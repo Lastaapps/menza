@@ -81,6 +81,10 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.COMPOSE
     }
 }
 
@@ -88,6 +92,7 @@ dependencies {
 
     coreLibraryDesugaring(Libs.DESUGARING)
 
+    implementation(Libs.SPLASHSCREEN)
     implementation(Libs.CORE)
     implementation(Libs.LIFECYCLE)
     implementation(Libs.COMPOSE_ACTIVITY)

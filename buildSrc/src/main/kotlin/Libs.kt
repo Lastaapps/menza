@@ -46,6 +46,7 @@ object Libs {
         "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
     const val PREFERENCES = "androidx.preference:preference-ktx:${Versions.PREFERENCES}"
     const val RECYCLER_VIEW = "androidx.recyclerview:recyclerview:${Versions.RECYCLER_VIEW}"
+    const val SPLASHSCREEN = "androidx.core:core-splashscreen:${Versions.SPLASHSCREEN}"
     const val STARTUP = "androidx.startup:startup-runtime:${Versions.STARTUP}"
     const val SWIPE_REFRESH_LAYOUT =
         "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.SWIPE_REFRESH_LAYOUT}"

@@ -22,11 +22,6 @@
 
 buildscript {
 
-    repositories {
-        google()
-        mavenCentral()
-    }
-
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.GRADLE}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}")
@@ -34,13 +29,6 @@ buildscript {
     }
 }
 
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
 
 plugins {
     id("com.google.devtools.ksp") version Versions.KSP
@@ -50,6 +38,7 @@ plugins {
 // Address https://github.com/gradle/gradle/issues/4823: Force parent project evaluation before sub-project evaluation for Kotlin build scripts
 // Enables Kotlin DSL scripts to run while org.gradle.configureondemand = true
 subprojects {
+    @Suppress("UnstableApiUsage")
     if (gradle.startParameter.isConfigureOnDemand
         && buildscript.sourceFile?.extension?.toLowerCase() == "kts"
         && parent != rootProject
