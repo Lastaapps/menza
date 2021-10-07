@@ -20,4 +20,4 @@
 package cz.lastaapps.entity.menza
 
 @JvmInline
-value class Address(val address: String)
+value class Address(val stringForm: String)

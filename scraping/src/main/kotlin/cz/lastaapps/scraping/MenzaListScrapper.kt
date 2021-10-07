@@ -36,7 +36,7 @@ object MenzaListScrapper {
     suspend fun scrapeMenzaList(): Output {
 
         var opened = emptyMap<Int, Boolean>()
-        var addresses = emptyMap<Int, TempMenza>()
+        var infomartions = emptyMap<Int, TempMenza>()
         var contacts = emptySet<Contact>()
         var messages = emptyMap<Int, String>()
 
@@ -47,7 +47,7 @@ object MenzaListScrapper {
             response {
                 htmlDocument {
                     opened = parseMenzasOpened()
-                    addresses = parseAddress()
+                    infomartions = parseNameAndAddress()
                     contacts = parseContacts()
                 }
             }
@@ -63,20 +63,20 @@ object MenzaListScrapper {
             }
         }
 
-        val commonIds = opened.keys.intersect(addresses.keys)
+        val commonIds = opened.keys.intersect(infomartions.keys)
 
         val menzas = commonIds.map { id ->
             val open = if (opened[id]!!) Opened.OPENED else Opened.CLOSED
-            val address = addresses[id]!!
+            val info = infomartions[id]!!
             val message = messages[id]
 
             Menza(
                 MenzaId(id),
-                address.name,
+                info.name,
                 message,
                 open,
-                Address(address.address),
-                address.mapLink
+                Address(info.address),
+                info.mapLink
             )
         }.toSet()
 
@@ -100,7 +100,7 @@ object MenzaListScrapper {
                                 }
                             }
 
-                            //val name = it.text.trim()
+                            //val name = it.ownText.trim()
                             val id = it.id.removePrefix("podSh").toInt()
 
                             map[id] = opened
@@ -112,7 +112,7 @@ object MenzaListScrapper {
         return map
     }
 
-    private fun Doc.parseAddress(): Map<Int, TempMenza> {
+    private fun Doc.parseNameAndAddress(): Map<Int, TempMenza> {
         val map = mutableMapOf<Int, TempMenza>()
 
         findFirst("#otdoby") {
@@ -125,7 +125,7 @@ object MenzaListScrapper {
 
                 h3 {
                     findFirst {
-                        name = text.trim().replace("&nbsp;", "")
+                        name = this.ownText.trim().replace("&nbsp;", "")
                     }
                     small {
                         findFirst {

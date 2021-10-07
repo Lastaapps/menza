@@ -19,45 +19,31 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.menza.Contact
-import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.allergens.AllergenId
 import kotlinx.coroutines.runBlocking
+import org.junit.Test
 
-class MenzaListScrapperTest {
+class AllergensScrapperTest {
 
-    @org.junit.Test
-    fun scrapeMenzaList() {
+    @Test
+    fun scrapAllergens() {
         runBlocking {
-            val menzas = MenzaListScrapper.scrapeMenzaList().menzas
-            menzas.forEach {
-                println(it)
-            }
-            assert(menzas.size == 11)
-            assert(menzas.map { it.name }.contains("Menza Strahov"))
-            assert(menzas.map { it.address.stringForm }.contains("Jezdecká 1920, 160 17 Praha 6"))
-        }
-    }
+            val allergens = AllergensScrapper.scrapAllergens()
 
-    @org.junit.Test
-    fun scrapContacts() {
-        runBlocking {
-            val contacts = MenzaListScrapper.scrapeMenzaList().contacts
-
-            contacts.forEach {
+            allergens.forEach {
                 println(it)
             }
             assert(
-                contacts.contains(
-                    Contact(
-                        MenzaId(1),
-                        "Vedoucí menzy",
-                        "",
-                        "+420234678291",
-                        "menza-strahov@cvut.cz"
+                allergens.contains(
+                    Allergen(
+                        AllergenId(1),
+                        "Obiloviny obsahující lepek",
+                        "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
                     )
                 )
             )
-            assert(contacts.size == 12)
+            assert(allergens.size == 14)
         }
     }
 }

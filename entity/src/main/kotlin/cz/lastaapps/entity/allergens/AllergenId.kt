@@ -20,4 +20,4 @@
 package cz.lastaapps.entity.allergens
 
 @JvmInline
-value class AllergenId(val id: String)
+value class AllergenId(val id: Int)
