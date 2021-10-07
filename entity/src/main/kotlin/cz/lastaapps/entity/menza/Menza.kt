@@ -19,13 +19,11 @@
 
 package cz.lastaapps.entity.menza
 
-import android.net.Uri
-
 data class Menza(
     val id: MenzaId,
     val name: String,
-    val overview: String,
+    val message: String?,
     @Opened val opened: Int,
     val address: Address,
-    val mapsLink: Uri,
+    val mapsLink: String,
 )

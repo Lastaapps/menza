@@ -53,7 +53,18 @@ android {
 
 dependencies {
 
+    implementation(project(":entity"))
+
     val scrapeIt = "1.1.5"
     implementation("it.skrape:skrapeit:${scrapeIt}")
+
+    implementation(Libs.KOTLIN_STANDART_LIB)
+    implementation(Libs.KOTLIN_COROUTINES)
+
+    implementation(Libs.KTOR_CORE)
+    implementation(Libs.KTOR_CIO)
+
+    testImplementation(Tests.JUNIT)
+    testImplementation(Tests.COROUTINES)
 
 }

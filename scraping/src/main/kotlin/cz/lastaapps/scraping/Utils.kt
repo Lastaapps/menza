@@ -17,7 +17,26 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.menza
+package cz.lastaapps.scraping
 
-@JvmInline
-value class MenzaId(val id: Int)
+import it.skrape.selects.CssSelectable
+import it.skrape.selects.DocElement
+
+
+internal fun <T> CssSelectable.findAllAndCycle(cssSelector: String = "", init: DocElement.() -> T) {
+    findAll(cssSelector) {
+        forEach {
+            with(it) {
+                init()
+            }
+        }
+    }
+}
+
+internal fun <E> Collection<E>.forEachApply(action: E.() -> Unit) {
+    this.forEach {
+        with(it) {
+            action()
+        }
+    }
+}

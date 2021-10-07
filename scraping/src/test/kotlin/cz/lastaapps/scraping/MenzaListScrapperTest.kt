@@ -17,7 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.menza
+package cz.lastaapps.scraping
 
-@JvmInline
-value class MenzaId(val id: Int)
+import kotlinx.coroutines.runBlocking
+
+class MenzaListScrapperTest {
+
+    @org.junit.Test
+    fun scrapeMenzaList() {
+        runBlocking {
+            MenzaListScrapper.scrapeMenzaList().also { output ->
+                output.menzas.forEach {
+                    println(it)
+                }
+                assert(output.menzas.size == 11)
+                output.contacts.forEach {
+                    println(it)
+                }
+                assert(output.contacts.size == 12)
+            }
+        }
+    }
+}
