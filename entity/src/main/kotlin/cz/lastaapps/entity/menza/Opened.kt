@@ -19,15 +19,9 @@
 
 package cz.lastaapps.entity.menza
 
-import androidx.annotation.IntDef
-
-@IntDef(value = [Opened.OPENED, Opened.CLOSED, Opened.UNKNOWN, Opened.EXPECTED])
-@Retention(AnnotationRetention.SOURCE)
-annotation class Opened {
-    companion object {
-        const val OPENED = 1
-        const val CLOSED = 0
-        const val UNKNOWN = -1
-        const val EXPECTED = 2
-    }
+sealed class Opened(val id: Byte) {
+    object OPENED : Opened(1)
+    object CLOSED : Opened(0)
+    object UNKNOWN : Opened(-1)
+    object EXPECTED : Opened(2)
 }

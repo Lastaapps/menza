@@ -17,13 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.menza
+package cz.lastaapps.entity.day
 
-data class Menza(
-    val id: MenzaId,
-    val name: String,
-    val message: String?,
-    val opened: Opened,
-    val address: Address,
-    val mapsLink: String,
-)
+@JvmInline
+value class FoodId(val id: Int)

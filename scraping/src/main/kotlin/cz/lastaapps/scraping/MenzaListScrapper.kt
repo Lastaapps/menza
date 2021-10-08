@@ -125,11 +125,11 @@ object MenzaListScrapper {
 
                 h3 {
                     findFirst {
-                        name = this.ownText.trim().replace("&nbsp;", "")
+                        name = this.ownText.removeSpaces()
                     }
                     small {
                         findFirst {
-                            address = text.trim()
+                            address = text.removeSpaces()
                         }
                     }
                 }

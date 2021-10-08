@@ -21,9 +21,33 @@ package cz.lastaapps.scraping
 
 import it.skrape.selects.CssSelectable
 import it.skrape.selects.DocElement
+import java.time.ZoneId
 
+fun <T> CssSelectable.tryFindFirst(cssSelector: String = "", init: DocElement.() -> T): T? =
+    try {
+        findFirst(cssSelector, init)
+    } catch (e: Exception) {
+        null
+    }
 
-internal fun <T> CssSelectable.findAllAndCycle(cssSelector: String = "", init: DocElement.() -> T) {
+fun <T> CssSelectable.tryFindAll(cssSelector: String = "", init: List<DocElement>.() -> T): T? =
+    try {
+        findAll(cssSelector, init)
+    } catch (e: Exception) {
+        null
+    }
+
+fun <T> CssSelectable.tryFindAllAndCycle(cssSelector: String = "", init: DocElement.() -> T) =
+    try {
+        findAllAndCycle(cssSelector, init)
+    } catch (e: Exception) {
+        null
+    }
+
+internal fun <T> CssSelectable.findAllAndCycle(
+    cssSelector: String = "",
+    init: DocElement.() -> T
+) {
     findAll(cssSelector) {
         forEach {
             with(it) {
@@ -40,3 +64,8 @@ internal fun <E> Collection<E>.forEachApply(action: E.() -> Unit) {
         }
     }
 }
+
+internal fun String.removeSpaces(): String =
+    replace("&nbsp;", "").trim()
+
+internal val CET get() = ZoneId.of("Europe/Prague")

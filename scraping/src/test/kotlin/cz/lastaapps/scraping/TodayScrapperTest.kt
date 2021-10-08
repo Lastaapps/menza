@@ -17,13 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.menza
+package cz.lastaapps.scraping
 
-data class Menza(
-    val id: MenzaId,
-    val name: String,
-    val message: String?,
-    val opened: Opened,
-    val address: Address,
-    val mapsLink: String,
-)
+import cz.lastaapps.entity.menza.MenzaId
+import kotlinx.coroutines.runBlocking
+import org.junit.Test
+
+class TodayScrapperTest {
+
+    @Test
+    fun scrapeToday() {
+        runBlocking {
+            val foodList = TodayScrapper.scrapeToday(MenzaId(2)).foodList
+
+            foodList.forEach { println(it) }
+
+            assert(foodList.isNotEmpty())
+            assert(foodList.map { it.foodType.type }.contains("Polévky"))
+        }
+    }
+}

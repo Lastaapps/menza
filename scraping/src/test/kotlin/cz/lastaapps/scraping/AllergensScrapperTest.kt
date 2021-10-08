@@ -21,15 +21,37 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
+import cz.lastaapps.entity.day.FoodId
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class AllergensScrapperTest {
 
     @Test
-    fun scrapAllergens() {
+    fun scrapAllAllergens() {
         runBlocking {
-            val allergens = AllergensScrapper.scrapAllergens()
+            val allergens = AllergensScrapper.scrapAllAllergens()
+
+            allergens.forEach {
+                println(it)
+            }
+            assert(
+                allergens.contains(
+                    Allergen(
+                        AllergenId(1),
+                        "Obiloviny obsahující lepek",
+                        "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
+                    )
+                )
+            )
+            assert(allergens.size == 14)
+        }
+    }
+
+    @Test
+    fun scrapFoodAllergens() {
+        runBlocking {
+            val allergens = AllergensScrapper.scrapFoodAllergens(FoodId(336173))
 
             allergens.forEach {
                 println(it)

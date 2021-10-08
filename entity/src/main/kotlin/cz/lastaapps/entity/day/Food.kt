@@ -19,8 +19,6 @@
 
 package cz.lastaapps.entity.day
 
-import android.net.Uri
-import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.FoodType
 import cz.lastaapps.entity.common.Price
@@ -29,9 +27,9 @@ data class Food(
     val foodType: FoodType,
     val amount: Amount?,
     val name: String,
-    val allergens: List<Allergen>,
-    val imageUri: Uri,
+    val allergenFoodId: FoodId?,
+    val imageName: String?,
     val priceStudent: Price,
     val priceNormal: Price,
-    val issuePlaces: List<IssuePlace>,
+    val issuePlaces: List<IssueLocation>,
 )

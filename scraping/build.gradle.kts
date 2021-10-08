@@ -43,6 +43,8 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = Versions.JAVA
         targetCompatibility = Versions.JAVA
     }
@@ -52,6 +54,8 @@ android {
 }
 
 dependencies {
+
+    coreLibraryDesugaring(Libs.DESUGARING)
 
     implementation(project(":entity"))
 

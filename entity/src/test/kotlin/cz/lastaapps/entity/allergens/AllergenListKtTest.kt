@@ -17,13 +17,30 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.menza
+package cz.lastaapps.entity.allergens
 
-data class Menza(
-    val id: MenzaId,
-    val name: String,
-    val message: String?,
-    val opened: Opened,
-    val address: Address,
-    val mapsLink: String,
-)
+import org.junit.Test
+
+class AllergenListKtTest {
+
+    @Test
+    fun testAllergenList() {
+        listOf(
+            setOf(),
+            setOf(1, 4),
+            List(14) { i -> i + 1 }.toSet()
+        ).forEach { list ->
+
+            println("Testing:\t $list")
+
+            val allergens = list.toAllergenList()
+            val original = allergens.allergenIdSet
+
+            println("Allergens:\t ${allergens.allergens}")
+            println("Original:\t $original")
+            println("--------------------------------------------------------------------------------")
+
+            assert(list == original)
+        }
+    }
+}

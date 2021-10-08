@@ -21,6 +21,7 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
+import cz.lastaapps.entity.day.FoodId
 import it.skrape.core.htmlDocument
 import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.response
@@ -30,12 +31,20 @@ import it.skrape.selects.html5.td
 
 object AllergensScrapper {
 
-    suspend fun scrapAllergens(): List<Allergen> {
+    suspend fun scrapAllAllergens(): List<Allergen> {
+        return scrapAllergens("https://agata.suz.cvut.cz/jidelnicky/alergenyall.php")
+    }
+
+    suspend fun scrapFoodAllergens(foodId: FoodId): List<Allergen> {
+        return scrapAllergens("https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${foodId.id}")
+    }
+
+    suspend fun scrapAllergens(url: String): List<Allergen> {
         val list = mutableListOf<Allergen>()
 
         skrape(AsyncFetcher) {
             request {
-                url = "https://agata.suz.cvut.cz/jidelnicky/alergenyall.php"
+                this.url = url
             }
             response {
                 htmlDocument {
@@ -68,5 +77,4 @@ object AllergensScrapper {
 
         return list
     }
-
 }

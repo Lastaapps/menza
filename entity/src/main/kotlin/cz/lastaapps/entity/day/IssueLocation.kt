@@ -21,8 +21,9 @@ package cz.lastaapps.entity.day
 
 import cz.lastaapps.entity.menza.MenzaId
 
-data class IssuePlace(
+data class IssueLocation(
     val menzaId: MenzaId,
+    val locationId: String,
     val abbrev: String,
     val name: String,
 )

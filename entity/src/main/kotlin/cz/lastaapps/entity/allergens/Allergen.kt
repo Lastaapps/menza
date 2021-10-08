@@ -23,4 +23,8 @@ data class Allergen(
     val id: AllergenId,
     val name: String,
     val description: String
-)
+) : Comparable<Allergen> {
+    override fun compareTo(other: Allergen): Int {
+        return id.id.compareTo(other.id.id)
+    }
+}
