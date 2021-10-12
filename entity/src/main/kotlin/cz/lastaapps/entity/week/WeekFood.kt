@@ -21,9 +21,21 @@ package cz.lastaapps.entity.week
 
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.FoodType
+import java.time.LocalDate
 
 data class WeekFood(
+    val date: LocalDate,
     val foodType: FoodType,
     val amount: Amount?,
     val name: String,
-)
+) : Comparable<WeekFood> {
+
+    init {
+        assert(foodType.type.isNotBlank())
+        assert(name.isNotBlank())
+    }
+
+    override fun compareTo(other: WeekFood): Int {
+        return date.compareTo(other.date)
+    }
+}

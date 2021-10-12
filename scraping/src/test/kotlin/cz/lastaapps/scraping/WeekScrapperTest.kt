@@ -17,11 +17,32 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.common
+package cz.lastaapps.scraping
 
-@JvmInline
-value class FoodType(val type: String) {
-    init {
-        assert(type.isNotBlank())
+import cz.lastaapps.entity.menza.MenzaId
+import kotlinx.coroutines.runBlocking
+import org.junit.Test
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+class WeekScrapperTest {
+
+    @Test
+    fun scrapeWeek() {
+        runBlocking {
+
+            val date = LocalDate.now(CET)
+            println("Loading for ${date.format(DateTimeFormatter.ISO_DATE)}")
+
+            val weekFoodSet = WeekScrapper.scrapeWeek(MenzaId(1), date)
+
+            weekFoodSet.forEach {
+                println(it)
+            }
+
+            assert(weekFoodSet.isNotEmpty())
+            assert(weekFoodSet.map { it.foodType.type }.contains("Polévky"))
+            assert(weekFoodSet.map { it.foodType.type }.contains("Specialita dne"))
+        }
     }
 }
