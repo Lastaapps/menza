@@ -20,4 +20,8 @@
 package cz.lastaapps.entity.menza
 
 @JvmInline
-value class MenzaId(val id: Int)
+value class MenzaId(val id: Int) {
+    init {
+        assert(id > 0)
+    }
+}

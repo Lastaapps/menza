@@ -31,7 +31,6 @@ data class WeekFood(
 ) : Comparable<WeekFood> {
 
     init {
-        assert(foodType.type.isNotBlank())
         assert(name.isNotBlank())
     }
 

@@ -17,19 +17,24 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.day
+package cz.lastaapps.entity.week
 
-import cz.lastaapps.entity.menza.MenzaId
+import org.junit.Test
+import java.time.LocalDate
+import java.time.Month
+import java.time.format.DateTimeFormatter
 
-data class IssueLocation(
-    val menzaId: MenzaId,
-    val locationId: String,
-    val abbrev: String,
-    val name: String,
-) {
-    init {
-        assert(locationId.isNotBlank())
-        assert(abbrev.isNotBlank())
-        assert(name.isNotBlank())
+class WeekNumberKtTest {
+
+    @Test
+    fun toMonday() {
+        val monday = LocalDate.of(2021, Month.SEPTEMBER, 20)
+        val days = List(7) { i -> monday.plusDays(i.toLong()) }
+
+        println("Monday is ${monday.format(DateTimeFormatter.ISO_DATE)}")
+        days.map { it.toMonday() }.forEach {
+            println("Checking ${it.format(DateTimeFormatter.ISO_DATE)}")
+            assert(it == monday)
+        }
     }
 }

@@ -48,7 +48,7 @@ object TodayScrapper {
 
                     var currentType: String? = null
 
-                    findAllAndCycle("#jidelnicek tbody tr") {
+                    tryFindAllAndCycle("#jidelnicek tbody tr") {
 
                         when (children.firstOrNull()?.tagName) {
                             "th" -> {

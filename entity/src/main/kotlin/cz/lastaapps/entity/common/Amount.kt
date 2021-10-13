@@ -20,4 +20,8 @@
 package cz.lastaapps.entity.common
 
 @JvmInline
-value class Amount(val amount: String)
+value class Amount(val amount: String) {
+    init {
+        assert(amount.isNotBlank())
+    }
+}

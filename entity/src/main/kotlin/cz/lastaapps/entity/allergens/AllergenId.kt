@@ -20,4 +20,8 @@
 package cz.lastaapps.entity.allergens
 
 @JvmInline
-value class AllergenId(val id: Int)
+value class AllergenId(val id: Int) {
+    init {
+        assert(id in 1..14)
+    }
+}

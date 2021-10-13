@@ -26,4 +26,9 @@ data class Menza(
     val opened: Opened,
     val address: Address,
     val mapsLink: String,
-)
+) {
+    init {
+        assert(name.isNotBlank())
+        assert(mapsLink.isNotBlank())
+    }
+}

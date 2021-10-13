@@ -20,4 +20,8 @@
 package cz.lastaapps.entity.day
 
 @JvmInline
-value class FoodId(val id: Int)
+value class FoodId(val id: Int) {
+    init {
+        assert(id > 0)
+    }
+}

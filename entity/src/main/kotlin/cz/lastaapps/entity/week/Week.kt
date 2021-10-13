@@ -19,7 +19,10 @@
 
 package cz.lastaapps.entity.week
 
+import java.time.LocalDate
+
 data class Week(
-    val weekNumber: Int,
+    val dayOfWeek: LocalDate,
     val days: List<WeekDay>,
-)
+) {
+}

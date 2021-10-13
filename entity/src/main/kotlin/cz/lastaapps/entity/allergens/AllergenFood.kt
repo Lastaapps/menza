@@ -22,4 +22,8 @@ package cz.lastaapps.entity.allergens
 data class AllergenFood(
     val foodId: String,
     val allergens: AllergenList,
-)
+) {
+    init {
+        assert(foodId.isNotBlank())
+    }
+}

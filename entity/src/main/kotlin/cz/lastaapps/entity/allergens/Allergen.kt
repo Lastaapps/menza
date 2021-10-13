@@ -24,6 +24,12 @@ data class Allergen(
     val name: String,
     val description: String
 ) : Comparable<Allergen> {
+
+    init {
+        assert(name.isNotBlank())
+        assert(description.isNotBlank())
+    }
+
     override fun compareTo(other: Allergen): Int {
         return id.id.compareTo(other.id.id)
     }

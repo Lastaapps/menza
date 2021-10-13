@@ -23,6 +23,7 @@ import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.FoodType
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekFood
+import cz.lastaapps.entity.week.WeekNumber
 import it.skrape.core.htmlDocument
 import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.response
@@ -30,23 +31,19 @@ import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.*
 
 object WeekScrapper {
 
-    suspend fun scrapeWeek(menzaId: MenzaId, date: LocalDate): Set<WeekFood> {
+    suspend fun scrapeWeek(menzaId: MenzaId, weekNumber: WeekNumber): Set<WeekFood> {
 
         var set = emptySet<WeekFood>()
 
         skrape(AsyncFetcher) {
             request {
                 url =
-                    "https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=${menzaId.id}&clTyden=${
-                        getWeekNumber(
-                            date
-                        )
-                    }"
+                    "https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=" +
+                            "${menzaId.id}&clTyden=${weekNumber.week}"
             }
             response {
                 htmlDocument {
@@ -56,13 +53,6 @@ object WeekScrapper {
         }
 
         return set
-    }
-
-    private fun getWeekNumber(date: LocalDate): Int {
-        return ChronoUnit.WEEKS.between(
-            LocalDate.ofEpochDay(0),
-            date
-        ).toInt() + 25
     }
 
     private fun Doc.parse(): Set<WeekFood> {

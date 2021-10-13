@@ -29,4 +29,8 @@ data class OpeningHours(
     val open: LocalTime,
     val close: LocalTime,
     val mealType: String?,
-)
+) {
+    init {
+        assert(name.isNotBlank())
+    }
+}

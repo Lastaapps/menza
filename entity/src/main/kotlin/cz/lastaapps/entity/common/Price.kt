@@ -20,4 +20,8 @@
 package cz.lastaapps.entity.common
 
 @JvmInline
-value class Price(val price: Int)
+value class Price(val price: Int) {
+    init {
+        assert(price > 0)
+    }
+}

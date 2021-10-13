@@ -32,4 +32,9 @@ data class Food(
     val priceStudent: Price,
     val priceNormal: Price,
     val issuePlaces: List<IssueLocation>,
-)
+) {
+    init {
+        assert(name.isNotBlank())
+        assert(issuePlaces.isNotEmpty())
+    }
+}

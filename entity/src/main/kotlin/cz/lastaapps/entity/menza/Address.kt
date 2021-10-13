@@ -20,4 +20,8 @@
 package cz.lastaapps.entity.menza
 
 @JvmInline
-value class Address(val stringForm: String)
+value class Address(val stringForm: String) {
+    init {
+        assert(stringForm.isNotBlank())
+    }
+}
