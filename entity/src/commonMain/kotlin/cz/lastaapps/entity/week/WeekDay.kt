@@ -19,7 +19,7 @@
 
 package cz.lastaapps.entity.week
 
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 data class WeekDay(
     val date: LocalDate,

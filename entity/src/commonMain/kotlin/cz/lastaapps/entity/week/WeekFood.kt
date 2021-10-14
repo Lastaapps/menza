@@ -22,7 +22,7 @@ package cz.lastaapps.entity.week
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.FoodType
 import io.kotest.matchers.booleans.shouldBeTrue
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 data class WeekFood(
     val date: LocalDate,

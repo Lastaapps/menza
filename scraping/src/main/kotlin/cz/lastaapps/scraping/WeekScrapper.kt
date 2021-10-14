@@ -29,11 +29,11 @@ import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.response
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
+import kotlinx.datetime.LocalDate
 
 object WeekScrapper {
+
+    private val dateRegex = "^([0-9]{1,2}). ([0-9]{1,2}). ([0-9]{4})$".toRegex()
 
     suspend fun scrapeWeek(menzaId: MenzaId, weekNumber: WeekNumber): Set<WeekFood> {
 
@@ -67,10 +67,10 @@ object WeekScrapper {
                 if (children.first().className == "thkategorie") {
 
                     children[0].ownText.removeSpaces().takeIf { it.isNotBlank() }?.let {
-                        currentDate = LocalDate.parse(
-                            it, DateTimeFormatter.ofPattern(
-                                "dd. MM. yyyy", Locale("cz")
-                            )
+                        val values = dateRegex.find(it)?.destructured!!
+                        val (day, month, year) = values
+                        currentDate = LocalDate(
+                            year.toInt(), month.toInt(), day.toInt()
                         )
                     }
 

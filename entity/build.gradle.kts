@@ -44,9 +44,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(Libs.KOTLIN_STANDART_LIB)
+                implementation(Libs.KOTLINX_DATETIME)
                 implementation(Tests.KOTEST_ASSERTION)
-                implementation(Tests.KOTEST_JUNIT)
             }
         }
         val commonTest by getting {

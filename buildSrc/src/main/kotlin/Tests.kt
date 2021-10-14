@@ -24,7 +24,6 @@ object Tests {
     const val COMPOSE = "androidx.compose.ui:ui-test-junit4:${Versions.COMPOSE}"
 
     const val KOTEST_ASSERTION = "io.kotest:kotest-assertions-core:${Versions.KOTEST}"
-    const val KOTEST_JUNIT = "io.kotest:kotest-runner-junit5:${Versions.KOTEST}"
 
     //android
     const val JUNIT = "junit:junit:${Versions.TEST_JUNIT}"

@@ -20,9 +20,7 @@
 package cz.lastaapps.entity.week
 
 import io.kotest.matchers.ints.shouldBeGreaterThan
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
+import kotlinx.datetime.*
 import kotlin.jvm.JvmInline
 
 @JvmInline
@@ -33,12 +31,10 @@ value class WeekNumber private constructor(val week: Int) {
 
     companion object {
         fun of(date: LocalDate): WeekNumber {
-            return WeekNumber(
-                ChronoUnit.WEEKS.between(
-                    LocalDate.ofEpochDay(0),
-                    date.toMonday()
-                ).toInt() + 25 //fix, don't know where is the error
-            )
+            val epochStart = Instant.fromEpochMilliseconds(0L)
+            val days = epochStart.toLocalDateTime(TimeZone.UTC).date.daysUntil(date) - 4
+
+            return WeekNumber(days / 7 + 25)
         }
 
         /**
@@ -52,11 +48,9 @@ value class WeekNumber private constructor(val week: Int) {
  * @return the first monday before the date given, for mondays it returns the same date
  * */
 internal fun LocalDate.toMonday(): LocalDate {
-    var diff = DayOfWeek.MONDAY.value - this.dayOfWeek.value
-    if (diff == 0)
-        return this
-    while (diff > 0)
-        diff -= 7
-
-    return this.plusDays(diff.toLong())
+    var tempDate = this
+    while (tempDate.dayOfWeek != DayOfWeek.MONDAY) {
+        tempDate = tempDate.minus(1, DateTimeUnit.DAY)
+    }
+    return tempDate
 }

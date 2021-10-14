@@ -19,7 +19,7 @@
 
 package cz.lastaapps.entity.day
 
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 data class Day(
     val date: LocalDate,

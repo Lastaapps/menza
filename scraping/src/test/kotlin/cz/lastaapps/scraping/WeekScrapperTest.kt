@@ -22,9 +22,9 @@ package cz.lastaapps.scraping
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekNumber
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Clock
+import kotlinx.datetime.todayAt
 import org.junit.Test
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class WeekScrapperTest {
 
@@ -32,8 +32,8 @@ class WeekScrapperTest {
     fun scrapeWeek() {
         runBlocking {
 
-            val date = LocalDate.now(CET)
-            println("Loading for ${date.format(DateTimeFormatter.ISO_DATE)}")
+            val date = Clock.System.todayAt(CET)
+            println("Loading for $date")
 
             val weekFoodSet = WeekScrapper.scrapeWeek(MenzaId(1), WeekNumber.of(date))
 

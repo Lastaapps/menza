@@ -20,22 +20,37 @@
 package cz.lastaapps.entity.week
 
 import io.kotest.matchers.shouldBe
-import java.time.LocalDate
-import java.time.Month
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Month
+import kotlinx.datetime.plus
 import kotlin.test.Test
 
 class WeekNumberKtTest {
 
     @Test
-    fun toMonday() {
-        val monday = LocalDate.of(2021, Month.SEPTEMBER, 20)
-        val days = List(7) { i -> monday.plusDays(i.toLong()) }
+    fun weekNumberOf() {
+        val monday = LocalDate(2021, Month.SEPTEMBER, 20)
+        val days = List(7) { i -> monday.plus(i.toLong(), DateTimeUnit.DAY) }
 
-        println("Monday is ${monday.format(DateTimeFormatter.ISO_DATE)}")
+        println("Monday in $monday")
+
+        days.forEach {
+            val weekNumber = WeekNumber.of(it)
+            println("Checking $it, weekNumber is ${weekNumber.week}")
+            weekNumber.week shouldBe 2723
+        }
+    }
+
+    @Test
+    fun toMonday() {
+        val monday = LocalDate(2021, Month.SEPTEMBER, 20)
+        val days = List(7) { i -> monday.plus(i.toLong(), DateTimeUnit.DAY) }
+
+        println("Monday is $monday")
 
         days.map { it.toMonday() }.forEach {
-            println("Checking ${it.format(DateTimeFormatter.ISO_DATE)}")
+            println("Checking $it")
             it shouldBe monday
         }
     }

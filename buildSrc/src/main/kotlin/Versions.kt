@@ -92,6 +92,7 @@ object Versions {
 
     //testing KMP
     const val KOTEST = "4.6.3"
+    const val KOTLINX_DATETIME = "0.3.0"
 
     //testing android
     const val TEST_JUNIT = "4.13.2"

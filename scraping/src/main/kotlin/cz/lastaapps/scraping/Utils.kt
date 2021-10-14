@@ -21,7 +21,7 @@ package cz.lastaapps.scraping
 
 import it.skrape.selects.CssSelectable
 import it.skrape.selects.DocElement
-import java.time.ZoneId
+import kotlinx.datetime.TimeZone
 
 fun <T> CssSelectable.tryFindFirst(cssSelector: String = "", init: DocElement.() -> T): T? =
     try {
@@ -68,4 +68,4 @@ internal fun <E> Collection<E>.forEachApply(action: E.() -> Unit) {
 internal fun String.removeSpaces(): String =
     replace("&nbsp;", "").trim()
 
-internal val CET get() = ZoneId.of("Europe/Prague")
+internal val CET get() = TimeZone.of("Europe/Prague")

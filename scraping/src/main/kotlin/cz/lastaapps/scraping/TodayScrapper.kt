@@ -31,12 +31,13 @@ import it.skrape.core.htmlDocument
 import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.response
 import it.skrape.fetcher.skrape
-import java.time.ZonedDateTime
+import kotlinx.datetime.Clock
+import kotlinx.datetime.todayAt
 
 object TodayScrapper {
 
     suspend fun scrapeToday(menzaId: MenzaId): Day {
-        val localDate = ZonedDateTime.now(CET).toLocalDate()
+        val localDate = Clock.System.todayAt(CET)
         val food = mutableListOf<Food>()
 
         skrape(AsyncFetcher) {

@@ -64,6 +64,7 @@ dependencies {
 
     implementation(Libs.KOTLIN_STANDART_LIB)
     implementation(Libs.KOTLIN_COROUTINES)
+    implementation(Libs.KOTLINX_DATETIME)
 
     implementation(Libs.KTOR_CORE)
     implementation(Libs.KTOR_CIO)

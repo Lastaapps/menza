@@ -20,15 +20,15 @@
 package cz.lastaapps.entity.menza
 
 import io.kotest.matchers.booleans.shouldBeTrue
-import java.time.DayOfWeek
-import java.time.LocalTime
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDateTime
 
 data class OpeningHours(
     val menzaId: MenzaId,
     val name: String,
     val dayOfWeek: DayOfWeek,
-    val open: LocalTime,
-    val close: LocalTime,
+    val open: LocalDateTime,
+    val close: LocalDateTime,
     val mealType: String?,
 ) {
     init {

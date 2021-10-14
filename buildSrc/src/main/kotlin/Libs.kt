@@ -27,6 +27,8 @@ object Libs {
     const val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:${Versions.KOTLIN}"
     const val KTOR_CORE = "io.ktor:ktor-client-core:${Versions.KTOR}"
     const val KTOR_CIO = "io.ktor:ktor-client-cio:${Versions.KTOR}"
+    const val KOTLINX_DATETIME =
+        "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KOTLINX_DATETIME}"
 
     const val ACTIVITY = "androidx.activity:activity-ktx:${Versions.ACTIVITY}"
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
