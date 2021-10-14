@@ -17,27 +17,26 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.entity.week
+
+import io.kotest.matchers.shouldBe
+import java.time.LocalDate
+import java.time.Month
+import java.time.format.DateTimeFormatter
+import kotlin.test.Test
+
+class WeekNumberKtTest {
+
+    @Test
+    fun toMonday() {
+        val monday = LocalDate.of(2021, Month.SEPTEMBER, 20)
+        val days = List(7) { i -> monday.plusDays(i.toLong()) }
+
+        println("Monday is ${monday.format(DateTimeFormatter.ISO_DATE)}")
+
+        days.map { it.toMonday() }.forEach {
+            println("Checking ${it.format(DateTimeFormatter.ISO_DATE)}")
+            it shouldBe monday
+        }
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-)

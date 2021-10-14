@@ -29,9 +29,12 @@ buildscript {
     }
 }
 
+group = App.GROUP
+version = App.VERSION_NAME
 
 plugins {
     id("com.google.devtools.ksp") version Versions.KSP
+    //id("io.kotest.multiplatform") version Versions.KOTEST
 }
 
 

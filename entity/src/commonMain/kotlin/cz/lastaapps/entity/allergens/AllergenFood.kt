@@ -17,27 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.entity.allergens
+
+import io.kotest.matchers.booleans.shouldBeTrue
+
+data class AllergenFood(
+    val foodId: String,
+    val allergens: AllergenList,
+) {
+    init {
+        foodId.isNotBlank().shouldBeTrue()
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-)

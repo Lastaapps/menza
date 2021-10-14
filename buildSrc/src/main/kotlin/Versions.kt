@@ -90,7 +90,10 @@ object Versions {
     //firebase
     const val FIREBASE_BOM = "28.4.0"
 
-    //testing
+    //testing KMP
+    const val KOTEST = "4.6.3"
+
+    //testing android
     const val TEST_JUNIT = "4.13.2"
     const val TEST_ARCH = "2.1.0"
     const val TEST_ANDROIDX = "1.4.0"

@@ -17,27 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.entity.day
+
+import cz.lastaapps.entity.common.Amount
+import cz.lastaapps.entity.common.FoodType
+import cz.lastaapps.entity.common.Price
+import io.kotest.matchers.booleans.shouldBeTrue
+
+data class Food(
+    val foodType: FoodType,
+    val amount: Amount?,
+    val name: String,
+    val allergenFoodId: FoodId?,
+    val imageName: String?,
+    val priceStudent: Price,
+    val priceNormal: Price,
+    val issuePlaces: List<IssueLocation>,
+) {
+    init {
+        name.isNotBlank().shouldBeTrue()
+        issuePlaces.isNotEmpty().shouldBeTrue()
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-)

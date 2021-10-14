@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="11">
+      <module name="android.buildSrc" target="11" />
+      <module name="Menza.entity.commonMain" target="11" />
+      <module name="Menza.entity.commonTest" target="11" />
+      <module name="Menza.entity.desktopMain" target="11" />
+      <module name="Menza.entity.desktopTest" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

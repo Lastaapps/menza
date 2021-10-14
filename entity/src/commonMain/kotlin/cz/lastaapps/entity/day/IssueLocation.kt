@@ -17,27 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.entity.day
+
+import cz.lastaapps.entity.menza.MenzaId
+import io.kotest.matchers.booleans.shouldBeTrue
+
+data class IssueLocation(
+    val menzaId: MenzaId,
+    val locationId: String,
+    val abbrev: String,
+    val name: String,
+) {
+    init {
+        locationId.isNotBlank().shouldBeTrue()
+        abbrev.isNotBlank().shouldBeTrue()
+        name.isNotBlank().shouldBeTrue()
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-)

@@ -17,27 +17,22 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.entity.allergens
+
+import io.kotest.matchers.booleans.shouldBeTrue
+
+data class Allergen(
+    val id: AllergenId,
+    val name: String,
+    val description: String
+) : Comparable<Allergen> {
+
+    init {
+        name.isNotBlank().shouldBeTrue()
+        description.isNotBlank().shouldBeTrue()
+    }
+
+    override fun compareTo(other: Allergen): Int {
+        return id.id.compareTo(other.id.id)
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-)

@@ -17,27 +17,32 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.entity.allergens
+
+import io.kotest.matchers.shouldBe
+import kotlin.test.Test
+
+
+class AllergenListKtTest {
+
+    @Test
+    fun testAllergenList() {
+        listOf(
+            setOf(),
+            setOf(1, 4),
+            List(14) { i -> i + 1 }.toSet()
+        ).forEach { list ->
+
+            println("Testing:\t $list")
+
+            val allergens = list.toAllergenList()
+            val original = allergens.allergenIdSet
+
+            println("Allergens:\t ${allergens.allergens}")
+            println("Original:\t $original")
+            println("--------------------------------------------------------------------------------")
+
+            list shouldBe original
+        }
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-)

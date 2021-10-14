@@ -18,12 +18,66 @@
  */
 
 plugins {
+    kotlin("multiplatform")
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    //id("org.jetbrains.kotlin.android")
+    //id("kotlin-android-extensions")
+}
+
+group = App.GROUP
+version = App.VERSION_NAME
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+kotlin {
+    android()
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = Versions.JVM_TARGET
+        }
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(Libs.KOTLIN_STANDART_LIB)
+                implementation(Tests.KOTEST_ASSERTION)
+                implementation(Tests.KOTEST_JUNIT)
+            }
+        }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+            }
+        }
+        val androidTest by getting {
+            dependencies {
+            }
+        }
+        val desktopMain by getting {
+            dependencies {
+            }
+        }
+        val desktopTest by getting {
+            dependencies {
+                implementation(Tests.JUNIT)
+            }
+        }
+    }
 }
 
 android {
     compileSdk = 31
+
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
     defaultConfig {
         minSdk = 21
@@ -43,22 +97,15 @@ android {
         }
     }
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
+        //isCoreLibraryDesugaringEnabled = true
 
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = Versions.JAVA
+        targetCompatibility = Versions.JAVA
     }
-    kotlinOptions {
+    /*kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
+    }*/
+    dependencies {
+        coreLibraryDesugaring(Libs.DESUGARING)
     }
-}
-
-dependencies {
-
-    coreLibraryDesugaring(Libs.DESUGARING)
-
-    implementation(Libs.KOTLIN_STANDART_LIB)
-
-    testImplementation(Tests.JUNIT)
-
 }

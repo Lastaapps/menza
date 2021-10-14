@@ -17,27 +17,21 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.entity.menza
+
+import io.kotest.matchers.booleans.shouldBeTrue
+import java.time.DayOfWeek
+import java.time.LocalTime
+
+data class OpeningHours(
+    val menzaId: MenzaId,
+    val name: String,
+    val dayOfWeek: DayOfWeek,
+    val open: LocalTime,
+    val close: LocalTime,
+    val mealType: String?,
+) {
+    init {
+        name.isNotBlank().shouldBeTrue()
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-)

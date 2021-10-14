@@ -17,27 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.entity.week
+
+import cz.lastaapps.entity.common.Amount
+import cz.lastaapps.entity.common.FoodType
+import io.kotest.matchers.booleans.shouldBeTrue
+import java.time.LocalDate
+
+data class WeekFood(
+    val date: LocalDate,
+    val foodType: FoodType,
+    val amount: Amount?,
+    val name: String,
+) : Comparable<WeekFood> {
+
+    init {
+        name.isNotBlank().shouldBeTrue()
+    }
+
+    override fun compareTo(other: WeekFood): Int {
+        return date.compareTo(other.date)
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-)
