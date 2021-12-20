@@ -106,7 +106,7 @@ android {
         }
     }
     compileOptions {
-        //isCoreLibraryDesugaringEnabled = true
+        isCoreLibraryDesugaringEnabled = true
 
         sourceCompatibility = Versions.JAVA
         targetCompatibility = Versions.JAVA

@@ -47,7 +47,7 @@ fun String.toCzechDayShortcutToDayOfWeek(): DayOfWeek? {
         "po" -> DayOfWeek.MONDAY
         "út" -> DayOfWeek.TUESDAY
         "st" -> DayOfWeek.WEDNESDAY
-        "ct" -> DayOfWeek.THURSDAY
+        "čt" -> DayOfWeek.THURSDAY
         "pá" -> DayOfWeek.FRIDAY
         "so" -> DayOfWeek.SATURDAY
         "ne" -> DayOfWeek.SUNDAY
