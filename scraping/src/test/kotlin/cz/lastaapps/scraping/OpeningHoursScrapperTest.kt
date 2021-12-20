@@ -36,7 +36,6 @@ class OpeningHoursScrapperTest {
 
         val hours = OpeningHoursScrapper.scrapOpeningHours()
 
-
         hours.shouldNotBeNull()
         hours.shouldNotBeEmpty()
 

@@ -21,29 +21,33 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekNumber
-import kotlinx.coroutines.runBlocking
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.todayAt
 import org.junit.Test
 
 class WeekScrapperTest {
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun scrapeWeek() {
-        runBlocking {
+    fun scrapeWeek() = runTest {
 
-            val date = Clock.System.todayAt(CET)
-            println("Loading for $date")
+        val date = Clock.System.todayAt(CET)
+        println("Loading for $date")
 
-            val weekFoodSet = WeekScrapper.scrapeWeek(MenzaId(1), WeekNumber.of(date))
+        val weekFoodSet = WeekScrapper.scrapeWeek(MenzaId(1), WeekNumber.of(date))
 
-            weekFoodSet.forEach {
-                println(it)
-            }
-
-            assert(weekFoodSet.isNotEmpty())
-            assert(weekFoodSet.map { it.foodType.type }.contains("Polévky"))
-            assert(weekFoodSet.map { it.foodType.type }.contains("Specialita dne"))
+        weekFoodSet.forEach {
+            println(it)
         }
+
+        weekFoodSet.shouldNotBeNull()
+        weekFoodSet.shouldNotBeEmpty()
+        weekFoodSet.map { it.foodType.type } shouldContain "Polévky"
+        weekFoodSet.map { it.foodType.type } shouldContain "Specialita dne"
     }
 }

@@ -20,20 +20,24 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.menza.MenzaId
-import kotlinx.coroutines.runBlocking
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class TodayScrapperTest {
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun scrapeToday() {
-        runBlocking {
-            val foodList = TodayScrapper.scrapeToday(MenzaId(1)).foodList
+    fun scrapeToday() = runTest {
+        val foodList = TodayScrapper.scrapeToday(MenzaId(1)).foodList
 
-            foodList.forEach { println(it) }
+        foodList.forEach { println(it) }
 
-            assert(foodList.isNotEmpty())
-            assert(foodList.map { it.foodType.type }.contains("Polévky"))
-        }
+        foodList.shouldNotBeNull()
+        foodList.shouldNotBeEmpty()
+        foodList.map { it.foodType.type } shouldContain "Polévky"
     }
 }

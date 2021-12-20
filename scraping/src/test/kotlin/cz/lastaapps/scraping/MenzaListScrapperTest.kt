@@ -21,44 +21,47 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.menza.Contact
 import cz.lastaapps.entity.menza.MenzaId
-import kotlinx.coroutines.runBlocking
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
 class MenzaListScrapperTest {
 
-    @org.junit.Test
-    fun scrapeMenzaList() {
-        runBlocking {
-            val menzas = MenzaListScrapper.scrapeMenzaList().menzas
-            menzas.forEach {
-                println(it)
-            }
-            assert(menzas.size == 11)
-            assert(menzas.map { it.name }.contains("Menza Strahov"))
-            assert(menzas.map { it.address.stringForm }.contains("Jezdecká 1920, 160 17 Praha 6"))
-            //assert(menzas.find { it.name == "Technická menza" }?.opened == Opened.CLOSED)
+    @ExperimentalCoroutinesApi
+    @Test
+    fun scrapeMenzaList() = runTest {
+
+        val menzas = MenzaListScrapper.scrapeMenzaList().menzas
+
+        menzas.forEach {
+            println(it)
         }
+        menzas.size shouldBe 11
+        menzas.map { it.name } shouldContain "Menza Strahov"
+        menzas.map { it.address.stringForm } shouldContain "Jezdecká 1920, 160 17 Praha 6"
+        //menzas.find { it.name == "Technická menza" }?.opened shouldBe Opened.CLOSED
     }
 
-    @org.junit.Test
-    fun scrapContacts() {
-        runBlocking {
-            val contacts = MenzaListScrapper.scrapeMenzaList().contacts
+    @ExperimentalCoroutinesApi
+    @Test
+    fun scrapContacts() = runTest {
 
-            contacts.forEach {
-                println(it)
-            }
-            assert(
-                contacts.contains(
-                    Contact(
-                        MenzaId(1),
-                        "Vedoucí menzy",
-                        "",
-                        "+420234678291",
-                        "menza-strahov@cvut.cz"
-                    )
-                )
-            )
-            assert(contacts.size == 12)
+        val contacts = MenzaListScrapper.scrapeMenzaList().contacts
+
+        contacts.forEach {
+            println(it)
         }
+
+        contacts shouldContain Contact(
+            MenzaId(1),
+            "Vedoucí menzy",
+            "",
+            "+420234678291",
+            "menza-strahov@cvut.cz"
+        )
+
+        contacts.size shouldBe 12
     }
 }

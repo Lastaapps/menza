@@ -22,50 +22,48 @@ package cz.lastaapps.scraping
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.day.FoodId
-import kotlinx.coroutines.runBlocking
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class AllergensScrapperTest {
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun scrapAllAllergens() {
-        runBlocking {
-            val allergens = AllergensScrapper.scrapAllAllergens()
+    fun scrapAllAllergens() = runTest {
+        val allergens = AllergensScrapper.scrapAllAllergens()
 
-            allergens.forEach {
-                println(it)
-            }
-            assert(
-                allergens.contains(
-                    Allergen(
-                        AllergenId(1),
-                        "Obiloviny obsahující lepek",
-                        "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
-                    )
-                )
-            )
-            assert(allergens.size == 14)
+        allergens.forEach {
+            println(it)
         }
+
+        allergens shouldContain Allergen(
+            AllergenId(1),
+            "Obiloviny obsahující lepek",
+            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
+        )
+
+        allergens.size shouldBe 14
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun scrapFoodAllergens() {
-        runBlocking {
-            val allergens = AllergensScrapper.scrapFoodAllergens(FoodId(336173))
+    fun scrapFoodAllergens() = runTest {
 
-            allergens.forEach {
-                println(it)
-            }
-            assert(
-                allergens.contains(
-                    Allergen(
-                        AllergenId(1),
-                        "Obiloviny obsahující lepek",
-                        "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
-                    )
-                )
-            )
-            assert(allergens.size == 14)
+        val allergens = AllergensScrapper.scrapFoodAllergens(FoodId(336173))
+
+        allergens.forEach {
+            println(it)
         }
+
+        allergens shouldContain Allergen(
+            AllergenId(1),
+            "Obiloviny obsahující lepek",
+            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
+        )
+
+        allergens.size shouldBe 14
     }
 }
