@@ -59,7 +59,7 @@ dependencies {
 
     implementation(project(":entity"))
 
-    val scrapeIt = "1.1.6"
+    val scrapeIt = "1.1.7"
     implementation("it.skrape:skrapeit:${scrapeIt}")
 
     implementation(Libs.KOTLIN_STANDART_LIB)
