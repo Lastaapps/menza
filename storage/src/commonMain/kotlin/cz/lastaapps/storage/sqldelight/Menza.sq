@@ -1,0 +1,9 @@
+CREATE TABLE menza (
+    menza_id INTEGER NOT NULL
+);
+
+CREATE INDEX menza_id ON menza(menza_id);
+
+selectAll:
+SELECT *
+FROM menza;

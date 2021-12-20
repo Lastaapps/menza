@@ -17,28 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
+package cz.lastaapps.storage
+
+import com.squareup.sqldelight.db.SqlDriver
+
+expect class MenzaDriverFactory {
+    expect fun createDriver(): SqlDriver
 }
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
+fun createDatabase(driverFactory): MenzaDatabase {
+    val driver = driverFactory.createDriver()
+    val database = MenzaDatabase(driver)
+
+
+
+    return database
 }
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage",
-)

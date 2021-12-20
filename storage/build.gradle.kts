@@ -19,7 +19,8 @@
 
 plugins {
     kotlin("multiplatform")
-    id("com.android.library")
+    id(Plugins.LIBRARY)
+    id(Plugins.SQLDELIGHT)
 }
 
 group = App.GROUP
@@ -54,6 +55,7 @@ kotlin {
             dependencies {
                 implementation(Libs.KOTLINX_DATETIME)
                 implementation(Tests.KOTEST_ASSERTION)
+                implementation(Libs.SQLDELIGHT_COROUTINES)
             }
         }
         val commonTest by getting {
@@ -63,6 +65,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
+                implementation(Libs.SQLDELIGHT_ANDROID)
             }
         }
         val androidTest by getting {
@@ -71,6 +74,7 @@ kotlin {
         }
         val desktopMain by getting {
             dependencies {
+                implementation(Libs.SQLDELIGHT_JVM)
             }
         }
         val desktopTest by getting {
@@ -78,6 +82,12 @@ kotlin {
                 implementation(Tests.JUNIT)
             }
         }
+    }
+}
+
+sqldelight {
+    database("MenzaDatabase") {
+        packageName = "cz.lastaapps.menza"
     }
 }
 

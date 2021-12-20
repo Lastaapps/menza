@@ -26,6 +26,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:${Versions.GRADLE}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}")
         classpath("com.google.android.gms:oss-licenses-plugin:${Versions.OSS_PLUGIN}")
+        classpath("com.squareup.sqldelight:gradle-plugin:${Versions.SQLDELIGHT}")
     }
 }
 
@@ -33,8 +34,7 @@ group = App.GROUP
 version = App.VERSION_NAME
 
 plugins {
-    id("com.google.devtools.ksp") version Versions.KSP
-    //id("io.kotest.multiplatform") version Versions.KOTEST
+    id(Plugins.KSP) version Versions.KSP
 }
 
 
@@ -53,6 +53,8 @@ subprojects {
 }
 */
 
+/*
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
+*/
