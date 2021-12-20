@@ -19,49 +19,51 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.menza.Contact
-import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.allergens.AllergenId
+import cz.lastaapps.entity.day.FoodId
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-class MenzaListScrapperTest {
+class AllergensScrapperTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun scrapeMenzaList() = runTest {
+    fun scrapAllAllergens() = runTest {
+        val allergens = AllergensScrapper.scrapAllAllergens()
 
-        val menzas = MenzaListScrapper.scrapeMenzaList().menzas
-
-        menzas.forEach {
+        allergens.forEach {
             println(it)
         }
-        menzas.size shouldBe 11
-        menzas.map { it.name } shouldContain "Menza Strahov"
-        menzas.map { it.address.stringForm } shouldContain "Jezdecká 1920, 160 17 Praha 6"
-        //menzas.find { it.name == "Technická menza" }?.opened shouldBe Opened.CLOSED
+
+        allergens shouldContain Allergen(
+            AllergenId(1),
+            "Obiloviny obsahující lepek",
+            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
+        )
+
+        allergens.size shouldBe 14
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun scrapContacts() = runTest {
+    fun scrapFoodAllergens() = runTest {
 
-        val contacts = MenzaListScrapper.scrapeMenzaList().contacts
+        val allergens = AllergensScrapper.scrapFoodAllergens(FoodId(336173))
 
-        contacts.forEach {
+        allergens.forEach {
             println(it)
         }
 
-        contacts shouldContain Contact(
-            MenzaId(1),
-            "Vedoucí menzy",
-            "",
-            "+420234678291",
-            "menza-strahov@cvut.cz"
+        allergens shouldContain Allergen(
+            AllergenId(1),
+            "Obiloviny obsahující lepek",
+            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
         )
 
-        contacts.size shouldBe 12
+        allergens.size shouldBe 14
     }
 }

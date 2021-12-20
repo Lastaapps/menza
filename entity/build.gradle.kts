@@ -19,7 +19,7 @@
 
 plugins {
     kotlin("multiplatform")
-    id("com.android.library")
+    id(Plugins.LIBRARY)
 }
 
 group = App.GROUP

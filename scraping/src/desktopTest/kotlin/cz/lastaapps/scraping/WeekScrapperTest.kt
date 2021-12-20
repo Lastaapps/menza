@@ -28,7 +28,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.todayAt
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class WeekScrapperTest {
 

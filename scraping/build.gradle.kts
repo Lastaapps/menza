@@ -18,12 +18,88 @@
  */
 
 plugins {
+    kotlin("multiplatform")
     id(Plugins.LIBRARY)
-    id(Plugins.KOTLIN)
+}
+
+group = App.GROUP
+version = App.VERSION_NAME
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+val scrapeIt = "1.1.7"
+
+kotlin {
+    sourceSets.all {
+        languageSettings.apply {
+            languageVersion = Versions.KOTLIN_LANGUAGE_VERSION
+            apiVersion = Versions.KOTLIN_LANGUAGE_VERSION
+        }
+    }
+    android {
+        compilations.all {
+            kotlinOptions.jvmTarget = Versions.JVM_TARGET
+        }
+    }
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = Versions.JVM_TARGET
+        }
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(Libs.KOTLINX_DATETIME)
+                implementation(Libs.KOTLIN_COROUTINES)
+
+                implementation(Libs.KTOR_CORE)
+                implementation(Libs.KTOR_CIO)
+
+                implementation(project(":entity"))
+            }
+        }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(Tests.COROUTINES)
+                implementation(Tests.KOTEST_ASSERTION)
+            }
+        }
+        val androidMain by getting {
+            kotlin.srcDir("src/commonJvmAndroid/kotlin")
+            dependencies {
+                implementation("it.skrape:skrapeit:${scrapeIt}")
+            }
+        }
+        val androidTest by getting {
+            kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
+            dependencies {
+            }
+        }
+        val desktopMain by getting {
+            kotlin.srcDir("src/commonJvmAndroid/kotlin")
+            dependencies {
+                implementation("it.skrape:skrapeit:${scrapeIt}")
+            }
+        }
+        val desktopTest by getting {
+            kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
+            dependencies {
+                implementation(Tests.JUNIT)
+            }
+        }
+    }
 }
 
 android {
     compileSdk = App.COMPILE_SDK
+
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
     defaultConfig {
         minSdk = App.MIN_SDK
@@ -31,15 +107,15 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-        proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro"
-        )
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -48,29 +124,9 @@ android {
         sourceCompatibility = Versions.JAVA
         targetCompatibility = Versions.JAVA
     }
-    kotlinOptions {
-        jvmTarget = Versions.JVM_TARGET
+
+    dependencies {
+        coreLibraryDesugaring(Libs.DESUGARING)
     }
 }
 
-dependencies {
-
-    coreLibraryDesugaring(Libs.DESUGARING)
-
-    implementation(project(":entity"))
-
-    val scrapeIt = "1.1.7"
-    implementation("it.skrape:skrapeit:${scrapeIt}")
-
-    implementation(Libs.KOTLIN_STANDART_LIB)
-    implementation(Libs.KOTLIN_COROUTINES)
-    implementation(Libs.KOTLINX_DATETIME)
-
-    implementation(Libs.KTOR_CORE)
-    implementation(Libs.KTOR_CIO)
-
-    testImplementation(Tests.JUNIT)
-    testImplementation(Tests.COROUTINES)
-    testImplementation(Tests.KOTEST_ASSERTION)
-
-}

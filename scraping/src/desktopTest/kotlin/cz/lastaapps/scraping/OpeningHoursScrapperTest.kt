@@ -26,7 +26,7 @@ import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DayOfWeek
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class OpeningHoursScrapperTest {
 

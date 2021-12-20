@@ -19,25 +19,49 @@
 
 package cz.lastaapps.scraping
 
+import cz.lastaapps.entity.menza.Contact
 import cz.lastaapps.entity.menza.MenzaId
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldNotBeEmpty
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-class TodayScrapperTest {
+class MenzaListScrapperTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun scrapeToday() = runTest {
-        val foodList = TodayScrapper.scrapeToday(MenzaId(1)).foodList
+    fun scrapeMenzaList() = runTest {
 
-        foodList.forEach { println(it) }
+        val menzas = MenzaListScrapper.scrapeMenzaList().menzas
 
-        foodList.shouldNotBeNull()
-        foodList.shouldNotBeEmpty()
-        foodList.map { it.foodType.type } shouldContain "Polévky"
+        menzas.forEach {
+            println(it)
+        }
+        menzas.size shouldBe 11
+        menzas.map { it.name } shouldContain "Menza Strahov"
+        menzas.map { it.address.stringForm } shouldContain "Jezdecká 1920, 160 17 Praha 6"
+        //menzas.find { it.name == "Technická menza" }?.opened shouldBe Opened.CLOSED
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun scrapContacts() = runTest {
+
+        val contacts = MenzaListScrapper.scrapeMenzaList().contacts
+
+        contacts.forEach {
+            println(it)
+        }
+
+        contacts shouldContain Contact(
+            MenzaId(1),
+            "Vedoucí menzy",
+            "",
+            "+420234678291",
+            "menza-strahov@cvut.cz"
+        )
+
+        contacts.size shouldBe 12
     }
 }
