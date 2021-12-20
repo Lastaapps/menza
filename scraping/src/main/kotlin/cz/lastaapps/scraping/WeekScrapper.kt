@@ -42,8 +42,9 @@ object WeekScrapper {
         skrape(AsyncFetcher) {
             request {
                 url =
-                    "https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=" +
-                            "${menzaId.id}&clTyden=${weekNumber.week}"
+                    "https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=${menzaId.id}"
+                //TODO weeks are not working
+                //+ "&clTyden=${weekNumber.week}"
             }
             response {
                 htmlDocument {

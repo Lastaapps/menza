@@ -19,7 +19,9 @@
 
 package cz.lastaapps.entity.menza
 
+import cz.lastaapps.entity.compareInWeek
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.comparables.shouldNotBeGreaterThanOrEqualTo
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDateTime
 
@@ -30,8 +32,13 @@ data class OpeningHours(
     val open: LocalDateTime,
     val close: LocalDateTime,
     val mealType: String?,
-) {
+) : Comparable<OpeningHours> {
     init {
         name.isNotBlank().shouldBeTrue()
+        open shouldNotBeGreaterThanOrEqualTo close
+    }
+
+    override fun compareTo(other: OpeningHours): Int {
+        return dayOfWeek.compareInWeek(other.dayOfWeek)
     }
 }

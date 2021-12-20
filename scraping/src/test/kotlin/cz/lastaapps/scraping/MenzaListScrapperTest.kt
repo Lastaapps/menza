@@ -35,6 +35,7 @@ class MenzaListScrapperTest {
             assert(menzas.size == 11)
             assert(menzas.map { it.name }.contains("Menza Strahov"))
             assert(menzas.map { it.address.stringForm }.contains("Jezdecká 1920, 160 17 Praha 6"))
+            //assert(menzas.find { it.name == "Technická menza" }?.opened == Opened.CLOSED)
         }
     }
 

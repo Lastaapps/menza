@@ -90,21 +90,19 @@ object MenzaListScrapper {
         findFirst("#menzy") {
             li {
                 a {
-                    findAll {
-                        this.forEach {
-                            var opened = false
+                    findAllAndCycle {
+                        var opened = false
 
-                            img {
-                                findFirst {
-                                    opened = attributes["src"] == openImgName
-                                }
+                        //val name = ownText.trim()
+                        val id = id.removePrefix("podSh").toInt()
+
+                        img {
+                            findFirst {
+                                opened = attributes["src"] == openImgName
                             }
-
-                            //val name = it.ownText.trim()
-                            val id = it.id.removePrefix("podSh").toInt()
-
-                            map[id] = opened
                         }
+
+                        map[id] = opened
                     }
                 }
             }

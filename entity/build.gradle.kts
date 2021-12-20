@@ -32,7 +32,17 @@ tasks.withType<Test> {
 }
 
 kotlin {
-    android()
+    sourceSets.all {
+        languageSettings.apply {
+            languageVersion = Versions.KOTLIN_LANGUAGE_VERSION
+            apiVersion = Versions.KOTLIN_LANGUAGE_VERSION
+        }
+    }
+    android {
+        compilations.all {
+            kotlinOptions.jvmTarget = Versions.JVM_TARGET
+        }
+    }
     jvm("desktop") {
         compilations.all {
             kotlinOptions.jvmTarget = Versions.JVM_TARGET

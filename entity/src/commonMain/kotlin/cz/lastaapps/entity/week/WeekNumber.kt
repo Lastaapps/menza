@@ -30,6 +30,7 @@ value class WeekNumber private constructor(val week: Int) {
     }
 
     companion object {
+        //TODO week number not working
         fun of(date: LocalDate): WeekNumber {
             val epochStart = Instant.fromEpochMilliseconds(0L)
             val days = epochStart.toLocalDateTime(TimeZone.UTC).date.daysUntil(date) - 4
