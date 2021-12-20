@@ -23,7 +23,7 @@ import kotlinx.datetime.LocalDate
 
 data class Day(
     val date: LocalDate,
-    val foodList: List<Food>
+    val foodList: Set<Food>
 ) : Comparable<Day> {
     override fun compareTo(other: Day): Int {
         return date.compareTo(other.date)

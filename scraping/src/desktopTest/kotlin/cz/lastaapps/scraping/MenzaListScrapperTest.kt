@@ -20,6 +20,7 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.menza.Contact
+import cz.lastaapps.entity.menza.Location
 import cz.lastaapps.entity.menza.MenzaId
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
@@ -38,9 +39,11 @@ class MenzaListScrapperTest {
         menzas.forEach {
             println(it)
         }
+
         menzas.size shouldBe 11
         menzas.map { it.name } shouldContain "Menza Strahov"
         menzas.map { it.address.stringForm } shouldContain "Jezdecká 1920, 160 17 Praha 6"
+        menzas.map { it.location } shouldContain Location("50.100882","14.386966")
         //menzas.find { it.name == "Technická menza" }?.opened shouldBe Opened.CLOSED
     }
 
@@ -57,9 +60,16 @@ class MenzaListScrapperTest {
         contacts shouldContain Contact(
             MenzaId(1),
             "Vedoucí menzy",
-            "",
+            null,
             "+420234678291",
             "menza-strahov@cvut.cz"
+        )
+        contacts shouldContain Contact(
+            MenzaId(1),
+            "Provoz",
+            null,
+            "+420234678361",
+            "suz-provoznims@cvut.cz"
         )
 
         contacts.size shouldBe 12

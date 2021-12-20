@@ -30,15 +30,16 @@ import it.skrape.selects.html5.*
 
 object MenzaListScrapper {
 
+    private val locationRegex = "q=(\\d+.\\d+),\\s*(\\d+.\\d+)&".toRegex()
     private const val openImgName = "img/Otevreno.png"
     private const val closeImgName = "img/Zavreno.png"
 
     suspend fun scrapeMenzaList(): Output {
 
-        var opened = emptyMap<Int, Boolean>()
-        var infomartions = emptyMap<Int, TempMenza>()
+        var opened = emptyMap<MenzaId, Opened>()
+        var infomartions = emptyMap<MenzaId, TempMenza>()
         var contacts = emptySet<Contact>()
-        var messages = emptyMap<Int, String>()
+        var messages = emptyMap<MenzaId, String>()
 
         skrape(AsyncFetcher) {
             request {
@@ -66,15 +67,14 @@ object MenzaListScrapper {
         val commonIds = opened.keys.intersect(infomartions.keys)
 
         val menzas = commonIds.map { id ->
-            val open = if (opened[id]!!) Opened.OPENED else Opened.CLOSED
             val info = infomartions[id]!!
             val message = messages[id]
 
             Menza(
-                MenzaId(id),
+                id,
                 info.name,
                 message,
-                open,
+                opened[id]!!,
                 Address(info.address),
                 info.mapLink
             )
@@ -83,9 +83,26 @@ object MenzaListScrapper {
         return Output(menzas, contacts)
     }
 
-    private fun Doc.parseMenzasOpened(): Map<Int, Boolean> {
+    suspend fun scrapeMenzaOpened(): Map<MenzaId, Opened> {
+        var opened: Map<MenzaId, Opened>? = null
 
-        val map = mutableMapOf<Int, Boolean>()
+        skrape(AsyncFetcher) {
+            request {
+                url = "https://agata.suz.cvut.cz/jidelnicky/kontakty.php"
+            }
+            response {
+                htmlDocument {
+                    opened = parseMenzasOpened()
+                }
+            }
+        }
+
+        return opened ?: error("Failed to update opened")
+    }
+
+    private fun Doc.parseMenzasOpened(): Map<MenzaId, Opened> {
+
+        val map = mutableMapOf<MenzaId, Opened>()
 
         findFirst("#menzy") {
             li {
@@ -102,7 +119,8 @@ object MenzaListScrapper {
                             }
                         }
 
-                        map[id] = opened
+                        val open = if (opened) Opened.OPENED else Opened.CLOSED
+                        map[MenzaId(id)] = open
                     }
                 }
             }
@@ -110,14 +128,14 @@ object MenzaListScrapper {
         return map
     }
 
-    private fun Doc.parseNameAndAddress(): Map<Int, TempMenza> {
-        val map = mutableMapOf<Int, TempMenza>()
+    private fun Doc.parseNameAndAddress(): Map<MenzaId, TempMenza> {
+        val map = mutableMapOf<MenzaId, TempMenza>()
 
         findFirst("#otdoby") {
             findAllAndCycle("section") {
                 var name = ""
                 var address = ""
-                var mapLink = ""
+                var mapLink: Location? = null
 
                 val menzaId = id.removePrefix("section").toInt()
 
@@ -134,17 +152,21 @@ object MenzaListScrapper {
                 findFirst(".span4") {
                     a {
                         findFirst {
-                            //TODO extract coordinates
-                            mapLink = attributes["href"]!!.trim()
+                            mapLink = attributes["href"]!!.removeSpaces().parseLocation()
                         }
                     }
                 }
 
-                map[menzaId] = TempMenza(name, address, mapLink)
+                map[MenzaId(menzaId)] = TempMenza(name, address, mapLink!!)
             }
         }
 
         return map
+    }
+
+    private fun String.parseLocation(): Location {
+        val (long, lat) = locationRegex.find(this)!!.destructured
+        return Location(long, lat)
     }
 
     private fun Doc.parseContacts(): Set<Contact> {
@@ -155,24 +177,26 @@ object MenzaListScrapper {
                 forEachApply {
                     val menzaId = id.removePrefix("section").toInt()
 
-                    var role = ""
-                    var name = ""
-                    var phoneNumber = ""
-                    var email = ""
-
                     findAllAndCycle("tbody tr") {
+
+                        var role: String? = null
+                        var name: String? = null
+                        var phoneNumber: String? = null
+                        var email: String? = null
+
                         td {
                             findByIndex(0) {
-                                role = text.trim()
+                                role = text.takeIf { it.removeSpaces().isNotBlank() }
                             }
                             findByIndex(1) {
-                                name = text.trim()
+                                name = text.takeIf { it.removeSpaces().isNotBlank() }
                             }
                             findByIndex(2) {
                                 a {
                                     findFirst {
-                                        phoneNumber =
-                                            attribute("href").removePrefix("tel:")
+                                        phoneNumber = attribute("href").takeIf {
+                                            it.removeSpaces().isNotBlank()
+                                        }?.removePrefix("tel:")
                                     }
                                 }
                             }
@@ -180,14 +204,16 @@ object MenzaListScrapper {
                                 a {
                                     findFirst {
                                         email =
-                                            attribute("href").removePrefix("mailto:")
-                                                .decodeURLPart()
+                                            attribute("href").takeIf {
+                                                it.removeSpaces().isNotBlank()
+                                            }?.removePrefix("mailto:")?.decodeURLPart()
                                     }
                                 }
                             }
                         }
 
-                        set += Contact(MenzaId(menzaId), role, name, phoneNumber, email)
+                        if (role != null || name != null || phoneNumber != null || email != null)
+                            set += Contact(MenzaId(menzaId), role, name, phoneNumber, email)
                     }
                 }
             }
@@ -196,8 +222,8 @@ object MenzaListScrapper {
         return set
     }
 
-    private fun Doc.parseMessages(): Map<Int, String> {
-        val map = mutableMapOf<Int, String>()
+    private fun Doc.parseMessages(): Map<MenzaId, String> {
+        val map = mutableMapOf<MenzaId, String>()
 
         findFirst("#aktuality") {
             findAllAndCycle("div div div") {
@@ -207,7 +233,7 @@ object MenzaListScrapper {
                 findByIndex(1, "p") {
                     t = text.replace("<BR>", "").replace("<br>", "")
                 }
-                map[menzaId] = t
+                map[MenzaId(menzaId)] = t
             }
         }
 
@@ -215,7 +241,7 @@ object MenzaListScrapper {
     }
 
     private data class TempMenza(
-        val name: String, val address: String, val mapLink: String,
+        val name: String, val address: String, val mapLink: Location,
     )
 
     data class Output internal constructor(

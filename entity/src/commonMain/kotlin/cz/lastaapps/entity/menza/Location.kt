@@ -19,14 +19,23 @@
 
 package cz.lastaapps.entity.menza
 
-data class Contact(
-    val id: MenzaId,
-    val role: String?,
-    val name: String?,
-    val phoneNumber: String?,
-    val email: String?,
-) {
+import io.kotest.matchers.string.shouldNotBeBlank
+
+data class Location(val long: String, val lat: String) {
+
     init {
-        assert(role != null || name != null || phoneNumber != null || email != null)
+        long.shouldNotBeBlank()
+        lat.shouldNotBeBlank()
+    }
+
+    fun saveToString() : String {
+        return "$long:$lat"
+    }
+
+    companion object {
+        fun restoreFromString(str: String): Location {
+            val split = str.split(",")
+            return Location(split[0], split[1]);
+        }
     }
 }

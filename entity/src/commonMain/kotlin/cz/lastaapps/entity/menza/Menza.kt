@@ -27,10 +27,9 @@ data class Menza(
     val message: String?,
     val opened: Opened,
     val address: Address,
-    val mapsLink: String,
+    val location: Location,
 ) {
     init {
         name.isNotBlank().shouldBeTrue()
-        mapsLink.isNotBlank().shouldBeTrue()
     }
 }

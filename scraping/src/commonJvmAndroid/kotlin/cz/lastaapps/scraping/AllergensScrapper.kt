@@ -26,21 +26,23 @@ import it.skrape.core.htmlDocument
 import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.response
 import it.skrape.fetcher.skrape
+import it.skrape.selects.Doc
 import it.skrape.selects.html5.img
 import it.skrape.selects.html5.td
 
 object AllergensScrapper {
 
-    suspend fun scrapAllAllergens(): List<Allergen> {
-        return scrapAllergens("https://agata.suz.cvut.cz/jidelnicky/alergenyall.php")
+    suspend fun scrapAllAllergens(): Set<Allergen> {
+        return scrapeAllergens("https://agata.suz.cvut.cz/jidelnicky/alergenyall.php")
     }
 
-    suspend fun scrapFoodAllergens(foodId: FoodId): List<Allergen> {
-        return scrapAllergens("https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${foodId.id}")
+    suspend fun scrapFoodAllergens(foodId: FoodId): Set<Allergen> {
+        return scrapeAllergens("https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${foodId.id}")
     }
 
-    suspend fun scrapAllergens(url: String): List<Allergen> {
-        val list = mutableListOf<Allergen>()
+    private suspend fun scrapeAllergens(url: String): Set<Allergen> {
+
+        var toReturn: Set<Allergen>? = null
 
         skrape(AsyncFetcher) {
             request {
@@ -48,33 +50,40 @@ object AllergensScrapper {
             }
             response {
                 htmlDocument {
-                    findAllAndCycle("#otdoby tbody tr") {
-                        var allergenId = 0
-                        var name = ""
-                        var description = ""
-
-                        td {
-                            findByIndex(0) {
-                                img {
-                                    findFirst {
-                                        allergenId = attribute("alt").trim().toInt()
-                                    }
-                                }
-                            }
-                            findByIndex(1) {
-                                name = ownText
-                            }
-                            findByIndex(2) {
-                                description = ownText
-                            }
-                        }
-
-                        list += Allergen(AllergenId(allergenId), name, description)
-                    }
+                    toReturn = scrapeHtml()
                 }
             }
         }
 
-        return list
+        return toReturn ?: error("Scrapping failed")
+    }
+
+    private fun Doc.scrapeHtml(): Set<Allergen> {
+        val set = mutableSetOf<Allergen>()
+        findAllAndCycle("#otdoby tbody tr") {
+            var allergenId = 0
+            var name = ""
+            var description = ""
+
+            td {
+                findByIndex(0) {
+                    img {
+                        findFirst {
+                            allergenId = attribute("alt").trim().toInt()
+                        }
+                    }
+                }
+                findByIndex(1) {
+                    name = ownText
+                }
+                findByIndex(2) {
+                    description = ownText
+                }
+            }
+
+            set += Allergen(AllergenId(allergenId), name, description)
+        }
+
+        return set
     }
 }

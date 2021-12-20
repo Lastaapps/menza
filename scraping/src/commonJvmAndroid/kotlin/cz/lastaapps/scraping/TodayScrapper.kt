@@ -31,14 +31,15 @@ import it.skrape.core.htmlDocument
 import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.response
 import it.skrape.fetcher.skrape
+import it.skrape.selects.Doc
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.todayAt
 
 object TodayScrapper {
 
-    suspend fun scrapeToday(menzaId: MenzaId): Day {
-        val localDate = Clock.System.todayAt(CET)
-        val food = mutableListOf<Food>()
+    suspend fun scrapeToday(menzaId: MenzaId, date: LocalDate = Clock.System.todayAt(CET)): Day {
+        var food: Set<Food>? = null
 
         skrape(AsyncFetcher) {
             request {
@@ -46,70 +47,78 @@ object TodayScrapper {
             }
             response {
                 htmlDocument {
-
-                    var currentType: String? = null
-
-                    tryFindAllAndCycle("#jidelnicek tbody tr") {
-
-                        when (children.firstOrNull()?.tagName) {
-                            "th" -> {
-                                currentType = children.first().ownText.removeSpaces()
-                            }
-                            "td" -> {
-
-                                val amount =
-                                    children[1].ownText.removeSpaces().takeIf { it.isNotBlank() }
-                                val name = children[2].ownText.removeSpaces()
-
-                                val priceStudent = children[5]
-                                    .ownText.removeSpaces().removeSuffix(",00 Kč").toInt()
-                                val priceNormal = children[6]
-                                    .ownText.removeSpaces().removeSuffix(",00 Kč").toInt()
-
-                                var allergensFoodId: Int? = null
-                                children[3].tryFindFirst("a") {
-                                    allergensFoodId =
-                                        attribute("href").removePrefix("alergeny.php?alergen=")
-                                            .toInt()
-                                }
-
-                                var imgName: String? = null
-                                children[4].tryFindFirst("a") {
-                                    imgName = attribute("href").removeSpaces().let {
-                                        val toFind = "&xFile="
-                                        val index = it.indexOf(toFind)
-                                        it.substring(index + toFind.length)
-                                    }
-                                }
-
-                                val issuePlaces = mutableListOf<IssueLocation>()
-                                children[7]
-                                findAllAndCycle("span") {
-                                    issuePlaces += IssueLocation(
-                                        menzaId,
-                                        id,
-                                        ownText,
-                                        attribute("title"),
-                                    )
-                                }
-
-                                food += Food(
-                                    FoodType(currentType!!),
-                                    amount?.let { Amount(amount) },
-                                    name,
-                                    allergensFoodId?.let { FoodId(it) },
-                                    imgName,
-                                    Price(priceStudent),
-                                    Price(priceNormal),
-                                    issuePlaces,
-                                )
-                            }
-                        }
-                    }
+                    food = parseHtml(menzaId)
                 }
             }
         }
 
-        return Day(localDate, food)
+        food ?: error("Failed to scrape food")
+        return Day(date, food!!)
+    }
+
+    private fun Doc.parseHtml(menzaId: MenzaId): Set<Food> {
+
+        val food = mutableSetOf<Food>()
+        var currentType: String? = null
+
+        tryFindAllAndCycle("#jidelnicek tbody tr") {
+
+            when (children.firstOrNull()?.tagName) {
+                "th" -> {
+                    currentType = children.first().ownText.removeSpaces()
+                }
+                "td" -> {
+
+                    val amount =
+                        children[1].ownText.removeSpaces().takeIf { it.isNotBlank() }
+                    val name = children[2].ownText.removeSpaces()
+
+                    val priceStudent = children[5]
+                        .ownText.removeSpaces().removeSuffix(",00 Kč").toInt()
+                    val priceNormal = children[6]
+                        .ownText.removeSpaces().removeSuffix(",00 Kč").toInt()
+
+                    var allergensFoodId: Int? = null
+                    children[3].tryFindFirst("a") {
+                        allergensFoodId =
+                            attribute("href").removePrefix("alergeny.php?alergen=")
+                                .toInt()
+                    }
+
+                    var imgName: String? = null
+                    children[4].tryFindFirst("a") {
+                        imgName = attribute("href").removeSpaces().let {
+                            val toFind = "&xFile="
+                            val index = it.indexOf(toFind)
+                            it.substring(index + toFind.length)
+                        }
+                    }
+
+                    val issuePlaces = mutableListOf<IssueLocation>()
+                    children[7]
+                    findAllAndCycle("span") {
+                        issuePlaces += IssueLocation(
+                            menzaId,
+                            id,
+                            ownText,
+                            attribute("title"),
+                        )
+                    }
+
+                    food += Food(
+                        FoodType(currentType!!),
+                        amount?.let { Amount(amount) },
+                        name,
+                        allergensFoodId?.let { FoodId(it) },
+                        imgName,
+                        Price(priceStudent),
+                        Price(priceNormal),
+                        issuePlaces,
+                    )
+                }
+            }
+        }
+        return food
     }
 }
+
