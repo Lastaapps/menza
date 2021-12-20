@@ -19,6 +19,7 @@
 
 package cz.lastaapps.scraping
 
+import cz.lastaapps.entity.LocalTime
 import cz.lastaapps.entity.TimeUtils
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.OpeningHours
@@ -28,11 +29,12 @@ import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.response
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
-import kotlinx.datetime.*
 
 object OpeningHoursScrapper {
 
-    suspend fun scrapOpeningHours(): Map<MenzaId, Set<OpeningHours>> {
+    suspend fun scrapOpeningHours(): Set<OpeningHours>? {
+
+        var hours: Set<OpeningHours>? = null
 
         skrape(AsyncFetcher) {
             request {
@@ -40,15 +42,15 @@ object OpeningHoursScrapper {
             }
             response {
                 htmlDocument {
-                    doParsing()
+                    hours = doParsing()
                 }
             }
         }
 
-        error("")
+        return hours
     }
 
-    private fun Doc.doParsing() {
+    private fun Doc.doParsing(): Set<OpeningHours> {
         val set = mutableSetOf<OpeningHours>()
 
         findFirst("#otdoby") {
@@ -65,15 +67,15 @@ object OpeningHoursScrapper {
                         val startDay = children[0].ownText.toCzechDayShortcutToDayOfWeek()
                         val endDay = children[2].ownText.takeIf { it.removeSpaces().isNotBlank() }
                             ?.toCzechDayShortcutToDayOfWeek()
-                        val startTime = children[3].ownText.parseTime()!!
-                        val endTime = children[5].ownText.parseTime()!!
+                        val startTime = children[3].ownText.parseTime()
+                        val endTime = children[5].ownText.parseTime()
                         val type = children[6].ownText.removeSpaces().takeIf { it.isNotBlank() }
 
                         val days = TimeUtils.getDaysOfWeek()
                         val startIndex = days.indexOf(startDay)
                         val endIndex = endDay?.let { days.indexOf(it) } ?: startIndex
 
-                        for (day in days.subList(startIndex, endIndex)) {
+                        for (day in days.subList(startIndex, endIndex + 1)) {
 
                             set += OpeningHours(
                                 MenzaId(id),
@@ -87,17 +89,22 @@ object OpeningHoursScrapper {
                 }
             }
         }
+
+        return set
     }
 
     private val timeRegex = "^([0-9]{1,2}):([0-9]{1,2})$".toRegex()
 
-    private fun String.parseTime(): LocalDateTime? {
+    private fun String.parseTime(): LocalTime? {
 
-        val (hours, minutes) = timeRegex.find(this)?.destructured ?: return null
+        val (sHours, sMinutes) = timeRegex.find(this)?.destructured ?: return null
 
-        return Instant.fromEpochMilliseconds(0)
-            .plus(hours.toInt(), DateTimeUnit.HOUR)
-            .plus(minutes.toInt(), DateTimeUnit.MINUTE)
-            .toLocalDateTime(TimeZone.UTC)
+        val hours = sHours.toIntOrNull() ?: return null
+        val minutes = sMinutes.toIntOrNull() ?: return null
+
+        if (hours == 0 && minutes == 0)
+            return null
+
+        return LocalTime(hours, minutes, 0)
     }
 }

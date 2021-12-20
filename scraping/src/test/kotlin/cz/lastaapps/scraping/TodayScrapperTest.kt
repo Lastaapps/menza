@@ -28,7 +28,7 @@ class TodayScrapperTest {
     @Test
     fun scrapeToday() {
         runBlocking {
-            val foodList = TodayScrapper.scrapeToday(MenzaId(2)).foodList
+            val foodList = TodayScrapper.scrapeToday(MenzaId(1)).foodList
 
             foodList.forEach { println(it) }
 

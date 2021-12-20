@@ -71,5 +71,6 @@ dependencies {
 
     testImplementation(Tests.JUNIT)
     testImplementation(Tests.COROUTINES)
+    testImplementation(Tests.KOTEST_ASSERTION)
 
 }
