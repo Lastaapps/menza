@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/entity" />
             <option value="$PROJECT_DIR$/scraping" />
             <option value="$PROJECT_DIR$/storage" />
+            <option value="$PROJECT_DIR$/storage/db" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -20,16 +20,13 @@
 package cz.lastaapps.storage
 
 import com.squareup.sqldelight.db.SqlDriver
+import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import cz.lastaapps.menza.db.MenzaDatabase
 
-expect class MenzaDriverFactory {
-    expect fun createDriver(): SqlDriver
-}
-
-fun createDatabase(driverFactory): MenzaDatabase {
-    val driver = driverFactory.createDriver()
-    val database = MenzaDatabase(driver)
-
-
-
-    return database
+actual class MenzaDriverFactory {
+    actual fun createDriver(): SqlDriver {
+        val driver: SqlDriver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        MenzaDatabase.Schema.create(driver)
+        return driver
+    }
 }

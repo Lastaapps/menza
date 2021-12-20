@@ -68,6 +68,9 @@ android {
     buildFeatures {
         buildConfig = false
     }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
 
@@ -93,6 +96,10 @@ android {
 dependencies {
 
     coreLibraryDesugaring(Libs.DESUGARING)
+
+    implementation(project(":entity"))
+    implementation(project(":scraping"))
+    implementation(project(":storage:db"))
 
     implementation(Libs.SPLASHSCREEN)
     implementation(Libs.CORE)

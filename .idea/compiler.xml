@@ -9,6 +9,10 @@
       <module name="Menza.entity.desktopTest" target="11" />
       <module name="Menza.storage.commonMain" target="11" />
       <module name="Menza.storage.commonTest" target="11" />
+      <module name="Menza.storage.db.commonMain" target="11" />
+      <module name="Menza.storage.db.commonTest" target="11" />
+      <module name="Menza.storage.db.desktopMain" target="11" />
+      <module name="Menza.storage.db.desktopTest" target="11" />
       <module name="Menza.storage.desktopMain" target="11" />
       <module name="Menza.storage.desktopTest" target="11" />
     </bytecodeTargetLevel>

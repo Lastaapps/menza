@@ -17,28 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.storage
+
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
+
+class MenzaDriverFactoryTest {
+
+    @Test
+    @ExperimentalCoroutinesApi
+    fun testInsertion() = runTest {
+        val db = createDatabase(MenzaDriverFactory())
     }
+
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-)

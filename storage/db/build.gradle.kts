@@ -20,7 +20,7 @@
 plugins {
     kotlin("multiplatform")
     id(Plugins.LIBRARY)
-    id(Plugins.SQLDELIGHT)
+    id(Plugins.SQLDELIGHT) version Versions.SQLDELIGHT
 }
 
 group = App.GROUP
@@ -55,7 +55,11 @@ kotlin {
             dependencies {
                 implementation(Libs.KOTLINX_DATETIME)
                 implementation(Tests.KOTEST_ASSERTION)
+
+                implementation("com.squareup.sqldelight:runtime:${Versions.SQLDELIGHT}")
                 implementation(Libs.SQLDELIGHT_COROUTINES)
+
+                implementation(project(":entity"))
             }
         }
         val commonTest by getting {
@@ -80,6 +84,7 @@ kotlin {
         val desktopTest by getting {
             dependencies {
                 implementation(Tests.JUNIT)
+                implementation(Tests.COROUTINES)
             }
         }
     }
@@ -87,18 +92,19 @@ kotlin {
 
 sqldelight {
     database("MenzaDatabase") {
-        packageName = "cz.lastaapps.menza"
+        packageName = "cz.lastaapps.menza.db"
+        sourceFolders = listOf("sqldelight")
     }
 }
 
 android {
-    compileSdk = 31
+    compileSdk = App.COMPILE_SDK
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 31
+        minSdk = App.MIN_SDK
+        targetSdk = App.TARGET_SDK
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

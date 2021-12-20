@@ -82,13 +82,13 @@ kotlin {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = App.COMPILE_SDK
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 31
+        minSdk = App.MIN_SDK
+        targetSdk = App.TARGET_SDK
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
