@@ -41,4 +41,5 @@ include(
     ":scraping",
     ":entity",
     ":storage:db",
+    ":storage:repo",
 )
