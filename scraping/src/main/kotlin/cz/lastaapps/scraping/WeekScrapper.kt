@@ -35,7 +35,10 @@ object WeekScrapper {
 
     private val dateRegex = "^([0-9]{1,2}). ([0-9]{1,2}). ([0-9]{4})$".toRegex()
 
-    suspend fun scrapeWeek(menzaId: MenzaId, weekNumber: WeekNumber): Set<WeekFood> {
+    suspend fun scrapeWeek(
+        menzaId: MenzaId,
+        @Suppress("UNUSED_PARAMETER") weekNumber: WeekNumber
+    ): Set<WeekFood> {
 
         var set = emptySet<WeekFood>()
 

@@ -37,7 +37,6 @@ dependencyResolutionManagement {
 rootProject.name = "Menza"
 
 include(
-    //TODO uncomment ":app",
     ":app",
     ":scraping",
     ":entity",

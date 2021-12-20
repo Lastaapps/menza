@@ -38,6 +38,7 @@ plugins {
 }
 
 
+/*
 // Address https://github.com/gradle/gradle/issues/4823: Force parent project evaluation before sub-project evaluation for Kotlin build scripts
 // Enables Kotlin DSL scripts to run while org.gradle.configureondemand = true
 subprojects {
@@ -50,6 +51,7 @@ subprojects {
             .forEach { evaluationDependsOn(it.path) }
     }
 }
+*/
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
