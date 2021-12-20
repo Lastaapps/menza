@@ -35,7 +35,7 @@ object Versions {
     const val KOTLIN = "1.6.10"
     const val KOTLIN_LANGUAGE_VERSION = "1.6"
     const val KSP = "$KOTLIN-1.0.2"
-    const val COROUTINES = "1.5.2-native-mt"
+    const val COROUTINES = "1.6.0"
     const val KTOR = "1.6.5"
 
     //androidx
