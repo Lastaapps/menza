@@ -30,6 +30,7 @@ object Plugins {
 
     const val KSP = "com.google.devtools.ksp"
     const val KAPT = "kotlin-kapt"
+    const val SQLDELIGHT = "com.squareup.sqldelight"
 
     const val PARCELIZE = "kotlin-parcelize"
 

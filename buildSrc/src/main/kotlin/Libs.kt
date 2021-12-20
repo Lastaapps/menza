@@ -115,4 +115,10 @@ object Libs {
     const val ACCOMPANIST_SWIPE_TO_REFRESH =
         "com.google.accompanist:accompanist-swiperefresh:${Versions.ACCOMPANIST}"
 
+    const val SQLDELIGHT_ANDROID = "com.squareup.sqldelight:android-driver:${Versions.SQLDELIGHT}"
+    const val SQLDELIGHT_JVM = "com.squareup.sqldelight:sqlite-driver:${Versions.SQLDELIGHT}"
+    const val SQLDELIGHT_COROUTINES =
+        "com.squareup.sqldelight:coroutines-extensions:${Versions.SQLDELIGHT}"
+    const val SQLDELIGHT_PLUGIN = "com.squareup.sqldelight:gradle-plugin:${Versions.SQLDELIGHT}"
+
 }

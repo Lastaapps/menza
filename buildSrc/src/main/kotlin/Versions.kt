@@ -76,9 +76,10 @@ object Versions {
     //firebase
     const val FIREBASE_BOM = "29.0.3"
 
-    //testing KMP
+    //KMP
     const val KOTEST = "5.0.3"
     const val KOTLINX_DATETIME = "0.3.1"
+    const val SQLDELIGHT = "1.5.3"
 
     //testing android
     const val TEST_JUNIT = "4.13.2"
