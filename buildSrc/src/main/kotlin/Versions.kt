@@ -44,6 +44,7 @@ object Versions {
 
     //compose
     const val COMPOSE = "1.1.0-rc01"
+    const val COMPOSE_COMPILER = "1.1.0-rc02"
     const val COMPOSE_MATERIAL_3 = "1.0.0-alpha02"
     const val CONSTRAINTLAYOUT_COMPOSE = "1.0.0-rc02"
     const val NAVIGATION = "2.4.0-rc01"
@@ -53,7 +54,7 @@ object Versions {
     const val GOOGLE_MATERIAL = "1.5.0-rc01"
     const val OSS_LICENSE = "17.0.0"
     const val PLAY_SERVICES = "1.8.1"
-    const val ACCOMPANIST = "0.21.5-rc"
+    const val ACCOMPANIST = "0.22.0-rc"
 
     //firebase
     const val FIREBASE_BOM = "29.0.3"
