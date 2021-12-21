@@ -19,9 +19,13 @@
 
 package cz.lastaapps.entity.menza
 
-sealed class Opened(val id: Byte) {
+sealed class Opened private constructor(val id: Int) {
     object OPENED : Opened(1)
     object CLOSED : Opened(0)
     object UNKNOWN : Opened(-1)
     object EXPECTED : Opened(2)
+
+    companion object {
+        val states = listOf(OPENED, CLOSED, UNKNOWN, EXPECTED)
+    }
 }

@@ -1,3 +1,48 @@
-CREATE TABLE  (
+import cz.lastaapps.entity.LocalTime;
+import cz.lastaapps.entity.menza.MenzaId;
+import kotlinx.datetime.DayOfWeek;
 
+CREATE TABLE openedHoursEntity (
+    menza_id INTEGER AS MenzaId NOT NULL,
+    name TEXT NOT NULL,
+    day_of_week INTEGER AS DayOfWeek NOT NULL,
+    open INTEGER AS LocalTime,
+    close INTEGER AS LocalTime,
+    comment TEXT,
+    PRIMARY KEY (menza_id, name, day_of_week)
 );
+
+getAllHours:
+    SELECT *
+    FROM openedHoursEntity;
+
+getForMenzaId:
+    SELECT *
+    FROM openedHoursEntity
+    WHERE menza_id = :menzaId;
+
+getForMenzaAndName:
+    SELECT *
+    FROM openedHoursEntity
+    WHERE menza_id = :menzaId
+    AND name = :name;
+
+getAllNamesForMenza:
+    SELECT name
+    FROM openedHoursEntity
+    WHERE menza_id = :menzaId;
+
+getForMenzaNameAndDay:
+    SELECT *
+    FROM openedHoursEntity
+    WHERE menza_id = :menzaId
+    AND name = :name
+    AND day_of_week = :dayOfWeek;
+
+
+deleteHours:
+    DELETE FROM menzaEntity;
+
+insertHours:
+    INSERT INTO menzaEntity VALUES :menzas;
+

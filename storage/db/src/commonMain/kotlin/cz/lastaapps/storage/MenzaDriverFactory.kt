@@ -20,7 +20,12 @@
 package cz.lastaapps.storage
 
 import com.squareup.sqldelight.db.SqlDriver
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.db.MenzaDatabase
+import menza.ContactEntity
+import menza.MenzaEntity
+import menza.OpenedHoursEntity
 
 expect class MenzaDriverFactory {
     fun createDriver(): SqlDriver
@@ -28,5 +33,21 @@ expect class MenzaDriverFactory {
 
 fun createDatabase(driverFactory: MenzaDriverFactory): MenzaDatabase {
     val driver = driverFactory.createDriver()
-    return MenzaDatabase(driver)
+    return MenzaDatabase(
+        driver,
+        menzaEntityAdapter = MenzaEntity.Adapter(
+            idAdapter = ColumnConvertors.menzaId,
+            openedAdapter = ColumnConvertors.opened,
+            addressAdapter = ColumnConvertors.address,
+            locationAdapter = ColumnConvertors.location,
+        ),
+        contactEntityAdapter = ContactEntity.Adapter(
+            menza_idAdapter = ColumnConvertors.menzaId,
+        ),
+        openedHoursEntityAdapter = OpenedHoursEntity.Adapter(
+            menza_idAdapter = ColumnConvertors.menzaId,
+            day_of_weekAdapter = ColumnConvertors.dayOfWeek,
+            open_Adapter = ColumnConvertors.localTime,
+            closeAdapter = ColumnConvertors.localTime,
+        ),
 }

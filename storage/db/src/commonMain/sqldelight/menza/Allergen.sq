@@ -1,3 +1,20 @@
-CREATE TABLE  (
-
+CREATE TABLE allergenEntity (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL
 );
+
+getAllAlergens:
+    SELECT *
+    FROM allergenEntity;
+
+getAllergenById:
+    SELECT *
+    FROM allergenEntity
+    WHERE id = :id;
+
+deleteAllergens:
+    DELETE FROM allergenEntity;
+
+insertAllergens:
+    INSERT INTO allergenEntity VALUES :menzas;

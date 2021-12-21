@@ -1,41 +1,38 @@
+import cz.lastaapps.entity.menza.Address;
+import cz.lastaapps.entity.menza.Location;
+import cz.lastaapps.entity.menza.MenzaId;
+import cz.lastaapps.entity.menza.Opened;
+
 CREATE TABLE menzaEntity (
-    id INTEGER NOT NULL PRIMARY KEY,
+    id INTEGER AS MenzaId NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     message TEXT,
-    opened INTEGER NOT NULL,
-    address TEXT NOT NULL,
-    map_link TEXT NOT NULL
-);
-
-CREATE TABLE contactEntity (
-    menza_id INTEGER NOT NULL PRIMARY KEY,
-    role TEXT NOT NULL,
-    name TEXT NOT NULL,
-    phone TEXT NOT NULL,
-    email TEXT NOT NULL
-);
-
-CREATE TABLE hoursEntity (
-    menza_id INTEGER NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
-    day_of_week INTEGER NOT NULL,
-    open INTEGER,
-    close INTEGER,
-    comment TEXT
-);
-
-CREATE TABLE alergenEntity (
-    id INTEGER NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
-    description TEXT NOT NULL
+    opened INTEGER AS Opened NOT NULL,
+    address TEXT AS Address NOT NULL,
+    location TEXT AS Location NOT NULL
 );
 
 CREATE INDEX menza_id ON menzaEntity(id);
-CREATE INDEX contacts_menza_id ON contactEntity(menza_id);
-CREATE INDEX hours_menza_id ON hoursEntity(menza_id);
 
-selectAll:
-SELECT *
-FROM menzaEntity;
+getAllMenzas:
+    SELECT *
+    FROM menzaEntity;
+
+getMenzasById:
+    SELECT *
+    FROM menzaEntity
+    WHERE id = :id;
+
+updateOpened:
+    UPDATE menzaEntity
+    SET opened = :opened
+    WHERE id IN :ids;
+
+deleteMenzas:
+    DELETE FROM menzaEntity;
+
+insertMenzas:
+    INSERT INTO menzaEntity VALUES :menzas;
+
 
 

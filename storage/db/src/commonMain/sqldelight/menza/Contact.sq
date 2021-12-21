@@ -1,3 +1,24 @@
-CREATE TABLE  (
+import cz.lastaapps.entity.menza.MenzaId;
 
+CREATE TABLE contactEntity (
+    menza_id INTEGER AS MenzaId NOT NULL PRIMARY KEY,
+    role TEXT,
+    name TEXT,
+    phone TEXT,
+    email TEXT
 );
+
+getAllConstacts:
+    SELECT *
+    FROM contactEntity;
+
+getContactById:
+    SELECT *
+    FROM contactEntity
+    WHERE menza_id = :menzy_id;
+
+deleteContacts:
+    DELETE FROM contactEntity;
+
+insertContacts:
+    INSERT INTO contactEntity VALUES :menzas;
