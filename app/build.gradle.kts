@@ -87,9 +87,7 @@ android {
         compose = true
     }
     composeOptions {
-        //TODO revert kotlin compiler extension
-        //kotlinCompilerExtensionVersion = Versions.COMPOSE
-        kotlinCompilerExtensionVersion = "1.1.0-rc02"
+        kotlinCompilerExtensionVersion = Versions.COMPOSE_COMPILER
     }
 }
 
