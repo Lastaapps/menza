@@ -100,6 +100,7 @@ object Libs {
     const val SQLDELIGHT_JVM = "com.squareup.sqldelight:sqlite-driver:${Versions.SQLDELIGHT}"
     const val SQLDELIGHT_COROUTINES =
         "com.squareup.sqldelight:coroutines-extensions:${Versions.SQLDELIGHT}"
+    const val SQLDELIGHT_RUNTIME = "com.squareup.sqldelight:runtime:${Versions.SQLDELIGHT}"
     const val SQLDELIGHT_PLUGIN = "com.squareup.sqldelight:gradle-plugin:${Versions.SQLDELIGHT}"
 
     const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"
