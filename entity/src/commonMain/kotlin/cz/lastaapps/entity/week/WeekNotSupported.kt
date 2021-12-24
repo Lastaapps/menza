@@ -17,15 +17,6 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.allergens
+package cz.lastaapps.entity.week
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
-data class AllergenFood(
-    val foodId: String,
-    val allergens: AllergenList,
-) {
-    init {
-        foodId.shouldNotBeBlank()
-    }
-}
+class WeekNotSupported : Exception()

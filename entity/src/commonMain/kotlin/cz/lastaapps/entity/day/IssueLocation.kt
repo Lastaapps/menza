@@ -19,18 +19,16 @@
 
 package cz.lastaapps.entity.day
 
-import cz.lastaapps.entity.menza.MenzaId
-import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.string.shouldNotBeBlank
 
 data class IssueLocation(
-    val menzaId: MenzaId,
     val locationId: String,
     val abbrev: String,
     val name: String,
 ) {
     init {
-        locationId.isNotBlank().shouldBeTrue()
-        abbrev.isNotBlank().shouldBeTrue()
-        name.isNotBlank().shouldBeTrue()
+        locationId.shouldNotBeBlank()
+        abbrev.shouldNotBeBlank()
+        name.shouldNotBeBlank()
     }
 }

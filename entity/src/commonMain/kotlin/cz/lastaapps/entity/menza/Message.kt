@@ -17,18 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage
+package cz.lastaapps.entity.menza
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
+import io.kotest.matchers.string.shouldNotBeBlank
 
-class MenzaDriverFactoryTest {
-
-    @Test
-    @ExperimentalCoroutinesApi
-    fun testInsertion() = runTest {
-        val db = createDatabase(MenzaDriverFactory())
+data class Message(
+    val id: MenzaId,
+    val message: String,
+) {
+    init {
+        message.shouldNotBeBlank()
     }
-
 }

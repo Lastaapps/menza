@@ -19,12 +19,11 @@
 
 package cz.lastaapps.entity.common
 
-import io.kotest.matchers.booleans.shouldBeTrue
-import kotlin.jvm.JvmInline
+import io.kotest.matchers.string.shouldNotBeBlank
 
 @JvmInline
 value class FoodType(val type: String) {
     init {
-        type.isNotBlank().shouldBeTrue()
+        type.shouldNotBeBlank()
     }
 }

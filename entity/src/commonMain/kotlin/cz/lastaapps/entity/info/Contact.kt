@@ -17,15 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.allergens
+package cz.lastaapps.entity.info
 
-import io.kotest.matchers.string.shouldNotBeBlank
+import cz.lastaapps.entity.menza.MenzaId
 
-data class AllergenFood(
-    val foodId: String,
-    val allergens: AllergenList,
+data class Contact(
+    val id: MenzaId,
+    val role: String?,
+    val name: String?,
+    val phoneNumber: String?,
+    val email: String?,
 ) {
     init {
-        foodId.shouldNotBeBlank()
+        assert(role != null || name != null || phoneNumber != null || email != null)
     }
 }

@@ -24,64 +24,60 @@ import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.day.FoodId
 import it.skrape.core.htmlDocument
 import it.skrape.fetcher.AsyncFetcher
-import it.skrape.fetcher.response
+import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.img
 import it.skrape.selects.html5.td
 
-object AllergensScrapper {
+object AllergensScrapper : Scrapper<Allergen> {
 
-    suspend fun scrapAllAllergens(): Set<Allergen> {
-        return scrapeAllergens("https://agata.suz.cvut.cz/jidelnicky/alergenyall.php")
-    }
-
-    suspend fun scrapFoodAllergens(foodId: FoodId): Set<Allergen> {
-        return scrapeAllergens("https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${foodId.id}")
-    }
-
-    private suspend fun scrapeAllergens(url: String): Set<Allergen> {
-
-        var toReturn: Set<Allergen>? = null
-
-        skrape(AsyncFetcher) {
-            request {
-                this.url = url
-            }
-            response {
-                htmlDocument {
-                    toReturn = scrapeHtml()
-                }
-            }
+    suspend fun createRequestForAll() = skrape(AsyncFetcher) {
+        request {
+            this.url = "https://agata.suz.cvut.cz/jidelnicky/alergenyall.php"
         }
-
-        return toReturn ?: error("Scrapping failed")
     }
 
-    private fun Doc.scrapeHtml(): Set<Allergen> {
-        val set = mutableSetOf<Allergen>()
-        findAllAndCycle("#otdoby tbody tr") {
-            var allergenId = 0
-            var name = ""
-            var description = ""
+    suspend fun createRequestForFood(foodId: FoodId) = skrape(AsyncFetcher) {
+        request {
+            this.url = "https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${foodId.id}"
+        }
+    }
 
-            td {
-                findByIndex(0) {
-                    img {
-                        findFirst {
-                            allergenId = attribute("alt").trim().toInt()
+    override fun scrape(result: Result): Set<Allergen> {
+        return result.htmlDocument { parseHtml() }
+    }
+
+    override fun scrape(html: String): Set<Allergen> {
+        return htmlDocument(html) { parseHtml() }
+    }
+
+    private fun Doc.parseHtml(): Set<Allergen> {
+        val set = mutableSetOf<Allergen>()
+
+        findFirst("#otdoby tbody") {
+            tryFindAllAndCycle("tr") {
+
+                if (attributes["style"]?.contains("none") == true) {
+                    return@tryFindAllAndCycle
+                }
+
+                td {
+                    val allergenId = findByIndex(0) {
+                        img {
+                            findFirst {
+                                attributes["alt"]?.removeSpaces()
+                                    ?.takeIf { it.isNotBlank() }?.toInt()
+                                    ?: error("Blank allergen code")
+                            }
                         }
                     }
-                }
-                findByIndex(1) {
-                    name = ownText
-                }
-                findByIndex(2) {
-                    description = ownText
+                    val name = findByIndex(1) { ownText }
+                    val description = findByIndex(2) { ownText }
+
+                    set += Allergen(AllergenId(allergenId), name, description)
                 }
             }
-
-            set += Allergen(AllergenId(allergenId), name, description)
         }
 
         return set

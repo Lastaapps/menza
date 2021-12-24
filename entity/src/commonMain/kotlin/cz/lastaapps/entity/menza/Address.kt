@@ -19,12 +19,11 @@
 
 package cz.lastaapps.entity.menza
 
-import io.kotest.matchers.booleans.shouldBeTrue
-import kotlin.jvm.JvmInline
+import io.kotest.matchers.string.shouldNotBeBlank
 
 @JvmInline
 value class Address(val stringForm: String) {
     init {
-        stringForm.isNotBlank().shouldBeTrue()
+        stringForm.shouldNotBeBlank()
     }
 }

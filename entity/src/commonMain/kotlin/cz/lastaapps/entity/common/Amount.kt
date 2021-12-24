@@ -19,12 +19,11 @@
 
 package cz.lastaapps.entity.common
 
-import io.kotest.matchers.booleans.shouldBeTrue
-import kotlin.jvm.JvmInline
+import io.kotest.matchers.string.shouldNotBeBlank
 
 @JvmInline
 value class Amount(val amount: String) {
     init {
-        amount.isNotBlank().shouldBeTrue()
+        amount.shouldNotBeBlank()
     }
 }

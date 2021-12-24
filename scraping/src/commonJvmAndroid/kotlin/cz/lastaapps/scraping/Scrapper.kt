@@ -17,16 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.menza
+package cz.lastaapps.scraping
 
-data class Contact(
-    val id: MenzaId,
-    val role: String?,
-    val name: String?,
-    val phoneNumber: String?,
-    val email: String?,
-) {
-    init {
-        assert(role != null || name != null || phoneNumber != null || email != null)
-    }
+import it.skrape.fetcher.Result
+
+interface Scrapper<T : Any?> {
+    fun scrape(result: Result): Set<T>
+    fun scrape(html: String): Set<T>
 }

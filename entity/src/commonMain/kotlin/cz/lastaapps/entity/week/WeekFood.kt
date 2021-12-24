@@ -21,7 +21,7 @@ package cz.lastaapps.entity.week
 
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.FoodType
-import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.string.shouldNotBeBlank
 import kotlinx.datetime.LocalDate
 
 data class WeekFood(
@@ -32,7 +32,7 @@ data class WeekFood(
 ) : Comparable<WeekFood> {
 
     init {
-        name.isNotBlank().shouldBeTrue()
+        name.shouldNotBeBlank()
     }
 
     override fun compareTo(other: WeekFood): Int {

@@ -22,7 +22,7 @@ package cz.lastaapps.storage
 import com.squareup.sqldelight.ColumnAdapter
 import cz.lastaapps.entity.LocalTime
 import cz.lastaapps.entity.menza.Address
-import cz.lastaapps.entity.menza.Location
+import cz.lastaapps.entity.menza.Coordinates
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.Opened
 import kotlinx.datetime.DayOfWeek
@@ -58,11 +58,11 @@ internal object ColumnConvertors {
         override fun encode(value: Address) = value.stringForm
     }
 
-    val location = object : ColumnAdapter<Location, String> {
+    val coordinates = object : ColumnAdapter<Coordinates, String> {
         override fun decode(databaseValue: String) =
-            Location.restoreFromString(databaseValue)
+            Coordinates.restoreFromString(databaseValue)
 
-        override fun encode(value: Location) = value.saveToString()
+        override fun encode(value: Coordinates) = value.saveToString()
     }
 
     val dayOfWeek = object : ColumnAdapter<DayOfWeek, Long> {

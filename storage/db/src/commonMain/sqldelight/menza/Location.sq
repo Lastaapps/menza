@@ -1,0 +1,24 @@
+import cz.lastaapps.entity.menza.Address;
+import cz.lastaapps.entity.menza.Coordinates;
+import cz.lastaapps.entity.menza.MenzaId;
+
+CREATE TABLE locationEntity(
+    menza_id INTEGER AS MenzaId NOT NULL PRIMARY KEY,
+    adderss TEXT AS Address NOT NULL,
+    coordinates TEXT AS Coordinates NOT NULL
+);
+
+getAllLocations:
+    SELECT * FROM locationEntity;
+
+getLocationForMenza:
+    SELECT * FROM locationEntity
+    WHERE menza_id = :menzaId;
+
+deleteLocations:
+    DELETE FROM locationEntity;
+
+insertLocations:
+    INSERT INTO locationEntity
+    VALUES :locations;
+

@@ -22,20 +22,23 @@ package cz.lastaapps.entity.day
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.FoodType
 import cz.lastaapps.entity.common.Price
-import io.kotest.matchers.booleans.shouldBeTrue
+import cz.lastaapps.entity.menza.MenzaId
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.string.shouldNotBeBlank
 
 data class Food(
+    val menzaId: MenzaId,
     val foodType: FoodType,
     val amount: Amount?,
     val name: String,
     val allergenFoodId: FoodId?,
-    val imageName: String?,
+    val imageUrl: String?,
     val priceStudent: Price,
     val priceNormal: Price,
     val issuePlaces: List<IssueLocation>,
 ) {
     init {
-        name.isNotBlank().shouldBeTrue()
-        issuePlaces.isNotEmpty().shouldBeTrue()
+        name.shouldNotBeBlank()
+        issuePlaces.shouldNotBeEmpty()
     }
 }

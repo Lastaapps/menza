@@ -19,7 +19,7 @@
 
 package cz.lastaapps.entity.allergens
 
-import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.string.shouldNotBeBlank
 
 data class Allergen(
     val id: AllergenId,
@@ -28,8 +28,8 @@ data class Allergen(
 ) : Comparable<Allergen> {
 
     init {
-        name.isNotBlank().shouldBeTrue()
-        description.isNotBlank().shouldBeTrue()
+        name.shouldNotBeBlank()
+        description.shouldNotBeBlank()
     }
 
     override fun compareTo(other: Allergen): Int {

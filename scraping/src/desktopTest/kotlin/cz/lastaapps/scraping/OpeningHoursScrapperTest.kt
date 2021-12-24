@@ -20,6 +20,9 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.LocalTime
+import io.kotest.assertions.throwables.shouldThrowAny
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -28,21 +31,21 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DayOfWeek
 import org.junit.jupiter.api.Test
 
+@ExperimentalCoroutinesApi
 class OpeningHoursScrapperTest {
 
     @Test
-    @ExperimentalCoroutinesApi
-    fun scrapOpeningHours() = runTest {
+    fun scrapOpeningHoursOnline() = runTest {
 
-        val hours = OpeningHoursScrapper.scrapOpeningHours()
+        val result = OpeningHoursScrapper.createRequest().scrape()
+        val hours = OpeningHoursScrapper.scrape(result)
 
-        hours.shouldNotBeNull()
         hours.shouldNotBeEmpty()
 
         val strahov = hours.filter { it.menzaId.id == 1 }
         strahov.shouldNotBeEmpty()
 
-        val restaurant = strahov.filter { it.name == "Restaurace" }
+        val restaurant = strahov.filter { it.locationName == "Restaurace" }
         restaurant.shouldNotBeEmpty()
 
         val restaurantOpen = LocalTime(11, 0, 0)
@@ -63,5 +66,788 @@ class OpeningHoursScrapperTest {
         found.shouldNotBeNull()
         found.open shouldBe restaurantOpen
         found.close shouldBe LocalTime(19, 30, 0)
+    }
+
+    @Test
+    fun scrapeOpeningHours() = runTest {
+        val toTest = """
+        <div id='otdoby' style="max-width:800px;padding-left:10px">
+        <section id="section15"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>ArchiCafé</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">ArchiCafé</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Čt</td>
+        <td style="text-align:right; width:30px;">8:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">17:30</td>
+        <td style="text-align:left;" >&nbsp; </td>
+        </tr>
+        <tr>
+        <td style="text-align:right; width:25px;">Pá</td>
+        <td style="text-align:center; width:10px;"></td>
+        <td style="text-align:left; width:25px;"></td>
+        <td style="text-align:right; width:30px;">8:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:00</td>
+        <td style="text-align:left;" >&nbsp; </td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section5"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Masarykova kolej</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Restaurace</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">11:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">15:00</td>
+        <td style="text-align:left;" >&nbsp; </td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section12"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>MEGA BUF FAT</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Bufet FSv</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Čt</td>
+        <td style="text-align:right; width:30px;">7:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">18:00</td>
+        <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+        <tr>
+        <td style="text-align:right; width:25px;">Pá</td>
+        <td style="text-align:center; width:10px;"></td>
+        <td style="text-align:left; width:25px;"></td>
+        <td style="text-align:right; width:30px;">7:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:30</td>
+        <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section9"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Kladno</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Restaurace</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">10:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:00</td>
+        <td style="text-align:left;" >&nbsp; </td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Kantýna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">8:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">15:00</td>
+        <td style="text-align:left;" >&nbsp; </td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        </div><div class="row-fluid"><div class="span6 offset6">&nbsp;</div><div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section4"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Podolí</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Jídelna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Čt</td>
+        <td style="text-align:right; width:30px;">11:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:30</td>
+        <td style="text-align:left;" >&nbsp;Obědy</td>
+        </tr>
+        <tr>
+        <td style="text-align:right; width:25px;">Pá</td>
+        <td style="text-align:center; width:10px;"></td>
+        <td style="text-align:left; width:25px;"></td>
+        <td style="text-align:right; width:30px;">11:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:00</td>
+        <td style="text-align:left;" >&nbsp;Obědy</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Pokladna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">11:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:00</td>
+        <td style="text-align:left;" >&nbsp;Pokladna</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        </div><div class="row-fluid"><div class="span6 offset6">&nbsp;</div><div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Restaurace</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Čt</td>
+        <td style="text-align:right; width:30px;">11:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">20:30</td>
+        <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+        <tr>
+        <td style="text-align:right; width:25px;">Pá</td>
+        <td style="text-align:center; width:10px;"></td>
+        <td style="text-align:left; width:25px;"></td>
+        <td style="text-align:right; width:30px;">11:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">19:30</td>
+        <td style="text-align:left;" >&nbsp; </td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Jídelna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">6:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">9:30</td>
+        <td style="text-align:left;" >&nbsp;Snídaně</td>
+        </tr>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">11:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:30</td>
+        <td style="text-align:left;" >&nbsp;Oběd</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        </div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Snack Bar blok 1</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Čt</td>
+        <td style="text-align:right; width:30px;">7:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">15:30</td>
+        <td style="text-align:left;" >&nbsp; </td>
+        </tr>
+        <tr>
+        <td style="text-align:right; width:25px;">Pá</td>
+        <td style="text-align:center; width:10px;"></td>
+        <td style="text-align:left; width:25px;"></td>
+        <td style="text-align:right; width:30px;">7:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:00</td>
+        <td style="text-align:left;" >&nbsp; </td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section2"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Studentský dům</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Jídelna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">0:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">0:00</td>
+        <td style="text-align:left;" >&nbsp;ZŠ Lvíčata</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Jídelna 2</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">10:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:30</td>
+        <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        </div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Jídelna 3</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">10:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:30</td>
+        <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Pokladna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">8:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:30</td>
+        <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        </div><div class="row-fluid"><div class="span6 offset6">&nbsp;</div><div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section14"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Oddělění správy IT GÚ</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Oddělení správy IT Gastroprovozů</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">9:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">15:30</td>
+        <td style="text-align:left;" >&nbsp; není zaručeno</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section3"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Technická menza</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Jídelna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">8:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">10:00</td>
+        <td style="text-align:left;" >&nbsp;snídaně</td>
+        </tr>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">10:45</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:30</td>
+        <td style="text-align:left;" >&nbsp;obědy </td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Kavárna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">8:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:30</td>
+        <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        </div><div class="row-fluid"><div class="span6 offset6">&nbsp;</div><div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section6"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Výdejna Horská</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Výdejna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Pá</td>
+        <td style="text-align:right; width:30px;">11:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:00</td>
+        <td style="text-align:left;" >&nbsp;Obědy</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Bufet</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Čt</td>
+        <td style="text-align:right; width:30px;">8:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">15:30</td>
+        <td style="text-align:left;" >&nbsp; Pondělí - Čtvrtek</td>
+        </tr>
+        <tr>
+        <td style="text-align:right; width:25px;">Pá</td>
+        <td style="text-align:center; width:10px;"></td>
+        <td style="text-align:left; width:25px;"></td>
+        <td style="text-align:right; width:30px;">8:00</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:00</td>
+        <td style="text-align:left;" >&nbsp; Pátek</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        </div><div class="row-fluid"><div class="span6 offset6">&nbsp;</div><div class="span6 offset6">&nbsp;</div></div></div><br></section><section id="section8"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Výdejna Karlovo náměstí</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+        <table class="table table-striped table-condensed" style="max-width:500px;">
+        <thead>
+        <tr>
+        <th colspan="7">Výdejna</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="text-align:right; width:25px;">Po</td>
+        <td style="text-align:center; width:10px;">–</td>
+        <td style="text-align:left; width:25px;">Čt</td>
+        <td style="text-align:right; width:30px;">10:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:30</td>
+        <td style="text-align:left;" >&nbsp;Obědy</td>
+        </tr>
+        <tr>
+        <td style="text-align:right; width:25px;">Pá</td>
+        <td style="text-align:center; width:10px;"></td>
+        <td style="text-align:left; width:25px;"></td>
+        <td style="text-align:right; width:30px;">10:30</td>
+        <td style="text-align:center; width:8px;">–</td>
+        <td style="text-align:left; width:30px;">14:00</td>
+        <td style="text-align:left;" >&nbsp;Obědy</td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+        <div class="span6 offset6">&nbsp;</div></div></div><br></section></div>
+        </div>
+        </div>"""
+
+        val hours = OpeningHoursScrapper.scrape(toTest)
+
+        hours.map { it.menzaId to it.locationName }.toSet().shouldHaveSize(20)
+
+        val strahov = hours.filter { it.menzaId.id == 1 }
+        strahov.shouldNotBeEmpty()
+
+        val restaurant = strahov.filter { it.locationName == "Restaurace" }
+        restaurant.shouldNotBeEmpty()
+
+        val restaurantOpen = LocalTime(11, 0, 0)
+        val restaurantClose = LocalTime(20, 30, 0)
+
+        for (day in listOf(
+            DayOfWeek.MONDAY,
+            DayOfWeek.TUESDAY,
+            DayOfWeek.WEDNESDAY,
+            DayOfWeek.THURSDAY,
+        )) {
+            val found = strahov.find { it.dayOfWeek == day }
+            found.shouldNotBeNull()
+            found.open shouldBe restaurantOpen
+            found.close shouldBe restaurantClose
+        }
+        val found = strahov.find { it.dayOfWeek == DayOfWeek.FRIDAY }
+        found.shouldNotBeNull()
+        found.open shouldBe restaurantOpen
+        found.close shouldBe LocalTime(19, 30, 0)
+    }
+
+    @Test
+    fun malformed() = runTest {
+        val emptyList = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      </div>
+      </div>
+      </section>
+</div>"""
+        val missingId = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Čt</td>
+          <td style="text-align:right; width:30px;">11:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">20:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val missingIdElement = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Čt</td>
+          <td style="text-align:right; width:30px;">11:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">20:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val malformedId = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="sectionABC"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Čt</td>
+          <td style="text-align:right; width:30px;">11:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">20:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val noPlaceName = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7"></th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Čt</td>
+          <td style="text-align:right; width:30px;">11:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">20:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val switchedDays = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Čt</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Po</td>
+          <td style="text-align:right; width:30px;">11:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">20:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val sameDay = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Po</td>
+          <td style="text-align:right; width:30px;">11:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">20:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val switchedTimes = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Čt</td>
+          <td style="text-align:right; width:30px;">20:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">11:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val sameTimes = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Čt</td>
+          <td style="text-align:right; width:30px;">11:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">11:00</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val missingRows = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Čt</td>
+          <td style="text-align:right; width:30px;">11:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val malformedTime = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Čt</td>
+          <td style="text-align:right; width:30px;">AA:BB</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">20:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val unknownDay = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Poneděle</td>
+          <td style="text-align:right; width:30px;">11:00</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">20:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+        val hoursOnly = """<div id='otdoby' style="max-width:800px;padding-left:10px">
+<section id="section1"><div class="data2"><div class="row-fluid"><div class="span12"><div style="color: #007fc5"><h3>Menza Strahov</h3><br></div></div></div><div class="row-fluid">      <div class="span6">
+      <table class="table table-striped table-condensed" style="max-width:500px;">
+       <thead> <tr> <th colspan="7">Restaurace</th>       </tr> </thead>
+       <tbody>     
+              <tr>          
+          <td style="text-align:right; width:25px;">Po</td>
+          <td style="text-align:center; width:10px;">–</td>
+          <td style="text-align:left; width:25px;">Čt</td>
+          <td style="text-align:right; width:30px;">11</td>
+          <td style="text-align:center; width:8px;">–</td>
+          <td style="text-align:left; width:30px;">20:30</td>
+          <td style="text-align:left;" >&nbsp;</td>
+        </tr>
+              </tbody>
+      </table>
+      </div>
+      </div>
+      </section>
+</div>"""
+
+        OpeningHoursScrapper.scrape(emptyList).shouldBeEmpty()
+        shouldThrowAny { OpeningHoursScrapper.scrape("") }
+        shouldThrowAny { OpeningHoursScrapper.scrape(missingId) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(missingIdElement) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(malformedId) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(noPlaceName) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(switchedDays) }
+        OpeningHoursScrapper.scrape(sameDay).shouldNotBeEmpty()
+        shouldThrowAny { OpeningHoursScrapper.scrape(switchedDays) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(switchedTimes) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(sameTimes) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(missingRows) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(malformedTime) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(unknownDay) }
+        shouldThrowAny { OpeningHoursScrapper.scrape(hoursOnly) }
     }
 }

@@ -1,0 +1,20 @@
+import cz.lastaapps.entity.menza.MenzaId;
+
+CREATE TABLE  messageEntity(
+    menza_id INTEGER AS MenzaId NOT NULL PRIMARY KEY,
+    message TEXT NOT NULL
+);
+
+getAllMessages:
+    SELECT * FROM messageEntity;
+
+getMessageForMenza:
+    SELECT * FROM messageEntity
+    WHERE menza_id = :menzaId;
+
+deleteMessages:
+    DELETE FROM messageEntity;
+
+insertMessages:
+    INSERT INTO messageEntity
+    VALUES :messages;

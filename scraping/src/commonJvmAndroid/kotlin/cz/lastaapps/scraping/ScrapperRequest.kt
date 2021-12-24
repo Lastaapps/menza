@@ -17,15 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.allergens
+package cz.lastaapps.scraping
 
-import io.kotest.matchers.string.shouldNotBeBlank
+import it.skrape.fetcher.Request
+import it.skrape.fetcher.Scraper
 
-data class AllergenFood(
-    val foodId: String,
-    val allergens: AllergenList,
-) {
-    init {
-        foodId.shouldNotBeBlank()
-    }
+interface ScrapperRequest<T> : Scrapper<T> {
+    suspend fun createRequest(): Scraper<Request>
 }

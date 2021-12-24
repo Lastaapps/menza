@@ -19,17 +19,14 @@
 
 package cz.lastaapps.entity.menza
 
-import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.string.shouldNotBeBlank
 
 data class Menza(
-    val id: MenzaId,
+    val menzaId: MenzaId,
     val name: String,
-    val message: String?,
     val opened: Opened,
-    val address: Address,
-    val location: Location,
 ) {
     init {
-        name.isNotBlank().shouldBeTrue()
+        name.shouldNotBeBlank()
     }
 }

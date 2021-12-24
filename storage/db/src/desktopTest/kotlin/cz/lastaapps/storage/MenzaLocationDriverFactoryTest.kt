@@ -17,25 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.menza
+package cz.lastaapps.storage
 
-import io.kotest.matchers.string.shouldNotBeBlank
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
 
-data class Location(val long: String, val lat: String) {
+class MenzaLocationDriverFactoryTest {
 
-    init {
-        long.shouldNotBeBlank()
-        lat.shouldNotBeBlank()
+    @Test
+    @ExperimentalCoroutinesApi
+    fun testInsertion() = runTest {
+        val db = createDatabase(MenzaDriverFactory())
     }
 
-    fun saveToString() : String {
-        return "$long:$lat"
-    }
-
-    companion object {
-        fun restoreFromString(str: String): Location {
-            val split = str.split(",")
-            return Location(split[0], split[1]);
-        }
-    }
 }

@@ -1,15 +1,10 @@
-import cz.lastaapps.entity.menza.Address;
-import cz.lastaapps.entity.menza.Location;
 import cz.lastaapps.entity.menza.MenzaId;
 import cz.lastaapps.entity.menza.Opened;
 
 CREATE TABLE menzaEntity (
     id INTEGER AS MenzaId NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
-    message TEXT,
-    opened INTEGER AS Opened NOT NULL,
-    address TEXT AS Address NOT NULL,
-    location TEXT AS Location NOT NULL
+    opened INTEGER AS Opened NOT NULL
 );
 
 CREATE INDEX menza_id ON menzaEntity(id);

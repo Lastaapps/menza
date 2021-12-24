@@ -17,15 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.day
+package cz.lastaapps.entity.menza
 
-import kotlinx.datetime.LocalDate
+import io.kotest.matchers.string.shouldNotBeBlank
 
-data class Day(
-    val date: LocalDate,
-    val foodList: Set<Food>
-) : Comparable<Day> {
-    override fun compareTo(other: Day): Int {
-        return date.compareTo(other.date)
+data class Coordinates(val long: String, val lat: String) {
+
+    init {
+        long.shouldNotBeBlank()
+        lat.shouldNotBeBlank()
+    }
+
+    fun saveToString(): String {
+        return "$long:$lat"
+    }
+
+    companion object {
+        fun restoreFromString(str: String): Coordinates {
+            val split = str.split(",")
+            return Coordinates(split[0], split[1])
+        }
     }
 }
