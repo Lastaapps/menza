@@ -54,8 +54,10 @@ kotlin {
             dependencies {
                 implementation(Libs.KOTLINX_DATETIME)
                 implementation(Tests.KOTEST_ASSERTION)
+                implementation(Libs.KOTLIN_COROUTINES)
 
                 implementation(project(":entity"))
+                implementation(project(":scraping"))
                 implementation(project(":storage:db"))
             }
         }
@@ -79,6 +81,9 @@ kotlin {
         val desktopTest by getting {
             dependencies {
                 implementation(Tests.JUNIT)
+                implementation(Tests.COROUTINES)
+
+                implementation(project(":storage:db"))
             }
         }
     }

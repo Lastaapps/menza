@@ -8,6 +8,8 @@ CREATE TABLE contactEntity (
     email TEXT
 );
 
+CREATE INDEX contactIndex ON contactEntity(menza_id);
+
 getAllConstacts:
     SELECT *
     FROM contactEntity;
@@ -21,4 +23,5 @@ deleteContacts:
     DELETE FROM contactEntity;
 
 insertContacts:
-    INSERT INTO contactEntity VALUES :menzas;
+    INSERT INTO contactEntity(menza_id, role, name, phone, email)
+    VALUES (:menza_id, :role, :name, :phone, :email);

@@ -19,16 +19,14 @@
 
 package cz.lastaapps.storage
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
+import com.squareup.sqldelight.db.SqlDriver
+import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import cz.lastaapps.menza.db.MenzaDatabase
 
-class MenzaLocationDriverFactoryTest {
-
-    @Test
-    @ExperimentalCoroutinesApi
-    fun testInsertion() = runTest {
-        createMenzaDatabase(MenzaDriverFactoryFactoryImpl())
+actual class MemoryMenzaDriverFactory : MenzaDriverFactory {
+    actual override fun createDriver(): SqlDriver {
+        val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        MenzaDatabase.Schema.create(driver)
+        return driver
     }
-
 }

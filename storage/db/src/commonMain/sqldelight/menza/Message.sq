@@ -1,9 +1,11 @@
 import cz.lastaapps.entity.menza.MenzaId;
 
-CREATE TABLE  messageEntity(
+CREATE TABLE messageEntity(
     menza_id INTEGER AS MenzaId NOT NULL PRIMARY KEY,
     message TEXT NOT NULL
 );
+
+CREATE INDEX messageIndex ON messageEntity(menza_id);
 
 getAllMessages:
     SELECT * FROM messageEntity;
@@ -16,5 +18,5 @@ deleteMessages:
     DELETE FROM messageEntity;
 
 insertMessages:
-    INSERT INTO messageEntity
-    VALUES :messages;
+    INSERT INTO messageEntity(menza_id, message)
+    VALUES (:menza_id, :message);

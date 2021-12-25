@@ -24,8 +24,8 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.menza.db.MenzaDatabase
 
-actual class MenzaDriverFactory(private val context: Context) {
-    actual fun createDriver(): SqlDriver {
+actual class MenzaDriverFactoryFactoryImpl(private val context: Context) : MenzaDriverFactory {
+    actual override fun createDriver(): SqlDriver {
         return AndroidSqliteDriver(MenzaDatabase.Schema, context, "menza.db")
     }
 }

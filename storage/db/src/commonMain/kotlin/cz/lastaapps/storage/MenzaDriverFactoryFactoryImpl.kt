@@ -23,14 +23,23 @@ import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.menza.db.MenzaDatabase
 import menza.*
 
-expect class MenzaDriverFactory {
+interface MenzaDriverFactory {
     fun createDriver(): SqlDriver
 }
 
-fun createDatabase(driverFactory: MenzaDriverFactory): MenzaDatabase {
+expect class MenzaDriverFactoryFactoryImpl : MenzaDriverFactory {
+    override fun createDriver(): SqlDriver
+}
+
+fun createMenzaDatabase(driverFactory: MenzaDriverFactory): MenzaDatabase {
+
     val driver = driverFactory.createDriver()
+
     return MenzaDatabase(
         driver,
+        allergenEntityAdapter = AllergenEntity.Adapter(
+            idAdapter = ColumnConvertors.allergenId
+        ),
         menzaEntityAdapter = MenzaEntity.Adapter(
             idAdapter = ColumnConvertors.menzaId,
             openedAdapter = ColumnConvertors.opened,

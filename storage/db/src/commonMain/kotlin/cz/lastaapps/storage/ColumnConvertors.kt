@@ -21,6 +21,7 @@ package cz.lastaapps.storage
 
 import com.squareup.sqldelight.ColumnAdapter
 import cz.lastaapps.entity.LocalTime
+import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.menza.Address
 import cz.lastaapps.entity.menza.Coordinates
 import cz.lastaapps.entity.menza.MenzaId
@@ -28,6 +29,13 @@ import cz.lastaapps.entity.menza.Opened
 import kotlinx.datetime.DayOfWeek
 
 internal object ColumnConvertors {
+
+    val allergenId = object : ColumnAdapter<AllergenId, Long> {
+        override fun decode(databaseValue: Long) =
+            AllergenId(databaseValue.toInt())
+
+        override fun encode(value: AllergenId) = value.id.toLong()
+    }
 
     val menzaId = object : ColumnAdapter<MenzaId, Long> {
         override fun decode(databaseValue: Long) =

@@ -19,16 +19,18 @@
 
 package cz.lastaapps.storage
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
+import com.squareup.sqldelight.db.SqlDriver
+import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import cz.lastaapps.menza.db.MenzaDatabase
 
-class MenzaLocationDriverFactoryTest {
-
-    @Test
-    @ExperimentalCoroutinesApi
-    fun testInsertion() = runTest {
-        createMenzaDatabase(MenzaDriverFactoryFactoryImpl())
+actual class MenzaDriverFactoryFactoryImpl : MenzaDriverFactory {
+    @Suppress("UNREACHABLE_CODE")
+    actual override fun createDriver(): SqlDriver {
+        //TODO use real driver
+        //https://github.com/molikuner/sqldelight-simple-jvm-driver
+        error("Implement real driver first")
+        val driver: SqlDriver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        MenzaDatabase.Schema.create(driver)
+        return driver
     }
-
 }

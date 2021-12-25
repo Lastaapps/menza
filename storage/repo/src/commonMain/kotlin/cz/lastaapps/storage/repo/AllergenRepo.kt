@@ -17,18 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage
+package cz.lastaapps.storage.repo
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
+import cz.lastaapps.entity.allergens.Allergen
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
-class MenzaLocationDriverFactoryTest {
+interface AllergenRepo {
 
-    @Test
-    @ExperimentalCoroutinesApi
-    fun testInsertion() = runTest {
-        createMenzaDatabase(MenzaDriverFactoryFactoryImpl())
-    }
+    val hasData: StateFlow<Boolean>
+    val isLoading: StateFlow<Boolean>
+    val failed: StateFlow<Boolean>
+
+    suspend fun getData(): Flow<List<Allergen>>
 
 }

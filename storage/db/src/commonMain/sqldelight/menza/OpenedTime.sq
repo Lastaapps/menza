@@ -12,6 +12,8 @@ CREATE TABLE openedHoursEntity (
     PRIMARY KEY (menza_id, name, day_of_week)
 );
 
+CREATE INDEX openedHoursIndex ON openedHoursEntity(menza_id, day_of_week);
+
 getAllHours:
     SELECT *
     FROM openedHoursEntity;
@@ -41,8 +43,9 @@ getForMenzaNameAndDay:
 
 
 deleteHours:
-    DELETE FROM menzaEntity;
+    DELETE FROM openedHoursEntity;
 
 insertHours:
-    INSERT INTO menzaEntity VALUES :menzas;
+    INSERT INTO openedHoursEntity(menza_id, name, day_of_week, open, close, comment)
+    VALUES (:menza_id, :name, :day_of_week, :open, :close, :comment);
 

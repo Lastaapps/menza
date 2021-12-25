@@ -17,18 +17,8 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage
+package cz.lastaapps.storage.repo
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
-
-class MenzaLocationDriverFactoryTest {
-
-    @Test
-    @ExperimentalCoroutinesApi
-    fun testInsertion() = runTest {
-        createMenzaDatabase(MenzaDriverFactoryFactoryImpl())
-    }
+interface MenzaRepo {
 
 }

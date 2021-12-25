@@ -17,16 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage
+package cz.lastaapps.storage.repo
 
-import com.squareup.sqldelight.db.SqlDriver
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import cz.lastaapps.menza.db.MenzaDatabase
-
-actual class MenzaDriverFactory {
-    actual fun createDriver(): SqlDriver {
-        val driver: SqlDriver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        MenzaDatabase.Schema.create(driver)
-        return driver
-    }
+class MenzaRepoImpl {
 }

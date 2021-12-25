@@ -8,6 +8,8 @@ CREATE TABLE locationEntity(
     coordinates TEXT AS Coordinates NOT NULL
 );
 
+CREATE INDEX locationIndex ON locationEntity(menza_id);
+
 getAllLocations:
     SELECT * FROM locationEntity;
 
@@ -19,6 +21,6 @@ deleteLocations:
     DELETE FROM locationEntity;
 
 insertLocations:
-    INSERT INTO locationEntity
-    VALUES :locations;
+    INSERT INTO locationEntity(menza_id, adderss, coordinates)
+    VALUES (:menza_id, :adderss, :coordinates);
 

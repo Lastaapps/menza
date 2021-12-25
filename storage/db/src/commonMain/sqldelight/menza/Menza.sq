@@ -7,7 +7,7 @@ CREATE TABLE menzaEntity (
     opened INTEGER AS Opened NOT NULL
 );
 
-CREATE INDEX menza_id ON menzaEntity(id);
+CREATE INDEX menzaIndex ON menzaEntity(id);
 
 getAllMenzas:
     SELECT *
@@ -27,7 +27,7 @@ deleteMenzas:
     DELETE FROM menzaEntity;
 
 insertMenzas:
-    INSERT INTO menzaEntity VALUES :menzas;
+    INSERT INTO menzaEntity(id, name, opened) VALUES (:id, :name, :opened);
 
 
 

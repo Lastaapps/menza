@@ -1,8 +1,16 @@
+import cz.lastaapps.entity.allergens.AllergenId;
+
 CREATE TABLE allergenEntity (
-    id INTEGER NOT NULL PRIMARY KEY,
+    id INTEGER AS AllergenId NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     description TEXT NOT NULL
 );
+
+CREATE INDEX allergenIndex ON allergenEntity(id);
+
+hasData:
+    SELECT 1
+    FROM allergenEntity;
 
 getAllAlergens:
     SELECT *
@@ -17,4 +25,5 @@ deleteAllergens:
     DELETE FROM allergenEntity;
 
 insertAllergens:
-    INSERT INTO allergenEntity VALUES :menzas;
+    INSERT INTO allergenEntity(id, name, description)
+    VALUES (:id, :name, :description);

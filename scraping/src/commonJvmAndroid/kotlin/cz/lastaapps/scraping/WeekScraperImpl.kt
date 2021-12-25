@@ -43,7 +43,7 @@ object WeekScraperImpl : WeekScraper<Result> {
         request {
             url =
                 "https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=${menzaId.id}"
-            //TODO weeks are not working
+            //TODO week numbers are not working
             //+ "&clTyden=${weekNumber.week}"
         }
     }.scrape()

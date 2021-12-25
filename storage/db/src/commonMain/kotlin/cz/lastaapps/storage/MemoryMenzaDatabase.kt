@@ -19,16 +19,8 @@
 
 package cz.lastaapps.storage
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
+import com.squareup.sqldelight.db.SqlDriver
 
-class MenzaLocationDriverFactoryTest {
-
-    @Test
-    @ExperimentalCoroutinesApi
-    fun testInsertion() = runTest {
-        createMenzaDatabase(MenzaDriverFactoryFactoryImpl())
-    }
-
+expect class MemoryMenzaDriverFactory : MenzaDriverFactory {
+    override fun createDriver(): SqlDriver
 }
