@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test
 import java.time.Month
 
 @ExperimentalCoroutinesApi
-class WeekScrapperTest {
+class WeekScraperTest {
 
     @Test
     fun scrapeWeekOnline() = runTest {
@@ -52,11 +52,11 @@ class WeekScrapperTest {
         println("Loading for $date, weekNumber is ${weekNumber.week}")
 
         shouldThrow<WeekNotSupported> {
-            val result = WeekScrapper.createRequest(MenzaId(15), weekNumber).scrape()
-            WeekScrapper.scrape(result)
+            val result = WeekScraperImpl.createRequest(MenzaId(15), weekNumber)
+            WeekScraperImpl.scrape(result)
         }
-        val result = WeekScrapper.createRequest(MenzaId(1), weekNumber).scrape()
-        val weekFoodSet = WeekScrapper.scrape(result)
+        val result = WeekScraperImpl.createRequest(MenzaId(1), weekNumber)
+        val weekFoodSet = WeekScraperImpl.scrape(result)
 
         weekFoodSet.forEach {
             println(it)
@@ -555,7 +555,7 @@ class WeekScrapperTest {
   </noscript>
 </div>"""
 
-        val result = WeekScrapper.scrape(toTest)
+        val result = WeekScraperImpl.scrape(toTest)
 
         result shouldHaveSize 40
         result.map { it.foodType }.toSet() shouldHaveSize 5
@@ -577,7 +577,7 @@ Tato provozovna nevystavuje týdenní jídelní lístek.
 </div>
 </div>"""
 
-        shouldThrow<WeekNotSupported> { WeekScrapper.scrape(toTest) }
+        shouldThrow<WeekNotSupported> { WeekScraperImpl.scrape(toTest) }
     }
 
     @Test
@@ -889,8 +889,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
 </div>
 </div>"""
 
-        val strahov = WeekScrapper.scrape(toTestStrahovChristmas)
-        val technicka = WeekScrapper.scrape(toTestTechnickaChristmas)
+        val strahov = WeekScraperImpl.scrape(toTestStrahovChristmas)
+        val technicka = WeekScraperImpl.scrape(toTestTechnickaChristmas)
 
         strahov.shouldHaveSize(0)
         technicka.shouldHaveSize(0)
@@ -1019,13 +1019,13 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
   </div>
 </div>"""
 
-        WeekScrapper.scrape(emptyList).shouldBeEmpty()
-        shouldThrowAny { WeekScrapper.scrape("") }
-        WeekScrapper.scrape(noFoodName).shouldBeEmpty()
-        shouldThrowAny { WeekScrapper.scrape(noDate) }
-        shouldThrowAny { WeekScrapper.scrape(noFoodType) }
-        shouldThrowAny { WeekScrapper.scrape(missingLine) }
-        shouldThrowAny { WeekScrapper.scrape(malformedDate) }
+        WeekScraperImpl.scrape(emptyList).shouldBeEmpty()
+        shouldThrowAny { WeekScraperImpl.scrape("") }
+        WeekScraperImpl.scrape(noFoodName).shouldBeEmpty()
+        shouldThrowAny { WeekScraperImpl.scrape(noDate) }
+        shouldThrowAny { WeekScraperImpl.scrape(noFoodType) }
+        shouldThrowAny { WeekScraperImpl.scrape(missingLine) }
+        shouldThrowAny { WeekScraperImpl.scrape(malformedDate) }
     }
 
     @Test
@@ -1046,8 +1046,8 @@ Tato provozovna ABC nevystavuje týdenní jídelní lístek.
             """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 </div>"""
 
-        shouldThrowAny { shouldNotThrow<WeekNotSupported> { WeekScrapper.scrape(noMessage) } }
-        shouldThrowAny { shouldNotThrow<WeekNotSupported> { WeekScrapper.scrape(wrongMessage) } }
-        shouldThrowAny { shouldNotThrow<WeekNotSupported> { WeekScrapper.scrape(noElement) } }
+        shouldThrowAny { shouldNotThrow<WeekNotSupported> { WeekScraperImpl.scrape(noMessage) } }
+        shouldThrowAny { shouldNotThrow<WeekNotSupported> { WeekScraperImpl.scrape(wrongMessage) } }
+        shouldThrowAny { shouldNotThrow<WeekNotSupported> { WeekScraperImpl.scrape(noElement) } }
     }
 }

@@ -32,13 +32,13 @@ import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 
-object TodayScrapper : Scrapper<Food> {
+object TodayScraperImpl : TodayScraper<Result> {
 
-    suspend fun createRequest(menzaId: MenzaId) = skrape(AsyncFetcher) {
+    override suspend fun createRequest(menzaId: MenzaId) = skrape(AsyncFetcher) {
         request {
             url = "https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}"
         }
-    }
+    }.scrape()
 
     override fun scrape(result: Result): Set<Food> {
         return result.htmlDocument { parseHtml() }

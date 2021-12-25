@@ -32,13 +32,13 @@ import kotlinx.datetime.DayOfWeek
 import org.junit.jupiter.api.Test
 
 @ExperimentalCoroutinesApi
-class OpeningHoursScrapperTest {
+class OpeningHoursScraperTest {
 
     @Test
     fun scrapOpeningHoursOnline() = runTest {
 
-        val result = OpeningHoursScrapper.createRequest().scrape()
-        val hours = OpeningHoursScrapper.scrape(result)
+        val result = OpeningHoursScraperImpl.createRequest()
+        val hours = OpeningHoursScraperImpl.scrape(result)
 
         hours.shouldNotBeEmpty()
 
@@ -557,7 +557,7 @@ class OpeningHoursScrapperTest {
         </div>
         </div>"""
 
-        val hours = OpeningHoursScrapper.scrape(toTest)
+        val hours = OpeningHoursScraperImpl.scrape(toTest)
 
         hours.map { it.menzaId to it.locationName }.toSet().shouldHaveSize(20)
 
@@ -834,20 +834,20 @@ class OpeningHoursScrapperTest {
       </section>
 </div>"""
 
-        OpeningHoursScrapper.scrape(emptyList).shouldBeEmpty()
-        shouldThrowAny { OpeningHoursScrapper.scrape("") }
-        shouldThrowAny { OpeningHoursScrapper.scrape(missingId) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(missingIdElement) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(malformedId) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(noPlaceName) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(switchedDays) }
-        OpeningHoursScrapper.scrape(sameDay).shouldNotBeEmpty()
-        shouldThrowAny { OpeningHoursScrapper.scrape(switchedDays) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(switchedTimes) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(sameTimes) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(missingRows) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(malformedTime) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(unknownDay) }
-        shouldThrowAny { OpeningHoursScrapper.scrape(hoursOnly) }
+        OpeningHoursScraperImpl.scrape(emptyList).shouldBeEmpty()
+        shouldThrowAny { OpeningHoursScraperImpl.scrape("") }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(missingId) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(missingIdElement) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(malformedId) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(noPlaceName) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(switchedDays) }
+        OpeningHoursScraperImpl.scrape(sameDay).shouldNotBeEmpty()
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(switchedDays) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(switchedTimes) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(sameTimes) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(missingRows) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(malformedTime) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(unknownDay) }
+        shouldThrowAny { OpeningHoursScraperImpl.scrape(hoursOnly) }
     }
 }

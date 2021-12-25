@@ -32,11 +32,11 @@ import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 import kotlinx.datetime.LocalDate
 
-object WeekScrapper : Scrapper<WeekFood> {
+object WeekScraperImpl : WeekScraper<Result> {
 
     private val dateRegex = "^([0-9]{1,2}). ([0-9]{1,2}). ([0-9]{4})$".toRegex()
 
-    suspend fun createRequest(
+    override suspend fun createRequest(
         menzaId: MenzaId,
         @Suppress("UNUSED_PARAMETER") weekNumber: WeekNumber
     ) = skrape(AsyncFetcher) {
@@ -46,7 +46,7 @@ object WeekScrapper : Scrapper<WeekFood> {
             //TODO weeks are not working
             //+ "&clTyden=${weekNumber.week}"
         }
-    }
+    }.scrape()
 
     @Throws(WeekNotSupported::class)
     override fun scrape(result: Result): Set<WeekFood> {

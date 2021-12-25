@@ -31,13 +31,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 @ExperimentalCoroutinesApi
-class ContactsScrapperTest {
+class ContactsScraperTest {
 
     @Test
     fun scrapContactsOnline() = runTest {
 
-        val result = ContactsScrapper.createRequest().scrape()
-        val contacts = ContactsScrapper.scrape(result)
+        val result = ContactsScraperImpl.createRequest()
+        val contacts = ContactsScraperImpl.scrape(result)
 
         //contacts.forEach { println(it) }
 
@@ -455,7 +455,7 @@ class ContactsScrapperTest {
    <br>
 </div>"""
 
-        val contacts = ContactsScrapper.scrape(toTest)
+        val contacts = ContactsScraperImpl.scrape(toTest)
 
         //contacts.forEach { println(it) }
 
@@ -693,22 +693,22 @@ class ContactsScrapperTest {
    </section>
 </div>"""
 
-        shouldThrowAny { ContactsScrapper.scrape("") }
-        shouldThrowAny { ContactsScrapper.scrape(noMenzaId) }
-        shouldThrowAny { ContactsScrapper.scrape(invalidMenzaId) }
-        ContactsScrapper.scrape(noContacts).shouldBeEmpty()
-        ContactsScrapper.scrape(emptyContact).shouldBeEmpty()
-        shouldThrowAny { ContactsScrapper.scrape(invalidPhoneNumber) }
-        shouldThrowAny { ContactsScrapper.scrape(malformedPhoneNumber) }
+        shouldThrowAny { ContactsScraperImpl.scrape("") }
+        shouldThrowAny { ContactsScraperImpl.scrape(noMenzaId) }
+        shouldThrowAny { ContactsScraperImpl.scrape(invalidMenzaId) }
+        ContactsScraperImpl.scrape(noContacts).shouldBeEmpty()
+        ContactsScraperImpl.scrape(emptyContact).shouldBeEmpty()
+        shouldThrowAny { ContactsScraperImpl.scrape(invalidPhoneNumber) }
+        shouldThrowAny { ContactsScraperImpl.scrape(malformedPhoneNumber) }
 
-        ContactsScrapper.scrape(noPrefixEmail)
+        ContactsScraperImpl.scrape(noPrefixEmail)
             .map { it.email } shouldContain "suz-archicafe@cvut.cz"
-        ContactsScrapper.scrape(noPrefixPhoneNumber)
+        ContactsScraperImpl.scrape(noPrefixPhoneNumber)
             .map { it.phoneNumber } shouldContain "+420725896859"
-        ContactsScrapper.scrape(phoneNumberNotCzech)
+        ContactsScraperImpl.scrape(phoneNumberNotCzech)
             .map { it.phoneNumber } shouldContain "+421725896859"
-        ContactsScrapper.scrape(phoneNumberNoCountry)
+        ContactsScraperImpl.scrape(phoneNumberNoCountry)
             .map { it.phoneNumber } shouldContain "+420725896859"
-        shouldThrowAny { ContactsScrapper.scrape(phoneNumberWrongPlus) }
+        shouldThrowAny { ContactsScraperImpl.scrape(phoneNumberWrongPlus) }
     }
 }

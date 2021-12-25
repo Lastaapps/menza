@@ -19,9 +19,6 @@
 
 package cz.lastaapps.scraping
 
-import it.skrape.fetcher.Result
+import cz.lastaapps.entity.info.Contact
 
-interface Scrapper<T : Any?> {
-    fun scrape(result: Result): Set<T>
-    fun scrape(html: String): Set<T>
-}
+interface ContactsScraper<R : Any> : ScraperRequest<R, Contact>

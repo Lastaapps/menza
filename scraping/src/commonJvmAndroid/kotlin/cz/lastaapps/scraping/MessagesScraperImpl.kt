@@ -27,13 +27,13 @@ import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 
-object MessagesScrapper : ScrapperRequest<Message> {
+object MessagesScraperImpl : MessagesScraper<Result> {
 
     override suspend fun createRequest() = skrape(AsyncFetcher) {
         request {
             url = "https://agata.suz.cvut.cz/jidelnicky/index.php"
         }
-    }
+    }.scrape()
 
     /**
      * Accepts any url /jidelnicky/index.php???

@@ -30,13 +30,13 @@ import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 
-object OpeningHoursScrapper : ScrapperRequest<OpeningHours> {
+object OpeningHoursScraperImpl : OpeningHoursScraper<Result> {
 
     override suspend fun createRequest() = skrape(AsyncFetcher) {
         request {
             url = "https://agata.suz.cvut.cz/jidelnicky/oteviraci-doby.php"
         }
-    }
+    }.scrape()
 
     override fun scrape(result: Result): Set<OpeningHours> {
         return result.htmlDocument { parseHtml() }

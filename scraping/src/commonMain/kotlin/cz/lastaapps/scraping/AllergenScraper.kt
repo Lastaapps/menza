@@ -19,9 +19,10 @@
 
 package cz.lastaapps.scraping
 
-import it.skrape.fetcher.Request
-import it.skrape.fetcher.Scraper
+import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.day.FoodId
 
-interface ScrapperRequest<T> : Scrapper<T> {
-    suspend fun createRequest(): Scraper<Request>
+interface AllergenScraper<R : Any> : ScraperBase<R, Allergen> {
+    suspend fun createRequestForAll(): R
+    suspend fun createRequestForFood(foodId: FoodId): R
 }

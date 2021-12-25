@@ -31,13 +31,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 @ExperimentalCoroutinesApi
-class MessagesScrapperTest {
+class MessagesScraperTest {
 
     @Test
     fun testMessagesOnline() = runTest {
 
-        val result = MessagesScrapper.createRequest().scrape()
-        val messages = MessagesScrapper.scrape(result)
+        val result = MessagesScraperImpl.createRequest()
+        val messages = MessagesScraperImpl.scrape(result)
 
         messages.shouldNotBeEmpty()
     }
@@ -203,7 +203,7 @@ class MessagesScrapperTest {
    <div class="row-fluid"></div>
 </div>
 """
-        val messages = MessagesScrapper.scrape(toTest)
+        val messages = MessagesScraperImpl.scrape(toTest)
 
         messages shouldHaveSize 10
         messages.map { it.id } shouldContain MenzaId(1)
@@ -284,13 +284,13 @@ Možnost namátkové kontroly. Nevztahuje se na studenty a zaměstnance ČVUT"""
    </div>
 </div>"""
 
-        MessagesScrapper.scrape(noItems).shouldBeEmpty()
-        shouldThrowAny { MessagesScrapper.scrape("") }
-        shouldThrowAny { MessagesScrapper.scrape(noMessageElement) }
-        shouldThrowAny { MessagesScrapper.scrape(noMessageText) }
-        shouldThrowAny { MessagesScrapper.scrape(noMenzaId) }
-        shouldThrowAny { MessagesScrapper.scrape(noMenzaIdAttribute) }
-        shouldThrowAny { MessagesScrapper.scrape(malformedId) }
+        MessagesScraperImpl.scrape(noItems).shouldBeEmpty()
+        shouldThrowAny { MessagesScraperImpl.scrape("") }
+        shouldThrowAny { MessagesScraperImpl.scrape(noMessageElement) }
+        shouldThrowAny { MessagesScraperImpl.scrape(noMessageText) }
+        shouldThrowAny { MessagesScraperImpl.scrape(noMenzaId) }
+        shouldThrowAny { MessagesScraperImpl.scrape(noMenzaIdAttribute) }
+        shouldThrowAny { MessagesScraperImpl.scrape(malformedId) }
     }
 
 }

@@ -30,13 +30,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 @ExperimentalCoroutinesApi
-class LocationScrapperTest {
+class LocationScraperTest {
 
     @Test
     fun locationOnline() = runTest {
 
-        val result = ContactsScrapper.createRequest().scrape()
-        val locations = LocationScrapper.scrape(result)
+        val result = ContactsScraperImpl.createRequest()
+        val locations = LocationScraperImpl.scrape(result)
 
         //locations.forEach { println(it) }
 
@@ -442,7 +442,7 @@ class LocationScrapperTest {
    <br>
 </div>"""
 
-        val locations = LocationScrapper.scrape(toTest)
+        val locations = LocationScraperImpl.scrape(toTest)
 
         //locations.forEach { println(it) }
 
@@ -568,15 +568,15 @@ class LocationScrapperTest {
    </section>
 </div>"""
 
-        shouldThrowAny { LocationScrapper.scrape("") }
-        shouldThrowAny { LocationScrapper.scrape(noMenzaId) }
-        shouldThrowAny { LocationScrapper.scrape(malformedMenzaId) }
-        LocationScrapper.scrape(noItems).shouldBeEmpty()
-        shouldThrowAny { LocationScrapper.scrape(toFewRows) }.printStackTrace()
-        shouldThrowAny { LocationScrapper.scrape(noAddress) }
-        shouldThrowAny { LocationScrapper.scrape(noLink) }
-        shouldThrowAny { LocationScrapper.scrape(noCoordinates) }
-        shouldThrowAny { LocationScrapper.scrape(malformedCoordinates) }
-        shouldThrowAny { LocationScrapper.scrape(oneCoordinateOnly) }
+        shouldThrowAny { LocationScraperImpl.scrape("") }
+        shouldThrowAny { LocationScraperImpl.scrape(noMenzaId) }
+        shouldThrowAny { LocationScraperImpl.scrape(malformedMenzaId) }
+        LocationScraperImpl.scrape(noItems).shouldBeEmpty()
+        shouldThrowAny { LocationScraperImpl.scrape(toFewRows) }.printStackTrace()
+        shouldThrowAny { LocationScraperImpl.scrape(noAddress) }
+        shouldThrowAny { LocationScraperImpl.scrape(noLink) }
+        shouldThrowAny { LocationScraperImpl.scrape(noCoordinates) }
+        shouldThrowAny { LocationScraperImpl.scrape(malformedCoordinates) }
+        shouldThrowAny { LocationScraperImpl.scrape(oneCoordinateOnly) }
     }
 }

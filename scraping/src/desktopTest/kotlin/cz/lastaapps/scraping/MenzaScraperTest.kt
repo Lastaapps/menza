@@ -31,13 +31,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 @ExperimentalCoroutinesApi
-class MenzaScrapperTest {
+class MenzaScraperTest {
 
     @Test
     fun menzaListOnline() = runTest {
 
-        val result = ContactsScrapper.createRequest().scrape()
-        val menzaList = MenzaScrapper.scrape(result)
+        val result = ContactsScraperImpl.createRequest()
+        val menzaList = MenzaScraperImpl.scrape(result)
 
         menzaList.shouldNotBeEmpty()
         menzaList.map { it.menzaId.id } shouldContain 1
@@ -88,7 +88,7 @@ class MenzaScrapperTest {
         <img src="img/Zavreno.png" alt="Provoz uzavřen" width="15" height="15" class="d-inline-block align-text-top"> - Zavřeno
       </div>"""
 
-        val menzaList = MenzaScrapper.scrape(toTest)
+        val menzaList = MenzaScraperImpl.scrape(toTest)
 
         menzaList shouldHaveSize 11
         menzaList.map { it.menzaId.id } shouldContain 1
@@ -149,15 +149,15 @@ class MenzaScrapperTest {
             </li>
          </ul>"""
 
-        MenzaScrapper.scrape(emptyList).shouldBeEmpty()
-        shouldThrowAny { MenzaScrapper.scrape("") }
-        shouldThrowAny { MenzaScrapper.scrape(noId) }
-        shouldThrowAny { MenzaScrapper.scrape(noIdField) }
-        shouldThrowAny { MenzaScrapper.scrape(malformedId) }
-        shouldThrowAny { MenzaScrapper.scrape(wrongImage) }
-        shouldThrowAny { MenzaScrapper.scrape(noImage) }
-        shouldThrowAny { MenzaScrapper.scrape(noImageSrc) }
-        shouldThrowAny { MenzaScrapper.scrape(noMenzaName) }
-        MenzaScrapper.scrape(noLink).shouldBeEmpty()
+        MenzaScraperImpl.scrape(emptyList).shouldBeEmpty()
+        shouldThrowAny { MenzaScraperImpl.scrape("") }
+        shouldThrowAny { MenzaScraperImpl.scrape(noId) }
+        shouldThrowAny { MenzaScraperImpl.scrape(noIdField) }
+        shouldThrowAny { MenzaScraperImpl.scrape(malformedId) }
+        shouldThrowAny { MenzaScraperImpl.scrape(wrongImage) }
+        shouldThrowAny { MenzaScraperImpl.scrape(noImage) }
+        shouldThrowAny { MenzaScraperImpl.scrape(noImageSrc) }
+        shouldThrowAny { MenzaScraperImpl.scrape(noMenzaName) }
+        MenzaScraperImpl.scrape(noLink).shouldBeEmpty()
     }
 }

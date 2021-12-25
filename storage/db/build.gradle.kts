@@ -56,8 +56,8 @@ kotlin {
                 implementation(Libs.KOTLINX_DATETIME)
                 implementation(Tests.KOTEST_ASSERTION)
 
-                implementation("com.squareup.sqldelight:runtime:${Versions.SQLDELIGHT}")
-                implementation(Libs.SQLDELIGHT_COROUTINES)
+                api(Libs.SQLDELIGHT_RUNTIME)
+                api(Libs.SQLDELIGHT_COROUTINES)
 
                 implementation(project(":entity"))
             }

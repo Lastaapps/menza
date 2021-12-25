@@ -19,32 +19,9 @@
 
 package cz.lastaapps.scraping
 
+import cz.lastaapps.entity.day.Food
 import cz.lastaapps.entity.menza.MenzaId
-import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldNotBeEmpty
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
 
-@ExperimentalCoroutinesApi
-class TodayScrapperTest {
-
-    @Test
-    fun scrapeTodayOnline() = runTest {
-
-        val id = 1
-        val result = TodayScrapper.createRequest(MenzaId(id)).scrape()
-        val foodList = TodayScrapper.scrape(result)
-
-        foodList.forEach { println(it) }
-
-        foodList.shouldNotBeNull()
-        foodList.shouldNotBeEmpty()
-        foodList.forEach {
-            it.menzaId.id shouldBe id
-        }
-        foodList.map { it.foodType.type } shouldContain "Polévky"
-    }
+interface TodayScraper<R : Any> : ScraperBase<R, Food> {
+    suspend fun createRequest(menzaId: MenzaId): R
 }

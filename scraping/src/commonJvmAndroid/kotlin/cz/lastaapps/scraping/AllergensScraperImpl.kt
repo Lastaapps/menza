@@ -30,19 +30,19 @@ import it.skrape.selects.Doc
 import it.skrape.selects.html5.img
 import it.skrape.selects.html5.td
 
-object AllergensScrapper : Scrapper<Allergen> {
+object AllergensScraperImpl : AllergenScraper<Result> {
 
-    suspend fun createRequestForAll() = skrape(AsyncFetcher) {
+    override suspend fun createRequestForAll() = skrape(AsyncFetcher) {
         request {
             this.url = "https://agata.suz.cvut.cz/jidelnicky/alergenyall.php"
         }
-    }
+    }.scrape()
 
-    suspend fun createRequestForFood(foodId: FoodId) = skrape(AsyncFetcher) {
+    override suspend fun createRequestForFood(foodId: FoodId) = skrape(AsyncFetcher) {
         request {
             this.url = "https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${foodId.id}"
         }
-    }
+    }.scrape()
 
     override fun scrape(result: Result): Set<Allergen> {
         return result.htmlDocument { parseHtml() }

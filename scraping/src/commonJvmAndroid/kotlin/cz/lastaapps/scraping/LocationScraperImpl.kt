@@ -29,7 +29,7 @@ import it.skrape.selects.Doc
 import it.skrape.selects.html5.h3
 import it.skrape.selects.html5.small
 
-object LocationScrapper : Scrapper<MenzaLocation> {
+object LocationScraperImpl : LocationScraper<Result> {
 
     //override suspend fun createRequest() = ContactsScrapper.createRequest()
 

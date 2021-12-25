@@ -31,13 +31,13 @@ import it.skrape.selects.DocElement
 import it.skrape.selects.html5.a
 import it.skrape.selects.html5.td
 
-object ContactsScrapper : ScrapperRequest<Contact> {
+object ContactsScraperImpl : ContactsScraper<Result> {
 
     override suspend fun createRequest() = skrape(AsyncFetcher) {
         request {
             url = "https://agata.suz.cvut.cz/jidelnicky/kontakty.php"
         }
-    }
+    }.scrape()
 
     override fun scrape(result: Result): Set<Contact> {
         return result.htmlDocument { parseHtml() }

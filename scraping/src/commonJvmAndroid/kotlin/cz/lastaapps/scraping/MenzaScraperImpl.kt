@@ -27,7 +27,7 @@ import it.skrape.fetcher.Result
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.img
 
-object MenzaScrapper : Scrapper<Menza> {
+object MenzaScraperImpl : MenzaScraper<Result> {
 
     private const val openImgName = "img/Otevreno.png"
     private const val closeImgName = "img/Zavreno.png"
