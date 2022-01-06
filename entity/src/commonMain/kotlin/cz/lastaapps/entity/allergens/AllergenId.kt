@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,11 +20,14 @@
 package cz.lastaapps.entity.allergens
 
 import io.kotest.matchers.ints.shouldBeInRange
-import kotlin.jvm.JvmInline
 
+/**
+ * Holds allergen id - it's code in the czech/international allergen table
+ * https://agata.suz.cvut.cz/jidelnicky/alergenyall.php
+ */
 @JvmInline
 value class AllergenId(val id: Int) {
     init {
-        id.shouldBeInRange(1..14)
+        id.shouldBeInRange(1..AllergenList.range)
     }
 }

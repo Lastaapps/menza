@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,6 +22,16 @@ package cz.lastaapps.entity.day
 import io.kotest.matchers.ints.shouldBeNonNegative
 import io.kotest.matchers.string.shouldNotBeBlank
 
+/**
+ * Holds info about issue place
+ * on the web this info is located fight next to the dish price
+ * For example for Podolí Menza
+ * terminalId: 21
+ * windowId: 3
+ * abbrev: J
+ * name: Jídelna
+ * https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=4
+ */
 data class IssueLocation(
     val terminalId: Int,
     val windowsId: Int,

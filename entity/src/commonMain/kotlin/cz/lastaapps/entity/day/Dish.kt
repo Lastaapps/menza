@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,18 +20,22 @@
 package cz.lastaapps.entity.day
 
 import cz.lastaapps.entity.common.Amount
-import cz.lastaapps.entity.common.FoodType
+import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
 import cz.lastaapps.entity.menza.MenzaId
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.string.shouldNotBeBlank
 
-data class Food(
+/**
+ * Holds data about a dish in a day
+ * https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=1
+ */
+data class Dish(
     val menzaId: MenzaId,
-    val foodType: FoodType,
+    val courseType: CourseType,
     val amount: Amount?,
     val name: String,
-    val allergenFoodId: FoodAllergens,
+    val allergenDishId: DishAllergensPage,
     val imageUrl: String?,
     val priceStudent: Price,
     val priceNormal: Price,

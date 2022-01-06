@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,13 +17,29 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.common
+package cz.lastaapps.entity.week
 
+import cz.lastaapps.entity.common.Amount
+import cz.lastaapps.entity.common.CourseType
 import io.kotest.matchers.string.shouldNotBeBlank
+import kotlinx.datetime.LocalDate
 
-@JvmInline
-value class FoodType(val type: String) {
+/**
+ * One dish in week menu
+ * https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=1
+ */
+data class WeekDish(
+    val date: LocalDate,
+    val courseType: CourseType,
+    val amount: Amount?,
+    val name: String,
+) : Comparable<WeekDish> {
+
     init {
-        type.shouldNotBeBlank()
+        name.shouldNotBeBlank()
+    }
+
+    override fun compareTo(other: WeekDish): Int {
+        return date.compareTo(other.date)
     }
 }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,10 +20,10 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.common.Amount
-import cz.lastaapps.entity.common.FoodType
+import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
-import cz.lastaapps.entity.day.Food
-import cz.lastaapps.entity.day.FoodAllergens
+import cz.lastaapps.entity.day.Dish
+import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.day.IssueLocation
 import cz.lastaapps.entity.menza.MenzaId
 import io.kotest.assertions.throwables.shouldThrowAny
@@ -41,15 +41,15 @@ class TodayScraperTest {
 
         val id = 1
         val result = TodayScraperImpl.createRequest(MenzaId(id))
-        val foodList = TodayScraperImpl.scrape(result)
+        val dishSet = TodayScraperImpl.scrape(result)
 
-        foodList.forEach { println(it) }
+        dishSet.forEach { println(it) }
 
-        foodList.shouldNotBeEmpty()
-        foodList.forEach {
+        dishSet.shouldNotBeEmpty()
+        dishSet.forEach {
             it.menzaId.id shouldBe id
         }
-        foodList.map { it.foodType.type } shouldContain "Polévky"
+        dishSet.map { it.courseType.type } shouldContain "Polévky"
     }
 
     @Test
@@ -392,23 +392,23 @@ class TodayScraperTest {
   </noscript>
 </div>"""
 
-        val foodList = TodayScraperImpl.scrape(toTest)
+        val dishSet = TodayScraperImpl.scrape(toTest)
 
-        foodList.forEach { println(it) }
+        dishSet.forEach { println(it) }
 
-        foodList.shouldHaveSize(9)
-        foodList.forEach {
+        dishSet.shouldHaveSize(9)
+        dishSet.forEach {
             it.menzaId.id shouldBe 4
         }
-        foodList.map { it.foodType.type } shouldContainAll
-               listOf("Polévky", "Hlavní jídla", "Bezmasá jídla")
+        dishSet.map { it.courseType.type } shouldContainAll
+                listOf("Polévky", "Hlavní jídla", "Bezmasá jídla")
 
-        foodList shouldContain Food(
+        dishSet shouldContain Dish(
             MenzaId(4),
-            FoodType("Hlavní jídla"),
+            CourseType("Hlavní jídla"),
             Amount("120 g"),
             "Hovězí pečeně frankfurtská, karlovarské knedlíky",
-            FoodAllergens(340616),
+            DishAllergensPage(340616),
             "https://agata.suz.cvut.cz/jidelnicky/imgshow.php?clPodsystem=4&xFile=IMG-2022-01-06-100010746.JPG",
             Price(79),
             Price(101),
@@ -668,7 +668,7 @@ class TodayScraperTest {
     </div>
   </div>
 </body>"""
-        val noFoodName = """<body>
+        val noDishName = """<body>
   <input type='hidden' id='PodsysActive' value='4'>
   <div id="jidelnicek">
     <div class='data'>
@@ -1186,7 +1186,7 @@ class TodayScraperTest {
         shouldThrowAny { TodayScraperImpl.scrape(noCategory) }
         shouldThrowAny { TodayScraperImpl.scrape(noCategoryName) }
         shouldThrowAny { TodayScraperImpl.scrape(noCategoryTag) }
-        shouldThrowAny { TodayScraperImpl.scrape(noFoodName) }
+        shouldThrowAny { TodayScraperImpl.scrape(noDishName) }
         shouldThrowAny { TodayScraperImpl.scrape(noAllergenId) }
         shouldThrowAny { TodayScraperImpl.scrape(noAllergenIdTag) }
         shouldThrowAny { TodayScraperImpl.scrape(invalidAllergenId) }

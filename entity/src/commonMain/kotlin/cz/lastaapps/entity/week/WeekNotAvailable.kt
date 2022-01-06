@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,9 +19,9 @@
 
 package cz.lastaapps.entity.week
 
-import kotlinx.datetime.LocalDate
-
-data class WeekDay(
-    val date: LocalDate,
-    val foodList: List<WeekFood>
-)
+/**
+ * I thrown when a menza states, that they don't provide week menu
+ * Can be also thrown during celebrations
+ * https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=15
+ */
+class WeekNotAvailable : Exception()

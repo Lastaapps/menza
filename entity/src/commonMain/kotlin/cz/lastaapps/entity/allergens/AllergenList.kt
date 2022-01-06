@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,17 +19,46 @@
 
 package cz.lastaapps.entity.allergens
 
-import kotlin.jvm.JvmInline
 import kotlin.math.pow
 
+/**
+ * Holds a list of allergens
+ * stores it in binary form, so it can be saved into a database easily
+ *
+ * Unless dishes are stored in cache database, this is useless
+ */
 @JvmInline
-value class AllergenList(
+value class AllergenList internal constructor(
     val allergens: Int
 ) {
 
     companion object {
         // the number of current allergens, full Int is overall 32 bits long
-        internal val range = 14
+        internal const val range = 14
+
+        fun fromAllergenList(list: Collection<Allergen>): AllergenList {
+            return fromAllergenIdList(list.map { it.id })
+        }
+
+        fun fromAllergenIdList(list: Collection<AllergenId>): AllergenList {
+            var output = 0
+
+            for (i in 0 until range) {
+                if (list.contains(AllergenId(i + 1)))
+                    output += 2.0.pow(i).toInt()
+            }
+            return AllergenList(output)
+        }
+
+        fun fromBoolArray(array: BooleanArray): AllergenList {
+            var output = 0
+
+            for (i in 0 until range) {
+                if (array[i])
+                    output += 2.0.pow(i).toInt()
+            }
+            return AllergenList(output)
+        }
     }
 
     val boolArray: BooleanArray
@@ -45,24 +74,10 @@ value class AllergenList(
             return array
         }
 
-    val allergenIdSet: Set<Int>
+    val allergenIdSet: Set<AllergenId>
         get() {
             return boolArray.mapIndexed() { index, state ->
                 if (state) index + 1 else null
-            }.filterNotNull().toSet()
+            }.filterNotNull().map { AllergenId(it) }.toSet()
         }
-}
-
-//fun Collection<Allergen>.toAllergenList(): AllergenList {
-//    return this.map { it.id.id }.toAllergenList()
-//}
-
-fun Collection<Int>.toAllergenList(): AllergenList {
-    var output = 0
-
-    for (i in 0 until AllergenList.range) {
-        if (this.contains(i + 1))
-            output += 2.0.pow(i).toInt()
-    }
-    return AllergenList(output)
 }

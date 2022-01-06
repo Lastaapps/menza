@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,10 +20,10 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.common.Amount
-import cz.lastaapps.entity.common.FoodType
+import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.entity.week.WeekFood
-import cz.lastaapps.entity.week.WeekNotSupported
+import cz.lastaapps.entity.week.WeekDish
+import cz.lastaapps.entity.week.WeekNotAvailable
 import cz.lastaapps.entity.week.WeekNumber
 import it.skrape.core.htmlDocument
 import it.skrape.fetcher.AsyncFetcher
@@ -48,23 +48,23 @@ object WeekScraperImpl : WeekScraper<Result> {
         }
     }.scrape()
 
-    @Throws(WeekNotSupported::class)
-    override fun scrape(result: Result): Set<WeekFood> {
+    @Throws(WeekNotAvailable::class)
+    override fun scrape(result: Result): Set<WeekDish> {
         return result.htmlDocument { parseHtml() }
     }
 
-    @Throws(WeekNotSupported::class)
-    override fun scrape(html: String): Set<WeekFood> {
+    @Throws(WeekNotAvailable::class)
+    override fun scrape(html: String): Set<WeekDish> {
         return htmlDocument(html) { parseHtml() }
     }
 
-    @Throws(WeekNotSupported::class)
-    private fun Doc.parseHtml(): Set<WeekFood> {
-        val set = mutableSetOf<WeekFood>()
+    @Throws(WeekNotAvailable::class)
+    private fun Doc.parseHtml(): Set<WeekDish> {
+        val set = mutableSetOf<WeekDish>()
 
         tryFindFirst(".data") {
             if (ownText == "Tato provozovna nevystavuje týdenní jídelní lístek.") {
-                throw WeekNotSupported()
+                throw WeekNotAvailable()
             }
         }
 
@@ -90,9 +90,9 @@ object WeekScraperImpl : WeekScraper<Result> {
                     val name = children[4].ownText.removeSpaces()
 
                     if (name.isNotBlank() && name.isNameValid()) {
-                        set += WeekFood(
+                        set += WeekDish(
                             currentDate!!,
-                            FoodType(type),
+                            CourseType(type),
                             amount?.let { Amount(it) },
                             name,
                         )
@@ -104,13 +104,14 @@ object WeekScraperImpl : WeekScraper<Result> {
         return set
     }
 
-    private val invalidFoodNames = listOf("štědrýden", "zavřeno")
+    //TODO add more celebrations
+    private val invalidDishNames = listOf("štědrýden", "zavřeno")
 
     /**
      * Checks if the name is valid food name e.g. it is Christmas, Closed, ...
      */
     private fun String.isNameValid(): Boolean {
-        if (this.lowercase().replace("\\s+".toRegex(), "") in invalidFoodNames) return false
+        if (this.lowercase().replace("\\s+".toRegex(), "") in invalidDishNames) return false
         return true
     }
 }

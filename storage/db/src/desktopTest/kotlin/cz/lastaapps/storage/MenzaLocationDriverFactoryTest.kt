@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,7 +28,7 @@ class MenzaLocationDriverFactoryTest {
     @Test
     @ExperimentalCoroutinesApi
     fun testInsertion() = runTest {
-        createMenzaDatabase(MenzaDriverFactoryFactoryImpl())
+        createMenzaDatabase(MemoryMenzaDriverFactory())
     }
 
 }

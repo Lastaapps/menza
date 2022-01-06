@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,6 +19,10 @@
 
 package cz.lastaapps.entity.menza
 
+/**
+ * Represents if a menza is currently open of close (according to web, not current time)
+ * agata.suz.cvut.cz/jidelnicky/oteviraci-doby.php
+ */
 sealed class Opened private constructor(val id: Int) {
     object OPENED : Opened(1)
     object CLOSED : Opened(0)

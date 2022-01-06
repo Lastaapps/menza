@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,9 +20,9 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.entity.week.WeekFood
+import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.entity.week.WeekNumber
 
-interface WeekScraper<R : Any> : ScraperBase<R, WeekFood> {
+interface WeekScraper<R : Any> : ScraperBase<R, WeekDish> {
     suspend fun createRequest(menzaId: MenzaId, weekNumber: WeekNumber): R
 }

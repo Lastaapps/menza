@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,6 +21,10 @@ package cz.lastaapps.entity.menza
 
 import io.kotest.matchers.string.shouldNotBeBlank
 
+/**
+ * Holds value of the menza address
+ * https://agata.suz.cvut.cz/jidelnicky/kontakty.php
+ */
 @JvmInline
 value class Address(val stringForm: String) {
     init {

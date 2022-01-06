@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,10 +20,10 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.common.Amount
-import cz.lastaapps.entity.common.FoodType
+import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.entity.week.WeekFood
-import cz.lastaapps.entity.week.WeekNotSupported
+import cz.lastaapps.entity.week.WeekDish
+import cz.lastaapps.entity.week.WeekNotAvailable
 import cz.lastaapps.entity.week.WeekNumber
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
@@ -51,21 +51,21 @@ class WeekScraperTest {
         val weekNumber = WeekNumber.of(date)
         println("Loading for $date, weekNumber is ${weekNumber.week}")
 
-        shouldThrow<WeekNotSupported> {
+        shouldThrow<WeekNotAvailable> {
             val result = WeekScraperImpl.createRequest(MenzaId(15), weekNumber)
             WeekScraperImpl.scrape(result)
         }
         val result = WeekScraperImpl.createRequest(MenzaId(1), weekNumber)
-        val weekFoodSet = WeekScraperImpl.scrape(result)
+        val weekDishSet = WeekScraperImpl.scrape(result)
 
-        weekFoodSet.forEach {
+        weekDishSet.forEach {
             println(it)
         }
 
-        weekFoodSet.shouldNotBeNull()
-        weekFoodSet.shouldNotBeEmpty()
-        weekFoodSet.map { it.foodType.type } shouldContain "Polévky"
-        weekFoodSet.map { it.foodType.type } shouldContain "Specialita dne"
+        weekDishSet.shouldNotBeNull()
+        weekDishSet.shouldNotBeEmpty()
+        weekDishSet.map { it.courseType.type } shouldContain "Polévky"
+        weekDishSet.map { it.courseType.type } shouldContain "Specialita dne"
     }
 
     @Test
@@ -558,11 +558,11 @@ class WeekScraperTest {
         val result = WeekScraperImpl.scrape(toTest)
 
         result shouldHaveSize 40
-        result.map { it.foodType }.toSet() shouldHaveSize 5
+        result.map { it.courseType }.toSet() shouldHaveSize 5
         result.map { it.date } shouldContain LocalDate(2022, Month.JANUARY, 4)
-        result shouldContain WeekFood(
+        result shouldContain WeekDish(
             LocalDate(2022, Month.JANUARY, 6),
-            FoodType("Specialita dne"),
+            CourseType("Specialita dne"),
             Amount("150 g"),
             "Kuřecí steak se šunkou a sýrem, smažené hranolky",
         )
@@ -577,7 +577,7 @@ Tato provozovna nevystavuje týdenní jídelní lístek.
 </div>
 </div>"""
 
-        shouldThrow<WeekNotSupported> { WeekScraperImpl.scrape(toTest) }
+        shouldThrow<WeekNotAvailable> { WeekScraperImpl.scrape(toTest) }
     }
 
     @Test
@@ -911,7 +911,7 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
     </table>
   </div>
 </div>"""
-        val noFoodName =
+        val noDishName =
             """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
@@ -1021,7 +1021,7 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
 
         WeekScraperImpl.scrape(emptyList).shouldBeEmpty()
         shouldThrowAny { WeekScraperImpl.scrape("") }
-        WeekScraperImpl.scrape(noFoodName).shouldBeEmpty()
+        WeekScraperImpl.scrape(noDishName).shouldBeEmpty()
         shouldThrowAny { WeekScraperImpl.scrape(noDate) }
         shouldThrowAny { WeekScraperImpl.scrape(noFoodType) }
         shouldThrowAny { WeekScraperImpl.scrape(missingLine) }
@@ -1046,8 +1046,8 @@ Tato provozovna ABC nevystavuje týdenní jídelní lístek.
             """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 </div>"""
 
-        shouldThrowAny { shouldNotThrow<WeekNotSupported> { WeekScraperImpl.scrape(noMessage) } }
-        shouldThrowAny { shouldNotThrow<WeekNotSupported> { WeekScraperImpl.scrape(wrongMessage) } }
-        shouldThrowAny { shouldNotThrow<WeekNotSupported> { WeekScraperImpl.scrape(noElement) } }
+        shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(noMessage) } }
+        shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(wrongMessage) } }
+        shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(noElement) } }
     }
 }

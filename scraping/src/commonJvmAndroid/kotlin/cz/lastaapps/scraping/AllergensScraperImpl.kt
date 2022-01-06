@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,7 +21,7 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
-import cz.lastaapps.entity.day.FoodAllergens
+import cz.lastaapps.entity.day.DishAllergensPage
 import it.skrape.core.htmlDocument
 import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.Result
@@ -38,9 +38,9 @@ object AllergensScraperImpl : AllergenScraper<Result> {
         }
     }.scrape()
 
-    override suspend fun createRequestForFood(foodId: FoodAllergens) = skrape(AsyncFetcher) {
+    override suspend fun createRequestForDish(dishId: DishAllergensPage) = skrape(AsyncFetcher) {
         request {
-            this.url = "https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${foodId.id}"
+            this.url = "https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${dishId.pageId}"
         }
     }.scrape()
 

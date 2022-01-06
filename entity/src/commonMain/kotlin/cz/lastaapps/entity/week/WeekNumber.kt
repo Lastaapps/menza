@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,8 +21,11 @@ package cz.lastaapps.entity.week
 
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import kotlinx.datetime.*
-import kotlin.jvm.JvmInline
 
+/**
+ * Represents week number used in fetching a week menu
+ * Id's aren't stable on the server side, so Week number is disabled fo now
+ */
 @JvmInline
 value class WeekNumber private constructor(val week: Int) {
     init {
@@ -43,15 +46,4 @@ value class WeekNumber private constructor(val week: Int) {
          * */
         fun restore(week: Int): WeekNumber = WeekNumber(week)
     }
-}
-
-/**
- * @return the first monday before the date given, for mondays it returns the same date
- * */
-internal fun LocalDate.toMonday(): LocalDate {
-    var tempDate = this
-    while (tempDate.dayOfWeek != DayOfWeek.MONDAY) {
-        tempDate = tempDate.minus(1, DateTimeUnit.DAY)
-    }
-    return tempDate
 }

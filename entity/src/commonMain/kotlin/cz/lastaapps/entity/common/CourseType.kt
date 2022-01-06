@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,6 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.week
+package cz.lastaapps.entity.common
 
-class WeekNotSupported : Exception()
+import io.kotest.matchers.string.shouldNotBeBlank
+
+/**
+ * Course of day for a dish
+ * for example soup, main meal, vegetarian (grass eater)
+ * https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=1
+ * https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=1
+ */
+@JvmInline
+value class CourseType(val type: String) {
+    init {
+        type.shouldNotBeBlank()
+    }
+}

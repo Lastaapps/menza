@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,7 +20,12 @@
 package cz.lastaapps.entity.info
 
 import cz.lastaapps.entity.menza.MenzaId
+import io.kotest.matchers.booleans.shouldBeTrue
 
+/**
+ * Holds contact info to the menza administration
+ * https://agata.suz.cvut.cz/jidelnicky/kontakty.php
+ */
 data class Contact(
     val id: MenzaId,
     val role: String?,
@@ -29,6 +34,6 @@ data class Contact(
     val email: String?,
 ) {
     init {
-        assert(role != null || name != null || phoneNumber != null || email != null)
+        (role != null || name != null || phoneNumber != null || email != null).shouldBeTrue()
     }
 }

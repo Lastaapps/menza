@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,15 +19,16 @@
 
 package cz.lastaapps.entity
 
-import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.TimeZone
+import kotlinx.datetime.*
 
 object TimeUtils {
     fun getDaysOfWeek() = daysOfWeekSorted
 }
 
+/** Central Europe timezone*/
 internal val CET get() = TimeZone.of("Europe/Prague")
 
+/** Days in Czech week */
 internal val daysOfWeekSorted = listOf(
     DayOfWeek.MONDAY,
     DayOfWeek.TUESDAY,
@@ -38,10 +39,14 @@ internal val daysOfWeekSorted = listOf(
     DayOfWeek.SUNDAY
 )
 
+/** Compares a day of week to another using czech calendar
+ * @return if the other day is later in week */
 fun DayOfWeek.compareInWeek(other: DayOfWeek): Int {
     return daysOfWeekSorted.indexOf(this).compareTo(daysOfWeekSorted.indexOf(other))
 }
 
+/** Maps day names to day enum
+ * @return DayOfWeek or null */
 fun String.toCzechDayShortcutToDayOfWeek(): DayOfWeek? {
     return when (this.lowercase()) {
         "po" -> DayOfWeek.MONDAY
@@ -53,4 +58,15 @@ fun String.toCzechDayShortcutToDayOfWeek(): DayOfWeek? {
         "ne" -> DayOfWeek.SUNDAY
         else -> null
     }
+}
+
+/**
+ * @return the first monday before the date given, for mondays it returns the same date
+ * */
+internal fun LocalDate.toMonday(): LocalDate {
+    var tempDate = this
+    while (tempDate.dayOfWeek != DayOfWeek.MONDAY) {
+        tempDate = tempDate.minus(1, DateTimeUnit.DAY)
+    }
+    return tempDate
 }

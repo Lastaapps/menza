@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,6 +21,12 @@ package cz.lastaapps.entity.common
 
 import io.kotest.matchers.string.shouldNotBeBlank
 
+/**
+ * Holds the amount of food
+ * can be grams, pieces, milliliters or whatever they want
+ * Is not always presented
+ * https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=1
+ */
 @JvmInline
 value class Amount(val amount: String) {
     init {

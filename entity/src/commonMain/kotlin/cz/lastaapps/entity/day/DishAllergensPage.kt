@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,15 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.allergens
+package cz.lastaapps.entity.day
 
-import io.kotest.matchers.string.shouldNotBeBlank
+import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 
-data class AllergenFood(
-    val foodId: String,
-    val allergens: AllergenList,
-) {
+/**
+ * Holds the info about the ids of a dish in Agata allergen id system
+ * Can be used to reference food allergens
+ * https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=1
+ * https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=340656
+ */
+@JvmInline
+value class DishAllergensPage(val pageId: Int) {
     init {
-        foodId.shouldNotBeBlank()
+        pageId shouldBeGreaterThanOrEqual 0
     }
 }

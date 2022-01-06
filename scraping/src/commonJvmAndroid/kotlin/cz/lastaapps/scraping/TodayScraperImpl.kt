@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,10 +20,10 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.common.Amount
-import cz.lastaapps.entity.common.FoodType
+import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
-import cz.lastaapps.entity.day.Food
-import cz.lastaapps.entity.day.FoodAllergens
+import cz.lastaapps.entity.day.Dish
+import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.day.IssueLocation
 import cz.lastaapps.entity.menza.MenzaId
 import it.skrape.core.htmlDocument
@@ -41,17 +41,17 @@ object TodayScraperImpl : TodayScraper<Result> {
         }
     }.scrape()
 
-    override fun scrape(result: Result): Set<Food> {
+    override fun scrape(result: Result): Set<Dish> {
         return result.htmlDocument { parseHtml() }
     }
 
-    override fun scrape(html: String): Set<Food> {
+    override fun scrape(html: String): Set<Dish> {
         return htmlDocument(html) { parseHtml() }
     }
 
-    private fun Doc.parseHtml(): Set<Food> {
+    private fun Doc.parseHtml(): Set<Dish> {
 
-        val food = mutableSetOf<Food>()
+        val dishSet = mutableSetOf<Dish>()
         var currentType: String? = null
 
         val menzaId = findFirst("body #PodsysActive") {
@@ -67,18 +67,18 @@ object TodayScraperImpl : TodayScraper<Result> {
                 "td" -> {
                     val amount = children[1].ownText.removeSpaces().takeIf { it.isNotBlank() }
                     val name = children[2].ownText.removeSpaces()
-                    val allergensFoodId = children[3].parseAllergens()
+                    val dishAllergensId = children[3].parseAllergens()
                     val imgUrl = children[4].parseImage()
                     val priceStudent = children[5].parseMoney()
                     val priceNormal = children[6].parseMoney()
                     val issuePlaces = children[7].parseIssuePlaces()
 
-                    food += Food(
+                    dishSet += Dish(
                         MenzaId(menzaId),
-                        FoodType(currentType!!),
+                        CourseType(currentType!!),
                         amount?.let { Amount(amount) },
                         name,
-                        allergensFoodId,
+                        dishAllergensId,
                         imgUrl,
                         Price(priceStudent),
                         Price(priceNormal),
@@ -88,13 +88,13 @@ object TodayScraperImpl : TodayScraper<Result> {
                 else -> error("No <tr> children")
             }
         }
-        return food
+        return dishSet
     }
 
-    private fun DocElement.parseAllergens(): FoodAllergens {
+    private fun DocElement.parseAllergens(): DishAllergensPage {
         return findFirst("a") {
             val code = attribute("href").removePrefix("alergeny.php?alergen=").toInt()
-            FoodAllergens(code)
+            DishAllergensPage(code)
         }
     }
 
