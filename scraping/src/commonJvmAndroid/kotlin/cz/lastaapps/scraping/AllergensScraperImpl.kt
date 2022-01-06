@@ -21,7 +21,7 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
-import cz.lastaapps.entity.day.FoodId
+import cz.lastaapps.entity.day.FoodAllergens
 import it.skrape.core.htmlDocument
 import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.Result
@@ -38,7 +38,7 @@ object AllergensScraperImpl : AllergenScraper<Result> {
         }
     }.scrape()
 
-    override suspend fun createRequestForFood(foodId: FoodId) = skrape(AsyncFetcher) {
+    override suspend fun createRequestForFood(foodId: FoodAllergens) = skrape(AsyncFetcher) {
         request {
             this.url = "https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${foodId.id}"
         }

@@ -19,15 +19,18 @@
 
 package cz.lastaapps.entity.day
 
+import io.kotest.matchers.ints.shouldBeNonNegative
 import io.kotest.matchers.string.shouldNotBeBlank
 
 data class IssueLocation(
-    val locationId: String,
+    val terminalId: Int,
+    val windowsId: Int,
     val abbrev: String,
     val name: String,
 ) {
     init {
-        locationId.shouldNotBeBlank()
+        terminalId.shouldBeNonNegative()
+        windowsId.shouldBeNonNegative()
         abbrev.shouldNotBeBlank()
         name.shouldNotBeBlank()
     }

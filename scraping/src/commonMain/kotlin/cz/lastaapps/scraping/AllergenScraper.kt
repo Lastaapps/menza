@@ -20,9 +20,9 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.allergens.Allergen
-import cz.lastaapps.entity.day.FoodId
+import cz.lastaapps.entity.day.FoodAllergens
 
 interface AllergenScraper<R : Any> : ScraperBase<R, Allergen> {
     suspend fun createRequestForAll(): R
-    suspend fun createRequestForFood(foodId: FoodId): R
+    suspend fun createRequestForFood(foodId: FoodAllergens): R
 }

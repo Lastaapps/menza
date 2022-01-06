@@ -23,7 +23,7 @@ import io.kotest.matchers.ints.shouldBeGreaterThan
 import kotlin.jvm.JvmInline
 
 @JvmInline
-value class FoodId(val id: Int) {
+value class FoodAllergens(val id: Int) {
     init {
         id.shouldBeGreaterThan(0)
     }

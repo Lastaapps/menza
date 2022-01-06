@@ -21,7 +21,7 @@ package cz.lastaapps.storage.repo
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
-import cz.lastaapps.entity.day.FoodId
+import cz.lastaapps.entity.day.FoodAllergens
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.AllergenScraper
 import cz.lastaapps.storage.MemoryMenzaDriverFactory
@@ -70,7 +70,7 @@ internal class MockAllergenScraper(private val data: Set<Allergen>) :
         return data
     }
 
-    override suspend fun createRequestForFood(foodId: FoodId): Set<Allergen> {
+    override suspend fun createRequestForFood(foodId: FoodAllergens): Set<Allergen> {
         error("Not implemented")
     }
 

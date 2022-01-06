@@ -31,7 +31,7 @@ data class Food(
     val foodType: FoodType,
     val amount: Amount?,
     val name: String,
-    val allergenFoodId: FoodId?,
+    val allergenFoodId: FoodAllergens,
     val imageUrl: String?,
     val priceStudent: Price,
     val priceNormal: Price,

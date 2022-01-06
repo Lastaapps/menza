@@ -21,7 +21,7 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
-import cz.lastaapps.entity.day.FoodId
+import cz.lastaapps.entity.day.FoodAllergens
 import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
@@ -53,7 +53,7 @@ class AllergensScraperTest {
     @Test
     fun scrapeFoodAllergensOnline() = runTest {
 
-        val result = AllergensScraperImpl.createRequestForFood(FoodId(336173))
+        val result = AllergensScraperImpl.createRequestForFood(FoodAllergens(336173))
         val allergens = AllergensScraperImpl.scrape(result)
 
         //allergens.forEach { println(it) }
