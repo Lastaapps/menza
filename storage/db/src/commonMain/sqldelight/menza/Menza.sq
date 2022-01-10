@@ -9,6 +9,10 @@ CREATE TABLE menzaEntity (
 
 CREATE INDEX menzaIndex ON menzaEntity(id);
 
+hasData:
+    SELECT 1
+    FROM menzaEntity;
+
 getAllMenzas:
     SELECT *
     FROM menzaEntity;

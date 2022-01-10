@@ -7,6 +7,10 @@ CREATE TABLE messageEntity(
 
 CREATE INDEX messageIndex ON messageEntity(menza_id);
 
+hasData:
+    SELECT 1
+    FROM messageEntity;
+
 getAllMessages:
     SELECT * FROM messageEntity;
 

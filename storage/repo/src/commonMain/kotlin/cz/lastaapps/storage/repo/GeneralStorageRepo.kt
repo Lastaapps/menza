@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,5 +20,16 @@
 package cz.lastaapps.storage.repo
 
 import cz.lastaapps.entity.allergens.Allergen
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
-interface AllergenRepo : GeneralStorageRepo<Allergen>
+interface GeneralStorageRepo <R:Any> {
+
+    val errors: Channel<Errors>
+    val requestInProgress: StateFlow<Boolean>
+
+    suspend fun getData(): Flow<List<R>>
+    suspend fun refreshData()
+    suspend fun hasDataStored(): Flow<Boolean>
+}

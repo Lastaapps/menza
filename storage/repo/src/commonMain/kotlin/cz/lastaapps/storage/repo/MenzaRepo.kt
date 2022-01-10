@@ -19,6 +19,8 @@
 
 package cz.lastaapps.storage.repo
 
-interface MenzaRepo {
+import cz.lastaapps.entity.menza.Menza
+
+interface MenzaRepo : GeneralStorageRepo<Menza> {
 
 }

@@ -31,7 +31,7 @@ import it.skrape.selects.html5.small
 
 object LocationScraperImpl : LocationScraper<Result> {
 
-    //override suspend fun createRequest() = ContactsScrapper.createRequest()
+    override suspend fun createRequest() = ContactsScraperImpl.createRequest()
 
     /**
      * Accepts contacts scrape result

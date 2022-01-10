@@ -4,11 +4,15 @@ import cz.lastaapps.entity.menza.MenzaId;
 
 CREATE TABLE locationEntity(
     menza_id INTEGER AS MenzaId NOT NULL PRIMARY KEY,
-    adderss TEXT AS Address NOT NULL,
+    address TEXT AS Address NOT NULL,
     coordinates TEXT AS Coordinates NOT NULL
 );
 
 CREATE INDEX locationIndex ON locationEntity(menza_id);
+
+hasData:
+    SELECT 1
+    FROM locationEntity;
 
 getAllLocations:
     SELECT * FROM locationEntity;
@@ -21,6 +25,6 @@ deleteLocations:
     DELETE FROM locationEntity;
 
 insertLocations:
-    INSERT INTO locationEntity(menza_id, adderss, coordinates)
+    INSERT INTO locationEntity(menza_id, address, coordinates)
     VALUES (:menza_id, :adderss, :coordinates);
 

@@ -20,58 +20,71 @@
 package cz.lastaapps.storage.repo
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.AllergenScraper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 class AllergenRepoImpl<R : Any>(
     private val database: MenzaDatabase,
-    private val allergenScraper: AllergenScraper<R>,
+    private val scraper: AllergenScraper<R>,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : AllergenRepo {
-    override val hasData: StateFlow<Boolean>
-        get() = mHasData
-    override val isLoading: StateFlow<Boolean>
-        get() = mIsLoading
-    override val failed: StateFlow<Boolean>
-        get() = mFailed
 
-    private val mHasData = MutableStateFlow(false)
-    private val mIsLoading = MutableStateFlow(false)
-    private val mFailed = MutableStateFlow(false)
+    override val errors: Channel<Errors>
+        get() = mErrors
+    override val requestInProgress: StateFlow<Boolean>
+        get() = mRequestInProgress
 
-    //TODO error channel
-    private val errorChannel = Channel<String>()
+    private val mErrors = Channel<Errors>(Channel.CONFLATED)
+    private val mRequestInProgress = MutableStateFlow(false)
 
-    override suspend fun getData(): Flow<List<Allergen>> = withContext(dispatcher) {
+    private val mutex = Mutex()
 
-        val queries = database.allergenQueries
-        val exists = queries.hasData().executeAsOneOrNull() != null
+    override suspend fun getData(): Flow<List<Allergen>> = mutex.withLock {
+        withContext(dispatcher) {
 
-        if (!exists) {
-            loadFromWeb()
+            val hasData = hasDataStored().first()
+            if (!hasData) {
+                launch(coroutineContext) {
+                    refreshInternal()
+                }
+            }
+
+            val queries = database.allergenQueries
+            return@withContext queries.getAllAlergens { id, name, description ->
+                Allergen(id, name, description)
+            }
+                .asFlow().mapToList(coroutineContext)
         }
-
-        return@withContext queries.getAllAlergens()
-            .asFlow().map { it.executeAsList() }
-            .map { list -> list.map { Allergen(it.id, it.name, it.description) }.sorted() }
     }
 
-    suspend fun reload() {
-        loadFromWeb()
+    override suspend fun refreshData() {
+        refreshInternal()
     }
 
-    private suspend fun loadFromWeb() {
-        val request = allergenScraper.createRequestForAll()
-        val data = allergenScraper.scrape(request)
+    private suspend fun refreshInternal(): Boolean {
+        val request = try {
+            scraper.createRequestForAll()
+        } catch (e: Exception) {
+            mErrors.send(Errors.ConnectionError)
+            return false
+        }
+        val data = try {
+            scraper.scrape(request)
+        } catch (e: Exception) {
+            mErrors.send(Errors.ParsingError)
+            return false
+        }
 
         val queries = database.allergenQueries
         queries.transaction {
@@ -79,6 +92,15 @@ class AllergenRepoImpl<R : Any>(
             data.forEach {
                 queries.insertAllergens(it.id, it.name, it.description)
             }
+        }
+        return false
+    }
+
+    override suspend fun hasDataStored(): Flow<Boolean> {
+        return withContext(dispatcher) {
+            val queries = database.allergenQueries
+            return@withContext queries.hasData().asFlow().mapToOneOrNull(coroutineContext)
+                .map { it != null }
         }
     }
 }

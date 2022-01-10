@@ -22,13 +22,9 @@ package cz.lastaapps.storage.repo
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
-import cz.lastaapps.entity.allergens.Allergen
-import cz.lastaapps.entity.menza.Menza
-import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.entity.menza.Message
 import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.scraping.AllergenScraper
-import cz.lastaapps.scraping.MenzaScraper
-import cz.lastaapps.scraping.ScraperRequest
+import cz.lastaapps.scraping.MessagesScraper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -38,12 +34,12 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
-class MenzaRepoImpl <S: Any>(
+class MessagesRepoImpl<R : Any>(
     private val database: MenzaDatabase,
-    private val scraper: MenzaScraper<S>,
-    private val otherScraper: ScraperRequest<S, Any>,
+    private val scraper: MessagesScraper<R>,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-) : MenzaRepo {
+) : MessagesRepo {
+
     override val errors: Channel<Errors>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
@@ -54,7 +50,7 @@ class MenzaRepoImpl <S: Any>(
 
     private val mutex = Mutex()
 
-    override suspend fun getData(): Flow<List<Menza>> = mutex.withLock {
+    override suspend fun getData(): Flow<List<Message>> = mutex.withLock {
         withContext(dispatcher) {
 
             val hasData = hasDataStored().first()
@@ -64,10 +60,8 @@ class MenzaRepoImpl <S: Any>(
                 }
             }
 
-            val queries = database.menzaQueries
-            return@withContext queries.getAllMenzas { id, name, opened ->
-                Menza(id, name, opened)
-            }
+            val queries = database.messageQueries
+            return@withContext queries.getAllMessages { menzaId, message -> Message(menzaId, message) }
                 .asFlow().mapToList(coroutineContext)
         }
     }
@@ -78,7 +72,7 @@ class MenzaRepoImpl <S: Any>(
 
     private suspend fun refreshInternal(): Boolean {
         val request = try {
-            otherScraper.createRequest()
+            scraper.createRequest()
         } catch (e: Exception) {
             mErrors.send(Errors.ConnectionError)
             return false
@@ -90,11 +84,11 @@ class MenzaRepoImpl <S: Any>(
             return false
         }
 
-        val queries = database.menzaQueries
+        val queries = database.messageQueries
         queries.transaction {
-            queries.deleteMenzas()
+            queries.deleteMessages()
             data.forEach {
-                queries.insertMenzas(it.menzaId, it.name, it.opened)
+                queries.insertMessages(it.id, it.message)
             }
         }
         return false
@@ -102,7 +96,7 @@ class MenzaRepoImpl <S: Any>(
 
     override suspend fun hasDataStored(): Flow<Boolean> {
         return withContext(dispatcher) {
-            val queries = database.menzaQueries
+            val queries = database.messageQueries
             return@withContext queries.hasData().asFlow().mapToOneOrNull(coroutineContext)
                 .map { it != null }
         }

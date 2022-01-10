@@ -10,6 +10,10 @@ CREATE TABLE contactEntity (
 
 CREATE INDEX contactIndex ON contactEntity(menza_id);
 
+hasData:
+    SELECT 1
+    FROM contactEntity;
+
 getAllConstacts:
     SELECT *
     FROM contactEntity;

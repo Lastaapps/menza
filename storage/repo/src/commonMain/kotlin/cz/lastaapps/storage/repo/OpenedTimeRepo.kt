@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,6 +19,9 @@
 
 package cz.lastaapps.storage.repo
 
-import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.info.OpeningHours
+import cz.lastaapps.entity.menza.Opened
 
-interface AllergenRepo : GeneralStorageRepo<Allergen>
+interface OpenedTimeRepo : GeneralStorageRepo<OpeningHours> {
+
+}
