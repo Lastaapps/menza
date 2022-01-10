@@ -41,6 +41,8 @@ value class WeekNumber private constructor(val week: Int) {
             return WeekNumber(days / 7 + 25)
         }
 
+        val tempWeekNumber = WeekNumber(0)
+
         /**
          * used to restore data from database
          * */
