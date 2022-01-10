@@ -48,6 +48,7 @@ object Versions {
     const val DATASTORE = "1.0.0"
     const val DOCUMENT_FILE = "1.1.0-alpha01"
     const val FRAGMENT = "1.4.0"
+    const val HILT = "2.38.1"
     const val LIFECYCLE = "2.4.0"
     const val PREFERENCES = "1.2.0-rc01"
     const val RECYCLER_VIEW = "1.3.0-alpha01"
