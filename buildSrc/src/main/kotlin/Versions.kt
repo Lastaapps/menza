@@ -22,7 +22,7 @@ object Versions {
 
     //androidx
     const val ACTIVITY = "1.4.0"
-    const val APPCOMPAT = "1.4.0"
+    const val APPCOMPAT = "1.4.1"
     const val ANNOTATION = "1.3.0"
     const val COLLECTION = "1.2.0"
     const val CONSTRAINTLAYOUT = "2.1.2"
@@ -34,8 +34,8 @@ object Versions {
     const val LIFECYCLE = "2.4.0"
     const val PREFERENCES = "1.2.0-rc01"
     const val RECYCLER_VIEW = "1.3.0-alpha01"
-    const val ROOM = "2.4.0"
-    const val SPLASHSCREEN = "1.0.0-alpha02"
+    const val ROOM = "2.4.1"
+    const val SPLASHSCREEN = "1.0.0-beta01"
     const val STARTUP = "1.1.0"
     const val SWIPE_REFRESH_LAYOUT = "1.2.0-alpha01"
     const val TRACING = "1.1.0-alpha02"
@@ -44,9 +44,9 @@ object Versions {
 
 
     //compose
-    const val COMPOSE = "1.1.0-rc01"
-    const val COMPOSE_COMPILER = "1.1.0-rc02"
-    const val COMPOSE_MATERIAL_3 = "1.0.0-alpha02"
+    const val COMPOSE = "1.2.0-alpha01"
+    const val COMPOSE_COMPILER = COMPOSE
+    const val COMPOSE_MATERIAL_3 = "1.0.0-alpha03"
     const val CONSTRAINTLAYOUT_COMPOSE = "1.0.0-rc02"
     const val NAVIGATION = "2.4.0-rc01"
     const val VIEWMODEL_COMPOSE = "2.4.0"
