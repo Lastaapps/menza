@@ -1,4 +1,3 @@
-
 object Plugins {
 
     const val APPLICATION = "com.android.application"
@@ -13,8 +12,9 @@ object Plugins {
     const val KSP = "com.google.devtools.ksp"
     const val KAPT = "kotlin-kapt"
     const val SQLDELIGHT = "com.squareup.sqldelight"
-    const val HILT_CLASSPATH = "com.google.dagger:hilt-android-gradle-plugin:${Versions.HILT}"
-    const val HILT = "dagger.hilt.android.plugin"
+    const val DAGGER_HILT_CLASSPATH =
+        "com.google.dagger:hilt-android-gradle-plugin:${Versions.DAGGER_HILT}"
+    const val DAGGER_HILT = "dagger.hilt.android.plugin"
 
     const val PARCELIZE = "kotlin-parcelize"
 

@@ -27,11 +27,17 @@ object Versions {
     const val COLLECTION = "1.2.0"
     const val CONSTRAINTLAYOUT = "2.1.2"
     const val CORE = "1.7.0"
+    const val DAGGER_HILT = "2.38.1"
     const val DATASTORE = "1.0.0"
     const val DOCUMENT_FILE = "1.1.0-alpha01"
     const val FRAGMENT = "1.4.0"
-    const val HILT = "2.38.1"
+    const val HILT_COMMON = "1.0.0"
+    const val HILT_COMPILER = "1.0.0"
+    const val HILT_NAVIGATION = "1.0.0"
+    const val HILT_VIEWMODEL = "1.0.0-alpha03"
+    const val HILT_WORK = "1.0.0"
     const val LIFECYCLE = "2.4.0"
+    const val NAVIGATION = "2.4.0-rc01"
     const val PREFERENCES = "1.2.0-rc01"
     const val RECYCLER_VIEW = "1.3.0-alpha01"
     const val ROOM = "2.4.1"
@@ -48,8 +54,8 @@ object Versions {
     const val COMPOSE_COMPILER = COMPOSE
     const val COMPOSE_MATERIAL_3 = "1.0.0-alpha03"
     const val CONSTRAINTLAYOUT_COMPOSE = "1.0.0-rc02"
-    const val NAVIGATION = "2.4.0-rc01"
     const val VIEWMODEL_COMPOSE = "2.4.0"
+    const val HILT_NAVIGATION_COMPOSE = "1.0.0-rc01"
 
     //google
     const val GOOGLE_MATERIAL = "1.5.0"
