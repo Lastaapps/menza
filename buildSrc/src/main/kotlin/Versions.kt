@@ -52,7 +52,7 @@ object Versions {
     const val VIEWMODEL_COMPOSE = "2.4.0"
 
     //google
-    const val GOOGLE_MATERIAL = "1.5.0-rc01"
+    const val GOOGLE_MATERIAL = "1.5.0"
     const val OSS_LICENSE = "17.0.0"
     const val PLAY_SERVICES = "1.8.1"
     const val ACCOMPANIST = "0.22.0-rc"
