@@ -14,11 +14,11 @@ CREATE TABLE openedHoursEntity (
 
 CREATE INDEX openedHoursIndex ON openedHoursEntity(menza_id, day_of_week);
 
-hasData:
-    SELECT 1
+rowNumber:
+    SELECT COUNT(*)
     FROM openedHoursEntity;
 
-getAllHours:
+getAll:
     SELECT *
     FROM openedHoursEntity;
 
@@ -46,10 +46,10 @@ getForMenzaNameAndDay:
     AND day_of_week = :dayOfWeek;
 
 
-deleteHours:
+delete:
     DELETE FROM openedHoursEntity;
 
-insertHours:
+insert:
     INSERT INTO openedHoursEntity(menza_id, name, day_of_week, open, close, comment)
     VALUES (:menza_id, :name, :day_of_week, :open, :close, :comment);
 

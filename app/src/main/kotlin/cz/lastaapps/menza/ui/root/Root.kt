@@ -17,23 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.info
+package cz.lastaapps.menza.ui.root
 
-import cz.lastaapps.entity.menza.MenzaId
-import io.kotest.matchers.booleans.shouldBeTrue
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import cz.lastaapps.menza.ui.theme.AppTheme
 
-/**
- * Holds contact info to the menza administration
- * https://agata.suz.cvut.cz/jidelnicky/kontakty.php
- */
-data class Contact(
-    val id: MenzaId,
-    val name: Name?,
-    val role: Role?,
-    val phoneNumber: PhoneNumber?,
-    val email: Email?,
-) {
-    init {
-        (role != null || name != null || phoneNumber != null || email != null).shouldBeTrue()
+@Composable
+fun AppRoot(viewModel: RootViewModel) {
+    val state by viewModel.isDark.collectAsState()
+
+    AppTheme(state) {
+        Box(Modifier.fillMaxSize(), Alignment.Center) {
+            Text(text = "Hello, world!")
+        }
     }
 }

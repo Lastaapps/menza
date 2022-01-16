@@ -19,7 +19,7 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.info.Contact
+import cz.lastaapps.entity.info.*
 import cz.lastaapps.entity.menza.MenzaId
 import io.ktor.http.*
 import it.skrape.core.htmlDocument
@@ -60,16 +60,20 @@ object ContactsScraperImpl : ContactsScraper<Result> {
 
                     td {
                         val role = findByIndex(0) {
-                            text.takeIf { it.removeSpaces().isNotBlank() }
+                            text.takeIf { it.removeSpaces().isNotBlank() }?.let { Role(it) }
                         }
                         val name = findByIndex(1) {
-                            text.takeIf { it.removeSpaces().isNotBlank() }
+                            text.takeIf { it.removeSpaces().isNotBlank() }?.let { Name(it) }
                         }
-                        val phoneNumber = findByIndex(2) { parsePhoneNumber() }
-                        val email = findByIndex(3) { parseEmail() }
+                        val phoneNumber = findByIndex(2) {
+                            parsePhoneNumber()?.let { PhoneNumber(it) }
+                        }
+                        val email = findByIndex(3) {
+                            parseEmail()?.let { Email(it) }
+                        }
 
                         if (role != null || name != null || phoneNumber != null || email != null)
-                            set += Contact(MenzaId(menzaId), role, name, phoneNumber, email)
+                            set += Contact(MenzaId(menzaId), name, role, phoneNumber, email)
                     }
                 }
             }

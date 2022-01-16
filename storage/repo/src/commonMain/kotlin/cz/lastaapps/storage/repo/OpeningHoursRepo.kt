@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,8 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.scraping
+package cz.lastaapps.storage.repo
 
-import cz.lastaapps.entity.menza.Menza
+import cz.lastaapps.entity.info.OpeningHours
+import cz.lastaapps.entity.menza.Opened
 
-interface MenzaScraper<R : Any> : ScraperRequest<R, Menza>
+interface OpeningHoursRepo : GeneralStorageRepo<OpeningHours> {
+}

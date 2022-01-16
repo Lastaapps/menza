@@ -9,11 +9,11 @@ CREATE TABLE menzaEntity (
 
 CREATE INDEX menzaIndex ON menzaEntity(id);
 
-hasData:
-    SELECT 1
+rowNumber:
+    SELECT COUNT(*)
     FROM menzaEntity;
 
-getAllMenzas:
+getAll:
     SELECT *
     FROM menzaEntity;
 
@@ -22,15 +22,15 @@ getMenzasById:
     FROM menzaEntity
     WHERE id = :id;
 
-updateOpened:
+update:
     UPDATE menzaEntity
     SET opened = :opened
     WHERE id IN :ids;
 
-deleteMenzas:
+delete:
     DELETE FROM menzaEntity;
 
-insertMenzas:
+insert:
     INSERT INTO menzaEntity(id, name, opened) VALUES (:id, :name, :opened);
 
 

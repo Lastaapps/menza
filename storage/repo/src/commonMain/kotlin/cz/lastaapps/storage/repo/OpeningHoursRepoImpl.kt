@@ -26,13 +26,12 @@ import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.info.Contact
+import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaLocation
+import cz.lastaapps.entity.menza.Message
 import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.scraping.AllergenScraper
-import cz.lastaapps.scraping.ContactsScraper
-import cz.lastaapps.scraping.LocationScraper
-import cz.lastaapps.scraping.MenzaScraper
+import cz.lastaapps.scraping.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -41,14 +40,14 @@ import kotlinx.coroutines.sync.withLock
 import javax.security.auth.login.LoginException
 import kotlin.coroutines.CoroutineContext
 
-class MenzaRepoImpl<R : Any>(
+class OpeningHoursRepoImpl<R : Any>(
     database: MenzaDatabase,
-    private val scraper: MenzaScraper<R>,
+    private val scraper: OpeningHoursScraper<R>,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-) : MenzaRepo {
+) : OpeningHoursRepo {
 
-    private val TAG = MenzaRepo::class.simpleName
-    private val queries = database.menzaQueries
+    private val TAG = OpeningHoursRepo::class.simpleName
+    private val queries = database.openedTimeQueries
 
     override val errors: Channel<Errors>
         get() = mErrors
@@ -58,7 +57,7 @@ class MenzaRepoImpl<R : Any>(
     private val mErrors = Channel<Errors>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
-    override fun getData(scope: CoroutineScope): Flow<List<Menza>> {
+    override fun getData(scope: CoroutineScope): Flow<List<OpeningHours>> {
 
         Log.i(TAG, "Getting data")
         scope.launch() {
@@ -68,13 +67,13 @@ class MenzaRepoImpl<R : Any>(
             }
         }
 
-        return queries.getAll { id, name, opened ->
-            Menza(id, name, opened)
+        return queries.getAll { menzaId, name, dayOfWeek, opened, close, comment ->
+            OpeningHours(menzaId, name, dayOfWeek, opened, close, comment)
         }
             .asFlow().mapToList(scope.coroutineContext)
     }
 
-    override fun refreshData() : Flow<Boolean?> {
+    override fun refreshData(): Flow<Boolean?> {
         return flow {
             Log.i(TAG, "Requesting data refresh")
             emit(refreshInternal())
@@ -110,7 +109,10 @@ class MenzaRepoImpl<R : Any>(
         queries.transaction {
             queries.delete()
             data.forEach {
-                queries.insert(it.menzaId, it.name, it.opened)
+                queries.insert(
+                    it.menzaId, it.locationName, it.dayOfWeek,
+                    it.open, it.close, it.comment
+                )
             }
         }
         mRequestInProgress.value = true
@@ -120,6 +122,6 @@ class MenzaRepoImpl<R : Any>(
     override fun hasDataStored(): Flow<Boolean> {
         Log.i(TAG, "Asking hasData")
         return queries.rowNumber().asFlow().mapToOneNotNull(dispatcher)
-            .map {it > 0 }
+            .map { it > 0 }
     }
 }

@@ -22,6 +22,7 @@ package cz.lastaapps.storage.repo
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
+import cz.lastaapps.entity.week.WeekNotAvailable
 import cz.lastaapps.entity.week.WeekNumber
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.OpeningHoursScraper
@@ -49,7 +50,7 @@ class WeekRepoImpl <R: Any> (
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<Errors>(Channel.CONFLATED)
+    private val mErrors = Channel<Errors>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
     private val mutex = Mutex()
@@ -65,6 +66,9 @@ class WeekRepoImpl <R: Any> (
 
             val data = try {
                 scraper.scrape(request)
+            } catch (e: WeekNotAvailable) {
+                //TODO week no available
+                return@withContext null
             } catch (e: Exception) {
                 mErrors.send(Errors.ParsingError)
                 return@withContext null

@@ -46,7 +46,7 @@ class TodayRepoImpl <R:Any> (
    override val requestInProgress: StateFlow<Boolean>
        get() = mRequestInProgress
 
-   private val mErrors = Channel<Errors>(Channel.CONFLATED)
+   private val mErrors = Channel<Errors>(Channel.BUFFERED)
    private val mRequestInProgress = MutableStateFlow(false)
 
    private val mutex = Mutex()

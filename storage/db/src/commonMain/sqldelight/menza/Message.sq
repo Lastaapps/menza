@@ -7,20 +7,20 @@ CREATE TABLE messageEntity(
 
 CREATE INDEX messageIndex ON messageEntity(menza_id);
 
-hasData:
-    SELECT 1
+rowNumber:
+    SELECT COUNT(*)
     FROM messageEntity;
 
-getAllMessages:
+getAll:
     SELECT * FROM messageEntity;
 
 getMessageForMenza:
     SELECT * FROM messageEntity
     WHERE menza_id = :menzaId;
 
-deleteMessages:
+delete:
     DELETE FROM messageEntity;
 
-insertMessages:
+insert:
     INSERT INTO messageEntity(menza_id, message)
     VALUES (:menza_id, :message);

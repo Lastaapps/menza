@@ -26,6 +26,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:${Versions.GRADLE}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}")
         classpath("com.google.android.gms:oss-licenses-plugin:${Versions.OSS_PLUGIN}")
+        classpath(Plugins.DAGGER_HILT_CLASSPATH)
     }
 }
 

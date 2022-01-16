@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,8 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.scraping
+package cz.lastaapps.menza.ui.root
 
-import cz.lastaapps.entity.menza.Menza
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-interface MenzaScraper<R : Any> : ScraperRequest<R, Menza>
+class RootViewModel @Inject constructor() : ViewModel() {
+
+    val isDark: StateFlow<Boolean> = MutableStateFlow(false)
+    val isReady: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
+    init {
+        viewModelScope.launch {
+            delay(1000)
+            isReady.value = true
+        }
+    }
+}

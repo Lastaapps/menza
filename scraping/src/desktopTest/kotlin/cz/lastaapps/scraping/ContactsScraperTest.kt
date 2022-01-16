@@ -19,7 +19,7 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.info.Contact
+import cz.lastaapps.entity.info.*
 import cz.lastaapps.entity.menza.MenzaId
 import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -39,23 +39,23 @@ class ContactsScraperTest {
         val result = ContactsScraperImpl.createRequest()
         val contacts = ContactsScraperImpl.scrape(result)
 
-        //contacts.forEach { println(it) }
+        contacts.forEach { println(it) }
 
         contacts.shouldNotBeEmpty()
 
         contacts shouldContain Contact(
             MenzaId(1),
-            "Vedoucí menzy",
             null,
-            "+420234678291",
-            "menza-strahov@cvut.cz"
+            Role("Vedoucí menzy"),
+            PhoneNumber("+420234678291"),
+            Email("menza-strahov@cvut.cz"),
         )
         contacts shouldContain Contact(
             MenzaId(1),
-            "Provoz",
             null,
-            "+420234678361",
-            "suz-provoznims@cvut.cz"
+            Role("Provoz"),
+            PhoneNumber("+420234678361"),
+            Email("suz-provoznims@cvut.cz"),
         )
     }
 
@@ -462,17 +462,17 @@ class ContactsScraperTest {
         contacts shouldHaveSize 12
         contacts shouldContain Contact(
             MenzaId(1),
-            "Vedoucí menzy",
             null,
-            "+420234678291",
-            "menza-strahov@cvut.cz"
+            Role("Vedoucí menzy"),
+            PhoneNumber("+420234678291"),
+            Email("menza-strahov@cvut.cz"),
         )
         contacts shouldContain Contact(
             MenzaId(1),
-            "Provoz",
             null,
-            "+420234678361",
-            "suz-provoznims@cvut.cz"
+            Role("Provoz"),
+            PhoneNumber("+420234678361"),
+            Email("suz-provoznims@cvut.cz"),
         )
     }
 
@@ -702,13 +702,13 @@ class ContactsScraperTest {
         shouldThrowAny { ContactsScraperImpl.scrape(malformedPhoneNumber) }
 
         ContactsScraperImpl.scrape(noPrefixEmail)
-            .map { it.email } shouldContain "suz-archicafe@cvut.cz"
+            .map { it.email } shouldContain Email("suz-archicafe@cvut.cz")
         ContactsScraperImpl.scrape(noPrefixPhoneNumber)
-            .map { it.phoneNumber } shouldContain "+420725896859"
+            .map { it.phoneNumber } shouldContain PhoneNumber("+420725896859")
         ContactsScraperImpl.scrape(phoneNumberNotCzech)
-            .map { it.phoneNumber } shouldContain "+421725896859"
+            .map { it.phoneNumber } shouldContain PhoneNumber("+421725896859")
         ContactsScraperImpl.scrape(phoneNumberNoCountry)
-            .map { it.phoneNumber } shouldContain "+420725896859"
+            .map { it.phoneNumber } shouldContain PhoneNumber("+420725896859")
         shouldThrowAny { ContactsScraperImpl.scrape(phoneNumberWrongPlus) }
     }
 }

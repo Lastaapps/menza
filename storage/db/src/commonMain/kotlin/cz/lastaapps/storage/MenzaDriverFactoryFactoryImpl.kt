@@ -46,6 +46,10 @@ fun createMenzaDatabase(driverFactory: MenzaDriverFactory): MenzaDatabase {
         ),
         contactEntityAdapter = ContactEntity.Adapter(
             menza_idAdapter = ColumnConvertors.menzaId,
+            nameAdapter = ColumnConvertors.name,
+            roleAdapter = ColumnConvertors.role,
+            phoneAdapter = ColumnConvertors.phone,
+            emailAdapter = ColumnConvertors.email,
         ),
         openedHoursEntityAdapter = OpenedHoursEntity.Adapter(
             menza_idAdapter = ColumnConvertors.menzaId,
@@ -55,7 +59,7 @@ fun createMenzaDatabase(driverFactory: MenzaDriverFactory): MenzaDatabase {
         ),
         locationEntityAdapter = LocationEntity.Adapter(
             menza_idAdapter = ColumnConvertors.menzaId,
-            adderssAdapter = ColumnConvertors.address,
+            addressAdapter = ColumnConvertors.address,
             coordinatesAdapter = ColumnConvertors.coordinates,
         ),
         messageEntityAdapter = MessageEntity.Adapter(

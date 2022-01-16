@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 /*
  *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
  *
@@ -55,6 +57,7 @@ kotlin {
                 implementation(Libs.KOTLINX_DATETIME)
                 implementation(Tests.KOTEST_ASSERTION)
                 implementation(Libs.KOTLIN_COROUTINES)
+                implementation(Libs.DAGGER_HILT)
 
                 implementation(project(":entity"))
                 implementation(project(":scraping"))

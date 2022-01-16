@@ -19,86 +19,103 @@
 
 package cz.lastaapps.storage.repo
 
+import android.util.Log
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
+import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.info.Contact
+import cz.lastaapps.entity.menza.Menza
+import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.entity.menza.Message
 import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.scraping.MessagesScraper
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import cz.lastaapps.scraping.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
+import javax.security.auth.login.LoginException
+import kotlin.coroutines.CoroutineContext
 
 class MessagesRepoImpl<R : Any>(
-    private val database: MenzaDatabase,
+    database: MenzaDatabase,
     private val scraper: MessagesScraper<R>,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : MessagesRepo {
+
+    private val TAG = MessagesRepo::class.simpleName
+    private val queries = database.messageQueries
 
     override val errors: Channel<Errors>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<Errors>(Channel.CONFLATED)
+    private val mErrors = Channel<Errors>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
-    private val mutex = Mutex()
+    override fun getData(scope: CoroutineScope): Flow<List<Message>> {
 
-    override suspend fun getData(): Flow<List<Message>> = mutex.withLock {
-        withContext(dispatcher) {
-
+        Log.i(TAG, "Getting data")
+        scope.launch() {
             val hasData = hasDataStored().first()
             if (!hasData) {
-                launch(coroutineContext) {
-                    refreshInternal()
-                }
+                refreshInternal()
             }
+        }
 
-            val queries = database.messageQueries
-            return@withContext queries.getAllMessages { menzaId, message -> Message(menzaId, message) }
-                .asFlow().mapToList(coroutineContext)
+        return queries.getAll { menzaId, message -> Message(menzaId, message) }
+            .asFlow().mapToList(scope.coroutineContext)
+    }
+
+    override fun refreshData() : Flow<Boolean?> {
+        return flow {
+            Log.i(TAG, "Requesting data refresh")
+            emit(refreshInternal())
         }
     }
 
-    override suspend fun refreshData() {
-        refreshInternal()
-    }
+    private suspend fun refreshInternal(): Boolean? {
+        if (mRequestInProgress.value)
+            return null
 
-    private suspend fun refreshInternal(): Boolean {
+        mRequestInProgress.value = true
+
         val request = try {
+            Log.i(TAG, "Getting data from a server")
             scraper.createRequest()
         } catch (e: Exception) {
             mErrors.send(Errors.ConnectionError)
+            e.printStackTrace()
+            mRequestInProgress.value = false
             return false
         }
         val data = try {
+            Log.i(TAG, "Scraping")
             scraper.scrape(request)
         } catch (e: Exception) {
             mErrors.send(Errors.ParsingError)
+            e.printStackTrace()
+            mRequestInProgress.value = false
             return false
         }
 
-        val queries = database.messageQueries
+        Log.i(TAG, "Replacing database entries")
         queries.transaction {
-            queries.deleteMessages()
+            queries.delete()
             data.forEach {
-                queries.insertMessages(it.id, it.message)
+                queries.insert(it.id, it.message)
             }
         }
-        return false
+        mRequestInProgress.value = true
+        return true
     }
 
-    override suspend fun hasDataStored(): Flow<Boolean> {
-        return withContext(dispatcher) {
-            val queries = database.messageQueries
-            return@withContext queries.hasData().asFlow().mapToOneOrNull(coroutineContext)
-                .map { it != null }
-        }
+    override fun hasDataStored(): Flow<Boolean> {
+        Log.i(TAG, "Asking hasData")
+        return queries.rowNumber().asFlow().mapToOneNotNull(dispatcher)
+            .map {it > 0 }
     }
 }

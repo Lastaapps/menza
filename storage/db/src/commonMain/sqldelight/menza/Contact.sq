@@ -1,20 +1,24 @@
+import cz.lastaapps.entity.info.Email;
+import cz.lastaapps.entity.info.Name;
+import cz.lastaapps.entity.info.PhoneNumber;
+import cz.lastaapps.entity.info.Role;
 import cz.lastaapps.entity.menza.MenzaId;
 
 CREATE TABLE contactEntity (
     menza_id INTEGER AS MenzaId NOT NULL PRIMARY KEY,
-    role TEXT,
-    name TEXT,
-    phone TEXT,
-    email TEXT
+    name TEXT AS Name,
+    role TEXT AS Role,
+    phone TEXT AS PhoneNumber,
+    email TEXT AS Email
 );
 
 CREATE INDEX contactIndex ON contactEntity(menza_id);
 
-hasData:
-    SELECT 1
+rowNumber:
+    SELECT COUNT(*)
     FROM contactEntity;
 
-getAllConstacts:
+getAll:
     SELECT *
     FROM contactEntity;
 
@@ -23,9 +27,9 @@ getContactById:
     FROM contactEntity
     WHERE menza_id = :menzy_id;
 
-deleteContacts:
+delete:
     DELETE FROM contactEntity;
 
-insertContacts:
-    INSERT INTO contactEntity(menza_id, role, name, phone, email)
-    VALUES (:menza_id, :role, :name, :phone, :email);
+insert:
+    INSERT INTO contactEntity(menza_id, name, role, phone, email)
+    VALUES (:menza_id, :name, :role, :phone, :email);

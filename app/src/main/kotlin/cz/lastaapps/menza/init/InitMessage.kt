@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,8 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.scraping
+package cz.lastaapps.menza.init
 
-import cz.lastaapps.entity.menza.Menza
+sealed class InitMessage private constructor() {
+    object Preparing:InitMessage()
+    object Done: InitMessage()
+    object Error: InitMessage()
 
-interface MenzaScraper<R : Any> : ScraperRequest<R, Menza>
+    object AllergenDone: InitMessage()
+    object ContactsDone: InitMessage()
+    object LocationDone: InitMessage()
+    object MenzaDone: InitMessage()
+    object MessageDone: InitMessage()
+    object OpeningHoursDone: InitMessage()
+}

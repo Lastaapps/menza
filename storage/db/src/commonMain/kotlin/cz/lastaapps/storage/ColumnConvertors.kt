@@ -19,9 +19,14 @@
 
 package cz.lastaapps.storage
 
+import android.telephony.PhoneNumberUtils
 import com.squareup.sqldelight.ColumnAdapter
 import cz.lastaapps.entity.LocalTime
 import cz.lastaapps.entity.allergens.AllergenId
+import cz.lastaapps.entity.info.Email
+import cz.lastaapps.entity.info.Name
+import cz.lastaapps.entity.info.PhoneNumber
+import cz.lastaapps.entity.info.Role
 import cz.lastaapps.entity.menza.Address
 import cz.lastaapps.entity.menza.Coordinates
 import cz.lastaapps.entity.menza.MenzaId
@@ -87,6 +92,46 @@ internal object ColumnConvertors {
 
         override fun encode(value: LocalTime): Long {
             return value.toSeconds().toLong()
+        }
+    }
+
+    val name = object : ColumnAdapter<Name, String> {
+        override fun decode(databaseValue: String): Name {
+            return Name(databaseValue)
+        }
+
+        override fun encode(value: Name): String {
+            return value.name
+        }
+    }
+
+    val role = object : ColumnAdapter<Role, String> {
+        override fun decode(databaseValue: String): Role {
+            return Role(databaseValue)
+        }
+
+        override fun encode(value: Role): String {
+            return value.role
+        }
+    }
+
+    val phone = object : ColumnAdapter<PhoneNumber, String> {
+        override fun decode(databaseValue: String): PhoneNumber {
+            return PhoneNumber(databaseValue)
+        }
+
+        override fun encode(value: PhoneNumber): String {
+            return value.phone
+        }
+    }
+
+    val email = object : ColumnAdapter<Email, String> {
+        override fun decode(databaseValue: String): Email {
+            return Email(databaseValue)
+        }
+
+        override fun encode(value: Email): String {
+            return value.mail
         }
     }
 }

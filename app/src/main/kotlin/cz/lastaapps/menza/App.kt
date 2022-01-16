@@ -17,11 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage.repo
+package cz.lastaapps.menza
 
-import cz.lastaapps.entity.info.OpeningHours
-import cz.lastaapps.entity.menza.Opened
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-interface OpenedTimeRepo : GeneralStorageRepo<OpeningHours> {
-
+@HiltAndroidApp
+class App : Application() {
 }

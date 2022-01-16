@@ -8,11 +8,11 @@ CREATE TABLE allergenEntity (
 
 CREATE INDEX allergenIndex ON allergenEntity(id);
 
-hasData:
-    SELECT 1
+rowNumber:
+    SELECT COUNT(*)
     FROM allergenEntity;
 
-getAllAlergens:
+getAll:
     SELECT *
     FROM allergenEntity;
 
@@ -21,9 +21,9 @@ getAllergenById:
     FROM allergenEntity
     WHERE id = :id;
 
-deleteAllergens:
+delete:
     DELETE FROM allergenEntity;
 
-insertAllergens:
+insert:
     INSERT INTO allergenEntity(id, name, description)
     VALUES (:id, :name, :description);

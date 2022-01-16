@@ -20,6 +20,7 @@
 package cz.lastaapps.storage.repo
 
 import cz.lastaapps.entity.allergens.Allergen
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +30,7 @@ interface GeneralStorageRepo <R:Any> {
     val errors: Channel<Errors>
     val requestInProgress: StateFlow<Boolean>
 
-    suspend fun getData(): Flow<List<R>>
-    suspend fun refreshData()
-    suspend fun hasDataStored(): Flow<Boolean>
+    fun getData(scope: CoroutineScope): Flow<List<R>>
+    fun refreshData(): Flow<Boolean?>
+    fun hasDataStored(): Flow<Boolean>
 }

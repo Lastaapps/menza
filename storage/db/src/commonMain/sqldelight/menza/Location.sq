@@ -10,21 +10,21 @@ CREATE TABLE locationEntity(
 
 CREATE INDEX locationIndex ON locationEntity(menza_id);
 
-hasData:
-    SELECT 1
+rowNumber:
+    SELECT COUNT(*)
     FROM locationEntity;
 
-getAllLocations:
+getAll:
     SELECT * FROM locationEntity;
 
 getLocationForMenza:
     SELECT * FROM locationEntity
     WHERE menza_id = :menzaId;
 
-deleteLocations:
+delete:
     DELETE FROM locationEntity;
 
-insertLocations:
+insert:
     INSERT INTO locationEntity(menza_id, address, coordinates)
     VALUES (:menza_id, :adderss, :coordinates);
 
