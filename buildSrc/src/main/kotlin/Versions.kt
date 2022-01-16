@@ -67,7 +67,7 @@ object Versions {
     const val FIREBASE_BOM = "29.0.3"
 
     //KMP
-    const val KOTEST = "5.0.3"
+    const val KOTEST = "5.1.0"
     const val KOTLINX_DATETIME = "0.3.1"
     const val SQLDELIGHT = "1.5.3"
     const val SKRAPE_IT = "1.1.7"
