@@ -30,6 +30,6 @@ sealed class Opened private constructor(val id: Int) {
     object EXPECTED : Opened(2)
 
     companion object {
-        val states = listOf(OPENED, CLOSED, UNKNOWN, EXPECTED)
+        val states by lazy { listOf(OPENED, CLOSED, UNKNOWN, EXPECTED) }
     }
 }

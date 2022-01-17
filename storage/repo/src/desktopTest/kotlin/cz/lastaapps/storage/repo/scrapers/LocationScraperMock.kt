@@ -17,20 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage.repo
+package cz.lastaapps.storage.repo.scrapers
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
+import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.day.DishAllergensPage
+import cz.lastaapps.entity.menza.MenzaLocation
+import cz.lastaapps.scraping.AllergenScraper
+import cz.lastaapps.scraping.LocationScraper
 
-interface GeneralStorageRepo <R:Any> {
+class LocationScraperMock(val set: Set<MenzaLocation>) : LocationScraper<Any> {
+    override suspend fun createRequest() = Any()
 
-    val errors: Channel<Errors>
-    val requestInProgress: StateFlow<Boolean>
+    override fun scrape(result: Any): Set<MenzaLocation> = set
 
-    fun getData(scope: CoroutineScope): Flow<List<R>>
-    fun refreshData(): Flow<Boolean?>
-    suspend fun hasData(): Boolean
-    fun hasDataStored(): Flow<Boolean>
+    override fun scrape(html: String): Set<MenzaLocation> = set
 }

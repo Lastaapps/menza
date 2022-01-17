@@ -6,8 +6,8 @@ CREATE TABLE openedHoursEntity (
     menza_id INTEGER AS MenzaId NOT NULL,
     name TEXT NOT NULL,
     day_of_week INTEGER AS DayOfWeek NOT NULL,
-    open INTEGER AS LocalTime,
-    close INTEGER AS LocalTime,
+    open INTEGER AS LocalTime NOT NULL,
+    close INTEGER AS LocalTime NOT NULL,
     comment TEXT,
     PRIMARY KEY (menza_id, name, day_of_week)
 );

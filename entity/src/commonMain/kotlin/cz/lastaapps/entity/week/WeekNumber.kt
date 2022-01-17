@@ -19,7 +19,7 @@
 
 package cz.lastaapps.entity.week
 
-import io.kotest.matchers.ints.shouldBeGreaterThan
+import io.kotest.matchers.comparables.shouldBeGreaterThanOrEqualTo
 import kotlinx.datetime.*
 
 /**
@@ -29,7 +29,7 @@ import kotlinx.datetime.*
 @JvmInline
 value class WeekNumber private constructor(val week: Int) {
     init {
-        week.shouldBeGreaterThan(0)
+        week shouldBeGreaterThanOrEqualTo 0
     }
 
     companion object {

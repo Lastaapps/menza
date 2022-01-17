@@ -26,6 +26,7 @@ import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.AllergenScraper
 import cz.lastaapps.storage.MemoryMenzaDriverFactory
 import cz.lastaapps.storage.createMenzaDatabase
+import cz.lastaapps.storage.repo.scrapers.AllergenScraperMock
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -38,7 +39,7 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AllergenRepoImplTest {
 
-    lateinit var db: MenzaDatabase
+    private lateinit var db: MenzaDatabase
 
     @BeforeAll
     fun createDatabase() {
@@ -54,32 +55,10 @@ class AllergenRepoImplTest {
             Allergen(AllergenId(4), "4", "four"),
         )
 
-        val repo = AllergenRepoImpl(db, MockAllergenScraper(allergens))
+        val repo = AllergenRepoImpl(db, AllergenScraperMock(allergens))
 
-        val loaded = repo.getData().first()
+        val loaded = repo.getData(this).first()
 
         allergens shouldBe loaded.toSet()
-
     }
-
-}
-
-internal class MockAllergenScraper(private val data: Set<Allergen>) :
-    AllergenScraper<Set<Allergen>> {
-    override suspend fun createRequestForAll(): Set<Allergen> {
-        return data
-    }
-
-    override suspend fun createRequestForDish(dishId: DishAllergensPage): Set<Allergen> {
-        error("Not implemented")
-    }
-
-    override fun scrape(result: Set<Allergen>): Set<Allergen> {
-        return result
-    }
-
-    override fun scrape(html: String): Set<Allergen> {
-        error("Not implemented")
-    }
-
 }

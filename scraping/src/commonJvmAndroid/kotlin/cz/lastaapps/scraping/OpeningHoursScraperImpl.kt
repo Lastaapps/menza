@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -61,8 +61,8 @@ object OpeningHoursScraperImpl : OpeningHoursScraper<Result> {
                     tryFindAllAndCycle("tbody tr") {
                         val startDay = children[0].ownText.toCzechDayShortcutToDayOfWeek()
                         val endDay = children[2].ownText.takeIf { it.removeSpaces().isNotBlank() }
-                        val startTime = children[3].ownText.parseTime()
-                        val endTime = children[5].ownText.parseTime()
+                        val startTime = children[3].ownText.parseTime()!!
+                        val endTime = children[5].ownText.parseTime()!!
                         val type = children[6].ownText.removeSpaces().takeIf { it.isNotBlank() }
 
 
@@ -100,9 +100,6 @@ object OpeningHoursScraperImpl : OpeningHoursScraper<Result> {
 
         val hours = sHours.toIntOrNull() ?: return null
         val minutes = sMinutes.toIntOrNull() ?: return null
-
-        if (hours == 0 && minutes == 0)
-            return null
 
         return LocalTime(hours, minutes, 0)
     }

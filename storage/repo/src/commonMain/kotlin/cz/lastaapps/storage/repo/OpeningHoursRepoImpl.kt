@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,26 +19,19 @@
 
 package cz.lastaapps.storage.repo
 
-import android.util.Log
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
-import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
-import cz.lastaapps.entity.allergens.Allergen
-import cz.lastaapps.entity.info.Contact
 import cz.lastaapps.entity.info.OpeningHours
-import cz.lastaapps.entity.menza.Menza
-import cz.lastaapps.entity.menza.MenzaLocation
-import cz.lastaapps.entity.menza.Message
 import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.scraping.*
-import kotlinx.coroutines.*
+import cz.lastaapps.scraping.OpeningHoursScraper
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import javax.security.auth.login.LoginException
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.launch
+import org.lighthousegames.logging.logging
 
 class OpeningHoursRepoImpl<R : Any>(
     database: MenzaDatabase,
@@ -46,7 +39,10 @@ class OpeningHoursRepoImpl<R : Any>(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : OpeningHoursRepo {
 
-    private val TAG = OpeningHoursRepo::class.simpleName
+    companion object {
+        private val log = logging(OpeningHoursRepo::class.simpleName)
+    }
+
     private val queries = database.openedTimeQueries
 
     override val errors: Channel<Errors>
@@ -59,9 +55,9 @@ class OpeningHoursRepoImpl<R : Any>(
 
     override fun getData(scope: CoroutineScope): Flow<List<OpeningHours>> {
 
-        Log.i(TAG, "Getting data")
-        scope.launch() {
-            val hasData = hasDataStored().first()
+        log.i { "Getting data" }
+        scope.launch(dispatcher) {
+            val hasData = hasData()
             if (!hasData) {
                 refreshInternal()
             }
@@ -75,9 +71,9 @@ class OpeningHoursRepoImpl<R : Any>(
 
     override fun refreshData(): Flow<Boolean?> {
         return flow {
-            Log.i(TAG, "Requesting data refresh")
+            log.i { "Requesting data refresh" }
             emit(refreshInternal())
-        }
+        }.flowOn(dispatcher)
     }
 
     private suspend fun refreshInternal(): Boolean? {
@@ -87,7 +83,7 @@ class OpeningHoursRepoImpl<R : Any>(
         mRequestInProgress.value = true
 
         val request = try {
-            Log.i(TAG, "Getting data from a server")
+            log.i { "Getting data from a server" }
             scraper.createRequest()
         } catch (e: Exception) {
             mErrors.send(Errors.ConnectionError)
@@ -96,7 +92,7 @@ class OpeningHoursRepoImpl<R : Any>(
             return false
         }
         val data = try {
-            Log.i(TAG, "Scraping")
+            log.i { "Scraping" }
             scraper.scrape(request)
         } catch (e: Exception) {
             mErrors.send(Errors.ParsingError)
@@ -105,7 +101,7 @@ class OpeningHoursRepoImpl<R : Any>(
             return false
         }
 
-        Log.i(TAG, "Replacing database entries")
+        log.i { "Replacing database entries" }
         queries.transaction {
             queries.delete()
             data.forEach {
@@ -119,8 +115,11 @@ class OpeningHoursRepoImpl<R : Any>(
         return true
     }
 
+    override suspend fun hasData(): Boolean =
+        hasDataStored().first().also { log.i { "hasData: $it" } }
+
     override fun hasDataStored(): Flow<Boolean> {
-        Log.i(TAG, "Asking hasData")
+        log.i { "Asking hasData" }
         return queries.rowNumber().asFlow().mapToOneNotNull(dispatcher)
             .map { it > 0 }
     }

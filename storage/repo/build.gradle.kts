@@ -1,7 +1,5 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -57,7 +55,7 @@ kotlin {
                 implementation(Libs.KOTLINX_DATETIME)
                 implementation(Tests.KOTEST_ASSERTION)
                 implementation(Libs.KOTLIN_COROUTINES)
-                implementation(Libs.DAGGER_HILT)
+                api(Libs.KM_LOGGING)
 
                 implementation(project(":entity"))
                 implementation(project(":scraping"))
@@ -71,6 +69,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
+                implementation(Libs.DAGGER_HILT)
             }
         }
         val androidTest by getting {

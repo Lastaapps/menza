@@ -20,7 +20,6 @@
 package cz.lastaapps.storage.repo
 
 import cz.lastaapps.entity.info.OpeningHours
-import cz.lastaapps.entity.menza.Opened
 
 interface OpeningHoursRepo : GeneralStorageRepo<OpeningHours> {
 }

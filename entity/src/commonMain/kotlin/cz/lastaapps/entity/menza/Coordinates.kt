@@ -33,12 +33,14 @@ data class Coordinates(val long: String, val lat: String) {
     }
 
     fun saveToString(): String {
-        return "$long:$lat"
+        return "$long$databaseDelimiter$lat"
     }
 
     companion object {
+        private const val databaseDelimiter = ':'
+
         fun restoreFromString(str: String): Coordinates {
-            val split = str.split(",")
+            val split = str.split(databaseDelimiter)
             return Coordinates(split[0], split[1])
         }
     }

@@ -21,10 +21,10 @@ package cz.lastaapps.entity.info
 
 import cz.lastaapps.entity.LocalTime
 import cz.lastaapps.entity.compareInWeek
+import cz.lastaapps.entity.daysOfWeekSorted
 import cz.lastaapps.entity.menza.MenzaId
-import io.kotest.matchers.comparables.shouldNotBeGreaterThanOrEqualTo
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.collections.shouldBeIn
+import io.kotest.matchers.comparables.shouldNotBeGreaterThan
 import io.kotest.matchers.string.shouldNotBeBlank
 import kotlinx.datetime.DayOfWeek
 
@@ -37,18 +37,14 @@ data class OpeningHours(
     val menzaId: MenzaId,
     val locationName: String,
     val dayOfWeek: DayOfWeek,
-    val open: LocalTime?,
-    val close: LocalTime?,
+    val open: LocalTime,
+    val close: LocalTime,
     val comment: String?,
 ) : Comparable<OpeningHours> {
     init {
         locationName.shouldNotBeBlank()
-        if (open != null) {
-            close.shouldNotBeNull()
-            open.toSeconds() shouldNotBeGreaterThanOrEqualTo close.toSeconds()
-        } else {
-            close.shouldBeNull()
-        }
+        dayOfWeek shouldBeIn daysOfWeekSorted
+        open.toSeconds() shouldNotBeGreaterThan close.toSeconds()
     }
 
     override fun compareTo(other: OpeningHours): Int {

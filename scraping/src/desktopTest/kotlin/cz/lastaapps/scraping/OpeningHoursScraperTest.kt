@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -844,7 +844,7 @@ class OpeningHoursScraperTest {
         OpeningHoursScraperImpl.scrape(sameDay).shouldNotBeEmpty()
         shouldThrowAny { OpeningHoursScraperImpl.scrape(switchedDays) }
         shouldThrowAny { OpeningHoursScraperImpl.scrape(switchedTimes) }
-        shouldThrowAny { OpeningHoursScraperImpl.scrape(sameTimes) }
+        OpeningHoursScraperImpl.scrape(sameTimes).shouldNotBeEmpty()
         shouldThrowAny { OpeningHoursScraperImpl.scrape(missingRows) }
         shouldThrowAny { OpeningHoursScraperImpl.scrape(malformedTime) }
         shouldThrowAny { OpeningHoursScraperImpl.scrape(unknownDay) }
