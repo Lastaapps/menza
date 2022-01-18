@@ -2,54 +2,54 @@ import cz.lastaapps.entity.LocalTime;
 import cz.lastaapps.entity.menza.MenzaId;
 import kotlinx.datetime.DayOfWeek;
 
-CREATE TABLE openedHoursEntity (
+CREATE TABLE openingHoursEntity (
     menza_id INTEGER AS MenzaId NOT NULL,
     name TEXT NOT NULL,
     day_of_week INTEGER AS DayOfWeek NOT NULL,
     open INTEGER AS LocalTime NOT NULL,
     close INTEGER AS LocalTime NOT NULL,
     comment TEXT,
-    PRIMARY KEY (menza_id, name, day_of_week)
+    PRIMARY KEY (menza_id, name, day_of_week, comment)
 );
 
-CREATE INDEX openedHoursIndex ON openedHoursEntity(menza_id, day_of_week);
+CREATE INDEX openedHoursIndex ON openingHoursEntity(menza_id, day_of_week);
 
 rowNumber:
     SELECT COUNT(*)
-    FROM openedHoursEntity;
+    FROM openingHoursEntity;
 
 getAll:
     SELECT *
-    FROM openedHoursEntity;
+    FROM openingHoursEntity;
 
 getForMenzaId:
     SELECT *
-    FROM openedHoursEntity
+    FROM openingHoursEntity
     WHERE menza_id = :menzaId;
 
 getForMenzaAndName:
     SELECT *
-    FROM openedHoursEntity
+    FROM openingHoursEntity
     WHERE menza_id = :menzaId
     AND name = :name;
 
 getAllNamesForMenza:
     SELECT name
-    FROM openedHoursEntity
+    FROM openingHoursEntity
     WHERE menza_id = :menzaId;
 
 getForMenzaNameAndDay:
     SELECT *
-    FROM openedHoursEntity
+    FROM openingHoursEntity
     WHERE menza_id = :menzaId
     AND name = :name
     AND day_of_week = :dayOfWeek;
 
 
 delete:
-    DELETE FROM openedHoursEntity;
+    DELETE FROM openingHoursEntity;
 
 insert:
-    INSERT INTO openedHoursEntity(menza_id, name, day_of_week, open, close, comment)
+    INSERT INTO openingHoursEntity(menza_id, name, day_of_week, open, close, comment)
     VALUES (:menza_id, :name, :day_of_week, :open, :close, :comment);
 

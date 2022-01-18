@@ -23,7 +23,6 @@ import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.day.DishAllergensPage
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
@@ -32,13 +31,13 @@ import it.skrape.selects.html5.td
 
 object AllergensScraperImpl : AllergenScraper<Result> {
 
-    override suspend fun createRequestForAll() = skrape(AsyncFetcher) {
+    override suspend fun createRequestForAll() = skrape(CIOAsyncFetcher) {
         request {
             this.url = "https://agata.suz.cvut.cz/jidelnicky/alergenyall.php"
         }
     }.scrape()
 
-    override suspend fun createRequestForDish(dishId: DishAllergensPage) = skrape(AsyncFetcher) {
+    override suspend fun createRequestForDish(dishId: DishAllergensPage) = skrape(CIOAsyncFetcher) {
         request {
             this.url = "https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${dishId.pageId}"
         }

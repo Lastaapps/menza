@@ -19,15 +19,20 @@
 
 package cz.lastaapps.menza.ui.root
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RootViewModel @Inject constructor() : ViewModel() {
+@HiltViewModel
+class RootViewModel @Inject constructor(
+    private val stavedStateHandle: SavedStateHandle,
+) : ViewModel() {
 
     val isDark: StateFlow<Boolean> = MutableStateFlow(false)
     val isReady: MutableStateFlow<Boolean> = MutableStateFlow(false)

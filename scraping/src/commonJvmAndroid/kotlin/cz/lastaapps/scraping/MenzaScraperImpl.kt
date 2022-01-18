@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,9 +22,7 @@ package cz.lastaapps.scraping
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.Opened
-import it.skrape.SkrapeItDsl
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
@@ -35,7 +33,7 @@ object MenzaScraperImpl : MenzaScraper<Result> {
     private const val openImgName = "img/Otevreno.png"
     private const val closeImgName = "img/Zavreno.png"
 
-    override suspend fun createRequest() = skrape(AsyncFetcher) {
+    override suspend fun createRequest() = skrape(CIOAsyncFetcher) {
         request {
             url = "https://agata.suz.cvut.cz/jidelnicky/indexTyden.php"
         }

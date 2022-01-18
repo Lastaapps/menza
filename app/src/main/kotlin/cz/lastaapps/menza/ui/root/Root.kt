@@ -21,12 +21,13 @@ package cz.lastaapps.menza.ui.root
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Card
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.lastaapps.menza.init.InitDecision
 import cz.lastaapps.menza.ui.theme.AppTheme
 
 @Composable
@@ -34,8 +35,20 @@ fun AppRoot(viewModel: RootViewModel) {
     val state by viewModel.isDark.collectAsState()
 
     AppTheme(state) {
-        Box(Modifier.fillMaxSize(), Alignment.Center) {
-            Text(text = "Hello, world!")
+        var showInit by rememberSaveable() {
+            mutableStateOf(true)
+        }
+
+        if (showInit) {
+            InitDecision(Modifier.fillMaxSize()) {
+                showInit = false
+            }
+        } else {
+            Box(Modifier.fillMaxSize(), Alignment.Center) {
+                Card {
+                    Text(text = "Muhaha")
+                }
+            }
         }
     }
 }

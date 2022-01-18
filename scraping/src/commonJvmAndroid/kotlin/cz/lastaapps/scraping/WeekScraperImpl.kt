@@ -26,7 +26,6 @@ import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.entity.week.WeekNotAvailable
 import cz.lastaapps.entity.week.WeekNumber
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
@@ -39,7 +38,7 @@ object WeekScraperImpl : WeekScraper<Result> {
     override suspend fun createRequest(
         menzaId: MenzaId,
         @Suppress("UNUSED_PARAMETER") weekNumber: WeekNumber
-    ) = skrape(AsyncFetcher) {
+    ) = skrape(CIOAsyncFetcher) {
         request {
             url =
                 "https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=${menzaId.id}"

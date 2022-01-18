@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,7 +23,6 @@ import cz.lastaapps.entity.info.*
 import cz.lastaapps.entity.menza.MenzaId
 import io.ktor.http.*
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
@@ -33,7 +32,7 @@ import it.skrape.selects.html5.td
 
 object ContactsScraperImpl : ContactsScraper<Result> {
 
-    override suspend fun createRequest() = skrape(AsyncFetcher) {
+    override suspend fun createRequest() = skrape(CIOAsyncFetcher) {
         request {
             url = "https://agata.suz.cvut.cz/jidelnicky/kontakty.php"
         }

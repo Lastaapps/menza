@@ -27,7 +27,6 @@ import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.day.IssueLocation
 import cz.lastaapps.entity.menza.MenzaId
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
@@ -35,7 +34,7 @@ import it.skrape.selects.DocElement
 
 object TodayScraperImpl : TodayScraper<Result> {
 
-    override suspend fun createRequest(menzaId: MenzaId) = skrape(AsyncFetcher) {
+    override suspend fun createRequest(menzaId: MenzaId) = skrape(CIOAsyncFetcher) {
         request {
             url = "https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}"
         }

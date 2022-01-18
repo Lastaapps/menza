@@ -5,11 +5,12 @@ import cz.lastaapps.entity.info.Role;
 import cz.lastaapps.entity.menza.MenzaId;
 
 CREATE TABLE contactEntity (
-    menza_id INTEGER AS MenzaId NOT NULL PRIMARY KEY,
+    menza_id INTEGER AS MenzaId NOT NULL,
     name TEXT AS Name,
     role TEXT AS Role,
     phone TEXT AS PhoneNumber,
-    email TEXT AS Email
+    email TEXT AS Email,
+    PRIMARY KEY (menza_id, name, role)
 );
 
 CREATE INDEX contactIndex ON contactEntity(menza_id);

@@ -25,14 +25,13 @@ import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.toCzechDayShortcutToDayOfWeek
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.AsyncFetcher
 import it.skrape.fetcher.Result
 import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 
 object OpeningHoursScraperImpl : OpeningHoursScraper<Result> {
 
-    override suspend fun createRequest() = skrape(AsyncFetcher) {
+    override suspend fun createRequest() = skrape(CIOAsyncFetcher) {
         request {
             url = "https://agata.suz.cvut.cz/jidelnicky/oteviraci-doby.php"
         }

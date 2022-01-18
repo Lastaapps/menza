@@ -43,7 +43,7 @@ class OpeningHoursRepoImpl<R : Any>(
         private val log = logging(OpeningHoursRepo::class.simpleName)
     }
 
-    private val queries = database.openedTimeQueries
+    private val queries = database.openingHoursQueries
 
     override val errors: Channel<Errors>
         get() = mErrors
