@@ -20,5 +20,6 @@ object Tests {
         "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.TEST_KOTLIN_COROUTINES}"
     const val ROBOELECTRIC = "org.robolectric:robolectric:${Versions.TEST_ROBOELECTRIC}"
     const val ESPRESSO = "androidx.test.espresso:espresso-core:${Versions.TEST_ESPRESSO_CORE}"
+    const val WINDOW_MANAGER = "androidx.window:window-testing:${Versions.WINDOW_MANAGER}"
 
 }

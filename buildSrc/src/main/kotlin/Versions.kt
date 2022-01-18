@@ -46,6 +46,7 @@ object Versions {
     const val SWIPE_REFRESH_LAYOUT = "1.2.0-alpha01"
     const val TRACING = "1.1.0-alpha02"
     const val VECTOR_DRAWABLES = "1.2.0-alpha02"
+    const val WINDOW_MANAGER = "1.0.0-rc01"
     const val WORK = "2.7.1"
 
 
