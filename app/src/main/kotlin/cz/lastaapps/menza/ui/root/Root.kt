@@ -19,36 +19,134 @@
 
 package cz.lastaapps.menza.ui.root
 
-import androidx.compose.foundation.layout.Box
+import android.app.Activity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Card
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.init.InitDecision
+import cz.lastaapps.menza.ui.LocalWindowWidth
+import cz.lastaapps.menza.ui.WindowSizeClass
+import cz.lastaapps.menza.ui.WithLocalWindowSizes
+import cz.lastaapps.menza.ui.WithSnackbarProvider
+import cz.lastaapps.menza.ui.dish.DishContent
+import cz.lastaapps.menza.ui.main.*
 import cz.lastaapps.menza.ui.theme.AppTheme
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppRoot(viewModel: RootViewModel) {
+fun AppRoot(
+    activity: Activity,
+    viewModel: RootViewModel,
+) {
+    if (!viewModel.isReady.collectAsState().value)
+        return
+
     val state by viewModel.isDark.collectAsState()
 
     AppTheme(state) {
-        var showInit by rememberSaveable() {
-            mutableStateOf(true)
-        }
-
-        if (showInit) {
-            InitDecision(Modifier.fillMaxSize()) {
-                showInit = false
-            }
-        } else {
-            Box(Modifier.fillMaxSize(), Alignment.Center) {
-                Card {
-                    Text(text = "Muhaha")
-                }
+        WithLocalWindowSizes(activity = activity) {
+            InitDecision {
+                AppContent()
             }
         }
     }
 }
+
+@Composable
+private fun AppContent() {
+
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    WithSnackbarProvider(snackbarHostState = snackbarHostState) {
+        when (LocalWindowWidth.current) {
+            WindowSizeClass.COMPACT -> AppContentCompact(snackbarHostState)
+            WindowSizeClass.EXPANDED -> AppContentMedium(snackbarHostState)
+            WindowSizeClass.MEDIUM -> AppContentExpanded(snackbarHostState)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppContentCompact(snackbarHostState: SnackbarHostState) {
+    var menzaId by rememberSaveable {
+        mutableStateOf<MenzaId?>(null)
+    }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+    val scope = rememberCoroutineScope()
+    MenzaNavDrawer(
+        selectedMenza = menzaId,
+        onMenzaSelected = {
+            menzaId = it
+            scope.launch { drawerState.close() }
+        },
+        drawerState,
+    ) {
+        Scaffold(
+            Modifier.fillMaxSize(),
+            topBar = {
+                MainTopBar(
+                    enableMenuIcon = true,
+                    menuOpened = drawerState.targetValue == DrawerValue.Open,
+                ) { scope.launch { drawerState.open() } }
+            },
+            bottomBar = { MainBottomNav() },
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
+        ) {
+            DishContent(Modifier.fillMaxSize())
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppContentMedium(snackbarHostState: SnackbarHostState) {
+    var menzaId by rememberSaveable {
+        mutableStateOf<MenzaId?>(null)
+    }
+
+    Scaffold(
+        Modifier.fillMaxSize(),
+        topBar = { MainTopBar(enableMenuIcon = false, menuOpened = false) {} },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+    ) {
+        Row(Modifier.fillMaxSize()) {
+            MainNavRail()
+            Column(Modifier.fillMaxHeight()) {
+                var expanded by rememberSaveable() { mutableStateOf(false) }
+                MenzaList(
+                    modifier = Modifier.weight(1f),
+                    selectedMenza = menzaId,
+                    onMenzaSelected = { menzaId = it },
+                    expanded = expanded,
+                    menzaListViewModel = hiltViewModel(),
+                )
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "")
+                }
+            }
+            DishContent(Modifier.fillMaxSize())
+        }
+    }
+}
+
+@Composable
+fun AppContentExpanded(snackbarHostState: SnackbarHostState) {
+    AppContentMedium(snackbarHostState)
+}
+
+

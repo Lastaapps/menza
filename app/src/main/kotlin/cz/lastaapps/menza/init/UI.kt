@@ -37,14 +37,18 @@ import kotlinx.coroutines.channels.consumeEach
 @Composable
 fun InitDecision(
     modifier: Modifier = Modifier,
-    onLoadingDone: () -> Unit,
+    viewModel: InitViewModel = hiltViewModel(),
+    content: @Composable () -> Unit,
 ) {
-    val viewModel = hiltViewModel<InitViewModel>()
+    val isReady by viewModel.isDone.collectAsState()
 
-    LaunchedEffect(viewModel.isDone) {
-        viewModel.isDone.consumeEach {
-            if (it) onLoadingDone()
-        }
+    if (isReady) {
+        content()
+        return
+    }
+    val downloadStarted by viewModel.startedDownloading.collectAsState()
+    if (!downloadStarted) {
+        return
     }
 
     val snackbarHost = remember { SnackbarHostState() }
@@ -54,7 +58,8 @@ fun InitDecision(
         }
     }
 
-    Scaffold(modifier,
+    Scaffold(
+        modifier,
         snackbarHost = { SnackbarHost(hostState = snackbarHost) },
         content = {
             Surface(

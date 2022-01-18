@@ -41,7 +41,8 @@ class InitViewModel @Inject constructor(
     private val openingHoursRepo: OpeningHoursRepo,
 ) : ViewModel() {
 
-    val isDone: Channel<Boolean> = Channel(Channel.BUFFERED)
+    val isDone: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val startedDownloading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val progressMessage: MutableStateFlow<InitMessage> = MutableStateFlow(Preparing)
     val progressIndicator: MutableStateFlow<Float> = MutableStateFlow(0.0f)
     val failed: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -72,13 +73,15 @@ class InitViewModel @Inject constructor(
         failed.value = false
         progressIndicator.value = 0f
         progressMessage.value = Preparing
-        isDone.send(false)
+        isDone.value = false
+        startedDownloading.value = false
 
         repos.forEachIndexed { index, pair ->
             val repo = pair.first
             progressMessage.value = pair.second
 
             if (!repo.hasData()) {
+                startedDownloading.value = true
                 when (repo.refreshData().first()) {
                     true -> Unit
                     false -> {
@@ -99,7 +102,7 @@ class InitViewModel @Inject constructor(
         }
 
         progressMessage.value = Done
-        isDone.send(true)
+        isDone.value = true
     }
 }
 

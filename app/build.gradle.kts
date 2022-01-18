@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -109,6 +109,7 @@ dependencies {
     implementation(Libs.SPLASHSCREEN)
     implementation(Libs.CORE)
     implementation(Libs.LIFECYCLE)
+    implementation(Libs.WINDOW_MANAGER)
 
     implementation(Libs.DAGGER_HILT)
     implementation(Libs.HILT_COMMON)
