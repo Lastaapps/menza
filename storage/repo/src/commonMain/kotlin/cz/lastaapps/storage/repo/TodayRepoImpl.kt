@@ -27,42 +27,52 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import org.lighthousegames.logging.logging
 
-class TodayRepoImpl <R:Any> (
-   private val scraper: TodayScraper<R>,
-   private val menzaId: MenzaId,
-   private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-): TodayRepo {
+class TodayRepoImpl<R : Any>(
+    private val scraper: TodayScraper<R>,
+    private val menzaId: MenzaId,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : TodayRepo {
 
-   override val errors: Channel<Errors>
-       get() = mErrors
-   override val requestInProgress: StateFlow<Boolean>
-       get() = mRequestInProgress
+    companion object {
+        private val log = logging(TodayRepo::class.simpleName)
+    }
 
-   private val mErrors = Channel<Errors>(Channel.BUFFERED)
-   private val mRequestInProgress = MutableStateFlow(false)
+    override val errors: Channel<Errors>
+        get() = mErrors
+    override val requestInProgress: StateFlow<Boolean>
+        get() = mRequestInProgress
 
-   private val mutex = Mutex()
+    private val mErrors = Channel<Errors>(Channel.BUFFERED)
+    private val mRequestInProgress = MutableStateFlow(false)
 
-   override suspend fun getData(): Set<Dish>? = mutex.withLock {
-       withContext(dispatcher) {
-           val request = try {
-               scraper.createRequest(menzaId)
-           } catch (e: Exception) {
-               mErrors.send(Errors.ConnectionError)
-               return@withContext null
-           }
-           val data = try {
-               scraper.scrape(request)
-           } catch (e: Exception) {
-               mErrors.send(Errors.ParsingError)
-               return@withContext null
-           }
+    override suspend fun getData(): Set<Dish>? =
+        withContext(dispatcher) {
+            if (mRequestInProgress.value)
+                return@withContext null
 
-           return@withContext data
-       }
-   }
+            mRequestInProgress.value = true
+
+            val request = try {
+                log.i { "Getting data from a server" }
+                scraper.createRequest(menzaId)
+            } catch (e: Exception) {
+                mErrors.send(Errors.ConnectionError)
+                mRequestInProgress.value = false
+                return@withContext null
+            }
+            val data = try {
+                log.i { "Scraping" }
+                scraper.scrape(request)
+            } catch (e: Exception) {
+                mErrors.send(Errors.ParsingError)
+                mRequestInProgress.value = false
+                return@withContext null
+            }
+
+            mRequestInProgress.value = false
+            return@withContext data
+        }
 }

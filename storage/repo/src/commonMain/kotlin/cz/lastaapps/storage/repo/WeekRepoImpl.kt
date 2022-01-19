@@ -32,12 +32,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import org.lighthousegames.logging.logging
 
 class WeekRepoImpl <R: Any> (
     private val scraper: WeekScraper<R>,
     private val menzaId: MenzaId,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ): WeekRepo {
+
+    companion object {
+        private val log = logging(WeekRepo::class.simpleName)
+    }
 
     override val errors: Channel<Errors>
         get() = mErrors
@@ -52,6 +57,7 @@ class WeekRepoImpl <R: Any> (
     override suspend fun getData(): Set<WeekDish>? = mutex.withLock {
         withContext(dispatcher) {
             val request = try {
+                log.i { "Getting data from a server" }
                 scraper.createRequest(menzaId, WeekNumber.tempWeekNumber)
             } catch (e: Exception) {
                 mErrors.send(Errors.ConnectionError)
@@ -59,6 +65,7 @@ class WeekRepoImpl <R: Any> (
             }
 
             val data = try {
+                log.i { "Scraping" }
                 scraper.scrape(request)
             } catch (e: WeekNotAvailable) {
                 //TODO week no available

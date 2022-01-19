@@ -22,6 +22,7 @@ package cz.lastaapps.menza.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.menza.Menza
+import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.storage.repo.MenzaRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +32,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MenzaListViewModel @Inject constructor(
+class MenzaViewModel @Inject constructor(
     private val menzaRepo: MenzaRepo
 ) : ViewModel() {
 
@@ -50,5 +51,14 @@ class MenzaListViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    val selectedMenza: StateFlow<MenzaId?>
+        get() = mSelectedMenza
+
+    private val mSelectedMenza = MutableStateFlow<MenzaId?>(null)
+
+    fun selectMenza(menzaId: MenzaId) {
+        mSelectedMenza.value = menzaId
     }
 }

@@ -26,8 +26,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import it.skrape.fetcher.Request
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -74,5 +74,17 @@ object RepoModule {
         database: MenzaDatabase,
         scraper: OpeningHoursScraper<Request>
     ): OpeningHoursRepo = OpeningHoursRepoImpl(database, scraper)
+
+    @Provides
+    @Singleton
+    fun provideTodayRepoFactory(
+        scraper: TodayScraper<Request>
+    ): TodayRepoFactory = TodayRepoFactoryImpl(scraper)
+
+    @Provides
+    @Singleton
+    fun provideWeekRepoFactory(
+        scraper: WeekScraper<Request>
+    ): WeekRepoFactory = WeekRepoFactoryImpl(scraper)
 
 }

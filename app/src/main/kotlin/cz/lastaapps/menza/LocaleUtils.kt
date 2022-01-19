@@ -17,21 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.common
+package cz.lastaapps.menza
 
-import io.kotest.matchers.string.shouldNotBeBlank
+import java.text.Collator
+import java.util.*
 
-/**
- * Course of day for a dish
- * for example soup, main meal, vegetarian (grass eater)
- * https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=1
- * https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=1
- */
-data class CourseType(
-    val type: String,
-    val webOrder: Int,
-) {
-    init {
-        type.shouldNotBeBlank()
-    }
-}
+fun String.compareToLocal(other: String, locale: Locale) =
+    Collator.getInstance(locale).compare(this, other)
+

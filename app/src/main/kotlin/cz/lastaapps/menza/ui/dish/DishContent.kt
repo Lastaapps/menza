@@ -21,33 +21,41 @@ package cz.lastaapps.menza.ui.dish
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
+import cz.lastaapps.menza.ui.today.TodayDishList
 
 @Composable
-fun DishContent(modifier: Modifier = Modifier) {
+fun DishContent(menzaId: MenzaId?, modifier: Modifier = Modifier.fillMaxSize()) {
     Surface(modifier, color = MaterialTheme.colorScheme.secondary) {
         if (LocalWindowWidth.current == WindowSizeClass.COMPACT) {
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "Muhahá")
-            }
+            TodayDishList(
+                menzaId = menzaId,
+                modifier = Modifier
+                    .fillMaxHeight(),
+            )
         } else {
             Row {
+                TodayDishList(
+                    menzaId = menzaId,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
+                )
                 Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "Muhahá")
-                }
-                Box(
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
                 ) {
                     Text(text = "Hehehe")
                 }

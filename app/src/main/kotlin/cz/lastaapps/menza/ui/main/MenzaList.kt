@@ -43,7 +43,7 @@ fun MenzaList(
     onMenzaSelected: (MenzaId) -> Unit,
     expanded: Boolean,
     modifier: Modifier = Modifier,
-    menzaListViewModel: MenzaListViewModel,
+    menzaListViewModel: MenzaViewModel,
 ) {
     val isReady by menzaListViewModel.isReady.collectAsState()
     if (isReady) {

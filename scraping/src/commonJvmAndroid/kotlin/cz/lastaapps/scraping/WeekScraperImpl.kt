@@ -70,6 +70,8 @@ object WeekScraperImpl : WeekScraper<Result> {
         findFirst("#jidelnicek tbody") {
 
             var currentDate: LocalDate? = null
+            var currentOrder = 0
+            val currentDateOrders = HashMap<String, Int>()
 
             children.forEachApply {
                 //to skip day dividers
@@ -84,6 +86,8 @@ object WeekScraperImpl : WeekScraper<Result> {
                     }
 
                     val type = children[2].text.removeSpaces()
+                    currentDateOrders.getOrPut(type) { currentOrder.also { currentOrder++ } }
+
                     val amount: String? =
                         children[3].ownText.removeSpaces().takeIf { it.isNotBlank() }
                     val name = children[4].ownText.removeSpaces()
@@ -91,7 +95,7 @@ object WeekScraperImpl : WeekScraper<Result> {
                     if (name.isNotBlank() && name.isNameValid()) {
                         set += WeekDish(
                             currentDate!!,
-                            CourseType(type),
+                            CourseType(type, currentDateOrders[type]!!),
                             amount?.let { Amount(it) },
                             name,
                         )

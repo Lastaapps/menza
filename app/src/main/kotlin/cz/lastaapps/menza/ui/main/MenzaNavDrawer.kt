@@ -36,7 +36,7 @@ fun MenzaNavDrawer(
     onMenzaSelected: (MenzaId) -> Unit,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    menzaListViewModel: MenzaListViewModel = hiltViewModel(),
+    menzaListViewModel: MenzaViewModel = hiltViewModel(),
     content: @Composable () -> Unit,
 ) {
 

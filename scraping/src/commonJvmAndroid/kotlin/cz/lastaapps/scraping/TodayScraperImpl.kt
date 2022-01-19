@@ -52,6 +52,7 @@ object TodayScraperImpl : TodayScraper<Result> {
 
         val dishSet = mutableSetOf<Dish>()
         var currentType: String? = null
+        var webOrder = 0
 
         val menzaId = findFirst("body #PodsysActive") {
             attribute("value").removeSpaces().takeIf { it.isNotBlank() }?.toInt()
@@ -61,7 +62,11 @@ object TodayScraperImpl : TodayScraper<Result> {
 
             when (children.firstOrNull()?.tagName) {
                 "th" -> {
-                    currentType = children.first().ownText.removeSpaces()
+                    val newType = children.first().ownText.removeSpaces()
+                    if (newType != currentType) {
+                        currentType = newType
+                        webOrder++
+                    }
                 }
                 "td" -> {
                     val amount = children[1].ownText.removeSpaces().takeIf { it.isNotBlank() }
@@ -74,7 +79,7 @@ object TodayScraperImpl : TodayScraper<Result> {
 
                     dishSet += Dish(
                         MenzaId(menzaId),
-                        CourseType(currentType!!),
+                        CourseType(currentType!!, webOrder),
                         amount?.let { Amount(amount) },
                         name,
                         dishAllergensId,
