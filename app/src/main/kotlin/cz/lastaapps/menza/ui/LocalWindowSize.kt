@@ -31,12 +31,15 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.window.layout.WindowMetricsCalculator
+import org.lighthousegames.logging.logging
 
-sealed class WindowSizeClass private constructor() {
-    object COMPACT : WindowSizeClass()
-    object MEDIUM : WindowSizeClass()
-    object EXPANDED : WindowSizeClass()
+sealed class WindowSizeClass private constructor(val name: String) {
+    object COMPACT : WindowSizeClass("Compact")
+    object MEDIUM : WindowSizeClass("Medium")
+    object EXPANDED : WindowSizeClass("Expanded")
 }
+
+val log = logging(WindowSizeClass::class.simpleName)
 
 val LocalWindowWidth = compositionLocalOf<WindowSizeClass> { WindowSizeClass.COMPACT }
 val LocalWindowHeight = compositionLocalOf<WindowSizeClass> { WindowSizeClass.COMPACT }
@@ -85,6 +88,8 @@ private fun getWindowWidthClass(windowDpSize: DpSize): WindowSizeClass = when {
     windowDpSize.width < 600.dp -> WindowSizeClass.COMPACT
     windowDpSize.width < 840.dp -> WindowSizeClass.MEDIUM
     else -> WindowSizeClass.EXPANDED
+}.also {
+    log.i { "Layout width mode: ${it.name}" }
 }
 
 private fun getWindowHeightClass(windowDpSize: DpSize): WindowSizeClass = when {
@@ -92,4 +97,6 @@ private fun getWindowHeightClass(windowDpSize: DpSize): WindowSizeClass = when {
     windowDpSize.width < 480.dp -> WindowSizeClass.COMPACT
     windowDpSize.width < 900.dp -> WindowSizeClass.MEDIUM
     else -> WindowSizeClass.EXPANDED
+}.also {
+    log.i { "Layout height mode: ${it.name}" }
 }

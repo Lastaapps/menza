@@ -29,16 +29,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.lighthousegames.logging.logging
 
-class WeekRepoImpl <R: Any> (
+class WeekRepoImpl<R : Any>(
     private val scraper: WeekScraper<R>,
     private val menzaId: MenzaId,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-): WeekRepo {
+) : WeekRepo {
 
     companion object {
         private val log = logging(WeekRepo::class.simpleName)
@@ -52,15 +50,18 @@ class WeekRepoImpl <R: Any> (
     private val mErrors = Channel<Errors>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
-    private val mutex = Mutex()
-
-    override suspend fun getData(): Set<WeekDish>? = mutex.withLock {
+    override suspend fun getData(): Set<WeekDish>? =
         withContext(dispatcher) {
+            if (mRequestInProgress.value)
+                return@withContext null
+
+            mRequestInProgress.value = true
             val request = try {
                 log.i { "Getting data from a server" }
                 scraper.createRequest(menzaId, WeekNumber.tempWeekNumber)
             } catch (e: Exception) {
                 mErrors.send(Errors.ConnectionError)
+                mRequestInProgress.value = false
                 return@withContext null
             }
 
@@ -68,13 +69,16 @@ class WeekRepoImpl <R: Any> (
                 log.i { "Scraping" }
                 scraper.scrape(request)
             } catch (e: WeekNotAvailable) {
-                //TODO week no available
+                mErrors.send(Errors.WeekNotSupported)
+                mRequestInProgress.value = false
                 return@withContext null
             } catch (e: Exception) {
                 mErrors.send(Errors.ParsingError)
+                mRequestInProgress.value = false
                 return@withContext null
             }
+
+            mRequestInProgress.value = false
             return@withContext data
         }
-    }
 }

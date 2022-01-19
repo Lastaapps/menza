@@ -120,6 +120,7 @@ dependencies {
 
     initCompose(useMaterial2 = true)
 
+    implementation(Libs.KOTLINX_DATETIME)
     implementation(Libs.SKRAPE_IT)
 }
 
