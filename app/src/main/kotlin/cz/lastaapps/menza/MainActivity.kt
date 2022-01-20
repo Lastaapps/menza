@@ -23,6 +23,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import cz.lastaapps.menza.ui.root.AppRoot
@@ -53,8 +54,10 @@ class MainActivity : ComponentActivity() {
         }*/
 
         setContent {
-            val activity = remember(this) { this }
-            AppRoot(activity = activity, viewModel = rootViewModel)
+            if (rootViewModel.isReady.collectAsState().value) {
+                val activity = remember(this) { this }
+                AppRoot(activity = activity, viewModel = rootViewModel)
+            }
         }
     }
 }

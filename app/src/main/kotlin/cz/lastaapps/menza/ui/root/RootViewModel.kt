@@ -19,28 +19,41 @@
 
 package cz.lastaapps.menza.ui.root
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cz.lastaapps.menza.db.MenzaDatabase
+import cz.lastaapps.menza.ui.settings.store.SettingsStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.lighthousegames.logging.logging
 import javax.inject.Inject
 
 @HiltViewModel
 class RootViewModel @Inject constructor(
-    private val stavedStateHandle: SavedStateHandle,
+    private val database: MenzaDatabase,
+    val sett: SettingsStore,
 ) : ViewModel() {
 
-    val isDark: StateFlow<Boolean> = MutableStateFlow(false)
+    companion object {
+        private val log = logging()
+    }
+
+    //holds splashscreen
     val isReady: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
         viewModelScope.launch {
-            delay(1000)
-            isReady.value = true
+            //open database
+            database.allergenQueries.rowNumber()
+
+            //cache settings
+            sett.isReady.first { it }
+            log.i { "Settings ready" }
+
+            //hide splashscreen
+            isReady.emit(true)
         }
     }
 }

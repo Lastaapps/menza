@@ -29,6 +29,8 @@ object Dest {
         //const val week = "week?${A.menzaId}={${A.menzaId}}"
         //const val info = "info?${A.menzaId}={${A.menzaId}}"
         const val settings = "settings"
+
+        const val start = today
     }
 
     object A {

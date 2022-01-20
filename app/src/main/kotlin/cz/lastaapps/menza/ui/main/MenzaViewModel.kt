@@ -19,38 +19,51 @@
 
 package cz.lastaapps.menza.ui.main
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.storage.repo.MenzaRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.lighthousegames.logging.logging
 import javax.inject.Inject
 
 @HiltViewModel
 class MenzaViewModel @Inject constructor(
-    private val menzaRepo: MenzaRepo
+    private val menzaRepo: MenzaRepo,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+
+    companion object {
+        private val log = logging()
+        private const val selectedMenzaKey = "menzaId"
+    }
 
     val isReady = MutableStateFlow<Boolean>(false)
     lateinit var data: StateFlow<List<Menza>>
 
     fun getForId(id: MenzaId): Menza? = data.value.firstOrNull { it.menzaId == id }
 
-    init {
-        viewModelScope.launch {
-            var myData: MutableStateFlow<List<Menza>>? = null
-            menzaRepo.getData(this).collectLatest { list ->
-                if (myData == null) {
-                    myData = MutableStateFlow(list).also { data = it }
-                    isReady.value = true
-                } else {
-                    myData!!.value = list
-                }
+    private suspend fun CoroutineScope.prepareMenza() {
+
+        var myData: MutableStateFlow<List<Menza>>? = null
+
+        menzaRepo.getData(this).collectLatest { list ->
+            if (myData == null) {
+                myData = MutableStateFlow(list).also { data = it }
+
+                log.i { "Data ready" }
+
+                selectMenza(savedStateHandle.get<Int>(selectedMenzaKey)?.let { MenzaId(it) })
+                isReady.value = true
+            } else {
+                myData!!.value = list
             }
         }
     }
@@ -62,5 +75,12 @@ class MenzaViewModel @Inject constructor(
 
     fun selectMenza(menzaId: MenzaId?) {
         mSelectedMenza.value = menzaId
+        savedStateHandle[selectedMenzaKey] = menzaId?.id
+    }
+
+    init {
+        viewModelScope.launch {
+            prepareMenza()
+        }
     }
 }

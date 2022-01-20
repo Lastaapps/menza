@@ -20,8 +20,8 @@
 package cz.lastaapps.menza.di
 
 import android.app.Application
-import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.menza.db.MenzaDatabase
+import cz.lastaapps.menza.ui.settings.store.SettingsStore
 import cz.lastaapps.storage.MenzaDriverFactory
 import cz.lastaapps.storage.MenzaDriverFactoryFactoryImpl
 import cz.lastaapps.storage.createMenzaDatabase
@@ -29,6 +29,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -44,7 +46,13 @@ object AppModule {
     @Provides
     @Singleton
     fun provideMenzaDatabase(driver: MenzaDriverFactory): MenzaDatabase {
-         return createMenzaDatabase(driver)
+        return createMenzaDatabase(driver)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingsDataStore(app: Application): SettingsStore {
+        return SettingsStore(app, CoroutineScope(Dispatchers.Default))
     }
 
 }

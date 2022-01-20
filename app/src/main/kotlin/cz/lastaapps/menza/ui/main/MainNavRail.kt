@@ -68,7 +68,15 @@ fun MainNavRail(
                 icon = { Icon(item.icon, contentDescription = item.label) },
                 label = { Text(item.label) },
                 selected = selected,
-                onClick = { navController.navigate(item.dest) },
+                onClick = {
+                    navController.navigate(item.dest) {
+                        launchSingleTop = true
+                        popUpTo(Dest.R.start) {
+                            saveState = true
+                            inclusive = false
+                        }
+                    }
+                },
                 alwaysShowLabel = false
             )
         }

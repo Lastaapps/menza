@@ -17,36 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.settings
+package cz.lastaapps.menza.ui.settings.store
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import cz.lastaapps.menza.ui.settings.store.*
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import android.os.Build
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import kotlinx.coroutines.flow.StateFlow
 
-@HiltViewModel
-class SettingsViewModel @Inject constructor(
-    val sett: SettingsStore
-) : ViewModel() {
+private val systemThemeKey = booleanPreferencesKey("systemTheme")
 
-    fun setDarkMode(mode: DarkMode) {
-        viewModelScope.launch {
-            sett.setDarkMode(mode)
-        }
-    }
+fun SettingsStore.isSystemThemeAvailable(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
-    fun setUseSystemTheme(mode: Boolean) {
-        viewModelScope.launch {
-            sett.setUseSystemTheme(mode)
-        }
-    }
+val SettingsStore.systemTheme: StateFlow<Boolean>
+    get() = data.mapState { it[systemThemeKey] ?: isSystemThemeAvailable() }
 
-    fun setPriceType(type: PriceType) {
-        viewModelScope.launch {
-            sett.setPriceType(type)
-        }
-    }
-
+suspend fun SettingsStore.setUseSystemTheme(useSystem: Boolean) {
+    edit { it[systemThemeKey] = useSystem }
 }

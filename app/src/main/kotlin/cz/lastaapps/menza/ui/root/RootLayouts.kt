@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.ui.root
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -95,6 +96,10 @@ fun AppLayoutCompact(
                     .fillMaxSize()
             ) {
                 content()
+
+                BackHandler(drawerState.isOpen) {
+                    scope.launch { drawerState.close() }
+                }
             }
         }
     }

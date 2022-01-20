@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.ui.theme
 
 import android.os.Build
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -87,15 +88,16 @@ private val DarkThemeScheme = darkColorScheme(
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    useCustomTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !useCustomTheme
     val colorScheme = when {
         dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
         darkTheme -> DarkThemeScheme
         else -> LightThemeScheme
-    }
+    }.animated()
 
     val systemUiController = rememberSystemUiController()
 
@@ -110,5 +112,37 @@ fun AppTheme(
         colorScheme = colorScheme,
         typography = AppTypography,
         content = content
+    )
+}
+
+@Composable
+private fun ColorScheme.animated(): ColorScheme {
+    return ColorScheme(
+        background = animateColorAsState(background).value,
+        error = animateColorAsState(error).value,
+        errorContainer = animateColorAsState(errorContainer).value,
+        inverseOnSurface = animateColorAsState(inverseOnSurface).value,
+        inversePrimary = animateColorAsState(inversePrimary).value,
+        inverseSurface = animateColorAsState(inverseSurface).value,
+        onBackground = animateColorAsState(onBackground).value,
+        onError = animateColorAsState(onError).value,
+        onErrorContainer = animateColorAsState(onErrorContainer).value,
+        onPrimary = animateColorAsState(onPrimary).value,
+        onPrimaryContainer = animateColorAsState(onPrimaryContainer).value,
+        onSecondary = animateColorAsState(onSecondary).value,
+        onSecondaryContainer = animateColorAsState(onSecondaryContainer).value,
+        onSurface = animateColorAsState(onSurface).value,
+        onSurfaceVariant = animateColorAsState(onSurfaceVariant).value,
+        onTertiary = animateColorAsState(onTertiary).value,
+        onTertiaryContainer = animateColorAsState(onTertiaryContainer).value,
+        outline = animateColorAsState(outline).value,
+        primary = animateColorAsState(primary).value,
+        primaryContainer = animateColorAsState(primaryContainer).value,
+        secondary = animateColorAsState(secondary).value,
+        secondaryContainer = animateColorAsState(secondaryContainer).value,
+        surface = animateColorAsState(surface).value,
+        surfaceVariant = animateColorAsState(surfaceVariant).value,
+        tertiary = animateColorAsState(tertiary).value,
+        tertiaryContainer = animateColorAsState(tertiaryContainer).value,
     )
 }

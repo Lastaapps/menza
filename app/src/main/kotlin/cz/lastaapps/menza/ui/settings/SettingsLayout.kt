@@ -19,19 +19,20 @@
 
 package cz.lastaapps.menza.ui.settings
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
 import cz.lastaapps.menza.ui.main.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
-import cz.lastaapps.menza.ui.root.AppLayoutExpandedSimple
+import cz.lastaapps.menza.ui.root.AppLayoutExpanded
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,7 +98,7 @@ fun SettingsLayoutCompact(
             scope.launch { drawerState.open() }
         }
     ) {
-        Text(text = "Settings - Muhahá")
+        SettingsUI(viewModel = viewModel, modifier = Modifier.fillMaxSize())
     }
 }
 
@@ -112,14 +113,14 @@ fun SettingsLayoutExpanded(
     menzaViewModel: MenzaViewModel,
     viewModel: SettingsViewModel,
 ) {
-    AppLayoutExpandedSimple(
+    AppLayoutExpanded(
         navController = navController,
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-    ) {
-        Text(text = "Settings - Muhahá, but two times. Where? There - muhahááá")
-    }
+        panel1 = { SettingsUI(viewModel = viewModel, modifier = Modifier.fillMaxSize()) },
+        panel2 = {},
+    )
 }
