@@ -23,6 +23,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -50,7 +51,7 @@ fun AppLayoutCompact(
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     enableIcon: Boolean,
-    showHamburgerMenu: Boolean, //or back arrow
+    showHamburgerMenu: Boolean, //or the back arrow
     onMenuButtonClicked: () -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -107,6 +108,64 @@ fun AppLayoutCompact(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun AppLayoutMedium(
+    navController: NavController,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId) -> Unit,
+    menzaViewModel: MenzaViewModel,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
+    content: @Composable () -> Unit,
+) {
+    val menza = remember(menzaId) {
+        menzaId?.let { menzaViewModel.getForId(menzaId) }
+    }
+
+    val scope = rememberCoroutineScope()
+    Scaffold(
+        Modifier.fillMaxSize(),
+        topBar = {
+            MainTopBar(
+                menzaName = menza?.name,
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+    ) { insets ->
+        Row(
+            Modifier
+                .padding(insets)
+                .fillMaxSize()
+        ) {
+            MainNavRail(navController)
+            Column(Modifier.fillMaxHeight()) {
+                var expanded by rememberSaveable() { mutableStateOf(false) }
+                MenzaList(
+                    modifier = Modifier.weight(1f),
+                    selectedMenza = menzaId,
+                    onMenzaSelected = {
+                        onMenzaSelected(it)
+                        scope.launch { drawerState.close() }
+                    },
+                    expanded = expanded,
+                    menzaListViewModel = hiltViewModel(),
+                )
+                IconButton(onClick = { expanded = !expanded }) {
+                    val icon = if (expanded) Icons.Default.ArrowBack else Icons.Default.ArrowForward
+                    Icon(icon, contentDescription = null)
+                }
+            }
+
+            Box(Modifier.fillMaxSize()) {
+                content()
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun AppLayoutExpandedSimple(
     navController: NavController,
     menzaId: MenzaId?,
@@ -151,7 +210,8 @@ fun AppLayoutExpandedSimple(
                     menzaListViewModel = hiltViewModel(),
                 )
                 IconButton(onClick = { expanded = !expanded }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    val icon = if (expanded) Icons.Default.ArrowBack else Icons.Default.ArrowForward
+                    Icon(icon, contentDescription = null)
                 }
             }
 
@@ -226,7 +286,9 @@ fun AppLayoutExpanded(
                         menzaListViewModel = hiltViewModel(),
                     )
                     IconButton(onClick = { expanded = !expanded }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                        val icon =
+                            if (expanded) Icons.Default.ArrowBack else Icons.Default.ArrowForward
+                        Icon(icon, contentDescription = null)
                     }
                 }
 

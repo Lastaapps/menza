@@ -22,12 +22,11 @@ package cz.lastaapps.menza.ui.root
 import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.ImageLoader
+import coil.compose.LocalImageLoader
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -53,8 +52,10 @@ import cz.lastaapps.menza.ui.week.WeekLayout
 fun AppRoot(
     activity: Activity,
     viewModel: RootViewModel,
+    imageLoader: ImageLoader,
 ) {
 
+    LocalImageLoader
     val useDark by viewModel.sett.darkMode.collectAsState()
     val useSystem by viewModel.sett.systemTheme.collectAsState()
 
@@ -69,11 +70,13 @@ fun AppRoot(
             WithLocalWindowSizes(activity = activity) {
                 WithFoldingFeature(activity = activity) {
                     ProvideWindowInsets {
+                        CompositionLocalProvider(LocalImageLoader provides imageLoader) {
 
-                        //Download default data
-                        InitDecision {
-                            //show app if ready
-                            AppContent()
+                            //Download default data
+                            InitDecision {
+                                //show app if ready
+                                AppContent()
+                            }
                         }
                     }
                 }
@@ -94,7 +97,8 @@ private fun AppContent(viewModel: MenzaViewModel = hiltViewModel()) {
     val navHostState = rememberAnimatedNavController()
 
     //drawer should auto open, if there is no menza selected and user hasn't touched the drawer
-    val drawerState = rememberDrawerState(DrawerValue.Open)
+    val drawerState =
+        rememberDrawerState(if (menzaId == null) DrawerValue.Open else DrawerValue.Closed)
 
 
     WithSnackbarProvider(snackbarHostState = snackbarHostState) {

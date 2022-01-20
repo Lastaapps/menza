@@ -104,7 +104,8 @@ object TodayScraperImpl : TodayScraper<Result> {
 
     private fun DocElement.parseImage(): String? {
         return tryFindFirst("a") {
-            "https://agata.suz.cvut.cz/jidelnicky/" + attribute("href")
+            "https://agata.suz.cvut.cz/jidelnicky/" +
+                    attribute("href").replace("imgshow.php", "showfoto.php")
             /*.removeSpaces().let {
                 val toFind = "&xFile="
                 val index = it.indexOf(toFind)

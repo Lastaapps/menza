@@ -110,6 +110,7 @@ dependencies {
     implementation(Libs.CORE)
     implementation(Libs.LIFECYCLE)
     implementation(Libs.WINDOW_MANAGER)
+    implementation(Libs.VECTOR_DRAWABLES)
 
     implementation(Libs.DAGGER_HILT)
     implementation(Libs.HILT_COMMON)
@@ -123,6 +124,8 @@ dependencies {
 
     implementation(Libs.KOTLINX_DATETIME)
     implementation(Libs.SKRAPE_IT)
+    implementation(Libs.COIL_COMPOSE_COMPLETE)
+
 }
 
 fun DependencyHandler.initCompose(useMaterial2: Boolean = false, useMaterial3: Boolean = true) {

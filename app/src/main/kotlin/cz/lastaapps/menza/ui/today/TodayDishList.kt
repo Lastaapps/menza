@@ -20,22 +20,31 @@
 package cz.lastaapps.menza.ui.today
 
 import android.os.Build
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Downloading
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.ImagePainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import cz.lastaapps.entity.common.CourseType
@@ -124,13 +133,43 @@ private fun DishHeader(courseType: CourseType, modifier: Modifier = Modifier) {
     Text(text = courseType.type, modifier = modifier)
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun DishItem(dish: Dish, onDishSelected: (Dish) -> Unit, modifier: Modifier = Modifier) {
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer,
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
-        Text(dish.name, Modifier.padding(8.dp))
+        Row(Modifier.padding(8.dp)) {
+            val size = 64.dp
+            val sizePx = with(LocalDensity.current) { size.roundToPx() }
+
+            if (dish.imageUrl != null) {
+                val imagePainter = rememberImagePainter(dish.imageUrl) {
+                    //transformations(CircleCropTransformation())
+                    size(sizePx)
+                }
+
+                val painter: Any = when (imagePainter.state) {
+                    ImagePainter.State.Empty -> Icons.Default.Downloading
+                    is ImagePainter.State.Loading -> Icons.Default.Downloading
+                    is ImagePainter.State.Success -> imagePainter.state.painter!!
+                    is ImagePainter.State.Error -> Icons.Default.Error
+                }
+
+                if (painter is Painter)
+                    Image(painter, contentDescription = dish.name, Modifier.size(size))
+                else if (painter is ImageVector)
+                    Image(painter, contentDescription = dish.name, Modifier.size(size))
+            } else {
+                Image(
+                    Icons.Default.Restaurant,
+                    contentDescription = dish.name,
+                    Modifier.size(size)
+                )
+            }
+            Text(dish.name, Modifier.padding(8.dp))
+        }
     }
 }
 

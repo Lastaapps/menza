@@ -17,33 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.di
+package cz.lastaapps.menza
 
-import android.app.Application
-import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.storage.MenzaDriverFactory
-import cz.lastaapps.storage.MenzaDriverFactoryFactoryImpl
-import cz.lastaapps.storage.createMenzaDatabase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import okhttp3.CacheControl
+import okhttp3.Interceptor
+import okhttp3.Response
+import java.util.concurrent.TimeUnit
 
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
+object CacheHeaderInterceptor : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val response = chain.proceed(chain.request())
 
-    @Provides
-    @Singleton
-    fun provideMenzaDatabaseDriver(app: Application): MenzaDriverFactory {
-        return MenzaDriverFactoryFactoryImpl(app)
+        val cacheControl = CacheControl.Builder()
+            .maxAge(1, TimeUnit.DAYS)
+            .build()
+
+        return response.newBuilder()
+            .removeHeader("Pragma")
+            .removeHeader("Cache-Control")
+            .header("Cache-Control", cacheControl.toString())
+            .build()
     }
-
-    @Provides
-    @Singleton
-    fun provideMenzaDatabase(driver: MenzaDriverFactory): MenzaDatabase {
-        return createMenzaDatabase(driver)
-    }
-
 }

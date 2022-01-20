@@ -409,7 +409,7 @@ class TodayScraperTest {
             Amount("120 g"),
             "Hovězí pečeně frankfurtská, karlovarské knedlíky",
             DishAllergensPage(340616),
-            "https://agata.suz.cvut.cz/jidelnicky/imgshow.php?clPodsystem=4&xFile=IMG-2022-01-06-100010746.JPG",
+            "https://agata.suz.cvut.cz/jidelnicky/showfoto.php?clPodsystem=4&xFile=IMG-2022-01-06-100010746.JPG",
             Price(79),
             Price(101),
             listOf(IssueLocation(21, 1, "J", "Jídelna"))

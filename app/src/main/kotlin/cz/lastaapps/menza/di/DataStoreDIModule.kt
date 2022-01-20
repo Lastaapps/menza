@@ -20,30 +20,23 @@
 package cz.lastaapps.menza.di
 
 import android.app.Application
-import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.storage.MenzaDriverFactory
-import cz.lastaapps.storage.MenzaDriverFactoryFactoryImpl
-import cz.lastaapps.storage.createMenzaDatabase
+import cz.lastaapps.menza.ui.settings.store.SettingsStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object DataStoreDIModule {
 
     @Provides
     @Singleton
-    fun provideMenzaDatabaseDriver(app: Application): MenzaDriverFactory {
-        return MenzaDriverFactoryFactoryImpl(app)
-    }
-
-    @Provides
-    @Singleton
-    fun provideMenzaDatabase(driver: MenzaDriverFactory): MenzaDatabase {
-        return createMenzaDatabase(driver)
+    fun provideSettingsDataStore(app: Application): SettingsStore {
+        return SettingsStore(app, CoroutineScope(Dispatchers.Default))
     }
 
 }

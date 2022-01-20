@@ -20,30 +20,40 @@
 package cz.lastaapps.menza.di
 
 import android.app.Application
-import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.storage.MenzaDriverFactory
-import cz.lastaapps.storage.MenzaDriverFactoryFactoryImpl
-import cz.lastaapps.storage.createMenzaDatabase
+import coil.ImageLoader
+import coil.request.CachePolicy
+import coil.util.CoilUtils
+import coil.util.DebugLogger
+import cz.lastaapps.menza.CacheHeaderInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object CoilDIModule {
 
     @Provides
     @Singleton
-    fun provideMenzaDatabaseDriver(app: Application): MenzaDriverFactory {
-        return MenzaDriverFactoryFactoryImpl(app)
-    }
-
-    @Provides
-    @Singleton
-    fun provideMenzaDatabase(driver: MenzaDriverFactory): MenzaDatabase {
-        return createMenzaDatabase(driver)
+    fun provideSettingsDataStore(app: Application): ImageLoader {
+        return ImageLoader.Builder(app)
+            .availableMemoryPercentage(0.25)
+            .crossfade(true)
+            .networkCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .logger(DebugLogger())
+            .okHttpClient {
+                OkHttpClient.Builder()
+                    .cache(CoilUtils.createDefaultCache(app))
+                    .addNetworkInterceptor(CacheHeaderInterceptor)
+                    .build()
+            }
+            .build()
     }
 
 }
+

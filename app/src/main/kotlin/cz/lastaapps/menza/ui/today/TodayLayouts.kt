@@ -33,6 +33,7 @@ import cz.lastaapps.menza.ui.WindowSizeClass
 import cz.lastaapps.menza.ui.main.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
+import cz.lastaapps.menza.ui.root.AppLayoutMedium
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +67,20 @@ fun TodayDest(
                 onDishSelected = onDishSelected,
             )
         }
-        in listOf(WindowSizeClass.EXPANDED, WindowSizeClass.MEDIUM) -> {
+        WindowSizeClass.MEDIUM -> {
+            TodayDestMedium(
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                drawerState = drawerState,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel,
+                viewModel = todayViewModel,
+                selectedDish = selectedDish,
+                onDishSelected = onDishSelected,
+            )
+        }
+        WindowSizeClass.EXPANDED -> {
             TodayDestExpanded(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
@@ -112,6 +126,42 @@ fun TodayDestCompat(
             else
                 onDishSelected(null)
         },
+    ) {
+        BackHandler(enabled = selectedDish != null) {
+            onDishSelected(null)
+        }
+        if (selectedDish == null) {
+            TodayDishList(
+                menzaId = menzaId,
+                onDishSelected = onDishSelected,
+                viewModel = viewModel,
+            )
+        } else {
+            Text(text = selectedDish.name)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TodayDestMedium(
+    navController: NavController,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+    viewModel: TodayViewModel,
+    selectedDish: Dish?,
+    onDishSelected: (Dish?) -> Unit,
+) {
+    AppLayoutMedium(
+        navController = navController,
+        menzaId = menzaId,
+        onMenzaSelected = onMenzaSelected,
+        menzaViewModel = menzaViewModel,
+        snackbarHostState = snackbarHostState,
+        drawerState = drawerState,
     ) {
         BackHandler(enabled = selectedDish != null) {
             onDishSelected(null)

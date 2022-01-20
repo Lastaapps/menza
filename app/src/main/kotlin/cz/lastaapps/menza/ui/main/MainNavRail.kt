@@ -20,10 +20,10 @@
 package cz.lastaapps.menza.ui.main
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.DinnerDining
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
@@ -45,8 +45,8 @@ data class NavItem(
 )
 
 val navItems = listOf(
-    NavItem("Today", Dest.R.today.withMenzaId(), Icons.Filled.Home),
-    NavItem("Week", Dest.R.week.withMenzaId(), Icons.Filled.Star),
+    NavItem("Today", Dest.R.today.withMenzaId(), Icons.Filled.DinnerDining),
+    NavItem("Week", Dest.R.week.withMenzaId(), Icons.Filled.MenuBook),
     NavItem("Info", Dest.R.info.withMenzaId(), Icons.Filled.Info),
     NavItem("Settings", Dest.R.settings, Icons.Filled.Settings),
 )

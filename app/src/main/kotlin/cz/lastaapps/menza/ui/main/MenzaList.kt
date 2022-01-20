@@ -20,9 +20,8 @@
 package cz.lastaapps.menza.ui.main
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -33,9 +32,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.ui.theme.colorForMenza
 
 @Composable
 fun MenzaList(
@@ -87,7 +88,16 @@ private fun MenzaItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start)
         ) {
-            Text(text = menza.name[0] + "")
+            Box(
+                Modifier
+                    .size(48.dp)
+                    .background(Brush.horizontalGradient(colorForMenza(menza))),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "" + menza.name[0],
+                )
+            }
 
             if (expanded)
                 Text(menza.name)
