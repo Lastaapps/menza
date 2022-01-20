@@ -115,6 +115,14 @@ object Libs {
 
     const val KM_LOGGING = "org.lighthousegames:logging:${Versions.KM_LOGGING}"
 
+    const val COIL_COMPLETE = "io.coil-kt:coil:${Versions.COIL}"
+    const val COIL_BASE = "io.coil-kt:coil-base:${Versions.COIL}"
+    const val COIL_COMPOSE_COMPLETE = "io.coil-kt:coil-compose:${Versions.COIL}"
+    const val COIL_COMPOSE_BASE = "io.coil-kt:coil-compose-base:${Versions.COIL}"
+    const val COIL_GIF = "io.coil-kt:coil-gif:${Versions.COIL}"
+    const val COIL_SVG = "io.coil-kt:coil-svg:${Versions.COIL}"
+    const val COIL_VIDEO = "io.coil-kt:coil-video:${Versions.COIL}"
+
     const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"
 
 }
