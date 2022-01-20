@@ -45,6 +45,7 @@ object Libs {
     const val VECTOR_DRAWABLES =
             "androidx.vectordrawable:vectordrawable:${Versions.VECTOR_DRAWABLES}"
     const val VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE}"
+    const val VIEWMODEL_SAVEDSTATE = "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.LIFECYCLE}"
     const val WINDOW_MANAGER = "androidx.window:window:${Versions.WINDOW_MANAGER}"
     const val WORK = "androidx.work:work-runtime-ktx:${Versions.WORK}"
 

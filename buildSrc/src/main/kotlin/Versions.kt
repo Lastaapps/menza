@@ -18,14 +18,14 @@ object Versions {
     const val KOTLIN_LANGUAGE_VERSION = "1.6"
     const val KSP = "$KOTLIN-1.0.2"
     const val COROUTINES = "1.6.0"
-    const val KTOR = "1.6.5"
+    const val KTOR = "1.6.7"
 
     //androidx
     const val ACTIVITY = "1.4.0"
     const val APPCOMPAT = "1.4.1"
     const val ANNOTATION = "1.3.0"
     const val COLLECTION = "1.2.0"
-    const val CONSTRAINTLAYOUT = "2.1.2"
+    const val CONSTRAINTLAYOUT = "2.1.3"
     const val CORE = "1.7.0"
     const val DAGGER_HILT = "2.38.1"
     const val DATASTORE = "1.0.0"
@@ -54,7 +54,7 @@ object Versions {
     const val COMPOSE = "1.2.0-alpha01"
     const val COMPOSE_COMPILER = COMPOSE
     const val COMPOSE_MATERIAL_3 = "1.0.0-alpha03"
-    const val CONSTRAINTLAYOUT_COMPOSE = "1.0.0-rc02"
+    const val CONSTRAINTLAYOUT_COMPOSE = "1.0.0"
     const val VIEWMODEL_COMPOSE = "2.4.0"
     const val HILT_NAVIGATION_COMPOSE = "1.0.0-rc01"
 
@@ -62,7 +62,7 @@ object Versions {
     const val GOOGLE_MATERIAL = "1.5.0"
     const val OSS_LICENSE = "17.0.0"
     const val PLAY_SERVICES = "1.8.1"
-    const val ACCOMPANIST = "0.22.0-rc"
+    const val ACCOMPANIST = "0.24.0-alpha"
 
     //firebase
     const val FIREBASE_BOM = "29.0.3"
