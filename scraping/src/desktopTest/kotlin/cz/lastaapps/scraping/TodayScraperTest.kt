@@ -405,7 +405,7 @@ class TodayScraperTest {
 
         dishSet shouldContain Dish(
             MenzaId(4),
-            CourseType("Hlavní jídla"),
+            CourseType("Hlavní jídla", 2),
             Amount("120 g"),
             "Hovězí pečeně frankfurtská, karlovarské knedlíky",
             DishAllergensPage(340616),
@@ -1188,7 +1188,7 @@ class TodayScraperTest {
         shouldThrowAny { TodayScraperImpl.scrape(noCategoryTag) }
         shouldThrowAny { TodayScraperImpl.scrape(noDishName) }
         shouldThrowAny { TodayScraperImpl.scrape(noAllergenId) }
-        shouldThrowAny { TodayScraperImpl.scrape(noAllergenIdTag) }
+        TodayScraperImpl.scrape(noAllergenIdTag).shouldNotBeEmpty()
         shouldThrowAny { TodayScraperImpl.scrape(invalidAllergenId) }
         shouldThrowAny { TodayScraperImpl.scrape(noPrice) }
         shouldThrowAny { TodayScraperImpl.scrape(invalidPrice) }

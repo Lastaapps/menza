@@ -39,6 +39,8 @@ class MenzaViewModel @Inject constructor(
     val isReady = MutableStateFlow<Boolean>(false)
     lateinit var data: StateFlow<List<Menza>>
 
+    fun getForId(id: MenzaId): Menza? = data.value.firstOrNull { it.menzaId == id }
+
     init {
         viewModelScope.launch {
             var myData: MutableStateFlow<List<Menza>>? = null
@@ -58,7 +60,7 @@ class MenzaViewModel @Inject constructor(
 
     private val mSelectedMenza = MutableStateFlow<MenzaId?>(null)
 
-    fun selectMenza(menzaId: MenzaId) {
+    fun selectMenza(menzaId: MenzaId?) {
         mSelectedMenza.value = menzaId
     }
 }

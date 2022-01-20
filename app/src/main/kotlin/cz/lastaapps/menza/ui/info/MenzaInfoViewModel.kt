@@ -17,31 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.week
+package cz.lastaapps.menza.ui.info
 
-import cz.lastaapps.entity.common.Amount
-import cz.lastaapps.entity.common.CourseType
-import cz.lastaapps.entity.menza.MenzaId
-import io.kotest.matchers.string.shouldNotBeBlank
-import kotlinx.datetime.LocalDate
+import androidx.lifecycle.ViewModel
+import cz.lastaapps.storage.repo.MessagesRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-/**
- * One dish in week menu
- * https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=1
- */
-data class WeekDish(
-    val menzaId: MenzaId,
-    val date: LocalDate,
-    val courseType: CourseType,
-    val amount: Amount?,
-    val name: String,
-) : Comparable<WeekDish> {
+@HiltViewModel
+class MenzaInfoViewModel @Inject constructor(
+    messageRepo: MessagesRepo,
+) : ViewModel() {
 
-    init {
-        name.shouldNotBeBlank()
-    }
 
-    override fun compareTo(other: WeekDish): Int {
-        return date.compareTo(other.date)
-    }
 }

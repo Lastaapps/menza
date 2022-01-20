@@ -21,30 +21,54 @@ package cz.lastaapps.menza.ui.main
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import cz.lastaapps.menza.navigation.Dest
+import cz.lastaapps.menza.navigation.routesEquals
+import cz.lastaapps.menza.navigation.withMenzaId
+
+data class NavItem(
+    val label: String,
+    val dest: String,
+    val icon: ImageVector,
+)
+
+val navItems = listOf(
+    NavItem("Today", Dest.R.today.withMenzaId(), Icons.Filled.Home),
+    NavItem("Week", Dest.R.week.withMenzaId(), Icons.Filled.Star),
+    NavItem("Info", Dest.R.info.withMenzaId(), Icons.Filled.Info),
+    NavItem("Settings", Dest.R.settings, Icons.Filled.Settings),
+)
 
 @Composable
-fun MainNavRail(modifier: Modifier = Modifier) {
-    var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf("Today", "Week", "Info", "Settings")
-    val icons =
-        listOf(Icons.Filled.Home, Icons.Filled.Star, Icons.Filled.Search, Icons.Filled.Settings)
+fun MainNavRail(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+) {
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val route = navBackStackEntry?.destination?.route
 
     NavigationRail(modifier) {
-        items.forEachIndexed { index, item ->
+        navItems.forEach { item ->
+            val selected = route?.routesEquals(item.dest) ?: false
+
             NavigationRailItem(
-                icon = { Icon(icons[index], contentDescription = item) },
-                label = { Text(item) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index },
+                icon = { Icon(item.icon, contentDescription = item.label) },
+                label = { Text(item.label) },
+                selected = selected,
+                onClick = { navController.navigate(item.dest) },
                 alwaysShowLabel = false
             )
         }

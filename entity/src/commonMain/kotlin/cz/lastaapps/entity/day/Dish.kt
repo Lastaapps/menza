@@ -35,7 +35,7 @@ data class Dish(
     val courseType: CourseType,
     val amount: Amount?,
     val name: String,
-    val allergenDishId: DishAllergensPage,
+    val allergenDishId: DishAllergensPage?,
     val imageUrl: String?,
     val priceStudent: Price,
     val priceNormal: Price,

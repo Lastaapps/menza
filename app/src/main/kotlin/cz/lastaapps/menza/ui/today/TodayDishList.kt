@@ -36,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import cz.lastaapps.entity.common.CourseType
@@ -47,9 +46,10 @@ import kotlinx.coroutines.channels.consumeEach
 
 @Composable
 fun TodayDishList(
-    modifier: Modifier = Modifier.fillMaxSize(),
     menzaId: MenzaId?,
-    viewModel: TodayViewModel = hiltViewModel(),
+    onDishSelected: (Dish) -> Unit,
+    viewModel: TodayViewModel,
+    modifier: Modifier = Modifier,
 ) {
     if (menzaId == null) {
         Box(modifier = modifier, contentAlignment = Alignment.Center) {
@@ -85,13 +85,17 @@ fun TodayDishList(
             onRefresh = { viewModel.refresh(menzaId, locale) },
             modifier = modifier,
         ) {
-            DishContent(data = data, Modifier.fillMaxSize())
+            DishContent(data = data, onDishSelected, Modifier.fillMaxSize())
         }
     }
 }
 
 @Composable
-private fun DishContent(data: List<DishTypeList>, modifier: Modifier = Modifier) {
+private fun DishContent(
+    data: List<DishTypeList>,
+    onDishSelected: (Dish) -> Unit,
+    modifier: Modifier = Modifier
+) {
 
     //no data handling
     if (data.isEmpty()) {
@@ -109,7 +113,7 @@ private fun DishContent(data: List<DishTypeList>, modifier: Modifier = Modifier)
         items(data) { dishType ->
             DishHeader(courseType = dishType.first)
             dishType.second.forEach { dish ->
-                DishItem(dish = dish, onDishClicked = {})
+                DishItem(dish = dish, onDishSelected = onDishSelected)
             }
         }
     }
@@ -121,10 +125,10 @@ private fun DishHeader(courseType: CourseType, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun DishItem(dish: Dish, onDishClicked: (Dish) -> Unit, modifier: Modifier = Modifier) {
+private fun DishItem(dish: Dish, onDishSelected: (Dish) -> Unit, modifier: Modifier = Modifier) {
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer,
-        modifier = modifier.clickable { onDishClicked(dish) },
+        modifier = modifier.clickable { onDishSelected(dish) },
     ) {
         Text(dish.name, Modifier.padding(8.dp))
     }

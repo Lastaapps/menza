@@ -70,8 +70,8 @@ class WeekScraperTest {
 
     @Test
     fun scrapeWeek() = runTest {
-        val toTest =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+        val toTest = """<body><input type='hidden' id='PodsysActive' value='1'></body>
+            <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
   </div>
@@ -561,8 +561,9 @@ class WeekScraperTest {
         result.map { it.courseType }.toSet() shouldHaveSize 5
         result.map { it.date } shouldContain LocalDate(2022, Month.JANUARY, 4)
         result shouldContain WeekDish(
+            MenzaId(1),
             LocalDate(2022, Month.JANUARY, 6),
-            CourseType("Specialita dne"),
+            CourseType("Specialita dne", 1),
             Amount("150 g"),
             "Kuřecí steak se šunkou a sýrem, smažené hranolky",
         )
@@ -571,7 +572,8 @@ class WeekScraperTest {
     @Test
     fun scrapeWeekDisabled() {
         val toTest =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+            <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 <div class='data'>
 Tato provozovna nevystavuje týdenní jídelní lístek.
 </div>
@@ -583,7 +585,8 @@ Tato provozovna nevystavuje týdenní jídelní lístek.
     @Test
     fun scrapeCelebration() {
         val toTestStrahovChristmas =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
    <div class='data' style="display:none;" >
       Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
    </div>
@@ -660,7 +663,8 @@ Tato provozovna nevystavuje týdenní jídelní lístek.
 </div>
 <!-- /jidelnicek -->"""
         val toTestTechnickaChristmas =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 <div class='data' style="display:none;" >
 Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
 </div>
@@ -899,7 +903,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
     @Test
     fun malformed() = runTest {
         val emptyList =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
   </div>
@@ -912,7 +917,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
   </div>
 </div>"""
         val noDishName =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
   </div>
@@ -934,7 +940,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
   </div>
 </div>"""
         val noDate =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
   </div>
@@ -956,7 +963,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
   </div>
 </div>"""
         val noFoodType =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
   </div>
@@ -976,7 +984,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
   </div>
 </div>"""
         val missingLine =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
   </div>
@@ -997,7 +1006,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
   </div>
 </div>"""
         val malformedDate =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
   </div>
@@ -1032,18 +1042,21 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
     fun malformedWeekNotSupported() = runTest {
 
         val noMessage =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 <div class='data'>
 </div>
 </div>"""
         val wrongMessage =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 <div class='data'>
 Tato provozovna ABC nevystavuje týdenní jídelní lístek.
 </div>
 </div>"""
         val noElement =
-            """<div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
+            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+ <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 </div>"""
 
         shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(noMessage) } }

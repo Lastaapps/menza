@@ -37,9 +37,11 @@ sealed class WindowSizeClass private constructor(val name: String) {
     object COMPACT : WindowSizeClass("Compact")
     object MEDIUM : WindowSizeClass("Medium")
     object EXPANDED : WindowSizeClass("Expanded")
+    companion object {
+        val log = logging(WindowSizeClass::class.simpleName)
+    }
 }
 
-val log = logging(WindowSizeClass::class.simpleName)
 
 val LocalWindowWidth = compositionLocalOf<WindowSizeClass> { WindowSizeClass.COMPACT }
 val LocalWindowHeight = compositionLocalOf<WindowSizeClass> { WindowSizeClass.COMPACT }
@@ -89,7 +91,7 @@ private fun getWindowWidthClass(windowDpSize: DpSize): WindowSizeClass = when {
     windowDpSize.width < 840.dp -> WindowSizeClass.MEDIUM
     else -> WindowSizeClass.EXPANDED
 }.also {
-    log.i { "Layout width mode: ${it.name}" }
+    WindowSizeClass.log.i { "Layout width mode: ${it.name}" }
 }
 
 private fun getWindowHeightClass(windowDpSize: DpSize): WindowSizeClass = when {
@@ -98,5 +100,5 @@ private fun getWindowHeightClass(windowDpSize: DpSize): WindowSizeClass = when {
     windowDpSize.width < 900.dp -> WindowSizeClass.MEDIUM
     else -> WindowSizeClass.EXPANDED
 }.also {
-    log.i { "Layout height mode: ${it.name}" }
+    WindowSizeClass.log.i { "Layout height mode: ${it.name}" }
 }

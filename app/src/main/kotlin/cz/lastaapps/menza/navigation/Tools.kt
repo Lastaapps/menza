@@ -17,31 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.week
+package cz.lastaapps.menza.navigation
 
-import cz.lastaapps.entity.common.Amount
-import cz.lastaapps.entity.common.CourseType
-import cz.lastaapps.entity.menza.MenzaId
-import io.kotest.matchers.string.shouldNotBeBlank
-import kotlinx.datetime.LocalDate
+fun String.withArg(name: String, data: Any?): String {
+    return replace("{$name}", "$data")
+}
 
-/**
- * One dish in week menu
- * https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=1
- */
-data class WeekDish(
-    val menzaId: MenzaId,
-    val date: LocalDate,
-    val courseType: CourseType,
-    val amount: Amount?,
-    val name: String,
-) : Comparable<WeekDish> {
+fun String.withMenzaId(data: Any? = null): String =
+    withArg(Dest.A.menzaId, data)
 
-    init {
-        name.shouldNotBeBlank()
-    }
-
-    override fun compareTo(other: WeekDish): Int {
-        return date.compareTo(other.date)
-    }
+fun String.routesEquals(other: String): Boolean {
+    return substringBeforeLast("?") == (other.substringBeforeLast("?"))
 }

@@ -18,6 +18,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cz.lastaapps.menza">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -34,7 +35,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Menza">
+            android:theme="@style/Theme.Menza"
+            android:resizeableActivity="true"
+            tools:ignore="UnusedAttribute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

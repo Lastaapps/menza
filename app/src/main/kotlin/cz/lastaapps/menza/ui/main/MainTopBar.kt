@@ -21,54 +21,59 @@ package cz.lastaapps.menza.ui.main
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopBar(
-    enableMenuIcon: Boolean,
-    menuOpened: Boolean,
-    onMenuClicked: () -> Unit,
+    menzaName: String?,
+    menuIcon: ImageVector? = null,
+    menuDescription: String? = null,
+    menuRotated: Boolean = false,
+    onMenuClicked: (() -> Unit)? = null,
 ) {
+
+    val title = remember(menzaName) {
+        menzaName ?: "No menza selected"
+    }
+
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val scrollBehavior = remember(decayAnimationSpec) {
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(decayAnimationSpec)
     }
+
     SmallTopAppBar(
-        title = { Text("Small TopAppBar") },
+        title = { Text(title) },
         navigationIcon = {
-            if (enableMenuIcon)
-                IconButton(onClick = onMenuClicked) {
-                    val rotation by animateFloatAsState(if (!menuOpened) 0f else 90f)
+            if (menuIcon != null)
+                IconButton(onClick = { onMenuClicked?.let { it() } }) {
+                    val rotation by animateFloatAsState(if (!menuRotated) 0f else 90f)
                     Icon(
                         modifier = Modifier.rotate(rotation),
-                        imageVector = Icons.Filled.Menu,
-                        contentDescription = "Localized description"
+                        imageVector = menuIcon,
+                        contentDescription = menuDescription
                     )
                 }
         },
         actions = {
-            // RowScope here, so these icons will be placed horizontally
-            IconButton(onClick = { /* doSomething() */ }) {
+            /*IconButton(onClick = {  }) {
                 Icon(
                     imageVector = Icons.Filled.Favorite,
                     contentDescription = "Localized description"
                 )
             }
-            IconButton(onClick = { /* doSomething() */ }) {
+            IconButton(onClick = {  }) {
                 Icon(
                     imageVector = Icons.Filled.Favorite,
                     contentDescription = "Localized description"
                 )
-            }
+            }*/
         },
         scrollBehavior = scrollBehavior
     )

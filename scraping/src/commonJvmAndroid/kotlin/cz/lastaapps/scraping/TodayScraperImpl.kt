@@ -95,8 +95,8 @@ object TodayScraperImpl : TodayScraper<Result> {
         return dishSet
     }
 
-    private fun DocElement.parseAllergens(): DishAllergensPage {
-        return findFirst("a") {
+    private fun DocElement.parseAllergens(): DishAllergensPage? {
+        return tryFindFirst("a") {
             val code = attribute("href").removePrefix("alergeny.php?alergen=").toInt()
             DishAllergensPage(code)
         }

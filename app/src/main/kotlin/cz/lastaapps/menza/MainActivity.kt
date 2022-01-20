@@ -42,6 +42,16 @@ class MainActivity : ComponentActivity() {
             !rootViewModel.isReady.value
         }
 
+        /*lifecycleScope.launch(Dispatchers.Main) {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                WindowInfoTracker.getOrCreate(this@MainActivity)
+                    .windowLayoutInfo(this@MainActivity)
+                    .collectLatest { newLayoutInfo ->
+                        Unit
+                    }
+            }
+        }*/
+
         setContent {
             val activity = remember(this) { this }
             AppRoot(activity = activity, viewModel = rootViewModel)

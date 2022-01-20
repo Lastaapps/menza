@@ -20,24 +20,33 @@
 package cz.lastaapps.menza.ui.root
 
 import android.app.Activity
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.insets.ProvideWindowInsets
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.init.InitDecision
-import cz.lastaapps.menza.ui.LocalWindowWidth
-import cz.lastaapps.menza.ui.WindowSizeClass
+import cz.lastaapps.menza.navigation.Dest
+import cz.lastaapps.menza.ui.WithFoldingFeature
 import cz.lastaapps.menza.ui.WithLocalWindowSizes
 import cz.lastaapps.menza.ui.WithSnackbarProvider
-import cz.lastaapps.menza.ui.dish.DishContent
-import cz.lastaapps.menza.ui.main.*
+import cz.lastaapps.menza.ui.info.InfoLayout
+import cz.lastaapps.menza.ui.main.MenzaViewModel
+import cz.lastaapps.menza.ui.settings.SettingsLayout
 import cz.lastaapps.menza.ui.theme.AppTheme
-import kotlinx.coroutines.launch
+import cz.lastaapps.menza.ui.today.TodayDest
+import cz.lastaapps.menza.ui.week.WeekLayout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,116 +61,96 @@ fun AppRoot(
 
     AppTheme(state) {
         WithLocalWindowSizes(activity = activity) {
-            InitDecision {
-                AppContent()
+            WithFoldingFeature(activity = activity) {
+                ProvideWindowInsets {
+
+                    //Download default data
+                    InitDecision {
+                        //show app if ready
+                        AppContent()
+                    }
+                }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppContent(viewModel: MenzaViewModel = hiltViewModel()) {
 
-    val snackbarHostState = remember { SnackbarHostState() }
     val menzaId by viewModel.selectedMenza.collectAsState()
-    val onMenzaChanged: (MenzaId) -> Unit = { viewModel.selectMenza(it) }
+    val onMenzaSelected: (MenzaId?) -> Unit = { viewModel.selectMenza(it) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val navHostState = rememberNavController()
+
+    //drawer should auto open, if there is no menza selected and user hasn't touched the drawer
+    val drawerState = rememberDrawerState(DrawerValue.Open)
+
 
     WithSnackbarProvider(snackbarHostState = snackbarHostState) {
-        when (LocalWindowWidth.current) {
-            WindowSizeClass.COMPACT -> AppContentCompact(snackbarHostState, menzaId, onMenzaChanged)
-            WindowSizeClass.EXPANDED -> AppContentMedium(snackbarHostState, menzaId, onMenzaChanged)
-            WindowSizeClass.MEDIUM -> AppContentExpanded(snackbarHostState, menzaId, onMenzaChanged)
-        }
-    }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AppContentCompact(
-    snackbarHostState: SnackbarHostState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId) -> Unit,
-) {
-
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
-    val scope = rememberCoroutineScope()
-    MenzaNavDrawer(
-        selectedMenza = menzaId,
-        onMenzaSelected = {
-            onMenzaSelected(it)
-            scope.launch { drawerState.close() }
-        },
-        drawerState,
-    ) {
-        Scaffold(
-            Modifier.fillMaxSize(),
-            topBar = {
-                MainTopBar(
-                    enableMenuIcon = true,
-                    menuOpened = drawerState.targetValue == DrawerValue.Open,
-                ) { scope.launch { drawerState.open() } }
-            },
-            bottomBar = { MainBottomNav() },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
-            },
-        ) { insets ->
-            DishContent(
-                menzaId,
-                Modifier
-                    .padding(insets)
-                    .fillMaxSize()
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AppContentMedium(
-    snackbarHostState: SnackbarHostState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId) -> Unit,
-) {
-
-    Scaffold(
-        Modifier.fillMaxSize(),
-        topBar = { MainTopBar(enableMenuIcon = false, menuOpened = false) {} },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
-    ) { insets ->
-        Row(
-            Modifier
-                .padding(insets)
-                .fillMaxSize()
+        NavHost(
+            navController = navHostState,
+            startDestination = Dest.R.today,
+            modifier = Modifier.fillMaxSize()
         ) {
-            MainNavRail()
-            Column(Modifier.fillMaxHeight()) {
-                var expanded by rememberSaveable() { mutableStateOf(false) }
-                MenzaList(
-                    modifier = Modifier.weight(1f),
-                    selectedMenza = menzaId,
+
+            composable(
+                Dest.R.today,
+            ) {
+                TodayDest(
+                    navController = navHostState,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
-                    expanded = expanded,
-                    menzaListViewModel = hiltViewModel(),
+                    menzaViewModel = viewModel,
+                    todayViewModel = hiltViewModel(),
                 )
-                IconButton(onClick = { expanded = !expanded }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "")
-                }
             }
-            DishContent(menzaId, Modifier.fillMaxSize())
+            composable(
+                Dest.R.week,
+            ) {
+                WeekLayout(
+                    navController = navHostState,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    menzaId = menzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = viewModel,
+                    weekViewModel = hiltViewModel(),
+                )
+            }
+            composable(
+                Dest.R.info,
+            ) {
+                InfoLayout(
+                    navController = navHostState,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    menzaId = menzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = viewModel,
+                    infoViewModel = hiltViewModel(),
+                )
+            }
+            composable(
+                Dest.R.settings,
+            ) {
+                SettingsLayout(
+                    navController = navHostState,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    menzaId = menzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = viewModel,
+                    settingsViewModel = hiltViewModel(),
+                )
+            }
         }
     }
-}
-
-@Composable
-fun AppContentExpanded(
-    snackbarHostState: SnackbarHostState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId) -> Unit,
-) {
-    AppContentMedium(snackbarHostState, menzaId, onMenzaSelected)
 }
 
 

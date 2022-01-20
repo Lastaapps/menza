@@ -19,27 +19,34 @@
 
 package cz.lastaapps.menza.ui.main
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import cz.lastaapps.menza.navigation.routesEquals
 
 @Composable
 fun MainBottomNav(
+    navController: NavController,
+    modifier: Modifier = Modifier,
 ) {
-    var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf("Today", "Week", "Info", "Settings")
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val route = navBackStackEntry?.destination?.route
 
-    NavigationBar {
-        items.forEachIndexed { index, item ->
+    NavigationBar(modifier = modifier) {
+        navItems.forEach { item ->
+            val selected = route?.routesEquals(item.dest) ?: false
+
             NavigationBarItem(
-                icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
-                label = { Text(item) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index },
+                icon = { Icon(item.icon, contentDescription = item.label) },
+                label = { Text(item.label) },
+                selected = selected,
+                onClick = { navController.navigate(item.dest) },
                 alwaysShowLabel = false
             )
         }

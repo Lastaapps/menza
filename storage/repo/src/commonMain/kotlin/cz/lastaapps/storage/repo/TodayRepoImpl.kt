@@ -56,19 +56,21 @@ class TodayRepoImpl<R : Any>(
             mRequestInProgress.value = true
 
             val request = try {
-                log.i { "Getting data from a server" }
+                log.i { "Getting data from a server for $menzaId" }
                 scraper.createRequest(menzaId)
             } catch (e: Exception) {
                 mErrors.send(Errors.ConnectionError)
                 mRequestInProgress.value = false
+                e.printStackTrace()
                 return@withContext null
             }
             val data = try {
-                log.i { "Scraping" }
+                log.i { "Scraping $menzaId" }
                 scraper.scrape(request)
             } catch (e: Exception) {
                 mErrors.send(Errors.ParsingError)
                 mRequestInProgress.value = false
+                e.printStackTrace()
                 return@withContext null
             }
 

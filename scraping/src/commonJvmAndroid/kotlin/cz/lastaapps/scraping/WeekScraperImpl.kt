@@ -67,6 +67,10 @@ object WeekScraperImpl : WeekScraper<Result> {
             }
         }
 
+        val menzaId = findFirst("body #PodsysActive") {
+            attribute("value").removeSpaces().takeIf { it.isNotBlank() }?.toInt()
+        } ?: error("Menza id not found")
+
         findFirst("#jidelnicek tbody") {
 
             var currentDate: LocalDate? = null
@@ -94,6 +98,7 @@ object WeekScraperImpl : WeekScraper<Result> {
 
                     if (name.isNotBlank() && name.isNameValid()) {
                         set += WeekDish(
+                            MenzaId(menzaId),
                             currentDate!!,
                             CourseType(type, currentDateOrders[type]!!),
                             amount?.let { Amount(it) },

@@ -43,6 +43,26 @@ class TodayViewModel @Inject constructor(
     private val todayRepoFactory: TodayRepoFactory,
 ) : ViewModel() {
 
+    val selectedDish: StateFlow<Dish?>
+        get() = mSelectedDish
+
+    private val mSelectedDish = MutableStateFlow<Dish?>(null)
+
+    /**
+     * Called when a menza id is spotted
+     * If the id doesn't correspond with the id of the selected dish,
+     * the dish is unselected
+     */
+    fun menzaSpotted(menzaId: MenzaId?) {
+        if (menzaId != mSelectedDish.value?.menzaId)
+            mSelectedDish.value = null
+    }
+
+    fun selectDish(dish: Dish?) {
+        mSelectedDish.value = dish
+    }
+
+
     private val repos = HashMap<MenzaId, TodayRepo>()
     private val cache = HashMap<MenzaId, MutableStateFlow<List<DishTypeList>>>()
     val errors = Channel<Errors>(Channel.BUFFERED)

@@ -57,24 +57,27 @@ class WeekRepoImpl<R : Any>(
 
             mRequestInProgress.value = true
             val request = try {
-                log.i { "Getting data from a server" }
+                log.i { "Getting data from a server for $menzaId" }
                 scraper.createRequest(menzaId, WeekNumber.tempWeekNumber)
             } catch (e: Exception) {
                 mErrors.send(Errors.ConnectionError)
                 mRequestInProgress.value = false
+                e.printStackTrace()
                 return@withContext null
             }
 
             val data = try {
-                log.i { "Scraping" }
+                log.i { "Scraping $menzaId" }
                 scraper.scrape(request)
             } catch (e: WeekNotAvailable) {
                 mErrors.send(Errors.WeekNotSupported)
                 mRequestInProgress.value = false
+                log.e { "Week not supported for $menzaId" }
                 return@withContext null
             } catch (e: Exception) {
                 mErrors.send(Errors.ParsingError)
                 mRequestInProgress.value = false
+                e.printStackTrace()
                 return@withContext null
             }
 
