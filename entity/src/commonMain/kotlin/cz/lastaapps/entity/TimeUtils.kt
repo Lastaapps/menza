@@ -39,6 +39,9 @@ internal val daysOfWeekSorted = listOf(
     DayOfWeek.SUNDAY
 )
 
+val DayOfWeek.index: Int
+    get() = daysOfWeekSorted.indexOf(this)
+
 /** Compares a day of week to another using czech calendar
  * @return if the other day is later in week */
 fun DayOfWeek.compareInWeek(other: DayOfWeek): Int {

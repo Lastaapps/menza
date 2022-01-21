@@ -20,6 +20,9 @@
 package cz.lastaapps.storage.repo
 
 import cz.lastaapps.entity.info.Contact
+import cz.lastaapps.entity.menza.MenzaId
+import kotlinx.coroutines.flow.Flow
 
 interface ContactsRepo : GeneralStorageRepo<Contact> {
+    fun getContactsForMenza(menzaId: MenzaId): Flow<List<Contact>>
 }

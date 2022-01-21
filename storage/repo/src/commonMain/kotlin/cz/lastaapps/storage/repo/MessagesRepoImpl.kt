@@ -22,6 +22,7 @@ package cz.lastaapps.storage.repo
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
+import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.Message
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.MessagesScraper
@@ -44,6 +45,11 @@ class MessagesRepoImpl<R : Any>(
     }
 
     private val queries = database.messageQueries
+    override fun getMessage(menzaId: MenzaId): Flow<List<Message>> {
+        return queries.getMessageForMenza(menzaId) { id, name ->
+            Message(id, name)
+        }.asFlow().mapToList(dispatcher)
+    }
 
     override val errors: Channel<Errors>
         get() = mErrors
@@ -67,7 +73,7 @@ class MessagesRepoImpl<R : Any>(
             .asFlow().mapToList(dispatcher)
     }
 
-    override fun refreshData() : Flow<Boolean?> {
+    override fun refreshData(): Flow<Boolean?> {
         return flow {
             log.i { "Requesting data refresh" }
             emit(refreshInternal())

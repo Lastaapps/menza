@@ -20,6 +20,9 @@
 package cz.lastaapps.storage.repo
 
 import cz.lastaapps.entity.info.OpeningHours
+import cz.lastaapps.entity.menza.MenzaId
+import kotlinx.coroutines.flow.Flow
 
 interface OpeningHoursRepo : GeneralStorageRepo<OpeningHours> {
+    fun getForMenza(menzaId: MenzaId): Flow<List<OpeningHours>>
 }

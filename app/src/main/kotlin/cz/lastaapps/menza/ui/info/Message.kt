@@ -17,12 +17,14 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage.repo
+package cz.lastaapps.menza.ui.info
 
-import cz.lastaapps.entity.menza.MenzaId
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import cz.lastaapps.entity.menza.Message
-import kotlinx.coroutines.flow.Flow
 
-interface MessagesRepo  :GeneralStorageRepo<Message> {
-    fun getMessage(menzaId: MenzaId): Flow<List<Message>>
+@Composable
+fun Message(message: Message, modifier: Modifier = Modifier) {
+    Text(message.message, modifier = modifier)
 }

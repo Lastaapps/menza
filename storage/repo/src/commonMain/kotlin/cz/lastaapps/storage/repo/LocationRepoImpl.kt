@@ -22,6 +22,7 @@ package cz.lastaapps.storage.repo
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
+import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.LocationScraper
@@ -44,6 +45,11 @@ class LocationRepoImpl<R : Any>(
     }
 
     private val queries = database.locationQueries
+    override fun getMenzaLocation(menzaId: MenzaId): Flow<List<MenzaLocation>> {
+        return queries.getLocationForMenza(menzaId) { newMenzaId, address, coordinates ->
+            MenzaLocation(newMenzaId, address, coordinates)
+        }.asFlow().mapToList(dispatcher)
+    }
 
     override val errors: Channel<Errors>
         get() = mErrors
@@ -69,7 +75,7 @@ class LocationRepoImpl<R : Any>(
             .asFlow().mapToList(scope.coroutineContext)
     }
 
-    override fun refreshData() : Flow<Boolean?> {
+    override fun refreshData(): Flow<Boolean?> {
         return flow {
             log.i { "Requesting data refresh" }
             emit(refreshInternal())

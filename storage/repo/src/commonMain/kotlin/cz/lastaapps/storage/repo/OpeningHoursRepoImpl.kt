@@ -23,6 +23,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import cz.lastaapps.entity.info.OpeningHours
+import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.OpeningHoursScraper
 import kotlinx.coroutines.CoroutineDispatcher
@@ -44,6 +45,11 @@ class OpeningHoursRepoImpl<R : Any>(
     }
 
     private val queries = database.openingHoursQueries
+    override fun getForMenza(menzaId: MenzaId): Flow<List<OpeningHours>> {
+        return queries.getForMenzaId(menzaId) { newMenzaId, name, dayOfWeek, open, close, comment ->
+            OpeningHours(newMenzaId, name, dayOfWeek, open, close, comment)
+        }.asFlow().mapToList(dispatcher)
+    }
 
     override val errors: Channel<Errors>
         get() = mErrors

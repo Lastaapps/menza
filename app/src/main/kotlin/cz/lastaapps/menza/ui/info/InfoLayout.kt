@@ -22,7 +22,6 @@ package cz.lastaapps.menza.ui.info
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
@@ -31,7 +30,8 @@ import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
 import cz.lastaapps.menza.ui.main.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
-import cz.lastaapps.menza.ui.root.AppLayoutExpandedSimple
+import cz.lastaapps.menza.ui.root.AppLayoutExpanded
+import cz.lastaapps.menza.ui.root.AppLayoutMedium
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,7 +45,6 @@ fun InfoLayout(
     menzaViewModel: MenzaViewModel,
     infoViewModel: MenzaInfoViewModel,
 ) {
-    @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
             InfoLayoutCompact(
@@ -58,7 +57,18 @@ fun InfoLayout(
                 viewModel = infoViewModel,
             )
         }
-        in listOf(WindowSizeClass.MEDIUM, WindowSizeClass.EXPANDED) -> {
+        WindowSizeClass.MEDIUM -> {
+            InfoLayoutMedium(
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                drawerState = drawerState,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel,
+                viewModel = infoViewModel,
+            )
+        }
+        WindowSizeClass.EXPANDED -> {
             InfoLayoutExpanded(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
@@ -97,7 +107,31 @@ fun InfoLayoutCompact(
             scope.launch { drawerState.open() }
         }
     ) {
-        Text(text = "Info - Muhahá")
+        InfoAllTogether(menzaId = menzaId, viewModel = viewModel)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InfoLayoutMedium(
+    navController: NavController,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+    viewModel: MenzaInfoViewModel,
+) {
+    AppLayoutMedium(
+        navController = navController,
+        menzaId = menzaId,
+        onMenzaSelected = onMenzaSelected,
+        menzaViewModel = menzaViewModel,
+        snackbarHostState = snackbarHostState,
+        drawerState = drawerState,
+        showBackButton = false,
+    ) {
+        InfoAllTogether(menzaId = menzaId, viewModel = viewModel)
     }
 }
 
@@ -112,7 +146,7 @@ fun InfoLayoutExpanded(
     menzaViewModel: MenzaViewModel,
     viewModel: MenzaInfoViewModel,
 ) {
-    AppLayoutExpandedSimple(
+    AppLayoutExpanded(
         navController = navController,
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
@@ -120,7 +154,11 @@ fun InfoLayoutExpanded(
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackButton = false,
-    ) {
-        Text(text = "Info - Muhahá, but two times. Where? There - muhahááá")
-    }
+        panel1 = {
+            InfoJustBasic(menzaId = menzaId, viewModel = viewModel)
+        },
+        panel2 = {
+            InfoRemaining(menzaId = menzaId, viewModel = viewModel)
+        },
+    )
 }

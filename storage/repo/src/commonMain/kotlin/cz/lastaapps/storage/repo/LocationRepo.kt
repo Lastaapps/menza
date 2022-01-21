@@ -19,7 +19,10 @@
 
 package cz.lastaapps.storage.repo
 
+import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.MenzaLocation
+import kotlinx.coroutines.flow.Flow
 
 interface LocationRepo : GeneralStorageRepo<MenzaLocation> {
+    fun getMenzaLocation(menzaId: MenzaId): Flow<List<MenzaLocation>>
 }

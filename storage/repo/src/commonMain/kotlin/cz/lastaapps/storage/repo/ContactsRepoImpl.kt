@@ -23,6 +23,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import cz.lastaapps.entity.info.Contact
+import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.ContactsScraper
 import kotlinx.coroutines.CoroutineDispatcher
@@ -44,6 +45,11 @@ class ContactsRepoImpl<R : Any>(
     }
 
     private val queries = database.contactQueries
+    override fun getContactsForMenza(menzaId: MenzaId): Flow<List<Contact>> {
+        return queries.getContactById(menzaId) { newMenzaId, name, role, phone, email ->
+            Contact(newMenzaId, name, role, phone, email)
+        }.asFlow().mapToList(dispatcher)
+    }
 
     override val errors: Channel<Errors>
         get() = mErrors
@@ -69,7 +75,7 @@ class ContactsRepoImpl<R : Any>(
             .asFlow().mapToList(scope.coroutineContext)
     }
 
-    override fun refreshData() : Flow<Boolean?> {
+    override fun refreshData(): Flow<Boolean?> {
         return flow {
             log.i { "Requesting data refresh" }
             emit(refreshInternal())
