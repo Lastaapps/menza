@@ -106,20 +106,18 @@ fun PriceSettings(
     viewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
 ) {
-    if (viewModel.sett.isSystemThemeAvailable()) {
-        val mode by viewModel.sett.priceType.collectAsState()
+    val mode by viewModel.sett.priceType.collectAsState()
 
-        SettingsSwitch(
-            title = "Show discounted prices",
-            checked = mode is PriceType.Discounted,
-            onClick = {
-                viewModel.setPriceType(
-                    if (mode is PriceType.Discounted) PriceType.Normal else PriceType.Discounted
-                )
-            },
-            modifier = modifier,
-        )
-    }
+    SettingsSwitch(
+        title = "Show discounted prices",
+        checked = mode is PriceType.Discounted,
+        onClick = {
+            viewModel.setPriceType(
+                if (mode is PriceType.Discounted) PriceType.Normal else PriceType.Discounted
+            )
+        },
+        modifier = modifier,
+    )
 }
 
 

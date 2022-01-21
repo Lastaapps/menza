@@ -162,6 +162,10 @@ fun TodayDestMedium(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
+        showBackButton = selectedDish != null,
+        onBackButtonPressed = {
+            onDishSelected(null)
+        },
     ) {
         BackHandler(enabled = selectedDish != null) {
             onDishSelected(null)
@@ -198,6 +202,7 @@ fun TodayDestExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
+        showBackButton = false,
         panel1 = {
             TodayDishList(
                 menzaId = menzaId,

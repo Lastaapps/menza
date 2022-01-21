@@ -43,9 +43,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        var composeRun = false
+
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition {
-            !rootViewModel.isReady.value
+            !rootViewModel.isReady.value && composeRun
         }
 
         /*lifecycleScope.launch(Dispatchers.Main) {
@@ -61,7 +63,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             if (rootViewModel.isReady.collectAsState().value) {
                 val activity = remember(this) { this }
-                AppRoot(activity = activity, viewModel = rootViewModel, imageLoader = imageLoader)
+                AppRoot(
+                    activity = activity,
+                    viewModel = rootViewModel,
+                    imageLoader = imageLoader,
+                    viewModelStoreOwner = this,
+                )
+                composeRun = true
             }
         }
     }

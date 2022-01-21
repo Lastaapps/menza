@@ -33,4 +33,9 @@ data class Menza(
     init {
         name.shouldNotBeBlank()
     }
+
+    val shorterName = name
+        .replace("Menza", "")
+        .replace("Výdejna", "")
+        .trim()
 }

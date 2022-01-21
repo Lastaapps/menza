@@ -21,6 +21,8 @@ package cz.lastaapps.menza.ui.main
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.rememberSplineBasedDecay
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +54,7 @@ fun MainTopBar(
     SmallTopAppBar(
         title = { Text(title) },
         navigationIcon = {
-            if (menuIcon != null)
+            if (menuIcon != null) {
                 IconButton(onClick = { onMenuClicked?.let { it() } }) {
                     val rotation by animateFloatAsState(if (!menuRotated) 0f else 90f)
                     Icon(
@@ -60,6 +63,9 @@ fun MainTopBar(
                         contentDescription = menuDescription
                     )
                 }
+            } else {
+                Box(Modifier.size(48.dp))
+            }
         },
         actions = {
             /*IconButton(onClick = {  }) {

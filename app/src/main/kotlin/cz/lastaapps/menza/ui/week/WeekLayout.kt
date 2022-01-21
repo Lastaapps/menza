@@ -124,6 +124,7 @@ private fun WeekLayoutExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
+        showBackButton = false
     ) {
         WeekDishList(
             menzaId = menzaId,

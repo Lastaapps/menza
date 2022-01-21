@@ -19,11 +19,14 @@
 
 package cz.lastaapps.menza.ui.main
 
+import android.app.Application
+import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.compareToLocal
 import cz.lastaapps.storage.repo.MenzaRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +39,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MenzaViewModel @Inject constructor(
+    private val app: Application,
     private val menzaRepo: MenzaRepo,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -56,15 +60,25 @@ class MenzaViewModel @Inject constructor(
 
         menzaRepo.getData(this).collectLatest { list ->
             if (myData == null) {
-                myData = MutableStateFlow(list).also { data = it }
+                myData = MutableStateFlow(list.sortMenzaList()).also { data = it }
 
                 log.i { "Data ready" }
 
                 selectMenza(savedStateHandle.get<Int>(selectedMenzaKey)?.let { MenzaId(it) })
                 isReady.value = true
             } else {
-                myData!!.value = list
+                myData!!.value = list.sortMenzaList()
             }
+        }
+    }
+
+    private fun Collection<Menza>.sortMenzaList(): List<Menza> {
+        @Suppress("DEPRECATION")
+        val locale = app.applicationContext.resources.configuration.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) it.locales[0] else it.locale
+        }
+        return sortedWith { m1, m2 ->
+            m1.shorterName.compareToLocal(m2.shorterName, locale)
         }
     }
 

@@ -20,10 +20,11 @@
 package cz.lastaapps.menza.ui.main
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.GenericShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,7 +33,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
@@ -46,19 +49,25 @@ fun MenzaList(
     modifier: Modifier = Modifier,
     menzaListViewModel: MenzaViewModel,
 ) {
+    val scrollState = rememberScrollState()
+
     val isReady by menzaListViewModel.isReady.collectAsState()
     if (isReady) {
         val menzaList by menzaListViewModel.data.collectAsState()
-        LazyColumn(
-            modifier.animateContentSize(),
+        Column(
+            modifier
+                .animateContentSize()
+                .width(IntrinsicSize.Max)
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Bottom),
             horizontalAlignment = Alignment.Start,
         ) {
-            items(menzaList) { item ->
+            menzaList.forEach { item ->
                 MenzaItem(
                     menza = item, selected = item.menzaId == selectedMenza,
                     expanded = expanded,
                     onClick = onMenzaSelected,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
@@ -77,30 +86,45 @@ private fun MenzaItem(
     else MaterialTheme.colorScheme.secondary
 
     Surface(
-        modifier = modifier,
+        modifier = modifier.height(48.dp),
         color = color,
         onClick = { onClick(menza.menzaId) },
+        shape = GenericShape { size, _ ->
+            addRect(Rect(0f, 0f, size.width - size.height / 2, size.height))
+            addOval(Rect(size.width - size.height, 0f, size.width, size.height))
+        }
     ) {
         Row(
-            modifier
-                .animateContentSize()
-                .padding(8.dp),
+            modifier.padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start)
         ) {
-            Box(
-                Modifier
-                    .size(48.dp)
-                    .background(Brush.horizontalGradient(colorForMenza(menza))),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "" + menza.name[0],
-                )
-            }
+            MenzaLetter(menza)
 
-            if (expanded)
+            if (expanded) {
                 Text(menza.name)
+                Spacer(modifier = Modifier.width(16.dp))
+            }
         }
+    }
+}
+
+@Composable
+private fun MenzaLetter(menza: Menza, modifier: Modifier = Modifier) {
+    val colors = colorForMenza(menza)
+    val brush = Brush.horizontalGradient(colors)
+    val size = 32.dp
+
+    Box(
+        modifier.size(size),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.size(size)) {
+            drawCircle(brush)
+        }
+        Text(
+            text = "" + menza.shorterName[0],
+            color = Color(0xffffffff)
+        )
     }
 }

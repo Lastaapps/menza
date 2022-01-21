@@ -35,15 +35,16 @@ private val menzaColors = listOf(
     Color(0xff009688) to Color(0xff52c7b8),
     Color(0xff4caf50) to Color(0xff80e27e),
     Color(0xff8bc34a) to Color(0xffbef67a),
-    Color(0xffcddc39) to Color(0xffffff6e),
-    Color(0xffffeb3b) to Color(0xffffff72),
+    //Color(0xffcddc39) to Color(0xffffff6e),
+    //Color(0xffffeb3b) to Color(0xffffff72),
     Color(0xffffc107) to Color(0xfffff350),
     Color(0xffff9800) to Color(0xffffc947),
     Color(0xffff5722) to Color(0xffff8a50),
 )
 
 fun colorForMenza(menza: Menza): List<Color> {
-    val hash = menza.name.hashCode()
+    //val hash = menza.name.hashCode()
+    val hash = menza.menzaId.id
     return menzaColors[abs(hash % menzaColors.size)]
         .let { listOf(it.first, it.second) }
 }

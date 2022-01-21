@@ -119,6 +119,7 @@ fun InfoLayoutExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
+        showBackButton = false,
     ) {
         Text(text = "Info - Muhahá, but two times. Where? There - muhahááá")
     }

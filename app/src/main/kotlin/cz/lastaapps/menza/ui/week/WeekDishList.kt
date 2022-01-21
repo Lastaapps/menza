@@ -36,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import cz.lastaapps.entity.common.CourseType
@@ -50,7 +49,7 @@ import kotlinx.datetime.LocalDate
 fun WeekDishList(
     menzaId: MenzaId?,
     modifier: Modifier = Modifier,
-    viewModel: WeekViewModel = hiltViewModel(),
+    viewModel: WeekViewModel,
 ) {
     if (menzaId == null) {
         Box(modifier = modifier, contentAlignment = Alignment.Center) {

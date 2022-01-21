@@ -120,6 +120,7 @@ fun SettingsLayoutExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
+        showBackButton = false,
         panel1 = { SettingsUI(viewModel = viewModel, modifier = Modifier.fillMaxSize()) },
         panel2 = {},
     )

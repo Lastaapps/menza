@@ -20,18 +20,18 @@
 package cz.lastaapps.menza.ui.root
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.window.layout.FoldingFeature
 import cz.lastaapps.entity.menza.MenzaId
@@ -67,6 +67,7 @@ fun AppLayoutCompact(
             onMenzaSelected(it)
         },
         drawerState,
+        menzaListViewModel = menzaViewModel,
     ) {
         Scaffold(
             Modifier.fillMaxSize(),
@@ -115,6 +116,8 @@ fun AppLayoutMedium(
     menzaViewModel: MenzaViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
+    showBackButton: Boolean,
+    onBackButtonPressed: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     val menza = remember(menzaId) {
@@ -125,9 +128,17 @@ fun AppLayoutMedium(
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = {
-            MainTopBar(
-                menzaName = menza?.name,
-            )
+            if (!showBackButton)
+                MainTopBar(
+                    menzaName = menza?.name,
+                )
+            else
+                MainTopBar(
+                    menzaName = menza?.name,
+                    menuIcon = Icons.Default.ArrowBack,
+                    menuDescription = "Go back",
+                    onMenuClicked = onBackButtonPressed,
+                )
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -149,11 +160,11 @@ fun AppLayoutMedium(
                         scope.launch { drawerState.close() }
                     },
                     expanded = expanded,
-                    menzaListViewModel = hiltViewModel(),
+                    menzaListViewModel = menzaViewModel,
                 )
-                IconButton(onClick = { expanded = !expanded }) {
-                    val icon = if (expanded) Icons.Default.ArrowBack else Icons.Default.ArrowForward
-                    Icon(icon, contentDescription = null)
+                val rotation by animateFloatAsState(if (expanded) 0f else 180f)
+                IconButton(onClick = { expanded = !expanded }, Modifier.rotate(rotation)) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = null)
                 }
             }
 
@@ -173,6 +184,8 @@ fun AppLayoutExpandedSimple(
     menzaViewModel: MenzaViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
+    showBackButton: Boolean,
+    onBackButtonPressed: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     val menza = remember(menzaId) {
@@ -183,9 +196,17 @@ fun AppLayoutExpandedSimple(
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = {
-            MainTopBar(
-                menzaName = menza?.name,
-            )
+            if (!showBackButton)
+                MainTopBar(
+                    menzaName = menza?.name,
+                )
+            else
+                MainTopBar(
+                    menzaName = menza?.name,
+                    menuIcon = Icons.Default.ArrowBack,
+                    menuDescription = "Go back",
+                    onMenuClicked = onBackButtonPressed,
+                )
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -207,11 +228,11 @@ fun AppLayoutExpandedSimple(
                         scope.launch { drawerState.close() }
                     },
                     expanded = expanded,
-                    menzaListViewModel = hiltViewModel(),
+                    menzaListViewModel = menzaViewModel,
                 )
-                IconButton(onClick = { expanded = !expanded }) {
-                    val icon = if (expanded) Icons.Default.ArrowBack else Icons.Default.ArrowForward
-                    Icon(icon, contentDescription = null)
+                val rotation by animateFloatAsState(if (expanded) 0f else 180f)
+                IconButton(onClick = { expanded = !expanded }, Modifier.rotate(rotation)) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = null)
                 }
             }
 
@@ -231,6 +252,8 @@ fun AppLayoutExpanded(
     menzaViewModel: MenzaViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
+    showBackButton: Boolean,
+    onBackButtonPressed: () -> Unit = {},
     panel1: @Composable () -> Unit,
     panel2: @Composable () -> Unit
 ) {
@@ -242,9 +265,17 @@ fun AppLayoutExpanded(
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = {
-            MainTopBar(
-                menzaName = menza?.name,
-            )
+            if (!showBackButton)
+                MainTopBar(
+                    menzaName = menza?.name,
+                )
+            else
+                MainTopBar(
+                    menzaName = menza?.name,
+                    menuIcon = Icons.Default.ArrowBack,
+                    menuDescription = "Go back",
+                    onMenuClicked = onBackButtonPressed,
+                )
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -283,12 +314,11 @@ fun AppLayoutExpanded(
                             scope.launch { drawerState.close() }
                         },
                         expanded = expanded,
-                        menzaListViewModel = hiltViewModel(),
+                        menzaListViewModel = menzaViewModel,
                     )
-                    IconButton(onClick = { expanded = !expanded }) {
-                        val icon =
-                            if (expanded) Icons.Default.ArrowBack else Icons.Default.ArrowForward
-                        Icon(icon, contentDescription = null)
+                    val rotation by animateFloatAsState(if (expanded) 0f else 180f)
+                    IconButton(onClick = { expanded = !expanded }, Modifier.rotate(rotation)) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = null)
                     }
                 }
 

@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import coil.ImageLoader
 import coil.compose.LocalImageLoader
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -34,9 +34,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.init.InitDecision
 import cz.lastaapps.menza.navigation.Dest
-import cz.lastaapps.menza.ui.WithFoldingFeature
-import cz.lastaapps.menza.ui.WithLocalWindowSizes
-import cz.lastaapps.menza.ui.WithSnackbarProvider
+import cz.lastaapps.menza.ui.*
 import cz.lastaapps.menza.ui.info.InfoLayout
 import cz.lastaapps.menza.ui.main.MenzaViewModel
 import cz.lastaapps.menza.ui.settings.SettingsLayout
@@ -53,9 +51,9 @@ fun AppRoot(
     activity: Activity,
     viewModel: RootViewModel,
     imageLoader: ImageLoader,
+    viewModelStoreOwner: ViewModelStoreOwner,
 ) {
 
-    LocalImageLoader
     val useDark by viewModel.sett.darkMode.collectAsState()
     val useSystem by viewModel.sett.systemTheme.collectAsState()
 
@@ -67,17 +65,34 @@ fun AppRoot(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.primaryContainer,
         ) {
-            WithLocalWindowSizes(activity = activity) {
-                WithFoldingFeature(activity = activity) {
-                    ProvideWindowInsets {
-                        CompositionLocalProvider(LocalImageLoader provides imageLoader) {
+            ApplyLocalProviders(
+                activity = activity,
+                imageLoader = imageLoader,
+                viewModelStoreOwner = viewModelStoreOwner,
+            ) {
+                //Download default data
+                InitDecision(hiltActivityViewModel()) {
+                    //show app if ready
+                    AppContent(hiltActivityViewModel())
+                }
+            }
+        }
+    }
+}
 
-                            //Download default data
-                            InitDecision {
-                                //show app if ready
-                                AppContent()
-                            }
-                        }
+@Composable
+fun ApplyLocalProviders(
+    activity: Activity,
+    imageLoader: ImageLoader,
+    viewModelStoreOwner: ViewModelStoreOwner,
+    content: @Composable () -> Unit
+) {
+    CompositionLocalProvider(LocalActivityViewModelOwner provides viewModelStoreOwner) {
+        WithLocalWindowSizes(activity) {
+            WithFoldingFeature(activity) {
+                ProvideWindowInsets {
+                    CompositionLocalProvider(LocalImageLoader provides imageLoader) {
+                        content()
                     }
                 }
             }
@@ -87,7 +102,7 @@ fun AppRoot(
 
 @OptIn(ExperimentalMaterial3Api::class, androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
-private fun AppContent(viewModel: MenzaViewModel = hiltViewModel()) {
+private fun AppContent(viewModel: MenzaViewModel) {
 
     val menzaId by viewModel.selectedMenza.collectAsState()
     val onMenzaSelected: (MenzaId?) -> Unit = { viewModel.selectMenza(it) }
@@ -124,7 +139,7 @@ private fun AppContent(viewModel: MenzaViewModel = hiltViewModel()) {
                     menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
-                    todayViewModel = hiltViewModel(),
+                    todayViewModel = hiltActivityViewModel(),
                 )
             }
             composable(
@@ -137,7 +152,7 @@ private fun AppContent(viewModel: MenzaViewModel = hiltViewModel()) {
                     menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
-                    weekViewModel = hiltViewModel(),
+                    weekViewModel = hiltActivityViewModel(),
                 )
             }
             composable(
@@ -150,7 +165,7 @@ private fun AppContent(viewModel: MenzaViewModel = hiltViewModel()) {
                     menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
-                    infoViewModel = hiltViewModel(),
+                    infoViewModel = hiltActivityViewModel(),
                 )
             }
             composable(
@@ -163,7 +178,7 @@ private fun AppContent(viewModel: MenzaViewModel = hiltViewModel()) {
                     menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
-                    settingsViewModel = hiltViewModel(),
+                    settingsViewModel = hiltActivityViewModel(),
                 )
             }
         }

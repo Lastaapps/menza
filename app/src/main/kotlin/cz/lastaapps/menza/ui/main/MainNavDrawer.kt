@@ -26,7 +26,6 @@ import androidx.compose.material3.NavigationDrawer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import cz.lastaapps.entity.menza.MenzaId
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +35,7 @@ fun MenzaNavDrawer(
     onMenzaSelected: (MenzaId) -> Unit,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    menzaListViewModel: MenzaViewModel = hiltViewModel(),
+    menzaListViewModel: MenzaViewModel,
     content: @Composable () -> Unit,
 ) {
 

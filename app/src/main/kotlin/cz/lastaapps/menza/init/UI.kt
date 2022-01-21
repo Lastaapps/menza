@@ -30,14 +30,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.channels.consumeEach
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InitDecision(
+    viewModel: InitViewModel,
     modifier: Modifier = Modifier,
-    viewModel: InitViewModel = hiltViewModel(),
     content: @Composable () -> Unit,
 ) {
     val isReady by viewModel.isDone.collectAsState()
