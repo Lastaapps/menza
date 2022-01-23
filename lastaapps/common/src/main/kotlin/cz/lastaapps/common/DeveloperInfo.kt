@@ -17,30 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.common
+
+import android.content.Context
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+object DeveloperInfo {
+
+    fun getName(context: Context): String {
+        return context.getString(R.string.developer_name)
     }
-}
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
+    fun getNameAndBuildYear(context: Context): String {
+        val date = LocalDate.parse(BuildConfig.BUILD_DATE)
+        val formatted = date.format(DateTimeFormatter.ofPattern("yyyy"))
+
+        return context.getString(R.string.developer_name_date, formatted)
     }
+
 }
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common"
-)

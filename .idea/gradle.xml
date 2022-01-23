@@ -14,6 +14,8 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/entity" />
+            <option value="$PROJECT_DIR$/lastaapps" />
+            <option value="$PROJECT_DIR$/lastaapps/common" />
             <option value="$PROJECT_DIR$/scraping" />
             <option value="$PROJECT_DIR$/storage" />
             <option value="$PROJECT_DIR$/storage/db" />

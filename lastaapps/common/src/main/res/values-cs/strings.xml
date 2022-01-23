@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+  ~
+  ~     This file is part of Menza.
+  ~
+  ~     Menza is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Menza is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="facebook">Facebook</string>
+    <string name="github">Github</string>
+    <string name="play_store">Obchod play</string>
+    <string name="telegram">Telegram</string>
+    <string name="github_project">Zdrojový kód</string>
+
+    <string name="content_description_facebook">Facebooková stránka autora</string>
+    <string name="content_description_github">Github repozitář vývojáře</string>
+    <string name="content_description_play_store">Další aplikace od vývojářě</string>
+    <string name="content_description_telegram">Kontakt na vývojáře na platformě Telegram</string>
+    <string name="content_description_github_project">Zdrojový kód projektu na Githubu</string>
+
+    <string name="review_dialog_title">Hodnocení</string>
+    <string name="review_dialog_message">Mohli byste nám prosím věnovat vteřinku a ohodnotit tuto aplikaci?</string>
+    <string name="review_dialog_positive">Jasně</string>
+    <string name="review_dialog_negative">Ne</string>
+    <string name="review_thanks">Děkujeme za vaše hodnocení!</string>
+</resources>

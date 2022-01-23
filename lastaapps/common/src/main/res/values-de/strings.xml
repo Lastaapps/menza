@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+  ~
+  ~     This file is part of Menza.
+  ~
+  ~     Menza is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Menza is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="facebook">Facebook</string>
+    <string name="github">Github</string>
+    <string name="play_store">Play store</string>
+    <string name="telegram">Telegram</string>
+    <string name="github_project">Quellcode</string>
+
+    <string name="content_description_facebook">The developer\'s Github repository</string>
+    <string name="content_description_github">Das Github-Profil des Entwicklers</string>
+    <string name="content_description_play_store">Die anderen Apps vom App-Entwickler</string>
+    <string name="content_description_telegram">Der Kontakt zum Entwickler der App über Telegramm</string>
+    <string name="content_description_github_project">Das Quellcode-Github-Repository des Projekts</string>
+
+    <string name="review_dialog_title">Rezension</string>
+    <string name="review_dialog_message">Könnten Sie bitte erwägen, dieser App eine nette Bewertung zu geben?</string>
+    <string name="review_dialog_positive">Natürlich</string>
+    <string name="review_dialog_negative">Nein</string>
+    <string name="review_thanks">Vielen Dank für Ihre Bewertung!</string>
+</resources>
