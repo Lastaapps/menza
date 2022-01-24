@@ -39,6 +39,7 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.FoldingClass
 import cz.lastaapps.menza.ui.LocalFoldProvider
 import cz.lastaapps.menza.ui.main.*
+import cz.lastaapps.menza.ui.menza.MenzaViewModel
 import kotlinx.coroutines.launch
 
 val sidesPadding = 16.dp

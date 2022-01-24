@@ -19,6 +19,7 @@
 
 package cz.lastaapps.scraping
 
+import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
@@ -71,7 +72,8 @@ object TodayScraperImpl : TodayScraper<Result> {
                 "td" -> {
                     val amount = children[1].ownText.removeSpaces().takeIf { it.isNotBlank() }
                     val name = children[2].ownText.removeSpaces()
-                    val dishAllergensId = children[3].parseAllergens()
+                    val dishAllergens = children[3].parseAllergens()
+                    val dishAllergensPage = children[3].parseAllergensPage()
                     val imgUrl = children[4].parseImage()
                     val priceStudent = children[5].parseMoney()
                     val priceNormal = children[6].parseMoney()
@@ -82,7 +84,8 @@ object TodayScraperImpl : TodayScraper<Result> {
                         CourseType(currentType!!, webOrder),
                         amount?.let { Amount(amount) },
                         name,
-                        dishAllergensId,
+                        dishAllergens,
+                        dishAllergensPage,
                         imgUrl,
                         Price(priceStudent),
                         Price(priceNormal),
@@ -95,9 +98,20 @@ object TodayScraperImpl : TodayScraper<Result> {
         return dishSet
     }
 
-    private fun DocElement.parseAllergens(): DishAllergensPage? {
+    private fun DocElement.parseAllergens(): List<AllergenId> {
         return tryFindFirst("a") {
-            val code = attribute("href").removePrefix("alergeny.php?alergen=").toInt()
+            attributes["title"]!!
+                .removePrefix("Alergeny: ")
+                .split(',', ' ')
+                .filter { it.isNotBlank() }
+                .map { AllergenId(it.toInt()) }
+                .sortedBy { it.id }
+        } ?: emptyList()
+    }
+
+    private fun DocElement.parseAllergensPage(): DishAllergensPage? {
+        return tryFindFirst("a") {
+            val code = attributes["href"]!!.removePrefix("alergeny.php?alergen=").toInt()
             DishAllergensPage(code)
         }
     }

@@ -36,9 +36,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.ui.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.theme.colorForMenza
 
 @Composable
@@ -89,9 +91,14 @@ private fun MenzaItem(
         modifier = modifier.height(48.dp),
         color = color,
         onClick = { onClick(menza.menzaId) },
-        shape = GenericShape { size, _ ->
-            addRect(Rect(0f, 0f, size.width - size.height / 2, size.height))
-            addOval(Rect(size.width - size.height, 0f, size.width, size.height))
+        shape = GenericShape { size, direction ->
+            if (LayoutDirection.Ltr == direction) {
+                addRect(Rect(0f, 0f, size.width - size.height / 2, size.height))
+                addOval(Rect(size.width - size.height, 0f, size.width, size.height))
+            } else {
+                addRect(Rect(size.width, 0f, size.height / 2, size.height))
+                addOval(Rect(size.height, 0f, 0f, size.height))
+            }
         }
     ) {
         Row(

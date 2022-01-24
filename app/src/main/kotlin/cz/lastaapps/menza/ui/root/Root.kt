@@ -38,7 +38,7 @@ import cz.lastaapps.menza.init.InitDecision
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.*
 import cz.lastaapps.menza.ui.info.InfoLayout
-import cz.lastaapps.menza.ui.main.MenzaViewModel
+import cz.lastaapps.menza.ui.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.others.license.LicenseLayout
 import cz.lastaapps.menza.ui.others.privacy.PrivacyCheck
 import cz.lastaapps.menza.ui.others.privacy.PrivacyDialogContent
@@ -158,6 +158,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
                     todayViewModel = hiltActivityViewModel(),
+                    settingsViewModel = hiltActivityViewModel()
                 )
             }
             composable(Dest.R.week) {

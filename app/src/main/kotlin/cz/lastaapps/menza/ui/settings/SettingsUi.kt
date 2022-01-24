@@ -24,6 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Switch
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.navigation.NavController
@@ -75,19 +77,27 @@ fun SettingsUI(
                     .width(min(width, 300.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Text(
+                    "Settings",
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center,
+                )
+
                 DarkThemeSettings(viewModel = viewModel)
 
                 UseThemeSettings(viewModel = viewModel)
 
                 PriceSettings(viewModel = viewModel)
 
+                Button(onClick = { navController.navigate(Dest.R.privacyPolicy) }) {
+                    Text(text = "Privacy Policy")
+                }
+
                 if (enableAbout)
                     Button(onClick = onAboutClicked) {
                         Text(text = "About")
                     }
-                Button(onClick = { navController.navigate(Dest.R.privacyPolicy) }) {
-                    Text(text = "Privacy Policy")
-                }
+
                 Button(onClick = {
                     uriHandler.openUri("https://play.google.com/store/apps/details?id=cz.lastaapps.menza")
                 }) {

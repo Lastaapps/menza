@@ -19,6 +19,7 @@
 
 package cz.lastaapps.entity.day
 
+import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
@@ -35,6 +36,7 @@ data class Dish(
     val courseType: CourseType,
     val amount: Amount?,
     val name: String,
+    val allergens: List<AllergenId>,
     val allergenDishId: DishAllergensPage?,
     val imageUrl: String?,
     val priceStudent: Price,

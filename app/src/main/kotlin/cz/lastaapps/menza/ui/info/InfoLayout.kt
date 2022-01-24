@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
-import cz.lastaapps.menza.ui.main.MenzaViewModel
+import cz.lastaapps.menza.ui.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
 import cz.lastaapps.menza.ui.root.AppLayoutMedium
@@ -121,7 +121,12 @@ fun InfoLayoutCompact(
             scope.launch { drawerState.open() }
         }
     ) {
-        InfoAllTogether(menzaId = menzaId, viewModel = viewModel, Modifier.fillMaxSize())
+        InfoAllTogether(
+            navController = navController,
+            menzaId = menzaId,
+            viewModel = viewModel,
+            Modifier.fillMaxSize(),
+        )
     }
 }
 
@@ -149,7 +154,12 @@ fun InfoLayoutMedium(
         onExpandedClicked = onExpandedClicked,
         showBackButton = false,
     ) {
-        InfoAllTogether(menzaId = menzaId, viewModel = viewModel, Modifier.fillMaxSize())
+        InfoAllTogether(
+            navController = navController,
+            menzaId = menzaId,
+            viewModel = viewModel,
+            Modifier.fillMaxSize(),
+        )
     }
 }
 
@@ -177,7 +187,12 @@ fun InfoLayoutExpanded(
         onExpandedClicked = onExpandedClicked,
         showBackButton = false,
         panel1 = {
-            InfoPrimary(menzaId = menzaId, viewModel = viewModel, Modifier.fillMaxSize())
+            InfoPrimary(
+                navController = navController,
+                menzaId = menzaId,
+                viewModel = viewModel,
+                Modifier.fillMaxSize()
+            )
         },
         panel2 = {
             InfoSecondary(menzaId = menzaId, viewModel = viewModel, Modifier.fillMaxSize())

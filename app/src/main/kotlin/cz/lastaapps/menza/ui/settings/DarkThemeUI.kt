@@ -111,25 +111,21 @@ private fun ThemeItem(
     onItemSelected: () -> Unit,
 ) {
     val color = if (isSelected)
-        MaterialTheme.colorScheme.secondaryContainer
+        MaterialTheme.colorScheme.primary
     else
-        MaterialTheme.colorScheme.tertiaryContainer
+        MaterialTheme.colorScheme.tertiary
 
     Surface(
         color = color,
         onClick = { onItemSelected() },
         modifier = modifier,
-        tonalElevation = 16.dp,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
             modifier = Modifier.padding(4.dp),
         ) {
-            Surface(
-                color = color,
-                tonalElevation = 32.dp,
-            ) {
+            Surface(color = color) {
                 Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
                     Icon(item.icon, contentDescription = item.title)
                 }

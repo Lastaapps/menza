@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.main
+package cz.lastaapps.menza.ui.menza
 
 import android.app.Application
 import android.os.Build

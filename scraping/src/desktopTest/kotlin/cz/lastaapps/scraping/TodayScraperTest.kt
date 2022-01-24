@@ -19,6 +19,7 @@
 
 package cz.lastaapps.scraping
 
+import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
@@ -408,6 +409,7 @@ class TodayScraperTest {
             CourseType("Hlavní jídla", 2),
             Amount("120 g"),
             "Hovězí pečeně frankfurtská, karlovarské knedlíky",
+            listOf(1, 3, 5, 6, 7, 9, 10, 14).map { AllergenId(it) },
             DishAllergensPage(340616),
             "https://agata.suz.cvut.cz/jidelnicky/showfoto.php?clPodsystem=4&xFile=IMG-2022-01-06-100010746.JPG",
             Price(79),
@@ -418,6 +420,7 @@ class TodayScraperTest {
 
     @Test
     fun malformed() = runTest {
+        @Suppress("UNUSED_VARIABLE")
         val valid = """<body>
   <input type='hidden' id='PodsysActive' value='4'>
   <div id="jidelnicek">
@@ -433,7 +436,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -463,7 +466,7 @@ class TodayScraperTest {
           <td>Hovězí vývar se zeleninou a nudlemi </td>
           <td>
             <div>                        
-              <a href="alergeny.php?alergen=340633"></a>
+              <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
             </div>
           </td>
           <td></td>
@@ -494,7 +497,7 @@ class TodayScraperTest {
           <td>Hovězí vývar se zeleninou a nudlemi </td>
           <td>
             <div>                        
-              <a href="alergeny.php?alergen=340633"></a>
+              <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
             </div>
           </td>
           <td></td>
@@ -525,7 +528,7 @@ class TodayScraperTest {
           <td>Hovězí vývar se zeleninou a nudlemi </td>
           <td>
             <div>                        
-              <a href="alergeny.php?alergen=340633"></a>
+              <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
             </div>
           </td>
           <td></td>
@@ -553,7 +556,7 @@ class TodayScraperTest {
           <td>Hovězí vývar se zeleninou a nudlemi </td>
           <td>
             <div>                        
-              <a href="alergeny.php?alergen=340633"></a>
+              <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
             </div>
           </td>
           <td></td>
@@ -591,7 +594,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -621,7 +624,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -652,7 +655,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -683,6 +686,37 @@ class TodayScraperTest {
             <td></td>
             <td>
               <div>                        
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
+              </div>
+            </td>
+            <td></td>
+            <td>12,00&nbsp;Kč</td>
+            <td>20,00&nbsp;Kč</td>
+            <td>
+              <span id="v0v18" title="Jídelna">J</span>   
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>"""
+        val noAllergenTitle = """<body>
+  <input type='hidden' id='PodsysActive' value='4'>
+  <div id="jidelnicek">
+    <div class='data'>
+      <table>
+        <tbody>
+          <tr>
+            <th colspan='9' class="thkategorie">Polévky</th>
+          </tr>
+          <tr>
+            <td></td>
+            <td>100&nbsp;ml</td>
+            <td>Hovězí vývar se zeleninou a nudlemi </td>
+            <td>
+              <div>                        
                 <a href="alergeny.php?alergen=340633"></a>
               </div>
             </td>
@@ -699,7 +733,131 @@ class TodayScraperTest {
     </div>
   </div>
 </body>"""
-        val noAllergenId = """<body>
+        val spaceDelimiter = """<body>
+  <input type='hidden' id='PodsysActive' value='4'>
+  <div id="jidelnicek">
+    <div class='data'>
+      <table>
+        <tbody>
+          <tr>
+            <th colspan='9' class="thkategorie">Polévky</th>
+          </tr>
+          <tr>
+            <td></td>
+            <td>100&nbsp;ml</td>
+            <td>Hovězí vývar se zeleninou a nudlemi </td>
+            <td>
+              <div>                        
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1 3 7 9"></a>
+              </div>
+            </td>
+            <td></td>
+            <td>12,00&nbsp;Kč</td>
+            <td>20,00&nbsp;Kč</td>
+            <td>
+              <span id="v0v18" title="Jídelna">J</span>   
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>"""
+        val noAllergenButDelimiters = """<body>
+  <input type='hidden' id='PodsysActive' value='4'>
+  <div id="jidelnicek">
+    <div class='data'>
+      <table>
+        <tbody>
+          <tr>
+            <th colspan='9' class="thkategorie">Polévky</th>
+          </tr>
+          <tr>
+            <td></td>
+            <td>100&nbsp;ml</td>
+            <td>Hovězí vývar se zeleninou a nudlemi </td>
+            <td>
+              <div>                        
+                <a href="alergeny.php?alergen=340633" title="Alergeny: ,,,"></a>
+              </div>
+            </td>
+            <td></td>
+            <td>12,00&nbsp;Kč</td>
+            <td>20,00&nbsp;Kč</td>
+            <td>
+              <span id="v0v18" title="Jídelna">J</span>   
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>"""
+        val invalidAllergenIds = """<body>
+  <input type='hidden' id='PodsysActive' value='4'>
+  <div id="jidelnicek">
+    <div class='data'>
+      <table>
+        <tbody>
+          <tr>
+            <th colspan='9' class="thkategorie">Polévky</th>
+          </tr>
+          <tr>
+            <td></td>
+            <td>100&nbsp;ml</td>
+            <td>Hovězí vývar se zeleninou a nudlemi </td>
+            <td>
+              <div>                        
+                <a href="alergeny.php?alergen=340633" title="Alergeny: a,b,c,d"></a>
+              </div>
+            </td>
+            <td></td>
+            <td>12,00&nbsp;Kč</td>
+            <td>20,00&nbsp;Kč</td>
+            <td>
+              <span id="v0v18" title="Jídelna">J</span>   
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>"""
+        val negativeAllergenIds = """<body>
+  <input type='hidden' id='PodsysActive' value='4'>
+  <div id="jidelnicek">
+    <div class='data'>
+      <table>
+        <tbody>
+          <tr>
+            <th colspan='9' class="thkategorie">Polévky</th>
+          </tr>
+          <tr>
+            <td></td>
+            <td>100&nbsp;ml</td>
+            <td>Hovězí vývar se zeleninou a nudlemi </td>
+            <td>
+              <div>                        
+                <a href="alergeny.php?alergen=340633" title="Alergeny: -1,-3,7,9"></a>
+              </div>
+            </td>
+            <td></td>
+            <td>12,00&nbsp;Kč</td>
+            <td>20,00&nbsp;Kč</td>
+            <td>
+              <span id="v0v18" title="Jídelna">J</span>   
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>"""
+        val noAllergenPageId = """<body>
   <input type='hidden' id='PodsysActive' value='4'>
   <div id="jidelnicek">
     <div class='data'>
@@ -730,7 +888,7 @@ class TodayScraperTest {
     </div>
   </div>
 </body>"""
-        val noAllergenIdTag = """<body>
+        val noAllergenPageIdTag = """<body>
   <input type='hidden' id='PodsysActive' value='4'>
   <div id="jidelnicek">
     <div class='data'>
@@ -760,7 +918,7 @@ class TodayScraperTest {
     </div>
   </div>
 </body>"""
-        val invalidAllergenId = """<body>
+        val invalidAllergenPageId = """<body>
   <input type='hidden' id='PodsysActive' value='4'>
   <div id="jidelnicek">
     <div class='data'>
@@ -806,7 +964,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -837,7 +995,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -868,7 +1026,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -899,7 +1057,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -930,7 +1088,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -961,7 +1119,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -992,7 +1150,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -1023,7 +1181,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -1054,7 +1212,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -1085,7 +1243,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -1116,7 +1274,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -1147,7 +1305,7 @@ class TodayScraperTest {
             <td>Hovězí vývar se zeleninou a nudlemi </td>
             <td>
               <div>                        
-                <a href="alergeny.php?alergen=340633"></a>
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
               </div>
             </td>
             <td></td>
@@ -1187,9 +1345,12 @@ class TodayScraperTest {
         shouldThrowAny { TodayScraperImpl.scrape(noCategoryName) }
         shouldThrowAny { TodayScraperImpl.scrape(noCategoryTag) }
         shouldThrowAny { TodayScraperImpl.scrape(noDishName) }
-        shouldThrowAny { TodayScraperImpl.scrape(noAllergenId) }
-        TodayScraperImpl.scrape(noAllergenIdTag).shouldNotBeEmpty()
-        shouldThrowAny { TodayScraperImpl.scrape(invalidAllergenId) }
+        shouldThrowAny { TodayScraperImpl.scrape(noAllergenTitle) }
+        shouldThrowAny { TodayScraperImpl.scrape(invalidAllergenIds) }
+        shouldThrowAny { TodayScraperImpl.scrape(negativeAllergenIds) }
+        shouldThrowAny { TodayScraperImpl.scrape(noAllergenPageId) }
+        TodayScraperImpl.scrape(noAllergenPageIdTag).shouldNotBeEmpty()
+        shouldThrowAny { TodayScraperImpl.scrape(invalidAllergenPageId) }
         shouldThrowAny { TodayScraperImpl.scrape(noPrice) }
         shouldThrowAny { TodayScraperImpl.scrape(invalidPrice) }
         shouldThrowAny { TodayScraperImpl.scrape(toShortLocationId) }
@@ -1201,6 +1362,8 @@ class TodayScraperTest {
 
         TodayScraperImpl.scrape(noTable).shouldBeEmpty()
         TodayScraperImpl.scrape(noAmount).shouldNotBeEmpty()
+        TodayScraperImpl.scrape(spaceDelimiter).shouldNotBeEmpty()
+        TodayScraperImpl.scrape(noAllergenButDelimiters).shouldNotBeEmpty()
         TodayScraperImpl.scrape(priceDecimalPointFormat).shouldNotBeEmpty()
         TodayScraperImpl.scrape(priceOtherCurrency).shouldNotBeEmpty()
         TodayScraperImpl.scrape(priceNoDecimal).shouldNotBeEmpty()

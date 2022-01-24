@@ -22,10 +22,7 @@ package cz.lastaapps.menza.ui.others.privacy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,7 +60,7 @@ fun PrivacyDialogContent(
             Text("This app doesn't collect or send any private data. If you don't trust it, you can check source code yourself.")
 
             val context = LocalContext.current
-            Button(onClick = { Communication.openProjectsGithub(context, "Menza") }) {
+            OutlinedButton(onClick = { Communication.openProjectsGithub(context, "Menza") }) {
                 Text("View source code")
             }
             if (showAccept)

@@ -20,20 +20,25 @@
 package cz.lastaapps.menza.ui.today
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
-import cz.lastaapps.menza.ui.main.MenzaViewModel
+import cz.lastaapps.menza.ui.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
 import cz.lastaapps.menza.ui.root.AppLayoutMedium
+import cz.lastaapps.menza.ui.settings.SettingsViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +53,7 @@ fun TodayDest(
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     todayViewModel: TodayViewModel,
+    settingsViewModel: SettingsViewModel,
 ) {
     remember(menzaId) { todayViewModel.menzaSpotted(menzaId); null }
 
@@ -69,6 +75,7 @@ fun TodayDest(
                 viewModel = todayViewModel,
                 selectedDish = selectedDish,
                 onDishSelected = onDishSelected,
+                settingsViewModel = settingsViewModel,
             )
         }
         WindowSizeClass.MEDIUM -> {
@@ -84,6 +91,7 @@ fun TodayDest(
                 viewModel = todayViewModel,
                 selectedDish = selectedDish,
                 onDishSelected = onDishSelected,
+                settingsViewModel = settingsViewModel,
             )
         }
         WindowSizeClass.EXPANDED -> {
@@ -99,6 +107,7 @@ fun TodayDest(
                 viewModel = todayViewModel,
                 selectedDish = selectedDish,
                 onDishSelected = onDishSelected,
+                settingsViewModel = settingsViewModel,
             )
         }
     }
@@ -118,6 +127,7 @@ fun TodayDestCompact(
     viewModel: TodayViewModel,
     selectedDish: Dish?,
     onDishSelected: (Dish?) -> Unit,
+    settingsViewModel: SettingsViewModel,
 ) {
     val scope = rememberCoroutineScope()
 
@@ -144,12 +154,15 @@ fun TodayDestCompact(
         }
         if (selectedDish == null) {
             TodayDishList(
+                navController = navController,
                 menzaId = menzaId,
                 onDishSelected = onDishSelected,
                 viewModel = viewModel,
+                settingsViewModel = settingsViewModel,
+                modifier = Modifier.fillMaxSize(),
             )
         } else {
-            Text(text = selectedDish.name)
+            TodayInfo(dish = selectedDish, Modifier.fillMaxSize())
         }
     }
 }
@@ -168,6 +181,7 @@ fun TodayDestMedium(
     viewModel: TodayViewModel,
     selectedDish: Dish?,
     onDishSelected: (Dish?) -> Unit,
+    settingsViewModel: SettingsViewModel,
 ) {
     AppLayoutMedium(
         navController = navController,
@@ -188,12 +202,15 @@ fun TodayDestMedium(
         }
         if (selectedDish == null) {
             TodayDishList(
+                navController = navController,
                 menzaId = menzaId,
                 onDishSelected = onDishSelected,
                 viewModel = viewModel,
+                settingsViewModel = settingsViewModel,
+                modifier = Modifier.fillMaxSize(),
             )
         } else {
-            Text(text = selectedDish.name)
+            TodayInfo(dish = selectedDish, Modifier.fillMaxSize())
         }
     }
 }
@@ -212,6 +229,7 @@ fun TodayDestExpanded(
     viewModel: TodayViewModel,
     selectedDish: Dish?,
     onDishSelected: (Dish?) -> Unit,
+    settingsViewModel: SettingsViewModel,
 ) {
     AppLayoutExpanded(
         navController = navController,
@@ -225,16 +243,21 @@ fun TodayDestExpanded(
         showBackButton = false,
         panel1 = {
             TodayDishList(
+                navController = navController,
                 menzaId = menzaId,
                 onDishSelected = onDishSelected,
                 viewModel = viewModel,
+                settingsViewModel = settingsViewModel,
+                modifier = Modifier.fillMaxSize(),
             )
         },
         panel2 = {
             if (selectedDish == null) {
-                Text("Nothing selected")
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Not dish selected")
+                }
             } else {
-                Text(text = selectedDish.name)
+                TodayInfo(dish = selectedDish, Modifier.fillMaxSize())
             }
         }
     )

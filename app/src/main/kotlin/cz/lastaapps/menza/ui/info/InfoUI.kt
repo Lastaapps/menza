@@ -25,23 +25,24 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.ui.menza.MenzaNotSelected
 
 @Composable
 fun InfoAllTogether(
+    navController: NavController,
     menzaId: MenzaId?,
     viewModel: InfoViewModel,
     modifier: Modifier = Modifier,
 ) {
     if (menzaId == null) {
-        InfoNoMenza(modifier)
+        MenzaNotSelected(navController, modifier)
         return
     }
 
@@ -68,12 +69,13 @@ fun InfoAllTogether(
 
 @Composable
 fun InfoPrimary(
+    navController: NavController,
     menzaId: MenzaId?,
     viewModel: InfoViewModel,
     modifier: Modifier = Modifier,
 ) {
     if (menzaId == null) {
-        InfoNoMenza(modifier)
+        MenzaNotSelected(navController, modifier)
         return
     }
 
@@ -120,15 +122,6 @@ fun InfoSecondary(
                 AddressList(locations = location!!, fillModifier)
             }
         }
-    }
-}
-
-@Composable
-private fun InfoNoMenza(
-    modifier: Modifier = Modifier,
-) {
-    Box(modifier, contentAlignment = Alignment.Center) {
-        Text("No menza selected")
     }
 }
 

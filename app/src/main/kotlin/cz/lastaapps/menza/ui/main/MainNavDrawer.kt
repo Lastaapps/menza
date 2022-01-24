@@ -19,14 +19,19 @@
 
 package cz.lastaapps.menza.ui.main
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.NavigationDrawer
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.lastaapps.common.DeveloperInfo
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.ui.menza.MenzaViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,13 +48,29 @@ fun MenzaNavDrawer(
         modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
-            MenzaList(
+            Column(
                 modifier = Modifier.padding(8.dp),
-                selectedMenza = selectedMenza,
-                onMenzaSelected = onMenzaSelected,
-                menzaListViewModel = menzaListViewModel,
-                expanded = true,
-            )
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    "ČVUT Menza", style = MaterialTheme.typography.headlineMedium
+                )
+
+                MenzaList(
+                    selectedMenza = selectedMenza,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaListViewModel = menzaListViewModel,
+                    expanded = true,
+                    modifier = Modifier.weight(1f),
+                )
+
+                Text(
+                    text = DeveloperInfo.getNameAndBuildYear(LocalContext.current),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                )
+            }
         },
         content = content,
     )

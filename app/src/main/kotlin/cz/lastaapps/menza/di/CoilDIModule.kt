@@ -30,6 +30,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -49,7 +50,11 @@ object CoilDIModule {
             .okHttpClient {
                 OkHttpClient.Builder()
                     .cache(CoilUtils.createDefaultCache(app))
+                    .callTimeout(3, TimeUnit.SECONDS)
+                    .connectTimeout(3, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
                     .addNetworkInterceptor(CacheHeaderInterceptor)
+                    .retryOnConnectionFailure(false)
                     .build()
             }
             .build()

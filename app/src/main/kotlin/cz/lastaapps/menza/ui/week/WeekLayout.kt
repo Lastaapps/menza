@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
-import cz.lastaapps.menza.ui.main.MenzaViewModel
+import cz.lastaapps.menza.ui.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpandedSimple
 import kotlinx.coroutines.launch
@@ -109,6 +109,7 @@ private fun WeekLayoutCompact(
         }
     ) {
         WeekDishList(
+            navController = navController,
             menzaId = menzaId,
             viewModel = viewModel,
             modifier = Modifier.fillMaxSize(),
@@ -141,9 +142,10 @@ private fun WeekLayoutExpanded(
         showBackButton = false
     ) {
         WeekDishList(
+            navController = navController,
             menzaId = menzaId,
             viewModel = viewModel,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
