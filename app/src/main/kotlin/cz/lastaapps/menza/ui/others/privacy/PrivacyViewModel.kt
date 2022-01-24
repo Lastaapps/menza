@@ -17,33 +17,29 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.di
+package cz.lastaapps.menza.ui.others.privacy
 
-import android.app.Application
-import cz.lastaapps.menza.ui.others.privacy.PrivacyStore
-import cz.lastaapps.menza.ui.settings.store.SettingsStore
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Singleton
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import javax.inject.Inject
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DataStoreDIModule {
+@HiltViewModel
+class PrivacyViewModel @Inject constructor(
+    private val store: PrivacyStore,
+) : ViewModel() {
 
-    @Provides
-    @Singleton
-    fun provideSettingsDataStore(app: Application): SettingsStore {
-        return SettingsStore(app, CoroutineScope(Dispatchers.Default))
+    val shouldShow = store.approved.map { it == null }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    fun onApprove() {
+        viewModelScope.launch {
+            store.setApproved(LocalDate.now())
+        }
     }
-
-    @Provides
-    @Singleton
-    fun providePrivacyDataStore(app: Application): PrivacyStore {
-        return PrivacyStore(app)
-    }
-
 }

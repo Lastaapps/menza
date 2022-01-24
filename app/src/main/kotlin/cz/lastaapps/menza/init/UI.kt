@@ -36,6 +36,7 @@ import kotlinx.coroutines.channels.consumeEach
 @Composable
 fun InitDecision(
     viewModel: InitViewModel,
+    onDrawReady: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -67,6 +68,10 @@ fun InitDecision(
                 InitContent(viewModel = viewModel, Modifier.fillMaxSize())
             }
         })
+
+    // Splashscreen is shown until actual download started, so there are no blink while
+    // hasData() queries are executed
+    onDrawReady()
 }
 
 @Composable

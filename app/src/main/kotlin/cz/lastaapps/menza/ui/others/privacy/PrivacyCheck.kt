@@ -17,33 +17,34 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.di
+package cz.lastaapps.menza.ui.others.privacy
 
-import android.app.Application
-import cz.lastaapps.menza.ui.others.privacy.PrivacyStore
-import cz.lastaapps.menza.ui.settings.store.SettingsStore
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Singleton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DataStoreDIModule {
+@Composable
+fun PrivacyCheck(
+    privacyViewModel: PrivacyViewModel,
+    onDrawReady: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    val state by privacyViewModel.shouldShow.collectAsState()
 
-    @Provides
-    @Singleton
-    fun provideSettingsDataStore(app: Application): SettingsStore {
-        return SettingsStore(app, CoroutineScope(Dispatchers.Default))
+    when (state) {
+        false -> {
+            content()
+        }
+        true -> {
+            PrivacyDialog(
+                shown = true,
+                onDismissRequest = {},
+                showAccept = true,
+            ) {
+                privacyViewModel.onApprove()
+            }
+            onDrawReady()
+        }
+        else -> {}
     }
-
-    @Provides
-    @Singleton
-    fun providePrivacyDataStore(app: Application): PrivacyStore {
-        return PrivacyStore(app)
-    }
-
 }

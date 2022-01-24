@@ -59,7 +59,7 @@ fun MenzaList(
                 .animateContentSize()
                 .width(IntrinsicSize.Max)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Bottom),
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start,
         ) {
             menzaList.forEach { item ->
@@ -103,7 +103,6 @@ private fun MenzaItem(
 
             if (expanded) {
                 Text(menza.name)
-                Spacer(modifier = Modifier.width(16.dp))
             }
         }
     }

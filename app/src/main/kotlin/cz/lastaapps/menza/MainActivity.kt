@@ -68,8 +68,8 @@ class MainActivity : ComponentActivity() {
                     viewModel = rootViewModel,
                     imageLoader = imageLoader,
                     viewModelStoreOwner = this,
+                    onDrawReady = { composeRun = true }
                 )
-                composeRun = true
             }
         }
     }

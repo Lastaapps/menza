@@ -17,27 +17,30 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.week
+package cz.lastaapps.menza.ui.others.vosturak
 
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
 import cz.lastaapps.menza.ui.main.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
-import cz.lastaapps.menza.ui.root.AppLayoutExpandedSimple
-import kotlinx.coroutines.launch
+import cz.lastaapps.menza.ui.root.AppLayoutExpanded
+import cz.lastaapps.menza.ui.root.AppLayoutMedium
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeekLayout(
+fun VosturakLayout(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -46,12 +49,12 @@ fun WeekLayout(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    weekViewModel: WeekViewModel,
 ) {
+
     @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
-            WeekLayoutCompact(
+            VosturakLayoutCompact(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
@@ -60,11 +63,10 @@ fun WeekLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
-                viewModel = weekViewModel,
             )
         }
-        in listOf(WindowSizeClass.MEDIUM, WindowSizeClass.EXPANDED) -> {
-            WeekLayoutExpanded(
+        WindowSizeClass.MEDIUM -> {
+            VosturakLayoutMedium(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
@@ -73,7 +75,18 @@ fun WeekLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
-                viewModel = weekViewModel,
+            )
+        }
+        WindowSizeClass.EXPANDED -> {
+            VosturakLayoutExpanded(
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                drawerState = drawerState,
+                expanded = expanded,
+                onExpandedClicked = onExpandedClicked,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel,
             )
         }
     }
@@ -81,7 +94,7 @@ fun WeekLayout(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun WeekLayoutCompact(
+fun VosturakLayoutCompact(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -90,9 +103,7 @@ private fun WeekLayoutCompact(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    viewModel: WeekViewModel,
 ) {
-    val scope = rememberCoroutineScope()
     AppLayoutCompact(
         navController = navController,
         menzaId = menzaId,
@@ -102,23 +113,25 @@ private fun WeekLayoutCompact(
         drawerState = drawerState,
         expanded = expanded,
         onExpandedClicked = onExpandedClicked,
-        enableIcon = true,
-        showHamburgerMenu = true,
-        onMenuButtonClicked = {
-            scope.launch { drawerState.open() }
-        }
+        enableIcon = false,
+        showHamburgerMenu = false,
+        onMenuButtonClicked = {},
     ) {
-        WeekDishList(
-            menzaId = menzaId,
-            viewModel = viewModel,
-            modifier = Modifier.fillMaxSize(),
-        )
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                VosturakText()
+                VosturakImages(Modifier.fillMaxWidth())
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun WeekLayoutExpanded(
+fun VosturakLayoutMedium(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -127,9 +140,8 @@ private fun WeekLayoutExpanded(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    viewModel: WeekViewModel,
 ) {
-    AppLayoutExpandedSimple(
+    AppLayoutMedium(
         navController = navController,
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
@@ -138,18 +150,61 @@ private fun WeekLayoutExpanded(
         drawerState = drawerState,
         expanded = expanded,
         onExpandedClicked = onExpandedClicked,
-        showBackButton = false
+        showBackButton = false,
     ) {
-        WeekDishList(
-            menzaId = menzaId,
-            viewModel = viewModel,
-            modifier = Modifier.fillMaxSize()
-        )
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                VosturakText()
+                VosturakImages(Modifier.fillMaxWidth())
+            }
+        }
     }
 }
 
-
-
-
-
-
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun VosturakLayoutExpanded(
+    navController: NavController,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+) {
+    AppLayoutExpanded(
+        navController = navController,
+        menzaId = menzaId,
+        onMenzaSelected = onMenzaSelected,
+        menzaViewModel = menzaViewModel,
+        snackbarHostState = snackbarHostState,
+        drawerState = drawerState,
+        expanded = expanded,
+        onExpandedClicked = onExpandedClicked,
+        showBackButton = false,
+        panel1 = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                contentAlignment = Alignment.Center
+            ) {
+                VosturakText()
+            }
+        },
+        panel2 = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                contentAlignment = Alignment.Center
+            ) {
+                VosturakImages()
+            }
+        }
+    )
+}

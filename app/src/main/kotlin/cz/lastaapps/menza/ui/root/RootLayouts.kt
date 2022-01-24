@@ -26,21 +26,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.window.layout.FoldingFeature
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.FoldingClass
 import cz.lastaapps.menza.ui.LocalFoldProvider
 import cz.lastaapps.menza.ui.main.*
 import kotlinx.coroutines.launch
 
+val sidesPadding = 16.dp
 
+@Suppress("UNUSED_PARAMETER")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppLayoutCompact(
@@ -51,6 +54,8 @@ fun AppLayoutCompact(
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     enableIcon: Boolean,
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
     showHamburgerMenu: Boolean, //or the back arrow
     onMenuButtonClicked: () -> Unit,
     content: @Composable () -> Unit
@@ -95,6 +100,7 @@ fun AppLayoutCompact(
             Box(
                 Modifier
                     .padding(insets)
+                    .padding(sidesPadding)
                     .fillMaxSize()
             ) {
                 content()
@@ -112,11 +118,13 @@ fun AppLayoutCompact(
 fun AppLayoutMedium(
     navController: NavController,
     menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId) -> Unit,
+    onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     showBackButton: Boolean,
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
     onBackButtonPressed: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
@@ -124,7 +132,6 @@ fun AppLayoutMedium(
         menzaId?.let { menzaViewModel.getForId(menzaId) }
     }
 
-    val scope = rememberCoroutineScope()
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = {
@@ -150,25 +157,20 @@ fun AppLayoutMedium(
                 .fillMaxSize()
         ) {
             MainNavRail(navController)
-            Column(Modifier.fillMaxHeight()) {
-                var expanded by rememberSaveable() { mutableStateOf(false) }
-                MenzaList(
-                    modifier = Modifier.weight(1f),
-                    selectedMenza = menzaId,
-                    onMenzaSelected = {
-                        onMenzaSelected(it)
-                        scope.launch { drawerState.close() }
-                    },
-                    expanded = expanded,
-                    menzaListViewModel = menzaViewModel,
-                )
-                val rotation by animateFloatAsState(if (expanded) 0f else 180f)
-                IconButton(onClick = { expanded = !expanded }, Modifier.rotate(rotation)) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null)
-                }
-            }
+            MenzaListExpandable(
+                drawerState = drawerState,
+                expanded = expanded,
+                onClick = onExpandedClicked,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel
+            )
 
-            Box(Modifier.fillMaxSize()) {
+            Box(
+                Modifier
+                    .padding(sidesPadding)
+                    .fillMaxSize()
+            ) {
                 content()
             }
         }
@@ -180,11 +182,13 @@ fun AppLayoutMedium(
 fun AppLayoutExpandedSimple(
     navController: NavController,
     menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId) -> Unit,
+    onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     showBackButton: Boolean,
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
     onBackButtonPressed: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
@@ -192,7 +196,6 @@ fun AppLayoutExpandedSimple(
         menzaId?.let { menzaViewModel.getForId(menzaId) }
     }
 
-    val scope = rememberCoroutineScope()
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = {
@@ -218,25 +221,20 @@ fun AppLayoutExpandedSimple(
                 .fillMaxSize()
         ) {
             MainNavRail(navController)
-            Column(Modifier.fillMaxHeight()) {
-                var expanded by rememberSaveable() { mutableStateOf(false) }
-                MenzaList(
-                    modifier = Modifier.weight(1f),
-                    selectedMenza = menzaId,
-                    onMenzaSelected = {
-                        onMenzaSelected(it)
-                        scope.launch { drawerState.close() }
-                    },
-                    expanded = expanded,
-                    menzaListViewModel = menzaViewModel,
-                )
-                val rotation by animateFloatAsState(if (expanded) 0f else 180f)
-                IconButton(onClick = { expanded = !expanded }, Modifier.rotate(rotation)) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null)
-                }
-            }
+            MenzaListExpandable(
+                drawerState = drawerState,
+                expanded = expanded,
+                onClick = onExpandedClicked,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel
+            )
 
-            Box(Modifier.fillMaxSize()) {
+            Box(
+                Modifier
+                    .padding(sidesPadding)
+                    .fillMaxSize()
+            ) {
                 content()
             }
         }
@@ -248,12 +246,63 @@ fun AppLayoutExpandedSimple(
 fun AppLayoutExpanded(
     navController: NavController,
     menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId) -> Unit,
+    onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     showBackButton: Boolean,
     onBackButtonPressed: () -> Unit = {},
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
+    panel1: @Composable () -> Unit,
+    panel2: @Composable () -> Unit
+) {
+    val foldingFeature = LocalFoldProvider.current
+    if (foldingFeature is FoldingClass.Supported)
+        AppLayoutExpandedFold(
+            navController = navController,
+            menzaId = menzaId,
+            onMenzaSelected = onMenzaSelected,
+            menzaViewModel = menzaViewModel,
+            snackbarHostState = snackbarHostState,
+            drawerState = drawerState,
+            showBackButton = showBackButton,
+            onBackButtonPressed = onBackButtonPressed,
+            expanded = expanded,
+            onExpandedClicked = onExpandedClicked,
+            panel1 = panel1,
+            panel2 = panel2,
+        )
+    else
+        AppLayoutExpandedNoFold(
+            navController = navController,
+            menzaId = menzaId,
+            onMenzaSelected = onMenzaSelected,
+            menzaViewModel = menzaViewModel,
+            snackbarHostState = snackbarHostState,
+            drawerState = drawerState,
+            showBackButton = showBackButton,
+            onBackButtonPressed = onBackButtonPressed,
+            expanded = expanded,
+            onExpandedClicked = onExpandedClicked,
+            panel1 = panel1,
+            panel2 = panel2,
+        )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppLayoutExpandedNoFold(
+    navController: NavController,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
+    showBackButton: Boolean,
+    onBackButtonPressed: () -> Unit = {},
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
     panel1: @Composable () -> Unit,
     panel2: @Composable () -> Unit
 ) {
@@ -261,7 +310,6 @@ fun AppLayoutExpanded(
         menzaId?.let { menzaViewModel.getForId(menzaId) }
     }
 
-    val scope = rememberCoroutineScope()
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = {
@@ -286,43 +334,123 @@ fun AppLayoutExpanded(
                 .padding(insets)
                 .fillMaxSize()
         ) {
-            var weightStart = 0.66f
-            var weightEnd = 0.33f
-            var spacesWidth = 0.dp
 
-            val foldingFeature = LocalFoldProvider.current
-            if (foldingFeature is FoldingClass.Supported) {
-                val feature = foldingFeature.foldingFeature
-                if (feature.orientation == FoldingFeature.Orientation.VERTICAL && feature.isSeparating) {
-                    weightStart = 0.5f
-                    weightEnd = 0.5f
-                    with(LocalDensity.current) {
-                        spacesWidth = feature.bounds.width().toDp()
-                    }
-                }
+            MainNavRail(navController)
+
+            MenzaListExpandable(
+                drawerState = drawerState,
+                expanded = expanded,
+                onClick = onExpandedClicked,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel,
+            )
+
+            Box(
+                modifier = Modifier
+                    .padding(
+                        top = sidesPadding,
+                        bottom = sidesPadding,
+                        start = sidesPadding,
+                        end = sidesPadding / 2,
+                    )
+                    .fillMaxHeight()
+                    .weight(1f)
+            ) {
+                panel1()
+            }
+
+            Box(
+                modifier = Modifier
+                    .padding(
+                        top = sidesPadding,
+                        bottom = sidesPadding,
+                        start = sidesPadding / 2,
+                        end = sidesPadding,
+                    )
+                    .fillMaxHeight()
+                    .weight(1f)
+            ) {
+                panel2()
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppLayoutExpandedFold(
+    navController: NavController,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
+    showBackButton: Boolean,
+    onBackButtonPressed: () -> Unit = {},
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
+    panel1: @Composable () -> Unit,
+    panel2: @Composable () -> Unit
+) {
+    val menza = remember(menzaId) {
+        menzaId?.let { menzaViewModel.getForId(menzaId) }
+    }
+
+    Scaffold(
+        Modifier.fillMaxSize(),
+        topBar = {
+            if (!showBackButton)
+                MainTopBar(
+                    menzaName = menza?.name,
+                )
+            else
+                MainTopBar(
+                    menzaName = menza?.name,
+                    menuIcon = Icons.Default.ArrowBack,
+                    menuDescription = "Go back",
+                    onMenuClicked = onBackButtonPressed,
+                )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+    ) { insets ->
+        Row(
+            Modifier
+                .padding(insets)
+                .fillMaxSize()
+        ) {
+            val foldingFeature = LocalFoldProvider.current as FoldingClass.Supported
+
+            val weightStart = 0.5f
+            val weightEnd = 0.5f
+            val spacesWidth = with(LocalDensity.current) {
+                foldingFeature.foldingFeature.bounds.width().toDp()
             }
 
             Row(Modifier.weight(weightStart)) {
                 MainNavRail(navController)
-                Column(Modifier.fillMaxHeight()) {
-                    var expanded by rememberSaveable() { mutableStateOf(false) }
-                    MenzaList(
-                        modifier = Modifier.weight(1f),
-                        selectedMenza = menzaId,
-                        onMenzaSelected = {
-                            onMenzaSelected(it)
-                            scope.launch { drawerState.close() }
-                        },
-                        expanded = expanded,
-                        menzaListViewModel = menzaViewModel,
-                    )
-                    val rotation by animateFloatAsState(if (expanded) 0f else 180f)
-                    IconButton(onClick = { expanded = !expanded }, Modifier.rotate(rotation)) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = null)
-                    }
-                }
 
-                Box(modifier = Modifier.fillMaxSize()) {
+                MenzaListExpandable(
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onClick = onExpandedClicked,
+                    menzaId = menzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                )
+
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            top = sidesPadding,
+                            bottom = sidesPadding,
+                            start = sidesPadding,
+                            end = sidesPadding / 2,
+                        )
+                        .fillMaxSize()
+                ) {
                     panel1()
                 }
             }
@@ -330,8 +458,17 @@ fun AppLayoutExpanded(
             //used to remove content from the hing area
             Spacer(modifier = Modifier.width(spacesWidth))
 
-            Row(Modifier.weight(weightEnd)) {
-                Box(modifier = Modifier.fillMaxSize()) {
+            Box(Modifier.weight(weightEnd)) {
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            top = sidesPadding,
+                            bottom = sidesPadding,
+                            start = sidesPadding / 2,
+                            end = sidesPadding,
+                        )
+                        .fillMaxSize()
+                ) {
                     panel2()
                 }
             }
@@ -339,3 +476,31 @@ fun AppLayoutExpanded(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MenzaListExpandable(
+    drawerState: DrawerState,
+    expanded: Boolean,
+    onClick: () -> Unit,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+) {
+    val scope = rememberCoroutineScope()
+    Column(Modifier.fillMaxHeight()) {
+        MenzaList(
+            modifier = Modifier.weight(1f),
+            selectedMenza = menzaId,
+            onMenzaSelected = {
+                onMenzaSelected(it)
+                scope.launch { drawerState.close() }
+            },
+            expanded = expanded,
+            menzaListViewModel = menzaViewModel,
+        )
+        val rotation by animateFloatAsState(if (expanded) 0f else 180f)
+        IconButton(onClick = onClick, Modifier.rotate(rotation)) {
+            Icon(Icons.Default.ArrowBack, contentDescription = null)
+        }
+    }
+}

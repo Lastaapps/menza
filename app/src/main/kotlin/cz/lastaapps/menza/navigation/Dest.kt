@@ -24,11 +24,10 @@ object Dest {
         const val today = "today"
         const val week = "week"
         const val info = "info"
-
-        //const val today = "today?${A.menzaId}={${A.menzaId}}"
-        //const val week = "week?${A.menzaId}={${A.menzaId}}"
-        //const val info = "info?${A.menzaId}={${A.menzaId}}"
         const val settings = "settings"
+        const val license = "license"
+        const val vosturak = "vosturak"
+        const val privacyPolicy = "privacyPolicy"
 
         const val start = today
     }

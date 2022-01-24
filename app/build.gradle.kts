@@ -22,6 +22,7 @@ plugins {
     id(Plugins.KOTLIN)
     id(Plugins.KAPT)
     id(Plugins.DAGGER_HILT)
+    id(Plugins.OSS_LICENSE)
 }
 
 android {
@@ -49,7 +50,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
         multiDexEnabled = true
 
     }
@@ -105,6 +105,7 @@ dependencies {
     implementation(project(":scraping"))
     implementation(project(":storage:db"))
     implementation(project(":storage:repo"))
+    implementation(project(":lastaapps:common"))
 
     implementation(Libs.SPLASHSCREEN)
     implementation(Libs.CORE)
@@ -125,6 +126,7 @@ dependencies {
     implementation(Libs.KOTLINX_DATETIME)
     implementation(Libs.SKRAPE_IT)
     implementation(Libs.COIL_COMPOSE_COMPLETE)
+    implementation("com.github.Lastaapps:OssLicenseAccess:1.0")
 
 }
 

@@ -17,16 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.today
+package cz.lastaapps.menza.ui.others.license
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
@@ -34,11 +37,12 @@ import cz.lastaapps.menza.ui.main.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
 import cz.lastaapps.menza.ui.root.AppLayoutMedium
+import cz.lastaapps.osslicenseaccess.ArtifactLicense
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodayDest(
+fun LicenseLayout(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -47,17 +51,17 @@ fun TodayDest(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    todayViewModel: TodayViewModel,
+    licenseViewModel: LicenseViewModel,
 ) {
-    remember(menzaId) { todayViewModel.menzaSpotted(menzaId); null }
-
-    val selectedDish by todayViewModel.selectedDish.collectAsState()
-    val onDishSelected: (Dish?) -> Unit = { todayViewModel.selectDish(it) }
+    val selected by licenseViewModel.selectedLicense.collectAsState()
+    val onArtifactSelected: (ArtifactLicense?) -> Unit = {
+        licenseViewModel.selectLicense(it)
+    }
 
     @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
-            TodayDestCompact(
+            LicenseLayoutCompact(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
@@ -66,13 +70,13 @@ fun TodayDest(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
-                viewModel = todayViewModel,
-                selectedDish = selectedDish,
-                onDishSelected = onDishSelected,
+                selectedArtifact = selected,
+                onArtifactSelected = onArtifactSelected,
+                licenseViewModel = licenseViewModel,
             )
         }
         WindowSizeClass.MEDIUM -> {
-            TodayDestMedium(
+            LicenseLayoutMedium(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
@@ -80,14 +84,14 @@ fun TodayDest(
                 onExpandedClicked = onExpandedClicked,
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
+                selectedArtifact = selected,
+                onArtifactSelected = onArtifactSelected,
                 menzaViewModel = menzaViewModel,
-                viewModel = todayViewModel,
-                selectedDish = selectedDish,
-                onDishSelected = onDishSelected,
+                licenseViewModel = licenseViewModel,
             )
         }
         WindowSizeClass.EXPANDED -> {
-            TodayDestExpanded(
+            LicenseLayoutExpanded(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
@@ -96,9 +100,9 @@ fun TodayDest(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
-                viewModel = todayViewModel,
-                selectedDish = selectedDish,
-                onDishSelected = onDishSelected,
+                selectedArtifact = selected,
+                onArtifactSelected = onArtifactSelected,
+                licenseViewModel = licenseViewModel,
             )
         }
     }
@@ -106,7 +110,7 @@ fun TodayDest(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodayDestCompact(
+fun LicenseLayoutCompact(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -115,9 +119,9 @@ fun TodayDestCompact(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    viewModel: TodayViewModel,
-    selectedDish: Dish?,
-    onDishSelected: (Dish?) -> Unit,
+    selectedArtifact: ArtifactLicense?,
+    onArtifactSelected: (ArtifactLicense?) -> Unit,
+    licenseViewModel: LicenseViewModel,
 ) {
     val scope = rememberCoroutineScope()
 
@@ -131,32 +135,36 @@ fun TodayDestCompact(
         expanded = expanded,
         onExpandedClicked = onExpandedClicked,
         enableIcon = true,
-        showHamburgerMenu = selectedDish == null,
+        showHamburgerMenu = selectedArtifact == null,
         onMenuButtonClicked = {
-            if (selectedDish == null)
+            if (selectedArtifact == null)
                 scope.launch { drawerState.open() }
             else
-                onDishSelected(null)
+                onArtifactSelected(null)
         },
     ) {
-        BackHandler(enabled = selectedDish != null) {
-            onDishSelected(null)
+        BackHandler(enabled = selectedArtifact != null) {
+            onArtifactSelected(null)
         }
-        if (selectedDish == null) {
-            TodayDishList(
-                menzaId = menzaId,
-                onDishSelected = onDishSelected,
-                viewModel = viewModel,
+        if (selectedArtifact == null) {
+            LicenseList(
+                licenseViewModel = licenseViewModel,
+                onArtifactSelected = onArtifactSelected,
+                Modifier.fillMaxSize()
             )
         } else {
-            Text(text = selectedDish.name)
+            LicenseText(
+                selectedArtifact = selectedArtifact,
+                licenseViewModel = licenseViewModel,
+                Modifier.fillMaxSize()
+            )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodayDestMedium(
+fun LicenseLayoutMedium(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -165,9 +173,9 @@ fun TodayDestMedium(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    viewModel: TodayViewModel,
-    selectedDish: Dish?,
-    onDishSelected: (Dish?) -> Unit,
+    selectedArtifact: ArtifactLicense?,
+    onArtifactSelected: (ArtifactLicense?) -> Unit,
+    licenseViewModel: LicenseViewModel,
 ) {
     AppLayoutMedium(
         navController = navController,
@@ -178,29 +186,33 @@ fun TodayDestMedium(
         drawerState = drawerState,
         expanded = expanded,
         onExpandedClicked = onExpandedClicked,
-        showBackButton = selectedDish != null,
+        showBackButton = selectedArtifact != null,
         onBackButtonPressed = {
-            onDishSelected(null)
+            onArtifactSelected(null)
         },
     ) {
-        BackHandler(enabled = selectedDish != null) {
-            onDishSelected(null)
+        BackHandler(enabled = selectedArtifact != null) {
+            onArtifactSelected(null)
         }
-        if (selectedDish == null) {
-            TodayDishList(
-                menzaId = menzaId,
-                onDishSelected = onDishSelected,
-                viewModel = viewModel,
+        if (selectedArtifact == null) {
+            LicenseList(
+                licenseViewModel = licenseViewModel,
+                onArtifactSelected = onArtifactSelected,
+                Modifier.fillMaxSize()
             )
         } else {
-            Text(text = selectedDish.name)
+            LicenseText(
+                selectedArtifact = selectedArtifact,
+                licenseViewModel = licenseViewModel,
+                Modifier.fillMaxSize()
+            )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodayDestExpanded(
+fun LicenseLayoutExpanded(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -209,9 +221,9 @@ fun TodayDestExpanded(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    viewModel: TodayViewModel,
-    selectedDish: Dish?,
-    onDishSelected: (Dish?) -> Unit,
+    selectedArtifact: ArtifactLicense?,
+    onArtifactSelected: (ArtifactLicense?) -> Unit,
+    licenseViewModel: LicenseViewModel,
 ) {
     AppLayoutExpanded(
         navController = navController,
@@ -224,18 +236,18 @@ fun TodayDestExpanded(
         onExpandedClicked = onExpandedClicked,
         showBackButton = false,
         panel1 = {
-            TodayDishList(
-                menzaId = menzaId,
-                onDishSelected = onDishSelected,
-                viewModel = viewModel,
+            LicenseList(
+                licenseViewModel = licenseViewModel,
+                onArtifactSelected = onArtifactSelected,
+                Modifier.fillMaxSize()
             )
         },
         panel2 = {
-            if (selectedDish == null) {
-                Text("Nothing selected")
-            } else {
-                Text(text = selectedDish.name)
-            }
+            LicenseText(
+                selectedArtifact = selectedArtifact,
+                licenseViewModel = licenseViewModel,
+                Modifier.fillMaxSize()
+            )
         }
     )
 }

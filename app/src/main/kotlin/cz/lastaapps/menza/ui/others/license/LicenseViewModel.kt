@@ -17,42 +17,31 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.settings
+package cz.lastaapps.menza.ui.others.license
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import cz.lastaapps.menza.ui.settings.store.*
+import cz.lastaapps.osslicenseaccess.ArtifactLicense
+import cz.lastaapps.osslicenseaccess.LicenseLoader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
-    val sett: SettingsStore
+class LicenseViewModel @Inject constructor(
+    private val app: Application
 ) : ViewModel() {
 
-    val aboutShown = MutableStateFlow(false)
-    fun showAbout(value: Boolean) {
-        aboutShown.value = value
+    val selectedLicense: StateFlow<ArtifactLicense?>
+        get() = mSelectedLicense
+    private val mSelectedLicense = MutableStateFlow<ArtifactLicense?>(null)
+
+    fun selectLicense(artifact: ArtifactLicense?) {
+        mSelectedLicense.value = artifact
     }
 
-    fun setDarkMode(mode: DarkMode) {
-        viewModelScope.launch {
-            sett.setDarkMode(mode)
-        }
-    }
-
-    fun setUseSystemTheme(mode: Boolean) {
-        viewModelScope.launch {
-            sett.setUseSystemTheme(mode)
-        }
-    }
-
-    fun setPriceType(type: PriceType) {
-        viewModelScope.launch {
-            sett.setPriceType(type)
-        }
-    }
+    fun getList() = LicenseLoader.loadLicenses(app).sortedBy { it.name }
+    fun getTextForArtifact(artifact: ArtifactLicense) = LicenseLoader.loadLicenseText(app, artifact)
 
 }

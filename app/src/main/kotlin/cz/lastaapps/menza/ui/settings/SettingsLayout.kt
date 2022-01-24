@@ -19,11 +19,15 @@
 
 package cz.lastaapps.menza.ui.settings
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -31,6 +35,7 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
 import cz.lastaapps.menza.ui.main.MenzaViewModel
+import cz.lastaapps.menza.ui.others.AboutUi
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
 import kotlinx.coroutines.launch
@@ -41,11 +46,16 @@ fun SettingsLayout(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     settingsViewModel: SettingsViewModel,
 ) {
+    val aboutShown by settingsViewModel.aboutShown.collectAsState()
+    val onAboutClicked = { settingsViewModel.showAbout(!aboutShown) }
+
     @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
@@ -53,10 +63,14 @@ fun SettingsLayout(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
+                expanded = expanded,
+                onExpandedClicked = onExpandedClicked,
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
                 viewModel = settingsViewModel,
+                aboutShown = aboutShown,
+                onAboutClicked = onAboutClicked,
             )
         }
         in listOf(WindowSizeClass.MEDIUM, WindowSizeClass.EXPANDED) -> {
@@ -64,6 +78,8 @@ fun SettingsLayout(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
+                expanded = expanded,
+                onExpandedClicked = onExpandedClicked,
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
@@ -79,10 +95,14 @@ fun SettingsLayoutCompact(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     viewModel: SettingsViewModel,
+    aboutShown: Boolean,
+    onAboutClicked: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     AppLayoutCompact(
@@ -92,13 +112,28 @@ fun SettingsLayoutCompact(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
+        expanded = expanded,
+        onExpandedClicked = onExpandedClicked,
         enableIcon = true,
-        showHamburgerMenu = true,
+        showHamburgerMenu = !aboutShown,
         onMenuButtonClicked = {
-            scope.launch { drawerState.open() }
+            if (!aboutShown)
+                scope.launch { drawerState.open() }
+            else
+                onAboutClicked()
         }
     ) {
-        SettingsUI(viewModel = viewModel, modifier = Modifier.fillMaxSize())
+        BackHandler(aboutShown) {
+            onAboutClicked()
+        }
+        SettingsUI(
+            navController = navController,
+            viewModel = viewModel,
+            modifier = Modifier.fillMaxSize(),
+            enableAbout = true,
+            aboutShown = aboutShown,
+            onAboutClicked = onAboutClicked,
+        )
     }
 }
 
@@ -108,6 +143,8 @@ fun SettingsLayoutExpanded(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
+    expanded: Boolean,
+    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -120,8 +157,17 @@ fun SettingsLayoutExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
+        expanded = expanded,
+        onExpandedClicked = onExpandedClicked,
         showBackButton = false,
-        panel1 = { SettingsUI(viewModel = viewModel, modifier = Modifier.fillMaxSize()) },
-        panel2 = {},
+        panel1 = {
+            SettingsUI(
+                navController = navController,
+                viewModel = viewModel,
+                modifier = Modifier.fillMaxSize(),
+                enableAbout = false,
+            )
+        },
+        panel2 = { AboutUi(navController = navController, scrollState = rememberScrollState()) },
     )
 }

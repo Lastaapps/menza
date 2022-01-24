@@ -23,14 +23,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Switch
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.navigation.NavController
+import cz.lastaapps.menza.navigation.Dest
+import cz.lastaapps.menza.ui.others.AboutUi
 import cz.lastaapps.menza.ui.settings.store.PriceType
 import cz.lastaapps.menza.ui.settings.store.isSystemThemeAvailable
 import cz.lastaapps.menza.ui.settings.store.priceType
@@ -38,10 +43,25 @@ import cz.lastaapps.menza.ui.settings.store.systemTheme
 
 @Composable
 fun SettingsUI(
+    navController: NavController,
     viewModel: SettingsViewModel,
+    enableAbout: Boolean,
     modifier: Modifier = Modifier,
+    aboutShown: Boolean = false,
+    onAboutClicked: () -> Unit = {},
 ) {
+    if (aboutShown) {
+        AboutUi(
+            navController = navController,
+            scrollState = rememberScrollState(),
+            Modifier.fillMaxSize()
+        )
+        return
+    }
+
     val scrollState = rememberScrollState()
+    val uriHandler = LocalUriHandler.current
+
     BoxWithConstraints(modifier.fillMaxWidth()) {
         val width = minWidth
 
@@ -60,6 +80,19 @@ fun SettingsUI(
                 UseThemeSettings(viewModel = viewModel)
 
                 PriceSettings(viewModel = viewModel)
+
+                if (enableAbout)
+                    Button(onClick = onAboutClicked) {
+                        Text(text = "About")
+                    }
+                Button(onClick = { navController.navigate(Dest.R.privacyPolicy) }) {
+                    Text(text = "Privacy Policy")
+                }
+                Button(onClick = {
+                    uriHandler.openUri("https://play.google.com/store/apps/details?id=cz.lastaapps.menza")
+                }) {
+                    Text(text = "Rate us!")
+                }
             }
         }
     }

@@ -24,7 +24,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.navigation.compose.dialog
 import coil.ImageLoader
 import coil.compose.LocalImageLoader
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -37,6 +39,10 @@ import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.*
 import cz.lastaapps.menza.ui.info.InfoLayout
 import cz.lastaapps.menza.ui.main.MenzaViewModel
+import cz.lastaapps.menza.ui.others.license.LicenseLayout
+import cz.lastaapps.menza.ui.others.privacy.PrivacyCheck
+import cz.lastaapps.menza.ui.others.privacy.PrivacyDialogContent
+import cz.lastaapps.menza.ui.others.vosturak.VosturakLayout
 import cz.lastaapps.menza.ui.settings.SettingsLayout
 import cz.lastaapps.menza.ui.settings.store.darkMode
 import cz.lastaapps.menza.ui.settings.store.resolveShouldUseDark
@@ -52,6 +58,7 @@ fun AppRoot(
     viewModel: RootViewModel,
     imageLoader: ImageLoader,
     viewModelStoreOwner: ViewModelStoreOwner,
+    onDrawReady: () -> Unit,
 ) {
 
     val useDark by viewModel.sett.darkMode.collectAsState()
@@ -70,10 +77,16 @@ fun AppRoot(
                 imageLoader = imageLoader,
                 viewModelStoreOwner = viewModelStoreOwner,
             ) {
-                //Download default data
-                InitDecision(hiltActivityViewModel()) {
-                    //show app if ready
-                    AppContent(hiltActivityViewModel())
+                //checks if privacy policy has been accepted
+                PrivacyCheck(hiltViewModel(), onDrawReady) {
+
+                    //Download default data
+                    InitDecision(hiltActivityViewModel(), onDrawReady) {
+
+                        //show app if ready
+                        AppContent(hiltActivityViewModel())
+                        onDrawReady()
+                    }
                 }
             }
         }
@@ -115,6 +128,9 @@ private fun AppContent(viewModel: MenzaViewModel) {
     val drawerState =
         rememberDrawerState(if (menzaId == null) DrawerValue.Open else DrawerValue.Closed)
 
+    var expanded by remember { mutableStateOf(false) }
+    val onExpandedClicked = { expanded = !expanded }
+
 
     WithSnackbarProvider(snackbarHostState = snackbarHostState) {
 
@@ -136,50 +152,81 @@ private fun AppContent(viewModel: MenzaViewModel) {
                     navController = navHostState,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
                     menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
                     todayViewModel = hiltActivityViewModel(),
                 )
             }
-            composable(
-                Dest.R.week,
-            ) {
+            composable(Dest.R.week) {
                 WeekLayout(
                     navController = navHostState,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
                     menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
                     weekViewModel = hiltActivityViewModel(),
                 )
             }
-            composable(
-                Dest.R.info,
-            ) {
+            composable(Dest.R.info) {
                 InfoLayout(
                     navController = navHostState,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
                     menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
                     infoViewModel = hiltActivityViewModel(),
                 )
             }
-            composable(
-                Dest.R.settings,
-            ) {
+            composable(Dest.R.settings) {
                 SettingsLayout(
                     navController = navHostState,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
                     menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
                     settingsViewModel = hiltActivityViewModel(),
                 )
+            }
+
+            composable(Dest.R.license) {
+                LicenseLayout(
+                    navController = navHostState,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = menzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = viewModel,
+                    licenseViewModel = hiltViewModel(),
+                )
+            }
+            composable(Dest.R.vosturak) {
+                VosturakLayout(
+                    navController = navHostState,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = menzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = viewModel,
+                )
+            }
+            dialog(Dest.R.privacyPolicy) {
+                PrivacyDialogContent(showAccept = false, onAccept = {})
             }
         }
     }
