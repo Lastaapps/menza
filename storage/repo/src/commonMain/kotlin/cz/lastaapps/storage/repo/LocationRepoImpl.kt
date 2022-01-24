@@ -111,7 +111,7 @@ class LocationRepoImpl<R : Any>(
         queries.transaction {
             queries.delete()
             data.forEach {
-                queries.insert(it.id, it.address, it.location)
+                queries.insert(it.id, it.address, it.coordinates)
             }
         }
         mRequestInProgress.value = true

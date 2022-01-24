@@ -19,12 +19,36 @@
 
 package cz.lastaapps.menza.ui.info
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Message
 
 @Composable
+fun MessageList(
+    messages: List<Message>,
+    modifier: Modifier = Modifier,
+) {
+    if (messages.isNotEmpty()) {
+        Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Web messages", style = MaterialTheme.typography.titleLarge)
+            messages.forEach {
+                Message(it, Modifier.fillMaxWidth())
+            }
+        }
+    }
+}
+
+@Composable
 fun Message(message: Message, modifier: Modifier = Modifier) {
-    Text(message.message, modifier = modifier)
+    Surface(color = MaterialTheme.colorScheme.tertiaryContainer, modifier = modifier) {
+        Text(message.message, modifier = Modifier.padding(8.dp))
+    }
 }

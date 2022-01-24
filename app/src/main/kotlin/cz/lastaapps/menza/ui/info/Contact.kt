@@ -23,46 +23,66 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.ContactsContract
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.info.Contact
 import cz.lastaapps.entity.info.Email
 import cz.lastaapps.entity.info.PhoneNumber
 import cz.lastaapps.menza.ui.LocalSnackbarProvider
 import kotlinx.coroutines.launch
 
+@Composable
+fun ContactList(
+    contact: List<Contact>,
+    modifier: Modifier = Modifier,
+) {
+    if (contact.isNotEmpty()) {
+        Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(text = "Contacts", style = MaterialTheme.typography.titleLarge)
+            contact.forEach {
+                ContactUI(contact = it, Modifier.fillMaxWidth())
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Contacts(
+fun ContactUI(
     contact: Contact,
     modifier: Modifier = Modifier,
 ) {
     if (contact.name == null && contact.role == null)
         return
 
-    Surface(modifier.width(IntrinsicSize.Max)) {
+    Surface(
+        modifier,
+        color = MaterialTheme.colorScheme.tertiaryContainer,
+    ) {
         val context = LocalContext.current
         val snackbar = LocalSnackbarProvider.current
         val scope = rememberCoroutineScope()
 
-        Column {
+        Column(Modifier.padding(8.dp)) {
             contact.name?.let {
-                Text(text = it.name)
+                Text(text = it.name, style = MaterialTheme.typography.titleMedium)
             }
             contact.role?.let {
-                Text(text = it.role)
+                Text(text = it.role, style = MaterialTheme.typography.titleMedium)
             }
             contact.phoneNumber?.let {
                 OutlinedButton(

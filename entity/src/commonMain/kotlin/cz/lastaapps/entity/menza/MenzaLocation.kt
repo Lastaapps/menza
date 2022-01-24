@@ -25,5 +25,5 @@ package cz.lastaapps.entity.menza
 data class MenzaLocation(
     val id: MenzaId,
     val address: Address,
-    val location: Coordinates,
+    val coordinates: Coordinates,
 )

@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class MenzaInfoViewModel @Inject constructor(
+class InfoViewModel @Inject constructor(
     private val messageRepo: MessagesRepo,
     private val contactsRepo: ContactsRepo,
     private val locationRepo: LocationRepo,
@@ -63,7 +63,10 @@ class MenzaInfoViewModel @Inject constructor(
             }
             val combined = places.entries.map { entry ->
 
-                entry.key to entry.value.sortedBy { it.dayOfWeek.index }.let { list ->
+                entry.key to entry.value.sortedWith { e1, e2 ->
+                    e1.comment?.compareTo(e2.comment ?: "").takeIf { it != 0 }
+                        ?: e1.dayOfWeek.index.compareTo(e2.dayOfWeek.index)
+                }.let { list ->
                     if (list.isEmpty()) return@let emptyList()
                     val sameGroups = mutableListOf(mutableListOf(0))
 

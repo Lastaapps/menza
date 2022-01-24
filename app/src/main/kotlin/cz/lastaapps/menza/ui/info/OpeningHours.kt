@@ -21,8 +21,7 @@ package cz.lastaapps.menza.ui.info
 
 import android.os.Build
 import android.text.format.DateFormat
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -31,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.LocalTime
 import kotlinx.datetime.DayOfWeek
 import java.time.format.DateTimeFormatter
@@ -38,18 +38,16 @@ import java.time.format.TextStyle
 import java.util.*
 
 @Composable
-fun OpeningHoursUI(
+fun OpeningHoursList(
     data: List<OpeningLocation>,
     modifier: Modifier = Modifier,
-    @Suppress("DEPRECATION")
-    locale: Locale = LocalConfiguration.current.let {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) it.locales[0] else it.locale
-    },
-    use24: Boolean = DateFormat.is24HourFormat(LocalContext.current)
 ) {
-    Column(modifier) {
-        data.forEach {
-            OpeningHoursLocationUI(data = it, locale, use24)
+    if (data.isNotEmpty()) {
+        Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Opening hours", style = MaterialTheme.typography.titleLarge)
+            data.forEach {
+                OpeningHoursLocationUI(data = it, Modifier.fillMaxWidth())
+            }
         }
     }
 }
@@ -57,9 +55,12 @@ fun OpeningHoursUI(
 @Composable
 fun OpeningHoursLocationUI(
     data: OpeningLocation,
-    locale: Locale,
-    use24: Boolean,
     modifier: Modifier = Modifier,
+    locale: Locale = LocalConfiguration.current.let {
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) it.locales[0] else it.locale
+    },
+    use24: Boolean = DateFormat.is24HourFormat(LocalContext.current),
 ) {
     val formatter = remember(use24) {
         val patter = if (use24) "H:mm" else "h:mm a"
@@ -67,9 +68,12 @@ fun OpeningHoursLocationUI(
     }
 
     Surface(color = MaterialTheme.colorScheme.secondaryContainer, modifier = modifier) {
-        Column {
-            Text(data.name)
-            Row() {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(8.dp),
+        ) {
+            Text(data.name, style = MaterialTheme.typography.titleMedium)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Column() {
                     data.list.forEach {
                         val start = it.startDay.getDisplayName(TextStyle.SHORT, locale)

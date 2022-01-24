@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -42,7 +42,7 @@ class LocationScraperTest {
 
         locations.shouldNotBeEmpty()
         locations.map { it.address.stringForm } shouldContain "Jezdecká 1920, 160 17 Praha 6"
-        locations.map { it.location } shouldContain Coordinates("50.100882", "14.386966")
+        locations.map { it.coordinates } shouldContain Coordinates("50.100882", "14.386966")
     }
 
 
@@ -448,7 +448,7 @@ class LocationScraperTest {
 
         locations shouldHaveSize 11
         locations.map { it.address.stringForm } shouldContain "Jezdecká 1920, 160 17 Praha 6"
-        locations.map { it.location } shouldContain Coordinates("50.100882", "14.386966")
+        locations.map { it.coordinates } shouldContain Coordinates("50.100882", "14.386966")
 
     }
 

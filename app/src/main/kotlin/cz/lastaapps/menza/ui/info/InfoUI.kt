@@ -19,87 +19,116 @@
 
 package cz.lastaapps.menza.ui.info
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.MenzaId
 
 @Composable
 fun InfoAllTogether(
     menzaId: MenzaId?,
-    viewModel: MenzaInfoViewModel,
+    viewModel: InfoViewModel,
     modifier: Modifier = Modifier,
 ) {
     if (menzaId == null) {
-        Text(text = "No menza selected")
+        InfoNoMenza(modifier)
         return
     }
-    Column() {
-        val data by viewModel.getOpeningHours(menzaId).collectAsState(initial = null)
-        if (data != null) {
-            OpeningHoursUI(data = data!!)
-        }
 
-        InfoCommon(menzaId = menzaId, viewModel = viewModel)
-    }
-}
-
-@Composable
-fun InfoJustBasic(
-    menzaId: MenzaId?,
-    viewModel: MenzaInfoViewModel,
-    modifier: Modifier = Modifier,
-) {
-    if (menzaId == null) {
-        Text(text = "No menza selected")
-        return
-    }
-    InfoCommon(menzaId = menzaId, viewModel = viewModel)
-}
-
-@Composable
-fun InfoRemaining(
-    menzaId: MenzaId?,
-    viewModel: MenzaInfoViewModel,
-    modifier: Modifier = Modifier,
-) {
-    if (menzaId == null) return
-    val data by viewModel.getOpeningHours(menzaId).collectAsState(initial = null)
-    if (data == null) return
-    OpeningHoursUI(data = data!!)
-}
-
-@Composable
-private fun InfoCommon(
-    menzaId: MenzaId,
-    viewModel: MenzaInfoViewModel,
-    modifier: Modifier = Modifier,
-) {
     val location by viewModel.getLocation(menzaId).collectAsState(initial = null)
     val contacts by viewModel.getContacts(menzaId).collectAsState(initial = null)
     val messages by viewModel.getMessage(menzaId).collectAsState(initial = null)
+    val openingHours by viewModel.getOpeningHours(menzaId).collectAsState(initial = null)
 
-    if (location == null || contacts == null || messages == null) {
-        Box(modifier = modifier, contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    } else {
-        Column {
-            location!!.forEach {
-                Address(address = it.address)
-                OpenMap(location = it.location)
+    if (!(location == null || contacts == null || messages == null || openingHours == null)) {
+        val fillModifier = Modifier.fillMaxWidth()
+        Box(modifier = modifier) {
+            Column(
+                Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                OpeningHoursList(data = openingHours!!, fillModifier)
+                ContactList(contact = contacts!!, fillModifier)
+                AddressList(locations = location!!, fillModifier)
+                MessageList(messages = messages!!)
             }
-            contacts!!.forEach {
-                Contacts(contact = it)
-            }
-            messages!!.forEach { Message(it) }
         }
+    }
+}
+
+@Composable
+fun InfoPrimary(
+    menzaId: MenzaId?,
+    viewModel: InfoViewModel,
+    modifier: Modifier = Modifier,
+) {
+    if (menzaId == null) {
+        InfoNoMenza(modifier)
+        return
+    }
+
+    val location by viewModel.getLocation(menzaId).collectAsState(initial = null)
+    val contacts by viewModel.getContacts(menzaId).collectAsState(initial = null)
+    val messages by viewModel.getMessage(menzaId).collectAsState(initial = null)
+    val openingHours by viewModel.getOpeningHours(menzaId).collectAsState(initial = null)
+
+    if (!(location == null || contacts == null || messages == null || openingHours == null)) {
+        val fillModifier = Modifier.fillMaxWidth()
+        Box(modifier = modifier) {
+            Column(
+                Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                ContactList(contact = contacts!!, fillModifier)
+                MessageList(messages = messages!!)
+            }
+        }
+    }
+}
+
+@Composable
+fun InfoSecondary(
+    menzaId: MenzaId?,
+    viewModel: InfoViewModel,
+    modifier: Modifier = Modifier,
+) {
+    if (menzaId == null) return
+
+    val location by viewModel.getLocation(menzaId).collectAsState(initial = null)
+    val contacts by viewModel.getContacts(menzaId).collectAsState(initial = null)
+    val messages by viewModel.getMessage(menzaId).collectAsState(initial = null)
+    val openingHours by viewModel.getOpeningHours(menzaId).collectAsState(initial = null)
+
+    if (!(location == null || contacts == null || messages == null || openingHours == null)) {
+        val fillModifier = Modifier.fillMaxWidth()
+        Box(modifier = modifier) {
+            Column(
+                Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                OpeningHoursList(data = openingHours!!, fillModifier)
+                AddressList(locations = location!!, fillModifier)
+            }
+        }
+    }
+}
+
+@Composable
+private fun InfoNoMenza(
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier, contentAlignment = Alignment.Center) {
+        Text("No menza selected")
     }
 }
 

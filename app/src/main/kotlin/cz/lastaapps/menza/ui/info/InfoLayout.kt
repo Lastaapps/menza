@@ -19,11 +19,13 @@
 
 package cz.lastaapps.menza.ui.info
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
@@ -45,7 +47,7 @@ fun InfoLayout(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    infoViewModel: MenzaInfoViewModel,
+    infoViewModel: InfoViewModel,
 ) {
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
@@ -101,7 +103,7 @@ fun InfoLayoutCompact(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    viewModel: MenzaInfoViewModel,
+    viewModel: InfoViewModel,
 ) {
     val scope = rememberCoroutineScope()
     AppLayoutCompact(
@@ -119,7 +121,7 @@ fun InfoLayoutCompact(
             scope.launch { drawerState.open() }
         }
     ) {
-        InfoAllTogether(menzaId = menzaId, viewModel = viewModel)
+        InfoAllTogether(menzaId = menzaId, viewModel = viewModel, Modifier.fillMaxSize())
     }
 }
 
@@ -134,7 +136,7 @@ fun InfoLayoutMedium(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    viewModel: MenzaInfoViewModel,
+    viewModel: InfoViewModel,
 ) {
     AppLayoutMedium(
         navController = navController,
@@ -147,7 +149,7 @@ fun InfoLayoutMedium(
         onExpandedClicked = onExpandedClicked,
         showBackButton = false,
     ) {
-        InfoAllTogether(menzaId = menzaId, viewModel = viewModel)
+        InfoAllTogether(menzaId = menzaId, viewModel = viewModel, Modifier.fillMaxSize())
     }
 }
 
@@ -162,7 +164,7 @@ fun InfoLayoutExpanded(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    viewModel: MenzaInfoViewModel,
+    viewModel: InfoViewModel,
 ) {
     AppLayoutExpanded(
         navController = navController,
@@ -175,10 +177,10 @@ fun InfoLayoutExpanded(
         onExpandedClicked = onExpandedClicked,
         showBackButton = false,
         panel1 = {
-            InfoJustBasic(menzaId = menzaId, viewModel = viewModel)
+            InfoPrimary(menzaId = menzaId, viewModel = viewModel, Modifier.fillMaxSize())
         },
         panel2 = {
-            InfoRemaining(menzaId = menzaId, viewModel = viewModel)
+            InfoSecondary(menzaId = menzaId, viewModel = viewModel, Modifier.fillMaxSize())
         },
     )
 }
