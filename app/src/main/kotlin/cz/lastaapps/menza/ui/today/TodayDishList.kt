@@ -29,10 +29,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -53,11 +55,14 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.LocalConnectivityProvider
+import cz.lastaapps.menza.isMetered
 import cz.lastaapps.menza.ui.LocalSnackbarProvider
 import cz.lastaapps.menza.ui.menza.MenzaNotSelected
 import cz.lastaapps.menza.ui.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.settings.store.PriceType
 import cz.lastaapps.menza.ui.settings.store.getPrice
+import cz.lastaapps.menza.ui.settings.store.imagesOnMetered
 import cz.lastaapps.menza.ui.settings.store.priceType
 import kotlinx.coroutines.channels.consumeEach
 
@@ -72,6 +77,7 @@ fun TodayDishList(
 ) {
     val priceType by settingsViewModel.sett.priceType.collectAsState()
     val onPriceType = { type: PriceType -> settingsViewModel.setPriceType(type) }
+    val downloadOnMetered by settingsViewModel.sett.imagesOnMetered.collectAsState()
 
     if (menzaId == null) {
         MenzaNotSelected(navController, modifier)
@@ -105,7 +111,14 @@ fun TodayDishList(
             onRefresh = { viewModel.refresh(menzaId, locale) },
             modifier = modifier,
         ) {
-            DishContent(data = data, onDishSelected, priceType, onPriceType, Modifier.fillMaxSize())
+            DishContent(
+                data = data,
+                onDishSelected,
+                priceType,
+                onPriceType,
+                downloadOnMetered,
+                Modifier.fillMaxSize()
+            )
         }
     }
 }
@@ -117,6 +130,7 @@ private fun DishContent(
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     onPriceType: (PriceType) -> Unit,
+    downloadOnMetered: Boolean,
     modifier: Modifier = Modifier
 ) {
 
@@ -145,10 +159,9 @@ private fun DishContent(
                 }
                 items(dishType.second) { dish ->
                     DishItem(
-                        dish = dish,
-                        onDishSelected = onDishSelected,
-                        priceType,
-                        Modifier.fillMaxWidth()
+                        dish, onDishSelected,
+                        priceType, downloadOnMetered,
+                        Modifier.fillMaxWidth(),
                     )
                 }
             }
@@ -224,6 +237,7 @@ private fun DishItem(
     dish: Dish,
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
+    downloadOnMetered: Boolean,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -236,10 +250,10 @@ private fun DishItem(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
 
-            DishImageWithBadge(dish = dish, priceType)
+            DishImageWithBadge(dish, priceType, downloadOnMetered)
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                DishNameRow(dish = dish)
-                DishInfoRow(dish = dish)
+                DishNameRow(dish)
+                DishInfoRow(dish)
             }
         }
     }
@@ -287,11 +301,16 @@ private fun DishInfoRow(dish: Dish, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun DishImageWithBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Modifier) {
+private fun DishImageWithBadge(
+    dish: Dish,
+    priceType: PriceType,
+    downloadOnMetered: Boolean,
+    modifier: Modifier = Modifier
+) {
     ConstraintLayout(modifier) {
         val (imgConst, priceConst) = createRefs()
 
-        DishImage(dish = dish, Modifier.constrainAs(imgConst) {
+        DishImage(dish = dish, downloadOnMetered, Modifier.constrainAs(imgConst) {
             centerHorizontallyTo(parent)
             centerVerticallyTo(parent)
         })
@@ -316,7 +335,7 @@ private fun DishBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Mod
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
+private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier = Modifier) {
     Box(modifier) {
         val size = 64.dp
         val imageModifier = Modifier
@@ -326,11 +345,23 @@ private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
         if (dish.imageUrl != null) {
 
             var retryHash by remember { mutableStateOf(0) }
+            val isMetered = LocalConnectivityProvider.current
+            var userAllowed by rememberSaveable(dish.imageUrl) { mutableStateOf(false) }
+            val canDownload = remember(isMetered, userAllowed) {
+                downloadOnMetered || !isMetered.isMetered() || userAllowed
+            }
 
-            val imageRequest = ImageRequest.Builder(LocalContext.current)
-                .data(dish.imageUrl)
-                .crossfade(true)
-                .setParameter("retry_hash", retryHash)
+            val imageRequest = with(ImageRequest.Builder(LocalContext.current)) {
+                diskCacheKey(dish.imageUrl)
+                memoryCacheKey(dish.imageUrl)
+                crossfade(true)
+                setParameter("retry_hash", retryHash)
+                // if user is no a metered network, images are going to be loaded from cache
+                if (canDownload)
+                    data(dish.imageUrl)
+                else
+                    data("https://userisnometerednetwork.su/")
+            }
                 .build()
 
             AsyncImage(
@@ -350,13 +381,13 @@ private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
                 },
                 error = {
                     Box(
-                        imageModifier.clickable { retryHash++ },
+                        imageModifier.clickable { retryHash++; userAllowed = true },
                         contentAlignment = Alignment.Center,
                     ) {
-                        Icon(
-                            Icons.Default.Refresh,
-                            "Failed to load an image",
-                        )
+                        if (canDownload)
+                            Icon(Icons.Default.Refresh, "Failed to load an image")
+                        else
+                            Icon(Icons.Default.Download, "Download on metered")
                     }
                 },
                 success = {

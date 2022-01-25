@@ -44,6 +44,8 @@ object CoilDIModule {
             .networkCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
             .memoryCachePolicy(CachePolicy.ENABLED)
+            .networkCachePolicy(CachePolicy.ENABLED)
+            .networkObserverEnabled(true)
             .respectCacheHeaders(true)
             .logger(DebugLogger())
             .okHttpClient {

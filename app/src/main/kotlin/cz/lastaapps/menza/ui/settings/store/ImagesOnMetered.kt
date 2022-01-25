@@ -17,22 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage.repo
+package cz.lastaapps.menza.ui.settings.store
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import kotlinx.coroutines.flow.StateFlow
 
-interface GeneralStorageRepo <R:Any> {
+private val imagesOnMeteredKey = booleanPreferencesKey("imagesMetered")
 
-    val errors: Channel<Errors>
-    val requestInProgress: StateFlow<Boolean>
+val SettingsStore.imagesOnMetered: StateFlow<Boolean>
+    get() = data.mapState { pref -> pref[imagesOnMeteredKey] ?: true }
 
-    fun getData(scope: CoroutineScope): Flow<List<R>>
-    fun refreshData(): Flow<Boolean?>
-    suspend fun hasData(): Boolean
-    fun hasDataStored(): Flow<Boolean>
-
-    suspend fun clearData()
+suspend fun SettingsStore.setImagesOnMetered(enabled: Boolean) {
+    edit { pref -> pref[imagesOnMeteredKey] = enabled }
 }
+

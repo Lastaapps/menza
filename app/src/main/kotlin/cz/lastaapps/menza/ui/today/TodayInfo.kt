@@ -157,11 +157,13 @@ private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
             //temporary solution for refreshing
             var retryHash by remember { mutableStateOf(0) }
 
-            val imageRequest = ImageRequest.Builder(LocalContext.current)
-                .data(dish.imageUrl)
-                .crossfade(true)
-                .setParameter("retry_hash", retryHash)
-                .build()
+            val imageRequest = with(ImageRequest.Builder(LocalContext.current)) {
+                data(dish.imageUrl)
+                diskCacheKey(dish.imageUrl)
+                memoryCacheKey(dish.imageUrl)
+                crossfade(true)
+                setParameter("retry_hash", retryHash)
+            }.build()
 
             AsyncImage(
                 imageRequest, dish.name,

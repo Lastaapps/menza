@@ -26,9 +26,8 @@ import androidx.compose.material.Switch
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -37,16 +36,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.navigation.NavController
 import cz.lastaapps.menza.navigation.Dest
+import cz.lastaapps.menza.ui.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.others.AboutUi
-import cz.lastaapps.menza.ui.settings.store.PriceType
-import cz.lastaapps.menza.ui.settings.store.isSystemThemeAvailable
-import cz.lastaapps.menza.ui.settings.store.priceType
-import cz.lastaapps.menza.ui.settings.store.systemTheme
+import cz.lastaapps.menza.ui.settings.modules.DarkThemeSettings
+import cz.lastaapps.menza.ui.settings.store.*
 
 @Composable
 fun SettingsUI(
     navController: NavController,
     viewModel: SettingsViewModel,
+    menzaViewModel: MenzaViewModel,
     enableAbout: Boolean,
     modifier: Modifier = Modifier,
     aboutShown: Boolean = false,
@@ -75,7 +74,8 @@ fun SettingsUI(
                 Modifier
                     .verticalScroll(scrollState)
                     .width(min(width, 300.dp)),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Text(
                     "Settings",
@@ -84,10 +84,17 @@ fun SettingsUI(
                 )
 
                 DarkThemeSettings(viewModel = viewModel)
-
                 UseThemeSettings(viewModel = viewModel)
-
                 PriceSettings(viewModel = viewModel)
+                ImagesOnMeteredSetting(viewModel = viewModel)
+
+                InitMenzaUI(
+                    menzaViewModel = menzaViewModel,
+                    settingsViewModel = viewModel,
+                    Modifier.fillMaxWidth(),
+                )
+
+                FullDataReload(viewModel = viewModel)
 
                 Button(onClick = { navController.navigate(Dest.R.privacyPolicy) }) {
                     Text(text = "Privacy Policy")
@@ -109,7 +116,7 @@ fun SettingsUI(
 }
 
 @Composable
-fun SettingsSwitch(
+private fun SettingsSwitch(
     title: String,
     checked: Boolean,
     onClick: () -> Unit,
@@ -128,7 +135,7 @@ fun SettingsSwitch(
 
 
 @Composable
-fun UseThemeSettings(
+private fun UseThemeSettings(
     viewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -145,7 +152,7 @@ fun UseThemeSettings(
 }
 
 @Composable
-fun PriceSettings(
+private fun PriceSettings(
     viewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -161,6 +168,34 @@ fun PriceSettings(
         },
         modifier = modifier,
     )
+}
+
+@Composable
+private fun ImagesOnMeteredSetting(
+    viewModel: SettingsViewModel,
+    modifier: Modifier = Modifier,
+) {
+    val mode by viewModel.sett.imagesOnMetered.collectAsState()
+
+    SettingsSwitch(
+        title = "Auto download images on metered networks",
+        checked = mode,
+        onClick = { viewModel.setImagesOnMetered(!mode) },
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun FullDataReload(viewModel: SettingsViewModel, modifier: Modifier = Modifier) {
+    var showFullReload by rememberSaveable { mutableStateOf(false) }
+    FullReloadDialog(
+        shown = showFullReload,
+        onDismissRequest = { showFullReload = false }) {
+        viewModel.fullRefresh()
+    }
+    Button(onClick = { showFullReload = true }, modifier) {
+        Text(text = "Full cache refresh")
+    }
 }
 
 

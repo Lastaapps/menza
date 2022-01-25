@@ -34,6 +34,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.WithConnectivity
 import cz.lastaapps.menza.init.InitDecision
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.*
@@ -105,7 +106,9 @@ fun ApplyLocalProviders(
             WithFoldingFeature(activity) {
                 ProvideWindowInsets {
                     CompositionLocalProvider(LocalImageLoader provides imageLoader) {
-                        content()
+                        WithConnectivity {
+                            content()
+                        }
                     }
                 }
             }
@@ -128,17 +131,12 @@ private fun AppContent(viewModel: MenzaViewModel) {
     val drawerState =
         rememberDrawerState(if (menzaId == null) DrawerValue.Open else DrawerValue.Closed)
 
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(menzaId == null) }
     val onExpandedClicked = { expanded = !expanded }
 
 
     WithSnackbarProvider(snackbarHostState = snackbarHostState) {
 
-        /*NavHost(
-            navController = navHostState,
-            startDestination = Dest.R.start,
-            modifier = Modifier.fillMaxSize()
-        ) {*/
         AnimatedNavHost(
             navController = navHostState,
             startDestination = Dest.R.start,

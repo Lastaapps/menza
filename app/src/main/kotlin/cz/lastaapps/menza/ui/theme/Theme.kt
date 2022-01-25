@@ -22,6 +22,7 @@ package cz.lastaapps.menza.ui.theme
 import android.os.Build
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -111,9 +112,23 @@ fun AppTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = AppTypography,
-        content = content
-    )
+    ) {
+        androidx.compose.material.MaterialTheme(
+            colors = colorScheme.toLegacy(darkTheme),
+            content = content
+        )
+    }
 }
+
+@Composable
+private fun ColorScheme.toLegacy(isDark: Boolean): Colors = Colors(
+    primary = primary, primaryVariant = primaryContainer,
+    secondary = tertiary, secondaryVariant = tertiaryContainer,
+    background = background, surface = surface, error = error,
+    onPrimary = onPrimary, onSecondary = onSecondary,
+    onBackground = onBackground, onSurface = onSurface, onError = onError,
+    isLight = !isDark,
+)
 
 @Composable
 private fun ColorScheme.animated(): ColorScheme {

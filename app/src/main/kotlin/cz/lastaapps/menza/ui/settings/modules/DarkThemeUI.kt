@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.settings
+package cz.lastaapps.menza.ui.settings.modules
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import cz.lastaapps.menza.ui.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.settings.store.DarkMode
 import cz.lastaapps.menza.ui.settings.store.darkMode
 import kotlin.math.min

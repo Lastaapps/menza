@@ -21,18 +21,19 @@ package cz.lastaapps.menza.ui.menza
 
 import android.app.Application
 import android.os.Build
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.compareToLocal
+import cz.lastaapps.menza.ui.settings.store.*
 import cz.lastaapps.storage.repo.MenzaRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.lighthousegames.logging.logging
 import javax.inject.Inject
@@ -41,12 +42,11 @@ import javax.inject.Inject
 class MenzaViewModel @Inject constructor(
     private val app: Application,
     private val menzaRepo: MenzaRepo,
-    private val savedStateHandle: SavedStateHandle,
+    private val sett: SettingsStore,
 ) : ViewModel() {
 
     companion object {
         private val log = logging()
-        private const val selectedMenzaKey = "menzaId"
     }
 
     val isReady = MutableStateFlow<Boolean>(false)
@@ -64,7 +64,13 @@ class MenzaViewModel @Inject constructor(
 
                 log.i { "Data ready" }
 
-                selectMenza(savedStateHandle.get<Int>(selectedMenzaKey)?.let { MenzaId(it) })
+                val menzaId = when (sett.initMenza.first()) {
+                    InitMenza.Ask -> null
+                    InitMenza.Remember -> sett.latestMenza.first()
+                    InitMenza.Specific -> sett.preferredMenza.first()
+                }
+                selectMenza(menzaId)
+
                 isReady.value = true
             } else {
                 myData!!.value = list.sortMenzaList()
@@ -89,7 +95,9 @@ class MenzaViewModel @Inject constructor(
 
     fun selectMenza(menzaId: MenzaId?) {
         mSelectedMenza.value = menzaId
-        savedStateHandle[selectedMenzaKey] = menzaId?.id
+        viewModelScope.launch {
+            menzaId?.let { sett.setLatestMenza(it) }
+        }
     }
 
     init {

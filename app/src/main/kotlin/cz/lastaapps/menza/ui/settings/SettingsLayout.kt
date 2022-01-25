@@ -129,6 +129,7 @@ fun SettingsLayoutCompact(
         SettingsUI(
             navController = navController,
             viewModel = viewModel,
+            menzaViewModel = menzaViewModel,
             modifier = Modifier.fillMaxSize(),
             enableAbout = true,
             aboutShown = aboutShown,
@@ -164,6 +165,7 @@ fun SettingsLayoutExpanded(
             SettingsUI(
                 navController = navController,
                 viewModel = viewModel,
+                menzaViewModel = menzaViewModel,
                 modifier = Modifier.fillMaxSize(),
                 enableAbout = false,
             )

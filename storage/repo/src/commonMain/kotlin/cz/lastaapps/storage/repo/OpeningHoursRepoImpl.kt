@@ -129,4 +129,8 @@ class OpeningHoursRepoImpl<R : Any>(
         return queries.rowNumber().asFlow().mapToOneNotNull(dispatcher)
             .map { it > 0 }
     }
+
+    override suspend fun clearData() {
+        queries.delete()
+    }
 }
