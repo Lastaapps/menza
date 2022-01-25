@@ -168,6 +168,12 @@ fun SettingsLayoutExpanded(
                 enableAbout = false,
             )
         },
-        panel2 = { AboutUi(navController = navController, scrollState = rememberScrollState()) },
+        panel2 = {
+            AboutUi(
+                navController = navController,
+                scrollState = rememberScrollState(),
+                modifier = Modifier.fillMaxSize()
+            )
+        },
     )
 }

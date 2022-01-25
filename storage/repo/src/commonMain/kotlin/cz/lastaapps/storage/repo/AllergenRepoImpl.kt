@@ -23,6 +23,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.AllergenScraper
 import kotlinx.coroutines.CoroutineDispatcher
@@ -44,6 +45,12 @@ class AllergenRepoImpl<R : Any>(
     }
 
     private val queries = database.allergenQueries
+
+    override fun getAllergenInfo(id: AllergenId): Flow<Allergen?> {
+        return queries.getAllergenById(id) { _, name, description ->
+            Allergen(id, name, description)
+        }.asFlow().mapToOneNotNull(dispatcher)
+    }
 
     override val errors: Channel<Errors>
         get() = mErrors

@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.ui.week
 
 import android.os.Build
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -91,6 +92,7 @@ fun WeekDishList(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun WeekDishContent(
     data: List<DayDishList>,
@@ -109,32 +111,23 @@ private fun WeekDishContent(
 
     // showing items
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        items(data) { dayDishList ->
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                DayHeader(dayDishList.date)
+        data.forEach { dayDishList ->
+            stickyHeader {
+                Surface(Modifier.fillMaxWidth()) {
+                    DayHeader(date = dayDishList.date, Modifier.padding(bottom = 8.dp))
+                }
+            }
+            items(dayDishList.dishes) { courseAndDish ->
 
-                Surface(
-                    //color = MaterialTheme.colorScheme.primaryContainer,
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        //modifier = Modifier.padding(8.dp)
-                    ) {
-                        dayDishList.dishes.forEach { courseAndDish ->
-
-                            CourseHeader(courseType = courseAndDish.first)
-                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                courseAndDish.second.forEach { dish ->
-                                    WeekDishItem(dish = dish, Modifier.fillMaxWidth())
-                                }
-                            }
-                        }
+                CourseHeader(courseType = courseAndDish.first)
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    courseAndDish.second.forEach { dish ->
+                        WeekDishItem(dish = dish, Modifier.fillMaxWidth())
                     }
                 }
             }
         }
+        return@LazyColumn
     }
 }
 

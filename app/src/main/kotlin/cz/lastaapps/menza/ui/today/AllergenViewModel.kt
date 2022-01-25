@@ -17,12 +17,29 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage.repo
+package cz.lastaapps.menza.ui.today
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
+import cz.lastaapps.storage.repo.AllergenRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-interface AllergenRepo : GeneralStorageRepo<Allergen> {
-    fun getAllergenInfo(id: AllergenId): Flow<Allergen?>
+@HiltViewModel
+class AllergenViewModel @Inject constructor(
+    private val allergenRepo: AllergenRepo,
+) : ViewModel() {
+
+    fun getAllAllergens() = allergenRepo.getData(viewModelScope)
+
+    fun getAllergenForIds(list: List<AllergenId>): Flow<List<Allergen>> {
+        return flow {
+            emit(list.mapNotNull { allergenRepo.getAllergenInfo(it).first() })
+        }
+    }
 }

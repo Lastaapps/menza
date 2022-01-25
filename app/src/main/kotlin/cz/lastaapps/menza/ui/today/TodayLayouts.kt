@@ -162,7 +162,7 @@ fun TodayDestCompact(
                 modifier = Modifier.fillMaxSize(),
             )
         } else {
-            TodayInfo(dish = selectedDish, Modifier.fillMaxSize())
+            TodayInfo(dish = selectedDish, viewModel, Modifier.fillMaxSize())
         }
     }
 }
@@ -210,7 +210,7 @@ fun TodayDestMedium(
                 modifier = Modifier.fillMaxSize(),
             )
         } else {
-            TodayInfo(dish = selectedDish, Modifier.fillMaxSize())
+            TodayInfo(dish = selectedDish, viewModel, Modifier.fillMaxSize())
         }
     }
 }
@@ -257,7 +257,7 @@ fun TodayDestExpanded(
                     Text("Not dish selected")
                 }
             } else {
-                TodayInfo(dish = selectedDish, Modifier.fillMaxSize())
+                TodayInfo(dish = selectedDish, viewModel, Modifier.fillMaxSize())
             }
         }
     )

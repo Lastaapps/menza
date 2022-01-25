@@ -40,7 +40,7 @@ fun VosturakText(modifier: Modifier = Modifier) {
             "Vošťurák is the name of iron (or wooden) stick used for roasting " +
                     "sausages on a campfire. This term is used in the area around town Pelhřimov. " +
                     "Why am I telling you about it? Because there is no equivalent for " +
-                    "for this word in czech although vošťurák is used very ofter. " +
+                    "this word in czech although vošťurák is used very ofter. " +
                     "I want to spread this word to as many people as possible, because I find it " +
                     "much better than napichovák used now. And also to spread my home culture. You can see images of it below."
         )

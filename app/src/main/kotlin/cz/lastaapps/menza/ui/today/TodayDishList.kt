@@ -20,8 +20,7 @@
 package cz.lastaapps.menza.ui.today
 
 import android.os.Build
-import android.util.Log
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,7 +29,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -38,14 +37,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
+import coil.compose.AsyncImageContent
+import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
@@ -111,6 +110,7 @@ fun TodayDishList(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DishContent(
     data: List<DishTypeList>,
@@ -137,22 +137,22 @@ private fun DishContent(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(data) { dishType ->
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DishHeader(courseType = dishType.first)
-
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        dishType.second.forEach { dish ->
-                            DishItem(
-                                dish = dish,
-                                onDishSelected = onDishSelected,
-                                priceType,
-                                Modifier.fillMaxWidth()
-                            )
-                        }
+            data.forEach { dishType ->
+                stickyHeader {
+                    Surface(Modifier.fillMaxWidth()) {
+                        DishHeader(courseType = dishType.first, Modifier.padding(bottom = 8.dp))
                     }
                 }
+                items(dishType.second) { dish ->
+                    DishItem(
+                        dish = dish,
+                        onDishSelected = onDishSelected,
+                        priceType,
+                        Modifier.fillMaxWidth()
+                    )
+                }
             }
+            return@LazyColumn
         }
         PriceTypeUnspecified(priceType, onPriceType, Modifier.fillMaxWidth())
     }
@@ -238,8 +238,37 @@ private fun DishItem(
 
             DishImageWithBadge(dish = dish, priceType)
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(dish.name)
+                DishNameRow(dish = dish)
                 DishInfoRow(dish = dish)
+            }
+        }
+    }
+}
+
+@Composable
+private fun DishNameRow(dish: Dish, modifier: Modifier = Modifier) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.Top,
+        modifier = modifier,
+    ) {
+        Text(dish.name, Modifier.weight(1f))
+        Column(
+            Modifier.width(IntrinsicSize.Max),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            dish.issuePlaces.forEach {
+                Surface(
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = "${it.abbrev} ${it.windowsId}",
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.padding(2.dp),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
             }
         }
     }
@@ -290,75 +319,61 @@ private fun DishBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Mod
 private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
     Box(modifier) {
         val size = 64.dp
-        val sizePx = with(LocalDensity.current) { size.roundToPx() }
         val imageModifier = Modifier
             .size(size)
-            .padding(bottom = 8.dp, end = 8.dp)
-        val iconModifier = Modifier
-            .size(48.dp)
-            .padding(8.dp)
             .padding(bottom = 8.dp, end = 8.dp)
 
         if (dish.imageUrl != null) {
 
-            val imagePainter = rememberImagePainter(dish.imageUrl) {
-                //transformations(CircleCropTransformation())
-                size(sizePx)
-                listener(
-                    onError = { _, _ ->
-                        Log.i("FIND_ME", "${dish.imageUrl?.takeLast(8)} onError")
-                    },
-                    onSuccess = { _, _ ->
-                        Log.i("FIND_ME", "${dish.imageUrl?.takeLast(8)} onSuccess")
-                    },
-                    onCancel = {
-                        Log.i("FIND_ME", "${dish.imageUrl?.takeLast(8)} onCancel")
-                    },
-                    onStart = {
-                        Log.i("FIND_ME", "${dish.imageUrl?.takeLast(8)} onStart")
-                    },
+            var retryHash by remember { mutableStateOf(0) }
+
+            val imageRequest = ImageRequest.Builder(LocalContext.current)
+                .data(dish.imageUrl)
+                .crossfade(true)
+                .setParameter("retry_hash", retryHash)
+                .build()
+
+            AsyncImage(
+                imageRequest, dish.name,
+                loading = {
+                    Box(
+                        imageModifier
+                            .placeholder(
+                                true, color = MaterialTheme.colorScheme.primary,
+                                shape = RoundedCornerShape(4.dp),
+                                highlight = PlaceholderHighlight.fade(
+                                    highlightColor = MaterialTheme.colorScheme.secondary,
+                                )
+                            )
+                            .clickable { retryHash++ }
+                    )
+                },
+                error = {
+                    Box(
+                        imageModifier.clickable { retryHash++ },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.Default.Refresh,
+                            "Failed to load an image",
+                        )
+                    }
+                },
+                success = {
+                    AsyncImageContent(
+                        contentScale = ContentScale.Crop,
+                        modifier = imageModifier,
+                    )
+                },
+            )
+
+        } else {
+            Box(imageModifier, contentAlignment = Alignment.Center) {
+                Icon(
+                    Icons.Default.Restaurant,
+                    contentDescription = dish.name,
                 )
             }
-
-            Log.i("FIND_ME", "${dish.imageUrl?.takeLast(8)} State is ${imagePainter.state}")
-
-            when (imagePainter.state) {
-                is ImagePainter.State.Empty -> {
-                    Box(imageModifier)
-                }
-                is ImagePainter.State.Loading -> {
-                    Box(
-                        imageModifier.placeholder(
-                            true, color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(4.dp),
-                            highlight = PlaceholderHighlight.fade(
-                                highlightColor = MaterialTheme.colorScheme.secondary,
-                            )
-                        )
-                    )
-                }
-                is ImagePainter.State.Success -> {
-                    Image(
-                        imagePainter,
-                        dish.name,
-                        imageModifier,
-                        contentScale = ContentScale.Crop
-                    )
-                }
-                is ImagePainter.State.Error -> {
-                    Icon(
-                        Icons.Default.ErrorOutline,
-                        "Failed to load an image",
-                        iconModifier.clickable { imagePainter.imageLoader.enqueue(imagePainter.request) },
-                    )
-                }
-            }
-        } else {
-            Icon(
-                Icons.Default.Restaurant,
-                contentDescription = dish.name,
-                iconModifier,
-            )
         }
     }
 }

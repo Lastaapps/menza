@@ -21,17 +21,19 @@ package cz.lastaapps.menza.ui.today
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.compareToLocal
 import cz.lastaapps.menza.di.TodayRepoFactory
+import cz.lastaapps.storage.repo.AllergenRepo
 import cz.lastaapps.storage.repo.Errors
 import cz.lastaapps.storage.repo.TodayRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -41,6 +43,7 @@ typealias DishTypeList = Pair<CourseType, List<Dish>>
 @HiltViewModel
 class TodayViewModel @Inject constructor(
     private val todayRepoFactory: TodayRepoFactory,
+    private val allergenRepo: AllergenRepo,
 ) : ViewModel() {
 
     val selectedDish: StateFlow<Dish?>
@@ -60,6 +63,14 @@ class TodayViewModel @Inject constructor(
 
     fun selectDish(dish: Dish?) {
         mSelectedDish.value = dish
+    }
+
+    // I was lazy to pass AllergenViewModel in the whole hierarchy
+    // so there is the important method
+    fun getAllergenForIds(list: List<AllergenId>): Flow<List<Allergen>> {
+        return flow {
+            emit(list.mapNotNull { allergenRepo.getAllergenInfo(it).first() })
+        }
     }
 
 

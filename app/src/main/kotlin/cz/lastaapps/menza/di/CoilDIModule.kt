@@ -22,7 +22,6 @@ package cz.lastaapps.menza.di
 import android.app.Application
 import coil.ImageLoader
 import coil.request.CachePolicy
-import coil.util.CoilUtils
 import coil.util.DebugLogger
 import cz.lastaapps.menza.CacheHeaderInterceptor
 import dagger.Module
@@ -41,18 +40,16 @@ object CoilDIModule {
     @Singleton
     fun provideSettingsDataStore(app: Application): ImageLoader {
         return ImageLoader.Builder(app)
-            .availableMemoryPercentage(0.25)
             .crossfade(true)
             .networkCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
             .memoryCachePolicy(CachePolicy.ENABLED)
+            .respectCacheHeaders(true)
             .logger(DebugLogger())
             .okHttpClient {
                 OkHttpClient.Builder()
-                    .cache(CoilUtils.createDefaultCache(app))
-                    .callTimeout(3, TimeUnit.SECONDS)
-                    .connectTimeout(3, TimeUnit.SECONDS)
-                    .readTimeout(10, TimeUnit.SECONDS)
+                    .connectTimeout(5, TimeUnit.SECONDS)
+                    //.readTimeout(10, TimeUnit.SECONDS)
                     .addNetworkInterceptor(CacheHeaderInterceptor)
                     .retryOnConnectionFailure(false)
                     .build()
