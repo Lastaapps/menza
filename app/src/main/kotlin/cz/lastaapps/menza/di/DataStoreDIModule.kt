@@ -20,8 +20,8 @@
 package cz.lastaapps.menza.di
 
 import android.app.Application
-import cz.lastaapps.menza.ui.others.privacy.PrivacyStore
-import cz.lastaapps.menza.ui.settings.store.SettingsStore
+import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyStore
+import cz.lastaapps.menza.ui.dests.settings.store.SettingsStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface TodayRepo {
 
-    val errors: Channel<Errors>
+    val errors: Channel<MenzaError>
     val requestInProgress: StateFlow<Boolean>
 
     suspend fun getData(): Set<Dish>?

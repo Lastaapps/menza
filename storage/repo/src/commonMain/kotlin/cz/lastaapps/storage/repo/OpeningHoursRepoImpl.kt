@@ -51,12 +51,12 @@ class OpeningHoursRepoImpl<R : Any>(
         }.asFlow().mapToList(dispatcher)
     }
 
-    override val errors: Channel<Errors>
+    override val errors: Channel<MenzaError>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<Errors>(Channel.BUFFERED)
+    private val mErrors = Channel<MenzaError>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
     override fun getData(scope: CoroutineScope): Flow<List<OpeningHours>> {
@@ -92,8 +92,8 @@ class OpeningHoursRepoImpl<R : Any>(
             log.i { "Getting data from a server" }
             scraper.createRequest()
         } catch (e: Exception) {
-            mErrors.send(Errors.ConnectionError)
-            e.printStackTrace()
+            log.e(e) { "Download failed" }
+            mErrors.send(e.toMenzaError())
             mRequestInProgress.value = false
             return false
         }
@@ -101,7 +101,7 @@ class OpeningHoursRepoImpl<R : Any>(
             log.i { "Scraping" }
             scraper.scrape(request)
         } catch (e: Exception) {
-            mErrors.send(Errors.ParsingError)
+            mErrors.send(MenzaError.ParsingError(e))
             e.printStackTrace()
             mRequestInProgress.value = false
             return false

@@ -25,6 +25,7 @@ import cz.lastaapps.menza.init.InitMessage.*
 import cz.lastaapps.storage.repo.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class InitViewModel @Inject constructor(
     val progressMessage: MutableStateFlow<InitMessage> = MutableStateFlow(Preparing)
     val progressIndicator: MutableStateFlow<Float> = MutableStateFlow(0.0f)
     val failed: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val errors: Channel<Errors> = Channel(Channel.BUFFERED)
+    val errors: Channel<MenzaError> = Channel(Channel.BUFFERED)
 
     private val repos = listOf<Pair<GeneralStorageRepo<*>, InitMessage>>(
         allergenRepo to AllergenDone,
@@ -98,10 +99,11 @@ class InitViewModel @Inject constructor(
                     null -> error("Refresh already in progress")
                 }
             }
-            progressIndicator.value = 1f * index / repos.size
+            progressIndicator.value = 1f * (index + 1) / repos.size
         }
 
         progressMessage.value = Done
+        delay(1000)
         isDone.value = true
     }
 }

@@ -40,12 +40,12 @@ class TodayRepoImpl<R : Any>(
         private val log = logging(TodayRepo::class.simpleName)
     }
 
-    override val errors: Channel<Errors>
+    override val errors: Channel<MenzaError>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<Errors>(Channel.BUFFERED)
+    private val mErrors = Channel<MenzaError>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
     override suspend fun getData(): Set<Dish>? =
@@ -59,22 +59,20 @@ class TodayRepoImpl<R : Any>(
                 log.i { "Getting data from a server for $menzaId" }
                 scraper.createRequest(menzaId)
             } catch (e: Exception) {
-                mErrors.send(Errors.ConnectionError)
-                mRequestInProgress.value = false
-                e.printStackTrace()
+                log.e(e) { "Download failed" }
+                mErrors.send(e.toMenzaError())
                 return@withContext null
             }
             val data = try {
                 log.i { "Scraping $menzaId" }
                 scraper.scrape(request)
             } catch (e: Exception) {
-                mErrors.send(Errors.ParsingError)
-                mRequestInProgress.value = false
+                mErrors.send(MenzaError.ParsingError(e))
+                log.e(e) { "Parsing error" }
                 e.printStackTrace()
                 return@withContext null
             }
 
-            mRequestInProgress.value = false
             return@withContext data
-        }
+        }.also { mRequestInProgress.value = false }
 }

@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface WeekRepo {
 
-    val errors: Channel<Errors>
+    val errors: Channel<MenzaError>
     val requestInProgress: StateFlow<Boolean>
 
     suspend fun getData(): Set<WeekDish>?

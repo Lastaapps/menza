@@ -26,12 +26,9 @@ import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.AllergenScraper
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import org.lighthousegames.logging.logging
 
 class AllergenRepoImpl<R : Any>(
@@ -52,12 +49,12 @@ class AllergenRepoImpl<R : Any>(
         }.asFlow().mapToOneNotNull(dispatcher)
     }
 
-    override val errors: Channel<Errors>
+    override val errors: Channel<MenzaError>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<Errors>(Channel.BUFFERED)
+    private val mErrors = Channel<MenzaError>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
     override fun getData(scope: CoroutineScope): Flow<List<Allergen>> {
@@ -83,9 +80,9 @@ class AllergenRepoImpl<R : Any>(
         }.flowOn(dispatcher)
     }
 
-    private suspend fun refreshInternal(): Boolean? {
+    private suspend fun refreshInternal(): Boolean? = withContext(dispatcher) {
         if (mRequestInProgress.value)
-            return null
+            return@withContext null
 
         mRequestInProgress.value = true
 
@@ -93,19 +90,17 @@ class AllergenRepoImpl<R : Any>(
             log.i { "Getting data from a server" }
             scraper.createRequestForAll()
         } catch (e: Exception) {
-            mErrors.send(Errors.ConnectionError)
-            e.printStackTrace()
-            mRequestInProgress.value = false
-            return false
+            log.e(e) { "Download failed" }
+            mErrors.send(e.toMenzaError())
+            return@withContext false
         }
         val data = try {
             log.i { "Scraping" }
             scraper.scrape(request)
         } catch (e: Exception) {
-            mErrors.send(Errors.ParsingError)
-            e.printStackTrace()
-            mRequestInProgress.value = false
-            return false
+            mErrors.send(MenzaError.ParsingError(e))
+            log.e(e) { "Parsing error" }
+            return@withContext false
         }
 
         log.i { "Replacing database entries" }
@@ -115,9 +110,9 @@ class AllergenRepoImpl<R : Any>(
                 queries.insert(it.id, it.name, it.description)
             }
         }
-        mRequestInProgress.value = true
-        return true
-    }
+
+        return@withContext true
+    }.also { mRequestInProgress.value = false }
 
     override suspend fun hasData(): Boolean =
         hasDataStored().first().also { log.i { "hasData: $it" } }

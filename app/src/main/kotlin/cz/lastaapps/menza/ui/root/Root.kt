@@ -38,19 +38,19 @@ import cz.lastaapps.menza.WithConnectivity
 import cz.lastaapps.menza.init.InitDecision
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.*
-import cz.lastaapps.menza.ui.info.InfoLayout
-import cz.lastaapps.menza.ui.menza.MenzaViewModel
-import cz.lastaapps.menza.ui.others.license.LicenseLayout
-import cz.lastaapps.menza.ui.others.privacy.PrivacyCheck
-import cz.lastaapps.menza.ui.others.privacy.PrivacyDialogContent
-import cz.lastaapps.menza.ui.others.vosturak.VosturakLayout
-import cz.lastaapps.menza.ui.settings.SettingsLayout
-import cz.lastaapps.menza.ui.settings.store.darkMode
-import cz.lastaapps.menza.ui.settings.store.resolveShouldUseDark
-import cz.lastaapps.menza.ui.settings.store.systemTheme
+import cz.lastaapps.menza.ui.dests.info.InfoLayout
+import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
+import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyCheck
+import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyDialogContent
+import cz.lastaapps.menza.ui.dests.others.vosturak.VosturakLayout
+import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
+import cz.lastaapps.menza.ui.dests.settings.store.darkMode
+import cz.lastaapps.menza.ui.dests.settings.store.resolveShouldUseDark
+import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
+import cz.lastaapps.menza.ui.dests.today.TodayDest
+import cz.lastaapps.menza.ui.dests.week.WeekLayout
+import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.theme.AppTheme
-import cz.lastaapps.menza.ui.today.TodayDest
-import cz.lastaapps.menza.ui.week.WeekLayout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -42,12 +42,12 @@ class WeekRepoImpl<R : Any>(
         private val log = logging(WeekRepo::class.simpleName)
     }
 
-    override val errors: Channel<Errors>
+    override val errors: Channel<MenzaError>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<Errors>(Channel.BUFFERED)
+    private val mErrors = Channel<MenzaError>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
     override suspend fun getData(): Set<WeekDish>? =
@@ -56,13 +56,13 @@ class WeekRepoImpl<R : Any>(
                 return@withContext null
 
             mRequestInProgress.value = true
+
+            log.i { "Getting data from a server for $menzaId" }
             val request = try {
-                log.i { "Getting data from a server for $menzaId" }
                 scraper.createRequest(menzaId, WeekNumber.tempWeekNumber)
             } catch (e: Exception) {
-                mErrors.send(Errors.ConnectionError)
-                mRequestInProgress.value = false
-                e.printStackTrace()
+                log.e(e) { "Download failed" }
+                mErrors.send(e.toMenzaError())
                 return@withContext null
             }
 
@@ -70,18 +70,15 @@ class WeekRepoImpl<R : Any>(
                 log.i { "Scraping $menzaId" }
                 scraper.scrape(request)
             } catch (e: WeekNotAvailable) {
-                mErrors.send(Errors.WeekNotSupported)
-                mRequestInProgress.value = false
+                mErrors.send(MenzaError.WeekNotSupported)
                 log.e { "Week not supported for $menzaId" }
                 return@withContext null
             } catch (e: Exception) {
-                mErrors.send(Errors.ParsingError)
-                mRequestInProgress.value = false
-                e.printStackTrace()
+                mErrors.send(MenzaError.ParsingError(e))
+                log.e(e) { "Parsing error" }
                 return@withContext null
             }
 
-            mRequestInProgress.value = false
             return@withContext data
-        }
+        }.also { mRequestInProgress.value = false }
 }

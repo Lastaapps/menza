@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface GeneralStorageRepo <R:Any> {
 
-    val errors: Channel<Errors>
+    val errors: Channel<MenzaError>
     val requestInProgress: StateFlow<Boolean>
 
     fun getData(scope: CoroutineScope): Flow<List<R>>

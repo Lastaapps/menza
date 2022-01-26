@@ -19,15 +19,15 @@
 
 package cz.lastaapps.menza.init
 
-sealed class InitMessage private constructor() {
-    object Preparing:InitMessage()
-    object Done: InitMessage()
-    object Error: InitMessage()
+sealed class InitMessage private constructor(val message: String) {
+    object Preparing : InitMessage("Preparing data download")
+    object Done : InitMessage("Done, data ready")
+    object Error : InitMessage("Error, try again later")
 
-    object AllergenDone: InitMessage()
-    object ContactsDone: InitMessage()
-    object LocationDone: InitMessage()
-    object MenzaDone: InitMessage()
-    object MessageDone: InitMessage()
-    object OpeningHoursDone: InitMessage()
+    object AllergenDone : InitMessage("Checking allergens")
+    object ContactsDone : InitMessage("Calling contacts")
+    object LocationDone : InitMessage("Looking up addresses")
+    object MenzaDone : InitMessage("Eating in all the Menzas")
+    object MessageDone : InitMessage("Reading messages")
+    object OpeningHoursDone : InitMessage("Checking opening hours")
 }

@@ -23,14 +23,18 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ProgressIndicatorDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.channels.consumeEach
+import cz.lastaapps.menza.ui.dests.others.CollectErrors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,18 +56,14 @@ fun InitDecision(
     }
 
     val snackbarHost = remember { SnackbarHostState() }
-    LaunchedEffect(viewModel.errors) {
-        viewModel.errors.consumeEach {
-            snackbarHost.showSnackbar(it.toString())
-        }
-    }
+    CollectErrors(snackbarHost, viewModel.errors)
 
     Scaffold(
         modifier,
         snackbarHost = { SnackbarHost(hostState = snackbarHost) },
         content = {
             Surface(
-                color = MaterialTheme.colorScheme.background
+                color = MaterialTheme.colorScheme.primaryContainer,
             ) {
                 InitContent(viewModel = viewModel, Modifier.fillMaxSize())
             }
@@ -75,35 +75,49 @@ fun InitDecision(
 }
 
 @Composable
-internal fun InitContent(viewModel: InitViewModel, modifier: Modifier = Modifier) {
+private fun InitContent(viewModel: InitViewModel, modifier: Modifier = Modifier) {
 
     val progress by viewModel.progressIndicator.collectAsState()
     val message by viewModel.progressMessage.collectAsState()
     val failed by viewModel.failed.collectAsState()
 
     Box(modifier, contentAlignment = Alignment.Center) {
-        Surface(
-            Modifier.animateContentSize(),
-            color = MaterialTheme.colorScheme.primaryContainer,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+            modifier = Modifier
+                .width(IntrinsicSize.Max)
+                .padding(8.dp)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-                modifier = Modifier.padding(8.dp)
+            Text(
+                "Downloading data...",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Surface(
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                modifier = Modifier
+                    .animateContentSize()
+                    .fillMaxWidth(),
             ) {
-                Text(
-                    "Downloading default data...",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                if (!failed) {
-                    val animatedProgress by animateFloatAsState(targetValue = progress)
-                    CircularProgressIndicator(animatedProgress)
-                    Text(text = "Downloading $message")
-                } else {
-                    IconButton(onClick = { viewModel.requestRefresh() }) {
-                        Icon(Icons.Default.Refresh, contentDescription = null)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    if (!failed) {
+                        val animatedProgress by animateFloatAsState(
+                            targetValue = progress,
+                            animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                        )
+                        CircularProgressIndicator(animatedProgress, Modifier.size(48.dp))
+                        Text(text = message.message)
+                    } else {
+                        IconButton(onClick = { viewModel.requestRefresh() }) {
+                            Icon(Icons.Default.Refresh, contentDescription = null)
+                        }
+                        Text("An error occurred! Retry?")
                     }
-                    Text("An error occurred! Retry?")
                 }
             }
         }

@@ -22,7 +22,7 @@ package cz.lastaapps.menza.ui.root
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.menza.ui.settings.store.SettingsStore
+import cz.lastaapps.menza.ui.dests.settings.store.SettingsStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
