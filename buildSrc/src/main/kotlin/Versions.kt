@@ -24,8 +24,10 @@ object Versions {
     val JAVA = JavaVersion.VERSION_11
     const val JVM_TARGET = "11"
 
-    const val GRADLE = "7.1.0-rc01"
+    const val GRADLE = "7.1.0"
     const val OSS_PLUGIN = "0.10.4"
+
+    const val OSS_LICENSE_ACCESS = "1.0"
 
     //Versions
     //Studio
@@ -55,7 +57,7 @@ object Versions {
     const val HILT_VIEWMODEL = "1.0.0-alpha03"
     const val HILT_WORK = "1.0.0"
     const val LIFECYCLE = "2.4.0"
-    const val NAVIGATION = "2.4.0-rc01"
+    const val NAVIGATION = "2.4.0"
     const val PREFERENCES = "1.2.0-rc01"
     const val RECYCLER_VIEW = "1.3.0-alpha01"
     const val ROOM = "2.4.1"
@@ -64,17 +66,19 @@ object Versions {
     const val SWIPE_REFRESH_LAYOUT = "1.2.0-alpha01"
     const val TRACING = "1.1.0-alpha02"
     const val VECTOR_DRAWABLES = "1.2.0-alpha02"
-    const val WINDOW_MANAGER = "1.0.0-rc01"
+    const val WINDOW_MANAGER = "1.0.0"
     const val WORK = "2.7.1"
 
 
     //compose
-    const val COMPOSE = "1.2.0-alpha01"
+    const val COMPOSE = "1.2.0-alpha02"
     const val COMPOSE_COMPILER = COMPOSE
-    const val COMPOSE_MATERIAL_3 = "1.0.0-alpha03"
+    const val COMPOSE_STABLE = "1.1.0-rc03"
+    const val COMPOSE_COMPILER_STABLE = COMPOSE_STABLE
+    const val COMPOSE_MATERIAL_3 = "1.0.0-alpha04"
     const val CONSTRAINTLAYOUT_COMPOSE = "1.0.0"
     const val VIEWMODEL_COMPOSE = "2.4.0"
-    const val HILT_NAVIGATION_COMPOSE = "1.0.0-rc01"
+    const val HILT_NAVIGATION_COMPOSE = "1.0.0"
 
     //google
     const val GOOGLE_MATERIAL = "1.5.0"
