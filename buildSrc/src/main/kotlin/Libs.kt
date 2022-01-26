@@ -125,4 +125,5 @@ object Libs {
 
     const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"
 
+    const val OSS_LICENSE_ACCESSOR = "com.github.Lastaapps:OssLicenseAccess:${Versions.OSS_LICENSE_ACCESS}"
 }
