@@ -22,8 +22,6 @@ package cz.lastaapps.menza.init
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ProgressIndicatorDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
@@ -40,7 +38,6 @@ import cz.lastaapps.menza.ui.dests.others.CollectErrors
 @Composable
 fun InitDecision(
     viewModel: InitViewModel,
-    onDrawReady: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -63,15 +60,11 @@ fun InitDecision(
         snackbarHost = { SnackbarHost(hostState = snackbarHost) },
         content = {
             Surface(
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.background,
             ) {
                 InitContent(viewModel = viewModel, Modifier.fillMaxSize())
             }
         })
-
-    // Splashscreen is shown until actual download started, so there are no blink while
-    // hasData() queries are executed
-    onDrawReady()
 }
 
 @Composable
@@ -95,33 +88,45 @@ private fun InitContent(viewModel: InitViewModel, modifier: Modifier = Modifier)
                 modifier = Modifier.fillMaxWidth(),
             )
             Surface(
-                color = MaterialTheme.colorScheme.tertiaryContainer,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier
                     .animateContentSize()
                     .fillMaxWidth(),
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    if (!failed) {
-                        val animatedProgress by animateFloatAsState(
-                            targetValue = progress,
-                            animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
-                        )
-                        CircularProgressIndicator(animatedProgress, Modifier.size(48.dp))
-                        Text(text = message.message)
-                    } else {
-                        IconButton(onClick = { viewModel.requestRefresh() }) {
-                            Icon(Icons.Default.Refresh, contentDescription = null)
-                        }
-                        Text("An error occurred! Retry?")
-                    }
-                }
+                Content(
+                    failed, message, progress,
+                    { viewModel.requestRefresh() },
+                    Modifier.padding(16.dp)
+                )
             }
         }
     }
 }
 
+@Composable
+private fun Content(
+    failed: Boolean, message: InitMessage, progress: Float,
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier,
+    ) {
+        if (!failed) {
+            val animatedProgress by animateFloatAsState(
+                targetValue = progress,
+                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+            )
+            CircularProgressIndicator(animatedProgress, Modifier.size(48.dp))
+            Text(text = message.message)
+        } else {
+            IconButton(onClick = onRefresh) {
+                Icon(Icons.Default.Refresh, contentDescription = null)
+            }
+            Text("An error occurred! Retry?")
+        }
+    }
+}
 

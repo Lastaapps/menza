@@ -43,11 +43,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var composeRun = false
-
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition {
-            !rootViewModel.isReady.value && composeRun
+            !rootViewModel.isReady.value
         }
 
         /*lifecycleScope.launch(Dispatchers.Main) {
@@ -68,7 +66,6 @@ class MainActivity : ComponentActivity() {
                     viewModel = rootViewModel,
                     imageLoader = imageLoader,
                     viewModelStoreOwner = this,
-                    onDrawReady = { composeRun = true }
                 )
             }
         }

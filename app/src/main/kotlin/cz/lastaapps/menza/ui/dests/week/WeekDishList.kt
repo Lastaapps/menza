@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -112,8 +113,11 @@ private fun WeekDishContent(
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         data.forEach { dayDishList ->
             stickyHeader {
+                //make header nontransparent
                 Surface(Modifier.fillMaxWidth()) {
-                    DayHeader(date = dayDishList.date, Modifier.padding(bottom = 8.dp))
+                    Box(Modifier.padding(bottom = 8.dp)) {
+                        DayHeader(date = dayDishList.date)
+                    }
                 }
             }
             items(dayDishList.dishes) { courseAndDish ->
@@ -133,11 +137,17 @@ private fun WeekDishContent(
 @Composable
 private fun DayHeader(date: LocalDate, modifier: Modifier = Modifier) {
     val format = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
-    Text(
-        text = date.toJavaLocalDate().format(format),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = modifier
-    )
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.tertiary,
+        shape = CircleShape,
+    ) {
+        Text(
+            text = date.toJavaLocalDate().format(format),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(4.dp),
+        )
+    }
 }
 
 @Composable
@@ -152,7 +162,7 @@ private fun CourseHeader(courseType: CourseType, modifier: Modifier = Modifier) 
 @Composable
 private fun WeekDishItem(dish: WeekDish, modifier: Modifier = Modifier) {
     Surface(
-        color = MaterialTheme.colorScheme.tertiaryContainer,
+        color = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier,
     ) {
         Row(

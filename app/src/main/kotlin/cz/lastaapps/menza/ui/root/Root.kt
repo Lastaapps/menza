@@ -59,7 +59,6 @@ fun AppRoot(
     viewModel: RootViewModel,
     imageLoader: ImageLoader,
     viewModelStoreOwner: ViewModelStoreOwner,
-    onDrawReady: () -> Unit,
 ) {
 
     val useDark by viewModel.sett.darkMode.collectAsState()
@@ -71,7 +70,7 @@ fun AppRoot(
     ) {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.primaryContainer,
+            color = MaterialTheme.colorScheme.background,
         ) {
             ApplyLocalProviders(
                 activity = activity,
@@ -79,14 +78,13 @@ fun AppRoot(
                 viewModelStoreOwner = viewModelStoreOwner,
             ) {
                 //checks if privacy policy has been accepted
-                PrivacyCheck(hiltViewModel(), onDrawReady) {
+                PrivacyCheck(hiltViewModel()) {
 
                     //Download default data
-                    InitDecision(hiltActivityViewModel(), onDrawReady) {
+                    InitDecision(hiltActivityViewModel()) {
 
                         //show app if ready
                         AppContent(hiltActivityViewModel())
-                        onDrawReady()
                     }
                 }
             }

@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.ContactsContract
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,7 +66,7 @@ fun ContactUI(
 
     Surface(
         modifier,
-        color = MaterialTheme.colorScheme.tertiaryContainer,
+        color = MaterialTheme.colorScheme.primaryContainer,
     ) {
         val context = LocalContext.current
         val snackbar = LocalSnackbarProvider.current
@@ -85,7 +86,9 @@ fun ContactUI(
                             scope.launch { snackbar.showSnackbar("No dial app installed") }
                         }
                     },
-                    Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
+                    border = BorderStroke(1.dp, LocalContentColor.current),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         text = it.phone,
@@ -102,7 +105,9 @@ fun ContactUI(
                             scope.launch { snackbar.showSnackbar("No email app installed") }
                         }
                     },
-                    Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
+                    border = BorderStroke(1.dp, LocalContentColor.current),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         text = it.mail,
@@ -119,7 +124,9 @@ fun ContactUI(
                             scope.launch { snackbar.showSnackbar("No contacts app installed") }
                         }
                     },
-                    Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
+                    border = BorderStroke(1.dp, LocalContentColor.current),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(text = "Add Contact")
                 }

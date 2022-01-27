@@ -54,7 +54,7 @@ fun LicenseText(
                     modifier = Modifier.padding(8.dp),
                 )
             }
-            Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.primaryContainer) {
+            Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.tertiaryContainer) {
                 LinkifyText(
                     text = text,
                     Modifier

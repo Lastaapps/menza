@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
@@ -17,18 +17,7 @@
   ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-    <group
-        android:scaleX="2.046"
-        android:scaleY="2.046"
-        android:translateX="29.448"
-        android:translateY="29.448">
-        <path
-            android:fillColor="@color/ic_launcher_foreground"
-            android:pathData="M16,6v8h3v8h2L21,2c-2.76,0 -5,2.24 -5,4zM11,9L9,9L9,2L7,2v7L5,9L5,2L3,2v7c0,2.21 1.79,4 4,4v9h2v-9c2.21,0 4,-1.79 4,-4L13,2h-2v7z" />
-    </group>
-</vector>
+<resources>
+    <color name="ic_launcher_foreground">#FFFFFF</color>
+    <color name="ic_launcher_background">@color/md_theme_light_primary</color>
+</resources>

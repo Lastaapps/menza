@@ -83,7 +83,7 @@ private fun Artifact(
 ) {
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = MaterialTheme.colorScheme.primaryContainer,
         onClick = onClick,
     ) {
         Box(

@@ -26,7 +26,6 @@ import androidx.compose.runtime.getValue
 @Composable
 fun PrivacyCheck(
     privacyViewModel: PrivacyViewModel,
-    onDrawReady: () -> Unit,
     content: @Composable () -> Unit,
 ) {
     val state by privacyViewModel.shouldShow.collectAsState()
@@ -43,7 +42,6 @@ fun PrivacyCheck(
             ) {
                 privacyViewModel.onApprove()
             }
-            onDrawReady()
         }
         else -> {}
     }

@@ -237,7 +237,7 @@ private fun DishItem(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
         Row(

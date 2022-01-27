@@ -67,7 +67,7 @@ fun OpeningHoursLocationUI(
         DateTimeFormatter.ofPattern(patter)
     }
 
-    Surface(color = MaterialTheme.colorScheme.secondaryContainer, modifier = modifier) {
+    Surface(color = MaterialTheme.colorScheme.primaryContainer, modifier = modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(8.dp),

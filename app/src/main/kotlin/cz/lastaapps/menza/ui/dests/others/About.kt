@@ -73,7 +73,7 @@ fun AboutUi(
 
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.secondaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer
             ) {
                 Column(
                     Modifier

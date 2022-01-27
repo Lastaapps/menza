@@ -48,7 +48,7 @@ fun MessageList(
 
 @Composable
 fun Message(message: Message, modifier: Modifier = Modifier) {
-    Surface(color = MaterialTheme.colorScheme.tertiaryContainer, modifier = modifier) {
+    Surface(color = MaterialTheme.colorScheme.primaryContainer, modifier = modifier) {
         Text(message.message, modifier = Modifier.padding(8.dp))
     }
 }

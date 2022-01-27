@@ -23,12 +23,14 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -99,7 +101,7 @@ private fun IssueLocationList(
                 style = MaterialTheme.typography.titleMedium,
             )
             Text(
-                text = "Windows number",
+                text = "Window number",
                 textAlign = TextAlign.End,
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.titleMedium,
@@ -136,7 +138,16 @@ private fun AllergenList(
                 data.forEach {
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text("${it.id.id}", style = MaterialTheme.typography.titleMedium)
+                            Surface(
+                                color = MaterialTheme.colorScheme.tertiary,
+                                shape = CircleShape
+                            ) {
+                                Text(
+                                    "${it.id.id}",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.padding(2.dp),
+                                )
+                            }
                             Text(it.name, style = MaterialTheme.typography.titleMedium)
                         }
                         Text(it.description)

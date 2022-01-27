@@ -38,12 +38,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.App.Starting">
+        android:theme="@style/AppTheme.Starting">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:resizeableActivity="true"
-            android:theme="@style/Theme.App.Starting"
+            android:theme="@style/AppTheme.Starting"
             tools:ignore="UnusedAttribute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

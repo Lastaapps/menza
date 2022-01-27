@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
@@ -19,5 +18,13 @@
   -->
 
 <resources>
-    <color name="ic_launcher_background">#DC823D</color>
+
+    <style name="AppTheme" parent="Theme.Material3.DynamicColors.DayNight"></style>
+
+    <style name="AppTheme.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/md_theme_light_primary
+        </item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
 </resources>

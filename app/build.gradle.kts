@@ -108,6 +108,7 @@ dependencies {
     implementation(project(":lastaapps:common"))
 
     implementation(Libs.SPLASHSCREEN)
+    implementation(Libs.MATERIAL)
     implementation(Libs.CORE)
     implementation(Libs.LIFECYCLE)
     implementation(Libs.WINDOW_MANAGER)

@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.theme
+package cz.lastaapps.menza.ui.theme.generated
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -34,7 +34,7 @@ val AppTypography = Typography(
         fontWeight = FontWeight.W400,
         fontSize = 57.sp,
         lineHeight = 64.sp,
-        letterSpacing = (-0.25).sp,
+        letterSpacing = -0.25.sp,
     ),
     displayMedium = TextStyle(
         fontFamily = Roboto,
