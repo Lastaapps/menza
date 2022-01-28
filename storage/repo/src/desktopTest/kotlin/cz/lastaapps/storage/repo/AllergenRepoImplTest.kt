@@ -21,9 +21,7 @@ package cz.lastaapps.storage.repo
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
-import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.scraping.AllergenScraper
 import cz.lastaapps.storage.MemoryMenzaDriverFactory
 import cz.lastaapps.storage.createMenzaDatabase
 import cz.lastaapps.storage.repo.scrapers.AllergenScraperMock

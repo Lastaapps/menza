@@ -26,7 +26,7 @@ object Dest {
         const val info = "info"
         const val settings = "settings"
         const val license = "license"
-        const val vosturak = "vosturak"
+        const val osturak = "osturak"
         const val privacyPolicy = "privacyPolicy"
 
         const val start = today

@@ -37,9 +37,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Coordinates
 import cz.lastaapps.entity.menza.MenzaLocation
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.LocalSnackbarProvider
 import kotlinx.coroutines.launch
 
@@ -50,7 +52,10 @@ fun AddressList(
 ) {
     if (locations.isNotEmpty()) {
         Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Menza address", style = MaterialTheme.typography.titleLarge)
+            Text(
+                stringResource(R.string.info_location_title),
+                style = MaterialTheme.typography.titleLarge
+            )
             locations.forEach {
                 Address(it, Modifier.fillMaxWidth())
             }
@@ -64,12 +69,13 @@ fun Address(location: MenzaLocation, modifier: Modifier = Modifier) {
     val snackbar = LocalSnackbarProvider.current
     val scope = rememberCoroutineScope()
 
+    val errorMessage = stringResource(R.string.info_location_no_app)
     Button(
         modifier = modifier,
         onClick = {
             openMap(context, location.coordinates, onError = {
                 scope.launch {
-                    snackbar.showSnackbar("No map app found!")
+                    snackbar.showSnackbar(errorMessage)
                 }
             })
         },
@@ -92,7 +98,12 @@ private fun openMap(context: Context, location: Coordinates, onError: () -> Unit
         )
     }
     try {
-        context.startActivity(Intent.createChooser(intent, "Select an application"))
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                context.getString(R.string.info_location_choose_app)
+            )
+        )
     } catch (e: Exception) {
         onError()
         e.printStackTrace()

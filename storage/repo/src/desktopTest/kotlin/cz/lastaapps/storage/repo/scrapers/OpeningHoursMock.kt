@@ -19,10 +19,7 @@
 
 package cz.lastaapps.storage.repo.scrapers
 
-import cz.lastaapps.entity.allergens.Allergen
-import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.info.OpeningHours
-import cz.lastaapps.scraping.AllergenScraper
 import cz.lastaapps.scraping.OpeningHoursScraper
 
 class OpeningHoursMock(val set: Set<OpeningHours>) : OpeningHoursScraper<Any> {

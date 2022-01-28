@@ -19,15 +19,18 @@
 
 package cz.lastaapps.menza.init
 
-sealed class InitMessage private constructor(val message: String) {
-    object Preparing : InitMessage("Preparing data download")
-    object Done : InitMessage("Done, data ready")
-    object Error : InitMessage("Error, try again later")
+import androidx.annotation.StringRes
+import cz.lastaapps.menza.R
 
-    object AllergenDone : InitMessage("Checking allergens")
-    object ContactsDone : InitMessage("Calling contacts")
-    object LocationDone : InitMessage("Looking up addresses")
-    object MenzaDone : InitMessage("Eating in all the Menzas")
-    object MessageDone : InitMessage("Reading messages")
-    object OpeningHoursDone : InitMessage("Checking opening hours")
+sealed class InitMessage private constructor(@StringRes val message: Int) {
+    object Preparing : InitMessage(R.string.init_message_preparing)
+    object Done : InitMessage(R.string.init_message_done)
+    object Error : InitMessage(R.string.init_message_error)
+
+    object AllergenDone : InitMessage(R.string.init_message_allergen)
+    object ContactsDone : InitMessage(R.string.init_message_contacts)
+    object LocationDone : InitMessage(R.string.init_message_location)
+    object MenzaDone : InitMessage(R.string.init_message_menza)
+    object MessageDone : InitMessage(R.string.init_message_message)
+    object OpeningHoursDone : InitMessage(R.string.init_message_opening_hours)
 }

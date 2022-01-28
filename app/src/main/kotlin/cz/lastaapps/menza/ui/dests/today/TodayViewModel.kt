@@ -76,7 +76,11 @@ class TodayViewModel @Inject constructor(
 
     private val repos = HashMap<MenzaId, TodayRepo>()
     private val cache = HashMap<MenzaId, MutableStateFlow<List<DishTypeList>>>()
-    val errors = Channel<MenzaError>(Channel.BUFFERED)
+
+    //val errors = Channel<MenzaError>(Channel.BUFFERED, onUndeliveredElement = {
+    val errors = Channel<MenzaError>(10, onUndeliveredElement = {
+        println("UNDELIVERED: $it")
+    })
 
     fun getData(menzaId: MenzaId, locale: Locale): StateFlow<List<DishTypeList>> {
 

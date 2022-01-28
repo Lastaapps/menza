@@ -52,7 +52,7 @@ object CIOAsyncFetcher : NonBlockingFetcher<Request> {
                     connectAttempts = 1
                 }
             }
-        }.request<HttpResponse> {
+        }.request {
             url(request.url)
         }
     }

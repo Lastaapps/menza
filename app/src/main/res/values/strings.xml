@@ -1,5 +1,5 @@
 <!--
-  ~    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -18,5 +18,139 @@
   -->
 
 <resources>
-    <string name="app_name">Menza</string>
+    <string name="app_name" translatable="false">Menza</string>
+    <string name="app_name_long">CTU Menza</string>
+
+    <string name="init_message_preparing">Preparing data download</string>
+    <string name="init_message_done">Done, the app is ready</string>
+    <string name="init_message_error">Error, try connecting to internet</string>
+    <string name="init_message_allergen">Checking allergens intolerances</string>
+    <string name="init_message_contacts">Calling contacts</string>
+    <string name="init_message_location">Looking up addresses</string>
+    <string name="init_message_menza">Eating in all the Menzas</string>
+    <string name="init_message_message">Reading announcements</string>
+    <string name="init_message_opening_hours">Controlling opening hours</string>
+    <string name="init_title">Downloading data</string>
+    <string name="init_error">An error occurred. Retry now?</string>
+
+    <string name="info_contacts_title">Contacts</string>
+    <string name="info_contacts_dial_no_app">No dial app installed</string>
+    <string name="info_contacts_email_no_app">No email app installed</string>
+    <string name="info_contacts_contact_no_app">No contacts app installed</string>
+    <string name="info_contacts_dial_choose_app">Choose phone app</string>
+    <string name="info_contacts_email_choose_app">Choose email app</string>
+    <string name="info_contacts_contact_choose_app">Choose contacts app</string>
+    <string name="info_contacts_contact_button_add">Add contact</string>
+    <string name="info_location_title">Address</string>
+    <string name="info_location_no_app">No map app installed</string>
+    <string name="info_location_choose_app">Choose map app</string>
+    <string name="info_message_title">Announcements</string>
+    <string name="info_opening_hours_title">Opening hours</string>
+
+    <string name="license_title">Used open-source libraries</string>
+    <string name="license_menza_button">Menza is licensed under GNU GPL v3.0 license</string>
+    <string name="license_none_selected">No artifact selected</string>
+
+    <string name="privacy_title">Privacy Policy</string>
+    <string name="privacy_text">
+        This app doesn\'t collect or send any private data.
+        If you don\'t trust it, you can check source code yourself.
+    </string>
+    <string name="privacy_view_source">View source code</string>
+    <string name="privacy_accept">Accept</string>
+
+    <string name="osturak_title" translatable="false">Ošťurák</string>
+    <string name="osturak_text">
+        Ošťurák is the name of iron (or wooden) stick used for roasting
+        sausages on a campfire. This term is used in the area around town Pelhřimov (Vysočina region).
+        Why am I telling you about it? Because there is no equivalent for
+        this word in czech although ošťurák is used very often.
+        I want to spread this word to as many people as possible, because I find it
+        much better than napichovák used now. And also to spread my home culture.
+        You can see images of it below.
+    </string>
+    <string name="osturak_brought_by">Brought you by Ošťurák\'s Witnesses</string>
+    <string name="osturak_source">Source</string>
+
+    <string name="about_title">Menza CTU</string>
+    <string name="about_license_notices">License notices</string>
+    <string name="about_osturak">Info about Ošťurák</string>
+    <string name="about_data_source">Data source</string>
+    <string name="about_developer_contact">Developer contact</string>
+
+    <string name="report_title">How do you want to report the error?</string>
+    <string name="report_telegram">Telegram</string>
+    <string name="report_github">GitHub Issue</string>
+    <string name="report_facebook">Facebook Messenger</string>
+    <string name="report_email">Email</string>
+    <string name="report_email_no_app">No email app installed</string>
+    <string name="report_cancel">Cancel</string>
+    <string name="report_add_description">Please describe you problem here</string>
+    <string name="report_clipboard">Report text copied to clipboard</string>
+    <string name="report_clipboard_title">Menza problem report</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_switch_system_theme">Use system dynamic theme</string>
+    <string name="settings_switch_price">Show discounted student prices</string>
+    <string name="settings_switch_metered">Download images on metered networks</string>
+    <string name="settings_button_privacy_policy">Privacy policy</string>
+    <string name="settings_button_about">About</string>
+    <string name="settings_button_rate">Rate us!</string>
+    <string name="settings_button_reload">Full cache refresh</string>
+    <string name="settings_button_report">Report an error</string>
+    <string name="settings_init_menza_ask">Always ask</string>
+    <string name="settings_init_menza_remember">Remember latest</string>
+    <string name="settings_init_menza_specific">Choose one</string>
+    <string name="settings_init_menza_behaviour">Selected menza at startup behaviour</string>
+    <string name="settings_init_menza_select_title">Menza to open</string>
+    <string name="settings_init_menza_select_placeholder">Select a menza</string>
+    <string name="settings_reload_title">Full data reload</string>
+    <string name="settings_reload_text">
+        This operation clears local data like menza\'s name, location, contacts, etc.
+        No settings are reset as result of this operation.
+        Make sure you are connected to network,
+        these data are required for the app to function correctly.
+        App will be closed and the data will be downloaded on next app start.
+        You can open it right away.
+    </string>
+    <string name="settings_reload_cancel">Cancel</string>
+    <string name="settings_reload_ok">Close app and reload</string>
+    <string name="settings_theme_title">App theme</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_system">System</string>
+
+    <string name="today_no_dish">No dish selected</string>
+    <string name="today_info_location">Issue location</string>
+    <string name="today_info_window">Expected window number</string>
+    <string name="today_info_allergens_title">Allergens</string>
+    <string name="today_info_allergens_none">Dish without any allerens</string>
+    <string name="today_info_image_load_failed">Failed to load the image</string>
+    <string name="today_list_none">No data available</string>
+    <string name="today_list_image_load_failed">Failed to load the image</string>
+    <string name="today_list_image_metered">The image not downloaded, metered network</string>
+    <string name="today_price_title">Which prices do you want to see?</string>
+    <string name="today_price_discounted">Discounted</string>
+    <string name="today_price_normal">Normal full</string>
+
+    <string name="week_list_none">No data available</string>
+
+    <string name="error_button_report">Report</string>
+    <string name="error_week_not_supported">This menza doesn\'t support Week menu</string>
+    <string name="error_parsing">Internal app error, please report it</string>
+    <string name="error_unknown_connection_error">Unknown connection error</string>
+    <string name="error_connection_closed">Connection closed</string>
+    <string name="error_failed_to_connect">Failed to connect to the server</string>
+    <string name="error_no_internet">No Internet available</string>
+    <string name="error_timeout">Connection timed out</string>
+
+    <string name="nav_today">Today</string>
+    <string name="nav_week">Week</string>
+    <string name="nav_info">Info</string>
+    <string name="nav_settings">Settings</string>
+    <string name="appbar_no_menza">No menza selected</string>
+
+    <string name="menza_none_selected">No menza selected</string>
+    <string name="menza_osturak">Find out about ošťurák</string>
+
 </resources>

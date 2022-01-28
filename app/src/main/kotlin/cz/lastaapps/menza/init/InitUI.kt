@@ -31,8 +31,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.menza.ui.dests.others.CollectErrors
+import cz.lastaapps.menza.R
+import cz.lastaapps.menza.ui.CollectErrors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,7 +85,7 @@ private fun InitContent(viewModel: InitViewModel, modifier: Modifier = Modifier)
                 .padding(8.dp)
         ) {
             Text(
-                "Downloading data...",
+                stringResource(R.string.init_title),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -120,12 +122,12 @@ private fun Content(
                 animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
             )
             CircularProgressIndicator(animatedProgress, Modifier.size(48.dp))
-            Text(text = message.message)
+            Text(stringResource(message.message))
         } else {
             IconButton(onClick = onRefresh) {
                 Icon(Icons.Default.Refresh, contentDescription = null)
             }
-            Text("An error occurred! Retry?")
+            Text(stringResource(R.string.init_error))
         }
     }
 }

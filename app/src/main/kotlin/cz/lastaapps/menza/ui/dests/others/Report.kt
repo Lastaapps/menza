@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -69,7 +70,7 @@ fun ReportDialog(
                         .padding(16.dp)
                 ) {
                     Text(
-                        "How do you want to report the error?",
+                        stringResource(cz.lastaapps.menza.R.string.report_title),
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center,
                     )
@@ -86,7 +87,7 @@ fun ReportDialog(
                                 null,
                                 Modifier.size(24.dp)
                             )
-                            Text(text = "Telegram")
+                            Text(stringResource(cz.lastaapps.menza.R.string.report_telegram))
                         }
                     }
                     Button(
@@ -102,7 +103,7 @@ fun ReportDialog(
                                 null,
                                 Modifier.size(24.dp)
                             )
-                            Text(text = "GitHub Issue")
+                            Text(stringResource(cz.lastaapps.menza.R.string.report_github))
                         }
                     }
                     Button(
@@ -118,7 +119,7 @@ fun ReportDialog(
                                 null,
                                 Modifier.size(24.dp)
                             )
-                            Text(text = "Facebook Messenger")
+                            Text(stringResource(cz.lastaapps.menza.R.string.report_facebook))
                         }
                     }
                     Button(
@@ -130,11 +131,11 @@ fun ReportDialog(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Image(Icons.Default.Email, null, Modifier.size(24.dp))
-                            Text(text = "Send Email")
+                            Text(stringResource(cz.lastaapps.menza.R.string.report_email))
                         }
                     }
                     TextButton(onClick = onDismissRequest) {
-                        Text(text = "Cancel")
+                        Text(stringResource(cz.lastaapps.menza.R.string.report_cancel))
                     }
                 }
             }
@@ -143,9 +144,8 @@ fun ReportDialog(
 }
 
 fun sendReport(context: Context, mode: ReportMode, throwable: Throwable? = null) {
-    //TODO translate
     val text = """
-        |Please add more description here
+        |${context.getString(cz.lastaapps.menza.R.string.report_add_description)}
         |
         |
         |${getPhoneInfo(context)}
@@ -178,9 +178,12 @@ private fun getPhoneInfo(context: Context): String {
 
 private fun copyToClipboard(context: Context, text: String) {
     val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText("Menza report", text)
+    val clip = ClipData.newPlainText(
+        context.getString(cz.lastaapps.menza.R.string.report_clipboard_title),
+        text
+    )
     clipboard.setPrimaryClip(clip)
-    Toast.makeText(context, "Report copied to the clipboard", Toast.LENGTH_LONG).show()
+    Toast.makeText(context, cz.lastaapps.menza.R.string.report_clipboard, Toast.LENGTH_LONG).show()
 }
 
 private fun sendTelegram(context: Context, text: String) {
@@ -226,7 +229,8 @@ private fun sendEmail(context: Context, text: String) {
         context.startActivity(intent)
     } catch (e: Exception) {
         e.printStackTrace()
-        Toast.makeText(context, "No email client found", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, cz.lastaapps.menza.R.string.report_email_no_app, Toast.LENGTH_LONG)
+            .show()
     }
 }
 

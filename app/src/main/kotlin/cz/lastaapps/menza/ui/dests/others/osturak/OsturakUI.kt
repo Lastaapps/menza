@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.others.vosturak
+package cz.lastaapps.menza.ui.dests.others.osturak
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -28,27 +28,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import cz.lastaapps.menza.R
 
 @Composable
-fun VosturakText(modifier: Modifier = Modifier) {
+fun OsturakText(modifier: Modifier = Modifier) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Vošťurák", style = MaterialTheme.typography.headlineMedium)
         Text(
-            "Vošťurák is the name of iron (or wooden) stick used for roasting " +
-                    "sausages on a campfire. This term is used in the area around town Pelhřimov. " +
-                    "Why am I telling you about it? Because there is no equivalent for " +
-                    "this word in czech although vošťurák is used very ofter. " +
-                    "I want to spread this word to as many people as possible, because I find it " +
-                    "much better than napichovák used now. And also to spread my home culture. You can see images of it below."
+            stringResource(R.string.osturak_title),
+            style = MaterialTheme.typography.headlineMedium
+        )
+        Text(stringResource(R.string.osturak_text))
+        Text(
+            stringResource(R.string.osturak_brought_by),
+            style = MaterialTheme.typography.titleSmall
         )
     }
 }
 
 @Composable
-fun VosturakImages(modifier: Modifier = Modifier) {
+fun OsturakImages(modifier: Modifier = Modifier) {
 
     val items = listOf(
         R.drawable.bodla to "bodla.cz",
@@ -86,6 +87,9 @@ private fun ImageWithImage(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(painterResource(id = imageId), link, modifier = Modifier.fillMaxWidth())
-        Text("Source: $link", style = MaterialTheme.typography.bodySmall)
+        Text(
+            "${stringResource(R.string.osturak_source)}: $link",
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }

@@ -64,7 +64,7 @@ fun AboutUi(
             Surface(modifier = Modifier.fillMaxWidth()) {
                 Box(Modifier.padding(16.dp), contentAlignment = Alignment.Center) {
                     Text(
-                        text = "Menzy ČVUT",
+                        text = stringResource(cz.lastaapps.menza.R.string.about_title),
                         style = MaterialTheme.typography.headlineMedium,
                         textAlign = TextAlign.Center,
                     )
@@ -93,20 +93,23 @@ fun AboutUi(
                         IconAndText({
                             Icon(Icons.Default.Description, null)
                         }, {
-                            Text(text = "License notices", textAlign = TextAlign.Center)
+                            Text(
+                                text = stringResource(cz.lastaapps.menza.R.string.about_license_notices),
+                                textAlign = TextAlign.Center
+                            )
                         })
                     }
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            navController.navigate(Dest.R.vosturak)
+                            navController.navigate(Dest.R.osturak)
                         }
                     ) {
                         IconAndText({
                             Icon(Icons.Default.LocalFireDepartment, null)
                         }, {
                             Text(
-                                text = "Info about Vošťurák",
+                                text = stringResource(cz.lastaapps.menza.R.string.about_osturak),
                                 textAlign = TextAlign.Center,
                                 maxLines = 1
                             )
@@ -134,7 +137,7 @@ private fun DataSource(modifier: Modifier = Modifier) {
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = "Data source:",
+            text = stringResource(cz.lastaapps.menza.R.string.about_data_source),
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
         )
@@ -226,7 +229,7 @@ private fun Socials(modifier: Modifier = Modifier) {
 
     Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = "Developer contacts",
+            text = stringResource(cz.lastaapps.menza.R.string.about_developer_contact),
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
         )

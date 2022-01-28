@@ -27,10 +27,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.common.DeveloperInfo
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.R
+import cz.lastaapps.menza.ui.layout.menza.MenzaList
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +56,8 @@ fun MenzaNavDrawer(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    "ČVUT Menza", style = MaterialTheme.typography.headlineMedium
+                    stringResource(R.string.app_name_long),
+                    style = MaterialTheme.typography.headlineMedium
                 )
 
                 MenzaList(

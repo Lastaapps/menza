@@ -19,10 +19,7 @@
 
 package cz.lastaapps.storage.repo.scrapers
 
-import cz.lastaapps.entity.allergens.Allergen
-import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.menza.Menza
-import cz.lastaapps.scraping.AllergenScraper
 import cz.lastaapps.scraping.MenzaScraper
 
 class MenzaScraperMock(val set: Set<Menza>) : MenzaScraper<Any> {

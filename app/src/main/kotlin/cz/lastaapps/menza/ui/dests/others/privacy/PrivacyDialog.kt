@@ -27,9 +27,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cz.lastaapps.common.Communication
+import cz.lastaapps.menza.R
 
 @Composable
 fun PrivacyDialog(
@@ -50,22 +52,25 @@ fun PrivacyDialogContent(
     showAccept: Boolean,
     onAccept: () -> Unit,
 ) {
-    Surface() {
+    Surface {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("Privacy Policy", style = MaterialTheme.typography.titleLarge)
-            Text("This app doesn't collect or send any private data. If you don't trust it, you can check source code yourself.")
+            Text(
+                stringResource(R.string.privacy_title),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(stringResource(R.string.privacy_text))
 
             val context = LocalContext.current
             OutlinedButton(onClick = { Communication.openProjectsGithub(context, "Menza") }) {
-                Text("View source code")
+                Text(stringResource(R.string.privacy_view_source))
             }
             if (showAccept)
                 Button(onClick = onAccept) {
-                    Text("Accept")
+                    Text(stringResource(R.string.privacy_accept))
                 }
         }
     }

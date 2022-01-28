@@ -17,6 +17,8 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:Suppress("SpellCheckingInspection")
+
 package cz.lastaapps.menza.ui.dests.others.license
 
 import androidx.compose.foundation.gestures.detectTapGestures

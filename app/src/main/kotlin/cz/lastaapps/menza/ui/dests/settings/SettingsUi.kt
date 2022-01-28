@@ -32,15 +32,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.navigation.NavController
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.dests.others.AboutUi
 import cz.lastaapps.menza.ui.dests.others.ReportDialog
 import cz.lastaapps.menza.ui.dests.others.sendReport
 import cz.lastaapps.menza.ui.dests.settings.modules.DarkThemeSettings
+import cz.lastaapps.menza.ui.dests.settings.modules.FullReloadDialog
 import cz.lastaapps.menza.ui.dests.settings.modules.InitMenzaUI
 import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
@@ -66,22 +69,22 @@ fun SettingsUI(
 
     val scrollState = rememberScrollState()
 
-    BoxWithConstraints(modifier.fillMaxWidth()) {
+    BoxWithConstraints(modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
         val width = minWidth
 
         Box(
-            modifier = Modifier.fillMaxWidth(),
+            Modifier
+                .verticalScroll(scrollState)
+                .width(min(width, 300.dp)),
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(
-                Modifier
-                    .verticalScroll(scrollState)
-                    .width(min(width, 300.dp)),
+                Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Text(
-                    "Settings",
+                    stringResource(R.string.settings_title),
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
                 )
@@ -142,7 +145,7 @@ private fun UseThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = 
         val mode by viewModel.sett.systemTheme.collectAsState()
 
         SettingsSwitch(
-            title = "Use system color theme",
+            title = stringResource(R.string.settings_switch_system_theme),
             checked = mode,
             onClick = { viewModel.setUseSystemTheme(!mode) },
             modifier = modifier,
@@ -155,7 +158,7 @@ private fun PriceSettings(viewModel: SettingsViewModel, modifier: Modifier = Mod
     val mode by viewModel.sett.priceType.collectAsState()
 
     SettingsSwitch(
-        title = "Show discounted prices",
+        title = stringResource(R.string.settings_switch_price),
         checked = mode is PriceType.Discounted,
         onClick = {
             viewModel.setPriceType(
@@ -171,7 +174,7 @@ private fun ImagesOnMeteredSetting(viewModel: SettingsViewModel, modifier: Modif
     val mode by viewModel.sett.imagesOnMetered.collectAsState()
 
     SettingsSwitch(
-        title = "Auto download images on metered networks",
+        title = stringResource(R.string.settings_switch_metered),
         checked = mode,
         onClick = { viewModel.setImagesOnMetered(!mode) },
         modifier = modifier,
@@ -185,30 +188,44 @@ private fun Buttons(
     viewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         val uriHandler = LocalUriHandler.current
 
         Button(
             onClick = { navController.navigate(Dest.R.privacyPolicy) },
             Modifier.fillMaxWidth()
         ) {
-            Text(text = "Privacy Policy")
+            Text(
+                text = stringResource(R.string.settings_button_privacy_policy),
+                textAlign = TextAlign.Center
+            )
         }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max),
         ) {
             if (enableAbout)
                 Button(
-                    onClick = onAboutClicked, modifier = Modifier.weight(1f)
-                ) { Text(text = "About") }
+                    onClick = onAboutClicked, modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                ) {
+                    Text(
+                        stringResource(R.string.settings_button_about),
+                        textAlign = TextAlign.Center
+                    )
+                }
 
             Button(
                 onClick = { uriHandler.openUri("https://play.google.com/store/apps/details?id=cz.lastaapps.menza") },
-                modifier = Modifier.weight(1f)
-            ) { Text(text = "Rate us!") }
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            ) { Text(stringResource(R.string.settings_button_rate), textAlign = TextAlign.Center) }
         }
 
         ReportButton(Modifier.fillMaxWidth())
@@ -226,7 +243,7 @@ private fun FullDataReload(viewModel: SettingsViewModel, modifier: Modifier = Mo
         viewModel.fullRefresh()
     }
     Button(onClick = { showFullReload = true }, modifier) {
-        Text(text = "Full cache refresh")
+        Text(stringResource(R.string.settings_button_reload), textAlign = TextAlign.Center)
     }
 }
 
@@ -235,7 +252,7 @@ private fun ReportButton(modifier: Modifier = Modifier) {
     var shown by rememberSaveable { mutableStateOf(false) }
 
     Button(onClick = { shown = true }, modifier) {
-        Text("Report an error")
+        Text(stringResource(R.string.settings_button_report), textAlign = TextAlign.Center)
     }
 
     val context = LocalContext.current

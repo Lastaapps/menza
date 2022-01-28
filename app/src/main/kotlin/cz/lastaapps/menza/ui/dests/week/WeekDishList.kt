@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -44,8 +45,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
+import cz.lastaapps.menza.R
+import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.LocalSnackbarProvider
-import cz.lastaapps.menza.ui.dests.others.CollectErrors
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
@@ -104,7 +106,7 @@ private fun WeekDishContent(
             modifier = modifier.verticalScroll(rememberScrollState()),
             contentAlignment = Alignment.Center,
         ) {
-            Text("No data available")
+            Text(stringResource(R.string.week_list_none))
         }
         return
     }

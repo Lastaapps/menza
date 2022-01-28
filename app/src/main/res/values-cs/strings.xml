@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+  ~
+  ~     This file is part of Menza.
+  ~
+  ~     Menza is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Menza is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name_long">ČVUT Menza</string>
+    <string name="init_message_preparing">Připravuji stažení dat</string>
+    <string name="init_message_done">Hotovo, aplikace připravena</string>
+    <string name="init_message_error">Chyba, zkuste se připojit k internetu</string>
+    <string name="init_message_allergen">Prozkoumávám alergeny</string>
+    <string name="init_message_contacts">Volám kontaktům</string>
+    <string name="init_message_location">Zjišťuji adresy</string>
+    <string name="init_message_menza">Obědvám v menzách</string>
+    <string name="init_message_message">Čtu oznámení</string>
+    <string name="init_message_opening_hours">Kontroluji otevírací dobu</string>
+    <string name="init_title">Stahování dat</string>
+    <string name="init_error">Vyskytla se chyba. Zkusit znovu?</string>
+    <string name="info_contacts_title">Kontakty</string>
+    <string name="info_contacts_dial_no_app">Není nainstalovaná aplikace kontakty</string>
+    <string name="info_contacts_email_no_app">Není nainstalován emailový klient</string>
+    <string name="info_contacts_contact_no_app">Není nainstalována aplikace kontakty</string>
+    <string name="info_contacts_dial_choose_app">Vyberte aplikaci pro hovor</string>
+    <string name="info_contacts_email_choose_app">Vyberte emailového klienta</string>
+    <string name="info_contacts_contact_choose_app">Vyberte kam uložit kontakt</string>
+    <string name="info_contacts_contact_button_add">Přidat kontakt</string>
+    <string name="info_location_title">Adresa</string>
+    <string name="info_location_no_app">Nejsou nainstalované mapy</string>
+    <string name="info_location_choose_app">Vyberte mapovací aplikaci</string>
+    <string name="info_message_title">Oznámení</string>
+    <string name="info_opening_hours_title">Otevírací hodiny</string>
+    <string name="license_title">Použité open-source knihovny</string>
+    <string name="license_menza_button">Menza je licencovaná pod GNU GPL v3.0 licencí</string>
+    <string name="license_none_selected">Není vybrán žádný artifact</string>
+    <string name="privacy_title">Zásady ochrany osobních údajů</string>
+    <string name="privacy_text">
+        Tato aplikace neshromažďuje žádná (osobní) data.
+        Pokud nevěříte, můžete si sami zkontrolovat zdrojový kód.
+    </string>
+    <string name="privacy_view_source">Prohlédnout si zdrojový kód</string>
+    <string name="privacy_accept">Přijímám</string>
+    <string name="osturak_text">
+        Ošťurák je název kovové tyčky (či naostřeného klacku) určené k opékání buřtů
+        při ohýnku či větším táboráku. Tento název pochází z okolí Pelhřimova (Vysočina).
+        V jazyce, co je mi známo, neexistuje žádný oficiální název, i když ošťuráky
+        používáme velice často. Touto zprávou chci toto úžasné slovo rozšířit do co
+        nejvíce částí naší republiky. Uznejte, že ošťurák zní mnohem lépe než napichovák.
+        Pokud si nejste jisti, o čem tu píši, můžete si prohlédnout obrázky níže.
+    </string>
+    <string name="osturak_brought_by">Přináší Svědci Ošťurákovi</string>
+    <string name="osturak_source">Zdroj</string>
+    <string name="about_title">Menza ČVUT</string>
+    <string name="about_license_notices">Použité knihovny</string>
+    <string name="about_osturak">Informace o ošťuráku</string>
+    <string name="about_data_source">Zdroj dat</string>
+    <string name="about_developer_contact">Kontakt na vývojáře</string>
+    <string name="report_title">Jakým způsobem chcete nahlásit chybu?</string>
+    <string name="report_telegram">Telegram</string>
+    <string name="report_github">GitHub Issue</string>
+    <string name="report_facebook">Facebook Messenger</string>
+    <string name="report_email">Email</string>
+    <string name="report_email_no_app">Není nainstalovaný emailový klient</string>
+    <string name="report_cancel">Zrušit</string>
+    <string name="report_add_description">Zde prosím popište váš problém více</string>
+    <string name="report_clipboard">Chybové hlášení zkopírováno do schránky</string>
+    <string name="report_clipboard_title">Chybové hlášení Menz</string>
+    <string name="settings_title">Nastavení</string>
+    <string name="settings_switch_system_theme">Použít systémový dynamický vzhled</string>
+    <string name="settings_switch_price">Zobrazit zlevněné studentské ceny</string>
+    <string name="settings_switch_metered">Stahovat obrázky na sítích s měřeným objemem dat</string>
+    <string name="settings_button_privacy_policy">Zásady ochrany osobních údajů</string>
+    <string name="settings_button_about">O aplikaci</string>
+    <string name="settings_button_rate">Ohodnoťte nás!</string>
+    <string name="settings_button_reload">Kompletní přenačtení dat</string>
+    <string name="settings_button_report">Nahlásit chybu</string>
+    <string name="settings_init_menza_ask">Vždy se zeptat</string>
+    <string name="settings_init_menza_remember">Zapamatovat si poslední</string>
+    <string name="settings_init_menza_specific">Vybrat jednu</string>
+    <string name="settings_init_menza_behaviour">Vybraná menza po spuštění aplikace</string>
+    <string name="settings_init_menza_select_title">Menza k otevření</string>
+    <string name="settings_init_menza_select_placeholder">Vyberte menzu</string>
+    <string name="settings_reload_title">Kompletní přenačtení dat</string>
+    <string name="settings_reload_text">
+        Tato operace smaže data typu jména, adresy, kontaky a podobně menz.
+        Nastavení se nezmění.
+        Aplikace se ukončí a při dalším spuštění si tato pro aplikaci nutná data stáhne znovu.
+        Proto budete muset být při spuštění připojeni k internetu.
+        Doporučejeme data stáhnout rovnou - hned znovu otevřít aplikaci.
+    </string>
+    <string name="settings_reload_cancel">Zrušit</string>
+    <string name="settings_reload_ok">Zavřít aplikaci a znovunačíst</string>
+    <string name="settings_theme_title">Vzhled aplikace</string>
+    <string name="settings_theme_light">Světlý</string>
+    <string name="settings_theme_dark">Tmavý</string>
+    <string name="settings_theme_system">Systémový</string>
+    <string name="today_no_dish">Není vybráno žádné jídlo</string>
+    <string name="today_info_location">Výdejní místo</string>
+    <string name="today_info_window">Očekávané číslo okénka</string>
+    <string name="today_info_allergens_title">Alergeny</string>
+    <string name="today_info_allergens_none">Jídlo bez alergenů</string>
+    <string name="today_info_image_load_failed">Nepodařilo se načíst obrázek</string>
+    <string name="today_list_none">Data nejsou dostupná</string>
+    <string name="today_list_image_load_failed">Nepodařilo se načíst obrázek</string>
+    <string name="today_list_image_metered">Obrázek nebyl stažen, placená síť</string>
+    <string name="today_price_title">Jaké ceny se mají zobrazovat?</string>
+    <string name="today_price_discounted">Zlevněné</string>
+    <string name="today_price_normal">Běžné plné</string>
+    <string name="week_list_none">Data nejsou dostupná</string>
+    <string name="error_button_report">Nahlásit</string>
+    <string name="error_week_not_supported">Tato menza neposkytuje týdenní jídelníček</string>
+    <string name="error_parsing">Chyba uvnitř aplikace, prosíme o nahlášení</string>
+    <string name="error_unknown_connection_error">Neznámá chyba připojení</string>
+    <string name="error_connection_closed">Připojení ukončeno</string>
+    <string name="error_failed_to_connect">Nepodařilo se připojit k serveru</string>
+    <string name="error_no_internet">Nejste připojeni k internetu</string>
+    <string name="error_timeout">Časový limit připojení vypršel</string>
+    <string name="nav_today">Dnes</string>
+    <string name="nav_week">Týden</string>
+    <string name="nav_info">Informace</string>
+    <string name="nav_settings">Nastavení</string>
+    <string name="appbar_no_menza">Menza není vybrána</string>
+    <string name="menza_none_selected">Není vybrána žádná menza</string>
+    <string name="menza_osturak">Seznámit se s ošťurákem</string>
+</resources>

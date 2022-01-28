@@ -30,7 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.lastaapps.menza.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,9 +44,8 @@ fun MainTopBar(
     onMenuClicked: (() -> Unit)? = null,
 ) {
 
-    val title = remember(menzaName) {
-        menzaName ?: "No menza selected"
-    }
+    val title = remember(menzaName) { menzaName }
+        ?: stringResource(R.string.appbar_no_menza)
 
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val scrollBehavior = remember(decayAnimationSpec) {

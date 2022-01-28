@@ -25,6 +25,8 @@ plugins {
     id(Plugins.OSS_LICENSE)
 }
 
+project.group = App.GROUP
+
 android {
 
     if (App.USE_LEGACY) {

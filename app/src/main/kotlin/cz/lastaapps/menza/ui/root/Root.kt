@@ -34,15 +34,14 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.WithConnectivity
 import cz.lastaapps.menza.init.InitDecision
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.*
 import cz.lastaapps.menza.ui.dests.info.InfoLayout
 import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
+import cz.lastaapps.menza.ui.dests.others.osturak.OsturakLayout
 import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyCheck
 import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyDialogContent
-import cz.lastaapps.menza.ui.dests.others.vosturak.VosturakLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
 import cz.lastaapps.menza.ui.dests.settings.store.darkMode
 import cz.lastaapps.menza.ui.dests.settings.store.resolveShouldUseDark
@@ -51,6 +50,7 @@ import cz.lastaapps.menza.ui.dests.today.TodayDest
 import cz.lastaapps.menza.ui.dests.week.WeekLayout
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.theme.AppTheme
+import kotlinx.coroutines.channels.produce
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,6 +63,7 @@ fun AppRoot(
 
     val useDark by viewModel.sett.darkMode.collectAsState()
     val useSystem by viewModel.sett.systemTheme.collectAsState()
+    rememberCoroutineScope().produce<Int> { 0 }
 
     AppTheme(
         darkTheme = useDark.resolveShouldUseDark(),
@@ -210,8 +211,8 @@ private fun AppContent(viewModel: MenzaViewModel) {
                     licenseViewModel = hiltViewModel(),
                 )
             }
-            composable(Dest.R.vosturak) {
-                VosturakLayout(
+            composable(Dest.R.osturak) {
+                OsturakLayout(
                     navController = navHostState,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,

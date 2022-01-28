@@ -28,8 +28,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Message
+import cz.lastaapps.menza.R
 
 @Composable
 fun MessageList(
@@ -38,7 +40,10 @@ fun MessageList(
 ) {
     if (messages.isNotEmpty()) {
         Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Web messages", style = MaterialTheme.typography.titleLarge)
+            Text(
+                stringResource(R.string.info_message_title),
+                style = MaterialTheme.typography.titleLarge
+            )
             messages.forEach {
                 Message(it, Modifier.fillMaxWidth())
             }

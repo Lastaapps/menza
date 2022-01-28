@@ -38,7 +38,11 @@ import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.FoldingClass
 import cz.lastaapps.menza.ui.LocalFoldProvider
-import cz.lastaapps.menza.ui.layout.main.*
+import cz.lastaapps.menza.ui.layout.main.MainBottomNav
+import cz.lastaapps.menza.ui.layout.main.MainNavRail
+import cz.lastaapps.menza.ui.layout.main.MainTopBar
+import cz.lastaapps.menza.ui.layout.main.MenzaNavDrawer
+import cz.lastaapps.menza.ui.layout.menza.MenzaList
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import kotlinx.coroutines.launch
 

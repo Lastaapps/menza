@@ -36,6 +36,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
@@ -47,6 +48,14 @@ import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.day.IssueLocation
+import cz.lastaapps.menza.R
+
+@Composable
+fun NoDishSelected(modifier: Modifier = Modifier) {
+    Box(modifier, contentAlignment = Alignment.Center) {
+        Text(stringResource(R.string.today_no_dish))
+    }
+}
 
 @Composable
 fun TodayInfo(
@@ -97,11 +106,11 @@ private fun IssueLocationList(
     Column(modifier) {
         Row {
             Text(
-                text = "Issue location",
+                text = stringResource(R.string.today_info_location),
                 style = MaterialTheme.typography.titleMedium,
             )
             Text(
-                text = "Window number",
+                text = stringResource(R.string.today_info_window),
                 textAlign = TextAlign.End,
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.titleMedium,
@@ -129,10 +138,13 @@ private fun AllergenList(
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         val data by todayViewModel.getAllergenForIds(dish.allergens).collectAsState(emptyList())
 
-        Text("Allergens", style = MaterialTheme.typography.titleLarge)
+        Text(
+            stringResource(R.string.today_info_allergens_title),
+            style = MaterialTheme.typography.titleLarge
+        )
 
         if (data.isEmpty()) {
-            Text("There are no allergens")
+            Text(stringResource(R.string.today_info_allergens_none))
         } else {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 data.forEach {
@@ -201,7 +213,7 @@ private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
                     ) {
                         Icon(
                             Icons.Default.Refresh,
-                            "Failed to load an image",
+                            stringResource(R.string.today_info_image_load_failed)
                         )
                     }
                 },

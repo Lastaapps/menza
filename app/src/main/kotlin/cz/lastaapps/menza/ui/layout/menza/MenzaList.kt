@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.layout.main
+package cz.lastaapps.menza.ui.layout.menza
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.theme.colorForMenza
 
 @Composable

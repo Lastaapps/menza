@@ -27,8 +27,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.navigation.Dest
 
 @Composable
@@ -41,9 +43,9 @@ fun MenzaNotSelected(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("No menza selected")
-            TextButton(onClick = { navController.navigate(Dest.R.vosturak) }) {
-                Text("Find out about vošťurák")
+            Text(stringResource(R.string.menza_none_selected))
+            TextButton(onClick = { navController.navigate(Dest.R.osturak) }) {
+                Text(stringResource(R.string.menza_osturak))
             }
         }
     }

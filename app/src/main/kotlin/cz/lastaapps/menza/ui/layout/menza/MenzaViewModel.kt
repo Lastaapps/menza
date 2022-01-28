@@ -49,7 +49,7 @@ class MenzaViewModel @Inject constructor(
         private val log = logging()
     }
 
-    val isReady = MutableStateFlow<Boolean>(false)
+    val isReady = MutableStateFlow(false)
     lateinit var data: StateFlow<List<Menza>>
 
     fun getForId(id: MenzaId): Menza? = data.value.firstOrNull { it.menzaId == id }

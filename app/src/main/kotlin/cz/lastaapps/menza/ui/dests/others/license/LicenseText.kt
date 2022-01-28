@@ -29,7 +29,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cz.lastaapps.menza.R
 import cz.lastaapps.osslicenseaccess.ArtifactLicense
 
 @Composable
@@ -40,7 +42,7 @@ fun LicenseText(
 ) {
     if (selectedArtifact == null) {
         Box(modifier, contentAlignment = Alignment.Center) {
-            Text("No artifact selected")
+            Text(stringResource(R.string.license_none_selected))
         }
     } else {
         val text = remember(selectedArtifact) {

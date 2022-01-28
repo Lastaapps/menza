@@ -30,8 +30,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.LocalTime
+import cz.lastaapps.menza.R
 import kotlinx.datetime.DayOfWeek
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -44,7 +46,10 @@ fun OpeningHoursList(
 ) {
     if (data.isNotEmpty()) {
         Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Opening hours", style = MaterialTheme.typography.titleLarge)
+            Text(
+                stringResource(R.string.info_opening_hours_title),
+                style = MaterialTheme.typography.titleLarge
+            )
             data.forEach {
                 OpeningHoursLocationUI(data = it, Modifier.fillMaxWidth())
             }
@@ -74,7 +79,7 @@ fun OpeningHoursLocationUI(
         ) {
             Text(data.name, style = MaterialTheme.typography.titleMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Column() {
+                Column {
                     data.list.forEach {
                         val start = it.startDay.getDisplayName(TextStyle.SHORT, locale)
                         if (it.startDay != it.endDay) {
@@ -85,14 +90,14 @@ fun OpeningHoursLocationUI(
                         }
                     }
                 }
-                Column() {
+                Column {
                     data.list.forEach {
                         val start = it.startTime.toJavaLocalDate().format(formatter)
                         val end = it.endTime.toJavaLocalDate().format(formatter)
                         Text("$start - $end")
                     }
                 }
-                Column() {
+                Column {
                     data.list.forEach {
                         Text(it.comment ?: "")
                     }

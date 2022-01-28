@@ -19,10 +19,7 @@
 
 package cz.lastaapps.storage.repo.scrapers
 
-import cz.lastaapps.entity.allergens.Allergen
-import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.info.Contact
-import cz.lastaapps.scraping.AllergenScraper
 import cz.lastaapps.scraping.ContactsScraper
 
 class ContactsScraperMock(val set: Set<Contact>) : ContactsScraper<Any> {

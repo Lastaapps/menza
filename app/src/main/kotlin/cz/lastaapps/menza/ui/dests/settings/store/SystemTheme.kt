@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 private val systemThemeKey = booleanPreferencesKey("systemTheme")
 
+@Suppress("unused")
 fun SettingsStore.isSystemThemeAvailable(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
 val SettingsStore.systemTheme: StateFlow<Boolean>

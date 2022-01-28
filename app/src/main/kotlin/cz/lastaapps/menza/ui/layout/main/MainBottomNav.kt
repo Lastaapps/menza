@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import cz.lastaapps.menza.navigation.Dest
@@ -44,8 +45,8 @@ fun MainBottomNav(
             val selected = route?.routesEquals(item.dest) ?: false
 
             NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = item.label) },
-                label = { Text(item.label) },
+                icon = { Icon(item.icon, null) },
+                label = { Text(stringResource(item.label)) },
                 selected = selected,
                 onClick = {
                     navController.navigate(item.dest) {

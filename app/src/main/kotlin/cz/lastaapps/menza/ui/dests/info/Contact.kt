@@ -33,11 +33,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.info.Contact
 import cz.lastaapps.entity.info.Email
 import cz.lastaapps.entity.info.PhoneNumber
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.LocalSnackbarProvider
 import kotlinx.coroutines.launch
 
@@ -48,7 +50,10 @@ fun ContactList(
 ) {
     if (contact.isNotEmpty()) {
         Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(text = "Contacts", style = MaterialTheme.typography.titleLarge)
+            Text(
+                stringResource(R.string.info_contacts_title),
+                style = MaterialTheme.typography.titleLarge
+            )
             contact.forEach {
                 ContactUI(contact = it, Modifier.fillMaxWidth())
             }
@@ -80,10 +85,11 @@ fun ContactUI(
                 Text(text = it.role, style = MaterialTheme.typography.titleMedium)
             }
             contact.phoneNumber?.let {
+                val errorMessage = stringResource(R.string.info_contacts_dial_no_app)
                 OutlinedButton(
                     onClick = {
                         makePhoneCall(context, it) {
-                            scope.launch { snackbar.showSnackbar("No dial app installed") }
+                            scope.launch { snackbar.showSnackbar(errorMessage) }
                         }
                     },
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
@@ -99,10 +105,11 @@ fun ContactUI(
                 }
             }
             contact.email?.let {
+                val errorMessage = stringResource(R.string.info_contacts_email_no_app)
                 OutlinedButton(
                     onClick = {
                         sendEmail(context, it) {
-                            scope.launch { snackbar.showSnackbar("No email app installed") }
+                            scope.launch { snackbar.showSnackbar(errorMessage) }
                         }
                     },
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
@@ -117,19 +124,21 @@ fun ContactUI(
                     )
                 }
             }
-            if (contact.phoneNumber ?: contact.email != null)
+            if (contact.phoneNumber ?: contact.email != null) {
+                val errorMessage = stringResource(R.string.info_contacts_contact_no_app)
                 OutlinedButton(
                     onClick = {
                         addContact(context, contact) {
-                            scope.launch { snackbar.showSnackbar("No contacts app installed") }
+                            scope.launch { snackbar.showSnackbar(errorMessage) }
                         }
                     },
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
                     border = BorderStroke(1.dp, LocalContentColor.current),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(text = "Add Contact")
+                    Text(stringResource(R.string.info_contacts_contact_button_add))
                 }
+            }
         }
     }
 }
@@ -138,7 +147,12 @@ private fun makePhoneCall(context: Context, phoneNumber: PhoneNumber, onError: (
     val intent = Intent(Intent.ACTION_DIAL)
     intent.data = Uri.parse("tel:${Uri.encode(phoneNumber.phone)}")
     try {
-        context.startActivity(Intent.createChooser(intent, "Choose app"))
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                context.getString(R.string.info_contacts_dial_choose_app)
+            )
+        )
     } catch (e: Exception) {
         e.printStackTrace()
         onError()
@@ -149,7 +163,12 @@ private fun sendEmail(context: Context, email: Email, onError: () -> Unit) {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = Uri.parse("mailto:${Uri.encode(email.mail)}")
     try {
-        context.startActivity(Intent.createChooser(intent, "Choose app"))
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                context.getString(R.string.info_contacts_email_choose_app)
+            )
+        )
     } catch (e: Exception) {
         e.printStackTrace()
         onError()
@@ -175,7 +194,12 @@ private fun addContact(context: Context, contact: Contact, onError: () -> Unit) 
         }
     }
     try {
-        context.startActivity(intent)
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                context.getString(R.string.info_contacts_contact_choose_app)
+            )
+        )
     } catch (e: Exception) {
         e.printStackTrace()
         onError()

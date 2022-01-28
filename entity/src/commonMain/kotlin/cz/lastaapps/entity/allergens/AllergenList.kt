@@ -76,7 +76,7 @@ value class AllergenList internal constructor(
 
     val allergenIdSet: Set<AllergenId>
         get() {
-            return boolArray.mapIndexed() { index, state ->
+            return boolArray.mapIndexed { index, state ->
                 if (state) index + 1 else null
             }.filterNotNull().map { AllergenId(it) }.toSet()
         }

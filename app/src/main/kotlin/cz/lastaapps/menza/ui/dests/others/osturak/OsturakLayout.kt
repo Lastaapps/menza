@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.others.vosturak
+package cz.lastaapps.menza.ui.dests.others.osturak
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -40,7 +40,7 @@ import cz.lastaapps.menza.ui.root.AppLayoutMedium
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VosturakLayout(
+fun OsturakLayout(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -54,7 +54,7 @@ fun VosturakLayout(
     @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
-            VosturakLayoutCompact(
+            OsturakLayoutCompact(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
@@ -66,7 +66,7 @@ fun VosturakLayout(
             )
         }
         WindowSizeClass.MEDIUM -> {
-            VosturakLayoutMedium(
+            OsturakLayoutMedium(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
@@ -78,7 +78,7 @@ fun VosturakLayout(
             )
         }
         WindowSizeClass.EXPANDED -> {
-            VosturakLayoutExpanded(
+            OsturakLayoutExpanded(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
@@ -94,7 +94,7 @@ fun VosturakLayout(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VosturakLayoutCompact(
+fun OsturakLayoutCompact(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -122,8 +122,8 @@ fun VosturakLayoutCompact(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                VosturakText()
-                VosturakImages(Modifier.fillMaxWidth())
+                OsturakText()
+                OsturakImages(Modifier.fillMaxWidth())
             }
         }
     }
@@ -131,7 +131,7 @@ fun VosturakLayoutCompact(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VosturakLayoutMedium(
+fun OsturakLayoutMedium(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -157,8 +157,8 @@ fun VosturakLayoutMedium(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                VosturakText()
-                VosturakImages(Modifier.fillMaxWidth())
+                OsturakText()
+                OsturakImages(Modifier.fillMaxWidth())
             }
         }
     }
@@ -166,7 +166,7 @@ fun VosturakLayoutMedium(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VosturakLayoutExpanded(
+fun OsturakLayoutExpanded(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
@@ -193,7 +193,7 @@ fun VosturakLayoutExpanded(
                     .verticalScroll(rememberScrollState()),
                 contentAlignment = Alignment.Center
             ) {
-                VosturakText()
+                OsturakText()
             }
         },
         panel2 = {
@@ -203,7 +203,7 @@ fun VosturakLayoutExpanded(
                     .verticalScroll(rememberScrollState()),
                 contentAlignment = Alignment.Center
             ) {
-                VosturakImages()
+                OsturakImages()
             }
         }
     )

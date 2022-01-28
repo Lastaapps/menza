@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -55,15 +56,16 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.LocalConnectivityProvider
-import cz.lastaapps.menza.isMetered
+import cz.lastaapps.menza.R
+import cz.lastaapps.menza.ui.CollectErrors
+import cz.lastaapps.menza.ui.LocalConnectivityProvider
 import cz.lastaapps.menza.ui.LocalSnackbarProvider
-import cz.lastaapps.menza.ui.dests.others.CollectErrors
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.PriceType
 import cz.lastaapps.menza.ui.dests.settings.store.getPrice
 import cz.lastaapps.menza.ui.dests.settings.store.imagesOnMetered
 import cz.lastaapps.menza.ui.dests.settings.store.priceType
+import cz.lastaapps.menza.ui.isMetered
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 
 @Composable
@@ -136,7 +138,7 @@ private fun DishContent(
             modifier = modifier.verticalScroll(rememberScrollState()),
             contentAlignment = Alignment.Center,
         ) {
-            Text("No data available")
+            Text(stringResource(R.string.today_list_none))
         }
         return
     }
@@ -181,7 +183,7 @@ private fun PriceTypeUnspecified(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
-                    "Which prices do you want to see?",
+                    stringResource(R.string.today_price_title),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge,
                 )
@@ -203,7 +205,10 @@ private fun PriceTypeUnspecified(
                             .weight(1f)
                             .fillMaxHeight()
                     ) {
-                        Text("Discounted", textAlign = TextAlign.Center)
+                        Text(
+                            stringResource(R.string.today_price_discounted),
+                            textAlign = TextAlign.Center
+                        )
                     }
                     Button(
                         onClick = { onPriceType(PriceType.Normal) },
@@ -215,7 +220,10 @@ private fun PriceTypeUnspecified(
                             .weight(1f)
                             .fillMaxHeight()
                     ) {
-                        Text("Normal full", textAlign = TextAlign.Center)
+                        Text(
+                            stringResource(R.string.today_price_normal),
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
             }
@@ -356,7 +364,7 @@ private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier
                 if (canDownload)
                     data(dish.imageUrl)
                 else
-                    data("https://userisnometerednetwork.su/")
+                    data("https://userisonmeterednetwork.su/")
             }
                 .build()
 
@@ -381,9 +389,15 @@ private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier
                         contentAlignment = Alignment.Center,
                     ) {
                         if (canDownload)
-                            Icon(Icons.Default.Refresh, "Failed to load an image")
+                            Icon(
+                                Icons.Default.Refresh,
+                                stringResource(R.string.today_list_image_load_failed)
+                            )
                         else
-                            Icon(Icons.Default.Download, "Download on metered")
+                            Icon(
+                                Icons.Default.Download,
+                                stringResource(R.string.today_list_image_metered)
+                            )
                     }
                 },
                 success = {

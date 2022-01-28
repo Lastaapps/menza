@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings
+package cz.lastaapps.menza.ui.dests.settings.modules
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,8 +27,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import cz.lastaapps.menza.R
 
 @Composable
 fun FullReloadDialog(
@@ -38,28 +40,26 @@ fun FullReloadDialog(
 ) {
     if (shown)
         Dialog(onDismissRequest = onDismissRequest) {
-            Surface() {
+            Surface {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(text = "Full Reload", style = MaterialTheme.typography.headlineMedium)
                     Text(
-                        "This operation clear local data like menza's names, location, contacts, etc. " +
-                                "No settings are reset as result of this operation. " +
-                                "Make sure you are connected to network, these data are required by the app to function correctly. " +
-                                "App will be closed and the data will be downloaded on next app start."
+                        stringResource(R.string.settings_reload_title),
+                        style = MaterialTheme.typography.headlineMedium
                     )
+                    Text(stringResource(R.string.settings_reload_text))
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         TextButton(onClick = onDismissRequest) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.settings_reload_cancel))
                         }
                         Button(onClick = {
                             onConfirm()
                             onDismissRequest()
                         }) {
-                            Text("Close app and reload")
+                            Text(stringResource(R.string.settings_reload_ok))
                         }
                     }
                 }

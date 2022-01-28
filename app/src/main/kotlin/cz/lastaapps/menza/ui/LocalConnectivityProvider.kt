@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza
+package cz.lastaapps.menza.ui
 
 import android.content.Context
 import android.net.ConnectivityManager

@@ -20,14 +20,11 @@
 package cz.lastaapps.menza.ui.dests.today
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.day.Dish
@@ -253,9 +250,7 @@ fun TodayDestExpanded(
         },
         panel2 = {
             if (selectedDish == null) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Not dish selected")
-                }
+                NoDishSelected(Modifier.fillMaxSize())
             } else {
                 TodayInfo(dish = selectedDish, viewModel, Modifier.fillMaxSize())
             }

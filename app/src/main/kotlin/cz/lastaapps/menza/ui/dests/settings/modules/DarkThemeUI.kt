@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.ui.dests.settings.modules
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness3
@@ -35,8 +36,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.DarkMode
 import cz.lastaapps.menza.ui.dests.settings.store.darkMode
@@ -52,12 +55,14 @@ fun DarkThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifie
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
     ) {
 
-        Text(text = "App theme:")
+        Text(stringResource(R.string.settings_theme_title))
 
         val items = listOf(
-            DarkThemeItem("Light", Icons.Default.WbSunny, DarkMode.Light),
-            DarkThemeItem("System", Icons.Default.BrightnessMedium, DarkMode.System),
-            DarkThemeItem("Dark", Icons.Default.Brightness3, DarkMode.Dark),
+            DarkThemeItem(R.string.settings_theme_light, Icons.Default.WbSunny, DarkMode.Light),
+            DarkThemeItem(
+                R.string.settings_theme_system, Icons.Default.BrightnessMedium, DarkMode.System
+            ),
+            DarkThemeItem(R.string.settings_theme_dark, Icons.Default.Brightness3, DarkMode.Dark),
         )
         Layout(
             content = {
@@ -128,14 +133,14 @@ private fun ThemeItem(
         ) {
             Surface(color = color) {
                 Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                    Icon(item.icon, contentDescription = item.title)
+                    Icon(item.icon, stringResource(item.title))
                 }
             }
-            Text(item.title)
+            Text(stringResource(item.title))
         }
     }
 }
 
 private data class DarkThemeItem(
-    val title: String, val icon: ImageVector, val mode: DarkMode,
+    @StringRes val title: Int, val icon: ImageVector, val mode: DarkMode,
 )

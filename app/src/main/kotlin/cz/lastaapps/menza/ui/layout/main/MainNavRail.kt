@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.ui.layout.main
 
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DinnerDining
 import androidx.compose.material.icons.filled.Info
@@ -32,23 +33,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.navigation.routesEquals
-import cz.lastaapps.menza.navigation.withMenzaId
 
 data class NavItem(
-    val label: String,
+    @StringRes val label: Int,
     val dest: String,
     val icon: ImageVector,
 )
 
 val navItems = listOf(
-    NavItem("Today", Dest.R.today.withMenzaId(), Icons.Filled.DinnerDining),
-    NavItem("Week", Dest.R.week.withMenzaId(), Icons.Filled.MenuBook),
-    NavItem("Info", Dest.R.info.withMenzaId(), Icons.Filled.Info),
-    NavItem("Settings", Dest.R.settings, Icons.Filled.Settings),
+    NavItem(R.string.nav_today, Dest.R.today, Icons.Filled.DinnerDining),
+    NavItem(R.string.nav_week, Dest.R.week, Icons.Filled.MenuBook),
+    NavItem(R.string.nav_info, Dest.R.info, Icons.Filled.Info),
+    NavItem(R.string.nav_settings, Dest.R.settings, Icons.Filled.Settings),
 )
 
 @Composable
@@ -65,8 +67,8 @@ fun MainNavRail(
             val selected = route?.routesEquals(item.dest) ?: false
 
             NavigationRailItem(
-                icon = { Icon(item.icon, contentDescription = item.label) },
-                label = { Text(item.label) },
+                icon = { Icon(item.icon, null) },
+                label = { Text(stringResource(item.label)) },
                 selected = selected,
                 onClick = {
                     navController.navigate(item.dest) {

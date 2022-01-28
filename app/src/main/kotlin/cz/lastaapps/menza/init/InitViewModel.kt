@@ -24,6 +24,7 @@ import androidx.lifecycle.viewModelScope
 import cz.lastaapps.menza.init.InitMessage.*
 import cz.lastaapps.storage.repo.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,14 +59,8 @@ class InitViewModel @Inject constructor(
         openingHoursRepo to OpeningHoursDone,
     )
 
-    init {
-        viewModelScope.launch {
-            loadDefaultData()
-        }
-    }
-
     fun requestRefresh() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             loadDefaultData()
         }
     }
@@ -103,8 +98,13 @@ class InitViewModel @Inject constructor(
         }
 
         progressMessage.value = Done
-        delay(1000)
+        if (startedDownloading.value)
+            delay(1000)
         isDone.value = true
+    }
+
+    init {
+        requestRefresh()
     }
 }
 

@@ -31,8 +31,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cz.lastaapps.menza.R
 import cz.lastaapps.osslicenseaccess.ArtifactLicense
 
 @Composable
@@ -55,7 +57,7 @@ fun LicenseList(
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
-            "Used Libraries",
+            stringResource(R.string.license_title),
             style = MaterialTheme.typography.headlineSmall,
         )
 
@@ -109,7 +111,7 @@ private fun ThisApp(
         modifier = modifier
     ) {
         Text(
-            text = "Menza is licensed under GNU GPL v3.0 license.",
+            text = stringResource(R.string.license_menza_button),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )

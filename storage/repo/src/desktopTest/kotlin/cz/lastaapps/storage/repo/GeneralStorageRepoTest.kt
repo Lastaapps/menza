@@ -57,7 +57,7 @@ class GeneralStorageRepoTest {
 
     @Test
     fun testHasData() = runTest {
-        val repos = listOf<GeneralStorageRepo<out Any>>(
+        val repos = listOf(
             AllergenRepoImpl(db, AllergenScraperMock(setOf(Allergen(AllergenId(1), "1", "one")))),
             ContactsRepoImpl(
                 db, ContactsScraperMock(

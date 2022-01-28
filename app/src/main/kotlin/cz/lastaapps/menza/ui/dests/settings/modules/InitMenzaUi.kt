@@ -29,9 +29,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.InitMenza
 import cz.lastaapps.menza.ui.dests.settings.store.initMenza
@@ -88,9 +90,9 @@ private fun InitMenzaRow(
     modifier: Modifier = Modifier
 ) {
     val options = listOf(
-        InitMenza.Ask to "Always ask",
-        InitMenza.Remember to "Remember",
-        InitMenza.Specific to "Choose",
+        InitMenza.Ask to stringResource(R.string.settings_init_menza_ask),
+        InitMenza.Remember to stringResource(R.string.settings_init_menza_remember),
+        InitMenza.Specific to stringResource(R.string.settings_init_menza_specific),
     )
 
     ExposedDropdownMenuBox(
@@ -102,7 +104,7 @@ private fun InitMenzaRow(
             readOnly = true,
             value = options.first { it.first == mode }.second,
             onValueChange = { },
-            label = { Text("Default menza at startup") },
+            label = { Text(stringResource(R.string.settings_init_menza_behaviour)) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
                     expanded = expanded
@@ -110,7 +112,8 @@ private fun InitMenzaRow(
             },
             colors = ExposedDropdownMenuDefaults.textFieldColors(
                 textColor = LocalContentColor.current
-            )
+            ),
+            modifier = Modifier.fillMaxWidth(),
         )
         ExposedDropdownMenu(
             expanded = expanded,
@@ -148,9 +151,10 @@ private fun PreferredMenza(
     ) {
         TextField(
             readOnly = true,
-            value = menzaList.firstOrNull { it.menzaId == menza }?.name ?: "Select menza",
+            value = menzaList.firstOrNull { it.menzaId == menza }?.name
+                ?: stringResource(R.string.settings_init_menza_select_placeholder),
             onValueChange = { },
-            label = { Text("Menza to open") },
+            label = { Text(stringResource(R.string.settings_init_menza_select_title)) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
                     expanded = expanded
@@ -158,7 +162,8 @@ private fun PreferredMenza(
             },
             colors = ExposedDropdownMenuDefaults.textFieldColors(
                 textColor = LocalContentColor.current
-            )
+            ),
+            modifier = Modifier.fillMaxWidth(),
         )
         ExposedDropdownMenu(
             expanded = expanded,

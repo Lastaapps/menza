@@ -55,7 +55,7 @@ class SettingsStore(
         }
     }
 
-    public suspend fun edit(
+    suspend fun edit(
         transform: suspend (MutablePreferences) -> Unit
     ): Preferences = store.edit(transform)
 
