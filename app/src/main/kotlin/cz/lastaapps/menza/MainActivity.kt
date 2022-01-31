@@ -26,19 +26,14 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import coil.ImageLoader
 import cz.lastaapps.menza.ui.root.AppRoot
 import cz.lastaapps.menza.ui.root.RootViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val rootViewModel: RootViewModel by viewModels()
-
-    @Inject
-    lateinit var imageLoader: ImageLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +59,6 @@ class MainActivity : ComponentActivity() {
                 AppRoot(
                     activity = activity,
                     viewModel = rootViewModel,
-                    imageLoader = imageLoader,
                     viewModelStoreOwner = this,
                 )
             }

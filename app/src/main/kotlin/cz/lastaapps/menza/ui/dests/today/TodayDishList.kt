@@ -45,8 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.AsyncImage
-import coil.compose.AsyncImageContent
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
@@ -368,7 +368,7 @@ private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier
             }
                 .build()
 
-            AsyncImage(
+            SubcomposeAsyncImage(
                 imageRequest, dish.name,
                 loading = {
                     Box(
@@ -401,7 +401,7 @@ private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier
                     }
                 },
                 success = {
-                    AsyncImageContent(
+                    SubcomposeAsyncImageContent(
                         contentScale = ContentScale.Crop,
                         modifier = imageModifier,
                     )

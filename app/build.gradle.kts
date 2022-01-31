@@ -19,7 +19,7 @@
 
 plugins {
     id(Plugins.APPLICATION)
-    id(Plugins.KOTLIN)
+    id(Plugins.KOTLIN_ANDROID)
     id(Plugins.KAPT)
     id(Plugins.DAGGER_HILT)
     id(Plugins.OSS_LICENSE)
@@ -84,6 +84,7 @@ android {
 
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
+        freeCompilerArgs = listOf("-Xjvm-default=compatibility")
     }
 
     buildFeatures {

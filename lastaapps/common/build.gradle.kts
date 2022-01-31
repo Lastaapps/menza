@@ -18,10 +18,10 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    id(Plugins.LIBRARY)
+    id(Plugins.KOTLIN_ANDROID)
 
-    id("maven-publish")
+    id(Plugins.MAVEN)
 }
 
 android {

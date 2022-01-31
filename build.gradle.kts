@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,12 +21,9 @@
 
 
 buildscript {
-
     dependencies {
-        classpath("com.android.tools.build:gradle:${Versions.GRADLE}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}")
-        classpath("com.google.android.gms:oss-licenses-plugin:${Versions.OSS_PLUGIN}")
-        classpath(Plugins.DAGGER_HILT_CLASSPATH)
+        classpath(Classpath.OSS_LICENSE)
+        classpath(Classpath.DAGGER_HILT)
     }
 }
 
@@ -34,7 +31,10 @@ group = App.GROUP
 version = App.VERSION_NAME
 
 plugins {
-    id(Plugins.KSP) version Versions.KSP
+    id(Plugins.APPLICATION) version Versions.GRADLE apply false
+    id(Plugins.LIBRARY) version Versions.GRADLE apply false
+    id(Plugins.KOTLIN) version Versions.KOTLIN apply false
+    id(Plugins.KSP) version Versions.KSP apply false
 }
 
 

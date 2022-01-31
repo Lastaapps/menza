@@ -94,7 +94,7 @@ object Versions {
     const val KOTLINX_DATETIME = "0.3.1"
     const val SQLDELIGHT = "1.5.3"
     const val KM_LOGGING = "1.1.1"
-    const val COIL = "2.0.0-alpha06"
+    const val COIL = "2.0.0-alpha07"
     const val SKRAPE_IT = "1.1.7"
 
     //testing android

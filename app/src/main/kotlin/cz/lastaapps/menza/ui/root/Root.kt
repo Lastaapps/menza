@@ -27,8 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.dialog
-import coil.ImageLoader
-import coil.compose.LocalImageLoader
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -57,7 +55,6 @@ import kotlinx.coroutines.channels.produce
 fun AppRoot(
     activity: Activity,
     viewModel: RootViewModel,
-    imageLoader: ImageLoader,
     viewModelStoreOwner: ViewModelStoreOwner,
 ) {
 
@@ -75,7 +72,6 @@ fun AppRoot(
         ) {
             ApplyLocalProviders(
                 activity = activity,
-                imageLoader = imageLoader,
                 viewModelStoreOwner = viewModelStoreOwner,
             ) {
                 //checks if privacy policy has been accepted
@@ -96,7 +92,6 @@ fun AppRoot(
 @Composable
 fun ApplyLocalProviders(
     activity: Activity,
-    imageLoader: ImageLoader,
     viewModelStoreOwner: ViewModelStoreOwner,
     content: @Composable () -> Unit
 ) {
@@ -104,10 +99,8 @@ fun ApplyLocalProviders(
         WithLocalWindowSizes(activity) {
             WithFoldingFeature(activity) {
                 ProvideWindowInsets {
-                    CompositionLocalProvider(LocalImageLoader provides imageLoader) {
-                        WithConnectivity {
-                            content()
-                        }
+                    WithConnectivity {
+                        content()
                     }
                 }
             }

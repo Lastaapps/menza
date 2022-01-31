@@ -40,8 +40,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.AsyncImage
-import coil.compose.AsyncImageContent
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
@@ -188,7 +188,7 @@ private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
                 setParameter("retry_hash", retryHash)
             }.build()
 
-            AsyncImage(
+            SubcomposeAsyncImage(
                 imageRequest, dish.name,
                 loading = {
                     Box(
@@ -218,7 +218,7 @@ private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
                     }
                 },
                 success = {
-                    AsyncImageContent(
+                    SubcomposeAsyncImageContent(
                         modifier = Modifier.fillMaxWidth(),
                     )
                 },

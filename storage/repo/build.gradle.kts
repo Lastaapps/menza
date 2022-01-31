@@ -18,7 +18,7 @@
  */
 
 plugins {
-    kotlin("multiplatform")
+    id(Plugins.KOTLIN_MULTIPLATFORM)
     id(Plugins.LIBRARY)
 }
 
