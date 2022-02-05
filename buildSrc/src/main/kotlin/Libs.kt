@@ -124,6 +124,8 @@ object Libs {
     const val COIL_VIDEO = "io.coil-kt:coil-video:${Versions.COIL}"
 
     const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"
+    const val ABOUT_LIBRARIES_CORE = "com.mikepenz:aboutlibraries-core:${Versions.ABOUT_LIBRARIES}"
+    const val ABOUT_LIBRARIES_COMPOSE = "com.mikepenz:aboutlibraries-compose:${Versions.ABOUT_LIBRARIES}"
 
     const val OSS_LICENSE_ACCESSOR = "com.github.Lastaapps:OssLicenseAccess:${Versions.OSS_LICENSE_ACCESS}"
 }

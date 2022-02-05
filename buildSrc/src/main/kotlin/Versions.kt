@@ -6,7 +6,7 @@ object Versions {
     val JAVA = JavaVersion.VERSION_11
     const val JVM_TARGET = "11"
 
-    const val GRADLE = "7.1.0"
+    const val GRADLE = "7.1.1"
     const val OSS_PLUGIN = "0.10.4"
 
     const val OSS_LICENSE_ACCESS = "1.0"
@@ -78,6 +78,7 @@ object Versions {
     const val KM_LOGGING = "1.1.1"
     const val COIL = "2.0.0-alpha07"
     const val SKRAPE_IT = "1.1.7"
+    const val ABOUT_LIBRARIES = "10.0.0-b09"
 
     //testing android
     const val TEST_JUNIT = "4.13.2"
