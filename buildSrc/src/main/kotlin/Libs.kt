@@ -41,6 +41,9 @@ object Libs {
     const val DAGGER_HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Versions.DAGGER_HILT}"
     const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
     const val DOCUMENT_FILE = "androidx.documentfile:documentfile:${Versions.DOCUMENT_FILE}"
+    const val EMOJI = "androidx.emoji2:emoji2:${Versions.EMOJI}"
+    const val EMOJI_VIEWS = "androidx.emoji2:emoji2-views:${Versions.EMOJI}"
+    const val EMOJI_VIEWS_HELPER = "androidx.emoji2:emoji2-views-helper:${Versions.EMOJI}"
     const val FRAGMENT = "androidx.fragment:fragment-ktx:${Versions.FRAGMENT}"
     const val LIFECYCLE = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE}"
     const val LIFECYCLE_LIVEDATA = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.LIFECYCLE}"
@@ -143,6 +146,8 @@ object Libs {
     const val COIL_VIDEO = "io.coil-kt:coil-video:${Versions.COIL}"
 
     const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"
+    const val ABOUT_LIBRARIES_CORE = "com.mikepenz:aboutlibraries-core:${Versions.ABOUT_LIBRARIES}"
+    const val ABOUT_LIBRARIES_COMPOSE = "com.mikepenz:aboutlibraries-compose:${Versions.ABOUT_LIBRARIES}"
 
     const val OSS_LICENSE_ACCESSOR = "com.github.Lastaapps:OssLicenseAccess:${Versions.OSS_LICENSE_ACCESS}"
 }
