@@ -8,7 +8,6 @@ object Versions {
 
     const val GRADLE = "7.1.1"
     const val OSS_PLUGIN = "0.10.4"
-
     const val OSS_LICENSE_ACCESS = "1.0"
 
     //Versions
@@ -20,7 +19,7 @@ object Versions {
     const val KOTLIN_LANGUAGE_VERSION = "1.6"
     const val KSP = "$KOTLIN-1.0.2"
     const val COROUTINES = "1.6.0"
-    const val KTOR = "1.6.7"
+    const val KTOR = "2.0.0-beta-1"
 
     //androidx
     const val ACTIVITY = "1.4.0"
@@ -32,19 +31,20 @@ object Versions {
     const val DAGGER_HILT = "2.38.1"
     const val DATASTORE = "1.0.0"
     const val DOCUMENT_FILE = "1.1.0-alpha01"
+    const val EMOJI = "1.1.0-rc01"
     const val FRAGMENT = "1.4.0"
     const val HILT_COMMON = "1.0.0"
     const val HILT_COMPILER = "1.0.0"
     const val HILT_NAVIGATION = "1.0.0"
     const val HILT_VIEWMODEL = "1.0.0-alpha03"
     const val HILT_WORK = "1.0.0"
-    const val LIFECYCLE = "2.4.0"
-    const val NAVIGATION = "2.4.0"
+    const val LIFECYCLE = "2.4.1"
+    const val NAVIGATION = "2.4.1"
     const val PREFERENCES = "1.2.0-rc01"
     const val RECYCLER_VIEW = "1.3.0-alpha01"
     const val ROOM = "2.4.1"
     const val SPLASHSCREEN = "1.0.0-beta01"
-    const val STARTUP = "1.1.0"
+    const val STARTUP = "1.1.1"
     const val SWIPE_REFRESH_LAYOUT = "1.2.0-alpha01"
     const val TRACING = "1.1.0-alpha02"
     const val VECTOR_DRAWABLES = "1.2.0-alpha02"
@@ -53,32 +53,32 @@ object Versions {
 
 
     //compose
-    const val COMPOSE = "1.2.0-alpha02"
+    const val COMPOSE = "1.2.0-alpha03"
     const val COMPOSE_COMPILER = COMPOSE
-    const val COMPOSE_STABLE = "1.1.0-rc03"
+    const val COMPOSE_STABLE = "1.1.0"
     const val COMPOSE_COMPILER_STABLE = COMPOSE_STABLE
-    const val COMPOSE_MATERIAL_3 = "1.0.0-alpha04"
+    const val COMPOSE_MATERIAL_3 = "1.0.0-alpha05"
     const val CONSTRAINTLAYOUT_COMPOSE = "1.0.0"
-    const val VIEWMODEL_COMPOSE = "2.4.0"
+    const val VIEWMODEL_COMPOSE = LIFECYCLE
     const val HILT_NAVIGATION_COMPOSE = "1.0.0"
 
     //google
     const val GOOGLE_MATERIAL = "1.5.0"
     const val OSS_LICENSE = "17.0.0"
     const val PLAY_SERVICES = "1.8.1"
-    const val ACCOMPANIST = "0.24.0-alpha"
+    const val ACCOMPANIST = "0.24.2-alpha"
 
     //firebase
-    const val FIREBASE_BOM = "29.0.3"
+    const val FIREBASE_BOM = "29.0.4"
 
-    //KMP
+    //others
     const val KOTEST = "5.1.0"
     const val KOTLINX_DATETIME = "0.3.1"
     const val SQLDELIGHT = "1.5.3"
     const val KM_LOGGING = "1.1.1"
-    const val COIL = "2.0.0-alpha07"
+    const val COIL = "2.0.0-alpha08"
     const val SKRAPE_IT = "1.1.7"
-    const val ABOUT_LIBRARIES = "10.0.0-b09"
+    const val ABOUT_LIBRARIES = "10.0.0-rc01"
 
     //testing android
     const val TEST_JUNIT = "4.13.2"
