@@ -199,7 +199,6 @@ private fun AppContent(viewModel: MenzaViewModel) {
                     menzaId = menzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = viewModel,
-                    licenseViewModel = hiltViewModel(),
                 )
             }
             composable(Dest.R.osturak) {

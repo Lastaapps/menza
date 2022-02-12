@@ -21,23 +21,28 @@ package cz.lastaapps.menza.ui.dests.others.license
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.entity.Library
+import com.mikepenz.aboutlibraries.util.withContext
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
-import cz.lastaapps.menza.ui.root.AppLayoutMedium
-import cz.lastaapps.osslicenseaccess.ArtifactLicense
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,11 +56,27 @@ fun LicenseLayout(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    licenseViewModel: LicenseViewModel,
 ) {
-    val selected by licenseViewModel.selectedLicense.collectAsState()
-    val onArtifactSelected: (ArtifactLicense?) -> Unit = {
-        licenseViewModel.selectLicense(it)
+    val context = LocalContext.current
+    var libraries by remember {
+        mutableStateOf<Libs?>(null)
+    }
+    LaunchedEffect(libraries) {
+        libraries = Libs.Builder().withContext(context).build()
+    }
+
+    var selectedArtifactUniqueId by rememberSaveable { mutableStateOf<String?>(null) }
+    val selectedLibrary = remember(libraries, selectedArtifactUniqueId) {
+        libraries?.libraries?.firstOrNull { it.uniqueId == selectedArtifactUniqueId }
+    }
+    val onLibrarySelected: (Library?) -> Unit = { selectedArtifactUniqueId = it?.uniqueId }
+
+    if (libraries == null)
+        return
+
+    val libraryList = remember(libraries) {
+        // to filter out wrongly named libraries
+        libraries!!.libraries.filter { !it.name.startsWith("$") }
     }
 
     @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
@@ -70,9 +91,9 @@ fun LicenseLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
-                selectedArtifact = selected,
-                onArtifactSelected = onArtifactSelected,
-                licenseViewModel = licenseViewModel,
+                libraries = libraryList,
+                selectedLibrary = selectedLibrary,
+                onLibrarySelected = onLibrarySelected,
             )
         }
         WindowSizeClass.MEDIUM -> {
@@ -84,10 +105,10 @@ fun LicenseLayout(
                 onExpandedClicked = onExpandedClicked,
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
-                selectedArtifact = selected,
-                onArtifactSelected = onArtifactSelected,
                 menzaViewModel = menzaViewModel,
-                licenseViewModel = licenseViewModel,
+                libraries = libraryList,
+                selectedLibrary = selectedLibrary,
+                onLibrarySelected = onLibrarySelected,
             )
         }
         WindowSizeClass.EXPANDED -> {
@@ -100,9 +121,9 @@ fun LicenseLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
-                selectedArtifact = selected,
-                onArtifactSelected = onArtifactSelected,
-                licenseViewModel = licenseViewModel,
+                libraries = libraryList,
+                selectedLibrary = selectedLibrary,
+                onLibrarySelected = onLibrarySelected,
             )
         }
     }
@@ -119,9 +140,9 @@ fun LicenseLayoutCompact(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    selectedArtifact: ArtifactLicense?,
-    onArtifactSelected: (ArtifactLicense?) -> Unit,
-    licenseViewModel: LicenseViewModel,
+    libraries: List<Library>,
+    selectedLibrary: Library?,
+    onLibrarySelected: (Library?) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
 
@@ -135,29 +156,25 @@ fun LicenseLayoutCompact(
         expanded = expanded,
         onExpandedClicked = onExpandedClicked,
         enableIcon = true,
-        showHamburgerMenu = selectedArtifact == null,
+        showHamburgerMenu = selectedLibrary == null,
         onMenuButtonClicked = {
-            if (selectedArtifact == null)
+            if (selectedLibrary == null)
                 scope.launch { drawerState.open() }
             else
-                onArtifactSelected(null)
+                onLibrarySelected(null)
         },
     ) {
-        BackHandler(enabled = selectedArtifact != null) {
-            onArtifactSelected(null)
+        BackHandler(enabled = selectedLibrary != null) {
+            onLibrarySelected(null)
         }
-        if (selectedArtifact == null) {
-            LicenseList(
-                licenseViewModel = licenseViewModel,
-                onArtifactSelected = onArtifactSelected,
-                Modifier.fillMaxSize()
-            )
-        } else {
-            LicenseText(
-                selectedArtifact = selectedArtifact,
-                licenseViewModel = licenseViewModel,
-                Modifier.fillMaxSize()
-            )
+        LibraryList(libraries, onLibrarySelected = onLibrarySelected, Modifier.fillMaxSize())
+
+        if (selectedLibrary != null) {
+            Dialog(onDismissRequest = { onLibrarySelected(null) }) {
+                Surface(shape = RoundedCornerShape(16.dp)) {
+                    LibraryDetail(library = selectedLibrary, Modifier.padding(16.dp))
+                }
+            }
         }
     }
 }
@@ -173,42 +190,22 @@ fun LicenseLayoutMedium(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    selectedArtifact: ArtifactLicense?,
-    onArtifactSelected: (ArtifactLicense?) -> Unit,
-    licenseViewModel: LicenseViewModel,
-) {
-    AppLayoutMedium(
-        navController = navController,
-        menzaId = menzaId,
-        onMenzaSelected = onMenzaSelected,
-        menzaViewModel = menzaViewModel,
-        snackbarHostState = snackbarHostState,
-        drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        showBackButton = selectedArtifact != null,
-        onBackButtonPressed = {
-            onArtifactSelected(null)
-        },
-    ) {
-        BackHandler(enabled = selectedArtifact != null) {
-            onArtifactSelected(null)
-        }
-        if (selectedArtifact == null) {
-            LicenseList(
-                licenseViewModel = licenseViewModel,
-                onArtifactSelected = onArtifactSelected,
-                Modifier.fillMaxSize()
-            )
-        } else {
-            LicenseText(
-                selectedArtifact = selectedArtifact,
-                licenseViewModel = licenseViewModel,
-                Modifier.fillMaxSize()
-            )
-        }
-    }
-}
+    libraries: List<Library>,
+    selectedLibrary: Library?,
+    onLibrarySelected: (Library?) -> Unit,
+) = LicenseLayoutExpanded(
+    navController = navController,
+    snackbarHostState = snackbarHostState,
+    drawerState = drawerState,
+    expanded = expanded,
+    onExpandedClicked = onExpandedClicked,
+    menzaId = menzaId,
+    onMenzaSelected = onMenzaSelected,
+    menzaViewModel = menzaViewModel,
+    libraries = libraries,
+    selectedLibrary = selectedLibrary,
+    onLibrarySelected = onLibrarySelected,
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -221,9 +218,9 @@ fun LicenseLayoutExpanded(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
-    selectedArtifact: ArtifactLicense?,
-    onArtifactSelected: (ArtifactLicense?) -> Unit,
-    licenseViewModel: LicenseViewModel,
+    libraries: List<Library>,
+    selectedLibrary: Library?,
+    onLibrarySelected: (Library?) -> Unit,
 ) {
     AppLayoutExpanded(
         navController = navController,
@@ -236,16 +233,14 @@ fun LicenseLayoutExpanded(
         onExpandedClicked = onExpandedClicked,
         showBackButton = false,
         panel1 = {
-            LicenseList(
-                licenseViewModel = licenseViewModel,
-                onArtifactSelected = onArtifactSelected,
+            LibraryList(
+                libraries, onLibrarySelected,
                 Modifier.fillMaxSize()
             )
         },
         panel2 = {
-            LicenseText(
-                selectedArtifact = selectedArtifact,
-                licenseViewModel = licenseViewModel,
+            LibraryDetailWrapper(
+                selectedLibrary,
                 Modifier.fillMaxSize()
             )
         }

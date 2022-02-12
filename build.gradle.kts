@@ -22,7 +22,6 @@
 
 buildscript {
     dependencies {
-        classpath(Classpath.OSS_LICENSE)
         classpath(Classpath.DAGGER_HILT)
     }
 }
@@ -35,6 +34,7 @@ plugins {
     id(Plugins.LIBRARY) version Versions.GRADLE apply false
     id(Plugins.KOTLIN) version Versions.KOTLIN apply false
     id(Plugins.KSP) version Versions.KSP apply false
+    id(Plugins.ABOUT_LIBRARIES) version Versions.ABOUT_LIBRARIES apply false
 }
 
 

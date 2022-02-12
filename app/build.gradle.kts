@@ -22,7 +22,7 @@ plugins {
     id(Plugins.KOTLIN_ANDROID)
     id(Plugins.KAPT)
     id(Plugins.DAGGER_HILT)
-    id(Plugins.OSS_LICENSE)
+    id(Plugins.ABOUT_LIBRARIES)
 }
 
 project.group = App.GROUP
@@ -43,8 +43,12 @@ android {
 
     defaultConfig {
         applicationId = App.APP_ID
-        versionCode = App.VERSION_CODE
-        versionName = App.VERSION_NAME
+
+        //have to be specified explicitly for FDroid to work
+        versionCode = 1000000 // 1x major . 2x minor . 2x path . 2x build diff
+        versionName = "1.0.0"
+        assert(versionCode == App.VERSION_CODE)
+        assert(versionName == App.VERSION_NAME)
 
         minSdk = App.MIN_SDK
 
@@ -55,7 +59,15 @@ android {
         multiDexEnabled = true
 
     }
-
+    configurations {
+        all {
+            //exclude(group = "org.apache.httpcomponents", module = "httpclient")
+            exclude(group = "commons-logging", module = "commons-logging")
+        }
+    }
+    lint {
+        abortOnError = false
+    }
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
@@ -130,7 +142,7 @@ dependencies {
     implementation(Libs.KOTLINX_DATETIME)
     implementation(Libs.SKRAPE_IT)
     implementation(Libs.COIL_COMPOSE_COMPLETE)
-    implementation(Libs.OSS_LICENSE_ACCESSOR)
+    implementation(Libs.ABOUT_LIBRARIES_CORE)
 
 }
 

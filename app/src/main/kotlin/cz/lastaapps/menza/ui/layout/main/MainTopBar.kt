@@ -21,14 +21,12 @@ package cz.lastaapps.menza.ui.layout.main
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.rememberSplineBasedDecay
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,8 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cz.lastaapps.menza.R
@@ -66,8 +64,11 @@ fun MainTopBar(
 
     CenterAlignedTopAppBar(
         title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                /*Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
                     Surface(
                         Modifier.size(32.dp),
                         color = colorResource(R.color.ic_launcher_background),
@@ -78,8 +79,8 @@ fun MainTopBar(
                             Icon(Icons.Default.Restaurant, null)
                         }
                     }
-                }
-                Text(title)
+                }*/
+                Text(title, textAlign = TextAlign.Center)
             }
         },
         navigationIcon = {

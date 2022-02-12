@@ -47,10 +47,6 @@
     <string name="info_message_title">Announcements</string>
     <string name="info_opening_hours_title">Opening hours</string>
 
-    <string name="license_title">Used open-source libraries</string>
-    <string name="license_menza_button">Menza is licensed under GNU GPL v3.0 license</string>
-    <string name="license_none_selected">No artifact selected</string>
-
     <string name="privacy_title">Privacy Policy</string>
     <string name="privacy_text">
         This app doesn\'t collect or send any private data.
@@ -158,5 +154,15 @@
 
     <string name="menza_none_selected">No menza selected</string>
     <string name="menza_osturak">Find out about ošťurák</string>
+
+    <string name="license_this_app">Menza is licensed under GNU GPL v3.0 license</string>
+    <string name="license_none_selected">No library selected</string>
+    <string name="license_detail_opensource_yes">Library is opensource</string>
+    <string name="license_detail_opensource_no">Library is not opensource</string>
+    <string name="license_detail_developer">Developer</string>
+    <string name="license_detail_link">Link</string>
+    <string name="license_detail_organization">Organization</string>
+    <string name="license_detail_description">Description</string>
+    <string name="license_detail_no_license">No license available</string>
 
 </resources>

@@ -43,9 +43,6 @@
     <string name="info_location_choose_app">Vyberte mapovací aplikaci</string>
     <string name="info_message_title">Oznámení</string>
     <string name="info_opening_hours_title">Otevírací hodiny</string>
-    <string name="license_title">Použité open-source knihovny</string>
-    <string name="license_menza_button">Menza je licencovaná pod GNU GPL v3.0 licencí</string>
-    <string name="license_none_selected">Není vybrán žádný artifact</string>
     <string name="privacy_title">Zásady ochrany osobních údajů</string>
     <string name="privacy_text">
         Tato aplikace neshromažďuje žádná (osobní) data.
@@ -140,4 +137,13 @@
     <string name="ui_top_bar_action_license">Použité knihovny</string>
     <string name="menza_none_selected">Není vybrána žádná menza</string>
     <string name="menza_osturak">Seznámit se s ošťurákem</string>
+    <string name="license_this_app">Menza je licencována pod GNU GPL v3.0 licencí</string>
+    <string name="license_none_selected">Není vybrána žádná knihovna</string>
+    <string name="license_detail_opensource_yes">Knihovna je opensource</string>
+    <string name="license_detail_opensource_no">Knihovna není opensource</string>
+    <string name="license_detail_developer">Vývojář</string>
+    <string name="license_detail_link">Odkaz</string>
+    <string name="license_detail_organization">Společnost</string>
+    <string name="license_detail_description">Popis</string>
+    <string name="license_detail_no_license">Není dostupná žádná licence</string>
 </resources>
