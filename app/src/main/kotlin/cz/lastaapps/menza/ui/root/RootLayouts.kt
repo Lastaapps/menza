@@ -88,6 +88,7 @@ fun AppLayoutCompact(
                 val rotated = drawerState.isOpen
 
                 MainTopBar(
+                    navController = navController,
                     menzaName = menza?.name,
                     menuIcon = icon,
                     menuDescription = null,
@@ -142,10 +143,12 @@ fun AppLayoutMedium(
         topBar = {
             if (!showBackButton)
                 MainTopBar(
+                    navController = navController,
                     menzaName = menza?.name,
                 )
             else
                 MainTopBar(
+                    navController = navController,
                     menzaName = menza?.name,
                     menuIcon = Icons.Default.ArrowBack,
                     menuDescription = "Go back",
@@ -206,10 +209,12 @@ fun AppLayoutExpandedSimple(
         topBar = {
             if (!showBackButton)
                 MainTopBar(
+                    navController = navController,
                     menzaName = menza?.name,
                 )
             else
                 MainTopBar(
+                    navController = navController,
                     menzaName = menza?.name,
                     menuIcon = Icons.Default.ArrowBack,
                     menuDescription = "Go back",
@@ -320,10 +325,12 @@ private fun AppLayoutExpandedNoFold(
         topBar = {
             if (!showBackButton)
                 MainTopBar(
+                    navController = navController,
                     menzaName = menza?.name,
                 )
             else
                 MainTopBar(
+                    navController = navController,
                     menzaName = menza?.name,
                     menuIcon = Icons.Default.ArrowBack,
                     menuDescription = "Go back",
@@ -407,10 +414,12 @@ fun AppLayoutExpandedFold(
         topBar = {
             if (!showBackButton)
                 MainTopBar(
+                    navController = navController,
                     menzaName = menza?.name,
                 )
             else
                 MainTopBar(
+                    navController = navController,
                     menzaName = menza?.name,
                     menuIcon = Icons.Default.ArrowBack,
                     menuDescription = "Go back",

@@ -21,16 +21,20 @@ package cz.lastaapps.menza.ui.layout.menza
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
@@ -75,6 +79,7 @@ fun MenzaList(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MenzaItem(
     menza: Menza,
@@ -83,13 +88,17 @@ private fun MenzaItem(
     expanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val color = if (selected) MaterialTheme.colorScheme.primary
-    else MaterialTheme.colorScheme.secondary
+    val color =
+        if (selected) MaterialTheme.colorScheme.surfaceVariant
+        else MaterialTheme.colorScheme.surface
 
-    Surface(
-        modifier = modifier.height(48.dp),
-        color = color,
-        onClick = { onClick(menza.menzaId) },
+    val interaction = remember { MutableInteractionSource() }
+    Card(
+        modifier = modifier
+            .height(48.dp)
+            .clickable(interaction, null, onClick = { onClick(menza.menzaId) }),
+        interactionSource = interaction,
+        containerColor = color,
         shape = GenericShape { size, direction ->
             if (LayoutDirection.Ltr == direction) {
                 addRect(Rect(0f, 0f, size.width - size.height / 2, size.height))
@@ -101,7 +110,10 @@ private fun MenzaItem(
         }
     ) {
         Row(
-            modifier.padding(8.dp),
+            modifier
+                .padding(8.dp)
+                .padding(end = 8.dp)
+                .align(Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start)
         ) {

@@ -19,13 +19,12 @@
 
 package cz.lastaapps.menza.ui.dests.others.license
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -77,21 +76,23 @@ fun LicenseList(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Artifact(
     artifact: ArtifactLicense,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.primaryContainer,
-        onClick = onClick,
+    val interaction = remember { MutableInteractionSource() }
+    ElevatedCard(
+        modifier = modifier.clickable(interaction, null, onClick = onClick),
+        interactionSource = interaction,
     ) {
         Box(
             Modifier
                 .padding(8.dp)
-                .defaultMinSize(minHeight = 32.dp),
+                .defaultMinSize(minHeight = 32.dp)
+                .align(Alignment.CenterHorizontally),
             contentAlignment = Alignment.CenterStart
         ) {
             Text(text = artifact.name)

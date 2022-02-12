@@ -169,6 +169,7 @@ private fun DishContent(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PriceTypeUnspecified(
     priceType: PriceType,
@@ -176,7 +177,11 @@ private fun PriceTypeUnspecified(
     modifier: Modifier = Modifier,
 ) {
     if (priceType == PriceType.Unset) {
-        Surface(color = MaterialTheme.colorScheme.tertiaryContainer, modifier = modifier) {
+        Card(
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            shape = RoundedCornerShape(16.dp),
+            modifier = modifier,
+        ) {
             Column(
                 Modifier.padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -236,6 +241,7 @@ private fun DishHeader(courseType: CourseType, modifier: Modifier = Modifier) {
     Text(text = courseType.type, modifier = modifier, style = MaterialTheme.typography.titleMedium)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DishItem(
     dish: Dish,
@@ -244,8 +250,9 @@ private fun DishItem(
     downloadOnMetered: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        color = MaterialTheme.colorScheme.primaryContainer,
+    Card(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        shape = RoundedCornerShape(16.dp),
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
         Row(
@@ -278,6 +285,7 @@ private fun DishNameRow(dish: Dish, modifier: Modifier = Modifier) {
             dish.issuePlaces.forEach {
                 Surface(
                     color = MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
@@ -328,7 +336,11 @@ private fun DishImageWithBadge(
 
 @Composable
 private fun DishBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Modifier) {
-    Surface(modifier, color = MaterialTheme.colorScheme.tertiary) {
+    Surface(
+        modifier,
+        color = MaterialTheme.colorScheme.tertiary,
+        shape = RoundedCornerShape(8.dp),
+    ) {
         Text(
             text = "${dish.getPrice(priceType).price} Kč",
             style = MaterialTheme.typography.bodySmall,
@@ -375,7 +387,7 @@ private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier
                         imageModifier
                             .placeholder(
                                 true, color = MaterialTheme.colorScheme.secondary,
-                                shape = RoundedCornerShape(4.dp),
+                                shape = RoundedCornerShape(8.dp),
                                 highlight = PlaceholderHighlight.fade(
                                     highlightColor = MaterialTheme.colorScheme.primary,
                                 )
@@ -401,10 +413,14 @@ private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier
                     }
                 },
                 success = {
-                    SubcomposeAsyncImageContent(
-                        contentScale = ContentScale.Crop,
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
                         modifier = imageModifier,
-                    )
+                    ) {
+                        SubcomposeAsyncImageContent(
+                            contentScale = ContentScale.Crop,
+                        )
+                    }
                 },
             )
 

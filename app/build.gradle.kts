@@ -130,7 +130,7 @@ dependencies {
     implementation(Libs.KOTLINX_DATETIME)
     implementation(Libs.SKRAPE_IT)
     implementation(Libs.COIL_COMPOSE_COMPLETE)
-    implementation("com.github.Lastaapps:OssLicenseAccess:1.0")
+    implementation(Libs.OSS_LICENSE_ACCESSOR)
 
 }
 

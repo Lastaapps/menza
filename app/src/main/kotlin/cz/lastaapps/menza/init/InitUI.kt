@@ -22,6 +22,7 @@ package cz.lastaapps.menza.init
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
@@ -91,6 +92,7 @@ private fun InitContent(viewModel: InitViewModel, modifier: Modifier = Modifier)
             )
             Surface(
                 color = MaterialTheme.colorScheme.primaryContainer,
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .animateContentSize()
                     .fillMaxWidth(),

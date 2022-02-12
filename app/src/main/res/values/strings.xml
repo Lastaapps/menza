@@ -55,6 +55,7 @@
     <string name="privacy_text">
         This app doesn\'t collect or send any private data.
         If you don\'t trust it, you can check source code yourself.
+        It\'s provided free with no warranty what so ever.
     </string>
     <string name="privacy_view_source">View source code</string>
     <string name="privacy_accept">Accept</string>
@@ -85,7 +86,7 @@
     <string name="report_email">Email</string>
     <string name="report_email_no_app">No email app installed</string>
     <string name="report_cancel">Cancel</string>
-    <string name="report_add_description">Please describe you problem here</string>
+    <string name="report_add_description">Please describe your problem here</string>
     <string name="report_clipboard">Report text copied to clipboard</string>
     <string name="report_clipboard_title">Menza problem report</string>
 
@@ -148,7 +149,12 @@
     <string name="nav_week">Week</string>
     <string name="nav_info">Info</string>
     <string name="nav_settings">Settings</string>
-    <string name="appbar_no_menza">No menza selected</string>
+    <string name="ui_top_bar_no_menza">No menza selected</string>
+    <string name="ui_top_bar_back_arrow">Go back</string>
+    <string name="ui_top_bar_action_description">Others</string>
+    <string name="ui_top_bar_action_privacy">Privacy policy</string>
+    <string name="ui_top_bar_action_license">License notices</string>
+    <string name="ui_top_bar_action_osturak" translatable="false">Ošťurák</string>
 
     <string name="menza_none_selected">No menza selected</string>
     <string name="menza_osturak">Find out about ošťurák</string>

@@ -26,6 +26,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LocalFireDepartment
@@ -46,6 +47,7 @@ import cz.lastaapps.common.R
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.navigation.Dest
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutUi(
     navController: NavController,
@@ -71,61 +73,25 @@ fun AboutUi(
                 }
             }
 
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.primaryContainer
-            ) {
+            ElevatedCard {
                 Column(
                     Modifier
                         .padding(16.dp)
-                        .width(IntrinsicSize.Max),
+                        .align(Alignment.CenterHorizontally),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     DataSource(Modifier.fillMaxWidth())
-
-                    OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            navController.navigate(Dest.R.license)
-                        }
-                    ) {
-                        IconAndText({
-                            Icon(Icons.Default.Description, null)
-                        }, {
-                            Text(
-                                text = stringResource(cz.lastaapps.menza.R.string.about_license_notices),
-                                textAlign = TextAlign.Center
-                            )
-                        })
-                    }
-                    OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            navController.navigate(Dest.R.osturak)
-                        }
-                    ) {
-                        IconAndText({
-                            Icon(Icons.Default.LocalFireDepartment, null)
-                        }, {
-                            Text(
-                                text = stringResource(cz.lastaapps.menza.R.string.about_osturak),
-                                textAlign = TextAlign.Center,
-                                maxLines = 1
-                            )
-                        })
-                    }
+                    LicenseButton(navController, Modifier.fillMaxWidth())
+                    OsturakButton(navController, Modifier.fillMaxWidth())
                     ViewSource(Modifier.fillMaxWidth())
                 }
             }
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.tertiaryContainer
-            ) {
+            ElevatedCard(Modifier.fillMaxWidth()) {
                 Socials(Modifier.padding(16.dp))
             }
-            Surface(modifier = Modifier.fillMaxWidth()) {
-                AppInfo(modifier = Modifier.padding(8.dp))
+            Surface(Modifier.fillMaxWidth()) {
+                AppInfo(Modifier.padding(8.dp))
             }
         }
     }
@@ -166,6 +132,44 @@ private fun DataSource(modifier: Modifier = Modifier) {
 }
 
 @Composable
+private fun LicenseButton(navController: NavController, modifier: Modifier = Modifier) {
+    OutlinedButton(
+        modifier = modifier,
+        onClick = {
+            navController.navigate(Dest.R.license)
+        }
+    ) {
+        IconAndText({
+            Icon(Icons.Default.Description, null)
+        }, {
+            Text(
+                text = stringResource(cz.lastaapps.menza.R.string.about_license_notices),
+                textAlign = TextAlign.Center
+            )
+        })
+    }
+}
+
+@Composable
+private fun OsturakButton(navController: NavController, modifier: Modifier = Modifier) {
+    OutlinedButton(
+        modifier = modifier,
+        onClick = {
+            navController.navigate(Dest.R.osturak)
+        }
+    ) {
+        IconAndText({
+            Icon(Icons.Default.LocalFireDepartment, null)
+        }, {
+            Text(
+                text = stringResource(cz.lastaapps.menza.R.string.about_osturak),
+                textAlign = TextAlign.Center,
+            )
+        })
+    }
+}
+
+@Composable
 private fun ViewSource(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     OutlinedButton(
@@ -174,8 +178,8 @@ private fun ViewSource(modifier: Modifier = Modifier) {
     ) {
         IconAndText(
             icon = {
-                Image(
-                    painterResource(R.drawable.ic_github),
+                Icon(
+                    Icons.Default.Code,
                     stringResource(R.string.content_description_github_project)
                 )
             },

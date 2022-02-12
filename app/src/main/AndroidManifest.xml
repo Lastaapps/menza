@@ -31,6 +31,14 @@
         </intent>
     </queries>
 
+    <supports-screens
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:anyDensity="true" />
+
     <application
         android:name=".App"
         android:allowBackup="true"

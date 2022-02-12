@@ -61,6 +61,7 @@ fun ContactList(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactUI(
     contact: Contact,
@@ -69,9 +70,9 @@ fun ContactUI(
     if (contact.name == null && contact.role == null)
         return
 
-    Surface(
+    Card(
         modifier,
-        color = MaterialTheme.colorScheme.primaryContainer,
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
     ) {
         val context = LocalContext.current
         val snackbar = LocalSnackbarProvider.current

@@ -59,7 +59,7 @@ object CIOAsyncFetcher : NonBlockingFetcher<Request> {
 
     //Stolen from skrape.it
     private suspend fun HttpResponse.toResult(): Result = Result(
-        responseBody = this.readText(),
+        responseBody = this.bodyAsText(),
         responseStatus = this.toStatus(),
         contentType = this.contentType()?.toString()?.replace(" ", ""),
         headers = this.headers.flattenEntries()

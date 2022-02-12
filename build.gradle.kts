@@ -53,6 +53,24 @@ subprojects {
 }
 */
 
+allprojects {
+    afterEvaluate {
+        // Remove log pollution until Android support in KMP improves.
+        // https://discuss.kotlinlang.org/t/disabling-androidandroidtestrelease-source-set-in-gradle-kotlin-dsl-script/21448/5
+        project.extensions.findByType<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension>()
+            ?.let { kmpExt ->
+                kmpExt.sourceSets.removeAll { sourceSet ->
+                    setOf(
+                        "androidAndroidTestRelease",
+                        "androidTestFixtures",
+                        "androidTestFixturesDebug",
+                        "androidTestFixturesRelease",
+                    ).contains(sourceSet.name)
+                }
+            }
+    }
+}
+
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }

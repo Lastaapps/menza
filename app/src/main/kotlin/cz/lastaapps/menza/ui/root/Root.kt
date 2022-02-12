@@ -48,7 +48,6 @@ import cz.lastaapps.menza.ui.dests.today.TodayDest
 import cz.lastaapps.menza.ui.dests.week.WeekLayout
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.theme.AppTheme
-import kotlinx.coroutines.channels.produce
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +59,6 @@ fun AppRoot(
 
     val useDark by viewModel.sett.darkMode.collectAsState()
     val useSystem by viewModel.sett.systemTheme.collectAsState()
-    rememberCoroutineScope().produce<Int> { 0 }
 
     AppTheme(
         darkTheme = useDark.resolveShouldUseDark(),

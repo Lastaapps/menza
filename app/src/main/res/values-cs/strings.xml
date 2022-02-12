@@ -50,6 +50,7 @@
     <string name="privacy_text">
         Tato aplikace neshromažďuje žádná (osobní) data.
         Pokud nevěříte, můžete si sami zkontrolovat zdrojový kód.
+        Je poskytována zdarma bez jakýchkoli záruk.
     </string>
     <string name="privacy_view_source">Prohlédnout si zdrojový kód</string>
     <string name="privacy_accept">Přijímám</string>
@@ -132,7 +133,11 @@
     <string name="nav_week">Týden</string>
     <string name="nav_info">Informace</string>
     <string name="nav_settings">Nastavení</string>
-    <string name="appbar_no_menza">Menza není vybrána</string>
+    <string name="ui_top_bar_no_menza">Menza není vybrána</string>
+    <string name="ui_top_bar_back_arrow">Zpět</string>
+    <string name="ui_top_bar_action_description">Další</string>
+    <string name="ui_top_bar_action_privacy">Ochrana soukromí</string>
+    <string name="ui_top_bar_action_license">Použité knihovny</string>
     <string name="menza_none_selected">Není vybrána žádná menza</string>
     <string name="menza_osturak">Seznámit se s ošťurákem</string>
 </resources>

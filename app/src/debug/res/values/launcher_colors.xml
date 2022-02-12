@@ -17,7 +17,8 @@
   ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
+<!-- Used to differentiate debug/release versions -->
 <resources>
     <color name="ic_launcher_foreground">#FFFFFF</color>
-    <color name="ic_launcher_background">#7C5800</color>
+    <color name="ic_launcher_background">#2196F3</color>
 </resources>

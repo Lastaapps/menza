@@ -20,18 +20,19 @@
 package cz.lastaapps.menza.ui.dests.settings.modules
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness3
 import androidx.compose.material.icons.filled.BrightnessMedium
 import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -109,6 +110,7 @@ fun DarkThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifie
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ThemeItem(
     item: DarkThemeItem,
@@ -121,20 +123,22 @@ private fun ThemeItem(
     else
         MaterialTheme.colorScheme.tertiary
 
-    Surface(
-        color = color,
-        onClick = { onItemSelected() },
-        modifier = modifier,
+    val interaction = remember { MutableInteractionSource() }
+    Card(
+        containerColor = animateColorAsState(color).value,
+        contentColor = animateColorAsState(contentColorFor(color)).value,
+        interactionSource = interaction,
+        modifier = modifier.clickable(interaction, null, onClick = { onItemSelected() }),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-            modifier = Modifier.padding(4.dp),
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.CenterHorizontally),
         ) {
-            Surface(color = color) {
-                Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                    Icon(item.icon, stringResource(item.title))
-                }
+            Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                Icon(item.icon, stringResource(item.title))
             }
             Text(stringResource(item.title))
         }

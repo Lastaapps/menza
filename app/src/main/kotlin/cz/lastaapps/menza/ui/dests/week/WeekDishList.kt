@@ -26,10 +26,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -161,10 +160,12 @@ private fun CourseHeader(courseType: CourseType, modifier: Modifier = Modifier) 
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WeekDishItem(dish: WeekDish, modifier: Modifier = Modifier) {
-    Surface(
-        color = MaterialTheme.colorScheme.primaryContainer,
+    Card(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        shape = RoundedCornerShape(16.dp),
         modifier = modifier,
     ) {
         Row(
