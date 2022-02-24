@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.ui.layout.menza
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -98,7 +99,7 @@ private fun MenzaItem(
             .height(48.dp)
             .clickable(interaction, null, onClick = { onClick(menza.menzaId) }),
         interactionSource = interaction,
-        containerColor = color,
+        containerColor = animateColorAsState(color).value,
         shape = GenericShape { size, direction ->
             if (LayoutDirection.Ltr == direction) {
                 addRect(Rect(0f, 0f, size.width - size.height / 2, size.height))

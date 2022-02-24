@@ -20,19 +20,18 @@
 package cz.lastaapps.menza.ui.dests.info
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.index
 import cz.lastaapps.entity.info.Contact
 import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.entity.menza.Message
-import cz.lastaapps.storage.repo.ContactsRepo
-import cz.lastaapps.storage.repo.LocationRepo
-import cz.lastaapps.storage.repo.MessagesRepo
-import cz.lastaapps.storage.repo.OpeningHoursRepo
+import cz.lastaapps.storage.repo.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +41,45 @@ class InfoViewModel @Inject constructor(
     private val locationRepo: LocationRepo,
     private val openingHoursRepo: OpeningHoursRepo,
 ) : ViewModel() {
+
+    val errors = Channel<MenzaError>(Channel.BUFFERED)
+
+    val isRefreshing: StateFlow<Boolean> get() = mIsRefreshing
+    private val mIsRefreshing = MutableStateFlow(false)
+
+    init {
+        fun Flow<MenzaError>.moveToChannel() {
+            viewModelScope.launch {
+                this@moveToChannel.collect { errors.send(it) }
+            }
+        }
+        messageRepo.errors.receiveAsFlow().moveToChannel()
+        contactsRepo.errors.receiveAsFlow().moveToChannel()
+        locationRepo.errors.receiveAsFlow().moveToChannel()
+        openingHoursRepo.errors.receiveAsFlow().moveToChannel()
+
+        viewModelScope.launch {
+            combine(
+                messageRepo.requestInProgress,
+                contactsRepo.requestInProgress,
+                locationRepo.requestInProgress,
+                openingHoursRepo.requestInProgress,
+            ) { b0, b1, b2, b3 ->
+                println("FIND ME: $b0 $b1 $b2 $b3")
+                b0 || b1 || b2 || b3 }.collectLatest {
+                mIsRefreshing.emit(it)
+            }
+        }
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            messageRepo.refreshData().filterNotNull().first()
+                    && contactsRepo.refreshData().filterNotNull().first()
+                    && locationRepo.refreshData().filterNotNull().first()
+                    && openingHoursRepo.refreshData().filterNotNull().first()
+        }
+    }
 
     fun getMessage(menzaId: MenzaId): Flow<List<Message>> {
         return messageRepo.getMessage(menzaId)

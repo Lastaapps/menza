@@ -124,7 +124,7 @@ private fun LicenseDetail(
         shape = RoundedCornerShape(8.dp),
         modifier = modifier,
     ) {
-        Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(license.name, style = titleStyle)
 
             license.year?.takeIf { it.isNotBlank() }?.let { Text(it, style = bodyStyle) }

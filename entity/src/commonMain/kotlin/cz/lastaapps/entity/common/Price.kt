@@ -19,7 +19,7 @@
 
 package cz.lastaapps.entity.common
 
-import io.kotest.matchers.ints.shouldBeGreaterThan
+import io.kotest.matchers.ints.shouldNotBeLessThan
 
 /**
  * Holds price of a food
@@ -28,6 +28,6 @@ import io.kotest.matchers.ints.shouldBeGreaterThan
 @JvmInline
 value class Price(val price: Int) {
     init {
-        price.shouldBeGreaterThan(0)
+        price.shouldNotBeLessThan(0)
     }
 }

@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.ui.dests.info
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,45 +50,47 @@ fun InfoLayout(
     menzaViewModel: MenzaViewModel,
     infoViewModel: InfoViewModel,
 ) {
-    when (LocalWindowWidth.current) {
-        WindowSizeClass.COMPACT -> {
-            InfoLayoutCompact(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                viewModel = infoViewModel,
-            )
-        }
-        WindowSizeClass.MEDIUM -> {
-            InfoLayoutMedium(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                viewModel = infoViewModel,
-            )
-        }
-        WindowSizeClass.EXPANDED -> {
-            InfoLayoutExpanded(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                viewModel = infoViewModel,
-            )
+    Crossfade(targetState = menzaId) { currentMenzaId ->
+        when (LocalWindowWidth.current) {
+            WindowSizeClass.COMPACT -> {
+                InfoLayoutCompact(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = currentMenzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                    viewModel = infoViewModel,
+                )
+            }
+            WindowSizeClass.MEDIUM -> {
+                InfoLayoutMedium(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = currentMenzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                    viewModel = infoViewModel,
+                )
+            }
+            WindowSizeClass.EXPANDED -> {
+                InfoLayoutExpanded(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = currentMenzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                    viewModel = infoViewModel,
+                )
+            }
         }
     }
 }
@@ -123,6 +126,7 @@ fun InfoLayoutCompact(
     ) {
         InfoAllTogether(
             navController = navController,
+            snackbarHost = snackbarHostState,
             menzaId = menzaId,
             viewModel = viewModel,
             Modifier.fillMaxSize(),
@@ -156,6 +160,7 @@ fun InfoLayoutMedium(
     ) {
         InfoAllTogether(
             navController = navController,
+            snackbarHost = snackbarHostState,
             menzaId = menzaId,
             viewModel = viewModel,
             Modifier.fillMaxSize(),
@@ -189,13 +194,18 @@ fun InfoLayoutExpanded(
         panel1 = {
             InfoPrimary(
                 navController = navController,
+                snackbarHost = snackbarHostState,
                 menzaId = menzaId,
                 viewModel = viewModel,
                 Modifier.fillMaxSize()
             )
         },
         panel2 = {
-            InfoSecondary(menzaId = menzaId, viewModel = viewModel, Modifier.fillMaxSize())
+            InfoSecondary(
+                menzaId = menzaId,
+                snackbarHost = snackbarHostState,
+                viewModel = viewModel, Modifier.fillMaxSize()
+            )
         },
     )
 }

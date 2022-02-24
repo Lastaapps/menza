@@ -25,6 +25,7 @@ import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
 import cz.lastaapps.entity.menza.MenzaId
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldNotBeBlank
 
 /**

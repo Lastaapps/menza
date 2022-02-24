@@ -980,6 +980,37 @@ class TodayScraperTest {
     </div>
   </div>
 </body>"""
+        val priceZero = """<body>
+  <input type='hidden' id='PodsysActive' value='4'>
+  <div id="jidelnicek">
+    <div class='data'>
+      <table>
+        <tbody>
+          <tr>
+            <th colspan='9' class="thkategorie">Polévky</th>
+          </tr>
+          <tr>
+            <td></td>
+            <td>100&nbsp;ml</td>
+            <td>Hovězí vývar se zeleninou a nudlemi </td>
+            <td>
+              <div>                        
+                <a href="alergeny.php?alergen=340633" title="Alergeny: 1,3,7,9"></a>
+              </div>
+            </td>
+            <td></td>
+            <td>0,00&nbsp;Kč</td>
+            <td>0,00&nbsp;Kč</td>
+            <td>
+              <span id="v0v18" title="Jídelna">J</span>   
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>"""
         val invalidPrice = """<body>
   <input type='hidden' id='PodsysActive' value='4'>
   <div id="jidelnicek">
@@ -1364,6 +1395,7 @@ class TodayScraperTest {
         TodayScraperImpl.scrape(noAmount).shouldNotBeEmpty()
         TodayScraperImpl.scrape(spaceDelimiter).shouldNotBeEmpty()
         TodayScraperImpl.scrape(noAllergenButDelimiters).shouldNotBeEmpty()
+        TodayScraperImpl.scrape(priceZero).shouldNotBeEmpty()
         TodayScraperImpl.scrape(priceDecimalPointFormat).shouldNotBeEmpty()
         TodayScraperImpl.scrape(priceOtherCurrency).shouldNotBeEmpty()
         TodayScraperImpl.scrape(priceNoDecimal).shouldNotBeEmpty()

@@ -20,11 +20,14 @@
 package cz.lastaapps.menza.ui.dests.today
 
 import android.os.Build
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -76,6 +79,7 @@ fun TodayDishList(
     viewModel: TodayViewModel,
     settingsViewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
+    scroll: LazyListState = rememberLazyListState(),
 ) {
     val priceType by settingsViewModel.sett.priceType.collectAsState()
     val onPriceType = { type: PriceType -> settingsViewModel.setPriceType(type) }
@@ -109,14 +113,13 @@ fun TodayDishList(
             onRefresh = { viewModel.refresh(menzaId, locale) },
             modifier = modifier,
         ) {
-            DishContent(
-                data = data,
-                onDishSelected,
-                priceType,
-                onPriceType,
-                downloadOnMetered,
-                Modifier.fillMaxSize()
-            )
+            Crossfade(targetState = data) { currentData ->
+                DishContent(
+                    currentData, onDishSelected,
+                    priceType, onPriceType,
+                    downloadOnMetered, scroll, Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }
@@ -129,6 +132,7 @@ private fun DishContent(
     priceType: PriceType,
     onPriceType: (PriceType) -> Unit,
     downloadOnMetered: Boolean,
+    scroll: LazyListState,
     modifier: Modifier = Modifier
 ) {
 
@@ -147,12 +151,13 @@ private fun DishContent(
         // showing items
         LazyColumn(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            state = scroll,
         ) {
             data.forEach { dishType ->
                 stickyHeader {
                     Surface(Modifier.fillMaxWidth()) {
-                        DishHeader(courseType = dishType.first, Modifier.padding(bottom = 8.dp))
+                        DishHeader(courseType = dishType.first, Modifier.padding(bottom = 4.dp))
                     }
                 }
                 items(dishType.second) { dish ->
@@ -183,7 +188,7 @@ private fun PriceTypeUnspecified(
             modifier = modifier,
         ) {
             Column(
-                Modifier.padding(8.dp),
+                Modifier.padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
@@ -256,7 +261,7 @@ private fun DishItem(
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
         Row(
-            Modifier.padding(8.dp),
+            Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -277,7 +282,7 @@ private fun DishNameRow(dish: Dish, modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.Top,
         modifier = modifier,
     ) {
-        Text(dish.name, Modifier.weight(1f))
+        Text(dish.name, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
         Column(
             Modifier.width(IntrinsicSize.Max),
             verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -319,18 +324,14 @@ private fun DishImageWithBadge(
     downloadOnMetered: Boolean,
     modifier: Modifier = Modifier
 ) {
-    ConstraintLayout(modifier) {
-        val (imgConst, priceConst) = createRefs()
-
-        DishImage(dish = dish, downloadOnMetered, Modifier.constrainAs(imgConst) {
-            centerHorizontallyTo(parent)
-            centerVerticallyTo(parent)
-        })
-
-        DishBadge(dish = dish, priceType, Modifier.constrainAs(priceConst) {
-            end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom)
-        })
+    Box(modifier) {
+        DishImage(
+            dish = dish, downloadOnMetered,
+            Modifier
+                .align(Alignment.Center)
+                .padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
+        )
+        DishBadge(dish = dish, priceType, Modifier.align(Alignment.BottomEnd))
     }
 }
 
@@ -354,9 +355,8 @@ private fun DishBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Mod
 private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier = Modifier) {
     Box(modifier) {
         val size = 64.dp
-        val imageModifier = Modifier
-            .size(size)
-            .padding(bottom = 8.dp, end = 8.dp)
+        val imageModifier = Modifier.size(size)
+
 
         if (dish.imageUrl != null) {
 

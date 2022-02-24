@@ -26,12 +26,9 @@ import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.OpeningHoursScraper
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import org.lighthousegames.logging.logging
 
 class OpeningHoursRepoImpl<R : Any>(
@@ -82,9 +79,9 @@ class OpeningHoursRepoImpl<R : Any>(
         }.flowOn(dispatcher)
     }
 
-    private suspend fun refreshInternal(): Boolean? {
+    private suspend fun refreshInternal(): Boolean? = withContext(dispatcher){
         if (mRequestInProgress.value)
-            return null
+            return@withContext null
 
         mRequestInProgress.value = true
 
@@ -94,17 +91,16 @@ class OpeningHoursRepoImpl<R : Any>(
         } catch (e: Exception) {
             log.e(e) { "Download failed" }
             mErrors.send(e.toMenzaError())
-            mRequestInProgress.value = false
-            return false
+            return@withContext false
         }
         val data = try {
             log.i { "Scraping" }
             scraper.scrape(request)
         } catch (e: Exception) {
             mErrors.send(MenzaError.ParsingError(e))
+            log.e(e) { "Parsing error" }
             e.printStackTrace()
-            mRequestInProgress.value = false
-            return false
+            return@withContext false
         }
 
         log.i { "Replacing database entries" }
@@ -117,9 +113,9 @@ class OpeningHoursRepoImpl<R : Any>(
                 )
             }
         }
-        mRequestInProgress.value = true
-        return true
-    }
+
+        return@withContext true
+    }.also { mRequestInProgress.value = false }
 
     override suspend fun hasData(): Boolean =
         hasDataStored().first().also { log.i { "hasData: $it" } }

@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -122,6 +123,7 @@ private fun TopBarPopup(
     modifier: Modifier = Modifier,
     navigateTo: (String) -> Unit,
 ) {
+    val uriHandler = LocalUriHandler.current
     DropdownMenu(expanded, onDismissRequest, modifier) {
         DropdownMenuItem(
             { Text(stringResource(R.string.ui_top_bar_action_privacy)) },
@@ -139,6 +141,12 @@ private fun TopBarPopup(
             { Text(stringResource(R.string.ui_top_bar_action_osturak)) },
             {
                 navigateTo(Dest.R.osturak)
+                onDismissRequest()
+            })
+        DropdownMenuItem(
+            { Text(stringResource(R.string.ui_top_bar_action_web)) },
+            {
+                uriHandler.openUri("https://agata.suz.cvut.cz/jidelnicky/")
                 onDismissRequest()
             })
     }

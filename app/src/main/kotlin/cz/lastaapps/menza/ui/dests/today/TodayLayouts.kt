@@ -20,7 +20,9 @@
 package cz.lastaapps.menza.ui.dests.today
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
@@ -57,55 +59,57 @@ fun TodayDest(
     val selectedDish by todayViewModel.selectedDish.collectAsState()
     val onDishSelected: (Dish?) -> Unit = { todayViewModel.selectDish(it) }
 
-    @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
-    when (LocalWindowWidth.current) {
-        WindowSizeClass.COMPACT -> {
-            TodayDestCompact(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                viewModel = todayViewModel,
-                selectedDish = selectedDish,
-                onDishSelected = onDishSelected,
-                settingsViewModel = settingsViewModel,
-            )
-        }
-        WindowSizeClass.MEDIUM -> {
-            TodayDestMedium(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                viewModel = todayViewModel,
-                selectedDish = selectedDish,
-                onDishSelected = onDishSelected,
-                settingsViewModel = settingsViewModel,
-            )
-        }
-        WindowSizeClass.EXPANDED -> {
-            TodayDestExpanded(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                viewModel = todayViewModel,
-                selectedDish = selectedDish,
-                onDishSelected = onDishSelected,
-                settingsViewModel = settingsViewModel,
-            )
+    Crossfade(targetState = menzaId) { currentMenzaId ->
+        @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
+        when (LocalWindowWidth.current) {
+            WindowSizeClass.COMPACT -> {
+                TodayDestCompact(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = currentMenzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                    viewModel = todayViewModel,
+                    selectedDish = selectedDish,
+                    onDishSelected = onDishSelected,
+                    settingsViewModel = settingsViewModel,
+                )
+            }
+            WindowSizeClass.MEDIUM -> {
+                TodayDestMedium(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = currentMenzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                    viewModel = todayViewModel,
+                    selectedDish = selectedDish,
+                    onDishSelected = onDishSelected,
+                    settingsViewModel = settingsViewModel,
+                )
+            }
+            WindowSizeClass.EXPANDED -> {
+                TodayDestExpanded(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = currentMenzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                    viewModel = todayViewModel,
+                    selectedDish = selectedDish,
+                    onDishSelected = onDishSelected,
+                    settingsViewModel = settingsViewModel,
+                )
+            }
         }
     }
 }
@@ -149,17 +153,20 @@ fun TodayDestCompact(
         BackHandler(enabled = selectedDish != null) {
             onDishSelected(null)
         }
-        if (selectedDish == null) {
-            TodayDishList(
-                navController = navController,
-                menzaId = menzaId,
-                onDishSelected = onDishSelected,
-                viewModel = viewModel,
-                settingsViewModel = settingsViewModel,
-                modifier = Modifier.fillMaxSize(),
-            )
-        } else {
-            TodayInfo(dish = selectedDish, viewModel, Modifier.fillMaxSize())
+
+        val scroll = rememberLazyListState()
+        Crossfade(targetState = selectedDish) { currentSelectedDish ->
+            if (currentSelectedDish == null) {
+                TodayDishList(
+                    navController = navController,
+                    menzaId = menzaId, onDishSelected = onDishSelected,
+                    viewModel = viewModel, settingsViewModel = settingsViewModel,
+                    modifier = Modifier.fillMaxSize(),
+                    scroll = scroll,
+                )
+            } else {
+                TodayInfo(dish = currentSelectedDish, viewModel, Modifier.fillMaxSize())
+            }
         }
     }
 }
@@ -197,17 +204,19 @@ fun TodayDestMedium(
         BackHandler(enabled = selectedDish != null) {
             onDishSelected(null)
         }
-        if (selectedDish == null) {
-            TodayDishList(
-                navController = navController,
-                menzaId = menzaId,
-                onDishSelected = onDishSelected,
-                viewModel = viewModel,
-                settingsViewModel = settingsViewModel,
-                modifier = Modifier.fillMaxSize(),
-            )
-        } else {
-            TodayInfo(dish = selectedDish, viewModel, Modifier.fillMaxSize())
+        Crossfade(targetState = selectedDish) { currentSelectedDish ->
+            if (currentSelectedDish == null) {
+                TodayDishList(
+                    navController = navController,
+                    menzaId = menzaId,
+                    onDishSelected = onDishSelected,
+                    viewModel = viewModel,
+                    settingsViewModel = settingsViewModel,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            } else {
+                TodayInfo(dish = currentSelectedDish, viewModel, Modifier.fillMaxSize())
+            }
         }
     }
 }
@@ -249,10 +258,12 @@ fun TodayDestExpanded(
             )
         },
         panel2 = {
-            if (selectedDish == null) {
-                NoDishSelected(Modifier.fillMaxSize())
-            } else {
-                TodayInfo(dish = selectedDish, viewModel, Modifier.fillMaxSize())
+            Crossfade(targetState = selectedDish) { currentSelectedDish ->
+                if (currentSelectedDish == null) {
+                    NoDishSelected(Modifier.fillMaxSize())
+                } else {
+                    TodayInfo(currentSelectedDish, viewModel, Modifier.fillMaxSize())
+                }
             }
         }
     )

@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.ui.dests.week
 
 import android.os.Build
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -88,7 +89,9 @@ fun WeekDishList(
             onRefresh = { viewModel.refresh(menzaId, locale) },
             modifier = modifier,
         ) {
-            WeekDishContent(data = data, Modifier.fillMaxSize())
+            Crossfade(targetState = data) { currentData ->
+                WeekDishContent(data = currentData, Modifier.fillMaxSize())
+            }
         }
     }
 }
@@ -124,6 +127,7 @@ private fun WeekDishContent(
             items(dayDishList.dishes) { courseAndDish ->
 
                 CourseHeader(courseType = courseAndDish.first)
+                Spacer(Modifier.height(4.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     courseAndDish.second.forEach { dish ->
                         WeekDishItem(dish = dish, Modifier.fillMaxWidth())
@@ -169,12 +173,12 @@ private fun WeekDishItem(dish: WeekDish, modifier: Modifier = Modifier) {
         modifier = modifier,
     ) {
         Row(
-            Modifier.padding(8.dp),
+            Modifier.padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(dish.amount?.amount ?: "", Modifier.width(48.dp))
-            Text(dish.name)
+            Text(dish.name, style = MaterialTheme.typography.titleMedium)
         }
     }
 }

@@ -76,7 +76,7 @@ fun AboutUi(
             ElevatedCard {
                 Column(
                     Modifier
-                        .padding(16.dp)
+                        .padding(12.dp)
                         .align(Alignment.CenterHorizontally),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -88,7 +88,7 @@ fun AboutUi(
                 }
             }
             ElevatedCard(Modifier.fillMaxWidth()) {
-                Socials(Modifier.padding(16.dp))
+                Socials(Modifier.padding(12.dp))
             }
             Surface(Modifier.fillMaxWidth()) {
                 AppInfo(Modifier.padding(8.dp))

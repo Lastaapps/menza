@@ -135,8 +135,10 @@
     <string name="ui_top_bar_action_description">Další</string>
     <string name="ui_top_bar_action_privacy">Ochrana soukromí</string>
     <string name="ui_top_bar_action_license">Použité knihovny</string>
+    <string name="ui_top_bar_action_web">Web</string>
     <string name="menza_none_selected">Není vybrána žádná menza</string>
-    <string name="menza_osturak">Seznámit se s ošťurákem</string>
+    <string name="menza_none_osturak">Seznámit se s ošťurákem</string>
+    <string name="menza_none_swipe">Přejetím vyberete Menzu</string>
     <string name="license_this_app">Menza je licencována pod GNU GPL v3.0 licencí</string>
     <string name="license_none_selected">Není vybrána žádná knihovna</string>
     <string name="license_detail_opensource_yes">Knihovna je opensource</string>

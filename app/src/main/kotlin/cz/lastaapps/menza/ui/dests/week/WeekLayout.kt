@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.ui.dests.week
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,33 +49,35 @@ fun WeekLayout(
     menzaViewModel: MenzaViewModel,
     weekViewModel: WeekViewModel,
 ) {
-    @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
-    when (LocalWindowWidth.current) {
-        WindowSizeClass.COMPACT -> {
-            WeekLayoutCompact(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                viewModel = weekViewModel,
-            )
-        }
-        in listOf(WindowSizeClass.MEDIUM, WindowSizeClass.EXPANDED) -> {
-            WeekLayoutExpanded(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                viewModel = weekViewModel,
-            )
+    Crossfade(targetState = menzaId) { currentMenzaId ->
+        @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
+        when (LocalWindowWidth.current) {
+            WindowSizeClass.COMPACT -> {
+                WeekLayoutCompact(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = currentMenzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                    viewModel = weekViewModel,
+                )
+            }
+            in listOf(WindowSizeClass.MEDIUM, WindowSizeClass.EXPANDED) -> {
+                WeekLayoutExpanded(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    expanded = expanded,
+                    onExpandedClicked = onExpandedClicked,
+                    menzaId = currentMenzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                    viewModel = weekViewModel,
+                )
+            }
         }
     }
 }

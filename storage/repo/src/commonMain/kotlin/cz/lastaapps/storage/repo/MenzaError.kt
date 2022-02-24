@@ -19,6 +19,7 @@
 
 package cz.lastaapps.storage.repo
 
+import io.ktor.client.network.sockets.*
 import java.io.EOFException
 import java.net.ConnectException
 import java.net.SocketException
@@ -45,6 +46,7 @@ fun Throwable.toMenzaError(): MenzaError {
         is UnresolvedAddressException -> MenzaError.NoInternet(this)
         is ConnectException -> MenzaError.FailedToConnect(this)
         is SocketTimeoutException -> MenzaError.Timeout(this)
+        is ConnectTimeoutException -> MenzaError.Timeout(this)
         is SocketException -> MenzaError.FailedToConnect(this)
         is EOFException -> MenzaError.ConnectionClosed(this)
         else -> MenzaError.UnknownConnectionError(this)

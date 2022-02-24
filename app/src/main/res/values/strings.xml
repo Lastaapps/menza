@@ -151,9 +151,11 @@
     <string name="ui_top_bar_action_privacy">Privacy policy</string>
     <string name="ui_top_bar_action_license">License notices</string>
     <string name="ui_top_bar_action_osturak" translatable="false">Ošťurák</string>
+    <string name="ui_top_bar_action_web">Website</string>
 
     <string name="menza_none_selected">No menza selected</string>
-    <string name="menza_osturak">Find out about ošťurák</string>
+    <string name="menza_none_osturak">Find out about ošťurák</string>
+    <string name="menza_none_swipe">Swipe to select a Menza</string>
 
     <string name="license_this_app">Menza is licensed under GNU GPL v3.0 license</string>
     <string name="license_none_selected">No library selected</string>

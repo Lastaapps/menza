@@ -77,7 +77,7 @@ fun OpeningHoursLocationUI(
     Card(containerColor = MaterialTheme.colorScheme.primaryContainer, modifier = modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(12.dp),
         ) {
             Text(data.name, style = MaterialTheme.typography.titleMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

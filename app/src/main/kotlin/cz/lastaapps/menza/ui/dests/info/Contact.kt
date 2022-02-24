@@ -78,7 +78,7 @@ fun ContactUI(
         val snackbar = LocalSnackbarProvider.current
         val scope = rememberCoroutineScope()
 
-        Column(Modifier.padding(8.dp)) {
+        Column(Modifier.padding(12.dp)) {
             contact.name?.let {
                 Text(text = it.name, style = MaterialTheme.typography.titleMedium)
             }

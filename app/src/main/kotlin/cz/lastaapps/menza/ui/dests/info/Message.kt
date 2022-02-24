@@ -56,6 +56,6 @@ fun MessageList(
 @Composable
 fun Message(message: Message, modifier: Modifier = Modifier) {
     Card(containerColor = MaterialTheme.colorScheme.primaryContainer, modifier = modifier) {
-        Text(message.message, modifier = Modifier.padding(8.dp))
+        Text(message.message, modifier = Modifier.padding(12.dp))
     }
 }
