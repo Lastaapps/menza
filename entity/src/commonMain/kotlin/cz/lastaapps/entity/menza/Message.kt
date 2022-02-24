@@ -19,8 +19,6 @@
 
 package cz.lastaapps.entity.menza
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
 /**
  * Warning or other type of information shown for a menza
  * https://agata.suz.cvut.cz/jidelnicky/index.php
@@ -30,6 +28,6 @@ data class Message(
     val message: String,
 ) {
     init {
-        message.shouldNotBeBlank()
+        require(message.isNotBlank()) { "Menza message is blank" }
     }
 }

@@ -19,9 +19,6 @@
 
 package cz.lastaapps.entity.day
 
-import io.kotest.matchers.ints.shouldBeNonNegative
-import io.kotest.matchers.string.shouldNotBeBlank
-
 /**
  * Holds info about issue place
  * on the web this info is located fight next to the dish price
@@ -39,9 +36,9 @@ data class IssueLocation(
     val name: String,
 ) {
     init {
-        terminalId.shouldBeNonNegative()
-        windowsId.shouldBeNonNegative()
-        abbrev.shouldNotBeBlank()
-        name.shouldNotBeBlank()
+        require(terminalId >= 0) { "Terminal id is negative $terminalId" }
+        require(windowsId >= 0) { "Window id is negative $windowsId" }
+        require(abbrev.isNotBlank()) { "Issue location abbrev is blank" }
+        require(name.isNotBlank()) { "Issue location abbrev is blank" }
     }
 }

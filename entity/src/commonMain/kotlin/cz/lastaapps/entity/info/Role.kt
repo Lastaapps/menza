@@ -19,11 +19,9 @@
 
 package cz.lastaapps.entity.info
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
 @JvmInline
 value class Role(val role: String) {
     init {
-        role.shouldNotBeBlank()
+        require(role.isNotBlank()) { "Role is blank" }
     }
 }

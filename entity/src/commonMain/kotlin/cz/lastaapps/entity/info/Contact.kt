@@ -20,7 +20,6 @@
 package cz.lastaapps.entity.info
 
 import cz.lastaapps.entity.menza.MenzaId
-import io.kotest.matchers.booleans.shouldBeTrue
 
 /**
  * Holds contact info to the menza administration
@@ -34,6 +33,8 @@ data class Contact(
     val email: Email?,
 ) {
     init {
-        (role != null || name != null || phoneNumber != null || email != null).shouldBeTrue()
+        require(role != null || name != null || phoneNumber != null || email != null) {
+            "None contact info passed"
+        }
     }
 }

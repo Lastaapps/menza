@@ -19,11 +19,9 @@
 
 package cz.lastaapps.entity.info
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
 @JvmInline
 value class Name(val name: String) {
     init {
-        name.shouldNotBeBlank()
+        require(name.isNotBlank()) { "Contact's name is blank" }
     }
 }

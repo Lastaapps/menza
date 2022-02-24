@@ -19,8 +19,6 @@
 
 package cz.lastaapps.entity.common
 
-import io.kotest.matchers.ints.shouldNotBeLessThan
-
 /**
  * Holds price of a food
  * https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=1
@@ -28,6 +26,6 @@ import io.kotest.matchers.ints.shouldNotBeLessThan
 @JvmInline
 value class Price(val price: Int) {
     init {
-        price.shouldNotBeLessThan(0)
+        require(price >= 0) { "Price is negative $price" }
     }
 }

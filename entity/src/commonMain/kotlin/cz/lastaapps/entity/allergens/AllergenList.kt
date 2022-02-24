@@ -36,6 +36,9 @@ value class AllergenList internal constructor(
         // the number of current allergens, full Int is overall 32 bits long
         internal const val range = 14
 
+        // to prevent assertions when new allergens are added in the future
+        internal const val hypotheticalRange = range + 8
+
         fun fromAllergenList(list: Collection<Allergen>): AllergenList {
             return fromAllergenIdList(list.map { it.id })
         }

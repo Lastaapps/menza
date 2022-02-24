@@ -19,7 +19,6 @@
 
 package cz.lastaapps.entity.allergens
 
-import io.kotest.matchers.ints.shouldBeInRange
 
 /**
  * Holds allergen id - it's code in the czech/international allergen table
@@ -28,6 +27,6 @@ import io.kotest.matchers.ints.shouldBeInRange
 @JvmInline
 value class AllergenId(val id: Int) {
     init {
-        id.shouldBeInRange(1..AllergenList.range)
+        require(id in 1..AllergenList.hypotheticalRange)
     }
 }

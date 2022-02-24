@@ -22,7 +22,6 @@ package cz.lastaapps.entity.week
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.menza.MenzaId
-import io.kotest.matchers.string.shouldNotBeBlank
 import kotlinx.datetime.LocalDate
 
 /**
@@ -38,7 +37,7 @@ data class WeekDish(
 ) : Comparable<WeekDish> {
 
     init {
-        name.shouldNotBeBlank()
+        require(name.isNotBlank()) { "Week Dish name is blank" }
     }
 
     override fun compareTo(other: WeekDish): Int {

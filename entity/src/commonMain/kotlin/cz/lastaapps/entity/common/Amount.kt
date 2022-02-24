@@ -19,7 +19,6 @@
 
 package cz.lastaapps.entity.common
 
-import io.kotest.matchers.string.shouldNotBeBlank
 
 /**
  * Holds the amount of food
@@ -30,6 +29,6 @@ import io.kotest.matchers.string.shouldNotBeBlank
 @JvmInline
 value class Amount(val amount: String) {
     init {
-        amount.shouldNotBeBlank()
+        require(amount.isNotBlank()) { "Amount is blank" }
     }
 }

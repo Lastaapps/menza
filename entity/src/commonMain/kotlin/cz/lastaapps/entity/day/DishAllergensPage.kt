@@ -19,8 +19,6 @@
 
 package cz.lastaapps.entity.day
 
-import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
-
 /**
  * Holds the info about the ids of a dish in Agata allergen id system
  * Can be used to reference food allergens
@@ -30,6 +28,6 @@ import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 @JvmInline
 value class DishAllergensPage(val pageId: Int) {
     init {
-        pageId shouldBeGreaterThanOrEqual 0
+        require(pageId >= 0) { "Allergen page id is negative" }
     }
 }

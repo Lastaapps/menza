@@ -19,8 +19,6 @@
 
 package cz.lastaapps.entity.common
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
 /**
  * Course of day for a dish
  * for example soup, main meal, vegetarian (grass eater)
@@ -32,6 +30,6 @@ data class CourseType(
     val webOrder: Int,
 ) {
     init {
-        type.shouldNotBeBlank()
+        require(type.isNotBlank()) { "Type is blank" }
     }
 }

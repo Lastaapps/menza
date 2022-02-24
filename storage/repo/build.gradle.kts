@@ -53,8 +53,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(Libs.KOTLINX_DATETIME)
-                implementation(Tests.KOTEST_ASSERTION)
                 implementation(Libs.KOTLIN_COROUTINES)
+                implementation(Libs.KTOR_CORE)
                 api(Libs.KM_LOGGING)
 
                 implementation(project(":entity"))
@@ -65,6 +65,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(Tests.KOTEST_ASSERTION)
             }
         }
         val androidMain by getting {

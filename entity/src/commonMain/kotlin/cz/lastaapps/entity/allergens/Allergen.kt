@@ -19,7 +19,6 @@
 
 package cz.lastaapps.entity.allergens
 
-import io.kotest.matchers.string.shouldNotBeBlank
 
 /**
  * Holds info about one type of allergen
@@ -32,8 +31,8 @@ data class Allergen(
 ) : Comparable<Allergen> {
 
     init {
-        name.shouldNotBeBlank()
-        description.shouldNotBeBlank()
+        require(name.isNotBlank()) { "Allergen name is blank" }
+        require(description.isNotBlank()) { "Description is blank" }
     }
 
     override fun compareTo(other: Allergen): Int {

@@ -19,11 +19,9 @@
 
 package cz.lastaapps.entity.info
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
 @JvmInline
 value class PhoneNumber(val phone: String) {
     init {
-        phone.shouldNotBeBlank()
+        require(phone.isNotBlank()) { "Phone number is blank" }
     }
 }

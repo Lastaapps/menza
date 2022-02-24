@@ -19,8 +19,6 @@
 
 package cz.lastaapps.entity.menza
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
 /**
  * Holds the coordinates of a menza, can be used to access maps
  * https://agata.suz.cvut.cz/jidelnicky/kontakty.php
@@ -28,8 +26,8 @@ import io.kotest.matchers.string.shouldNotBeBlank
 data class Coordinates(val long: String, val lat: String) {
 
     init {
-        long.shouldNotBeBlank()
-        lat.shouldNotBeBlank()
+        require(long.isNotBlank()) { "long is blank" }
+        require(lat.isNotBlank()) { "lat is blank" }
     }
 
     fun saveToString(): String {

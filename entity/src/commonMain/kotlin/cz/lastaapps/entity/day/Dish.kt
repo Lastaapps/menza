@@ -24,9 +24,6 @@ import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
 import cz.lastaapps.entity.menza.MenzaId
-import io.kotest.matchers.collections.shouldNotBeEmpty
-import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.string.shouldNotBeBlank
 
 /**
  * Holds data about a dish in a day
@@ -45,7 +42,7 @@ data class Dish(
     val issuePlaces: List<IssueLocation>,
 ) {
     init {
-        name.shouldNotBeBlank()
-        issuePlaces.shouldNotBeEmpty()
+        require(name.isNotBlank()) { "Dish name is blank" }
+        require(issuePlaces.isNotEmpty()) { "There are no issue places" }
     }
 }

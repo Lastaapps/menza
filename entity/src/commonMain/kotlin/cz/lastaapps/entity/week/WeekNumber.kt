@@ -19,7 +19,6 @@
 
 package cz.lastaapps.entity.week
 
-import io.kotest.matchers.comparables.shouldBeGreaterThanOrEqualTo
 import kotlinx.datetime.*
 
 /**
@@ -29,7 +28,7 @@ import kotlinx.datetime.*
 @JvmInline
 value class WeekNumber private constructor(val week: Int) {
     init {
-        week shouldBeGreaterThanOrEqualTo 0
+        require(week >= 0) { "Week number is negative" }
     }
 
     companion object {

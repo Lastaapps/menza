@@ -19,8 +19,6 @@
 
 package cz.lastaapps.entity.menza
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
 /**
  * Holds the basic state about a menza
  * https://agata.suz.cvut.cz/jidelnicky/oteviraci-doby.php
@@ -31,7 +29,7 @@ data class Menza(
     val opened: Opened,
 ) {
     init {
-        name.shouldNotBeBlank()
+        require(name.isNotBlank()) { "Menza name is blank" }
     }
 
     val shorterName = name

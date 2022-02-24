@@ -54,7 +54,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(Libs.KOTLINX_DATETIME)
-                implementation(Tests.KOTEST_ASSERTION)
 
                 api(Libs.SQLDELIGHT_RUNTIME)
                 api(Libs.SQLDELIGHT_COROUTINES)
@@ -65,6 +64,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(Tests.KOTEST_ASSERTION)
             }
         }
         val androidMain by getting {

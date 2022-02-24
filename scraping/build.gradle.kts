@@ -73,7 +73,7 @@ kotlin {
         val androidMain by getting {
             kotlin.srcDir("src/commonJvmAndroid/kotlin")
             dependencies {
-                implementation("it.skrape:skrapeit:${scrapeIt}")
+                implementation(Libs.SKRAPE_IT)
             }
         }
         val androidTest by getting {

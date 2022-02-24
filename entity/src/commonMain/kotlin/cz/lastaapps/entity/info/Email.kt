@@ -19,11 +19,9 @@
 
 package cz.lastaapps.entity.info
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
 @JvmInline
 value class Email(val mail: String) {
     init {
-        mail.shouldNotBeBlank()
+        require(mail.isNotBlank()) { "Main is blank" }
     }
 }

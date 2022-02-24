@@ -19,8 +19,6 @@
 
 package cz.lastaapps.entity.menza
 
-import io.kotest.matchers.ints.shouldBeGreaterThan
-
 /**
  * Represents the id of a menza is Agata system
  * between 0 and about 14
@@ -28,6 +26,6 @@ import io.kotest.matchers.ints.shouldBeGreaterThan
 @JvmInline
 value class MenzaId(val id: Int) {
     init {
-        id.shouldBeGreaterThan(0)
+        require(id >= 0) { "Menza id is negative $id" }
     }
 }

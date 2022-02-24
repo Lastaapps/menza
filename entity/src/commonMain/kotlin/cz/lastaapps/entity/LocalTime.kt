@@ -19,17 +19,16 @@
 
 package cz.lastaapps.entity
 
-import io.kotest.matchers.ints.shouldBeInRange
 
 /**
  * Represents local time in a day
  */
-data class LocalTime(val hours: Int, val minutes: Int, val seconds: Int) {
+data class LocalTime(val hours: Int, val minutes: Int, val seconds: Int) : Comparable<LocalTime> {
 
     init {
-        hours shouldBeInRange 0..23
-        minutes shouldBeInRange 0..59
-        seconds shouldBeInRange 0..59
+        require(hours in 0..23) { "Hours are $hours" }
+        require(minutes in 0..59) { "Minutes are $minutes" }
+        require(seconds in 0..59) { "Seconds are $seconds" }
     }
 
     fun toSeconds(): Int {
@@ -48,5 +47,9 @@ data class LocalTime(val hours: Int, val minutes: Int, val seconds: Int) {
 
             return LocalTime(hours, minutes, seconds)
         }
+    }
+
+    override fun compareTo(other: LocalTime): Int {
+        return toSeconds().compareTo(other.toSeconds())
     }
 }

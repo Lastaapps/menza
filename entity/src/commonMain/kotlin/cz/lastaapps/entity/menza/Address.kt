@@ -19,8 +19,6 @@
 
 package cz.lastaapps.entity.menza
 
-import io.kotest.matchers.string.shouldNotBeBlank
-
 /**
  * Holds value of the menza address
  * https://agata.suz.cvut.cz/jidelnicky/kontakty.php
@@ -28,6 +26,6 @@ import io.kotest.matchers.string.shouldNotBeBlank
 @JvmInline
 value class Address(val stringForm: String) {
     init {
-        stringForm.shouldNotBeBlank()
+        require(stringForm.isNotBlank()) { "Address is blank" }
     }
 }
