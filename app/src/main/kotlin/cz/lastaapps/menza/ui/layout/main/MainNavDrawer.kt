@@ -47,7 +47,7 @@ fun MenzaNavDrawer(
     content: @Composable () -> Unit,
 ) {
 
-    NavigationDrawer(
+    ModalNavigationDrawer(
         modifier = modifier,
         drawerState = drawerState,
         drawerContent = {

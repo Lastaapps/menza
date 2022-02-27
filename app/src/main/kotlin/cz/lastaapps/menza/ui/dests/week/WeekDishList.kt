@@ -150,7 +150,9 @@ private fun DayHeader(date: LocalDate, modifier: Modifier = Modifier) {
         Text(
             text = date.toJavaLocalDate().format(format),
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(4.dp),
+            modifier = Modifier
+                .padding(4.dp)
+                .padding(start = 8.dp, end = 8.dp),
         )
     }
 }

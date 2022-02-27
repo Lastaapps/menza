@@ -45,7 +45,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
@@ -59,6 +58,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.LocalConnectivityProvider
@@ -283,22 +283,28 @@ private fun DishNameRow(dish: Dish, modifier: Modifier = Modifier) {
         modifier = modifier,
     ) {
         Text(dish.name, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
-        Column(
-            Modifier.width(IntrinsicSize.Max),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            dish.issuePlaces.forEach {
-                Surface(
-                    color = MaterialTheme.colorScheme.secondary,
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        text = "${it.abbrev} ${it.windowsId}",
-                        textAlign = TextAlign.End,
-                        modifier = Modifier.padding(2.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
+
+        // TODO resolve dish issue windows
+        // Hidden to a normal user until it's verified
+        // Still available in dish details
+        if (BuildConfig.DEBUG) {
+            Column(
+                Modifier.width(IntrinsicSize.Max),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                dish.issuePlaces.forEach {
+                    Surface(
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = "${it.abbrev} ${it.windowsId}",
+                            textAlign = TextAlign.End,
+                            modifier = Modifier.padding(2.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
                 }
             }
         }
@@ -354,7 +360,7 @@ private fun DishBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Mod
 @Composable
 private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier = Modifier) {
     Box(modifier) {
-        val size = 64.dp
+        val size = 80.dp
         val imageModifier = Modifier.size(size)
 
 
@@ -414,7 +420,7 @@ private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier
                 },
                 success = {
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(12.dp),
                         modifier = imageModifier,
                     ) {
                         SubcomposeAsyncImageContent(

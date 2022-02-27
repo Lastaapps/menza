@@ -89,7 +89,7 @@
     <string name="settings_title">Settings</string>
     <string name="settings_switch_system_theme">Use system dynamic theme</string>
     <string name="settings_switch_price">Show discounted student prices</string>
-    <string name="settings_switch_metered">Download images on metered networks</string>
+    <string name="settings_switch_metered">Download images on metered networks (~0.7 MB each)</string>
     <string name="settings_button_privacy_policy">Privacy policy</string>
     <string name="settings_button_about">About</string>
     <string name="settings_button_rate">Rate us!</string>

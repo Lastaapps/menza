@@ -152,13 +152,18 @@ private fun AllergenList(
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Surface(
                                 color = MaterialTheme.colorScheme.tertiary,
-                                shape = CircleShape
+                                shape = CircleShape,
                             ) {
-                                Text(
-                                    "${it.id.id}",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.padding(2.dp),
-                                )
+                                Box(
+                                    modifier = Modifier.size(24.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        "${it.id.id}",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        modifier = Modifier.padding(2.dp),
+                                    )
+                                }
                             }
                             Text(it.name, style = MaterialTheme.typography.titleMedium)
                         }

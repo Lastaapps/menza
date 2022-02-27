@@ -27,6 +27,6 @@ package cz.lastaapps.entity.allergens
 @JvmInline
 value class AllergenId(val id: Int) {
     init {
-        require(id in 1..AllergenList.hypotheticalRange)
+        require(id in 1..AllergenList.hypotheticalRange) { "Allergen id is out of bound: $id" }
     }
 }
