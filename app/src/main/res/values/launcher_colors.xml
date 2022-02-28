@@ -19,5 +19,6 @@
 
 <resources>
     <color name="ic_launcher_foreground">#FFFFFF</color>
-    <color name="ic_launcher_background">#7C5800</color>
+    <color name="ic_launcher_background">#FFBB00</color>
+    <!-- color name="ic_launcher_background">@color/md_theme_dark_primary</color -->
 </resources>
