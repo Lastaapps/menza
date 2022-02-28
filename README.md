@@ -8,6 +8,10 @@ Core parts are written in Kotlin Multiplatform, support for JVM target can be ad
 
 Menza is Czech word for student's canteen.
 
+[<img alt='Now on Google Play' height="80px" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>](https://play.google.com/store/apps/details?id=cz.lastaapps.menza&utm_source=github)
+
+F-Droid coming hopefully soon.
+
 
 
 ## Technologies
