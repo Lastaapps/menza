@@ -125,10 +125,11 @@ private fun ThemeItem(
 
     val interaction = remember { MutableInteractionSource() }
     Card(
+        onClick = onItemSelected,
+        interactionSource = interaction,
         containerColor = animateColorAsState(color).value,
         contentColor = animateColorAsState(contentColorFor(color)).value,
-        interactionSource = interaction,
-        modifier = modifier.clickable(interaction, null, onClick = { onItemSelected() }),
+        modifier = modifier,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

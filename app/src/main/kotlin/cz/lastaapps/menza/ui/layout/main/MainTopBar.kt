@@ -21,10 +21,7 @@ package cz.lastaapps.menza.ui.layout.main
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
@@ -106,7 +103,8 @@ fun MainTopBar(
                         stringResource(R.string.ui_top_bar_action_description),
                     )
                 }
-                TopBarPopup(mainPopupExpanded, { mainPopupExpanded = false }) {
+                TopBarPopup(mainPopupExpanded, { mainPopupExpanded = false },
+                    Modifier.padding(top= 4.dp, start = 8.dp, bottom = 4.dp, end = 8.dp)) {
                     navController.navigate(it) {
                         launchSingleTop = true
                     }

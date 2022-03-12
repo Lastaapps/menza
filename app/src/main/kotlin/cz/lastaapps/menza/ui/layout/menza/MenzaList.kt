@@ -95,9 +95,8 @@ private fun MenzaItem(
 
     val interaction = remember { MutableInteractionSource() }
     Card(
-        modifier = modifier
-            .height(48.dp)
-            .clickable(interaction, null, onClick = { onClick(menza.menzaId) }),
+        modifier = modifier .height(48.dp),
+        onClick = { onClick(menza.menzaId) },
         interactionSource = interaction,
         containerColor = animateColorAsState(color).value,
         shape = GenericShape { size, direction ->
