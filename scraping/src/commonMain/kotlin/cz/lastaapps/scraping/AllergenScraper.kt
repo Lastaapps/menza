@@ -21,8 +21,9 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.day.DishAllergensPage
+import io.ktor.client.statement.*
 
-interface AllergenScraper<R : Any> : ScraperBase<R, Allergen> {
-    suspend fun createRequestForAll(): R
-    suspend fun createRequestForDish(dishId: DishAllergensPage): R
+interface AllergenScraper : ScraperBase<Allergen> {
+    suspend fun createRequestForAll(): HttpResponse
+    suspend fun createRequestForDish(dishId: DishAllergensPage): HttpResponse
 }

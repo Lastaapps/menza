@@ -26,14 +26,15 @@ import cz.lastaapps.entity.info.Contact
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.ContactsScraper
+import io.ktor.client.statement.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import org.lighthousegames.logging.logging
 
-class ContactsRepoImpl<R : Any>(
+class ContactsRepoImpl(
     database: MenzaDatabase,
-    private val scraper: ContactsScraper<R>,
+    private val scraper: ContactsScraper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ContactsRepo {
 
@@ -87,7 +88,7 @@ class ContactsRepoImpl<R : Any>(
 
         val request = try {
             log.i { "Getting data from a server" }
-            scraper.createRequest()
+            scraper.createRequest().bodyAsText()
         } catch (e: Exception) {
             log.e(e) { "Download failed" }
             mErrors.send(e.toMenzaError())

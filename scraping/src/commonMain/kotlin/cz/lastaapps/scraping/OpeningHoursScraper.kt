@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,7 +20,8 @@
 package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.info.OpeningHours
+import io.ktor.client.statement.*
 
-interface OpeningHoursScraper<R : Any> : ScraperRequest<R, OpeningHours> {
-    override suspend fun createRequest(): R
+interface OpeningHoursScraper : ScraperRequest<OpeningHours> {
+    override suspend fun createRequest(): HttpResponse
 }

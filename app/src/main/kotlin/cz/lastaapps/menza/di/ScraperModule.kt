@@ -1,3 +1,22 @@
+/*
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *
+ *     This file is part of Menza.
+ *
+ *     Menza is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Menza is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 /**
  *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
@@ -24,7 +43,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import it.skrape.fetcher.Request
 import javax.inject.Singleton
 
 @Module
@@ -34,42 +52,42 @@ object ScraperModule {
 
     @Provides
     @Singleton
-    fun provideAllergenScraper(): AllergenScraper<Request> =
-        AllergensScraperImpl as AllergenScraper<Request>
+    fun provideAllergenScraper(): AllergenScraper =
+        AllergensScraperImpl as AllergenScraper
 
     @Provides
     @Singleton
-    fun provideContactsScraper(): ContactsScraper<Request> =
-        ContactsScraperImpl as ContactsScraper<Request>
+    fun provideContactsScraper(): ContactsScraper =
+        ContactsScraperImpl as ContactsScraper
 
     @Provides
     @Singleton
-    fun provideLocationScraper(): LocationScraper<Request> =
-        LocationScraperImpl as LocationScraper<Request>
+    fun provideLocationScraper(): LocationScraper =
+        LocationScraperImpl as LocationScraper
 
     @Provides
     @Singleton
-    fun provideMenzaScraper(): MenzaScraper<Request> =
-        MenzaScraperImpl as MenzaScraper<Request>
+    fun provideMenzaScraper(): MenzaScraper =
+        MenzaScraperImpl as MenzaScraper
 
     @Provides
     @Singleton
-    fun provideMessagesScraper(): MessagesScraper<Request> =
-        MessagesScraperImpl as MessagesScraper<Request>
+    fun provideMessagesScraper(): MessagesScraper =
+        MessagesScraperImpl as MessagesScraper
 
     @Provides
     @Singleton
-    fun provideOpeningHoursScraper(): OpeningHoursScraper<Request> =
-        OpeningHoursScraperImpl as OpeningHoursScraper<Request>
+    fun provideOpeningHoursScraper(): OpeningHoursScraper =
+        OpeningHoursScraperImpl as OpeningHoursScraper
 
     @Provides
     @Singleton
-    fun provideTodayScraper(): TodayScraper<Request> =
-        TodayScraperImpl as TodayScraper<Request>
+    fun provideTodayScraper(): TodayScraper =
+        TodayScraperImpl as TodayScraper
 
     @Provides
     @Singleton
-    fun provideWeekScraper(): WeekScraper<Request> =
-        WeekScraperImpl as WeekScraper<Request>
+    fun provideWeekScraper(): WeekScraper =
+        WeekScraperImpl as WeekScraper
 
 }

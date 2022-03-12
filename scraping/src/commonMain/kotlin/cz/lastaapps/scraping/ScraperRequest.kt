@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,6 +19,8 @@
 
 package cz.lastaapps.scraping
 
-interface ScraperRequest<R : Any, T : Any?> : ScraperBase<R, T> {
-    suspend fun createRequest(): R
+import io.ktor.client.statement.*
+
+interface ScraperRequest<T : Any?> : ScraperBase<T> {
+    suspend fun createRequest(): HttpResponse
 }

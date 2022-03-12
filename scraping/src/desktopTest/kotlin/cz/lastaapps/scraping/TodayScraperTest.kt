@@ -30,6 +30,7 @@ import cz.lastaapps.entity.menza.MenzaId
 import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.collections.*
 import io.kotest.matchers.shouldBe
+import io.ktor.client.statement.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -41,7 +42,7 @@ class TodayScraperTest {
     fun scrapeTodayOnline() = runTest {
 
         val id = 1
-        val result = TodayScraperImpl.createRequest(MenzaId(id))
+        val result = TodayScraperImpl.createRequest(MenzaId(id)).bodyAsText()
         val dishSet = TodayScraperImpl.scrape(result)
 
         dishSet.forEach { println(it) }

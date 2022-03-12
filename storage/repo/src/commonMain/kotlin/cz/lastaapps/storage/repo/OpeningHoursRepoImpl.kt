@@ -26,14 +26,15 @@ import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.OpeningHoursScraper
+import io.ktor.client.statement.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import org.lighthousegames.logging.logging
 
-class OpeningHoursRepoImpl<R : Any>(
+class OpeningHoursRepoImpl(
     database: MenzaDatabase,
-    private val scraper: OpeningHoursScraper<R>,
+    private val scraper: OpeningHoursScraper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : OpeningHoursRepo {
 
@@ -87,7 +88,7 @@ class OpeningHoursRepoImpl<R : Any>(
 
         val request = try {
             log.i { "Getting data from a server" }
-            scraper.createRequest()
+            scraper.createRequest().bodyAsText()
         } catch (e: Exception) {
             log.e(e) { "Download failed" }
             mErrors.send(e.toMenzaError())

@@ -25,14 +25,15 @@ import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.MenzaScraper
+import io.ktor.client.statement.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import org.lighthousegames.logging.logging
 
-class MenzaRepoImpl<R : Any>(
+class MenzaRepoImpl(
     database: MenzaDatabase,
-    private val scraper: MenzaScraper<R>,
+    private val scraper: MenzaScraper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : MenzaRepo {
 
@@ -81,7 +82,7 @@ class MenzaRepoImpl<R : Any>(
 
         val request = try {
             log.i { "Getting data from a server" }
-            scraper.createRequest()
+            scraper.createRequest().bodyAsText()
         } catch (e: Exception) {
             log.e(e) { "Download failed" }
             mErrors.send(e.toMenzaError())

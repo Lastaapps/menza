@@ -22,6 +22,7 @@ package cz.lastaapps.storage.repo
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.scraping.TodayScraper
+import io.ktor.client.statement.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -30,8 +31,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.lighthousegames.logging.logging
 
-class TodayRepoImpl<R : Any>(
-    private val scraper: TodayScraper<R>,
+class TodayRepoImpl(
+    private val scraper: TodayScraper,
     private val menzaId: MenzaId,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : TodayRepo {
@@ -57,7 +58,7 @@ class TodayRepoImpl<R : Any>(
 
             val request = try {
                 log.i { "Getting data from a server for $menzaId" }
-                scraper.createRequest(menzaId)
+                scraper.createRequest(menzaId).bodyAsText()
             } catch (e: Exception) {
                 log.e(e) { "Download failed" }
                 mErrors.send(e.toMenzaError())

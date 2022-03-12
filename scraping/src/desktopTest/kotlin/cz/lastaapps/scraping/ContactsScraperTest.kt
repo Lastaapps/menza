@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,13 +19,17 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.info.*
+import cz.lastaapps.entity.info.Contact
+import cz.lastaapps.entity.info.Email
+import cz.lastaapps.entity.info.PhoneNumber
+import cz.lastaapps.entity.info.Role
 import cz.lastaapps.entity.menza.MenzaId
 import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.ktor.client.statement.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -36,7 +40,7 @@ class ContactsScraperTest {
     @Test
     fun scrapContactsOnline() = runTest {
 
-        val result = ContactsScraperImpl.createRequest()
+        val result = ContactsScraperImpl.createRequest().bodyAsText()
         val contacts = ContactsScraperImpl.scrape(result)
 
         contacts.forEach { println(it) }

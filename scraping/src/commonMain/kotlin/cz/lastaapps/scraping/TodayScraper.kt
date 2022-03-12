@@ -21,7 +21,8 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
+import io.ktor.client.statement.*
 
-interface TodayScraper<R : Any> : ScraperBase<R, Dish> {
-    suspend fun createRequest(menzaId: MenzaId): R
+interface TodayScraper : ScraperBase<Dish> {
+    suspend fun createRequest(menzaId: MenzaId): HttpResponse
 }

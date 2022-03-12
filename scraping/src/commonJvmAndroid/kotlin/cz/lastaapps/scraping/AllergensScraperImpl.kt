@@ -22,30 +22,19 @@ package cz.lastaapps.scraping
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.day.DishAllergensPage
+import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.Result
-import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.img
 import it.skrape.selects.html5.td
 
-object AllergensScraperImpl : AllergenScraper<Result> {
+object AllergensScraperImpl : AllergenScraper {
 
-    override suspend fun createRequestForAll() = skrape(CIOAsyncFetcher) {
-        request {
-            this.url = "https://agata.suz.cvut.cz/jidelnicky/alergenyall.php"
-        }
-    }.scrape()
+    override suspend fun createRequestForAll() =
+        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/alergenyall.php")
 
-    override suspend fun createRequestForDish(dishId: DishAllergensPage) = skrape(CIOAsyncFetcher) {
-        request {
-            this.url = "https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${dishId.pageId}"
-        }
-    }.scrape()
-
-    override fun scrape(result: Result): Set<Allergen> {
-        return result.htmlDocument { parseHtml() }
-    }
+    override suspend fun createRequestForDish(dishId: DishAllergensPage) =
+        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${dishId.pageId}")
 
     override fun scrape(html: String): Set<Allergen> {
         return htmlDocument(html) { parseHtml() }

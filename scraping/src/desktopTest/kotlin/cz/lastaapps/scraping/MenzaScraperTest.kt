@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,6 +26,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
+import io.ktor.client.statement.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -36,7 +37,7 @@ class MenzaScraperTest {
     @Test
     fun menzaListOnline() = runTest {
 
-        val result = ContactsScraperImpl.createRequest()
+        val result = ContactsScraperImpl.createRequest().bodyAsText()
         val menzaList = MenzaScraperImpl.scrape(result)
 
         menzaList.shouldNotBeEmpty()

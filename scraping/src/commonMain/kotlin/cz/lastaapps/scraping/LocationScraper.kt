@@ -21,4 +21,4 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.menza.MenzaLocation
 
-interface LocationScraper<R : Any> : ScraperRequest<R, MenzaLocation>
+interface LocationScraper : ScraperRequest<MenzaLocation>

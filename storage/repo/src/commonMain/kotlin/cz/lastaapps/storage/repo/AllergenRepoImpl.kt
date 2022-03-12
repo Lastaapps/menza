@@ -26,14 +26,15 @@ import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.AllergenScraper
+import io.ktor.client.statement.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import org.lighthousegames.logging.logging
 
-class AllergenRepoImpl<R : Any>(
+class AllergenRepoImpl(
     database: MenzaDatabase,
-    private val scraper: AllergenScraper<R>,
+    private val scraper: AllergenScraper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : AllergenRepo {
 
@@ -88,7 +89,7 @@ class AllergenRepoImpl<R : Any>(
 
         val request = try {
             log.i { "Getting data from a server" }
-            scraper.createRequestForAll()
+            scraper.createRequestForAll().bodyAsText()
         } catch (e: Exception) {
             log.e(e) { "Download failed" }
             mErrors.send(e.toMenzaError())

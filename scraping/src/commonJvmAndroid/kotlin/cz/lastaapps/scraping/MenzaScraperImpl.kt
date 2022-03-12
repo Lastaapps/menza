@@ -22,30 +22,22 @@ package cz.lastaapps.scraping
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.Opened
+import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.Result
-import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.img
 
-object MenzaScraperImpl : MenzaScraper<Result> {
+object MenzaScraperImpl : MenzaScraper {
 
     private const val openImgName = "img/Otevreno.png"
     private const val closeImgName = "img/Zavreno.png"
 
-    override suspend fun createRequest() = skrape(CIOAsyncFetcher) {
-        request {
-            url = "https://agata.suz.cvut.cz/jidelnicky/indexTyden.php"
-        }
-    }.scrape()
+    override suspend fun createRequest() =
+        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/indexTyden.php")
 
     /**
      * Accepts all the results
      */
-    override fun scrape(result: Result): Set<Menza> {
-        return result.htmlDocument { parseHtml() }
-    }
-
     override fun scrape(html: String): Set<Menza> {
         return htmlDocument(html) { parseHtml() }
     }

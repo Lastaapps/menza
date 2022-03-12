@@ -21,26 +21,18 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.info.*
 import cz.lastaapps.entity.menza.MenzaId
+import io.ktor.client.request.*
 import io.ktor.http.*
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.Result
-import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 import it.skrape.selects.DocElement
 import it.skrape.selects.html5.a
 import it.skrape.selects.html5.td
 
-object ContactsScraperImpl : ContactsScraper<Result> {
+object ContactsScraperImpl : ContactsScraper {
 
-    override suspend fun createRequest() = skrape(CIOAsyncFetcher) {
-        request {
-            url = "https://agata.suz.cvut.cz/jidelnicky/kontakty.php"
-        }
-    }.scrape()
-
-    override fun scrape(result: Result): Set<Contact> {
-        return result.htmlDocument { parseHtml() }
-    }
+    override suspend fun createRequest() =
+        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/kontakty.php")
 
     override fun scrape(html: String): Set<Contact> {
         return htmlDocument(html) { parseHtml() }

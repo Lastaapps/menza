@@ -25,6 +25,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.ktor.client.statement.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -35,7 +36,7 @@ class LocationScraperTest {
     @Test
     fun locationOnline() = runTest {
 
-        val result = ContactsScraperImpl.createRequest()
+        val result = ContactsScraperImpl.createRequest().bodyAsText()
         val locations = LocationScraperImpl.scrape(result)
 
         //locations.forEach { println(it) }

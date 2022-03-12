@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,22 +24,17 @@ import cz.lastaapps.entity.menza.Coordinates
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.MenzaLocation
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.Result
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.h3
 import it.skrape.selects.html5.small
 
-object LocationScraperImpl : LocationScraper<Result> {
+object LocationScraperImpl : LocationScraper {
 
     override suspend fun createRequest() = ContactsScraperImpl.createRequest()
 
     /**
      * Accepts contacts scrape result
      */
-    override fun scrape(result: Result): Set<MenzaLocation> {
-        return result.htmlDocument { parseHtml() }
-    }
-
     override fun scrape(html: String): Set<MenzaLocation> {
         return htmlDocument(html) { parseHtml() }
     }

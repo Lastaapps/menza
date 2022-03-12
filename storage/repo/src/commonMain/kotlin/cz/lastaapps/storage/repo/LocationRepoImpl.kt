@@ -26,14 +26,15 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.LocationScraper
+import io.ktor.client.statement.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import org.lighthousegames.logging.logging
 
-class LocationRepoImpl<R : Any>(
+class LocationRepoImpl(
     database: MenzaDatabase,
-    private val scraper: LocationScraper<R>,
+    private val scraper: LocationScraper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : LocationRepo {
 
@@ -87,7 +88,7 @@ class LocationRepoImpl<R : Any>(
 
         val request = try {
             log.i { "Getting data from a server" }
-            scraper.createRequest()
+            scraper.createRequest().bodyAsText()
         } catch (e: Exception) {
             log.e(e) { "Download failed" }
             mErrors.send(e.toMenzaError())

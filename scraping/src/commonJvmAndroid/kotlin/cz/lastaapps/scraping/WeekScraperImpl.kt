@@ -25,32 +25,19 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.entity.week.WeekNotAvailable
 import cz.lastaapps.entity.week.WeekNumber
+import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.Result
-import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 import kotlinx.datetime.LocalDate
 
-object WeekScraperImpl : WeekScraper<Result> {
+object WeekScraperImpl : WeekScraper {
 
     private val dateRegex = "^([0-9]{1,2}). ([0-9]{1,2}). ([0-9]{4})$".toRegex()
 
     override suspend fun createRequest(
-        menzaId: MenzaId,
-        @Suppress("UNUSED_PARAMETER") weekNumber: WeekNumber
-    ) = skrape(CIOAsyncFetcher) {
-        request {
-            url =
-                "https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=${menzaId.id}"
-            //TODO week numbers are not working
-            //+ "&clTyden=${weekNumber.week}"
-        }
-    }.scrape()
-
-    @Throws(WeekNotAvailable::class)
-    override fun scrape(result: Result): Set<WeekDish> {
-        return result.htmlDocument { parseHtml() }
-    }
+        menzaId: MenzaId, @Suppress("UNUSED_PARAMETER") weekNumber: WeekNumber
+    ) =
+        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=${menzaId.id}")
 
     @Throws(WeekNotAvailable::class)
     override fun scrape(html: String): Set<WeekDish> {

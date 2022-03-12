@@ -24,6 +24,7 @@ import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.entity.week.WeekNotAvailable
 import cz.lastaapps.entity.week.WeekNumber
 import cz.lastaapps.scraping.WeekScraper
+import io.ktor.client.statement.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -32,8 +33,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.lighthousegames.logging.logging
 
-class WeekRepoImpl<R : Any>(
-    private val scraper: WeekScraper<R>,
+class WeekRepoImpl(
+    private val scraper: WeekScraper,
     private val menzaId: MenzaId,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : WeekRepo {
@@ -59,7 +60,7 @@ class WeekRepoImpl<R : Any>(
 
             log.i { "Getting data from a server for $menzaId" }
             val request = try {
-                scraper.createRequest(menzaId, WeekNumber.tempWeekNumber)
+                scraper.createRequest(menzaId, WeekNumber.tempWeekNumber).bodyAsText()
             } catch (e: Exception) {
                 log.e(e) { "Download failed" }
                 mErrors.send(e.toMenzaError())

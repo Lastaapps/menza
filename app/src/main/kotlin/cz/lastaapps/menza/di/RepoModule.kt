@@ -26,7 +26,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import it.skrape.fetcher.Request
 import javax.inject.Singleton
 
 @Module
@@ -37,54 +36,54 @@ object RepoModule {
     @Singleton
     fun provideAllergenRepo(
         database: MenzaDatabase,
-        scraper: AllergenScraper<Request>
+        scraper: AllergenScraper,
     ): AllergenRepo = AllergenRepoImpl(database, scraper)
 
     @Provides
     @Singleton
     fun provideContactsRepo(
         database: MenzaDatabase,
-        scraper: ContactsScraper<Request>
+        scraper: ContactsScraper,
     ): ContactsRepo = ContactsRepoImpl(database, scraper)
 
     @Provides
     @Singleton
     fun provideLocationRepo(
         database: MenzaDatabase,
-        scraper: LocationScraper<Request>
+        scraper: LocationScraper,
     ): LocationRepo = LocationRepoImpl(database, scraper)
 
     @Provides
     @Singleton
     fun provideMenzaRepo(
         database: MenzaDatabase,
-        scraper: MenzaScraper<Request>
+        scraper: MenzaScraper,
     ): MenzaRepo = MenzaRepoImpl(database, scraper)
 
     @Provides
     @Singleton
     fun provideMessagesRepo(
         database: MenzaDatabase,
-        scraper: MessagesScraper<Request>
+        scraper: MessagesScraper,
     ): MessagesRepo = MessagesRepoImpl(database, scraper)
 
     @Provides
     @Singleton
     fun provideOpeningHoursRepo(
         database: MenzaDatabase,
-        scraper: OpeningHoursScraper<Request>
+        scraper: OpeningHoursScraper,
     ): OpeningHoursRepo = OpeningHoursRepoImpl(database, scraper)
 
     @Provides
     @Singleton
     fun provideTodayRepoFactory(
-        scraper: TodayScraper<Request>
+        scraper: TodayScraper,
     ): TodayRepoFactory = TodayRepoFactoryImpl(scraper)
 
     @Provides
     @Singleton
     fun provideWeekRepoFactory(
-        scraper: WeekScraper<Request>
+        scraper: WeekScraper,
     ): WeekRepoFactory = WeekRepoFactoryImpl(scraper)
 
 }

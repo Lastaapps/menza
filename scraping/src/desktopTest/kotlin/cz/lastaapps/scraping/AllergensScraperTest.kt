@@ -26,6 +26,7 @@ import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
+import io.ktor.client.statement.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -36,7 +37,7 @@ class AllergensScraperTest {
     @Test
     fun scrapeAllAllergensOnline() = runTest {
 
-        val result = AllergensScraperImpl.createRequestForAll()
+        val result = AllergensScraperImpl.createRequestForAll().bodyAsText()
         val allergens = AllergensScraperImpl.scrape(result)
 
         //allergens.forEach { println(it) }
@@ -53,7 +54,8 @@ class AllergensScraperTest {
     @Test
     fun scrapeFoodAllergensOnline() = runTest {
 
-        val result = AllergensScraperImpl.createRequestForDish(DishAllergensPage(336173))
+        val result =
+            AllergensScraperImpl.createRequestForDish(DishAllergensPage(336173)).bodyAsText()
         val allergens = AllergensScraperImpl.scrape(result)
 
         //allergens.forEach { println(it) }

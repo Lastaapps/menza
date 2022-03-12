@@ -19,11 +19,7 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.entity.week.WeekDish
-import cz.lastaapps.entity.week.WeekNumber
-import io.ktor.client.statement.*
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
 
-interface WeekScraper : ScraperBase<WeekDish> {
-    suspend fun createRequest(menzaId: MenzaId, weekNumber: WeekNumber): HttpResponse
-}
+internal val agataClient = HttpClient(CIO)

@@ -26,6 +26,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.ktor.client.statement.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DayOfWeek
@@ -37,7 +38,7 @@ class OpeningHoursScraperTest {
     @Test
     fun scrapOpeningHoursOnline() = runTest {
 
-        val result = OpeningHoursScraperImpl.createRequest()
+        val result = OpeningHoursScraperImpl.createRequest().bodyAsText()
         val hours = OpeningHoursScraperImpl.scrape(result)
 
         hours.shouldNotBeEmpty()

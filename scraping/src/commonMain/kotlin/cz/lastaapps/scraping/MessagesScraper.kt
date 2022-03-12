@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,4 +21,4 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.menza.Message
 
-interface MessagesScraper<R : Any> : ScraperRequest<R, Message>
+interface MessagesScraper : ScraperRequest<Message>

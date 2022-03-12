@@ -33,6 +33,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.ktor.client.statement.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -52,10 +53,10 @@ class WeekScraperTest {
         println("Loading for $date, weekNumber is ${weekNumber.week}")
 
         shouldThrow<WeekNotAvailable> {
-            val result = WeekScraperImpl.createRequest(MenzaId(15), weekNumber)
+            val result = WeekScraperImpl.createRequest(MenzaId(15), weekNumber).bodyAsText()
             WeekScraperImpl.scrape(result)
         }
-        val result = WeekScraperImpl.createRequest(MenzaId(1), weekNumber)
+        val result = WeekScraperImpl.createRequest(MenzaId(1), weekNumber).bodyAsText()
         val weekDishSet = WeekScraperImpl.scrape(result)
 
         weekDishSet.forEach {

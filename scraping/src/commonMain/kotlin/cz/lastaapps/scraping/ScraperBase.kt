@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,6 @@
 
 package cz.lastaapps.scraping
 
-interface ScraperBase<R : Any, T : Any?> {
-    fun scrape(result: R): Set<T>
+interface ScraperBase<T : Any?> {
     fun scrape(html: String): Set<T>
 }

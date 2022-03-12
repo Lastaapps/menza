@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -39,19 +39,6 @@ class WeekNumberKtTest {
             val weekNumber = WeekNumber.of(it)
             println("Checking $it, weekNumber is ${weekNumber.week}")
             weekNumber.week shouldBe 2723
-        }
-    }
-
-    @Test
-    fun toMonday() {
-        val monday = LocalDate(2021, Month.SEPTEMBER, 20)
-        val days = List(7) { i -> monday.plus(i.toLong(), DateTimeUnit.DAY) }
-
-        println("Monday is $monday")
-
-        days.map { it.toMonday() }.forEach {
-            println("Checking $it")
-            it shouldBe monday
         }
     }
 }

@@ -141,7 +141,6 @@ dependencies {
     initCompose(useMaterial2 = true)
 
     implementation(Libs.KOTLINX_DATETIME)
-    implementation(Libs.SKRAPE_IT)
     implementation(Libs.COIL_COMPOSE_COMPLETE)
     implementation(Libs.ABOUT_LIBRARIES_CORE)
 

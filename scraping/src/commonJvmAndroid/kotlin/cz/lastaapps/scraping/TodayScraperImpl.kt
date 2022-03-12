@@ -27,23 +27,15 @@ import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.day.IssueLocation
 import cz.lastaapps.entity.menza.MenzaId
+import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.Result
-import it.skrape.fetcher.skrape
 import it.skrape.selects.Doc
 import it.skrape.selects.DocElement
 
-object TodayScraperImpl : TodayScraper<Result> {
+object TodayScraperImpl : TodayScraper {
 
-    override suspend fun createRequest(menzaId: MenzaId) = skrape(CIOAsyncFetcher) {
-        request {
-            url = "https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}"
-        }
-    }.scrape()
-
-    override fun scrape(result: Result): Set<Dish> {
-        return result.htmlDocument { parseHtml() }
-    }
+    override suspend fun createRequest(menzaId: MenzaId) =
+        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}")
 
     override fun scrape(html: String): Set<Dish> {
         return htmlDocument(html) { parseHtml() }

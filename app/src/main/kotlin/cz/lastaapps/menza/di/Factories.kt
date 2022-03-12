@@ -26,7 +26,6 @@ import cz.lastaapps.storage.repo.TodayRepo
 import cz.lastaapps.storage.repo.TodayRepoImpl
 import cz.lastaapps.storage.repo.WeekRepo
 import cz.lastaapps.storage.repo.WeekRepoImpl
-import it.skrape.fetcher.Request
 import javax.inject.Inject
 
 interface TodayRepoFactory {
@@ -34,7 +33,7 @@ interface TodayRepoFactory {
 }
 
 class TodayRepoFactoryImpl @Inject constructor(
-    private val todayScraper: TodayScraper<Request>
+    private val todayScraper: TodayScraper,
 ) : TodayRepoFactory {
     override fun create(menzaId: MenzaId): TodayRepo {
         return TodayRepoImpl(scraper = todayScraper, menzaId = menzaId)
@@ -47,7 +46,7 @@ interface WeekRepoFactory {
 }
 
 class WeekRepoFactoryImpl @Inject constructor(
-    private val weekScraper: WeekScraper<Request>
+    private val weekScraper: WeekScraper,
 ) : WeekRepoFactory {
     override fun create(menzaId: MenzaId): WeekRepo {
         return WeekRepoImpl(scraper = weekScraper, menzaId = menzaId)
