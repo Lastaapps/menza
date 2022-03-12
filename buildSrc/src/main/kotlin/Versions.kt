@@ -53,11 +53,11 @@ object Versions {
 
 
     //compose
-    const val COMPOSE = "1.2.0-alpha04"
+    const val COMPOSE = "1.2.0-alpha05"
     const val COMPOSE_COMPILER = COMPOSE
     const val COMPOSE_STABLE = "1.1.1"
     const val COMPOSE_COMPILER_STABLE = COMPOSE_STABLE
-    const val COMPOSE_MATERIAL_3 = "1.0.0-alpha06"
+    const val COMPOSE_MATERIAL_3 = "1.0.0-alpha07"
     const val CONSTRAINTLAYOUT_COMPOSE = "1.0.0"
     const val VIEWMODEL_COMPOSE = LIFECYCLE
     const val HILT_NAVIGATION_COMPOSE = "1.0.0"
