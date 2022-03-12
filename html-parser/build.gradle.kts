@@ -29,8 +29,6 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-val scrapeIt = "1.1.7"
-
 kotlin {
     sourceSets.all {
         languageSettings.apply {
@@ -51,31 +49,22 @@ kotlin {
             useJUnitPlatform()
         }
     }
+
+    val jsoup = "1.13.1" // 1.14.3
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(Libs.KOTLINX_DATETIME)
-                implementation(Libs.KOTLIN_COROUTINES)
-
-                implementation(Libs.KTOR_CORE)
-                implementation(Libs.KTOR_CIO)
-
-                implementation(project(":entity"))
-                implementation(project(":html-parser"))
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(Tests.COROUTINES)
-                implementation(Tests.KOTEST_ASSERTION)
             }
         }
         val androidMain by getting {
             kotlin.srcDir("src/commonJvmAndroid/kotlin")
             dependencies {
-                //implementation(Libs.SKRAPE_IT)
-                //implementation(project(":html-parser"))
+                api("org.jsoup:jsoup:$jsoup")
             }
         }
         val androidTest by getting {
@@ -86,8 +75,7 @@ kotlin {
         val desktopMain by getting {
             kotlin.srcDir("src/commonJvmAndroid/kotlin")
             dependencies {
-                //implementation(Libs.SKRAPE_IT)
-                //implementation(project(":html-parser"))
+                api("org.jsoup:jsoup:$jsoup")
             }
         }
         val desktopTest by getting {

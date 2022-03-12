@@ -17,32 +17,24 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package it.skrape.selects.html5
+
+import aValidDocument
+import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
+
+class MainRootSelectorsKtTest {
+
+    @Test
+    fun `can pick html-tag`() {
+        val selector = aValidDocument().html("") {
+            findFirst {
+                expectThat(attribute("lang")).isEqualTo("en")
+            }
+            toCssSelector
+        }
+
+        expectThat(selector).isEqualTo("html")
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":html-parser",
-)

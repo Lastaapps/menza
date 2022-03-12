@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17">
       <module name="android.buildSrc" target="11" />
+      <module name="Menza.html-parser" target="1.8" />
       <module name="Menza.storage.commonMain" target="11" />
       <module name="Menza.storage.commonTest" target="11" />
       <module name="Menza.storage.desktopMain" target="11" />
