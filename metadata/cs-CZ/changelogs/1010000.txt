@@ -1,0 +1,5 @@
+Opravené pády při načtení chybných dat ze serveru
+Vylepšená grafika, větší náhledy jídel
+Je možno znovunačíst informace o menze
+Aktualizovány knihovny
+Aplikace jde sestavit mnohem rychleji

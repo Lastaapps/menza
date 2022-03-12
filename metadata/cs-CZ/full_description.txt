@@ -1,0 +1,3 @@
+Aplikace zobrazuje jídelníčky Menz ČVUT z webu agata.suz.cvut.cz pro mobil mnohem příjemnějším a použitelnějším způsobem.
+Zobrazuje dnešní i týdenní jídelníčky, otevírací hodiny, kontakty, adresu či oznámení.
+Samozřejmě podporuje tmavý režim, navíc ještě Material You a dynamické barvy Androidu 12.

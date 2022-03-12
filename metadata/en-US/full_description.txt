@@ -1,0 +1,3 @@
+This Android app shows dish menus for CTU cafeterias from agata.suz.cvut.cz web in much more pleasant and usable way for phones.
+It shows today and week menu, opening hours, contacts, announcements and address for all the canteens.
+It supports dark mode and Material You including Android 12 dynamic theming.

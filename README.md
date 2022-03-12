@@ -43,9 +43,9 @@ F-Droid coming hopefully soon.
 
 ## Screenshots
 
-<img src="img/light_today.png" alt="today dish menu" style="width:20%;"/><img src="img/dark_today.png" alt="today dish menu dark" style="width:20%;"/><img src="img/light_detail.png" alt="dish detail" style="width:20%;"/><img src="img/dark_detail.png" alt="dish detail dark" style="width:20%;"/>
+<img src="metadata/en-US/images/phoneScreenshots/light_today.png" alt="today dish menu" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/dark_today.png" alt="today dish menu dark" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/light_detail.png" alt="dish detail" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/dark_detail.png" alt="dish detail dark" style="width:20%;"/>
 
-<img src="img/dark_week.png" alt="week dish menu dark" style="width:20%;"/><img src="img/light_week.png" alt="week dish menu" style="width:20%;"/><img src="img/dark_info.png" alt="info page dark" style="width:20%;"/><img src="img/light_info.png" alt="info page" style="width:20%;"/>
+<img src="metadata/en-US/images/phoneScreenshots/dark_week.png" alt="week dish menu dark" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/light_week.png" alt="week dish menu" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/dark_info.png" alt="info page dark" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/light_info.png" alt="info page" style="width:20%;"/>
 
 
 
@@ -53,7 +53,7 @@ F-Droid coming hopefully soon.
 
 - app - Android app code - UI, viewmodels, caching
 - entity - entities representing data accessible from web
-- scrapping - abstract and JMV/Android implementation for web straping
+- scrapping - abstract and JMV/Android implementation for web scraping
 - storage.db - database for storing persistent entities - contact info, menza list, ...
 - storage.repo - repositories for common access to data from web or local database
 

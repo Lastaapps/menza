@@ -1,0 +1,5 @@
+Fixed crashes, when there were wrong data on the server side
+Graphics updates, larger dish images
+Menza info page is now refreshable
+Libraries updates
+App build time dramatically reduced
