@@ -63,6 +63,12 @@ F-Droid coming hopefully soon.
 
 I don't accept any code contributions till I have this project accepted as term paper hopefully in May 2022. So if you are interested, please wait a bit.
 
+#### Official API
+
+If you want to use the official API, see doc: https://agata.suz.cvut.cz/jidelnicky/soap4/api/client-popis.html
+To get support, try contacting Agata IT department: https://agata.suz.cvut.cz/jidelnicky/kontakty.php#section14
+(I haven't used the API because I hadn't known about it)
+
 
 
 ## License
