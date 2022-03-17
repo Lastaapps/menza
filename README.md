@@ -43,9 +43,9 @@ F-Droid coming hopefully soon.
 
 ## Screenshots
 
-<img src="metadata/en-US/images/phoneScreenshots/light_today.png" alt="today dish menu" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/dark_today.png" alt="today dish menu dark" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/light_detail.png" alt="dish detail" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/dark_detail.png" alt="dish detail dark" style="width:20%;"/>
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" alt="today dish menu" style="width:20%;"/><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" alt="today dish menu dark" style="width:20%;"/><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" alt="dish detail" style="width:20%;"/><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png" alt="dish detail dark" style="width:20%;"/>
 
-<img src="metadata/en-US/images/phoneScreenshots/dark_week.png" alt="week dish menu dark" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/light_week.png" alt="week dish menu" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/dark_info.png" alt="info page dark" style="width:20%;"/><img src="metadata/en-US/images/phoneScreenshots/light_info.png" alt="info page" style="width:20%;"/>
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5_en-US.png" alt="week dish menu dark" style="width:20%;"/><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6_en-US.png" alt="week dish menu" style="width:20%;"/><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7_en-US.png" alt="info page dark" style="width:20%;"/><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png" alt="info page" style="width:20%;"/>
 
 
 
@@ -56,6 +56,12 @@ F-Droid coming hopefully soon.
 - scrapping - abstract and JMV/Android implementation for web scraping
 - storage.db - database for storing persistent entities - contact info, menza list, ...
 - storage.repo - repositories for common access to data from web or local database
+
+
+
+#### Contributing
+
+I don't accept any code contributions till I have this project accepted as term paper hopefully in May 2022. So if you are interested, please wait a bit.
 
 
 
