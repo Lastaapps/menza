@@ -1,12 +1,12 @@
 # CTU Menza
 
-This Android app shows dish menus for CTU cafeterias from [agata.suz.cvut.cz](https://agata.suz.cvut.cz/) web in much more pleasant and usable way for phones. It shows today and week menu, opening hours, contacts, announcements and address for all the canteens. It supports dark mode and Material You including Android 12 dynamic theming.
+This Android app shows dish menus for CTU cafeterias from the [agata.suz.cvut.cz](https://agata.suz.cvut.cz/) website in a much more pleasant and usable way for phones. It shows today's and this week's menu, opening hours, contacts, announcements and addresses for all canteens. It supports dark mode and Material You, including Android 12 dynamic theming.
 
-Core parts are written in Kotlin Multiplatform, support for JVM target can be added right away. Other targets requires more work (non JVM web scraping library required), but it still may be manageable for somebody to port this codebase to native or js platforms.
+Core parts are written in Kotlin Multiplatform, support for JVM target can be added right away. Other targets require more work (non-JVM web scraping library required), but it still may be manageable for somebody to port this codebase to native or js platforms.
 
 ##### What does 'Menza' mean?
 
-Menza is Czech word for student's canteen.
+Menza is the Czech word for school cafeteria.
 
 [<img alt='Now on Google Play' height="80px" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>](https://play.google.com/store/apps/details?id=cz.lastaapps.menza&utm_source=github)
 
@@ -26,9 +26,9 @@ F-Droid coming hopefully soon.
 
 ## Features
 
-- Today menu + dish details
-- Week menu
-- Menza opening hours, contacts, announcements and address
+- Today's menu + dish details
+- This week's menu
+- Menza opening hours, contacts, announcements and addresses
 
 ## User experience
 
@@ -37,7 +37,7 @@ F-Droid coming hopefully soon.
 - Images download switch on metered networks (~0.7 MB per image)
 - Image caching
 - No private data collection
-- Proper landscape mode and large screen devices support
+- Proper landscape mode and large screen device support
 
 
 
@@ -61,4 +61,4 @@ F-Droid coming hopefully soon.
 
 ## License
 
-Menza is licensed under `GNU GPL v3.0` license.
+Menza is licensed under the `GNU GPL v3.0` license.
