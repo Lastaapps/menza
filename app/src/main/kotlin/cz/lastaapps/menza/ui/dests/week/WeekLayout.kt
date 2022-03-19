@@ -25,7 +25,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
@@ -34,7 +33,7 @@ import cz.lastaapps.menza.ui.WindowSizeClass
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpandedSimple
-import kotlinx.coroutines.launch
+import cz.lastaapps.menza.ui.root.AppLayoutMedium
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,42 +41,44 @@ fun WeekLayout(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     weekViewModel: WeekViewModel,
 ) {
     Crossfade(targetState = menzaId) { currentMenzaId ->
-        @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
         when (LocalWindowWidth.current) {
-            WindowSizeClass.COMPACT -> {
+            WindowSizeClass.COMPACT ->
                 WeekLayoutCompact(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
-                    expanded = expanded,
-                    onExpandedClicked = onExpandedClicked,
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
                     viewModel = weekViewModel,
                 )
-            }
-            in listOf(WindowSizeClass.MEDIUM, WindowSizeClass.EXPANDED) -> {
+            WindowSizeClass.MEDIUM ->
+                WeekLayoutMedium(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    drawerState = drawerState,
+                    menzaId = currentMenzaId,
+                    onMenzaSelected = onMenzaSelected,
+                    menzaViewModel = menzaViewModel,
+                    viewModel = weekViewModel,
+                )
+            WindowSizeClass.EXPANDED ->
                 WeekLayoutExpanded(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
-                    expanded = expanded,
-                    onExpandedClicked = onExpandedClicked,
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
                     viewModel = weekViewModel,
                 )
-            }
+
         }
     }
 }
@@ -88,14 +89,11 @@ private fun WeekLayoutCompact(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     viewModel: WeekViewModel,
 ) {
-    val scope = rememberCoroutineScope()
     AppLayoutCompact(
         navController = navController,
         menzaId = menzaId,
@@ -103,13 +101,36 @@ private fun WeekLayoutCompact(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        enableIcon = true,
-        showHamburgerMenu = true,
-        onMenuButtonClicked = {
-            scope.launch { drawerState.open() }
-        }
+        showBackArrow = false,
+    ) {
+        WeekDishList(
+            navController = navController,
+            menzaId = menzaId,
+            viewModel = viewModel,
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun WeekLayoutMedium(
+    navController: NavController,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+    viewModel: WeekViewModel,
+) {
+    AppLayoutMedium(
+        navController = navController,
+        menzaId = menzaId,
+        onMenzaSelected = onMenzaSelected,
+        menzaViewModel = menzaViewModel,
+        snackbarHostState = snackbarHostState,
+        drawerState = drawerState,
+        showBackArrow = false
     ) {
         WeekDishList(
             navController = navController,
@@ -126,8 +147,6 @@ private fun WeekLayoutExpanded(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -140,9 +159,7 @@ private fun WeekLayoutExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        showBackButton = false
+        showBackArrow = false
     ) {
         WeekDishList(
             navController = navController,

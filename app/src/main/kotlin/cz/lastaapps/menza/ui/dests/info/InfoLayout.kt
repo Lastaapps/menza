@@ -25,7 +25,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
@@ -35,7 +34,6 @@ import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
 import cz.lastaapps.menza.ui.root.AppLayoutMedium
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,8 +41,6 @@ fun InfoLayout(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -57,8 +53,6 @@ fun InfoLayout(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
-                    expanded = expanded,
-                    onExpandedClicked = onExpandedClicked,
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
@@ -70,8 +64,6 @@ fun InfoLayout(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
-                    expanded = expanded,
-                    onExpandedClicked = onExpandedClicked,
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
@@ -83,8 +75,6 @@ fun InfoLayout(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
-                    expanded = expanded,
-                    onExpandedClicked = onExpandedClicked,
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
@@ -101,14 +91,11 @@ fun InfoLayoutCompact(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     viewModel: InfoViewModel,
 ) {
-    val scope = rememberCoroutineScope()
     AppLayoutCompact(
         navController = navController,
         menzaId = menzaId,
@@ -116,13 +103,7 @@ fun InfoLayoutCompact(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        enableIcon = true,
-        showHamburgerMenu = true,
-        onMenuButtonClicked = {
-            scope.launch { drawerState.open() }
-        }
+        showBackArrow = false,
     ) {
         InfoAllTogether(
             navController = navController,
@@ -140,8 +121,6 @@ fun InfoLayoutMedium(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -154,9 +133,7 @@ fun InfoLayoutMedium(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        showBackButton = false,
+        showBackArrow = false,
     ) {
         InfoAllTogether(
             navController = navController,
@@ -174,8 +151,6 @@ fun InfoLayoutExpanded(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -188,9 +163,7 @@ fun InfoLayoutExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        showBackButton = false,
+        showBackArrow = false,
         panel1 = {
             InfoPrimary(
                 navController = navController,

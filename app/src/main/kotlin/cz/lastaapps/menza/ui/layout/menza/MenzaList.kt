@@ -19,23 +19,18 @@
 
 package cz.lastaapps.menza.ui.layout.menza
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
@@ -51,12 +46,10 @@ import cz.lastaapps.menza.ui.theme.colorForMenza
 fun MenzaList(
     selectedMenza: MenzaId?,
     onMenzaSelected: (MenzaId) -> Unit,
-    expanded: Boolean,
-    modifier: Modifier = Modifier,
     menzaListViewModel: MenzaViewModel,
+    scroll: ScrollState,
+    modifier: Modifier = Modifier,
 ) {
-    val scrollState = rememberScrollState()
-
     val isReady by menzaListViewModel.isReady.collectAsState()
     if (isReady) {
         val menzaList by menzaListViewModel.data.collectAsState()
@@ -64,14 +57,13 @@ fun MenzaList(
             modifier
                 .animateContentSize()
                 .width(IntrinsicSize.Max)
-                .verticalScroll(scrollState),
+                .verticalScroll(scroll),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start,
         ) {
             menzaList.forEach { item ->
                 MenzaItem(
                     menza = item, selected = item.menzaId == selectedMenza,
-                    expanded = expanded,
                     onClick = onMenzaSelected,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -86,19 +78,13 @@ private fun MenzaItem(
     menza: Menza,
     selected: Boolean,
     onClick: (MenzaId) -> Unit,
-    expanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val color =
-        if (selected) MaterialTheme.colorScheme.surfaceVariant
-        else MaterialTheme.colorScheme.surface
-
-    val interaction = remember { MutableInteractionSource() }
-    Card(
-        modifier = modifier .height(48.dp),
+    NavigationDrawerItem(
+        icon = { MenzaLetter(menza) },
+        label = { Text(menza.name) },
+        selected = selected,
         onClick = { onClick(menza.menzaId) },
-        interactionSource = interaction,
-        containerColor = animateColorAsState(color).value,
         shape = GenericShape { size, direction ->
             if (LayoutDirection.Ltr == direction) {
                 addRect(Rect(0f, 0f, size.width - size.height / 2, size.height))
@@ -107,23 +93,9 @@ private fun MenzaItem(
                 addRect(Rect(size.width, 0f, size.height / 2, size.height))
                 addOval(Rect(size.height, 0f, 0f, size.height))
             }
-        }
-    ) {
-        Row(
-            modifier
-                .padding(8.dp)
-                .padding(end = 8.dp)
-                .align(Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start)
-        ) {
-            MenzaLetter(menza)
-
-            if (expanded) {
-                Text(menza.name)
-            }
-        }
-    }
+        },
+        modifier = modifier,
+    )
 }
 
 @Composable

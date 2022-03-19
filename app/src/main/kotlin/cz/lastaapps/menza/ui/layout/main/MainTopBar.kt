@@ -44,6 +44,7 @@ import cz.lastaapps.menza.navigation.Dest
 fun MainTopBar(
     navController: NavController,
     menzaName: String?,
+    alignRail: Boolean,
     menuIcon: ImageVector? = null,
     menuDescription: String? = null,
     menuRotated: Boolean = false,
@@ -82,17 +83,18 @@ fun MainTopBar(
             }
         },
         navigationIcon = {
-            if (menuIcon != null) {
-                IconButton(onClick = { onMenuClicked?.let { it() } }) {
-                    val rotation by animateFloatAsState(if (!menuRotated) 0f else 90f)
-                    Icon(
-                        modifier = Modifier.rotate(rotation),
-                        imageVector = menuIcon,
-                        contentDescription = menuDescription
-                    )
+            val mod = if (alignRail) Modifier.width(76.dp) else Modifier //rail - 4.dp for padding
+            Box(mod, contentAlignment = Alignment.Center) {
+                if (menuIcon != null) {
+                    IconButton(onClick = { onMenuClicked?.let { it() } }) {
+                        val rotation by animateFloatAsState(if (!menuRotated) 0f else 90f)
+                        Icon(
+                            modifier = Modifier.rotate(rotation),
+                            imageVector = menuIcon,
+                            contentDescription = menuDescription
+                        )
+                    }
                 }
-            } else {
-                Box(Modifier.size(48.dp))
             }
         },
         actions = {
@@ -103,8 +105,10 @@ fun MainTopBar(
                         stringResource(R.string.ui_top_bar_action_description),
                     )
                 }
-                TopBarPopup(mainPopupExpanded, { mainPopupExpanded = false },
-                    Modifier.padding(top= 4.dp, start = 8.dp, bottom = 4.dp, end = 8.dp)) {
+                TopBarPopup(
+                    mainPopupExpanded, { mainPopupExpanded = false },
+                    Modifier.padding(top = 4.dp, start = 8.dp, bottom = 4.dp, end = 8.dp)
+                ) {
                     navController.navigate(it) {
                         launchSingleTop = true
                     }

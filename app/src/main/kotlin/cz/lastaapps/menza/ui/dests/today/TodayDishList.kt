@@ -378,13 +378,13 @@ private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier
                 memoryCacheKey(dish.imageUrl)
                 crossfade(true)
                 setParameter("retry_hash", retryHash)
-                // if user is no a metered network, images are going to be loaded from cache
+                // if user is not on a metered network, images are going to be loaded from cache
                 if (canDownload)
                     data(dish.imageUrl)
                 else
-                    data("https://userisonmeterednetwork.su/")
-            }
-                .build()
+                    data("https://userisonmeterednetwork.localhost/")
+                //data(null) - cache is not working
+            }.build()
 
             SubcomposeAsyncImage(
                 imageRequest, dish.name,

@@ -146,6 +146,7 @@
     <string name="nav_info">Info</string>
     <string name="nav_settings">Settings</string>
     <string name="ui_top_bar_no_menza">No menza selected</string>
+    <string name="ui_top_bar_show_menza_list">Show menza list</string>
     <string name="ui_top_bar_back_arrow">Go back</string>
     <string name="ui_top_bar_action_description">Others</string>
     <string name="ui_top_bar_action_privacy">Privacy policy</string>

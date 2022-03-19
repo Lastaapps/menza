@@ -109,12 +109,12 @@ private fun IssueLocationList(
                 text = stringResource(R.string.today_info_location),
                 style = MaterialTheme.typography.titleMedium,
             )
-            Text(
+            /*Text(
                 text = stringResource(R.string.today_info_window),
                 textAlign = TextAlign.End,
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.titleMedium,
-            )
+            )*/
         }
         list.forEach {
             Row {

@@ -43,7 +43,6 @@ import cz.lastaapps.menza.ui.WindowSizeClass
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,8 +50,6 @@ fun LicenseLayout(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -79,15 +76,12 @@ fun LicenseLayout(
         libraries!!.libraries.filter { !it.name.startsWith("$") }
     }
 
-    @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
             LicenseLayoutCompact(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
@@ -101,8 +95,6 @@ fun LicenseLayout(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
@@ -116,8 +108,6 @@ fun LicenseLayout(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
@@ -135,8 +125,6 @@ fun LicenseLayoutCompact(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -144,8 +132,6 @@ fun LicenseLayoutCompact(
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-
     AppLayoutCompact(
         navController = navController,
         menzaId = menzaId,
@@ -153,16 +139,8 @@ fun LicenseLayoutCompact(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        enableIcon = true,
-        showHamburgerMenu = selectedLibrary == null,
-        onMenuButtonClicked = {
-            if (selectedLibrary == null)
-                scope.launch { drawerState.open() }
-            else
-                onLibrarySelected(null)
-        },
+        showBackArrow = selectedLibrary != null,
+        onBackArrowClick = { onLibrarySelected(null) },
     ) {
         BackHandler(enabled = selectedLibrary != null) {
             onLibrarySelected(null)
@@ -185,8 +163,6 @@ fun LicenseLayoutMedium(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -197,8 +173,6 @@ fun LicenseLayoutMedium(
     navController = navController,
     snackbarHostState = snackbarHostState,
     drawerState = drawerState,
-    expanded = expanded,
-    onExpandedClicked = onExpandedClicked,
     menzaId = menzaId,
     onMenzaSelected = onMenzaSelected,
     menzaViewModel = menzaViewModel,
@@ -213,8 +187,6 @@ fun LicenseLayoutExpanded(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -229,9 +201,7 @@ fun LicenseLayoutExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        showBackButton = false,
+        showBackArrow = false,
         panel1 = {
             LibraryList(
                 libraries, onLibrarySelected,

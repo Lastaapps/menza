@@ -26,7 +26,10 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.day.Dish
@@ -38,7 +41,6 @@ import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
 import cz.lastaapps.menza.ui.root.AppLayoutMedium
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,8 +48,6 @@ fun TodayDest(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -60,15 +60,12 @@ fun TodayDest(
     val onDishSelected: (Dish?) -> Unit = { todayViewModel.selectDish(it) }
 
     Crossfade(targetState = menzaId) { currentMenzaId ->
-        @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
         when (LocalWindowWidth.current) {
             WindowSizeClass.COMPACT -> {
                 TodayDestCompact(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
-                    expanded = expanded,
-                    onExpandedClicked = onExpandedClicked,
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
@@ -83,8 +80,6 @@ fun TodayDest(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
-                    expanded = expanded,
-                    onExpandedClicked = onExpandedClicked,
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
@@ -99,8 +94,6 @@ fun TodayDest(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
                     drawerState = drawerState,
-                    expanded = expanded,
-                    onExpandedClicked = onExpandedClicked,
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
@@ -120,8 +113,6 @@ fun TodayDestCompact(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -130,8 +121,6 @@ fun TodayDestCompact(
     onDishSelected: (Dish?) -> Unit,
     settingsViewModel: SettingsViewModel,
 ) {
-    val scope = rememberCoroutineScope()
-
     AppLayoutCompact(
         navController = navController,
         menzaId = menzaId,
@@ -139,16 +128,8 @@ fun TodayDestCompact(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        enableIcon = true,
-        showHamburgerMenu = selectedDish == null,
-        onMenuButtonClicked = {
-            if (selectedDish == null)
-                scope.launch { drawerState.open() }
-            else
-                onDishSelected(null)
-        },
+        showBackArrow = selectedDish != null,
+        onBackArrowClick = { onDishSelected(null) },
     ) {
         BackHandler(enabled = selectedDish != null) {
             onDishSelected(null)
@@ -177,8 +158,6 @@ fun TodayDestMedium(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -194,10 +173,8 @@ fun TodayDestMedium(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        showBackButton = selectedDish != null,
-        onBackButtonPressed = {
+        showBackArrow = selectedDish != null,
+        onBackArrowClick = {
             onDishSelected(null)
         },
     ) {
@@ -227,8 +204,6 @@ fun TodayDestExpanded(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -244,9 +219,7 @@ fun TodayDestExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        showBackButton = false,
+        showBackArrow = false,
         panel1 = {
             TodayDishList(
                 navController = navController,

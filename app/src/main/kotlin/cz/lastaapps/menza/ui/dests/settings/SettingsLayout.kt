@@ -28,7 +28,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
@@ -38,7 +37,7 @@ import cz.lastaapps.menza.ui.dests.others.AboutUi
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
-import kotlinx.coroutines.launch
+import cz.lastaapps.menza.ui.root.AppLayoutMedium
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,8 +45,6 @@ fun SettingsLayout(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -56,15 +53,12 @@ fun SettingsLayout(
     val aboutShown by settingsViewModel.aboutShown.collectAsState()
     val onAboutClicked = { settingsViewModel.showAbout(!aboutShown) }
 
-    @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
     when (LocalWindowWidth.current) {
-        WindowSizeClass.COMPACT -> {
+        WindowSizeClass.COMPACT ->
             SettingsLayoutCompact(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
@@ -72,20 +66,28 @@ fun SettingsLayout(
                 aboutShown = aboutShown,
                 onAboutClicked = onAboutClicked,
             )
-        }
-        in listOf(WindowSizeClass.MEDIUM, WindowSizeClass.EXPANDED) -> {
+        WindowSizeClass.MEDIUM ->
+            SettingsLayoutMedium(
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                drawerState = drawerState,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel,
+                viewModel = settingsViewModel,
+                aboutShown = aboutShown,
+                onAboutClicked = onAboutClicked,
+            )
+        WindowSizeClass.EXPANDED ->
             SettingsLayoutExpanded(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 drawerState = drawerState,
-                expanded = expanded,
-                onExpandedClicked = onExpandedClicked,
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
                 viewModel = settingsViewModel,
             )
-        }
     }
 }
 
@@ -95,8 +97,6 @@ fun SettingsLayoutCompact(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -104,7 +104,6 @@ fun SettingsLayoutCompact(
     aboutShown: Boolean,
     onAboutClicked: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     AppLayoutCompact(
         navController = navController,
         menzaId = menzaId,
@@ -112,16 +111,45 @@ fun SettingsLayoutCompact(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        enableIcon = true,
-        showHamburgerMenu = !aboutShown,
-        onMenuButtonClicked = {
-            if (!aboutShown)
-                scope.launch { drawerState.open() }
-            else
-                onAboutClicked()
+        showBackArrow = aboutShown,
+        onBackArrowClick = { onAboutClicked() }) {
+        BackHandler(aboutShown) {
+            onAboutClicked()
         }
+        SettingsUI(
+            navController = navController,
+            viewModel = viewModel,
+            menzaViewModel = menzaViewModel,
+            modifier = Modifier.fillMaxSize(),
+            enableAbout = true,
+            aboutShown = aboutShown,
+            onAboutClicked = onAboutClicked,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsLayoutMedium(
+    navController: NavController,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+    viewModel: SettingsViewModel,
+    aboutShown: Boolean,
+    onAboutClicked: () -> Unit,
+) {
+    AppLayoutMedium(
+        navController = navController,
+        menzaId = menzaId,
+        onMenzaSelected = onMenzaSelected,
+        menzaViewModel = menzaViewModel,
+        snackbarHostState = snackbarHostState,
+        drawerState = drawerState,
+        showBackArrow = aboutShown,
+        onBackArrowClick = onAboutClicked,
     ) {
         BackHandler(aboutShown) {
             onAboutClicked()
@@ -144,8 +172,6 @@ fun SettingsLayoutExpanded(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    expanded: Boolean,
-    onExpandedClicked: () -> Unit,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
@@ -158,9 +184,7 @@ fun SettingsLayoutExpanded(
         menzaViewModel = menzaViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
-        expanded = expanded,
-        onExpandedClicked = onExpandedClicked,
-        showBackButton = false,
+        showBackArrow = false,
         panel1 = {
             SettingsUI(
                 navController = navController,

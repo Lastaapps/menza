@@ -19,7 +19,9 @@
 
 package cz.lastaapps.menza.ui.layout.menza
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -31,8 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.navigation.Dest
-import cz.lastaapps.menza.ui.LocalWindowWidth
-import cz.lastaapps.menza.ui.WindowSizeClass
 
 @Composable
 fun MenzaNotSelected(
@@ -50,12 +50,10 @@ fun MenzaNotSelected(
             ) {
                 Text(stringResource(R.string.menza_none_selected))
 
-                if (LocalWindowWidth.current == WindowSizeClass.COMPACT) {
-                    Text(
-                        stringResource(R.string.menza_none_swipe),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
+                Text(
+                    stringResource(R.string.menza_none_swipe),
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
             TextButton(onClick = { navController.navigate(Dest.R.osturak) }) {
                 Text(stringResource(R.string.menza_none_osturak))

@@ -19,66 +19,122 @@
 
 package cz.lastaapps.menza.ui.layout.main
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.common.DeveloperInfo
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.layout.menza.MenzaList
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenzaNavDrawer(
+fun MenzaModalDrawer(
     selectedMenza: MenzaId?,
     onMenzaSelected: (MenzaId) -> Unit,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
+    scroll: ScrollState = LocalDrawerScroll.current,
     menzaListViewModel: MenzaViewModel,
     content: @Composable () -> Unit,
 ) {
-
     ModalNavigationDrawer(
         modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
-            Column(
-                modifier = Modifier.padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    stringResource(R.string.app_name_long),
-                    style = MaterialTheme.typography.headlineMedium
-                )
-
-                MenzaList(
-                    selectedMenza = selectedMenza,
-                    onMenzaSelected = onMenzaSelected,
-                    menzaListViewModel = menzaListViewModel,
-                    expanded = true,
-                    modifier = Modifier.weight(1f),
-                )
-
-                Text(
-                    text = DeveloperInfo.getNameAndBuildYear(LocalContext.current),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                )
-            }
+            DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, scroll)
         },
         content = content,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MenzaDismissibleDrawerWithRailLayout(
+    modifier: Modifier = Modifier,
+    rail: @Composable () -> Unit,
+    drawer: @Composable () -> Unit,
+) {
+    Box(modifier) {
+        Row {
+            Spacer(modifier = Modifier.width(80.dp)) // rail width
+            drawer()
+        }
+        rail()
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MenzaDismissibleDrawer(
+    selectedMenza: MenzaId?,
+    onMenzaSelected: (MenzaId) -> Unit,
+    drawerState: DrawerState,
+    modifier: Modifier = Modifier,
+    scroll: ScrollState = LocalDrawerScroll.current,
+    menzaListViewModel: MenzaViewModel,
+    content: @Composable () -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    DismissibleNavigationDrawer(
+        modifier = modifier,
+        drawerState = drawerState,
+        gesturesEnabled = true,
+        drawerContent = {
+            DrawerContent(selectedMenza, {
+                scope.launch { drawerState.close() }
+                onMenzaSelected(it)
+            }, menzaListViewModel, scroll)
+        },
+        content = content,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MenzaPermanentDrawer(
+    selectedMenza: MenzaId?,
+    onMenzaSelected: (MenzaId) -> Unit,
+    @Suppress("UNUSED_PARAMETER")
+    drawerState: DrawerState,
+    modifier: Modifier = Modifier,
+    scroll: ScrollState = LocalDrawerScroll.current,
+    menzaListViewModel: MenzaViewModel,
+    content: @Composable () -> Unit,
+) {
+    PermanentNavigationDrawer(
+        modifier = modifier,
+        drawerContent = {
+            DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, scroll)
+        },
+        content = content,
+    )
+}
+
+@Composable
+private fun DrawerContent(
+    selectedMenza: MenzaId?,
+    onMenzaSelected: (MenzaId) -> Unit,
+    menzaListViewModel: MenzaViewModel,
+    scroll: ScrollState,
+) {
+    /*Text(
+        stringResource(R.string.app_name_long),
+        style = MaterialTheme.typography.headlineMedium
+    )*/
+
+    MenzaList(
+        selectedMenza = selectedMenza,
+        onMenzaSelected = onMenzaSelected,
+        menzaListViewModel = menzaListViewModel,
+        scroll = scroll,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
+    )
+}
 
