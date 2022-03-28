@@ -19,17 +19,23 @@
 
 package cz.lastaapps.menza.ui.dests.settings
 
+import android.content.Intent
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Switch
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -53,11 +59,13 @@ fun SettingsUI(
     navController: NavController,
     viewModel: SettingsViewModel,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     enableAbout: Boolean,
     modifier: Modifier = Modifier,
     aboutShown: Boolean = false,
     onAboutClicked: () -> Unit = {},
 ) {
+    LaunchedEffect(Unit) { settingsViewModel.setSettingsEverOpened(true) }
     if (aboutShown) {
         AboutUi(
             navController = navController,
@@ -189,44 +197,37 @@ private fun Buttons(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
+
+        val shareText = stringResource(R.string.settings_button_share_text)
+        Button(
+            onClick = {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, shareText)
+                    type = "text/plain"
+                }
+                context.startActivity(Intent.createChooser(sendIntent, null))
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) { IconAndText(Icons.Default.Share, R.string.settings_button_share) }
+
+        Button(
+            onClick = { uriHandler.openUri("https://play.google.com/store/apps/details?id=cz.lastaapps.menza") },
+            modifier = Modifier.fillMaxWidth(),
+        ) { IconAndText(Icons.Default.Star, R.string.settings_button_rate) }
+
+        if (enableAbout) {
+            Button(
+                onClick = onAboutClicked, modifier = Modifier.fillMaxWidth()
+            ) { IconAndText(Icons.Default.Info, R.string.settings_button_about) }
+        }
 
         Button(
             onClick = { navController.navigate(Dest.R.privacyPolicy) },
             Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = stringResource(R.string.settings_button_privacy_policy),
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Max),
-        ) {
-            if (enableAbout)
-                Button(
-                    onClick = onAboutClicked, modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                ) {
-                    Text(
-                        stringResource(R.string.settings_button_about),
-                        textAlign = TextAlign.Center
-                    )
-                }
-
-            Button(
-                onClick = { uriHandler.openUri("https://play.google.com/store/apps/details?id=cz.lastaapps.menza") },
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-            ) { Text(stringResource(R.string.settings_button_rate), textAlign = TextAlign.Center) }
-        }
+        ) { IconAndText(Icons.Default.Security, R.string.settings_button_privacy_policy) }
 
         ReportButton(Modifier.fillMaxWidth())
 
@@ -243,7 +244,7 @@ private fun FullDataReload(viewModel: SettingsViewModel, modifier: Modifier = Mo
         viewModel.fullRefresh()
     }
     Button(onClick = { showFullReload = true }, modifier) {
-        Text(stringResource(R.string.settings_button_reload), textAlign = TextAlign.Center)
+        IconAndText(Icons.Default.Refresh, R.string.settings_button_reload)
     }
 }
 
@@ -252,13 +253,28 @@ private fun ReportButton(modifier: Modifier = Modifier) {
     var shown by rememberSaveable { mutableStateOf(false) }
 
     Button(onClick = { shown = true }, modifier) {
-        Text(stringResource(R.string.settings_button_report), textAlign = TextAlign.Center)
+        IconAndText(Icons.Default.BugReport, R.string.settings_button_report)
     }
 
     val context = LocalContext.current
     ReportDialog(shown, { shown = false }) {
         sendReport(context, it)
         shown = false
+    }
+}
+
+@Composable
+private fun IconAndText(icon: ImageVector, @StringRes textId: Int) =
+    IconAndText(icon, stringResource(textId))
+
+@Composable
+private fun IconAndText(icon: ImageVector, text: String) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, null)
+        Text(text, textAlign = TextAlign.Center)
     }
 }
 

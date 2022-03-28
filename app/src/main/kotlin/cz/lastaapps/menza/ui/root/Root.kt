@@ -42,6 +42,7 @@ import cz.lastaapps.menza.ui.dests.others.osturak.OsturakLayout
 import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyCheck
 import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyDialogContent
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
+import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.darkMode
 import cz.lastaapps.menza.ui.dests.settings.store.resolveShouldUseDark
 import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
@@ -111,6 +112,7 @@ fun ApplyLocalProviders(
 @OptIn(ExperimentalMaterial3Api::class, androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
 private fun AppContent(viewModel: MenzaViewModel) {
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
 
     val menzaId by viewModel.selectedMenza.collectAsState()
     val onMenzaSelected: (MenzaId?) -> Unit = { viewModel.selectMenza(it) }
@@ -142,7 +144,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                         onMenzaSelected = onMenzaSelected,
                         menzaViewModel = viewModel,
                         todayViewModel = hiltActivityViewModel(),
-                        settingsViewModel = hiltActivityViewModel()
+                        settingsViewModel = settingsViewModel,
                     )
                 }
                 composable(Dest.R.week) {
@@ -153,6 +155,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                         menzaId = menzaId,
                         onMenzaSelected = onMenzaSelected,
                         menzaViewModel = viewModel,
+                        settingsViewModel = settingsViewModel,
                         weekViewModel = hiltActivityViewModel(),
                     )
                 }
@@ -164,6 +167,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                         menzaId = menzaId,
                         onMenzaSelected = onMenzaSelected,
                         menzaViewModel = viewModel,
+                        settingsViewModel = settingsViewModel,
                         infoViewModel = hiltActivityViewModel(),
                     )
                 }
@@ -175,7 +179,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                         menzaId = menzaId,
                         onMenzaSelected = onMenzaSelected,
                         menzaViewModel = viewModel,
-                        settingsViewModel = hiltActivityViewModel(),
+                        settingsViewModel = settingsViewModel,
                     )
                 }
 
@@ -187,6 +191,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                         menzaId = menzaId,
                         onMenzaSelected = onMenzaSelected,
                         menzaViewModel = viewModel,
+                        settingsViewModel = settingsViewModel,
                     )
                 }
                 composable(Dest.R.osturak) {
@@ -197,6 +202,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                         menzaId = menzaId,
                         onMenzaSelected = onMenzaSelected,
                         menzaViewModel = viewModel,
+                        settingsViewModel = settingsViewModel,
                     )
                 }
                 dialog(Dest.R.privacyPolicy) {

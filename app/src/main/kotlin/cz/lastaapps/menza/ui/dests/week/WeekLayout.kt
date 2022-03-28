@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
+import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpandedSimple
@@ -44,6 +45,7 @@ fun WeekLayout(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     weekViewModel: WeekViewModel,
 ) {
     Crossfade(targetState = menzaId) { currentMenzaId ->
@@ -56,6 +58,7 @@ fun WeekLayout(
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
+                    settingsViewModel = settingsViewModel,
                     viewModel = weekViewModel,
                 )
             WindowSizeClass.MEDIUM ->
@@ -66,6 +69,7 @@ fun WeekLayout(
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
+                    settingsViewModel = settingsViewModel,
                     viewModel = weekViewModel,
                 )
             WindowSizeClass.EXPANDED ->
@@ -76,6 +80,7 @@ fun WeekLayout(
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
+                    settingsViewModel = settingsViewModel,
                     viewModel = weekViewModel,
                 )
 
@@ -92,6 +97,7 @@ private fun WeekLayoutCompact(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     viewModel: WeekViewModel,
 ) {
     AppLayoutCompact(
@@ -99,6 +105,7 @@ private fun WeekLayoutCompact(
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = false,
@@ -121,6 +128,7 @@ private fun WeekLayoutMedium(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     viewModel: WeekViewModel,
 ) {
     AppLayoutMedium(
@@ -128,6 +136,7 @@ private fun WeekLayoutMedium(
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = false
@@ -150,6 +159,7 @@ private fun WeekLayoutExpanded(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     viewModel: WeekViewModel,
 ) {
     AppLayoutExpandedSimple(
@@ -157,6 +167,7 @@ private fun WeekLayoutExpanded(
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = false

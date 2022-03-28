@@ -83,6 +83,11 @@
     <string name="settings_button_privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="settings_button_about">O aplikaci</string>
     <string name="settings_button_rate">Ohodnoťte nás!</string>
+    <string name="settings_button_share">Sdílet</string>
+    <string name="settings_button_share_text">
+        Stáhni si novou supr appku do Menz ČVUT. Hned!
+        https://play.google.com/store/apps/details?id=cz.lastaapps.menza
+    </string>
     <string name="settings_button_reload">Kompletní přenačtení dat</string>
     <string name="settings_button_report">Nahlásit chybu</string>
     <string name="settings_init_menza_ask">Vždy se zeptat</string>

@@ -40,6 +40,7 @@ import com.mikepenz.aboutlibraries.util.withContext
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
+import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
@@ -53,6 +54,7 @@ fun LicenseLayout(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
 ) {
     val context = LocalContext.current
     var libraries by remember {
@@ -85,6 +87,7 @@ fun LicenseLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
+                settingsViewModel = settingsViewModel,
                 libraries = libraryList,
                 selectedLibrary = selectedLibrary,
                 onLibrarySelected = onLibrarySelected,
@@ -98,6 +101,7 @@ fun LicenseLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
+                settingsViewModel = settingsViewModel,
                 libraries = libraryList,
                 selectedLibrary = selectedLibrary,
                 onLibrarySelected = onLibrarySelected,
@@ -111,6 +115,7 @@ fun LicenseLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
+                settingsViewModel = settingsViewModel,
                 libraries = libraryList,
                 selectedLibrary = selectedLibrary,
                 onLibrarySelected = onLibrarySelected,
@@ -128,6 +133,7 @@ fun LicenseLayoutCompact(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     libraries: List<Library>,
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
@@ -137,6 +143,7 @@ fun LicenseLayoutCompact(
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = selectedLibrary != null,
@@ -166,6 +173,7 @@ fun LicenseLayoutMedium(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     libraries: List<Library>,
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
@@ -176,6 +184,7 @@ fun LicenseLayoutMedium(
     menzaId = menzaId,
     onMenzaSelected = onMenzaSelected,
     menzaViewModel = menzaViewModel,
+    settingsViewModel = settingsViewModel,
     libraries = libraries,
     selectedLibrary = selectedLibrary,
     onLibrarySelected = onLibrarySelected,
@@ -190,6 +199,7 @@ fun LicenseLayoutExpanded(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     libraries: List<Library>,
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
@@ -199,6 +209,7 @@ fun LicenseLayoutExpanded(
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = false,

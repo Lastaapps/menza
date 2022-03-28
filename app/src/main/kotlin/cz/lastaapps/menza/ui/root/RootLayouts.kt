@@ -38,6 +38,7 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.FoldingClass
 import cz.lastaapps.menza.ui.LocalFoldProvider
+import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.main.*
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import kotlinx.coroutines.launch
@@ -51,6 +52,7 @@ fun AppLayoutCompact(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     showBackArrow: Boolean,
@@ -84,7 +86,7 @@ fun AppLayoutCompact(
                 )
             },
             bottomBar = {
-                MainBottomNav(navController)
+                MainBottomNav(navController, settingsViewModel)
             },
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState)
@@ -113,6 +115,7 @@ fun AppLayoutMedium(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     showBackArrow: Boolean,
@@ -142,7 +145,7 @@ fun AppLayoutMedium(
             Modifier
                 .padding(insets)
                 .fillMaxSize(),
-            rail = { MainNavRail(navController) },
+            rail = { MainNavRail(navController, settingsViewModel) },
         ) {
             MenzaDismissibleDrawer(
                 selectedMenza = menzaId,
@@ -165,6 +168,7 @@ fun AppLayoutExpandedSimple(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     showBackArrow: Boolean,
@@ -194,7 +198,7 @@ fun AppLayoutExpandedSimple(
             Modifier
                 .padding(insets)
                 .fillMaxSize(),
-            rail = { MainNavRail(navController) }
+            rail = { MainNavRail(navController, settingsViewModel) }
         ) {
             MenzaDismissibleDrawer(
                 selectedMenza = menzaId,
@@ -217,6 +221,7 @@ fun AppLayoutExpanded(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     showBackArrow: Boolean,
@@ -231,6 +236,7 @@ fun AppLayoutExpanded(
             menzaId = menzaId,
             onMenzaSelected = onMenzaSelected,
             menzaViewModel = menzaViewModel,
+            settingsViewModel = settingsViewModel,
             snackbarHostState = snackbarHostState,
             drawerState = drawerState,
             showBackArrow = showBackArrow,
@@ -244,6 +250,7 @@ fun AppLayoutExpanded(
             menzaId = menzaId,
             onMenzaSelected = onMenzaSelected,
             menzaViewModel = menzaViewModel,
+            settingsViewModel = settingsViewModel,
             snackbarHostState = snackbarHostState,
             drawerState = drawerState,
             showBackArrow = showBackArrow,
@@ -260,6 +267,7 @@ private fun AppLayoutExpandedNoFold(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     showBackArrow: Boolean,
@@ -290,7 +298,7 @@ private fun AppLayoutExpandedNoFold(
             Modifier
                 .padding(insets)
                 .fillMaxSize(),
-            rail = { MainNavRail(navController) })
+            rail = { MainNavRail(navController, settingsViewModel) })
         {
             MenzaDismissibleDrawer(
                 selectedMenza = menzaId,
@@ -338,6 +346,7 @@ fun AppLayoutExpandedFold(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
     showBackArrow: Boolean,
@@ -368,7 +377,7 @@ fun AppLayoutExpandedFold(
             Modifier
                 .padding(insets)
                 .fillMaxSize(),
-            rail = { MainNavRail(navController) }
+            rail = { MainNavRail(navController, settingsViewModel) }
         ) {
             val foldingFeature = LocalFoldProvider.current as FoldingClass.Supported
 

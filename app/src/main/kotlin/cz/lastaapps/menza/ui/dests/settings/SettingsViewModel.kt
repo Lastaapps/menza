@@ -93,6 +93,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setSettingsEverOpened(enabled: Boolean) {
+        viewModelScope.launch { sett.setSettingsEverOpened(enabled) }
+    }
+
     @OptIn(ExperimentalCoilApi::class)
     fun fullRefresh() {
         viewModelScope.launch {

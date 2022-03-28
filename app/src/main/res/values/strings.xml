@@ -93,6 +93,11 @@
     <string name="settings_button_privacy_policy">Privacy policy</string>
     <string name="settings_button_about">About</string>
     <string name="settings_button_rate">Rate us!</string>
+    <string name="settings_button_share">Share</string>
+    <string name="settings_button_share_text">
+        Get a new perfect ČVUT Menza app. Now!
+        https://play.google.com/store/apps/details?id=cz.lastaapps.menza
+    </string>
     <string name="settings_button_reload">Full cache refresh</string>
     <string name="settings_button_report">Report an error</string>
     <string name="settings_init_menza_ask">Always ask</string>

@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
+import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
@@ -44,6 +45,7 @@ fun InfoLayout(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     infoViewModel: InfoViewModel,
 ) {
     Crossfade(targetState = menzaId) { currentMenzaId ->
@@ -56,6 +58,7 @@ fun InfoLayout(
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
+                    settingsViewModel = settingsViewModel,
                     viewModel = infoViewModel,
                 )
             }
@@ -67,6 +70,7 @@ fun InfoLayout(
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
+                    settingsViewModel = settingsViewModel,
                     viewModel = infoViewModel,
                 )
             }
@@ -78,6 +82,7 @@ fun InfoLayout(
                     menzaId = currentMenzaId,
                     onMenzaSelected = onMenzaSelected,
                     menzaViewModel = menzaViewModel,
+                    settingsViewModel = settingsViewModel,
                     viewModel = infoViewModel,
                 )
             }
@@ -94,6 +99,7 @@ fun InfoLayoutCompact(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     viewModel: InfoViewModel,
 ) {
     AppLayoutCompact(
@@ -101,6 +107,7 @@ fun InfoLayoutCompact(
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = false,
@@ -124,6 +131,7 @@ fun InfoLayoutMedium(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     viewModel: InfoViewModel,
 ) {
     AppLayoutMedium(
@@ -131,6 +139,7 @@ fun InfoLayoutMedium(
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = false,
@@ -154,6 +163,7 @@ fun InfoLayoutExpanded(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
     viewModel: InfoViewModel,
 ) {
     AppLayoutExpanded(
@@ -161,6 +171,7 @@ fun InfoLayoutExpanded(
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = false,

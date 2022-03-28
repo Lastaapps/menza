@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.LocalWindowWidth
 import cz.lastaapps.menza.ui.WindowSizeClass
+import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.AppLayoutCompact
 import cz.lastaapps.menza.ui.root.AppLayoutExpanded
@@ -47,6 +48,7 @@ fun OsturakLayout(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
 ) {
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
@@ -57,6 +59,7 @@ fun OsturakLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
+                settingsViewModel = settingsViewModel,
             )
         }
         WindowSizeClass.MEDIUM -> {
@@ -67,6 +70,7 @@ fun OsturakLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
+                settingsViewModel = settingsViewModel,
             )
         }
         WindowSizeClass.EXPANDED -> {
@@ -77,6 +81,7 @@ fun OsturakLayout(
                 menzaId = menzaId,
                 onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
+                settingsViewModel = settingsViewModel,
             )
         }
     }
@@ -91,12 +96,14 @@ fun OsturakLayoutCompact(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
 ) {
     AppLayoutCompact(
         navController = navController,
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = true,
@@ -123,12 +130,14 @@ fun OsturakLayoutMedium(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
 ) {
     AppLayoutMedium(
         navController = navController,
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = false,
@@ -154,12 +163,14 @@ fun OsturakLayoutExpanded(
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
 ) {
     AppLayoutExpanded(
         navController = navController,
         menzaId = menzaId,
         onMenzaSelected = onMenzaSelected,
         menzaViewModel = menzaViewModel,
+        settingsViewModel = settingsViewModel,
         snackbarHostState = snackbarHostState,
         drawerState = drawerState,
         showBackArrow = false,

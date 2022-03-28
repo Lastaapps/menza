@@ -40,7 +40,7 @@ object MessagesScraperImpl : MessagesScraper {
     private fun Doc.parseHtml(): Set<Message> {
         val set = mutableSetOf<Message>()
 
-        findFirst("#aktuality") {
+        tryFindFirst("#aktuality") {
             tryFindAllAndCycle("div div div") {
                 val menzaId =
                     id.removePrefix("Info").removeSpaces().takeIf { it.isNotBlank() }?.toInt()

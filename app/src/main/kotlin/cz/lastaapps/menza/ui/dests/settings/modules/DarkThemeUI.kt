@@ -21,7 +21,6 @@ package cz.lastaapps.menza.ui.dests.settings.modules
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -76,10 +75,14 @@ fun DarkThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifie
             },
         ) { measurable, constrains ->
 
-            val size = measurable.size
+            val itemNumber = measurable.size
+            val maxItemWidth = constrains.maxWidth / itemNumber
 
             val placeableWidth =
-                measurable.map { it.minIntrinsicWidth(constrains.maxWidth / size) }.maxOf { it }
+                measurable.map { it.minIntrinsicWidth(maxItemWidth) }
+                    .maxOf { it }
+                    //.takeIf {it <= maxItemWidth} ?: maxItemWidth
+                    .let { min(it, maxItemWidth) }
             val placeablesHeight =
                 measurable.map { it.minIntrinsicHeight(constrains.maxHeight) }.maxOf { it }
 
@@ -96,8 +99,8 @@ fun DarkThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifie
             val height = min(placeables.first().height, constrains.maxHeight)
 
             layout(width, height) {
-                val remainingWidth = width - (placeableWidth * size)
-                val spacing = remainingWidth / (size + 1)
+                val remainingWidth = width - (placeableWidth * itemNumber)
+                val spacing = remainingWidth / (itemNumber + 1)
 
                 placeables.forEachIndexed { index, placeable ->
                     val offset = index * (spacing + placeableWidth) + spacing
