@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.ui.theme
 
-import android.os.Build
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
@@ -27,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.material.color.DynamicColors
 import cz.lastaapps.menza.ui.theme.generated.AppTypography
 import cz.lastaapps.menza.ui.theme.generated.DarkThemeColors
 import cz.lastaapps.menza.ui.theme.generated.LightThemeColors
@@ -37,7 +37,7 @@ fun AppTheme(
     useCustomTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !useCustomTheme
+    val dynamicColor = isDynamicThemeSupported() && !useCustomTheme
     val colorScheme = when {
         dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
@@ -65,6 +65,8 @@ fun AppTheme(
         content = content,
     )
 }
+
+fun isDynamicThemeSupported() = DynamicColors.isDynamicColorAvailable()
 
 private val Shapes = Shapes(
     /*extraSmall = ShapeTokens.CornerExtraSmall

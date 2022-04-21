@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.ui.dests.today
 
 import android.os.Build
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -42,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -69,6 +71,7 @@ import cz.lastaapps.menza.ui.dests.settings.store.imagesOnMetered
 import cz.lastaapps.menza.ui.dests.settings.store.priceType
 import cz.lastaapps.menza.ui.isMetered
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
+import kotlinx.coroutines.delay
 
 @Composable
 fun TodayDishList(
@@ -114,7 +117,7 @@ fun TodayDishList(
         ) {
             Crossfade(targetState = data) { currentData ->
                 DishContent(
-                    currentData, onDishSelected,
+                    menzaId, currentData, onDishSelected,
                     priceType, onPriceType,
                     downloadOnMetered, scroll, Modifier.fillMaxSize(),
                 )
@@ -126,6 +129,7 @@ fun TodayDishList(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DishContent(
+    menzaId: MenzaId,
     data: List<DishTypeList>,
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
@@ -137,12 +141,7 @@ private fun DishContent(
 
     //no data handling
     if (data.isEmpty()) {
-        Box(
-            modifier = modifier.verticalScroll(rememberScrollState()),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(stringResource(R.string.today_list_none))
-        }
+        NoItems(modifier, menzaId)
         return
     }
 
@@ -170,6 +169,30 @@ private fun DishContent(
             return@LazyColumn
         }
         PriceTypeUnspecified(priceType, onPriceType, Modifier.fillMaxWidth())
+    }
+}
+
+@Composable
+private fun NoItems(modifier: Modifier, menzaId: MenzaId) {
+    Column(
+        modifier = modifier.verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
+    ) {
+        val uriHandler = LocalUriHandler.current
+        Text(stringResource(R.string.today_list_none))
+
+        // show web button after 3 seconds
+        var visible by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            delay(2000)
+            visible = true
+        }
+        AnimatedVisibility(visible) {
+            TextButton(onClick = { uriHandler.openUri("https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}") }) {
+                Text(stringResource(R.string.today_list_web))
+            }
+        }
     }
 }
 

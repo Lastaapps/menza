@@ -19,17 +19,13 @@
 
 package cz.lastaapps.menza.ui.dests.settings.store
 
-import android.os.Build
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import kotlinx.coroutines.flow.StateFlow
 
 private val systemThemeKey = booleanPreferencesKey("systemTheme")
 
-@Suppress("unused")
-fun SettingsStore.isSystemThemeAvailable(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
 val SettingsStore.systemTheme: StateFlow<Boolean>
-    get() = data.mapState { it[systemThemeKey] ?: isSystemThemeAvailable() }
+    get() = data.mapState { it[systemThemeKey] ?: true }
 
 suspend fun SettingsStore.setUseSystemTheme(useSystem: Boolean) {
     edit { it[systemThemeKey] = useSystem }

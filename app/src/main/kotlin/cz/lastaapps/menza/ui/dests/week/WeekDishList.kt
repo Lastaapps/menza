@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.ui.dests.week
 
 import android.os.Build
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -29,13 +30,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -48,6 +47,7 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.LocalSnackbarProvider
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
+import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
@@ -89,7 +89,7 @@ fun WeekDishList(
             modifier = modifier,
         ) {
             Crossfade(targetState = data) { currentData ->
-                WeekDishContent(data = currentData, Modifier.fillMaxSize())
+                WeekDishContent(menzaId, currentData, Modifier.fillMaxSize())
             }
         }
     }
@@ -98,17 +98,13 @@ fun WeekDishList(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun WeekDishContent(
+    menzaId: MenzaId,
     data: List<DayDishList>,
     modifier: Modifier = Modifier,
 ) {
     //no data handling
     if (data.isEmpty()) {
-        Box(
-            modifier = modifier.verticalScroll(rememberScrollState()),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(stringResource(R.string.week_list_none))
-        }
+        NoItems(modifier, menzaId)
         return
     }
 
@@ -135,6 +131,29 @@ private fun WeekDishContent(
             }
         }
         return@LazyColumn
+    }
+}
+
+@Composable
+private fun NoItems(modifier: Modifier, menzaId: MenzaId) {
+    Column(
+        modifier = modifier.verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
+    ) {
+        val uriHandler = LocalUriHandler.current
+        Text(stringResource(R.string.week_list_none))
+        // show web button after 3 seconds
+        var visible by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            delay(2000)
+            visible = true
+        }
+        AnimatedVisibility(visible) {
+            TextButton(onClick = { uriHandler.openUri("https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}") }) {
+                Text(stringResource(R.string.week_list_web))
+            }
+        }
     }
 }
 

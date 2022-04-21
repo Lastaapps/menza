@@ -117,6 +117,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
     val menzaId by viewModel.selectedMenza.collectAsState()
     val onMenzaSelected: (MenzaId?) -> Unit = { viewModel.selectMenza(it) }
 
+    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val drawableScroll = rememberScrollState()
     val navHostState = rememberAnimatedNavController()
@@ -127,6 +128,14 @@ private fun AppContent(viewModel: MenzaViewModel) {
 
     WithSnackbarProvider(snackbarHostState = snackbarHostState) {
         WithDrawerScrollProvider(drawableScroll) {
+
+            // instead of leaving app, open selection menu
+            /*BackHandler(drawerState.currentValue == DrawerValue.Closed) {
+                scope.launch {
+                    drawerState.open()
+                }
+            }*/
+
             AnimatedNavHost(
                 navController = navHostState,
                 startDestination = Dest.R.start,

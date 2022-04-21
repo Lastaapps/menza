@@ -47,8 +47,12 @@ import cz.lastaapps.menza.ui.dests.others.sendReport
 import cz.lastaapps.menza.ui.dests.settings.modules.DarkThemeSettings
 import cz.lastaapps.menza.ui.dests.settings.modules.FullReloadDialog
 import cz.lastaapps.menza.ui.dests.settings.modules.InitMenzaUI
-import cz.lastaapps.menza.ui.dests.settings.store.*
+import cz.lastaapps.menza.ui.dests.settings.store.PriceType
+import cz.lastaapps.menza.ui.dests.settings.store.imagesOnMetered
+import cz.lastaapps.menza.ui.dests.settings.store.priceType
+import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
+import cz.lastaapps.menza.ui.theme.isDynamicThemeSupported
 
 @Composable
 fun SettingsUI(
@@ -144,7 +148,7 @@ private fun Switches(viewModel: SettingsViewModel, modifier: Modifier = Modifier
 
 @Composable
 private fun UseThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifier) {
-    if (viewModel.sett.isSystemThemeAvailable()) {
+    if (isDynamicThemeSupported()) {
         val mode by viewModel.sett.systemTheme.collectAsState()
 
         SettingsSwitch(

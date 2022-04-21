@@ -117,12 +117,14 @@
     <string name="today_info_allergens_none">Jídlo bez alergenů</string>
     <string name="today_info_image_load_failed">Nepodařilo se načíst obrázek</string>
     <string name="today_list_none">Data nejsou dostupná</string>
+    <string name="today_list_web">Otevřít web</string>
     <string name="today_list_image_load_failed">Nepodařilo se načíst obrázek</string>
     <string name="today_list_image_metered">Obrázek nebyl stažen, placená síť</string>
     <string name="today_price_title">Jaké ceny se mají zobrazovat?</string>
     <string name="today_price_discounted">Zlevněné</string>
     <string name="today_price_normal">Běžné plné</string>
     <string name="week_list_none">Data nejsou dostupná</string>
+    <string name="week_list_web">Otevřít web</string>
     <string name="error_button_report">Nahlásit</string>
     <string name="error_week_not_supported">Tato menza neposkytuje týdenní jídelníček</string>
     <string name="error_parsing">Chyba uvnitř aplikace, prosíme o nahlášení</string>

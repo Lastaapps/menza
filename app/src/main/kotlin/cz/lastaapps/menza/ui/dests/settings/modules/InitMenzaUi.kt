@@ -92,26 +92,26 @@ private fun InitMenzaRow(
         InitMenza.Specific to stringResource(R.string.settings_init_menza_specific),
     )
 
+    //TODO try to rework in next version
+    var exp by remember { mutableStateOf(false) }
+    LaunchedEffect(expanded) { exp = expanded }
+
     ExposedDropdownMenuBox(
         modifier = modifier,
-        expanded = expanded,
-        onExpandedChange = onExpanded
+        expanded = exp,
+        onExpandedChange = { onExpanded(!exp) },
     ) {
         TextField(
             readOnly = true,
             value = options.first { it.first == mode }.second,
             onValueChange = { },
             label = { Text(stringResource(R.string.settings_init_menza_behaviour)) },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
-            },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(exp) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
             modifier = Modifier.fillMaxWidth(),
         )
         ExposedDropdownMenu(
-            expanded = expanded,
+            expanded = exp,
             onDismissRequest = { onExpanded(false) }
         ) {
             options.forEach { selectionOption ->
@@ -137,11 +137,14 @@ private fun PreferredMenza(
     menzaList: List<Menza>,
     modifier: Modifier = Modifier
 ) {
+    //TODO try to rework in next version
+    var exp by remember { mutableStateOf(false) }
+    LaunchedEffect(expanded) { exp = expanded }
 
     ExposedDropdownMenuBox(
         modifier = modifier,
-        expanded = expanded,
-        onExpandedChange = onExpanded
+        expanded = exp,
+        onExpandedChange = { onExpanded(!exp) },
     ) {
         TextField(
             readOnly = true,
@@ -149,18 +152,12 @@ private fun PreferredMenza(
                 ?: stringResource(R.string.settings_init_menza_select_placeholder),
             onValueChange = { },
             label = { Text(stringResource(R.string.settings_init_menza_select_title)) },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
-            },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(
-                textColor = LocalContentColor.current
-            ),
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(exp) },
+            colors = ExposedDropdownMenuDefaults.textFieldColors(),
             modifier = Modifier.fillMaxWidth(),
         )
         ExposedDropdownMenu(
-            expanded = expanded,
+            expanded = exp,
             onDismissRequest = { onExpanded(false) }
         ) {
             menzaList.forEach { selectionOption ->
