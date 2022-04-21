@@ -24,13 +24,9 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Switch
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -129,7 +125,6 @@ private fun SettingsSwitch(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(text = title, Modifier.weight(1f))
-        //TODO use Material 3 Switch when available
         Switch(checked = checked, onCheckedChange = { onClick() })
     }
 }

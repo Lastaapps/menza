@@ -21,6 +21,8 @@ package cz.lastaapps.menza.di
 
 import android.app.Application
 import coil.ImageLoader
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
 import coil.request.CachePolicy
 import coil.util.DebugLogger
 import cz.lastaapps.menza.CacheHeaderInterceptor
@@ -39,24 +41,36 @@ object CoilDIModule {
     @Provides
     @Singleton
     fun provideSettingsDataStore(app: Application): ImageLoader {
-        return ImageLoader.Builder(app)
-            .crossfade(true)
-            .networkCachePolicy(CachePolicy.ENABLED)
-            .diskCachePolicy(CachePolicy.ENABLED)
-            .memoryCachePolicy(CachePolicy.ENABLED)
-            .networkCachePolicy(CachePolicy.ENABLED)
-            .networkObserverEnabled(true)
-            .respectCacheHeaders(true)
-            .logger(DebugLogger())
-            .okHttpClient {
-                OkHttpClient.Builder()
-                    .connectTimeout(5, TimeUnit.SECONDS)
-                    //.readTimeout(10, TimeUnit.SECONDS)
-                    .addNetworkInterceptor(CacheHeaderInterceptor)
-                    .retryOnConnectionFailure(false)
-                    .build()
+        return with(ImageLoader.Builder(app)) {
+            diskCachePolicy(CachePolicy.ENABLED)
+            memoryCachePolicy(CachePolicy.ENABLED)
+            networkCachePolicy(CachePolicy.ENABLED)
+            networkObserverEnabled(true)
+            logger(DebugLogger())
+            diskCache {
+                with(DiskCache.Builder()) {
+                    maxSizeBytes(1024 * 1024 * 32) // 32 MB
+                    build()
+                }
             }
-            .build()
+            memoryCache {
+                with(MemoryCache.Builder(app)) {
+                    weakReferencesEnabled(true)
+                    build()
+                }
+            }
+            respectCacheHeaders(true)
+            okHttpClient {
+                with(OkHttpClient.Builder()) {
+                    connectTimeout(5, TimeUnit.SECONDS)
+                    //readTimeout(10, TimeUnit.SECONDS)
+                    addNetworkInterceptor(CacheHeaderInterceptor)
+                    retryOnConnectionFailure(false)
+                    build()
+                }
+            }
+            build()
+        }
     }
 
 }

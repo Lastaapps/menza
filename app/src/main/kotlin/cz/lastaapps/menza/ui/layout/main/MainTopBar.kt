@@ -72,7 +72,7 @@ fun MainTopBar(
                         Modifier.size(32.dp),
                         color = colorResource(R.color.ic_launcher_background),
                         contentColor = colorResource(R.color.ic_launcher_foreground),
-                        shape = RoundedCornerShape(8.dp),
+                        shape = MaterialTheme.shapes.medium,
                     ) {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             Icon(Icons.Default.Restaurant, null)

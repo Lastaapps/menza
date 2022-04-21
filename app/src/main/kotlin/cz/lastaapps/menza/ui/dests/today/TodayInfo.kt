@@ -24,7 +24,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -41,7 +40,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
@@ -201,7 +199,7 @@ private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
                             .aspectRatio(4f / 3f)
                             .placeholder(
                                 true, color = MaterialTheme.colorScheme.secondary,
-                                shape = RoundedCornerShape(4.dp),
+                                shape = MaterialTheme.shapes.extraSmall,
                                 highlight = PlaceholderHighlight.fade(
                                     highlightColor = MaterialTheme.colorScheme.primary,
                                 )
@@ -221,11 +219,6 @@ private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
                             stringResource(R.string.today_info_image_load_failed)
                         )
                     }
-                },
-                success = {
-                    SubcomposeAsyncImageContent(
-                        modifier = Modifier.fillMaxWidth(),
-                    )
                 },
             )
         } else {

@@ -22,7 +22,6 @@ package cz.lastaapps.menza.ui.dests.others.privacy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -54,7 +53,7 @@ fun PrivacyDialogContent(
     showAccept: Boolean,
     onAccept: () -> Unit,
 ) {
-    Surface(shape = RoundedCornerShape(16.dp)) {
+    Surface(shape = MaterialTheme.shapes.large) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),

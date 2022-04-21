@@ -22,11 +22,7 @@ package cz.lastaapps.menza.ui.theme
 import android.os.Build
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
@@ -65,22 +61,17 @@ fun AppTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = AppTypography,
-    ) {
-        androidx.compose.material.MaterialTheme(
-            colors = colorScheme.toLegacy(darkTheme),
-            content = content
-        )
-    }
+        shapes = Shapes,
+        content = content,
+    )
 }
 
-@Composable
-private fun ColorScheme.toLegacy(isDark: Boolean): Colors = Colors(
-    primary = primary, primaryVariant = primaryContainer,
-    secondary = tertiary, secondaryVariant = tertiaryContainer,
-    background = background, surface = surface, error = error,
-    onPrimary = onPrimary, onSecondary = onSecondary,
-    onBackground = onBackground, onSurface = onSurface, onError = onError,
-    isLight = !isDark,
+private val Shapes = Shapes(
+    /*extraSmall = ShapeTokens.CornerExtraSmall
+    small = ShapeTokens.CornerSmall,
+    medium = ShapeTokens.CornerMedium,
+    large = ShapeTokens.CornerLarge,
+    extraLarge = ShapeTokens.CornerExtraLarge,*/
 )
 
 @Composable
@@ -110,6 +101,7 @@ private fun ColorScheme.animated(): ColorScheme {
         secondaryContainer = animateColorAsState(secondaryContainer).value,
         surface = animateColorAsState(surface).value,
         surfaceVariant = animateColorAsState(surfaceVariant).value,
+        surfaceTint = animateColorAsState(surfaceTint).value,
         tertiary = animateColorAsState(tertiary).value,
         tertiaryContainer = animateColorAsState(tertiaryContainer).value,
     )

@@ -22,10 +22,7 @@ package cz.lastaapps.menza.ui.dests.info
 import android.os.Build
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -74,7 +71,12 @@ fun OpeningHoursLocationUI(
         DateTimeFormatter.ofPattern(patter)
     }
 
-    Card(containerColor = MaterialTheme.colorScheme.primaryContainer, modifier = modifier) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
+        modifier = modifier,
+    ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(12.dp),

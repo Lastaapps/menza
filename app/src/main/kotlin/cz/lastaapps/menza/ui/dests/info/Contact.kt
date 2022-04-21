@@ -72,7 +72,9 @@ fun ContactUI(
 
     Card(
         modifier,
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
     ) {
         val context = LocalContext.current
         val snackbar = LocalSnackbarProvider.current

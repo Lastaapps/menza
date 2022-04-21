@@ -130,8 +130,9 @@ private fun ThemeItem(
     Card(
         onClick = onItemSelected,
         interactionSource = interaction,
-        containerColor = animateColorAsState(color).value,
-        contentColor = animateColorAsState(contentColorFor(color)).value,
+        colors = CardDefaults.cardColors(
+            containerColor = animateColorAsState(color).value,
+        ),
         modifier = modifier,
     ) {
         Column(

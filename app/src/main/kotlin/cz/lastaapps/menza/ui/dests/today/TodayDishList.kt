@@ -29,7 +29,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
@@ -42,13 +41,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
@@ -183,8 +182,10 @@ private fun PriceTypeUnspecified(
 ) {
     if (priceType == PriceType.Unset) {
         Card(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            ),
+            shape = MaterialTheme.shapes.large,
             modifier = modifier,
         ) {
             Column(
@@ -256,8 +257,10 @@ private fun DishItem(
     modifier: Modifier = Modifier
 ) {
     Card(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
-        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
+        shape = MaterialTheme.shapes.large,
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
         Row(
@@ -295,7 +298,7 @@ private fun DishNameRow(dish: Dish, modifier: Modifier = Modifier) {
                 dish.issuePlaces.forEach {
                     Surface(
                         color = MaterialTheme.colorScheme.secondary,
-                        shape = RoundedCornerShape(8.dp),
+                        shape = MaterialTheme.shapes.medium,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
@@ -346,7 +349,7 @@ private fun DishBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Mod
     Surface(
         modifier,
         color = MaterialTheme.colorScheme.tertiary,
-        shape = RoundedCornerShape(8.dp),
+        shape = MaterialTheme.shapes.medium,
     ) {
         Text(
             text = "${dish.getPrice(priceType).price} Kč",
@@ -384,51 +387,49 @@ private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier
                 else
                     data("https://userisonmeterednetwork.localhost/")
                 //data(null) - cache is not working
-            }.build()
+                with(LocalDensity.current) { size(size.roundToPx()) }
+                build()
+            }
 
-            SubcomposeAsyncImage(
-                imageRequest, dish.name,
-                loading = {
-                    Box(
-                        imageModifier
-                            .placeholder(
-                                true, color = MaterialTheme.colorScheme.secondary,
-                                shape = RoundedCornerShape(8.dp),
-                                highlight = PlaceholderHighlight.fade(
-                                    highlightColor = MaterialTheme.colorScheme.primary,
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                modifier = imageModifier,
+            ) {
+                SubcomposeAsyncImage(
+                    imageRequest, dish.name,
+                    contentScale = ContentScale.Crop,
+                    loading = {
+                        Box(
+                            imageModifier
+                                .placeholder(
+                                    true, color = MaterialTheme.colorScheme.secondary,
+                                    shape = MaterialTheme.shapes.medium,
+                                    highlight = PlaceholderHighlight.fade(
+                                        highlightColor = MaterialTheme.colorScheme.primary,
+                                    )
                                 )
-                            )
-                            .clickable { retryHash++ }
-                    )
-                },
-                error = {
-                    Box(
-                        imageModifier.clickable { retryHash++; userAllowed = true },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        if (canDownload)
-                            Icon(
-                                Icons.Default.Refresh,
-                                stringResource(R.string.today_list_image_load_failed)
-                            )
-                        else
-                            Icon(
-                                Icons.Default.Download,
-                                stringResource(R.string.today_list_image_metered)
-                            )
-                    }
-                },
-                success = {
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = imageModifier,
-                    ) {
-                        SubcomposeAsyncImageContent(
-                            contentScale = ContentScale.Crop,
+                                .clickable { retryHash++ }
                         )
-                    }
-                },
-            )
+                    },
+                    error = {
+                        Box(
+                            imageModifier.clickable { retryHash++; userAllowed = true },
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            if (canDownload)
+                                Icon(
+                                    Icons.Default.Refresh,
+                                    stringResource(R.string.today_list_image_load_failed)
+                                )
+                            else
+                                Icon(
+                                    Icons.Default.Download,
+                                    stringResource(R.string.today_list_image_metered)
+                                )
+                        }
+                    },
+                )
+            }
 
         } else {
             Box(imageModifier, contentAlignment = Alignment.Center) {

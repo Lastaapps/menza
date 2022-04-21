@@ -32,6 +32,7 @@ object CacheHeaderInterceptor : Interceptor {
         val now = LocalTime.now()
         val cacheControl = CacheControl.Builder()
             .maxAge(24 - now.hour, TimeUnit.HOURS)
+            .immutable()
             .build()
 
         return response.newBuilder()

@@ -22,9 +22,7 @@ package cz.lastaapps.menza.ui.dests.settings.modules
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.*
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -40,7 +38,6 @@ import cz.lastaapps.menza.ui.dests.settings.store.initMenza
 import cz.lastaapps.menza.ui.dests.settings.store.preferredMenza
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun InitMenzaUI(
     menzaViewModel: MenzaViewModel,
@@ -80,7 +77,7 @@ fun InitMenzaUI(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InitMenzaRow(
     expanded: Boolean,
@@ -110,9 +107,7 @@ private fun InitMenzaRow(
                     expanded = expanded
                 )
             },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(
-                textColor = LocalContentColor.current
-            ),
+            colors = ExposedDropdownMenuDefaults.textFieldColors(),
             modifier = Modifier.fillMaxWidth(),
         )
         ExposedDropdownMenu(
@@ -124,16 +119,15 @@ private fun InitMenzaRow(
                     onClick = {
                         onMode(selectionOption.first)
                         onExpanded(false)
-                    }
-                ) {
-                    Text(text = selectionOption.second)
-                }
+                    },
+                    text = { Text(text = selectionOption.second) },
+                )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PreferredMenza(
     expanded: Boolean,
@@ -174,10 +168,9 @@ private fun PreferredMenza(
                     onClick = {
                         onMenza(selectionOption.menzaId)
                         onExpanded(false)
-                    }
-                ) {
-                    Text(text = selectionOption.name)
-                }
+                    },
+                    text = { Text(text = selectionOption.name) },
+                )
             }
         }
     }

@@ -22,11 +22,7 @@ package cz.lastaapps.menza.ui.dests.others.license
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -156,7 +152,7 @@ fun LicenseLayoutCompact(
 
         if (selectedLibrary != null) {
             Dialog(onDismissRequest = { onLibrarySelected(null) }) {
-                Surface(shape = RoundedCornerShape(16.dp)) {
+                Surface(shape = MaterialTheme.shapes.large) {
                     LibraryDetail(library = selectedLibrary, Modifier.padding(16.dp))
                 }
             }
