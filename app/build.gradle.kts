@@ -97,7 +97,13 @@ android {
 
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
-        freeCompilerArgs = listOf("-Xjvm-default=compatibility")
+        freeCompilerArgs = listOf(
+            "-Xjvm-default=all-compatibility",
+            "-opt-in=kotlin.RequiresOptIn",
+            "-Xbackend-threads=4",
+        )
+        languageVersion = Versions.KOTLIN_LANGUAGE_VERSION
+        apiVersion = Versions.KOTLIN_LANGUAGE_VERSION
     }
 
     buildFeatures {
