@@ -22,6 +22,8 @@ package cz.lastaapps.menza
 import android.app.Application
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
 import coil.request.CachePolicy
 import coil.util.DebugLogger
 import dagger.hilt.android.HiltAndroidApp
@@ -30,24 +32,36 @@ import java.util.concurrent.TimeUnit
 
 @HiltAndroidApp
 class App : Application(), ImageLoaderFactory {
-    override fun newImageLoader(): ImageLoader {
-        return ImageLoader.Builder(this)
-            .crossfade(true)
-            .networkCachePolicy(CachePolicy.ENABLED)
-            .diskCachePolicy(CachePolicy.ENABLED)
-            .memoryCachePolicy(CachePolicy.ENABLED)
-            .networkCachePolicy(CachePolicy.ENABLED)
-            .networkObserverEnabled(true)
-            .respectCacheHeaders(true)
-            .logger(DebugLogger())
-            .okHttpClient {
-                OkHttpClient.Builder()
-                    .connectTimeout(5, TimeUnit.SECONDS)
-                    //.readTimeout(10, TimeUnit.SECONDS)
-                    .addNetworkInterceptor(CacheHeaderInterceptor)
-                    .retryOnConnectionFailure(false)
-                    .build()
+    override fun newImageLoader(): ImageLoader =
+        with(ImageLoader.Builder(this)) {
+            diskCachePolicy(CachePolicy.ENABLED)
+            memoryCachePolicy(CachePolicy.ENABLED)
+            networkCachePolicy(CachePolicy.ENABLED)
+            networkObserverEnabled(true)
+            logger(DebugLogger())
+            diskCache {
+                with(DiskCache.Builder()) {
+                    maxSizeBytes(1024 * 1024 * 32) // 32 MB
+                    .directory(cacheDir.resolve("dish_image_cache"))
+                    build()
+                }
             }
-            .build()
+            memoryCache {
+                with(MemoryCache.Builder(this@App)) {
+                    weakReferencesEnabled(true)
+                    build()
+                }
+            }
+            respectCacheHeaders(true)
+            okHttpClient {
+                with(OkHttpClient.Builder()) {
+                    connectTimeout(5, TimeUnit.SECONDS)
+                    //readTimeout(10, TimeUnit.SECONDS)
+                    addNetworkInterceptor(CacheHeaderInterceptor)
+                    retryOnConnectionFailure(false)
+                    build()
+                }
+            }
+            build()
     }
 }

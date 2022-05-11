@@ -19,10 +19,12 @@
 
 package cz.lastaapps.menza.ui.dests.settings
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
+import coil.imageLoader
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.storage.repo.*
@@ -36,8 +38,8 @@ import kotlin.system.exitProcess
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
+    private val app: Application,
     val sett: SettingsStore,
-    private val imageLoader: ImageLoader,
     private val allergenRepo: AllergenRepo,
     private val locationRepo: LocationRepo,
     private val messagesRepo: MessagesRepo,
@@ -111,7 +113,7 @@ class SettingsViewModel @Inject constructor(
             ).forEach {
                 it.clearData()
             }
-            imageLoader.diskCache?.clear()
+            app.imageLoader.diskCache?.clear()
 
             withContext(Dispatchers.Main) {
                 exitProcess(0)
