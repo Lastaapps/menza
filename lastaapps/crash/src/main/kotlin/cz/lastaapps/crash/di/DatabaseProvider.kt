@@ -17,33 +17,32 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.crash.di
+
+import android.app.Application
+import cz.lastaapps.crash.CrashDatabase
+import cz.lastaapps.crash.db.CrashDatabaseDriver
+import cz.lastaapps.crash.db.createCrashDriver
+import cz.lastaapps.crash.db.createDatabase
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal object DatabaseProvider {
+
+    @Provides
+    @Singleton
+    fun provideCrashDriver(app: Application): CrashDatabaseDriver {
+        return createCrashDriver(app)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCrashDatabase(driver: CrashDatabaseDriver): CrashDatabase {
+        return createDatabase(driver)
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":html-parser",
-)
-include(":lastaapps:crash")

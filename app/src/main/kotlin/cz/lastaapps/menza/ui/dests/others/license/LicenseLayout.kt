@@ -152,7 +152,7 @@ fun LicenseLayoutCompact(
 
         if (selectedLibrary != null) {
             Dialog(onDismissRequest = { onLibrarySelected(null) }) {
-                Surface(shape = MaterialTheme.shapes.large) {
+                Surface(shape = MaterialTheme.shapes.extraLarge) {
                     LibraryDetail(library = selectedLibrary, Modifier.padding(16.dp))
                 }
             }

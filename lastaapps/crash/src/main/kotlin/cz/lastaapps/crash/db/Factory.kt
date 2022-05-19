@@ -17,33 +17,26 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
+package cz.lastaapps.crash.db
+
+import android.content.Context
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.db.SqlDriver
+import crash.Crashes
+import cz.lastaapps.crash.CrashDatabase
+
+internal data class CrashDatabaseDriver(val driver: SqlDriver)
+
+internal fun createCrashDriver(context: Context) =
+    CrashDatabaseDriver(AndroidSqliteDriver(CrashDatabase.Schema, context, "crash.db"))
+
+internal fun createDatabase(driver: CrashDatabaseDriver): CrashDatabase {
+    return CrashDatabase(
+        driver.driver,
+        crashesAdapter = Crashes.Adapter(
+            CrashAdapter.dateAdapter,
+            CrashAdapter.severityAdapter,
+            CrashAdapter.reportedAdapter,
+        )
+    )
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":html-parser",
-)
-include(":lastaapps:crash")

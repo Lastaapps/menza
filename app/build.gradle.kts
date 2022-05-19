@@ -128,17 +128,19 @@ dependencies {
     implementation(project(":storage:db"))
     implementation(project(":storage:repo"))
     implementation(project(":lastaapps:common"))
+    implementation(project(":lastaapps:crash"))
 
     implementation(Libs.SPLASHSCREEN)
     implementation(Libs.MATERIAL)
     implementation(Libs.CORE)
+    implementation(Libs.DATASTORE)
     implementation(Libs.LIFECYCLE)
+    implementation(Libs.STARTUP)
     implementation(Libs.WINDOW_MANAGER)
     implementation(Libs.VECTOR_DRAWABLES)
 
     implementation(Libs.DAGGER_HILT)
     implementation(Libs.HILT_COMMON)
-    implementation(Libs.DATASTORE)
     implementation(Libs.HILT_VIEWMODEL)
     implementation(Libs.HILT_NAVIGATION_COMPOSE)
     kapt(Libs.DAGGER_HILT_COMPILER)
@@ -169,7 +171,6 @@ fun DependencyHandler.initCompose(useMaterial2: Boolean = false, useMaterial3: B
 
     implementation(Libs.ACCOMPANIST_DRAWABLE_PAINTERS)
     implementation(Libs.ACCOMPANIST_FLOW_LAYOUTS)
-    implementation(Libs.ACCOMPANIST_INSETS)
     implementation(Libs.ACCOMPANIST_NAVIGATION_ANIMATION)
     implementation(Libs.ACCOMPANIST_NAVIGATION_MATERIAL)
     implementation(Libs.ACCOMPANIST_PAGER)

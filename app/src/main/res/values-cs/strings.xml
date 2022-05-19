@@ -76,6 +76,21 @@
     <string name="report_add_description">Zde prosím popište váš problém více</string>
     <string name="report_clipboard">Chybové hlášení zkopírováno do schránky</string>
     <string name="report_clipboard_title">Chybové hlášení Menz</string>
+    <string name="crash_do">Shoď se</string>
+    <string name="crash_none_title">Zatím nedošlo k pádu</string>
+    <string name="crash_none_subtitle">Zatím</string>
+    <string name="crash_none_subsubtitle">Ale nebojte, to přijde</string>
+    <string name="crash_title">Pády aplikace</string>
+    <string name="crash_subtitle">Prosím, nahlašte je</string>
+    <string name="crash_message_unknown">Neznámá</string>
+    <string name="crash_date_title">Datum</string>
+    <string name="crash_severity_title">Typ</string>
+    <string name="crash_severity_crash">Pád</string>
+    <string name="crash_severity_internal">Vnitřní chyba</string>
+    <string name="crash_status_title">Status</string>
+    <string name="crash_status_unreported">Nenahlášeno</string>
+    <string name="crash_status_dismissed">Skryto</string>
+    <string name="crash_status_reported">Nahlášeno, děkujeme</string>
     <string name="settings_title">Nastavení</string>
     <string name="settings_switch_system_theme">Použít systémový dynamický vzhled</string>
     <string name="settings_switch_price">Zobrazit zlevněné studentské ceny</string>
@@ -90,6 +105,7 @@
     </string>
     <string name="settings_button_reload">Kompletní přenačtení dat</string>
     <string name="settings_button_report">Nahlásit chybu</string>
+    <string name="settings_button_crashes">Zobrazit pády aplikace</string>
     <string name="settings_init_menza_ask">Vždy se zeptat</string>
     <string name="settings_init_menza_remember">Zapamatovat si poslední</string>
     <string name="settings_init_menza_specific">Vybrat jednu</string>

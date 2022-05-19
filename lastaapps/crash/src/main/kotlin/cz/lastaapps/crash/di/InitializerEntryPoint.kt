@@ -17,33 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.crash.di
+
+import android.content.Context
+import cz.lastaapps.crash.StartInit
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+internal interface InitializerEntryPoint {
+
+    fun inject(initializer: StartInit)
+
+    companion object {
+        fun resolve(context: Context): InitializerEntryPoint {
+            val appContext = context.applicationContext ?: throw IllegalStateException()
+
+            return EntryPointAccessors.fromApplication(
+                appContext, InitializerEntryPoint::class.java
+            )
+        }
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":html-parser",
-)
-include(":lastaapps:crash")

@@ -38,11 +38,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.dests.others.AboutUi
 import cz.lastaapps.menza.ui.dests.others.ReportDialog
+import cz.lastaapps.menza.ui.dests.others.crashes.CrashesDialog
+import cz.lastaapps.menza.ui.dests.others.crashes.CrashesViewModel
 import cz.lastaapps.menza.ui.dests.others.sendReport
 import cz.lastaapps.menza.ui.dests.settings.modules.DarkThemeSettings
 import cz.lastaapps.menza.ui.dests.settings.modules.FullReloadDialog
@@ -230,6 +233,8 @@ private fun Buttons(
 
         ReportButton(Modifier.fillMaxWidth())
 
+        CrashesButton(Modifier.fillMaxWidth())
+
         FullDataReload(viewModel = viewModel, Modifier.fillMaxWidth())
     }
 }
@@ -259,6 +264,18 @@ private fun ReportButton(modifier: Modifier = Modifier) {
     ReportDialog(shown, { shown = false }) {
         sendReport(context, it)
         shown = false
+    }
+}
+
+@Composable
+fun CrashesButton(modifier: Modifier = Modifier, viewModel: CrashesViewModel = hiltViewModel()) {
+    var dialogShown by remember { mutableStateOf(false) }
+
+    if (dialogShown) {
+        CrashesDialog(viewModel, onDismissRequest = { dialogShown = false })
+    }
+    Button(onClick = { dialogShown = true }, modifier) {
+        IconAndText(Icons.Default.ReceiptLong, stringResource(R.string.settings_button_crashes))
     }
 }
 

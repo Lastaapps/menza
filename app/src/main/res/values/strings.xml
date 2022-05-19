@@ -86,6 +86,22 @@
     <string name="report_clipboard">Report text copied to clipboard</string>
     <string name="report_clipboard_title">Menza problem report</string>
 
+    <string name="crash_do">Do a crash</string>
+    <string name="crash_none_title">No app crashes</string>
+    <string name="crash_none_subtitle">For now</string>
+    <string name="crash_none_subsubtitle">But more will come!</string>
+    <string name="crash_title">App crashes</string>
+    <string name="crash_subtitle">Please report them</string>
+    <string name="crash_message_unknown">Unknown</string>
+    <string name="crash_date_title">Date</string>
+    <string name="crash_severity_title">Severity</string>
+    <string name="crash_severity_crash">Crash</string>
+    <string name="crash_severity_internal">Internal error</string>
+    <string name="crash_status_title">Status</string>
+    <string name="crash_status_unreported">Unreported</string>
+    <string name="crash_status_dismissed">Dismissed</string>
+    <string name="crash_status_reported">Reported, thanks</string>
+
     <string name="settings_title">Settings</string>
     <string name="settings_switch_system_theme">Use system dynamic theme</string>
     <string name="settings_switch_price">Show discounted student prices</string>
@@ -100,6 +116,7 @@
     </string>
     <string name="settings_button_reload">Full cache refresh</string>
     <string name="settings_button_report">Report an error</string>
+    <string name="settings_button_crashes">Show app crashes</string>
     <string name="settings_init_menza_ask">Always ask</string>
     <string name="settings_init_menza_remember">Remember latest</string>
     <string name="settings_init_menza_specific">Choose one</string>

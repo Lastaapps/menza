@@ -1,0 +1,29 @@
+import cz.lastaapps.crash.entity.ErrorSeverity;
+import cz.lastaapps.crash.entity.ReportState;
+import java.time.ZonedDateTime;
+
+CREATE TABLE crashes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT AS ZonedDateTime NOT NULL,
+    severity INTEGER AS ErrorSeverity NOT NULL,
+    message TEXT,
+    trace TEXT NOT NULL,
+    reported INTEGER AS ReportState NOT NULL
+);
+
+saveCrash:
+    INSERT INTO crashes
+    (date, severity, message, trace, reported)
+    VALUES
+    (:date, :severity, :message, :trace, :reported);
+
+updateReported:
+    UPDATE crashes SET reported = :reported WHERE id = :id;
+
+getCrashes:
+    SELECT * FROM crashes
+    ORDER BY date DESC;
+
+hasUnreported:
+    SELECT count(*) FROM crashes
+    WHERE reported = 0;

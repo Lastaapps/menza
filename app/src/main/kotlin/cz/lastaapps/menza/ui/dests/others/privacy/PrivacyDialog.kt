@@ -53,7 +53,7 @@ fun PrivacyDialogContent(
     showAccept: Boolean,
     onAccept: () -> Unit,
 ) {
-    Surface(shape = MaterialTheme.shapes.large) {
+    Surface(shape = MaterialTheme.shapes.extraLarge) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),

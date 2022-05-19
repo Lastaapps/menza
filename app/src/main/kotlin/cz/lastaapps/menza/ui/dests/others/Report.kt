@@ -42,7 +42,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cz.lastaapps.common.Communication
 import cz.lastaapps.common.R
+import cz.lastaapps.crash.entity.Crash
+import cz.lastaapps.crash.entity.ErrorSeverity
 import cz.lastaapps.menza.BuildConfig
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -61,7 +64,7 @@ fun ReportDialog(
 ) {
     if (shown) {
         Dialog(onDismissRequest = onDismissRequest) {
-            Surface {
+            Surface(shape = MaterialTheme.shapes.extraLarge) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -150,9 +153,35 @@ fun sendReport(context: Context, mode: ReportMode, throwable: Throwable? = null)
         |
         |${getPhoneInfo(context)}
         |
+        |"Internal app problem"
+        |${LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)}
+        |${throwable?.message ?: "Unknown error message"}
         |${throwable?.stackTraceToString() ?: ""}
     """.trimMargin()
+    doSend(context, mode, text)
+}
 
+fun sendReport(context: Context, mode: ReportMode, crash: Crash) {
+    val text = """
+        |${context.getString(cz.lastaapps.menza.R.string.report_add_description)}
+        |
+        |
+        |${getPhoneInfo(context)}
+        |
+        |${
+        when (crash.severity) {
+            ErrorSeverity.CRASH -> "App crashed"
+            ErrorSeverity.HANDLED -> "Internal app problem"
+        }
+    }
+        |${crash.date.format(DateTimeFormatter.ISO_DATE_TIME)}
+        |${crash.message}
+        |${crash.trace}
+    """.trimMargin()
+    doSend(context, mode, text)
+}
+
+private fun doSend(context: Context, mode: ReportMode, text: String) {
     copyToClipboard(context, text)
 
     when (mode) {

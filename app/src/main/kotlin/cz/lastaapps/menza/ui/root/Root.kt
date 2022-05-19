@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.dialog
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -52,7 +51,6 @@ import cz.lastaapps.menza.ui.layout.main.WithDrawerScrollProvider
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.theme.AppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppRoot(
     activity: Activity,
@@ -99,10 +97,8 @@ fun ApplyLocalProviders(
     CompositionLocalProvider(LocalActivityViewModelOwner provides viewModelStoreOwner) {
         WithLocalWindowSizes(activity) {
             WithFoldingFeature(activity) {
-                ProvideWindowInsets {
-                    WithConnectivity {
-                        content()
-                    }
+                WithConnectivity {
+                    content()
                 }
             }
         }
@@ -117,7 +113,6 @@ private fun AppContent(viewModel: MenzaViewModel) {
     val menzaId by viewModel.selectedMenza.collectAsState()
     val onMenzaSelected: (MenzaId?) -> Unit = { viewModel.selectMenza(it) }
 
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val drawableScroll = rememberScrollState()
     val navHostState = rememberAnimatedNavController()

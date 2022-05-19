@@ -40,7 +40,7 @@ fun FullReloadDialog(
 ) {
     if (shown)
         Dialog(onDismissRequest = onDismissRequest) {
-            Surface {
+            Surface(shape = MaterialTheme.shapes.extraLarge) {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,

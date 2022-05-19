@@ -44,7 +44,7 @@ fun LibraryList(
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(libraries) { library ->
+            items(libraries, key = { it.artifactId }) { library ->
                 LicenseItem(library, Modifier.clickable { onLibrarySelected(library) })
             }
             item {

@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/html-parser" />
             <option value="$PROJECT_DIR$/lastaapps" />
             <option value="$PROJECT_DIR$/lastaapps/common" />
+            <option value="$PROJECT_DIR$/lastaapps/crash" />
             <option value="$PROJECT_DIR$/scraping" />
             <option value="$PROJECT_DIR$/storage" />
             <option value="$PROJECT_DIR$/storage/db" />

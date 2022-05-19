@@ -17,33 +17,33 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.crash
+
+import android.content.Context
+import androidx.annotation.Keep
+import androidx.startup.Initializer
+import cz.lastaapps.crash.di.HiltInitializer
+import cz.lastaapps.crash.di.InitializerEntryPoint
+import org.lighthousegames.logging.logging
+import javax.inject.Inject
+
+@Keep
+internal class StartInit : Initializer<Unit> {
+
+    companion object {
+        private val log = logging()
     }
-}
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
+    @Inject
+    lateinit var database: CrashDatabase
+
+    override fun create(context: Context) {
+        log.i { "Initializing crash storage" }
+        InitializerEntryPoint.resolve(context).inject(this)
+        Catcher.register(database)
     }
+
+    override fun dependencies(): List<Class<out Initializer<*>>> = listOf(
+        HiltInitializer::class.java,
+    )
 }
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":html-parser",
-)
-include(":lastaapps:crash")
