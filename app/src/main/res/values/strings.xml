@@ -147,6 +147,26 @@
     <string name="panel_crash_unknown">Unknown</string>
     <string name="panel_crash_dismiss">Dismiss</string>
     <string name="panel_crash_report">Report</string>
+    <string-array name="panel_april_items">
+        <item>Are you hungry again?</item>
+        <item>Sure I am</item>
+        <item>You know you will be fat then</item>
+        <item>Sure I do…</item>
+        <item>Why are you doing it?</item>
+        <item>I don\'t know, I love it I guess</item>
+        <item>Do you want to die in your 30\'s?</item>
+        <item>No, please, no</item>
+        <item>Well bad for you</item>
+        <item>Go away</item>
+        <item>Only if you promise that you wouldn\'t eat anymore</item>
+        <item>I do, I promise</item>
+        <item>Right, good for you</item>
+        <item>Totally agree</item>
+        <item>And now, image all the foods you can\'t eat</item>
+        <item>They all smell amazing</item>
+        <item>Just perfect</item>
+        <item>Totally agree</item>
+    </string-array>
 
     <string name="today_no_dish">No dish selected</string>
     <string name="today_info_location">Issue location</string>

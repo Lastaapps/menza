@@ -46,11 +46,13 @@ fun Panels(
     Box(modifier.animateContentSize()) {
         val showPrice = priceTypeUnspecifiedState(settingsViewModel)
         val showCrash = crashReportState(crashesViewModel)
+        val showAprils = aprilFoolsState()
 
-        val items = remember(showPrice) {
+        val items = remember(showPrice, showCrash, showAprils) {
             listOf(
                 PanelItem(showPrice) { PriceTypeUnspecified(settingsViewModel, it) },
                 PanelItem(showCrash) { CrashReport(crashesViewModel, it) },
+                PanelItem(showAprils) { AprilFools(it) },
             )
         }
 

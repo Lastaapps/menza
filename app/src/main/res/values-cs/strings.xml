@@ -134,6 +134,26 @@
     <string name="panel_crash_unknown">Unknown</string>
     <string name="panel_crash_dismiss">Zavžít</string>
     <string name="panel_crash_report">Nahlásit</string>
+    <string-array name="panel_april_items">
+        <item>To už chceš zase žerát?</item>
+        <item>Už to tak asi bude</item>
+        <item>Ale víš přece, že pak budeš tlustý prase?</item>
+        <item>No, vim no…</item>
+        <item>Tak proč si to děláš?</item>
+        <item>Nevim, asi to prostě miluju</item>
+        <item>No, tak příjemné umírání v třiceti</item>
+        <item>Ani o tom nemluv</item>
+        <item>Je to na prd, viď</item>
+        <item>Hele, odprejskni už</item>
+        <item>To určitě, jen když slíbíš, že už nikdy nebudeš jíst</item>
+        <item>No jo no, slibuji</item>
+        <item>Výborně, rozhodl ses správně</item>
+        <item>Taky si vlastně myslím</item>
+        <item>A teď si představ všechna tvá oblíbená jídla</item>
+        <item>Hmm, voněj tak krásně</item>
+        <item>Prostě nádhera</item>
+        <item>Nedá se nesouhlasit</item>
+    </string-array>
     <string name="today_no_dish">Není vybráno žádné jídlo</string>
     <string name="today_info_location">Výdejní místo</string>
     <string name="today_info_window">Očekávané číslo okénka</string>

@@ -121,8 +121,11 @@ fun TodayDishList(
                 Crossfade(targetState = data) { currentData ->
                     Surface(shape = MaterialTheme.shapes.large) {
                         DishContent(
-                            menzaId, currentData, onDishSelected, priceType,
-                            downloadOnMetered, scroll, Modifier.fillMaxSize(),
+                            menzaId, currentData, onDishSelected,
+                            priceType, downloadOnMetered, scroll,
+                            Modifier
+                                .padding(top = 4.dp) // so text is not cut off
+                                .fillMaxSize(),
                         )
                     }
                 }

@@ -22,6 +22,8 @@ package cz.lastaapps.menza.ui.dests.panels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,7 +46,10 @@ fun crashReportState(crashesViewModel: CrashesViewModel): State<Boolean> {
 fun CrashReport(crashesViewModel: CrashesViewModel, modifier: Modifier = Modifier) {
     val unreported = crashesViewModel.unreported.collectAsState().value.firstOrNull() ?: return
 
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier.verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         Text(
             stringResource(R.string.panel_crash_title),
             style = MaterialTheme.typography.titleLarge

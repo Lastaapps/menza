@@ -51,7 +51,7 @@ class CrashesViewModel @Inject constructor(
     val hasErrors: StateFlow<Boolean> get() = mHasErrors
     private val mHasErrors = MutableStateFlow(false)
 
-    val hasUnreported: StateFlow<Boolean> get() = mHasErrors
+    val hasUnreported: StateFlow<Boolean> get() = mHasUnreported
     private val mHasUnreported = MutableStateFlow(false)
 
     fun makeReported(id: Long, state: ReportState = ReportState.REPORTED) {
