@@ -45,6 +45,9 @@ class CrashesViewModel @Inject constructor(
     val errors: StateFlow<List<Pair<Long, Crash>>> get() = mErrors
     private val mErrors = MutableStateFlow<List<Pair<Long, Crash>>>(emptyList())
 
+    val unreported: StateFlow<List<Pair<Long, Crash>>> get() = mUnreported
+    private val mUnreported = MutableStateFlow<List<Pair<Long, Crash>>>(emptyList())
+
     val hasErrors: StateFlow<Boolean> get() = mHasErrors
     private val mHasErrors = MutableStateFlow(false)
 
@@ -64,6 +67,13 @@ class CrashesViewModel @Inject constructor(
             }.asFlow().mapToList(coroutineContext).collectLatest {
                 mErrors.emit(it)
                 mHasErrors.emit(it.isNotEmpty())
+            }
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            database.crashQueries.getUnreported { id: Long, date: ZonedDateTime, severity: ErrorSeverity, message: String?, trace: String, reported: ReportState ->
+                id to Crash(date, severity, message, trace, reported)
+            }.asFlow().mapToList(coroutineContext).collectLatest {
+                mUnreported.emit(it)
             }
         }
         viewModelScope.launch(Dispatchers.IO) {

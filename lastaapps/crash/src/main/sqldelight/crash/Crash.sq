@@ -10,6 +10,7 @@ CREATE TABLE crashes (
     trace TEXT NOT NULL,
     reported INTEGER AS ReportState NOT NULL
 );
+CREATE INDEX crashes_date ON crashes(date);
 
 saveCrash:
     INSERT INTO crashes
@@ -22,6 +23,11 @@ updateReported:
 
 getCrashes:
     SELECT * FROM crashes
+    ORDER BY date DESC;
+
+getUnreported:
+    SELECT * FROM crashes
+    WHERE reported = 0
     ORDER BY date DESC;
 
 hasUnreported:

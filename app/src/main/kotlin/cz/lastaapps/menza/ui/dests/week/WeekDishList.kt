@@ -146,7 +146,7 @@ private fun NoItems(modifier: Modifier, menzaId: MenzaId) {
         // show web button after 3 seconds
         var visible by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            delay(2000)
+            delay(3000)
             visible = true
         }
         AnimatedVisibility(visible) {

@@ -38,7 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.navigation.Dest
@@ -54,6 +53,7 @@ import cz.lastaapps.menza.ui.dests.settings.store.PriceType
 import cz.lastaapps.menza.ui.dests.settings.store.imagesOnMetered
 import cz.lastaapps.menza.ui.dests.settings.store.priceType
 import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
+import cz.lastaapps.menza.ui.hiltActivityViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.theme.isDynamicThemeSupported
 
@@ -268,7 +268,10 @@ private fun ReportButton(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CrashesButton(modifier: Modifier = Modifier, viewModel: CrashesViewModel = hiltViewModel()) {
+fun CrashesButton(
+    modifier: Modifier = Modifier,
+    viewModel: CrashesViewModel = hiltActivityViewModel()
+) {
     var dialogShown by remember { mutableStateOf(false) }
 
     if (dialogShown) {

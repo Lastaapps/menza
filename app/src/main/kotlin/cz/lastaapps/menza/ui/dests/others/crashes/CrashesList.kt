@@ -68,7 +68,7 @@ fun CrashesList(
         if (crashes.isEmpty()) {
             NoContent()
         } else {
-            var selectedItem by remember { mutableStateOf<Crash?>(null) }
+            var selectedItem by remember { mutableStateOf<Pair<Long, Crash>?>(null) }
 
             val context = LocalContext.current
             ReportDialog(
@@ -76,14 +76,14 @@ fun CrashesList(
                 onDismissRequest = { selectedItem = null },
                 onModeSelected = { mode ->
                     selectedItem?.let { crash ->
-                        sendReport(context, mode, crash)
+                        viewModel.makeReported(crash.first)
+                        sendReport(context, mode, crash.second)
                     }
                 }
             )
 
             Content(crashes) {
-                viewModel.makeReported(it.first)
-                selectedItem = it.second
+                selectedItem = it
             }
         }
     }
@@ -126,26 +126,32 @@ private fun CrashItem(crash: Crash, onClick: () -> Unit) {
             with(crash) {
                 Text(
                     message ?: stringResource(R.string.crash_message_unknown),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 Column {
                     Text(
-                        stringResource(R.string.crash_date_title) + ": " + crash.date.format(
-                            DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                        stringResource(
+                            R.string.crash_date_title, crash.date.format(
+                                DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                            )
                         )
                     )
                     Text(
-                        stringResource(R.string.crash_severity_title) + ": " + when (crash.severity) {
-                            ErrorSeverity.CRASH -> stringResource(R.string.crash_severity_crash)
-                            ErrorSeverity.HANDLED -> stringResource(R.string.crash_severity_internal)
-                        }
+                        stringResource(
+                            R.string.crash_severity_title, when (crash.severity) {
+                                ErrorSeverity.CRASH -> stringResource(R.string.crash_severity_crash)
+                                ErrorSeverity.HANDLED -> stringResource(R.string.crash_severity_internal)
+                            }
+                        )
                     )
                     Text(
-                        stringResource(R.string.crash_status_title) + ": " + when (crash.reported) {
-                            ReportState.UNREPORTED -> stringResource(R.string.crash_status_unreported)
-                            ReportState.DISMISSED -> stringResource(R.string.crash_status_dismissed)
-                            ReportState.REPORTED -> stringResource(R.string.crash_status_reported)
-                        }
+                        stringResource(
+                            R.string.crash_status_title, when (crash.reported) {
+                                ReportState.UNREPORTED -> stringResource(R.string.crash_status_unreported)
+                                ReportState.DISMISSED -> stringResource(R.string.crash_status_dismissed)
+                                ReportState.REPORTED -> stringResource(R.string.crash_status_reported)
+                            }
+                        )
                     )
                 }
                 Card {

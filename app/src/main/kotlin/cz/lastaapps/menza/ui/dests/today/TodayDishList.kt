@@ -64,6 +64,7 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.LocalConnectivityProvider
 import cz.lastaapps.menza.ui.LocalSnackbarProvider
+import cz.lastaapps.menza.ui.dests.panels.Panels
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.PriceType
 import cz.lastaapps.menza.ui.dests.settings.store.getPrice
@@ -84,45 +85,50 @@ fun TodayDishList(
     scroll: LazyListState = rememberLazyListState(),
 ) {
     val priceType by settingsViewModel.sett.priceType.collectAsState()
-    val onPriceType = { type: PriceType -> settingsViewModel.setPriceType(type) }
     val downloadOnMetered by settingsViewModel.sett.imagesOnMetered.collectAsState()
 
-    if (menzaId == null) {
-        MenzaNotSelected(navController, modifier)
-    } else {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        if (menzaId == null) {
+            MenzaNotSelected(navController, Modifier.fillMaxSize())
+        } else {
 
-        //show error snackBars
-        val snackbarHostState = LocalSnackbarProvider.current
-        CollectErrors(snackbarHostState, viewModel.errors)
+            //show error snackBars
+            val snackbarHostState = LocalSnackbarProvider.current
+            CollectErrors(snackbarHostState, viewModel.errors)
 
-        //getting locale for food sorting
-        val config = LocalContext.current.resources.configuration
-        val locale = remember(config) {
-            @Suppress("DEPRECATION")
-            if (Build.VERSION_CODES.N >= Build.VERSION.SDK_INT)
-                config.locale else config.locales[0]
-        }
+            //getting locale for food sorting
+            val config = LocalContext.current.resources.configuration
+            val locale = remember(config) {
+                @Suppress("DEPRECATION")
+                if (Build.VERSION_CODES.N >= Build.VERSION.SDK_INT)
+                    config.locale else config.locales[0]
+            }
 
-        //getting data
-        val data by remember(menzaId) { viewModel.getData(menzaId, locale) }.collectAsState()
+            //getting data
+            val data by remember(menzaId) { viewModel.getData(menzaId, locale) }.collectAsState()
 
-        val isRefreshing by remember(menzaId) {
-            viewModel.isRefreshing(menzaId)
-        }.collectAsState()
+            val isRefreshing by remember(menzaId) {
+                viewModel.isRefreshing(menzaId)
+            }.collectAsState()
 
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing),
-            onRefresh = { viewModel.refresh(menzaId, locale) },
-            modifier = modifier,
-        ) {
-            Crossfade(targetState = data) { currentData ->
-                DishContent(
-                    menzaId, currentData, onDishSelected,
-                    priceType, onPriceType,
-                    downloadOnMetered, scroll, Modifier.fillMaxSize(),
-                )
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing),
+                onRefresh = { viewModel.refresh(menzaId, locale) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            ) {
+                Crossfade(targetState = data) { currentData ->
+                    Surface(shape = MaterialTheme.shapes.large) {
+                        DishContent(
+                            menzaId, currentData, onDishSelected, priceType,
+                            downloadOnMetered, scroll, Modifier.fillMaxSize(),
+                        )
+                    }
+                }
             }
         }
+        Panels(Modifier.fillMaxWidth())
     }
 }
 
@@ -133,7 +139,6 @@ private fun DishContent(
     data: List<DishTypeList>,
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
-    onPriceType: (PriceType) -> Unit,
     downloadOnMetered: Boolean,
     scroll: LazyListState,
     modifier: Modifier = Modifier
@@ -168,7 +173,6 @@ private fun DishContent(
             }
             return@LazyColumn
         }
-        PriceTypeUnspecified(priceType, onPriceType, Modifier.fillMaxWidth())
     }
 }
 
@@ -185,81 +189,12 @@ private fun NoItems(modifier: Modifier, menzaId: MenzaId) {
         // show web button after 3 seconds
         var visible by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            delay(2000)
+            delay(3000)
             visible = true
         }
         AnimatedVisibility(visible) {
             TextButton(onClick = { uriHandler.openUri("https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}") }) {
                 Text(stringResource(R.string.today_list_web))
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PriceTypeUnspecified(
-    priceType: PriceType,
-    onPriceType: (PriceType) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    if (priceType == PriceType.Unset) {
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            ),
-            shape = MaterialTheme.shapes.large,
-            modifier = modifier,
-        ) {
-            Column(
-                Modifier.padding(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                Text(
-                    stringResource(R.string.today_price_title),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge,
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        8.dp,
-                        Alignment.CenterHorizontally
-                    ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.height(IntrinsicSize.Max)
-                ) {
-                    Button(
-                        onClick = { onPriceType(PriceType.Discounted) },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiary,
-                            contentColor = MaterialTheme.colorScheme.onTertiary,
-                        ),
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                    ) {
-                        Text(
-                            stringResource(R.string.today_price_discounted),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Button(
-                        onClick = { onPriceType(PriceType.Normal) },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiary,
-                            contentColor = MaterialTheme.colorScheme.onTertiary,
-                        ),
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                    ) {
-                        Text(
-                            stringResource(R.string.today_price_normal),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
             }
         }
     }

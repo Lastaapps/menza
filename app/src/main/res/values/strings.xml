@@ -93,11 +93,11 @@
     <string name="crash_title">App crashes</string>
     <string name="crash_subtitle">Please report them</string>
     <string name="crash_message_unknown">Unknown</string>
-    <string name="crash_date_title">Date</string>
-    <string name="crash_severity_title">Severity</string>
+    <string name="crash_date_title">Date: %s</string>
+    <string name="crash_severity_title">Severity: %s</string>
     <string name="crash_severity_crash">Crash</string>
     <string name="crash_severity_internal">Internal error</string>
-    <string name="crash_status_title">Status</string>
+    <string name="crash_status_title">Status: %s</string>
     <string name="crash_status_unreported">Unreported</string>
     <string name="crash_status_dismissed">Dismissed</string>
     <string name="crash_status_reported">Reported, thanks</string>
@@ -139,6 +139,15 @@
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_system">System</string>
 
+    <string name="panel_price_title">Which prices do you want to see?</string>
+    <string name="panel_price_discounted">Discounted</string>
+    <string name="panel_price_normal">Normal full</string>
+    <string name="panel_crash_title">App crashed</string>
+    <string name="panel_crash_subtitle">What happened: %s</string>
+    <string name="panel_crash_unknown">Unknown</string>
+    <string name="panel_crash_dismiss">Dismiss</string>
+    <string name="panel_crash_report">Report</string>
+
     <string name="today_no_dish">No dish selected</string>
     <string name="today_info_location">Issue location</string>
     <string name="today_info_window">Expected window number</string>
@@ -149,9 +158,6 @@
     <string name="today_list_web">Check website</string>
     <string name="today_list_image_load_failed">Failed to load the image</string>
     <string name="today_list_image_metered">The image not downloaded, metered network</string>
-    <string name="today_price_title">Which prices do you want to see?</string>
-    <string name="today_price_discounted">Discounted</string>
-    <string name="today_price_normal">Normal full</string>
 
     <string name="week_list_none">No data available</string>
     <string name="week_list_web">Check website</string>
