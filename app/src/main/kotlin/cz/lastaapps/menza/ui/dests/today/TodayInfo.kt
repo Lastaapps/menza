@@ -34,11 +34,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
@@ -47,6 +47,7 @@ import com.google.accompanist.placeholder.placeholder
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.day.IssueLocation
 import cz.lastaapps.menza.R
+import kotlin.math.max
 
 @Composable
 fun NoDishSelected(modifier: Modifier = Modifier) {
@@ -147,20 +148,40 @@ private fun AllergenList(
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 data.forEach {
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
                             Surface(
                                 color = MaterialTheme.colorScheme.tertiary,
                                 shape = CircleShape,
                             ) {
-                                Box(
-                                    modifier = Modifier.size(24.dp),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Text(
-                                        "${it.id.id}",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        modifier = Modifier.padding(2.dp),
-                                    )
+                                /*val density = LocalDensity.current
+                                val minSize = remember(density) {
+                                    with(density) { 24.dp.roundToPx() }
+                                }*/
+                                Layout(
+                                    content = {
+                                        Text(
+                                            "${it.id.id}",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            modifier = Modifier.padding(
+                                                start = 6.dp, end = 6.dp,
+                                                top = 2.dp, bottom = 2.dp
+                                            ),
+                                        )
+                                    }
+                                ) { measurable, constrains ->
+                                    val placeable = measurable[0].measure(constrains)
+                                    //val h = max(placeable.height, minSize)
+                                    val h = placeable.height
+                                    val w = max(placeable.width, h)
+                                    layout(w, h) {
+                                        placeable.place(
+                                            (w - placeable.width) / 2,
+                                            (h - placeable.height) / 2,
+                                        )
+                                    }
                                 }
                             }
                             Text(it.name, style = MaterialTheme.typography.titleMedium)
@@ -173,7 +194,6 @@ private fun AllergenList(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
     Box(modifier.animateContentSize()) {

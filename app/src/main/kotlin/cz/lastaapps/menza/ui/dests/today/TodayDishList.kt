@@ -48,7 +48,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
@@ -320,7 +319,6 @@ private fun DishBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Mod
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier = Modifier) {
     Box(modifier) {

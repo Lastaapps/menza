@@ -119,7 +119,9 @@ private fun WeekDishContent(
                     }
                 }
             }
-            items(dayDishList.dishes, key = { it.first.type }) { courseAndDish ->
+            items(
+                dayDishList.dishes,
+                key = { "" + dayDishList.date.dayOfWeek.value + it.first.type }) { courseAndDish ->
 
                 CourseHeader(courseType = courseAndDish.first)
                 Spacer(Modifier.height(4.dp))

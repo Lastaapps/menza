@@ -31,6 +31,7 @@ import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import it.skrape.selects.DocElement
+import kotlin.math.roundToInt
 
 object TodayScraperImpl : TodayScraper {
 
@@ -120,15 +121,15 @@ object TodayScraperImpl : TodayScraper {
         }
     }
 
-    private val moneyRegex = "(\\d+)([,|.]\\d{2})?".toRegex()
+    private val moneyRegex = """(\d+[,|.]\d{2})?""".toRegex()
 
     private fun DocElement.parseMoney(): Int {
         val text = ownText.removeSpaces()
         val money = moneyRegex.find(text)!!.destructured.component1()
-        return money.toInt()
+        return money.replace(',', '.').toDouble().roundToInt()
     }
 
-    private val issuePlaceIdRegex = "v(\\d+)v(\\d+)".toRegex()
+    private val issuePlaceIdRegex = """v(\d+)v(\d+)""".toRegex()
     private fun DocElement.parseIssuePlaces(): List<IssueLocation> {
         val issuePlaces = mutableListOf<IssueLocation>()
         findAllAndCycle("span") {
