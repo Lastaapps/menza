@@ -19,7 +19,6 @@ object Plugins {
     const val SQLDELIGHT = "com.squareup.sqldelight"
     const val MAVEN = "maven-publish"
     const val DAGGER_HILT = "dagger.hilt.android.plugin"
-    const val OSS_LICENSE = "com.google.android.gms.oss-licenses-plugin"
     const val ABOUT_LIBRARIES = "com.mikepenz.aboutlibraries.plugin"
 
     const val PLAY_SERVICES = "com.google.gms.google-services"
