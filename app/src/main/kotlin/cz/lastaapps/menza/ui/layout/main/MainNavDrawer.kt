@@ -19,8 +19,8 @@
 
 package cz.lastaapps.menza.ui.layout.main
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,21 +38,20 @@ fun MenzaModalDrawer(
     onMenzaSelected: (MenzaId) -> Unit,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    scroll: ScrollState = LocalDrawerScroll.current,
     menzaListViewModel: MenzaViewModel,
+    lazyListState: LazyListState = LocalDrawerListState.current,
     content: @Composable () -> Unit,
 ) {
     ModalNavigationDrawer(
         modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
-            DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, scroll)
+            DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, lazyListState)
         },
         content = content,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenzaDismissibleDrawerWithRailLayout(
     modifier: Modifier = Modifier,
@@ -75,8 +74,8 @@ fun MenzaDismissibleDrawer(
     onMenzaSelected: (MenzaId) -> Unit,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    scroll: ScrollState = LocalDrawerScroll.current,
     menzaListViewModel: MenzaViewModel,
+    lazyListState: LazyListState = LocalDrawerListState.current,
     content: @Composable () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -88,7 +87,7 @@ fun MenzaDismissibleDrawer(
             DrawerContent(selectedMenza, {
                 scope.launch { drawerState.close() }
                 onMenzaSelected(it)
-            }, menzaListViewModel, scroll)
+            }, menzaListViewModel, lazyListState)
         },
         content = content,
     )
@@ -102,14 +101,14 @@ fun MenzaPermanentDrawer(
     @Suppress("UNUSED_PARAMETER")
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    scroll: ScrollState = LocalDrawerScroll.current,
     menzaListViewModel: MenzaViewModel,
+    lazyListState: LazyListState = LocalDrawerListState.current,
     content: @Composable () -> Unit,
 ) {
     PermanentNavigationDrawer(
         modifier = modifier,
         drawerContent = {
-            DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, scroll)
+            DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, lazyListState)
         },
         content = content,
     )
@@ -120,7 +119,7 @@ private fun DrawerContent(
     selectedMenza: MenzaId?,
     onMenzaSelected: (MenzaId) -> Unit,
     menzaListViewModel: MenzaViewModel,
-    scroll: ScrollState,
+    lazyListState: LazyListState,
 ) {
     /*Text(
         stringResource(R.string.app_name_long),
@@ -130,8 +129,8 @@ private fun DrawerContent(
     MenzaList(
         selectedMenza = selectedMenza,
         onMenzaSelected = onMenzaSelected,
-        menzaListViewModel = menzaListViewModel,
-        scroll = scroll,
+        menzaViewModel = menzaListViewModel,
+        lazyListState = lazyListState,
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp, bottom = 16.dp, end = 16.dp),

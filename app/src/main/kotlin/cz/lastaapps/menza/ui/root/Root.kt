@@ -21,7 +21,7 @@ package cz.lastaapps.menza.ui.root
 
 import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -47,7 +47,7 @@ import cz.lastaapps.menza.ui.dests.settings.store.resolveShouldUseDark
 import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
 import cz.lastaapps.menza.ui.dests.today.TodayDest
 import cz.lastaapps.menza.ui.dests.week.WeekLayout
-import cz.lastaapps.menza.ui.layout.main.WithDrawerScrollProvider
+import cz.lastaapps.menza.ui.layout.main.WithDrawerListStateProvider
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.theme.AppTheme
 
@@ -114,7 +114,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
     val onMenzaSelected: (MenzaId?) -> Unit = { viewModel.selectMenza(it) }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val drawableScroll = rememberScrollState()
+    val drawableLazyListState = rememberLazyListState()
     val navHostState = rememberAnimatedNavController()
 
     //drawer should auto open, if there is no menza selected and user hasn't touched the drawer
@@ -122,7 +122,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
         rememberDrawerState(if (menzaId == null) DrawerValue.Open else DrawerValue.Closed)
 
     WithSnackbarProvider(snackbarHostState = snackbarHostState) {
-        WithDrawerScrollProvider(drawableScroll) {
+        WithDrawerListStateProvider(drawableLazyListState) {
 
             // instead of leaving app, open selection menu
             /*BackHandler(drawerState.currentValue == DrawerValue.Closed) {

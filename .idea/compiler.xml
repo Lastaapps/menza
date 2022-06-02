@@ -3,10 +3,30 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="18">
       <module name="android.buildSrc" target="11" />
+      <module name="Menza.entity.commonMain" target="11" />
+      <module name="Menza.entity.commonTest" target="11" />
+      <module name="Menza.entity.desktopMain" target="11" />
+      <module name="Menza.entity.desktopTest" target="11" />
+      <module name="Menza.html-parser.commonMain" target="11" />
+      <module name="Menza.html-parser.commonTest" target="11" />
+      <module name="Menza.html-parser.desktopMain" target="11" />
+      <module name="Menza.html-parser.desktopTest" target="11" />
+      <module name="Menza.scraping.commonMain" target="11" />
+      <module name="Menza.scraping.commonTest" target="11" />
+      <module name="Menza.scraping.desktopMain" target="11" />
+      <module name="Menza.scraping.desktopTest" target="11" />
       <module name="Menza.storage.commonMain" target="11" />
       <module name="Menza.storage.commonTest" target="11" />
+      <module name="Menza.storage.db.commonMain" target="11" />
+      <module name="Menza.storage.db.commonTest" target="11" />
+      <module name="Menza.storage.db.desktopMain" target="11" />
+      <module name="Menza.storage.db.desktopTest" target="11" />
       <module name="Menza.storage.desktopMain" target="11" />
       <module name="Menza.storage.desktopTest" target="11" />
+      <module name="Menza.storage.repo.commonMain" target="11" />
+      <module name="Menza.storage.repo.commonTest" target="11" />
+      <module name="Menza.storage.repo.desktopMain" target="11" />
+      <module name="Menza.storage.repo.desktopTest" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -19,19 +19,19 @@
 
 package cz.lastaapps.menza.ui.layout.main
 
-import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 
-val LocalDrawerScroll = compositionLocalOf { ScrollState(0) }
+val LocalDrawerListState = compositionLocalOf { LazyListState() }
 
 @Composable
-fun WithDrawerScrollProvider(
-    scroll: ScrollState,
+fun WithDrawerListStateProvider(
+    lazyListState: LazyListState,
     content: @Composable () -> Unit,
 ) {
-    CompositionLocalProvider(LocalDrawerScroll provides scroll) {
+    CompositionLocalProvider(LocalDrawerListState provides lazyListState) {
         content()
     }
 }

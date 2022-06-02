@@ -30,10 +30,7 @@ import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.storage.repo.MenzaRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.lighthousegames.logging.logging
 import javax.inject.Inject
@@ -43,6 +40,7 @@ class MenzaViewModel @Inject constructor(
     private val app: Application,
     private val menzaRepo: MenzaRepo,
     private val sett: SettingsStore,
+    private val menzaOrder: MenzaOrderDataStore,
 ) : ViewModel() {
 
     companion object {
@@ -51,6 +49,7 @@ class MenzaViewModel @Inject constructor(
 
     val isReady = MutableStateFlow(false)
     lateinit var data: StateFlow<List<Menza>>
+    private val orderKey: (Menza) -> String = { "agata_${it.menzaId}" }
 
     fun getForId(id: MenzaId): Menza? = data.value.firstOrNull { it.menzaId == id }
 
@@ -58,7 +57,7 @@ class MenzaViewModel @Inject constructor(
 
         var myData: MutableStateFlow<List<Menza>>? = null
 
-        menzaRepo.getData(this).collectLatest { list ->
+        menzaRepo.getData(this).combineOrder().collectLatest { list ->
             if (myData == null) {
                 myData = MutableStateFlow(list.sortMenzaList()).also { data = it }
 
@@ -78,14 +77,24 @@ class MenzaViewModel @Inject constructor(
         }
     }
 
-    private fun Collection<Menza>.sortMenzaList(): List<Menza> {
+    private fun Flow<List<Menza>>.combineOrder() = channelFlow<Map<Menza, Int>> {
+        collectLatest { list ->
+            menzaOrder.getItemOrder(list, orderKey).simplify().collectLatest {
+                send(it)
+            }
+        }
+    }
+
+    private fun Map<Menza, Int>.sortMenzaList(): List<Menza> {
+
         @Suppress("DEPRECATION")
         val locale = app.applicationContext.resources.configuration.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) it.locales[0] else it.locale
         }
-        return sortedWith { m1, m2 ->
-            m1.shorterName.compareToLocal(m2.shorterName, locale)
-        }
+        return asSequence().map { it.key to it.value }.sortedWith { m1, m2 ->
+            m1.second.compareTo(m2.second).takeIf { it != 0 }
+                ?: m1.first.shorterName.compareToLocal(m2.first.shorterName, locale)
+        }.map { it.first }.toList()
     }
 
     val selectedMenza: StateFlow<MenzaId?>
@@ -97,6 +106,15 @@ class MenzaViewModel @Inject constructor(
         mSelectedMenza.value = menzaId
         viewModelScope.launch {
             menzaId?.let { sett.setLatestMenza(it) }
+        }
+    }
+
+    fun saveNewOrder(newOrder: List<Menza>) {
+        viewModelScope.launch {
+            menzaOrder.setItemOrder(
+                newOrder.mapIndexed { index, menza -> menza to index }.toMap(),
+                orderKey
+            )
         }
     }
 

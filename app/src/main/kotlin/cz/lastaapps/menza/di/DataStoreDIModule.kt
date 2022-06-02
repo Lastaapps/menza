@@ -22,6 +22,7 @@ package cz.lastaapps.menza.di
 import android.app.Application
 import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyStore
 import cz.lastaapps.menza.ui.dests.settings.store.SettingsStore
+import cz.lastaapps.menza.ui.layout.menza.MenzaOrderDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +45,12 @@ object DataStoreDIModule {
     @Singleton
     fun providePrivacyDataStore(app: Application): PrivacyStore {
         return PrivacyStore(app)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMenzaOrderDataStore(app: Application): MenzaOrderDataStore {
+        return MenzaOrderDataStore(app)
     }
 
 }

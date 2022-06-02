@@ -19,18 +19,19 @@
 
 package cz.lastaapps.menza.ui.layout.menza
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.GenericShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
@@ -40,32 +41,50 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.ui.components.draggablelazylist.DraggableLazyColumn
+import cz.lastaapps.menza.ui.components.draggablelazylist.makeDraggableItem
+import cz.lastaapps.menza.ui.components.draggablelazylist.rememberDraggableLazyListState
 import cz.lastaapps.menza.ui.theme.colorForMenza
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MenzaList(
     selectedMenza: MenzaId?,
     onMenzaSelected: (MenzaId) -> Unit,
-    menzaListViewModel: MenzaViewModel,
-    scroll: ScrollState,
+    menzaViewModel: MenzaViewModel,
+    lazyListState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
-    val isReady by menzaListViewModel.isReady.collectAsState()
+    val isReady by menzaViewModel.isReady.collectAsState()
+
     if (isReady) {
-        val menzaList by menzaListViewModel.data.collectAsState()
-        Column(
-            modifier
-                .animateContentSize()
-                .width(IntrinsicSize.Max)
-                .verticalScroll(scroll),
+        val menzaListPermanent by menzaViewModel.data.collectAsState()
+        val menzaList = remember(menzaListPermanent) {
+            mutableStateListOf<Menza>().also { list -> list.addAll(menzaListPermanent) }
+        }
+        val updatableMenzaList = rememberUpdatedState(newValue = menzaList)
+        val state = rememberDraggableLazyListState(lazyListState, onMove = { from, to ->
+            val list = updatableMenzaList.value
+            val tmp = list[from]
+            list[from] = list[to]
+            list[to] = tmp
+        }, onMoveFinished = {
+            menzaViewModel.saveNewOrder(updatableMenzaList.value)
+        })
+
+        DraggableLazyColumn(
+            modifier = modifier,
+            state = state,
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start,
         ) {
-            menzaList.forEach { item ->
+            itemsIndexed(menzaList) { index, item ->
                 MenzaItem(
                     menza = item, selected = item.menzaId == selectedMenza,
                     onClick = onMenzaSelected,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .makeDraggableItem(state, index),
                 )
             }
         }
