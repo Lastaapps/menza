@@ -95,6 +95,7 @@
     <string name="settings_switch_system_theme">Použít systémový dynamický vzhled</string>
     <string name="settings_switch_price">Zobrazit zlevněné studentské ceny</string>
     <string name="settings_switch_metered">Stahovat obrázky na sítích s měřeným objemem dat (každý ~0.7 MB)</string>
+    <string name="settings_image_size_title">Škálování obrázků</string>
     <string name="settings_button_privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="settings_button_about">O aplikaci</string>
     <string name="settings_button_rate">Ohodnoťte nás!</string>

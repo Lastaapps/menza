@@ -48,6 +48,7 @@ import cz.lastaapps.menza.ui.dests.others.crashes.CrashesViewModel
 import cz.lastaapps.menza.ui.dests.others.sendReport
 import cz.lastaapps.menza.ui.dests.settings.modules.DarkThemeSettings
 import cz.lastaapps.menza.ui.dests.settings.modules.FullReloadDialog
+import cz.lastaapps.menza.ui.dests.settings.modules.ImageSizeSetting
 import cz.lastaapps.menza.ui.dests.settings.modules.InitMenzaUI
 import cz.lastaapps.menza.ui.dests.settings.store.PriceType
 import cz.lastaapps.menza.ui.dests.settings.store.imagesOnMetered
@@ -103,6 +104,8 @@ fun SettingsUI(
                 DarkThemeSettings(viewModel, Modifier.fillMaxWidth())
 
                 Switches(viewModel, Modifier.fillMaxWidth())
+
+                ImageSizeSetting(settingsViewModel)
 
                 InitMenzaUI(
                     menzaViewModel = menzaViewModel,

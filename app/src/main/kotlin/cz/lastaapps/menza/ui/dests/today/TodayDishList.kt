@@ -65,10 +65,7 @@ import cz.lastaapps.menza.ui.LocalConnectivityProvider
 import cz.lastaapps.menza.ui.LocalSnackbarProvider
 import cz.lastaapps.menza.ui.dests.panels.Panels
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.dests.settings.store.PriceType
-import cz.lastaapps.menza.ui.dests.settings.store.getPrice
-import cz.lastaapps.menza.ui.dests.settings.store.imagesOnMetered
-import cz.lastaapps.menza.ui.dests.settings.store.priceType
+import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.menza.ui.isMetered
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 import kotlinx.coroutines.delay
@@ -85,6 +82,7 @@ fun TodayDishList(
 ) {
     val priceType by settingsViewModel.sett.priceType.collectAsState()
     val downloadOnMetered by settingsViewModel.sett.imagesOnMetered.collectAsState()
+    val imageSizeRation by settingsViewModel.sett.imageSize.collectAsState()
 
     Column(modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         if (menzaId == null) {
@@ -121,7 +119,7 @@ fun TodayDishList(
                     Surface(shape = MaterialTheme.shapes.large) {
                         DishContent(
                             menzaId, currentData, onDishSelected,
-                            priceType, downloadOnMetered, scroll,
+                            priceType, downloadOnMetered, imageSizeRation, scroll,
                             Modifier
                                 .padding(top = 4.dp) // so text is not cut off
                                 .fillMaxSize(),
@@ -142,6 +140,7 @@ private fun DishContent(
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
+    imageSizeRation: Float,
     scroll: LazyListState,
     modifier: Modifier = Modifier
 ) {
@@ -168,7 +167,7 @@ private fun DishContent(
                 items(dishType.second) { dish ->
                     DishItem(
                         dish, onDishSelected,
-                        priceType, downloadOnMetered,
+                        priceType, downloadOnMetered, imageSizeRation,
                         Modifier.fillMaxWidth(),
                     )
                 }
@@ -214,6 +213,7 @@ private fun DishItem(
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
+    imageSizeRation: Float,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -229,7 +229,7 @@ private fun DishItem(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
 
-            DishImageWithBadge(dish, priceType, downloadOnMetered)
+            DishImageWithBadge(dish, priceType, downloadOnMetered, imageSizeRation)
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 DishNameRow(dish)
                 DishInfoRow(dish)
@@ -291,11 +291,12 @@ private fun DishImageWithBadge(
     dish: Dish,
     priceType: PriceType,
     downloadOnMetered: Boolean,
+    imageSizeRation: Float,
     modifier: Modifier = Modifier
 ) {
     Box(modifier) {
         DishImage(
-            dish = dish, downloadOnMetered,
+            dish = dish, downloadOnMetered, imageSizeRation,
             Modifier
                 .align(Alignment.Center)
                 .padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
@@ -320,9 +321,14 @@ private fun DishBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Mod
 }
 
 @Composable
-private fun DishImage(dish: Dish, downloadOnMetered: Boolean, modifier: Modifier = Modifier) {
+private fun DishImage(
+    dish: Dish,
+    downloadOnMetered: Boolean,
+    imageSizeRation: Float,
+    modifier: Modifier = Modifier,
+) {
     Box(modifier) {
-        val size = 80.dp
+        val size = (96 * imageSizeRation).dp
         val imageModifier = Modifier.size(size)
 
 

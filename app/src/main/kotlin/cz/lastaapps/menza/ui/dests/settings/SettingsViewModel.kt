@@ -22,7 +22,6 @@ package cz.lastaapps.menza.ui.dests.settings
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.imageLoader
 import cz.lastaapps.entity.menza.MenzaId
@@ -93,6 +92,10 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             sett.setImagesOnMetered(enabled)
         }
+    }
+
+    fun setImageSize(ration: Float) {
+        viewModelScope.launch { sett.setImageSize(ration) }
     }
 
     fun setSettingsEverOpened(enabled: Boolean) {
