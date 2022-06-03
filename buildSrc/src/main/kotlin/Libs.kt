@@ -76,8 +76,6 @@ object Libs {
     const val ROOM_KTX = "androidx.room:room-ktx:${Versions.ROOM}"
 
     const val MATERIAL = "com.google.android.material:material:${Versions.GOOGLE_MATERIAL}"
-    const val OSS_LICENSE =
-            "com.google.android.gms:play-services-oss-licenses:${Versions.OSS_LICENSE}"
     const val PLAY_SERVICES = "com.google.android.play:core-ktx:${Versions.PLAY_SERVICES}"
 
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
@@ -108,8 +106,6 @@ object Libs {
             "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.VIEWMODEL_COMPOSE}"
     const val COMPOSE_NAVIGATION = "androidx.navigation:navigation-compose:${Versions.NAVIGATION}"
 
-    const val ACCOMPANIST_INSETS =
-            "com.google.accompanist:accompanist-insets:${Versions.ACCOMPANIST}"
     const val ACCOMPANIST_SYSTEM_UI =
             "com.google.accompanist:accompanist-systemuicontroller:${Versions.ACCOMPANIST}"
     const val ACCOMPANIST_PAGER = "com.google.accompanist:accompanist-pager:${Versions.ACCOMPANIST}"
@@ -148,6 +144,4 @@ object Libs {
     const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"
     const val ABOUT_LIBRARIES_CORE = "com.mikepenz:aboutlibraries-core:${Versions.ABOUT_LIBRARIES}"
     const val ABOUT_LIBRARIES_COMPOSE = "com.mikepenz:aboutlibraries-compose:${Versions.ABOUT_LIBRARIES}"
-
-    const val OSS_LICENSE_ACCESSOR = "com.github.Lastaapps:OssLicenseAccess:${Versions.OSS_LICENSE_ACCESS}"
 }

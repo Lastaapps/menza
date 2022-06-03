@@ -40,16 +40,15 @@ object App {
     const val MIN_SDK = 21
 
     //latest version, may be preview
-    const val COMPILE_SDK = 31
-    const val BUILD_TOOLS = "31.0.0"
-    const val TARGET_SDK = 31
+    const val COMPILE_SDK = 32
+    const val BUILD_TOOLS = "32.1.0-rc1"
+    const val TARGET_SDK = 32
 //    const val COMPILE_SDK = "android-S"
 //    const val BUILD_TOOLS = "31.0.0 rc5"
 //    const val TARGET_SDK = "S"
 
     //legacy version, last released android version
-    const val LEGACY_COMPILE_SDK = 31
-    const val LEGACY_BUILD_TOOLS = "31.0.0"
-    const val LEGACY_TARGET_SDK = 31
-
+    const val LEGACY_COMPILE_SDK = 32
+    const val LEGACY_BUILD_TOOLS = "32.1.0-rc1"
+    const val LEGACY_TARGET_SDK = 32
 }

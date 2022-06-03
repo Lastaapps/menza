@@ -55,9 +55,6 @@ fun MainTopBar(
         ?: stringResource(R.string.ui_top_bar_no_menza)
 
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
-    val scrollBehavior = remember(decayAnimationSpec) {
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(decayAnimationSpec)
-    }
 
     var mainPopupExpanded by rememberSaveable { mutableStateOf(false) }
 
@@ -115,7 +112,6 @@ fun MainTopBar(
                 }
             }
         },
-        scrollBehavior = scrollBehavior
     )
 }
 

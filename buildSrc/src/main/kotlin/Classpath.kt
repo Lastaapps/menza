@@ -19,7 +19,6 @@
 
 object Classpath {
 
-    const val OSS_LICENSE = "com.google.android.gms:oss-licenses-plugin:${Versions.OSS_PLUGIN}"
     const val DAGGER_HILT = "com.google.dagger:hilt-android-gradle-plugin:${Versions.DAGGER_HILT}"
     const val ABOUT_LIBRARIES = "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:${Versions.ABOUT_LIBRARIES}"
 
