@@ -33,6 +33,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.menza.ui.dests.others.crashes.CrashesViewModel
+import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewPanel
+import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewViewModel
+import cz.lastaapps.menza.ui.dests.others.whatsnew.whatsNewPanelState
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.hiltActivityViewModel
 
@@ -42,16 +45,19 @@ fun Panels(
     modifier: Modifier = Modifier,
     settingsViewModel: SettingsViewModel = hiltActivityViewModel(),
     crashesViewModel: CrashesViewModel = hiltActivityViewModel(),
+    whatsNewViewModel: WhatsNewViewModel = hiltActivityViewModel(),
 ) {
     Box(modifier.animateContentSize()) {
         val showPrice = priceTypeUnspecifiedState(settingsViewModel)
         val showCrash = crashReportState(crashesViewModel)
+        val showWhatsNew = whatsNewPanelState(whatsNewViewModel)
         val showAprils = aprilFoolsState()
 
         val items = remember(showPrice, showCrash, showAprils) {
             listOf(
                 PanelItem(showPrice) { PriceTypeUnspecified(settingsViewModel, it) },
                 PanelItem(showCrash) { CrashReport(crashesViewModel, it) },
+                PanelItem(showWhatsNew) { WhatsNewPanel(whatsNewViewModel, it) },
                 PanelItem(showAprils) { AprilFools(it) },
             )
         }

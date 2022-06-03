@@ -70,10 +70,16 @@
     <string name="osturak_source">Source</string>
 
     <string name="about_title">Menza CTU</string>
+    <string name="about_data_source">Data source</string>
+    <string name="about_find_out_more">Find out more</string>
+    <string name="about_whats_new">Updates history</string>
     <string name="about_license_notices">License notices</string>
     <string name="about_osturak">Info about Ošťurák</string>
-    <string name="about_data_source">Data source</string>
     <string name="about_developer_contact">Developer contact</string>
+
+    <string name="whats_new_title">Update history</string>
+    <string name="whats_new_subtitle">Current version: %s</string>
+    <string name="whats_new_item_label">Version %s</string>
 
     <string name="report_title">How do you want to report the error?</string>
     <string name="report_telegram">Telegram</string>
@@ -148,6 +154,8 @@
     <string name="panel_crash_unknown">Unknown</string>
     <string name="panel_crash_dismiss">Dismiss</string>
     <string name="panel_crash_report">Report</string>
+    <string name="panel_whats_new_title">What\'s new</string>
+    <string name="panel_whats_new_button">Dismiss</string>
     <string-array name="panel_april_items">
         <item>Are you hungry again?</item>
         <item>Sure I am</item>

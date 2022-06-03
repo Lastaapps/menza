@@ -146,7 +146,7 @@ dependencies {
     kapt(Libs.DAGGER_HILT_COMPILER)
     kapt(Libs.HILT_COMPILER)
 
-    initCompose(useMaterial2 = true)
+    initCompose()
 
     implementation(Libs.KOTLINX_DATETIME)
     implementation(Libs.COIL_COMPOSE_COMPLETE)
@@ -154,16 +154,13 @@ dependencies {
 
 }
 
-fun DependencyHandler.initCompose(useMaterial2: Boolean = false, useMaterial3: Boolean = true) {
+fun DependencyHandler.initCompose() {
     implementation(Libs.COMPOSE_ACTIVITY)
     implementation(Libs.COMPOSE_ANIMATION)
     implementation(Libs.COMPOSE_CONSTRAINTLAYOUT)
     implementation(Libs.COMPOSE_FOUNDATION)
     implementation(Libs.COMPOSE_ICONS_EXTENDED)
-    if (useMaterial2)
-        implementation(Libs.COMPOSE_MATERIAL)
-    if (useMaterial3)
-        implementation(Libs.COMPOSE_MATERIAL_3)
+    implementation(Libs.COMPOSE_MATERIAL_3)
     implementation(Libs.COMPOSE_NAVIGATION)
     implementation(Libs.COMPOSE_TOOLING)
     implementation(Libs.COMPOSE_UI)

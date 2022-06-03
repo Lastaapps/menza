@@ -26,12 +26,13 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Code
-import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -46,6 +47,8 @@ import cz.lastaapps.common.DeveloperInfo
 import cz.lastaapps.common.R
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.navigation.Dest
+import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDialog
+import cz.lastaapps.menza.ui.hiltActivityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,6 +85,22 @@ fun AboutUi(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     DataSource(Modifier.fillMaxWidth())
+                }
+            }
+            ElevatedCard {
+                Column(
+                    Modifier
+                        .padding(12.dp)
+                        .align(Alignment.CenterHorizontally),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        stringResource(cz.lastaapps.menza.R.string.about_find_out_more),
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                    )
+                    WhatsNewButton(Modifier.fillMaxWidth())
                     LicenseButton(navController, Modifier.fillMaxWidth())
                     OsturakButton(navController, Modifier.fillMaxWidth())
                     ViewSource(Modifier.fillMaxWidth())
@@ -128,6 +147,31 @@ private fun DataSource(modifier: Modifier = Modifier) {
                 )
             })
         }
+    }
+}
+
+@Composable
+private fun WhatsNewButton(modifier: Modifier = Modifier) {
+    var showWhatsNew by rememberSaveable { mutableStateOf(false) }
+
+    OutlinedButton(
+        modifier = modifier,
+        onClick = { showWhatsNew = true },
+    ) {
+        IconAndText(
+            icon = {
+                Icon(Icons.Default.NewReleases, null)
+            },
+            text = {
+                Text(
+                    text = stringResource(id = cz.lastaapps.menza.R.string.about_whats_new),
+                    textAlign = TextAlign.Center
+                )
+            }
+        )
+    }
+    if (showWhatsNew) {
+        WhatsNewDialog(hiltActivityViewModel()) { showWhatsNew = false }
     }
 }
 

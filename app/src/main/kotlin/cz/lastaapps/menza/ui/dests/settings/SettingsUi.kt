@@ -205,6 +205,12 @@ private fun Buttons(
         val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
 
+        if (enableAbout) {
+            Button(
+                onClick = onAboutClicked, modifier = Modifier.fillMaxWidth()
+            ) { IconAndText(Icons.Default.Info, R.string.settings_button_about) }
+        }
+
         val shareText = stringResource(R.string.settings_button_share_text)
         Button(
             onClick = {
@@ -222,12 +228,6 @@ private fun Buttons(
             onClick = { uriHandler.openUri("https://play.google.com/store/apps/details?id=cz.lastaapps.menza") },
             modifier = Modifier.fillMaxWidth(),
         ) { IconAndText(Icons.Default.Star, R.string.settings_button_rate) }
-
-        if (enableAbout) {
-            Button(
-                onClick = onAboutClicked, modifier = Modifier.fillMaxWidth()
-            ) { IconAndText(Icons.Default.Info, R.string.settings_button_about) }
-        }
 
         Button(
             onClick = { navController.navigate(Dest.R.privacyPolicy) },

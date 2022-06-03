@@ -23,7 +23,9 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 
 class MenzaOrderDataStore(context: Context) {
     companion object {
@@ -52,17 +54,21 @@ class MenzaOrderDataStore(context: Context) {
     }
 
     suspend fun <T> setItemOrder(keyOrders: Map<T, Int>, keys: (T) -> String) {
-        store.edit { pref ->
-            keyOrders.forEach { entry ->
-                pref[intPreferencesKey(keys(entry.key))] = entry.value
+        withContext(Dispatchers.IO) {
+            store.edit { pref ->
+                keyOrders.forEach { entry ->
+                    pref[intPreferencesKey(keys(entry.key))] = entry.value
+                }
             }
         }
     }
 
     suspend fun setItemOrder(keyOrders: Map<String, Int>) {
-        store.edit { pref ->
-            keyOrders.forEach { entry ->
-                pref[intPreferencesKey(entry.key)] = entry.value
+        withContext(Dispatchers.IO) {
+            store.edit { pref ->
+                keyOrders.forEach { entry ->
+                    pref[intPreferencesKey(entry.key)] = entry.value
+                }
             }
         }
     }
