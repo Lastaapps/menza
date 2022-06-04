@@ -37,7 +37,7 @@ import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewPanel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewViewModel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.whatsNewPanelState
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.hiltActivityViewModel
+import cz.lastaapps.menza.ui.root.locals.hiltActivityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

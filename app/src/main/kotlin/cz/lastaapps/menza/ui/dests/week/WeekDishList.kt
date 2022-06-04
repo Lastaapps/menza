@@ -45,8 +45,8 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.CollectErrors
-import cz.lastaapps.menza.ui.LocalSnackbarProvider
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
+import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate

@@ -19,34 +19,25 @@
 
 package cz.lastaapps.menza.ui.dests.settings
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.ui.LocalWindowWidth
-import cz.lastaapps.menza.ui.WindowSizeClass
 import cz.lastaapps.menza.ui.dests.others.AboutUi
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
-import cz.lastaapps.menza.ui.root.AppLayoutCompact
-import cz.lastaapps.menza.ui.root.AppLayoutExpanded
-import cz.lastaapps.menza.ui.root.AppLayoutMedium
+import cz.lastaapps.menza.ui.root.BackArrow
+import cz.lastaapps.menza.ui.root.UseSplitLayout
+import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
+import cz.lastaapps.menza.ui.root.locals.WindowSizeClass
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsLayout(
     navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     settingsViewModel: SettingsViewModel,
 ) {
@@ -57,10 +48,6 @@ fun SettingsLayout(
         WindowSizeClass.COMPACT ->
             SettingsLayoutCompact(
                 navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
                 settingsViewModel = settingsViewModel,
                 viewModel = settingsViewModel,
@@ -70,10 +57,6 @@ fun SettingsLayout(
         WindowSizeClass.MEDIUM ->
             SettingsLayoutMedium(
                 navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
                 settingsViewModel = settingsViewModel,
                 viewModel = settingsViewModel,
@@ -83,10 +66,6 @@ fun SettingsLayout(
         WindowSizeClass.EXPANDED ->
             SettingsLayoutExpanded(
                 navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
                 menzaViewModel = menzaViewModel,
                 settingsViewModel = settingsViewModel,
                 viewModel = settingsViewModel,
@@ -98,104 +77,53 @@ fun SettingsLayout(
 @Composable
 fun SettingsLayoutCompact(
     navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     settingsViewModel: SettingsViewModel,
     viewModel: SettingsViewModel,
     aboutShown: Boolean,
     onAboutClicked: () -> Unit,
 ) {
-    AppLayoutCompact(
+    BackArrow(enabled = aboutShown) {
+        onAboutClicked()
+    }
+
+    SettingsUI(
         navController = navController,
-        menzaId = menzaId,
-        onMenzaSelected = onMenzaSelected,
+        viewModel = viewModel,
         menzaViewModel = menzaViewModel,
         settingsViewModel = settingsViewModel,
-        snackbarHostState = snackbarHostState,
-        drawerState = drawerState,
-        showBackArrow = aboutShown,
-        onBackArrowClick = { onAboutClicked() }) {
-        BackHandler(aboutShown) {
-            onAboutClicked()
-        }
-        SettingsUI(
-            navController = navController,
-            viewModel = viewModel,
-            menzaViewModel = menzaViewModel,
-            settingsViewModel = settingsViewModel,
-            modifier = Modifier.fillMaxSize(),
-            enableAbout = true,
-            aboutShown = aboutShown,
-            onAboutClicked = onAboutClicked,
-        )
-    }
+        modifier = Modifier.fillMaxSize(),
+        enableAbout = true,
+        aboutShown = aboutShown,
+        onAboutClicked = onAboutClicked,
+    )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsLayoutMedium(
     navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     settingsViewModel: SettingsViewModel,
     viewModel: SettingsViewModel,
     aboutShown: Boolean,
     onAboutClicked: () -> Unit,
-) {
-    AppLayoutMedium(
-        navController = navController,
-        menzaId = menzaId,
-        onMenzaSelected = onMenzaSelected,
-        menzaViewModel = menzaViewModel,
-        settingsViewModel = settingsViewModel,
-        snackbarHostState = snackbarHostState,
-        drawerState = drawerState,
-        showBackArrow = aboutShown,
-        onBackArrowClick = onAboutClicked,
-    ) {
-        BackHandler(aboutShown) {
-            onAboutClicked()
-        }
-        SettingsUI(
-            navController = navController,
-            viewModel = viewModel,
-            menzaViewModel = menzaViewModel,
-            settingsViewModel = settingsViewModel,
-            modifier = Modifier.fillMaxSize(),
-            enableAbout = true,
-            aboutShown = aboutShown,
-            onAboutClicked = onAboutClicked,
-        )
-    }
-}
+) = SettingsLayoutCompact(
+    navController = navController,
+    menzaViewModel = menzaViewModel,
+    settingsViewModel = settingsViewModel,
+    viewModel = viewModel,
+    aboutShown = aboutShown,
+    onAboutClicked = onAboutClicked,
+)
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsLayoutExpanded(
     navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
     menzaViewModel: MenzaViewModel,
     settingsViewModel: SettingsViewModel,
     viewModel: SettingsViewModel,
 ) {
-    AppLayoutExpanded(
-        navController = navController,
-        menzaId = menzaId,
-        onMenzaSelected = onMenzaSelected,
-        menzaViewModel = menzaViewModel,
-        settingsViewModel = settingsViewModel,
-        snackbarHostState = snackbarHostState,
-        drawerState = drawerState,
-        showBackArrow = false,
+    UseSplitLayout(
         panel1 = {
             SettingsUI(
                 navController = navController,
@@ -212,6 +140,6 @@ fun SettingsLayoutExpanded(
                 scrollState = rememberScrollState(),
                 modifier = Modifier.fillMaxSize()
             )
-        },
+        }
     )
 }

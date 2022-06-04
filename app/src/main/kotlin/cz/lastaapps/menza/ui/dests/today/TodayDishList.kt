@@ -62,12 +62,12 @@ import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.LocalConnectivityProvider
-import cz.lastaapps.menza.ui.LocalSnackbarProvider
 import cz.lastaapps.menza.ui.dests.panels.Panels
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.menza.ui.isMetered
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
+import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
 import kotlinx.coroutines.delay
 
 @Composable

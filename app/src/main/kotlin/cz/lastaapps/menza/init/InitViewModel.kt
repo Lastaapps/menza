@@ -47,7 +47,7 @@ class InitViewModel @Inject constructor(
     val startedDownloading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val progressMessage: MutableStateFlow<InitMessage> = MutableStateFlow(Preparing)
     val progressIndicator: MutableStateFlow<Float> = MutableStateFlow(0.0f)
-    val failed: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val failed: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     val errors: Channel<MenzaError> = Channel(Channel.BUFFERED)
 
     private val repos = listOf<Pair<GeneralStorageRepo<*>, InitMessage>>(

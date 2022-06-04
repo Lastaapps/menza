@@ -40,7 +40,7 @@ import cz.lastaapps.entity.info.Contact
 import cz.lastaapps.entity.info.Email
 import cz.lastaapps.entity.info.PhoneNumber
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.LocalSnackbarProvider
+import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
 import kotlinx.coroutines.launch
 
 @Composable
@@ -127,7 +127,7 @@ fun ContactUI(
                     )
                 }
             }
-            if (contact.phoneNumber ?: contact.email != null) {
+            if ((contact.phoneNumber ?: contact.email) != null) {
                 val errorMessage = stringResource(R.string.info_contacts_contact_no_app)
                 OutlinedButton(
                     onClick = {

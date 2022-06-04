@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui
+package cz.lastaapps.menza.ui.root.locals
 
 import android.app.Activity
 import androidx.compose.runtime.Composable

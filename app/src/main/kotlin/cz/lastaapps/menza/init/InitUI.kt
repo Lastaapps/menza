@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.init
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
@@ -60,11 +61,16 @@ fun InitDecision(
     Scaffold(
         modifier,
         snackbarHost = { SnackbarHost(hostState = snackbarHost) },
-        content = {
+        content = { insets ->
             Surface(
                 color = MaterialTheme.colorScheme.background,
             ) {
-                InitContent(viewModel = viewModel, Modifier.fillMaxSize())
+                InitContent(
+                    viewModel = viewModel,
+                    Modifier
+                        .padding(insets)
+                        .fillMaxSize()
+                )
             }
         })
 }
@@ -75,60 +81,48 @@ private fun InitContent(viewModel: InitViewModel, modifier: Modifier = Modifier)
     val progress by viewModel.progressIndicator.collectAsState()
     val message by viewModel.progressMessage.collectAsState()
     val failed by viewModel.failed.collectAsState()
+    if (failed == null) return
 
     Box(modifier, contentAlignment = Alignment.Center) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
             modifier = Modifier
-                .width(IntrinsicSize.Max)
+                .width(256.dp)
                 .padding(8.dp)
+                .animateContentSize()
         ) {
             Text(
                 stringResource(R.string.init_title),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.fillMaxWidth(),
             )
-            Surface(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shape = MaterialTheme.shapes.large,
-                modifier = Modifier
-                    .animateContentSize()
-                    .fillMaxWidth(),
-            ) {
-                Content(
-                    failed, message, progress,
-                    { viewModel.requestRefresh() },
-                    Modifier.padding(16.dp)
-                )
-            }
-        }
-    }
-}
 
-@Composable
-private fun Content(
-    failed: Boolean, message: InitMessage, progress: Float,
-    onRefresh: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
-    ) {
-        if (!failed) {
-            val animatedProgress by animateFloatAsState(
-                targetValue = progress,
-                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
-            )
-            CircularProgressIndicator(animatedProgress, Modifier.size(48.dp))
-            Text(stringResource(message.message))
-        } else {
-            IconButton(onClick = onRefresh) {
-                Icon(Icons.Default.Refresh, contentDescription = null)
+            Crossfade(targetState = failed) { currFailed ->
+                when (currFailed) {
+                    false -> {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            val animatedProgress by animateFloatAsState(
+                                targetValue = progress,
+                                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                            )
+                            LinearProgressIndicator(animatedProgress, Modifier.fillMaxWidth(.9f))
+                            Text(stringResource(message.message))
+                        }
+                    }
+                    true -> {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            IconButton(onClick = viewModel::requestRefresh) {
+                                Icon(Icons.Default.Refresh, contentDescription = null)
+                            }
+                            Text(stringResource(R.string.init_error))
+                        }
+                    }
+                    else -> {}
+                }
             }
-            Text(stringResource(R.string.init_error))
         }
     }
 }

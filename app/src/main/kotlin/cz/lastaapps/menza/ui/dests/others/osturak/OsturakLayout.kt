@@ -22,167 +22,71 @@ package cz.lastaapps.menza.ui.dests.others.osturak
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.ui.LocalWindowWidth
-import cz.lastaapps.menza.ui.WindowSizeClass
-import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
-import cz.lastaapps.menza.ui.root.AppLayoutCompact
-import cz.lastaapps.menza.ui.root.AppLayoutExpanded
-import cz.lastaapps.menza.ui.root.AppLayoutMedium
+import cz.lastaapps.menza.ui.root.BackArrow
+import cz.lastaapps.menza.ui.root.UseSplitLayout
+import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
+import cz.lastaapps.menza.ui.root.locals.WindowSizeClass
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OsturakLayout(
     navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
 ) {
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
             OsturakLayoutCompact(
                 navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                settingsViewModel = settingsViewModel,
             )
         }
         WindowSizeClass.MEDIUM -> {
             OsturakLayoutMedium(
                 navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                settingsViewModel = settingsViewModel,
             )
         }
         WindowSizeClass.EXPANDED -> {
-            OsturakLayoutExpanded(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                settingsViewModel = settingsViewModel,
-            )
+            OsturakLayoutExpanded()
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OsturakLayoutCompact(
-    navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
-) {
-    AppLayoutCompact(
-        navController = navController,
-        menzaId = menzaId,
-        onMenzaSelected = onMenzaSelected,
-        menzaViewModel = menzaViewModel,
-        settingsViewModel = settingsViewModel,
-        snackbarHostState = snackbarHostState,
-        drawerState = drawerState,
-        showBackArrow = true,
-        onBackArrowClick = { navController.navigateUp() },
-    ) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                OsturakText()
-                OsturakImages(Modifier.fillMaxWidth())
-            }
+fun OsturakLayoutCompact(navController: NavController) {
+    BackArrow {
+        navController.navigateUp()
+    }
+
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            OsturakText()
+            OsturakImages(Modifier.fillMaxWidth())
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OsturakLayoutMedium(
-    navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
-) {
-    AppLayoutMedium(
-        navController = navController,
-        menzaId = menzaId,
-        onMenzaSelected = onMenzaSelected,
-        menzaViewModel = menzaViewModel,
-        settingsViewModel = settingsViewModel,
-        snackbarHostState = snackbarHostState,
-        drawerState = drawerState,
-        showBackArrow = false,
-    ) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                OsturakText()
-                OsturakImages(Modifier.fillMaxWidth())
-            }
-        }
-    }
-}
+    navController: NavController
+) = OsturakLayoutCompact(
+    navController = navController,
+)
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OsturakLayoutExpanded(
-    navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
-) {
-    AppLayoutExpanded(
-        navController = navController,
-        menzaId = menzaId,
-        onMenzaSelected = onMenzaSelected,
-        menzaViewModel = menzaViewModel,
-        settingsViewModel = settingsViewModel,
-        snackbarHostState = snackbarHostState,
-        drawerState = drawerState,
-        showBackArrow = false,
+fun OsturakLayoutExpanded() {
+    UseSplitLayout(
         panel1 = {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
                 contentAlignment = Alignment.Center
-            ) {
-                OsturakText()
-            }
+            ) { OsturakText() }
         },
         panel2 = {
             Box(
@@ -190,9 +94,6 @@ fun OsturakLayoutExpanded(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
                 contentAlignment = Alignment.Center
-            ) {
-                OsturakImages()
-            }
-        }
-    )
+            ) { OsturakImages() }
+        })
 }

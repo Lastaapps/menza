@@ -19,39 +19,25 @@
 
 package cz.lastaapps.menza.ui.dests.others.license
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.navigation.NavController
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.util.withContext
-import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.ui.LocalWindowWidth
-import cz.lastaapps.menza.ui.WindowSizeClass
-import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
-import cz.lastaapps.menza.ui.root.AppLayoutCompact
-import cz.lastaapps.menza.ui.root.AppLayoutExpanded
+import cz.lastaapps.menza.ui.root.UseSplitLayout
+import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
+import cz.lastaapps.menza.ui.root.locals.WindowSizeClass
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LicenseLayout(
-    navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
-) {
+fun LicenseLayout() {
     val context = LocalContext.current
     var libraries by remember {
         mutableStateOf<Libs?>(null)
@@ -77,13 +63,6 @@ fun LicenseLayout(
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
             LicenseLayoutCompact(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                settingsViewModel = settingsViewModel,
                 libraries = libraryList,
                 selectedLibrary = selectedLibrary,
                 onLibrarySelected = onLibrarySelected,
@@ -91,13 +70,6 @@ fun LicenseLayout(
         }
         WindowSizeClass.MEDIUM -> {
             LicenseLayoutMedium(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                settingsViewModel = settingsViewModel,
                 libraries = libraryList,
                 selectedLibrary = selectedLibrary,
                 onLibrarySelected = onLibrarySelected,
@@ -105,13 +77,6 @@ fun LicenseLayout(
         }
         WindowSizeClass.EXPANDED -> {
             LicenseLayoutExpanded(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                drawerState = drawerState,
-                menzaId = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaViewModel = menzaViewModel,
-                settingsViewModel = settingsViewModel,
                 libraries = libraryList,
                 selectedLibrary = selectedLibrary,
                 onLibrarySelected = onLibrarySelected,
@@ -120,95 +85,45 @@ fun LicenseLayout(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LicenseLayoutCompact(
-    navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
     libraries: List<Library>,
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
 ) {
-    AppLayoutCompact(
-        navController = navController,
-        menzaId = menzaId,
-        onMenzaSelected = onMenzaSelected,
-        menzaViewModel = menzaViewModel,
-        settingsViewModel = settingsViewModel,
-        snackbarHostState = snackbarHostState,
-        drawerState = drawerState,
-        showBackArrow = selectedLibrary != null,
-        onBackArrowClick = { onLibrarySelected(null) },
-    ) {
-        BackHandler(enabled = selectedLibrary != null) {
-            onLibrarySelected(null)
-        }
-        LibraryList(libraries, onLibrarySelected = onLibrarySelected, Modifier.fillMaxSize())
+//    BackArrow(selectedLibrary != null) {
+//        onLibrarySelected(null)
+//    }
 
-        if (selectedLibrary != null) {
-            Dialog(onDismissRequest = { onLibrarySelected(null) }) {
-                Surface(shape = MaterialTheme.shapes.extraLarge) {
-                    LibraryDetail(library = selectedLibrary, Modifier.padding(16.dp))
-                }
+    LibraryList(libraries, onLibrarySelected = onLibrarySelected, Modifier.fillMaxSize())
+
+    if (selectedLibrary != null) {
+        Dialog(onDismissRequest = { onLibrarySelected(null) }) {
+            Surface(shape = MaterialTheme.shapes.extraLarge, modifier = Modifier.fillMaxSize(.9f)) {
+                LibraryDetail(library = selectedLibrary, Modifier.padding(16.dp))
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LicenseLayoutMedium(
-    navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
     libraries: List<Library>,
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
 ) = LicenseLayoutExpanded(
-    navController = navController,
-    snackbarHostState = snackbarHostState,
-    drawerState = drawerState,
-    menzaId = menzaId,
-    onMenzaSelected = onMenzaSelected,
-    menzaViewModel = menzaViewModel,
-    settingsViewModel = settingsViewModel,
     libraries = libraries,
     selectedLibrary = selectedLibrary,
     onLibrarySelected = onLibrarySelected,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LicenseLayoutExpanded(
-    navController: NavController,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
     libraries: List<Library>,
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
 ) {
-    AppLayoutExpanded(
-        navController = navController,
-        menzaId = menzaId,
-        onMenzaSelected = onMenzaSelected,
-        menzaViewModel = menzaViewModel,
-        settingsViewModel = settingsViewModel,
-        snackbarHostState = snackbarHostState,
-        drawerState = drawerState,
-        showBackArrow = false,
+    UseSplitLayout(
         panel1 = {
             LibraryList(
                 libraries, onLibrarySelected,

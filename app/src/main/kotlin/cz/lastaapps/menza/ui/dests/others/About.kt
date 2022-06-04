@@ -48,7 +48,7 @@ import cz.lastaapps.common.R
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDialog
-import cz.lastaapps.menza.ui.hiltActivityViewModel
+import cz.lastaapps.menza.ui.root.locals.hiltActivityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

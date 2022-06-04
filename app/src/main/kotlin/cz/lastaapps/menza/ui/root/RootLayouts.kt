@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -36,14 +37,17 @@ import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.FoldingClass
-import cz.lastaapps.menza.ui.LocalFoldProvider
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.main.*
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
+import cz.lastaapps.menza.ui.root.locals.FoldingClass
+import cz.lastaapps.menza.ui.root.locals.LocalFoldProvider
+import cz.lastaapps.menza.ui.root.locals.LocalMenuBackArrow
+import cz.lastaapps.menza.ui.root.locals.LocalSplitPosition
 import kotlinx.coroutines.launch
 
-val sidesPadding = 16.dp
+private val sidesPadding = 16.dp
+private val railWidth = 80.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,8 +59,6 @@ fun AppLayoutCompact(
     settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    showBackArrow: Boolean,
-    onBackArrowClick: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
     val menza = remember(menzaId) {
@@ -81,7 +83,6 @@ fun AppLayoutCompact(
                     menza = menza,
                     alignRail = false,
                     enableHamburger = true,
-                    showBackArrow, onBackArrowClick,
                     enableRotation = true,
                 )
             },
@@ -118,8 +119,6 @@ fun AppLayoutMedium(
     settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    showBackArrow: Boolean,
-    onBackArrowClick: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     val menza = remember(menzaId) {
@@ -134,7 +133,6 @@ fun AppLayoutMedium(
                 menza = menza,
                 alignRail = true,
                 enableHamburger = true,
-                showBackArrow, onBackArrowClick,
             )
         },
         snackbarHost = {
@@ -163,7 +161,7 @@ fun AppLayoutMedium(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppLayoutExpandedSimple(
+fun AppLayoutExpanded(
     navController: NavController,
     menzaId: MenzaId?,
     onMenzaSelected: (MenzaId?) -> Unit,
@@ -171,8 +169,43 @@ fun AppLayoutExpandedSimple(
     settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    showBackArrow: Boolean,
-    onBackArrowClick: () -> Unit = {},
+    content: @Composable () -> Unit,
+) {
+    val foldingFeature = LocalFoldProvider.current
+    if (foldingFeature is FoldingClass.Supported)
+        AppLayoutExpandedFold(
+            navController = navController,
+            menzaId = menzaId,
+            onMenzaSelected = onMenzaSelected,
+            menzaViewModel = menzaViewModel,
+            settingsViewModel = settingsViewModel,
+            snackbarHostState = snackbarHostState,
+            drawerState = drawerState,
+            content = content,
+        )
+    else
+        AppLayoutExpandedNoFold(
+            navController = navController,
+            menzaId = menzaId,
+            onMenzaSelected = onMenzaSelected,
+            menzaViewModel = menzaViewModel,
+            settingsViewModel = settingsViewModel,
+            snackbarHostState = snackbarHostState,
+            drawerState = drawerState,
+            content = content,
+        )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppLayoutExpandedNoFold(
+    navController: NavController,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
     content: @Composable () -> Unit,
 ) {
     val menza = remember(menzaId) {
@@ -187,107 +220,6 @@ fun AppLayoutExpandedSimple(
                 menza = menza,
                 alignRail = true,
                 enableHamburger = true,
-                showBackArrow, onBackArrowClick,
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
-    ) { insets ->
-        MenzaDismissibleDrawerWithRailLayout(
-            Modifier
-                .padding(insets)
-                .fillMaxSize(),
-            rail = { MainNavRail(navController, settingsViewModel) }
-        ) {
-            MenzaDismissibleDrawer(
-                selectedMenza = menzaId,
-                onMenzaSelected = onMenzaSelected,
-                menzaListViewModel = menzaViewModel,
-                drawerState = drawerState,
-                modifier = Modifier
-                    .padding(sidesPadding)
-                    .fillMaxSize(),
-                content = content,
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppLayoutExpanded(
-    navController: NavController,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    showBackArrow: Boolean,
-    onBackArrowClick: () -> Unit = {},
-    panel1: @Composable () -> Unit,
-    panel2: @Composable () -> Unit
-) {
-    val foldingFeature = LocalFoldProvider.current
-    if (foldingFeature is FoldingClass.Supported)
-        AppLayoutExpandedFold(
-            navController = navController,
-            menzaId = menzaId,
-            onMenzaSelected = onMenzaSelected,
-            menzaViewModel = menzaViewModel,
-            settingsViewModel = settingsViewModel,
-            snackbarHostState = snackbarHostState,
-            drawerState = drawerState,
-            showBackArrow = showBackArrow,
-            onBackArrowClick = onBackArrowClick,
-            panel1 = panel1,
-            panel2 = panel2,
-        )
-    else
-        AppLayoutExpandedNoFold(
-            navController = navController,
-            menzaId = menzaId,
-            onMenzaSelected = onMenzaSelected,
-            menzaViewModel = menzaViewModel,
-            settingsViewModel = settingsViewModel,
-            snackbarHostState = snackbarHostState,
-            drawerState = drawerState,
-            showBackArrow = showBackArrow,
-            onBackArrowClick = onBackArrowClick,
-            panel1 = panel1,
-            panel2 = panel2,
-        )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AppLayoutExpandedNoFold(
-    navController: NavController,
-    menzaId: MenzaId?,
-    onMenzaSelected: (MenzaId?) -> Unit,
-    menzaViewModel: MenzaViewModel,
-    settingsViewModel: SettingsViewModel,
-    snackbarHostState: SnackbarHostState,
-    drawerState: DrawerState,
-    showBackArrow: Boolean,
-    onBackArrowClick: () -> Unit = {},
-    panel1: @Composable () -> Unit,
-    panel2: @Composable () -> Unit
-) {
-    val menza = remember(menzaId) {
-        menzaId?.let { menzaViewModel.getForId(menzaId) }
-    }
-
-    Scaffold(
-        Modifier.fillMaxSize(),
-        topBar = {
-            DefaultTopBar(
-                navController = navController, drawerState = drawerState,
-                menza = menza,
-                alignRail = true,
-                enableHamburger = true,
-                showBackArrow, onBackArrowClick,
             )
         },
         snackbarHost = {
@@ -306,33 +238,18 @@ private fun AppLayoutExpandedNoFold(
                 drawerState = drawerState,
                 menzaListViewModel = menzaViewModel,
             ) {
-                Row(Modifier.fillMaxWidth()) {
-                    Box(
-                        modifier = Modifier
-                            .padding(
-                                top = sidesPadding,
-                                bottom = sidesPadding,
-                                start = sidesPadding,
-                                end = sidesPadding / 2,
-                            )
-                            .fillMaxHeight()
-                            .weight(1f)
-                    ) {
-                        panel1()
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(
-                                top = sidesPadding,
-                                bottom = sidesPadding,
-                                start = sidesPadding / 2,
-                                end = sidesPadding,
-                            )
-                            .fillMaxHeight()
-                            .weight(1f)
-                    ) {
-                        panel2()
-                    }
+                BoxWithConstraints(
+                    Modifier
+                        .padding(sidesPadding)
+                        .fillMaxSize()
+                ) {
+                    val totalWidthAvailable = maxWidth
+                    val startWidth = totalWidthAvailable * 0.5f
+                    val endWidth = totalWidthAvailable * 0.5f
+
+                    CompositionLocalProvider(
+                        LocalSplitPosition provides Triple(startWidth, 0.dp, endWidth)
+                    ) { content() }
                 }
             }
         }
@@ -349,10 +266,7 @@ fun AppLayoutExpandedFold(
     settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    showBackArrow: Boolean,
-    onBackArrowClick: () -> Unit = {},
-    panel1: @Composable () -> Unit,
-    panel2: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val menza = remember(menzaId) {
         menzaId?.let { menzaViewModel.getForId(menzaId) }
@@ -366,7 +280,6 @@ fun AppLayoutExpandedFold(
                 menza = menza,
                 alignRail = true,
                 enableHamburger = true,
-                showBackArrow, onBackArrowClick,
             )
         },
         snackbarHost = {
@@ -394,26 +307,55 @@ fun AppLayoutExpandedFold(
                 drawerState = drawerState,
                 menzaListViewModel = menzaViewModel,
             ) {
-                BoxWithConstraints {
-                    val railWidth = 80.dp
-                    val totalWidthAvailable =
-                        with(LocalDensity.current) {
-                            maxWidth.roundToPx().toDp()
-                        } - spacesWidth + railWidth
+                BoxWithConstraints(
+                    Modifier
+                        .padding(sidesPadding)
+                        .fillMaxSize(),
+                ) {
+                    val totalWidthAvailable = maxWidth - spacesWidth + railWidth
                     val startWidth = totalWidthAvailable * weightStart - railWidth
                     val endWidth = totalWidthAvailable * weightEnd
 
-                    Row {
-                        Box(Modifier.width(startWidth)) { panel1() }
-                        Spacer(Modifier.width(spacesWidth))
-                        Box(Modifier.width(endWidth)) { panel2() }
-                    }
+                    CompositionLocalProvider(
+                        LocalSplitPosition provides Triple(startWidth, spacesWidth, endWidth)
+                    ) { content() }
                 }
             }
         }
     }
 }
 
+@Composable
+fun UseSplitLayout(
+    panel1: @Composable () -> Unit,
+    panel2: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(modifier) {
+        val size = LocalSplitPosition.current
+        Box(
+            Modifier
+                .width(size.first)
+                .padding(
+                    top = sidesPadding, bottom = sidesPadding,
+                    start = sidesPadding, end = sidesPadding / 2
+                )
+        ) { panel1() }
+
+        Spacer(Modifier.width(size.second))
+
+        Box(
+            Modifier
+                .width(size.third)
+                .padding(
+                    top = sidesPadding, bottom = sidesPadding,
+                    start = sidesPadding / 2, end = sidesPadding
+                )
+        ) { panel2() }
+    }
+}
+
+@Suppress("SameParameterValue")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DefaultTopBar(
@@ -422,10 +364,12 @@ private fun DefaultTopBar(
     menza: Menza?,
     alignRail: Boolean,
     enableHamburger: Boolean,
-    showBackArrow: Boolean,
-    onBackArrowClick: () -> Unit,
     enableRotation: Boolean = false, // used for an animation while using modal Drawer
 ) {
+    val menuBack = LocalMenuBackArrow.current
+    val showBackArrow = menuBack.shouldShowBackArrow()
+    val onBackArrowClick = menuBack::runLast
+
     val icon = when {
         showBackArrow -> Icons.Default.ArrowBack
         enableHamburger -> Icons.Default.Menu

@@ -19,8 +19,8 @@
 
 package cz.lastaapps.menza.ui.layout.main
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -54,8 +54,6 @@ fun MainTopBar(
     val title = remember(menzaName) { menzaName }
         ?: stringResource(R.string.ui_top_bar_no_menza)
 
-    val decayAnimationSpec = rememberSplineBasedDecay<Float>()
-
     var mainPopupExpanded by rememberSaveable { mutableStateOf(false) }
 
     CenterAlignedTopAppBar(
@@ -82,14 +80,16 @@ fun MainTopBar(
         navigationIcon = {
             val mod = if (alignRail) Modifier.width(76.dp) else Modifier //rail - 4.dp for padding
             Box(mod, contentAlignment = Alignment.Center) {
-                if (menuIcon != null) {
-                    IconButton(onClick = { onMenuClicked?.let { it() } }) {
-                        val rotation by animateFloatAsState(if (!menuRotated) 0f else 90f)
-                        Icon(
-                            modifier = Modifier.rotate(rotation),
-                            imageVector = menuIcon,
-                            contentDescription = menuDescription
-                        )
+                Crossfade(targetState = menuIcon) { currMenuIcon ->
+                    if (currMenuIcon != null) {
+                        IconButton(onClick = { onMenuClicked?.let { it() } }) {
+                            val rotation by animateFloatAsState(if (!menuRotated) 0f else 90f)
+                            Icon(
+                                modifier = Modifier.rotate(rotation),
+                                imageVector = currMenuIcon,
+                                contentDescription = menuDescription
+                            )
+                        }
                     }
                 }
             }

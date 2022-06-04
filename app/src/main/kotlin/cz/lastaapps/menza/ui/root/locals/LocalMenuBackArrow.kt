@@ -17,21 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui
+package cz.lastaapps.menza.ui.root.locals
 
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
+import cz.lastaapps.menza.ui.root.MenuBackArrow
 
-val LocalSnackbarProvider = compositionLocalOf { SnackbarHostState() }
-
-@Composable
-fun WithSnackbarProvider(
-    snackbarHostState: SnackbarHostState,
-    content: @Composable () -> Unit,
-) {
-    CompositionLocalProvider(LocalSnackbarProvider provides snackbarHostState) {
-        content()
-    }
-}
+// left panel, spacer, right panel
+val LocalMenuBackArrow = compositionLocalOf { MenuBackArrow() }

@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Coordinates
 import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.LocalSnackbarProvider
+import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
 import kotlinx.coroutines.launch
 
 @Composable

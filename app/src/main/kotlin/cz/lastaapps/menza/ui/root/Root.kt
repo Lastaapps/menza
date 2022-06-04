@@ -27,6 +27,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.navigation.NavController
 import androidx.navigation.compose.dialog
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -34,7 +35,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.init.InitDecision
 import cz.lastaapps.menza.navigation.Dest
-import cz.lastaapps.menza.ui.*
+import cz.lastaapps.menza.ui.WithConnectivity
 import cz.lastaapps.menza.ui.dests.info.InfoLayout
 import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
 import cz.lastaapps.menza.ui.dests.others.osturak.OsturakLayout
@@ -49,6 +50,7 @@ import cz.lastaapps.menza.ui.dests.today.TodayDest
 import cz.lastaapps.menza.ui.dests.week.WeekLayout
 import cz.lastaapps.menza.ui.layout.main.WithDrawerListStateProvider
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
+import cz.lastaapps.menza.ui.root.locals.*
 import cz.lastaapps.menza.ui.theme.AppTheme
 
 @Composable
@@ -124,95 +126,118 @@ private fun AppContent(viewModel: MenzaViewModel) {
     WithSnackbarProvider(snackbarHostState = snackbarHostState) {
         WithDrawerListStateProvider(drawableLazyListState) {
 
-            // instead of leaving app, open selection menu
-            /*BackHandler(drawerState.currentValue == DrawerValue.Closed) {
-                scope.launch {
-                    drawerState.open()
-                }
-            }*/
-
-            AnimatedNavHost(
+            ChooseLayout(
                 navController = navHostState,
-                startDestination = Dest.R.start,
-                modifier = Modifier.fillMaxSize()
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = viewModel,
+                settingsViewModel = settingsViewModel,
+                snackbarHostState = snackbarHostState,
+                drawerState = drawerState
             ) {
-
-                composable(
-                    Dest.R.today,
+                AnimatedNavHost(
+                    navController = navHostState,
+                    startDestination = Dest.R.start,
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    TodayDest(
-                        navController = navHostState,
-                        snackbarHostState = snackbarHostState,
-                        drawerState = drawerState,
-                        menzaId = menzaId,
-                        onMenzaSelected = onMenzaSelected,
-                        menzaViewModel = viewModel,
-                        todayViewModel = hiltActivityViewModel(),
-                        settingsViewModel = settingsViewModel,
-                    )
-                }
-                composable(Dest.R.week) {
-                    WeekLayout(
-                        navController = navHostState,
-                        snackbarHostState = snackbarHostState,
-                        drawerState = drawerState,
-                        menzaId = menzaId,
-                        onMenzaSelected = onMenzaSelected,
-                        menzaViewModel = viewModel,
-                        settingsViewModel = settingsViewModel,
-                        weekViewModel = hiltActivityViewModel(),
-                    )
-                }
-                composable(Dest.R.info) {
-                    InfoLayout(
-                        navController = navHostState,
-                        snackbarHostState = snackbarHostState,
-                        drawerState = drawerState,
-                        menzaId = menzaId,
-                        onMenzaSelected = onMenzaSelected,
-                        menzaViewModel = viewModel,
-                        settingsViewModel = settingsViewModel,
-                        infoViewModel = hiltActivityViewModel(),
-                    )
-                }
-                composable(Dest.R.settings) {
-                    SettingsLayout(
-                        navController = navHostState,
-                        snackbarHostState = snackbarHostState,
-                        drawerState = drawerState,
-                        menzaId = menzaId,
-                        onMenzaSelected = onMenzaSelected,
-                        menzaViewModel = viewModel,
-                        settingsViewModel = settingsViewModel,
-                    )
-                }
 
-                composable(Dest.R.license) {
-                    LicenseLayout(
-                        navController = navHostState,
-                        snackbarHostState = snackbarHostState,
-                        drawerState = drawerState,
-                        menzaId = menzaId,
-                        onMenzaSelected = onMenzaSelected,
-                        menzaViewModel = viewModel,
-                        settingsViewModel = settingsViewModel,
-                    )
-                }
-                composable(Dest.R.osturak) {
-                    OsturakLayout(
-                        navController = navHostState,
-                        snackbarHostState = snackbarHostState,
-                        drawerState = drawerState,
-                        menzaId = menzaId,
-                        onMenzaSelected = onMenzaSelected,
-                        menzaViewModel = viewModel,
-                        settingsViewModel = settingsViewModel,
-                    )
-                }
-                dialog(Dest.R.privacyPolicy) {
-                    PrivacyDialogContent(showAccept = false, onAccept = {})
+                    composable(
+                        Dest.R.today,
+                    ) {
+                        TodayDest(
+                            navController = navHostState,
+                            menzaId = menzaId,
+                            todayViewModel = hiltActivityViewModel(),
+                            settingsViewModel = settingsViewModel,
+                        )
+                    }
+                    composable(Dest.R.week) {
+                        WeekLayout(
+                            navController = navHostState,
+                            menzaId = menzaId,
+                            weekViewModel = hiltActivityViewModel(),
+                        )
+                    }
+                    composable(Dest.R.info) {
+                        InfoLayout(
+                            navController = navHostState,
+                            snackbarHostState = snackbarHostState,
+                            menzaId = menzaId,
+                            infoViewModel = hiltActivityViewModel(),
+                        )
+                    }
+                    composable(Dest.R.settings) {
+                        SettingsLayout(
+                            navController = navHostState,
+                            menzaViewModel = viewModel,
+                            settingsViewModel = settingsViewModel,
+                        )
+                    }
+                    composable(Dest.R.license) {
+                        LicenseLayout()
+                    }
+                    composable(Dest.R.osturak) {
+                        OsturakLayout(
+                            navController = navHostState
+                        )
+                    }
+                    dialog(Dest.R.privacyPolicy) {
+                        PrivacyDialogContent(showAccept = false, onAccept = {})
+                    }
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ChooseLayout(
+    navController: NavController,
+    menzaId: MenzaId?,
+    onMenzaSelected: (MenzaId?) -> Unit,
+    menzaViewModel: MenzaViewModel,
+    settingsViewModel: SettingsViewModel,
+    snackbarHostState: SnackbarHostState,
+    drawerState: DrawerState,
+    content: @Composable () -> Unit
+) {
+    when (LocalWindowWidth.current) {
+        WindowSizeClass.COMPACT -> {
+            AppLayoutCompact(
+                navController = navController,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel,
+                settingsViewModel = settingsViewModel,
+                snackbarHostState = snackbarHostState,
+                drawerState = drawerState,
+                content = content,
+            )
+        }
+        WindowSizeClass.MEDIUM -> {
+            AppLayoutMedium(
+                navController = navController,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel,
+                settingsViewModel = settingsViewModel,
+                snackbarHostState = snackbarHostState,
+                drawerState = drawerState,
+                content = content,
+            )
+        }
+        WindowSizeClass.EXPANDED -> {
+            AppLayoutExpanded(
+                navController = navController,
+                menzaId = menzaId,
+                onMenzaSelected = onMenzaSelected,
+                menzaViewModel = menzaViewModel,
+                settingsViewModel = settingsViewModel,
+                snackbarHostState = snackbarHostState,
+                drawerState = drawerState,
+                content = content,
+            )
         }
     }
 }
