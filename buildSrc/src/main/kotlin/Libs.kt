@@ -11,6 +11,9 @@ object Libs {
     const val KTOR_CIO = "io.ktor:ktor-client-cio:${Versions.KTOR}"
     const val KTOR_CONTENT_NEGOTIATION = "io.ktor:ktor-client-content-negotiation:${Versions.KTOR}"
     const val KTOR_SERIALIZATION = "io.ktor:ktor-serialization-kotlinx-json:${Versions.KTOR}"
+    const val KTOR_AUTH = "io.ktor:ktor-client-auth:${Versions.KTOR}"
+    const val KTOR_ENCODING = "io.ktor:ktor-client-encoding:${Versions.KTOR}"
+    const val KTOR_LOGGING = "io.ktor:ktor-client-logging:${Versions.KTOR}"
 
     const val ACTIVITY = "androidx.activity:activity-ktx:${Versions.ACTIVITY}"
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
@@ -30,12 +33,11 @@ object Libs {
     const val LIFECYCLE = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE}"
     const val LIFECYCLE_LIVEDATA = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.LIFECYCLE}"
     const val LIFECYCLE_SERVICE = "androidx.lifecycle:lifecycle-service:${Versions.LIFECYCLE}"
-    const val HILT_COMMON = "androidx.hilt:hilt-common:${Versions.HILT_COMMON}"
-    const val HILT_COMPILER = "androidx.hilt:hilt-compiler:${Versions.HILT_COMPILER}"
-    const val HILT_NAVIGATION = "androidx.hilt:hilt-navigation:${Versions.HILT_NAVIGATION}"
+    const val HILT_COMMON = "androidx.hilt:hilt-common:${Versions.HILT}"
+    const val HILT_COMPILER = "androidx.hilt:hilt-compiler:${Versions.HILT}"
+    const val HILT_NAVIGATION = "androidx.hilt:hilt-navigation:${Versions.HILT}"
     const val HILT_NAVIGATION_COMPOSE = "androidx.hilt:hilt-navigation-compose:${Versions.HILT_NAVIGATION_COMPOSE}"
-    const val HILT_VIEWMODEL = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.HILT_VIEWMODEL}"
-    const val HILT_WORK = "androidx.hilt:hilt-work:${Versions.HILT_WORK}"
+    const val HILT_WORK = "androidx.hilt:hilt-work:${Versions.HILT}"
     const val NAVIGATION = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
     const val NAVIGATION_FRAGMENT =
             "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
@@ -127,4 +129,5 @@ object Libs {
     const val KM_LOGGING = "org.lighthousegames:logging:${Versions.KM_LOGGING}"
     const val KOTLINX_DATETIME =
         "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KOTLINX_DATETIME}"
+    const val LOGBACK = "ch.qos.logback:logback-classic:${Versions.LOGBACK}"
 }
