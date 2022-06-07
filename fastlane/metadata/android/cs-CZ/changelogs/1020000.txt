@@ -1,0 +1,9 @@
+Opraveno zpracování vadných dat na serveru
+Od teď můžete měnit pořadí mez (zatím ne je skrývat)
+Můžete měnit velikost náhledů jídel
+Omezena velikost cache
+Přidána sekce "Co je nového"
+Vylepšení sběru chyb
+Upravená struktura UI
+Lepší podpora tabletů
+A další opravy chyb a vylepšení

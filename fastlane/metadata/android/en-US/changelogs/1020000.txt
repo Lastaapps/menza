@@ -1,0 +1,9 @@
+Fixed parsing of invalid data from server
+You can now reorder menza list (not hide them yet)
+You can resize dish preview images now
+Cache size limited to 32 MB
+What's new section added
+Better crash collection
+Layout system rebuilt
+Better large screen support
+And other bug fixes and improvements

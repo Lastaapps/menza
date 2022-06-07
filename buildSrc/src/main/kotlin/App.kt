@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,9 +30,10 @@ object App {
 
     const val GROUP = "cz.lastaapps"
     const val APP_ID = "$GROUP.menza"
+
     // needs to be also updated in app/build.gradle
-    const val VERSION_CODE = 1010000 // 1x major . 2x minor . 2x path . 2x build diff
-    const val VERSION_NAME = "1.1.0"
+    const val VERSION_CODE = 1020000 // 1x major . 2x minor . 2x path . 2x build diff
+    const val VERSION_NAME = "1.2.0"
     const val IS_ALPHA = false
     const val IS_BETA = false
 

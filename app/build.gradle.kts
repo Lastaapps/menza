@@ -45,10 +45,10 @@ android {
         applicationId = App.APP_ID
 
         //have to be specified explicitly for FDroid to work
-        versionCode = 1010000 // 1x major . 2x minor . 2x path . 2x build diff
-        versionName = "1.1.0"
-        check(versionCode == App.VERSION_CODE)
-        check(versionName == App.VERSION_NAME)
+        versionCode = 1020000 // 1x major . 2x minor . 2x path . 2x build diff
+        versionName = "1.2.0"
+        require(versionCode == App.VERSION_CODE)
+        require(versionName == App.VERSION_NAME)
 
         minSdk = App.MIN_SDK
 
