@@ -26,6 +26,7 @@ import cz.lastaapps.entity.common.Price
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.day.IssueLocation
+import cz.lastaapps.entity.exceptions.DishNameEmpty
 import cz.lastaapps.entity.menza.MenzaId
 import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
@@ -47,6 +48,7 @@ object TodayScraperImpl : TodayScraper {
         val dishSet = mutableSetOf<Dish>()
         var currentType: String? = null
         var webOrder = 0
+        var errorOccurred = false
 
         val menzaId = findFirst("body #PodsysActive") {
             attribute("value").removeSpaces().takeIf { it.isNotBlank() }?.toInt()
@@ -72,22 +74,29 @@ object TodayScraperImpl : TodayScraper {
                     val priceNormal = children[6].parseMoney()
                     val issuePlaces = children[7].parseIssuePlaces()
 
-                    dishSet += Dish(
-                        MenzaId(menzaId),
-                        CourseType(currentType!!, webOrder),
-                        amount?.let { Amount(amount) },
-                        name,
-                        dishAllergens,
-                        dishAllergensPage,
-                        imgUrl,
-                        Price(priceStudent),
-                        Price(priceNormal),
-                        issuePlaces,
-                    )
+                    try {
+                        dishSet += Dish(
+                            MenzaId(menzaId),
+                            CourseType(currentType!!, webOrder),
+                            amount?.let { Amount(amount) },
+                            name,
+                            dishAllergens,
+                            dishAllergensPage,
+                            imgUrl,
+                            Price(priceStudent),
+                            Price(priceNormal),
+                            issuePlaces,
+                        )
+                    } catch (e: DishNameEmpty) {
+                        e.printStackTrace()
+                        errorOccurred = true
+                    }
                 }
                 else -> error("No <tr> children")
             }
         }
+        if (errorOccurred && dishSet.isEmpty())
+            error("Failed to parse dish list - invalid server data")
         return dishSet
     }
 
@@ -121,7 +130,7 @@ object TodayScraperImpl : TodayScraper {
         }
     }
 
-    private val moneyRegex = """(\d+[,|.]\d{2})?""".toRegex()
+    private val moneyRegex = """(\d+([,|.]\d{1,2})?)?""".toRegex()
 
     private fun DocElement.parseMoney(): Int {
         val text = ownText.removeSpaces()

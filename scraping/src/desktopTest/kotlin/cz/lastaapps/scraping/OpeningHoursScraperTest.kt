@@ -22,6 +22,7 @@ package cz.lastaapps.scraping
 import cz.lastaapps.entity.LocalTime
 import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -46,27 +47,45 @@ class OpeningHoursScraperTest {
         val strahov = hours.filter { it.menzaId.id == 1 }
         strahov.shouldNotBeEmpty()
 
-        val restaurant = strahov.filter { it.locationName == "Restaurace" }
-        restaurant.shouldNotBeEmpty()
+        val canteen = strahov.filter { it.locationName == "Jídelna" }
+        canteen.shouldNotBeEmpty()
 
-        val restaurantOpen = LocalTime(11, 0, 0)
-        val restaurantClose = LocalTime(20, 30, 0)
+        val canteenOpenMorning = LocalTime(11, 0, 0)
+        val canteenCloseMorning = LocalTime(14, 30, 0)
+        val canteenOpenEvening = LocalTime(17, 0, 0)
+        val canteenCloseEvening = LocalTime(20, 0, 0)
 
         for (day in listOf(
-            DayOfWeek.MONDAY,
-            DayOfWeek.TUESDAY,
-            DayOfWeek.WEDNESDAY,
-            DayOfWeek.THURSDAY,
+            DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
+            DayOfWeek.THURSDAY, DayOfWeek.FRIDAY,
         )) {
             val found = strahov.find { it.dayOfWeek == day }
             found.shouldNotBeNull()
-            found.open shouldBe restaurantOpen
-            found.close shouldBe restaurantClose
+            found.open shouldBeIn arrayOf(canteenOpenMorning, canteenOpenEvening)
+            found.close shouldBeIn arrayOf(canteenCloseMorning, canteenCloseEvening)
         }
-        val found = strahov.find { it.dayOfWeek == DayOfWeek.FRIDAY }
-        found.shouldNotBeNull()
-        found.open shouldBe restaurantOpen
-        found.close shouldBe LocalTime(19, 30, 0)
+
+//        val restaurant = strahov.filter { it.locationName == "Restaurace" }
+//        restaurant.shouldNotBeEmpty()
+//
+//        val restaurantOpen = LocalTime(11, 0, 0)
+//        val restaurantClose = LocalTime(20, 30, 0)
+//
+//        for (day in listOf(
+//            DayOfWeek.MONDAY,
+//            DayOfWeek.TUESDAY,
+//            DayOfWeek.WEDNESDAY,
+//            DayOfWeek.THURSDAY,
+//        )) {
+//            val found = strahov.find { it.dayOfWeek == day }
+//            found.shouldNotBeNull()
+//            found.open shouldBe restaurantOpen
+//            found.close shouldBe restaurantClose
+//        }
+//        val found = strahov.find { it.dayOfWeek == DayOfWeek.FRIDAY }
+//        found.shouldNotBeNull()
+//        found.open shouldBe restaurantOpen
+//        found.close shouldBe LocalTime(19, 30, 0)
     }
 
     @Test

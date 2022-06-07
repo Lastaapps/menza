@@ -358,12 +358,21 @@ class AllergensScraperTest {
         </tbody>
       </table>
   </div>"""
-        val notEnoughItems = """<div id='otdoby' style="max-width:900px">
+        val justTwoItems = """<div id='otdoby' style="max-width:900px">
   <table class="table table-condensed" style=" font-size: 13px;"> 
         <tbody>
           <tr>
             <td style="width:30px; text-align:left"><img src="img/Alergen1.png" alt="1"></td>
             <td style="width:160px; text-align:left">Obiloviny obsahující lepek</td>
+          </tr>
+        </tbody>
+      </table>
+  </div>"""
+        val justOneItem = """<div id='otdoby' style="max-width:900px">
+  <table class="table table-condensed" style=" font-size: 13px;"> 
+        <tbody>
+          <tr>
+            <td style="width:30px; text-align:left"><img src="img/Alergen1.png" alt="1"></td>
           </tr>
         </tbody>
       </table>
@@ -375,7 +384,8 @@ class AllergensScraperTest {
         shouldThrowAny { AllergensScraperImpl.scrape(invalidCode) }
         shouldThrowAny { AllergensScraperImpl.scrape(emptyName) }
         shouldThrowAny { AllergensScraperImpl.scrape(emptyDescription) }
-        shouldThrowAny { AllergensScraperImpl.scrape(notEnoughItems) }
+        shouldThrowAny { AllergensScraperImpl.scrape(justTwoItems) }
+        shouldThrowAny { AllergensScraperImpl.scrape(justOneItem) }
         AllergensScraperImpl.scrape(noItems).shouldBeEmpty()
     }
 

@@ -67,9 +67,11 @@ class TodayViewModel @Inject constructor(
 
     // I was lazy to pass AllergenViewModel in the whole hierarchy
     // so there is the important method
-    fun getAllergenForIds(list: List<AllergenId>): Flow<List<Allergen>> {
+    fun getAllergenForIds(list: List<AllergenId>, unknownAllergen: Allergen): Flow<List<Allergen>> {
         return flow {
-            emit(list.mapNotNull { allergenRepo.getAllergenInfo(it).first() })
+            emit(list.map {
+                allergenRepo.getAllergenInfo(it).first() ?: unknownAllergen.copy(id = it)
+            })
         }
     }
 

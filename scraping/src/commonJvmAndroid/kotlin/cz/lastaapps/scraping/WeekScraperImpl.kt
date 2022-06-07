@@ -21,9 +21,10 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.CourseType
+import cz.lastaapps.entity.exceptions.DishNameEmpty
+import cz.lastaapps.entity.exceptions.WeekNotAvailable
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
-import cz.lastaapps.entity.week.WeekNotAvailable
 import cz.lastaapps.entity.week.WeekNumber
 import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
@@ -84,13 +85,17 @@ object WeekScraperImpl : WeekScraper {
                     val name = children[4].ownText.removeSpaces()
 
                     if (name.isNotBlank() && name.isNameValid()) {
-                        set += WeekDish(
-                            MenzaId(menzaId),
-                            currentDate!!,
-                            CourseType(type, currentDateOrders[type]!!),
-                            amount?.let { Amount(it) },
-                            name,
-                        )
+                        try {
+                            set += WeekDish(
+                                MenzaId(menzaId),
+                                currentDate!!,
+                                CourseType(type, currentDateOrders[type]!!),
+                                amount?.let { Amount(it) },
+                                name,
+                            )
+                        } catch (e: DishNameEmpty) {
+                            e.printStackTrace()
+                        }
                     }
                 }
             }

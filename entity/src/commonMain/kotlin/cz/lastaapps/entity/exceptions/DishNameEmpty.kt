@@ -17,11 +17,6 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.entity.week
+package cz.lastaapps.entity.exceptions
 
-/**
- * I thrown when a menza states, that they don't provide week menu
- * Can be also thrown during celebrations
- * https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=15
- */
-class WeekNotAvailable : Exception()
+class DishNameEmpty : Exception("Dish name cannot be empty")

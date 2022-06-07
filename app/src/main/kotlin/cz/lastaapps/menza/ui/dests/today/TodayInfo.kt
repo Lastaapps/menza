@@ -44,6 +44,8 @@ import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
+import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.day.IssueLocation
 import cz.lastaapps.menza.R
@@ -135,7 +137,16 @@ private fun AllergenList(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        val data by todayViewModel.getAllergenForIds(dish.allergens).collectAsState(emptyList())
+        val context = LocalContext.current
+        val data by remember(context) {
+            // used in case server fucks up and returns allergens like 79 or 1011 (',' forgotten)
+            val unknownAllergen = Allergen(
+                AllergenId(Int.MAX_VALUE),
+                context.getString(R.string.today_info_unknown_allergen_title),
+                context.getString(R.string.today_info_unknown_allergen_description),
+            )
+            todayViewModel.getAllergenForIds(dish.allergens, unknownAllergen)
+        }.collectAsState(emptyList())
 
         Text(
             stringResource(R.string.today_info_allergens_title),

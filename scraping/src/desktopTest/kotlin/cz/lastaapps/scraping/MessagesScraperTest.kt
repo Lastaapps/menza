@@ -286,7 +286,7 @@ Možnost namátkové kontroly. Nevztahuje se na studenty a zaměstnance ČVUT"""
 </div>"""
 
         MessagesScraperImpl.scrape(noItems).shouldBeEmpty()
-        shouldThrowAny { MessagesScraperImpl.scrape("") }
+        MessagesScraperImpl.scrape("").shouldBeEmpty()
         shouldThrowAny { MessagesScraperImpl.scrape(noMessageElement) }
         shouldThrowAny { MessagesScraperImpl.scrape(noMessageText) }
         shouldThrowAny { MessagesScraperImpl.scrape(noMenzaId) }

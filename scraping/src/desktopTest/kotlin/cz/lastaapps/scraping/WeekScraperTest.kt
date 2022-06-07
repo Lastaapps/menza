@@ -21,9 +21,9 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.CourseType
+import cz.lastaapps.entity.exceptions.WeekNotAvailable
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
-import cz.lastaapps.entity.week.WeekNotAvailable
 import cz.lastaapps.entity.week.WeekNumber
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow

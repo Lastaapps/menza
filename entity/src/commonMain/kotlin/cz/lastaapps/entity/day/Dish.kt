@@ -23,6 +23,7 @@ import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.common.Amount
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
+import cz.lastaapps.entity.exceptions.DishNameEmpty
 import cz.lastaapps.entity.menza.MenzaId
 
 /**
@@ -42,7 +43,7 @@ data class Dish(
     val issuePlaces: List<IssueLocation>,
 ) {
     init {
-        require(name.isNotBlank()) { "Dish name is blank" }
+        if (name.isBlank()) throw DishNameEmpty()
         require(issuePlaces.isNotEmpty()) { "There are no issue places" }
     }
 }

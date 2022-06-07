@@ -181,8 +181,10 @@
     <string name="today_info_location">Issue location</string>
     <string name="today_info_window">Expected window number</string>
     <string name="today_info_allergens_title">Allergens</string>
-    <string name="today_info_allergens_none">Dish without any allerens</string>
+    <string name="today_info_allergens_none">Dish without any allergens</string>
     <string name="today_info_image_load_failed">Failed to load the image</string>
+    <string name="today_info_unknown_allergen_title">Unknown allergen</string>
+    <string name="today_info_unknown_allergen_description">Server returned invalid data</string>
     <string name="today_list_none">No data available</string>
     <string name="today_list_web">Check website</string>
     <string name="today_list_image_load_failed">Failed to load the image</string>

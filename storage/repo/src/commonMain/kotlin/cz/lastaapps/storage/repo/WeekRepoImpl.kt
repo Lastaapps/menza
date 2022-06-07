@@ -19,9 +19,9 @@
 
 package cz.lastaapps.storage.repo
 
+import cz.lastaapps.entity.exceptions.WeekNotAvailable
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
-import cz.lastaapps.entity.week.WeekNotAvailable
 import cz.lastaapps.entity.week.WeekNumber
 import cz.lastaapps.scraping.WeekScraper
 import io.ktor.client.statement.*

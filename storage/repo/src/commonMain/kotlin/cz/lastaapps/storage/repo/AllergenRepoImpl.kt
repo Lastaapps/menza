@@ -22,6 +22,7 @@ package cz.lastaapps.storage.repo
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.menza.db.MenzaDatabase
@@ -47,7 +48,7 @@ class AllergenRepoImpl(
     override fun getAllergenInfo(id: AllergenId): Flow<Allergen?> {
         return queries.getAllergenById(id) { _, name, description ->
             Allergen(id, name, description)
-        }.asFlow().mapToOneNotNull(dispatcher)
+        }.asFlow().mapToOneOrNull(dispatcher)
     }
 
     override val errors: Channel<MenzaError>
