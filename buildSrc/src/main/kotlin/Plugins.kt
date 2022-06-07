@@ -21,12 +21,12 @@ object Plugins {
 
     const val APPLICATION = "com.android.application"
     const val LIBRARY = "com.android.library"
-    const val KOTLIN = "org.jetbrains.kotlin.android"
+
+    const val KOTLIN_ANDROID = "org.jetbrains.kotlin.android"
     const val KOTLIN_MULTIPLATFORM = "org.jetbrains.kotlin.multiplatform"
     const val KOTLIN_JVM = "org.jetbrains.kotlin.jvm"
-
-    const val KOTLIN_ANDROID = "kotlin-android"
-    const val PARCELIZE = "kotlin-parcelize"
+    const val PARCELIZE = "org.jetbrains.kotlin.kotlin-parcelize"
+    const val SERIALIZATION = "org.jetbrains.kotlin.plugin.serialization"
 
     object Java {
         const val LIBRARY = "java-library"

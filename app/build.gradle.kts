@@ -141,7 +141,6 @@ dependencies {
 
     implementation(Libs.DAGGER_HILT)
     implementation(Libs.HILT_COMMON)
-    implementation(Libs.HILT_VIEWMODEL)
     implementation(Libs.HILT_NAVIGATION_COMPOSE)
     kapt(Libs.DAGGER_HILT_COMPILER)
     kapt(Libs.HILT_COMPILER)

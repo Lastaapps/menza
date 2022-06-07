@@ -32,7 +32,7 @@ version = App.VERSION_NAME
 plugins {
     id(Plugins.APPLICATION) version Versions.GRADLE apply false
     id(Plugins.LIBRARY) version Versions.GRADLE apply false
-    id(Plugins.KOTLIN) version Versions.KOTLIN apply false
+    id(Plugins.KOTLIN_ANDROID) version Versions.KOTLIN apply false
     id(Plugins.KSP) version Versions.KSP apply false
     id(Plugins.ABOUT_LIBRARIES) version Versions.ABOUT_LIBRARIES apply false
 }
