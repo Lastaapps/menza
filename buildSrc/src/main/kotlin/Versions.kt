@@ -65,14 +65,15 @@ object Versions {
     const val FIREBASE_BOM = "29.3.1"
 
     //others
+    const val ABOUT_LIBRARIES = "10.3.0"
+    const val COIL = "2.1.0"
+    const val KM_LOGGING = "1.1.1"
+    const val KODEIN = "7.12.0"
     const val KOTEST = "5.3.0"
     const val KOTLINX_DATETIME = "0.3.3"
-    const val SQLDELIGHT = "1.5.3"
-    const val KM_LOGGING = "1.1.1"
-    const val COIL = "2.1.0"
-    const val SKRAPE_IT = "1.2.1"
-    const val ABOUT_LIBRARIES = "10.3.0"
     const val LOGBACK = "1.2.11"
+    const val SKRAPE_IT = "1.2.1"
+    const val SQLDELIGHT = "1.5.3"
 
     //testing android
     const val TEST_JUNIT = "4.13.2"
