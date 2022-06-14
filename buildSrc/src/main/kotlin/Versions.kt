@@ -23,6 +23,7 @@ object Versions {
     const val ACTIVITY = "1.4.0"
     const val ANNOTATION = "1.4.0-rc01"
     const val APPCOMPAT = "1.4.1"
+    const val CAMERAX = "1.2.0-alpha02"
     const val COLLECTION = "1.2.0"
     const val CONSTRAINTLAYOUT = "2.1.3"
     const val CORE = "1.8.0"
@@ -59,6 +60,8 @@ object Versions {
     //google
     const val GOOGLE_MATERIAL = "1.6.1"
     const val PLAY_SERVICES = "1.8.1"
+    const val PLAY_SERVICES_LOCATION = "20.0.0"
+    const val MLKIT_BARCODE = "17.0.2"
     const val ACCOMPANIST = "0.24.9-beta"
 
     //firebase
@@ -72,6 +75,7 @@ object Versions {
     const val KOTEST = "5.3.0"
     const val KOTLINX_DATETIME = "0.3.3"
     const val LOGBACK = "1.2.11"
+    const val QRGEN = "2.6.0"
     const val SKRAPE_IT = "1.2.1"
     const val SQLDELIGHT = "1.5.3"
 

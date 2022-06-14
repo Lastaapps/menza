@@ -18,6 +18,13 @@ object Libs {
     const val ACTIVITY = "androidx.activity:activity-ktx:${Versions.ACTIVITY}"
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
     const val ANNOTATION = "androidx.annotation:annotation:${Versions.ANNOTATION}"
+    const val CAMERAX_CORE = "androidx.camera:camera-core:${Versions.CAMERAX}"
+    const val CAMERAX_CAMERA2 = "androidx.camera:camera-camera2:${Versions.CAMERAX}"
+    const val CAMERAX_EXTENSIONS = "androidx.camera:camera-extensions:${Versions.CAMERAX}"
+    const val CAMERAX_LIFECYCLE = "androidx.camera:camera-lifecycle:${Versions.CAMERAX}"
+    const val CAMERAX_VIDEO = "androidx.camera:camera-video:${Versions.CAMERAX}"
+    const val CAMERAX_VIEW = "androidx.camera:camera-view:${Versions.CAMERAX}"
+    const val CAMERAX_VISION = "androidx.camera:camera-mlkit-vision:${Versions.CAMERAX}"
     const val COLLECTION = "androidx.collection:collection-ktx:${Versions.COLLECTION}"
     const val CONSTRAINTLAYOUT =
         "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINTLAYOUT}"
@@ -45,6 +52,9 @@ object Libs {
         "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
     const val PREFERENCES = "androidx.preference:preference-ktx:${Versions.PREFERENCES}"
     const val RECYCLER_VIEW = "androidx.recyclerview:recyclerview:${Versions.RECYCLER_VIEW}"
+    const val ROOM = "androidx.room:room-runtime:${Versions.ROOM}"
+    const val ROOM_COMPILER = "androidx.room:room-compiler:${Versions.ROOM}"
+    const val ROOM_KTX = "androidx.room:room-ktx:${Versions.ROOM}"
     const val SPLASHSCREEN = "androidx.core:core-splashscreen:${Versions.SPLASHSCREEN}"
     const val STARTUP = "androidx.startup:startup-runtime:${Versions.STARTUP}"
     const val SWIPE_REFRESH_LAYOUT =
@@ -58,12 +68,10 @@ object Libs {
     const val WINDOW_MANAGER = "androidx.window:window:${Versions.WINDOW_MANAGER}"
     const val WORK = "androidx.work:work-runtime-ktx:${Versions.WORK}"
 
-    const val ROOM = "androidx.room:room-runtime:${Versions.ROOM}"
-    const val ROOM_COMPILER = "androidx.room:room-compiler:${Versions.ROOM}"
-    const val ROOM_KTX = "androidx.room:room-ktx:${Versions.ROOM}"
-
     const val MATERIAL = "com.google.android.material:material:${Versions.GOOGLE_MATERIAL}"
     const val PLAY_SERVICES = "com.google.android.play:core-ktx:${Versions.PLAY_SERVICES}"
+    const val PLAY_SERVICES_LOCATION = "com.google.android.gms:play-services-location:${Versions.PLAY_SERVICES_LOCATION}"
+    const val MLKIT_BARCODE = "com.google.mlkit:barcode-scanning:${Versions.MLKIT_BARCODE}"
 
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics-ktx"
@@ -146,5 +154,6 @@ object Libs {
     const val KOTLINX_DATETIME =
         "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KOTLINX_DATETIME}"
     const val LOGBACK = "ch.qos.logback:logback-classic:${Versions.LOGBACK}"
+    const val QRGEN = "com.github.kenglxn.QRGen:android:${Versions.QRGEN}" // jitpack
     const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"
 }
