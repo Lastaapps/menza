@@ -29,16 +29,12 @@ project.group = App.GROUP
 
 android {
 
-    if (App.USE_LEGACY) {
-        compileSdk = App.COMPILE_SDK
-        buildToolsVersion = App.BUILD_TOOLS
-
-        defaultConfig.targetSdk = App.TARGET_SDK
+    if (App.USE_PREVIEW) {
+        compileSdk = App.PREVIEW_COMPILE_SDK
+        defaultConfig.targetSdk = App.PREVIEW_TARGET_SDK
     } else {
-        compileSdk = App.LEGACY_COMPILE_SDK
-        buildToolsVersion = App.LEGACY_BUILD_TOOLS
-
-        defaultConfig.targetSdk = App.LEGACY_TARGET_SDK
+        compileSdk = App.COMPILE_SDK
+        defaultConfig.targetSdk = App.TARGET_SDK
     }
 
     defaultConfig {
@@ -81,9 +77,6 @@ android {
             isShrinkResources = true
         }
     }
-    buildFeatures {
-        buildConfig = false
-    }
     packagingOptions {
         resources.excludes.add("META-INF/*")
         resources.excludes.add("mozilla/*")
@@ -94,7 +87,6 @@ android {
         sourceCompatibility = Versions.JAVA
         targetCompatibility = Versions.JAVA
     }
-
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
         freeCompilerArgs = listOf(
@@ -105,7 +97,6 @@ android {
         languageVersion = Versions.KOTLIN_LANGUAGE_VERSION
         apiVersion = Versions.KOTLIN_LANGUAGE_VERSION
     }
-
     buildFeatures {
         buildConfig = true
         compose = true

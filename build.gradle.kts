@@ -17,9 +17,6 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-
 buildscript {
     dependencies {
         classpath(Classpath.DAGGER_HILT)
@@ -30,8 +27,9 @@ group = App.GROUP
 version = App.VERSION_NAME
 
 plugins {
-    id(Plugins.APPLICATION) version Versions.GRADLE apply false
-    id(Plugins.LIBRARY) version Versions.GRADLE apply false
+    val gradleVersion = "7.2.1"
+    id(Plugins.APPLICATION) version gradleVersion apply false
+    id(Plugins.LIBRARY) version gradleVersion apply false
     id(Plugins.KOTLIN_ANDROID) version Versions.KOTLIN apply false
     id(Plugins.KSP) version Versions.KSP apply false
     id(Plugins.ABOUT_LIBRARIES) version Versions.ABOUT_LIBRARIES apply false
