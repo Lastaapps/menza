@@ -6,8 +6,6 @@ object Versions {
     val JAVA = JavaVersion.VERSION_11
     const val JVM_TARGET = "11"
 
-    const val GRADLE = "7.2.1"
-
     //Versions
     //Studio
     const val DESUGAR = "1.1.5"
@@ -15,40 +13,41 @@ object Versions {
     //JetBrains
     const val KOTLIN = "1.6.21"
     const val KOTLIN_LANGUAGE_VERSION = "1.6"
-    const val KSP = "$KOTLIN-1.0.5"
+    const val KSP = "$KOTLIN-1.0.6"
     const val COROUTINES = "1.6.2"
     const val KTOR = "2.0.2"
 
     //androidx
-    const val ACTIVITY = "1.4.0"
-    const val ANNOTATION = "1.4.0-rc01"
-    const val APPCOMPAT = "1.4.1"
+    const val ACTIVITY = "1.6.0-alpha05"
+    const val ANNOTATION = "1.4.0"
+    const val APPCOMPAT = "1.6.0-alpha05"
+    const val APP_SEARCH = "1.1.0-alpha01"
     const val CAMERAX = "1.2.0-alpha02"
     const val COLLECTION = "1.2.0"
     const val CONSTRAINTLAYOUT = "2.1.3"
-    const val CORE = "1.8.0"
+    const val CORE = "1.9.0-alpha05"
     const val DAGGER_HILT = "2.42"
     const val DATASTORE = "1.0.0"
     const val DOCUMENT_FILE = "1.1.0-alpha01"
-    const val EMOJI = "1.1.0"
-    const val FRAGMENT = "1.4.0"
+    const val EMOJI = "1.2.0-alpha04"
+    const val FRAGMENT = "1.5.0-rc01"
     const val HILT = "1.0.0"
-    const val LIFECYCLE = "2.4.1"
-    const val NAVIGATION = "2.4.1"
+    const val LIFECYCLE = "2.5.0-rc02"
+    const val NAVIGATION = "2.5.0-rc02"
     const val PREFERENCES = "1.2.0-rc01"
-    const val RECYCLER_VIEW = "1.3.0-alpha01"
+    const val RECYCLER_VIEW = "1.3.0-alpha02"
     const val ROOM = "2.4.2"
     const val SPLASHSCREEN = "1.0.0-beta02"
-    const val STARTUP = "1.1.1"
+    const val STARTUP = "1.2.0-alpha01"
     const val SWIPE_REFRESH_LAYOUT = "1.2.0-alpha01"
     const val TRACING = "1.1.0"
     const val VECTOR_DRAWABLES = "1.2.0-alpha02"
-    const val WINDOW_MANAGER = "1.0.0"
-    const val WORK = "2.7.1"
+    const val WINDOW_MANAGER = "1.1.0-alpha02"
+    const val WORK = "2.8.0-alpha02"
 
 
     //compose
-    const val COMPOSE = "1.2.0-beta03"
+    const val COMPOSE = "1.2.0-rc01"
     const val COMPOSE_COMPILER = COMPOSE
     const val COMPOSE_STABLE = "1.1.1"
     const val COMPOSE_COMPILER_STABLE = COMPOSE_STABLE
@@ -62,10 +61,10 @@ object Versions {
     const val PLAY_SERVICES = "1.8.1"
     const val PLAY_SERVICES_LOCATION = "20.0.0"
     const val MLKIT_BARCODE = "17.0.2"
-    const val ACCOMPANIST = "0.24.9-beta"
+    const val ACCOMPANIST = "0.24.11-rc"
 
     //firebase
-    const val FIREBASE_BOM = "29.3.1"
+    const val FIREBASE_BOM = "31.1.0"
 
     //others
     const val ABOUT_LIBRARIES = "10.3.0"
