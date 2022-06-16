@@ -37,12 +37,24 @@ object Libs {
     const val ACTIVITY = "androidx.activity:activity-ktx:${Versions.ACTIVITY}"
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
     const val ANNOTATION = "androidx.annotation:annotation:${Versions.ANNOTATION}"
+    const val APP_SEARCH = "androidx.appsearch:appsearch:${Versions.APP_SEARCH}"
+    const val APP_SEARCH_COMPILER = "androidx.appsearch:appsearch-compiler:${Versions.APP_SEARCH}"
+    const val APP_SEARCH_LOCAL = "androidx.appsearch:appsearch-local-storage:${Versions.APP_SEARCH}"
+    const val APP_SEARCH_PLATFORM = "androidx.appsearch:appsearch-platform-storage:${Versions.APP_SEARCH}"
+    const val CAMERAX_CORE = "androidx.camera:camera-core:${Versions.CAMERAX}"
+    const val CAMERAX_CAMERA2 = "androidx.camera:camera-camera2:${Versions.CAMERAX}"
+    const val CAMERAX_EXTENSIONS = "androidx.camera:camera-extensions:${Versions.CAMERAX}"
+    const val CAMERAX_LIFECYCLE = "androidx.camera:camera-lifecycle:${Versions.CAMERAX}"
+    const val CAMERAX_VIDEO = "androidx.camera:camera-video:${Versions.CAMERAX}"
+    const val CAMERAX_VIEW = "androidx.camera:camera-view:${Versions.CAMERAX}"
+    const val CAMERAX_VISION = "androidx.camera:camera-mlkit-vision:${Versions.CAMERAX}"
     const val COLLECTION = "androidx.collection:collection-ktx:${Versions.COLLECTION}"
     const val CONSTRAINTLAYOUT =
             "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINTLAYOUT}"
     const val CORE = "androidx.core:core-ktx:${Versions.CORE}"
     const val DAGGER_HILT = "com.google.dagger:hilt-android:${Versions.DAGGER_HILT}"
-    const val DAGGER_HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Versions.DAGGER_HILT}"
+    const val DAGGER_HILT_COMPILER =
+            "com.google.dagger:hilt-android-compiler:${Versions.DAGGER_HILT}"
     const val DATASTORE = "androidx.datastore:datastore-preferences:${Versions.DATASTORE}"
     const val DOCUMENT_FILE = "androidx.documentfile:documentfile:${Versions.DOCUMENT_FILE}"
     const val EMOJI = "androidx.emoji2:emoji2:${Versions.EMOJI}"
@@ -55,13 +67,17 @@ object Libs {
     const val HILT_COMMON = "androidx.hilt:hilt-common:${Versions.HILT}"
     const val HILT_COMPILER = "androidx.hilt:hilt-compiler:${Versions.HILT}"
     const val HILT_NAVIGATION = "androidx.hilt:hilt-navigation:${Versions.HILT}"
-    const val HILT_NAVIGATION_COMPOSE = "androidx.hilt:hilt-navigation-compose:${Versions.HILT_NAVIGATION_COMPOSE}"
+    const val HILT_NAVIGATION_COMPOSE =
+            "androidx.hilt:hilt-navigation-compose:${Versions.HILT_NAVIGATION_COMPOSE}"
     const val HILT_WORK = "androidx.hilt:hilt-work:${Versions.HILT}"
     const val NAVIGATION = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
     const val NAVIGATION_FRAGMENT =
             "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
     const val PREFERENCES = "androidx.preference:preference-ktx:${Versions.PREFERENCES}"
     const val RECYCLER_VIEW = "androidx.recyclerview:recyclerview:${Versions.RECYCLER_VIEW}"
+    const val ROOM = "androidx.room:room-runtime:${Versions.ROOM}"
+    const val ROOM_COMPILER = "androidx.room:room-compiler:${Versions.ROOM}"
+    const val ROOM_KTX = "androidx.room:room-ktx:${Versions.ROOM}"
     const val SPLASHSCREEN = "androidx.core:core-splashscreen:${Versions.SPLASHSCREEN}"
     const val STARTUP = "androidx.startup:startup-runtime:${Versions.STARTUP}"
     const val SWIPE_REFRESH_LAYOUT =
@@ -70,16 +86,15 @@ object Libs {
     const val VECTOR_DRAWABLES =
             "androidx.vectordrawable:vectordrawable:${Versions.VECTOR_DRAWABLES}"
     const val VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.LIFECYCLE}"
-    const val VIEWMODEL_SAVEDSTATE = "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.LIFECYCLE}"
+    const val VIEWMODEL_SAVEDSTATE =
+            "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.LIFECYCLE}"
     const val WINDOW_MANAGER = "androidx.window:window:${Versions.WINDOW_MANAGER}"
     const val WORK = "androidx.work:work-runtime-ktx:${Versions.WORK}"
 
-    const val ROOM = "androidx.room:room-runtime:${Versions.ROOM}"
-    const val ROOM_COMPILER = "androidx.room:room-compiler:${Versions.ROOM}"
-    const val ROOM_KTX = "androidx.room:room-ktx:${Versions.ROOM}"
-
     const val MATERIAL = "com.google.android.material:material:${Versions.GOOGLE_MATERIAL}"
     const val PLAY_SERVICES = "com.google.android.play:core-ktx:${Versions.PLAY_SERVICES}"
+    const val PLAY_SERVICES_LOCATION = "com.google.android.gms:play-services-location:${Versions.PLAY_SERVICES_LOCATION}"
+    const val MLKIT_BARCODE = "com.google.mlkit:barcode-scanning:${Versions.MLKIT_BARCODE}"
 
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics-ktx"
@@ -142,11 +157,26 @@ object Libs {
     const val COIL_SVG = "io.coil-kt:coil-svg:${Versions.COIL}"
     const val COIL_VIDEO = "io.coil-kt:coil-video:${Versions.COIL}"
 
-    const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"
+    const val KODEIN =
+            "org.kodein.di:kodein-di:${Versions.KODEIN}"
+    const val KODEIN_ANDROID_CORE =
+            "org.kodein.di:kodein-di-framework-android-core:${Versions.KODEIN}"
+    const val KODEIN_ANDROIDX =
+            "org.kodein.di:kodein-di-framework-android-x:${Versions.KODEIN}"
+    const val KODEIN_ANDROIDX_VIEWMODE =
+            "org.kodein.di:kodein-di-framework-android-x-viewmodel:${Versions.KODEIN}"
+    const val KODEIN_ANDROIDX_VIEWMODE_SAVEDSTATE =
+            "org.kodein.di:kodein-di-framework-android-x-viewmodel-savedstate:${Versions.KODEIN}"
+    const val KODEIN_COMPOSE =
+            "org.kodein.di:kodein-di-framework-compose:${Versions.KODEIN}"
+
+    const val ABOUT_LIBRARIES_COMPOSE =
+            "com.mikepenz:aboutlibraries-compose:${Versions.ABOUT_LIBRARIES}"
     const val ABOUT_LIBRARIES_CORE = "com.mikepenz:aboutlibraries-core:${Versions.ABOUT_LIBRARIES}"
-    const val ABOUT_LIBRARIES_COMPOSE = "com.mikepenz:aboutlibraries-compose:${Versions.ABOUT_LIBRARIES}"
     const val KM_LOGGING = "org.lighthousegames:logging:${Versions.KM_LOGGING}"
     const val KOTLINX_DATETIME =
-        "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KOTLINX_DATETIME}"
+            "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KOTLINX_DATETIME}"
     const val LOGBACK = "ch.qos.logback:logback-classic:${Versions.LOGBACK}"
+    const val QRGEN = "com.github.kenglxn.QRGen:android:${Versions.QRGEN}" // jitpack
+    const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"
 }
