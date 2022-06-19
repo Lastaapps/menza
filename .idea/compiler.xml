@@ -3,6 +3,10 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="18">
       <module name="android.buildSrc" target="11" />
+      <module name="Menza.api.agata.commonMain" target="11" />
+      <module name="Menza.api.agata.commonTest" target="11" />
+      <module name="Menza.api.agata.desktopMain" target="11" />
+      <module name="Menza.api.agata.desktopTest" target="11" />
       <module name="Menza.entity.commonMain" target="11" />
       <module name="Menza.entity.commonTest" target="11" />
       <module name="Menza.entity.desktopMain" target="11" />
