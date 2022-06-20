@@ -19,7 +19,7 @@
 
 <resources>
 
-    <style name="AppTheme" parent="Theme.Material3.DynamicColors.DayNight" />
+    <style name="AppTheme" parent="Theme.Material3.DynamicColors.Dark" />
 
     <style name="AppTheme.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>

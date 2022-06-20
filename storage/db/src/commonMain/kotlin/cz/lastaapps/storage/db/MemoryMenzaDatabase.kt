@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,16 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage
+package cz.lastaapps.storage.db
 
 import com.squareup.sqldelight.db.SqlDriver
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import cz.lastaapps.menza.db.MenzaDatabase
 
-actual class MemoryMenzaDriverFactory : MenzaDriverFactory {
-    actual override fun createDriver(): SqlDriver {
-        val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        MenzaDatabase.Schema.create(driver)
-        return driver
-    }
+expect class MemoryMenzaDriverFactory : MenzaDriverFactory {
+    override fun createDriver(): SqlDriver
 }

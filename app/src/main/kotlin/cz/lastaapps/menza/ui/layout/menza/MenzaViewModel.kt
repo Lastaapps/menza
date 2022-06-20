@@ -28,15 +28,12 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.compareToLocal
 import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.storage.repo.MenzaRepo
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.lighthousegames.logging.logging
-import javax.inject.Inject
 
-@HiltViewModel
-class MenzaViewModel @Inject constructor(
+class MenzaViewModel constructor(
     private val app: Application,
     private val menzaRepo: MenzaRepo,
     private val sett: SettingsStore,

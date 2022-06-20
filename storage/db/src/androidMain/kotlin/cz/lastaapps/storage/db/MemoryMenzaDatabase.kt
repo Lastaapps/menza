@@ -17,8 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+package cz.lastaapps.storage.db
+
+/*
+ *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,58 +38,13 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.di
+import android.content.Context
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.db.SqlDriver
+import cz.lastaapps.menza.db.MenzaDatabase
 
-import cz.lastaapps.scraping.*
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
-
-@Module
-@InstallIn(SingletonComponent::class)
-@Suppress("UNCHECKED_CAST")
-object ScraperModule {
-
-    @Provides
-    @Singleton
-    fun provideAllergenScraper(): AllergenScraper =
-        AllergensScraperImpl as AllergenScraper
-
-    @Provides
-    @Singleton
-    fun provideContactsScraper(): ContactsScraper =
-        ContactsScraperImpl as ContactsScraper
-
-    @Provides
-    @Singleton
-    fun provideLocationScraper(): LocationScraper =
-        LocationScraperImpl as LocationScraper
-
-    @Provides
-    @Singleton
-    fun provideMenzaScraper(): MenzaScraper =
-        MenzaScraperImpl as MenzaScraper
-
-    @Provides
-    @Singleton
-    fun provideMessagesScraper(): MessagesScraper =
-        MessagesScraperImpl as MessagesScraper
-
-    @Provides
-    @Singleton
-    fun provideOpeningHoursScraper(): OpeningHoursScraper =
-        OpeningHoursScraperImpl as OpeningHoursScraper
-
-    @Provides
-    @Singleton
-    fun provideTodayScraper(): TodayScraper =
-        TodayScraperImpl as TodayScraper
-
-    @Provides
-    @Singleton
-    fun provideWeekScraper(): WeekScraper =
-        WeekScraperImpl as WeekScraper
-
+actual class MemoryMenzaDriverFactory(private val context: Context) : MenzaDriverFactory {
+    actual override fun createDriver(): SqlDriver {
+        return AndroidSqliteDriver(MenzaDatabase.Schema, context, null)
+    }
 }

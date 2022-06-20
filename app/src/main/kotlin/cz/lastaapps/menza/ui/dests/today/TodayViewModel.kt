@@ -31,17 +31,14 @@ import cz.lastaapps.menza.di.TodayRepoFactory
 import cz.lastaapps.storage.repo.AllergenRepo
 import cz.lastaapps.storage.repo.MenzaError
 import cz.lastaapps.storage.repo.TodayRepo
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
-import javax.inject.Inject
 
 typealias DishTypeList = Pair<CourseType, List<Dish>>
 
-@HiltViewModel
-class TodayViewModel @Inject constructor(
+class TodayViewModel constructor(
     private val todayRepoFactory: TodayRepoFactory,
     private val allergenRepo: AllergenRepo,
 ) : ViewModel() {

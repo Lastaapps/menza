@@ -48,7 +48,8 @@ import cz.lastaapps.common.R
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDialog
-import cz.lastaapps.menza.ui.root.locals.hiltActivityViewModel
+import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewViewModel
+import cz.lastaapps.menza.ui.root.locals.rememberActivityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -171,7 +172,9 @@ private fun WhatsNewButton(modifier: Modifier = Modifier) {
         )
     }
     if (showWhatsNew) {
-        WhatsNewDialog(hiltActivityViewModel()) { showWhatsNew = false }
+        WhatsNewDialog(rememberActivityViewModel<WhatsNewViewModel>().value) {
+            showWhatsNew = false
+        }
     }
 }
 

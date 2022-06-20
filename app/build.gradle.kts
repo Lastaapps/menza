@@ -20,8 +20,6 @@
 plugins {
     id(Plugins.APPLICATION)
     id(Plugins.KOTLIN_ANDROID)
-    id(Plugins.KAPT)
-    id(Plugins.DAGGER_HILT)
     id(Plugins.ABOUT_LIBRARIES)
 }
 
@@ -106,10 +104,6 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
 
     coreLibraryDesugaring(Libs.DESUGARING)
@@ -121,20 +115,21 @@ dependencies {
     implementation(project(":lastaapps:common"))
     implementation(project(":lastaapps:crash"))
 
-    implementation(Libs.SPLASHSCREEN)
-    implementation(Libs.MATERIAL)
+    implementation(Libs.APPCOMPAT)
     implementation(Libs.CORE)
     implementation(Libs.DATASTORE)
     implementation(Libs.LIFECYCLE)
+    implementation(Libs.MATERIAL)
+    implementation(Libs.SPLASHSCREEN)
     implementation(Libs.STARTUP)
     implementation(Libs.WINDOW_MANAGER)
     implementation(Libs.VECTOR_DRAWABLES)
 
-    implementation(Libs.DAGGER_HILT)
-    implementation(Libs.HILT_COMMON)
-    implementation(Libs.HILT_NAVIGATION_COMPOSE)
-    kapt(Libs.DAGGER_HILT_COMPILER)
-    kapt(Libs.HILT_COMPILER)
+    implementation(Libs.KODEIN)
+    implementation(Libs.KODEIN_COMPOSE)
+    implementation(Libs.KODEIN_ANDROIDX)
+    implementation(Libs.KODEIN_ANDROIDX_VIEWMODE)
+    implementation(Libs.KODEIN_ANDROIDX_VIEWMODE_SAVEDSTATE)
 
     initCompose()
 

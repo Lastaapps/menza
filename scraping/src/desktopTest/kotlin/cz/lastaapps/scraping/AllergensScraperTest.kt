@@ -37,8 +37,8 @@ class AllergensScraperTest {
     @Test
     fun scrapeAllAllergensOnline() = runTest {
 
-        val result = AllergensScraperImpl.createRequestForAll().bodyAsText()
-        val allergens = AllergensScraperImpl.scrape(result)
+        val result = AllergenScraperImpl.createRequestForAll().bodyAsText()
+        val allergens = AllergenScraperImpl.scrape(result)
 
         //allergens.forEach { println(it) }
 
@@ -55,8 +55,8 @@ class AllergensScraperTest {
     fun scrapeFoodAllergensOnline() = runTest {
 
         val result =
-            AllergensScraperImpl.createRequestForDish(DishAllergensPage(336173)).bodyAsText()
-        val allergens = AllergensScraperImpl.scrape(result)
+            AllergenScraperImpl.createRequestForDish(DishAllergensPage(336173)).bodyAsText()
+        val allergens = AllergenScraperImpl.scrape(result)
 
         //allergens.forEach { println(it) }
 
@@ -166,7 +166,7 @@ class AllergensScraperTest {
   
   </div>"""
 
-        val allergens = AllergensScraperImpl.scrape(toTest)
+        val allergens = AllergenScraperImpl.scrape(toTest)
 
         allergens.forEach {
             println(it)
@@ -270,7 +270,7 @@ class AllergensScraperTest {
   <p><a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a></p>    
   </div>"""
 
-        val allergens = AllergensScraperImpl.scrape(toTest)
+        val allergens = AllergenScraperImpl.scrape(toTest)
 
         allergens.forEach {
             println(it)
@@ -378,15 +378,15 @@ class AllergensScraperTest {
       </table>
   </div>"""
 
-        shouldThrowAny { AllergensScraperImpl.scrape("") }
-        shouldThrowAny { AllergensScraperImpl.scrape(noCode) }
-        shouldThrowAny { AllergensScraperImpl.scrape(emptyCode) }
-        shouldThrowAny { AllergensScraperImpl.scrape(invalidCode) }
-        shouldThrowAny { AllergensScraperImpl.scrape(emptyName) }
-        shouldThrowAny { AllergensScraperImpl.scrape(emptyDescription) }
-        shouldThrowAny { AllergensScraperImpl.scrape(justTwoItems) }
-        shouldThrowAny { AllergensScraperImpl.scrape(justOneItem) }
-        AllergensScraperImpl.scrape(noItems).shouldBeEmpty()
+        shouldThrowAny { AllergenScraperImpl.scrape("") }
+        shouldThrowAny { AllergenScraperImpl.scrape(noCode) }
+        shouldThrowAny { AllergenScraperImpl.scrape(emptyCode) }
+        shouldThrowAny { AllergenScraperImpl.scrape(invalidCode) }
+        shouldThrowAny { AllergenScraperImpl.scrape(emptyName) }
+        shouldThrowAny { AllergenScraperImpl.scrape(emptyDescription) }
+        shouldThrowAny { AllergenScraperImpl.scrape(justTwoItems) }
+        shouldThrowAny { AllergenScraperImpl.scrape(justOneItem) }
+        AllergenScraperImpl.scrape(noItems).shouldBeEmpty()
     }
 
 }

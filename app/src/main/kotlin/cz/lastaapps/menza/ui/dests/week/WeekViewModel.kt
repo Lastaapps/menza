@@ -28,17 +28,14 @@ import cz.lastaapps.menza.compareToLocal
 import cz.lastaapps.menza.di.WeekRepoFactory
 import cz.lastaapps.storage.repo.MenzaError
 import cz.lastaapps.storage.repo.WeekRepo
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import java.util.*
-import javax.inject.Inject
 
-@HiltViewModel
-class WeekViewModel @Inject constructor(
+class WeekViewModel constructor(
     private val weekRepoFactory: WeekRepoFactory,
 ) : ViewModel() {
 

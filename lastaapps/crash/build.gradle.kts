@@ -20,9 +20,7 @@
 plugins {
     id(Plugins.LIBRARY)
     id(Plugins.KOTLIN_ANDROID)
-    id(Plugins.KAPT)
-    id(Plugins.DAGGER_HILT)
-    id(Plugins.SQLDELIGHT) version Versions.SQLDELIGHT
+    id(Plugins.SQLDELIGHT)
 }
 
 android {
@@ -72,10 +70,10 @@ dependencies {
     implementation(Libs.SQLDELIGHT_RUNTIME)
     implementation(Libs.SQLDELIGHT_COROUTINES)
 
-    implementation(Libs.DAGGER_HILT)
-    implementation(Libs.HILT_COMMON)
-    kapt(Libs.DAGGER_HILT_COMPILER)
-    kapt(Libs.HILT_COMPILER)
+    implementation(Libs.KODEIN)
+    implementation(Libs.KODEIN_ANDROIDX)
+    implementation(Libs.KODEIN_ANDROIDX_VIEWMODE)
+    implementation(Libs.KODEIN_ANDROIDX_VIEWMODE_SAVEDSTATE)
 
     implementation(Libs.KM_LOGGING)
 }

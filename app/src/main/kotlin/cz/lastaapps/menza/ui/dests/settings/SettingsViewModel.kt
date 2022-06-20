@@ -27,16 +27,13 @@ import coil.imageLoader
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.storage.repo.*
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 import kotlin.system.exitProcess
 
-@HiltViewModel
-class SettingsViewModel @Inject constructor(
+class SettingsViewModel constructor(
     private val app: Application,
     val sett: SettingsStore,
     private val allergenRepo: AllergenRepo,

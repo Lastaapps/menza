@@ -17,33 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.di
+package cz.lastaapps.crash
 
-import android.app.Application
-import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.storage.MenzaDriverFactory
-import cz.lastaapps.storage.MenzaDriverFactoryFactoryImpl
-import cz.lastaapps.storage.createMenzaDatabase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import cz.lastaapps.crash.db.CrashDatabaseDriver
+import cz.lastaapps.crash.db.createCrashDriver
+import cz.lastaapps.crash.db.createDatabase
+import org.kodein.di.DI
+import org.kodein.di.bindProvider
+import org.kodein.di.bindSingleton
+import org.kodein.di.instance
 
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
+@Suppress("RemoveExplicitTypeArguments")
+val DIModule = DI.Module("cz.lastaapps.crash") {
 
-    @Provides
-    @Singleton
-    fun provideMenzaDatabaseDriver(app: Application): MenzaDriverFactory {
-        return MenzaDriverFactoryFactoryImpl(app)
-    }
-
-    @Provides
-    @Singleton
-    fun provideMenzaDatabase(driver: MenzaDriverFactory): MenzaDatabase {
-        return createMenzaDatabase(driver)
-    }
+    bindProvider<CrashDatabaseDriver> { createCrashDriver(instance()) }
+    bindSingleton<CrashDatabase> { createDatabase(instance()) }
 
 }

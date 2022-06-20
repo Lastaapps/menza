@@ -60,6 +60,8 @@ kotlin {
                 implementation(Libs.KTOR_CORE)
                 implementation(Libs.KTOR_CIO)
 
+                implementation(Libs.KODEIN)
+
                 implementation(project(":entity"))
                 implementation(project(":html-parser"))
             }
@@ -73,10 +75,7 @@ kotlin {
         }
         val androidMain by getting {
             kotlin.srcDir("src/commonJvmAndroid/kotlin")
-            dependencies {
-                //implementation(Libs.SKRAPE_IT)
-                //implementation(project(":html-parser"))
-            }
+            dependencies {}
         }
         val androidTest by getting {
             kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
@@ -85,10 +84,7 @@ kotlin {
         }
         val desktopMain by getting {
             kotlin.srcDir("src/commonJvmAndroid/kotlin")
-            dependencies {
-                //implementation(Libs.SKRAPE_IT)
-                //implementation(project(":html-parser"))
-            }
+            dependencies {}
         }
         val desktopTest by getting {
             kotlin.srcDir("src/commonJvmAndroidTest/kotlin")

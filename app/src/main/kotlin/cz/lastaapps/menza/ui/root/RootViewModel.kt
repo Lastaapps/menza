@@ -23,15 +23,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.menza.ui.dests.settings.store.SettingsStore
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.lighthousegames.logging.logging
-import javax.inject.Inject
 
-@HiltViewModel
-class RootViewModel @Inject constructor(
+class RootViewModel constructor(
     private val database: MenzaDatabase,
     val sett: SettingsStore,
 ) : ViewModel() {

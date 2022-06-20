@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,10 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage
+package cz.lastaapps.storage.db
 
-import com.squareup.sqldelight.db.SqlDriver
+import cz.lastaapps.menza.db.MenzaDatabase
+import org.kodein.di.DI
+import org.kodein.di.bindProvider
+import org.kodein.di.bindSingleton
+import org.kodein.di.instance
 
-expect class MemoryMenzaDriverFactory : MenzaDriverFactory {
-    override fun createDriver(): SqlDriver
+@Suppress("RemoveExplicitTypeArguments")
+actual val DIModule = DI.Module("db") {
+    bindProvider<MenzaDriverFactory> { MenzaDriverFactoryFactoryImpl() }
+    bindSingleton<MenzaDatabase> { createMenzaDatabase(instance()) }
 }

@@ -24,14 +24,11 @@ import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.storage.repo.AllergenRepo
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
-@HiltViewModel
-class AllergenViewModel @Inject constructor(
+class AllergenViewModel constructor(
     private val allergenRepo: AllergenRepo,
 ) : ViewModel() {
 

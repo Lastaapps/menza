@@ -22,7 +22,6 @@ package cz.lastaapps.menza.ui.dests.others.whatsnew
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,10 +32,8 @@ import org.lighthousegames.logging.logging
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
-import javax.inject.Inject
 
-@HiltViewModel
-class WhatsNewViewModel @Inject constructor(
+class WhatsNewViewModel constructor(
     private val app: Application,
     private val store: WhatsNewDataStore,
 ) : ViewModel() {

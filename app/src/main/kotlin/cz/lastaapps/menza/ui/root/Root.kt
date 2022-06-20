@@ -25,7 +25,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.compose.dialog
@@ -34,20 +33,25 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.init.InitDecision
+import cz.lastaapps.menza.init.InitViewModel
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.WithConnectivity
 import cz.lastaapps.menza.ui.dests.info.InfoLayout
+import cz.lastaapps.menza.ui.dests.info.InfoViewModel
 import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
 import cz.lastaapps.menza.ui.dests.others.osturak.OsturakLayout
 import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyCheck
 import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyDialogContent
+import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyViewModel
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.darkMode
 import cz.lastaapps.menza.ui.dests.settings.store.resolveShouldUseDark
 import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
 import cz.lastaapps.menza.ui.dests.today.TodayDest
+import cz.lastaapps.menza.ui.dests.today.TodayViewModel
 import cz.lastaapps.menza.ui.dests.week.WeekLayout
+import cz.lastaapps.menza.ui.dests.week.WeekViewModel
 import cz.lastaapps.menza.ui.layout.main.WithDrawerListStateProvider
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.locals.*
@@ -63,6 +67,11 @@ fun AppRoot(
     val useDark by viewModel.sett.darkMode.collectAsState()
     val useSystem by viewModel.sett.systemTheme.collectAsState()
 
+    val privacyViewModel: PrivacyViewModel by rememberActivityViewModel()
+    val initViewModel: InitViewModel by rememberActivityViewModel()
+    val menzaViewModel: MenzaViewModel by rememberActivityViewModel()
+    val settingsViewModel: SettingsViewModel by rememberActivityViewModel()
+
     AppTheme(
         darkTheme = useDark.resolveShouldUseDark(),
         useCustomTheme = !useSystem,
@@ -76,13 +85,13 @@ fun AppRoot(
                 viewModelStoreOwner = viewModelStoreOwner,
             ) {
                 //checks if privacy policy has been accepted
-                PrivacyCheck(hiltViewModel()) {
+                PrivacyCheck(privacyViewModel) {
 
                     //Download default data
-                    InitDecision(hiltActivityViewModel()) {
+                    InitDecision(initViewModel) {
 
                         //show app if ready
-                        AppContent(hiltActivityViewModel())
+                        AppContent(menzaViewModel, settingsViewModel)
                     }
                 }
             }
@@ -109,8 +118,7 @@ fun ApplyLocalProviders(
 
 @OptIn(ExperimentalMaterial3Api::class, androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
-private fun AppContent(viewModel: MenzaViewModel) {
-    val settingsViewModel: SettingsViewModel = hiltViewModel()
+private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsViewModel) {
 
     val menzaId by viewModel.selectedMenza.collectAsState()
     val onMenzaSelected: (MenzaId?) -> Unit = { viewModel.selectMenza(it) }
@@ -147,7 +155,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                         TodayDest(
                             navController = navHostState,
                             menzaId = menzaId,
-                            todayViewModel = hiltActivityViewModel(),
+                            todayViewModel = rememberActivityViewModel<TodayViewModel>().value,
                             settingsViewModel = settingsViewModel,
                         )
                     }
@@ -155,7 +163,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                         WeekLayout(
                             navController = navHostState,
                             menzaId = menzaId,
-                            weekViewModel = hiltActivityViewModel(),
+                            weekViewModel = rememberActivityViewModel<WeekViewModel>().value,
                         )
                     }
                     composable(Dest.R.info) {
@@ -163,7 +171,7 @@ private fun AppContent(viewModel: MenzaViewModel) {
                             navController = navHostState,
                             snackbarHostState = snackbarHostState,
                             menzaId = menzaId,
-                            infoViewModel = hiltActivityViewModel(),
+                            infoViewModel = rememberActivityViewModel<InfoViewModel>().value,
                         )
                     }
                     composable(Dest.R.settings) {

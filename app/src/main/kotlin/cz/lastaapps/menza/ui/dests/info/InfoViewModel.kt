@@ -28,14 +28,11 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.entity.menza.Message
 import cz.lastaapps.storage.repo.*
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class InfoViewModel @Inject constructor(
+class InfoViewModel constructor(
     private val messageRepo: MessagesRepo,
     private val contactsRepo: ContactsRepo,
     private val locationRepo: LocationRepo,

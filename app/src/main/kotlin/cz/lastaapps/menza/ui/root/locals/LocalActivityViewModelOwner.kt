@@ -22,11 +22,12 @@ package cz.lastaapps.menza.ui.root.locals
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
+import androidx.lifecycle.*
+import org.kodein.di.compose.localDI
+import org.kodein.di.direct
+import org.kodein.di.instance
 
 // Stolen from LocalViewModelOwner
 object LocalActivityViewModelOwner {
@@ -45,5 +46,22 @@ object LocalActivityViewModelOwner {
 }
 
 @Composable
-inline fun <reified VM : ViewModel> hiltActivityViewModel() =
-    hiltViewModel<VM>(LocalActivityViewModelOwner.current)
+inline fun <reified VM : ViewModel> rememberActivityViewModel(tag: Any? = null): ViewModelLazy<VM> =
+    with(localDI()) {
+        val viewModelStoreOwner = LocalActivityViewModelOwner.current
+
+        remember {
+            ViewModelLazy(
+                viewModelClass = VM::class,
+                storeProducer = { viewModelStoreOwner.viewModelStore },
+                factoryProducer = {
+                    object : ViewModelProvider.Factory {
+                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                            @Suppress("UNCHECKED_CAST")
+                            return direct.instance<VM>(tag) as T
+                        }
+                    }
+                }
+            )
+        }
+    }

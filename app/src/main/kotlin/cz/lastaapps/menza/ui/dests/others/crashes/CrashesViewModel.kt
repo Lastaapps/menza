@@ -28,17 +28,14 @@ import cz.lastaapps.crash.CrashDatabase
 import cz.lastaapps.crash.entity.Crash
 import cz.lastaapps.crash.entity.ErrorSeverity
 import cz.lastaapps.crash.entity.ReportState
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
-import javax.inject.Inject
 
-@HiltViewModel
-class CrashesViewModel @Inject constructor(
+class CrashesViewModel constructor(
     private val database: CrashDatabase,
 ) : ViewModel() {
 

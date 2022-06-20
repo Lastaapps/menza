@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage
+package cz.lastaapps.storage.db
 
 import com.squareup.sqldelight.ColumnAdapter
 import cz.lastaapps.entity.LocalTime

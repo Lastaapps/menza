@@ -20,7 +20,7 @@
 plugins {
     id(Plugins.KOTLIN_MULTIPLATFORM)
     id(Plugins.LIBRARY)
-    id(Plugins.SQLDELIGHT) version Versions.SQLDELIGHT
+    id(Plugins.SQLDELIGHT)
 }
 
 group = App.GROUP
@@ -54,6 +54,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(Libs.KOTLINX_DATETIME)
+                implementation(Libs.KODEIN)
 
                 api(Libs.SQLDELIGHT_RUNTIME)
                 api(Libs.SQLDELIGHT_COROUTINES)

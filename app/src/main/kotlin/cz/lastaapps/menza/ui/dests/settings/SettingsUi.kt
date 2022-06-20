@@ -55,7 +55,7 @@ import cz.lastaapps.menza.ui.dests.settings.store.imagesOnMetered
 import cz.lastaapps.menza.ui.dests.settings.store.priceType
 import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
-import cz.lastaapps.menza.ui.root.locals.hiltActivityViewModel
+import cz.lastaapps.menza.ui.root.locals.rememberActivityViewModel
 import cz.lastaapps.menza.ui.theme.isDynamicThemeSupported
 
 @Composable
@@ -273,7 +273,7 @@ private fun ReportButton(modifier: Modifier = Modifier) {
 @Composable
 fun CrashesButton(
     modifier: Modifier = Modifier,
-    viewModel: CrashesViewModel = hiltActivityViewModel()
+    viewModel: CrashesViewModel = rememberActivityViewModel<CrashesViewModel>().value
 ) {
     var dialogShown by remember { mutableStateOf(false) }
 

@@ -55,6 +55,7 @@ kotlin {
                 implementation(Libs.KOTLINX_DATETIME)
                 implementation(Libs.KOTLIN_COROUTINES)
                 implementation(Libs.KTOR_CORE)
+                implementation(Libs.KODEIN)
                 api(Libs.KM_LOGGING)
 
                 implementation(project(":entity"))

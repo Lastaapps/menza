@@ -17,29 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.crash
+package cz.lastaapps.storage.repo
 
-import android.content.Context
-import androidx.annotation.Keep
-import androidx.startup.Initializer
-import org.kodein.di.android.closestDI
+import kotlinx.coroutines.Dispatchers
+import org.kodein.di.DI
+import org.kodein.di.bindSingleton
 import org.kodein.di.instance
-import org.lighthousegames.logging.logging
 
-@Keep
-internal class StartInit : Initializer<Unit> {
+val DIModule = DI.Module("repo") {
+    import(cz.lastaapps.storage.db.DIModule)
 
-    companion object {
-        private val log = logging()
-    }
-
-    override fun create(context: Context) {
-        val di by closestDI(context)
-        val database: CrashDatabase by di.instance()
-
-        log.i { "Initializing crash storage" }
-        Catcher.register(database)
-    }
-
-    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
+    bindSingleton<AllergenRepo> { AllergenRepoImpl(instance(), instance(), Dispatchers.IO) }
+    bindSingleton<ContactsRepo> { ContactsRepoImpl(instance(), instance(), Dispatchers.IO) }
+    bindSingleton<LocationRepo> { LocationRepoImpl(instance(), instance(), Dispatchers.IO) }
+    bindSingleton<MenzaRepo> { MenzaRepoImpl(instance(), instance(), Dispatchers.IO) }
+    bindSingleton<MessagesRepo> { MessagesRepoImpl(instance(), instance(), Dispatchers.IO) }
+    bindSingleton<OpeningHoursRepo> { OpeningHoursRepoImpl(instance(), instance(), Dispatchers.IO) }
 }

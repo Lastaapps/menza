@@ -17,28 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.crash.di
+package cz.lastaapps.storage.db
 
-import android.content.Context
-import cz.lastaapps.crash.StartInit
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
+import cz.lastaapps.menza.db.MenzaDatabase
+import org.kodein.di.DI
+import org.kodein.di.bindProvider
+import org.kodein.di.bindSingleton
+import org.kodein.di.instance
 
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-internal interface InitializerEntryPoint {
-
-    fun inject(initializer: StartInit)
-
-    companion object {
-        fun resolve(context: Context): InitializerEntryPoint {
-            val appContext = context.applicationContext ?: throw IllegalStateException()
-
-            return EntryPointAccessors.fromApplication(
-                appContext, InitializerEntryPoint::class.java
-            )
-        }
-    }
+@Suppress("RemoveExplicitTypeArguments")
+actual val DIModule = DI.Module("db") {
+    bindProvider<MenzaDriverFactory> { MenzaDriverFactoryFactoryImpl(instance()) }
+    bindSingleton<MenzaDatabase> { createMenzaDatabase(instance()) }
 }

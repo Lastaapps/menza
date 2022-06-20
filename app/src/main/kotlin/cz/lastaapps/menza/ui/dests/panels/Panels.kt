@@ -37,15 +37,15 @@ import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewPanel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewViewModel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.whatsNewPanelState
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.root.locals.hiltActivityViewModel
+import cz.lastaapps.menza.ui.root.locals.rememberActivityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Panels(
     modifier: Modifier = Modifier,
-    settingsViewModel: SettingsViewModel = hiltActivityViewModel(),
-    crashesViewModel: CrashesViewModel = hiltActivityViewModel(),
-    whatsNewViewModel: WhatsNewViewModel = hiltActivityViewModel(),
+    settingsViewModel: SettingsViewModel = rememberActivityViewModel<SettingsViewModel>().value,
+    crashesViewModel: CrashesViewModel = rememberActivityViewModel<CrashesViewModel>().value,
+    whatsNewViewModel: WhatsNewViewModel = rememberActivityViewModel<WhatsNewViewModel>().value,
 ) {
     Box(modifier.animateContentSize()) {
         val showPrice = priceTypeUnspecifiedState(settingsViewModel)

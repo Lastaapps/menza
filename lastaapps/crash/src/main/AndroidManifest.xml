@@ -28,9 +28,6 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="cz.lastaapps.crash.di.HiltInitializer"
-                android:value="androidx.startup" />
-            <meta-data
                 android:name="cz.lastaapps.crash.StartInit"
                 android:value="androidx.startup" />
         </provider>

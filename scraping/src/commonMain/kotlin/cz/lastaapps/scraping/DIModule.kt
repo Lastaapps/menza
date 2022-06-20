@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,20 +17,8 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage
+package cz.lastaapps.scraping
 
-import com.squareup.sqldelight.db.SqlDriver
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import cz.lastaapps.menza.db.MenzaDatabase
+import org.kodein.di.DI
 
-actual class MenzaDriverFactoryFactoryImpl : MenzaDriverFactory {
-    @Suppress("UNREACHABLE_CODE")
-    actual override fun createDriver(): SqlDriver {
-        //TODO use real driver
-        //https://github.com/molikuner/sqldelight-simple-jvm-driver
-        error("Implement real driver first")
-        val driver: SqlDriver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        MenzaDatabase.Schema.create(driver)
-        return driver
-    }
-}
+expect val DIModule: DI.Module

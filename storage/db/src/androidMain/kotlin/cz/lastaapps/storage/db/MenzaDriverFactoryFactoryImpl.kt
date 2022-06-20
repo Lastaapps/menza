@@ -17,18 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.crash.di
+package cz.lastaapps.storage.db
 
 import android.content.Context
-import androidx.annotation.Keep
-import androidx.startup.Initializer
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.db.SqlDriver
+import cz.lastaapps.menza.db.MenzaDatabase
 
-@Keep
-internal class HiltInitializer : Initializer<Unit> {
-
-    override fun create(context: Context) {
-        InitializerEntryPoint.resolve(context)
+actual class MenzaDriverFactoryFactoryImpl(private val context: Context) : MenzaDriverFactory {
+    actual override fun createDriver(): SqlDriver {
+        return AndroidSqliteDriver(MenzaDatabase.Schema, context, "menza.db")
     }
-
-    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }

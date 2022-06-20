@@ -20,20 +20,22 @@
 package cz.lastaapps.menza
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import cz.lastaapps.menza.ui.root.AppRoot
 import cz.lastaapps.menza.ui.root.RootViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.android.closestDI
+import org.kodein.di.android.x.viewmodel.viewModel
 
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity(), DIAware {
 
-    private val rootViewModel: RootViewModel by viewModels()
+    override val di: DI by closestDI()
+    private val rootViewModel: RootViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,15 +45,7 @@ class MainActivity : ComponentActivity() {
             !rootViewModel.isReady.value
         }
 
-        /*lifecycleScope.launch(Dispatchers.Main) {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                WindowInfoTracker.getOrCreate(this@MainActivity)
-                    .windowLayoutInfo(this@MainActivity)
-                    .collectLatest { newLayoutInfo ->
-                        Unit
-                    }
-            }
-        }*/
+        supportActionBar?.hide()
 
         setContent {
             if (rootViewModel.isReady.collectAsState().value) {

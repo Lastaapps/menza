@@ -17,32 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.crash.di
+package cz.lastaapps.storage.db
 
-import android.app.Application
-import cz.lastaapps.crash.CrashDatabase
-import cz.lastaapps.crash.db.CrashDatabaseDriver
-import cz.lastaapps.crash.db.createCrashDriver
-import cz.lastaapps.crash.db.createDatabase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object DatabaseProvider {
+class MenzaLocationDriverFactoryTest {
 
-    @Provides
-    @Singleton
-    fun provideCrashDriver(app: Application): CrashDatabaseDriver {
-        return createCrashDriver(app)
+    @Test
+    @ExperimentalCoroutinesApi
+    fun testInsertion() = runTest {
+        createMenzaDatabase(MemoryMenzaDriverFactory())
     }
 
-    @Provides
-    @Singleton
-    fun provideCrashDatabase(driver: CrashDatabaseDriver): CrashDatabase {
-        return createDatabase(driver)
-    }
 }

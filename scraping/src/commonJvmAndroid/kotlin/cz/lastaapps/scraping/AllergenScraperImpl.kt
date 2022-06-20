@@ -28,7 +28,7 @@ import it.skrape.selects.Doc
 import it.skrape.selects.html5.img
 import it.skrape.selects.html5.td
 
-object AllergensScraperImpl : AllergenScraper {
+object AllergenScraperImpl : AllergenScraper {
 
     override suspend fun createRequestForAll() =
         agataClient.get("https://agata.suz.cvut.cz/jidelnicky/alergenyall.php")

@@ -17,29 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.crash
+package cz.lastaapps.storage.db
 
-import android.content.Context
-import androidx.annotation.Keep
-import androidx.startup.Initializer
-import org.kodein.di.android.closestDI
-import org.kodein.di.instance
-import org.lighthousegames.logging.logging
+import com.squareup.sqldelight.db.SqlDriver
+import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import cz.lastaapps.menza.db.MenzaDatabase
 
-@Keep
-internal class StartInit : Initializer<Unit> {
-
-    companion object {
-        private val log = logging()
+actual class MemoryMenzaDriverFactory : MenzaDriverFactory {
+    actual override fun createDriver(): SqlDriver {
+        val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        MenzaDatabase.Schema.create(driver)
+        return driver
     }
-
-    override fun create(context: Context) {
-        val di by closestDI(context)
-        val database: CrashDatabase by di.instance()
-
-        log.i { "Initializing crash storage" }
-        Catcher.register(database)
-    }
-
-    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }
