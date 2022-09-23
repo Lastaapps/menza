@@ -37,8 +37,7 @@ object WeekScraperImpl : WeekScraper {
 
     override suspend fun createRequest(
         menzaId: MenzaId, @Suppress("UNUSED_PARAMETER") weekNumber: WeekNumber
-    ) =
-        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=${menzaId.id}")
+    ) = agataClient.get("indexTyden.php?clPodsystem=${menzaId.id}")
 
     @Throws(WeekNotAvailable::class)
     override fun scrape(html: String): Set<WeekDish> {
@@ -105,7 +104,7 @@ object WeekScraperImpl : WeekScraper {
     }
 
     //TODO add more celebrations
-    private val invalidDishNames = listOf("štědrýden", "zavřeno")
+    private val invalidDishNames = arrayOf("štědrýden", "zavřeno")
 
     /**
      * Checks if the name is valid food name e.g. it is Christmas, Closed, ...

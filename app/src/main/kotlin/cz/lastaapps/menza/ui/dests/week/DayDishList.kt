@@ -21,9 +21,10 @@ package cz.lastaapps.menza.ui.dests.week
 
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.week.WeekDish
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.datetime.LocalDate
 
 data class DayDishList(
     val date: LocalDate,
-    val dishes: List<Pair<CourseType, List<WeekDish>>>
+    val dishes: ImmutableList<Pair<CourseType, ImmutableList<WeekDish>>>
 )

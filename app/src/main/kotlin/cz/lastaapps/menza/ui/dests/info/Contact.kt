@@ -41,11 +41,12 @@ import cz.lastaapps.entity.info.Email
 import cz.lastaapps.entity.info.PhoneNumber
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
 @Composable
 fun ContactList(
-    contact: List<Contact>,
+    contact: ImmutableList<Contact>,
     modifier: Modifier = Modifier,
 ) {
     if (contact.isNotEmpty()) {

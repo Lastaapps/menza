@@ -126,6 +126,7 @@ android {
         sourceCompatibility = Versions.JAVA
         targetCompatibility = Versions.JAVA
     }
+    namespace = "cz.lastaapps.storage.db"
     dependencies {
         coreLibraryDesugaring(Libs.DESUGARING)
     }

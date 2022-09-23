@@ -59,6 +59,7 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    namespace = "cz.lastaapps.common"
 }
 
 dependencies {

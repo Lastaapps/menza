@@ -52,6 +52,7 @@ android {
     kotlinOptions {
         jvmTarget = Versions.JVM_TARGET
     }
+    namespace = "cz.lastaapps.crash"
 }
 
 sqldelight {

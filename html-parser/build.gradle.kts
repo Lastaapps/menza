@@ -115,6 +115,7 @@ android {
         sourceCompatibility = Versions.JAVA
         targetCompatibility = Versions.JAVA
     }
+    namespace = "it.skrape"
 
     dependencies {
         coreLibraryDesugaring(Libs.DESUGARING)

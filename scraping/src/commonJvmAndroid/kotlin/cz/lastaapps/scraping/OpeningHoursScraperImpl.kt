@@ -19,7 +19,6 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.LocalTime
 import cz.lastaapps.entity.TimeUtils
 import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.MenzaId
@@ -27,11 +26,12 @@ import cz.lastaapps.entity.toCzechDayShortcutToDayOfWeek
 import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
+import kotlinx.datetime.LocalTime
 
 object OpeningHoursScraperImpl : OpeningHoursScraper {
 
     override suspend fun createRequest() =
-        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/oteviraci-doby.php")
+        agataClient.get("oteviraci-doby.php")
 
     override fun scrape(html: String): Set<OpeningHours> {
         return htmlDocument(html) { parseHtml() }

@@ -28,6 +28,8 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.compareToLocal
 import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.storage.repo.MenzaRepo
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -45,18 +47,18 @@ class MenzaViewModel constructor(
     }
 
     val isReady = MutableStateFlow(false)
-    lateinit var data: StateFlow<List<Menza>>
+    lateinit var data: StateFlow<ImmutableList<Menza>>
     private val orderKey: (Menza) -> String = { "agata_${it.menzaId}" }
 
     fun getForId(id: MenzaId): Menza? = data.value.firstOrNull { it.menzaId == id }
 
     private suspend fun CoroutineScope.prepareMenza() {
 
-        var myData: MutableStateFlow<List<Menza>>? = null
+        var myData: MutableStateFlow<ImmutableList<Menza>>? = null
 
         menzaRepo.getData(this).combineOrder().collectLatest { list ->
             if (myData == null) {
-                myData = MutableStateFlow(list.sortMenzaList()).also { data = it }
+                myData = MutableStateFlow(list.sortMenzaList().toImmutableList()).also { data = it }
 
                 log.i { "Data ready" }
 
@@ -69,7 +71,7 @@ class MenzaViewModel constructor(
 
                 isReady.value = true
             } else {
-                myData!!.value = list.sortMenzaList()
+                myData!!.value = list.sortMenzaList().toImmutableList()
             }
         }
     }

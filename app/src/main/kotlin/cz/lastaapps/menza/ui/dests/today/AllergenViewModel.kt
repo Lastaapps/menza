@@ -24,6 +24,7 @@ import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.storage.repo.AllergenRepo
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -34,7 +35,7 @@ class AllergenViewModel constructor(
 
     fun getAllAllergens() = allergenRepo.getData(viewModelScope)
 
-    fun getAllergenForIds(list: List<AllergenId>): Flow<List<Allergen>> {
+    fun getAllergenForIds(list: ImmutableList<AllergenId>): Flow<List<Allergen>> {
         return flow {
             emit(list.mapNotNull { allergenRepo.getAllergenInfo(it).first() })
         }

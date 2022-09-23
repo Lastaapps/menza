@@ -1,0 +1,3 @@
+Podpora Android 13
+Podpora nového webu
+Aktualizace knihoven

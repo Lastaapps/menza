@@ -35,6 +35,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentListOf
 import java.util.regex.Pattern
 
 // https://stackoverflow.com/questions/66130513/linkify-with-compose-text
@@ -48,7 +51,7 @@ fun LinkifyText(
     val layoutResult = remember {
         mutableStateOf<TextLayoutResult?>(null)
     }
-    val linksList = extractUrls(text)
+    val linksList = remember(text) { extractUrls(text) }
     val annotatedString = buildAnnotatedString {
         append(text)
         linksList.forEach {
@@ -93,24 +96,23 @@ private val urlPattern: Pattern = Pattern.compile(
     Pattern.CASE_INSENSITIVE or Pattern.MULTILINE or Pattern.DOTALL
 )
 
-private fun extractUrls(text: String): List<LinkInfo> {
-    val matcher = urlPattern.matcher(text)
-    var matchStart: Int
-    var matchEnd: Int
-    val links = arrayListOf<LinkInfo>()
+private fun extractUrls(text: String): ImmutableList<LinkInfo> =
+    persistentListOf<LinkInfo>().mutate { links ->
+        val matcher = urlPattern.matcher(text)
+        var matchStart: Int
+        var matchEnd: Int
 
-    while (matcher.find()) {
-        matchStart = matcher.start(1)
-        matchEnd = matcher.end()
+        while (matcher.find()) {
+            matchStart = matcher.start(1)
+            matchEnd = matcher.end()
 
-        var url = text.substring(matchStart, matchEnd)
-        if (!url.startsWith("http://") && !url.startsWith("https://"))
-            url = "https://$url"
+            var url = text.substring(matchStart, matchEnd)
+            if (!url.startsWith("http://") && !url.startsWith("https://"))
+                url = "https://$url"
 
-        links.add(LinkInfo(url, matchStart, matchEnd))
+            links.add(LinkInfo(url, matchStart, matchEnd))
+        }
     }
-    return links
-}
 
 private data class LinkInfo(
     val url: String,

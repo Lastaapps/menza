@@ -43,11 +43,12 @@ import cz.lastaapps.entity.menza.Coordinates
 import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
 @Composable
 fun AddressList(
-    locations: List<MenzaLocation>,
+    locations: ImmutableList<MenzaLocation>,
     modifier: Modifier = Modifier,
 ) {
     if (locations.isNotEmpty()) {

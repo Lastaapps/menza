@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -17,6 +17,6 @@
   ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<manifest package="cz.lastaapps.storage.db">
+<manifest>
 
 </manifest>

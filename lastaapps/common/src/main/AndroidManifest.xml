@@ -19,8 +19,7 @@
   ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<manifest package="cz.lastaapps.common"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <queries>
         <package android:name="com.facebook.katana" />

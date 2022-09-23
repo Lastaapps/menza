@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,8 +23,10 @@ object Libs {
 
     const val KOTLIN_STANDART_LIB = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.KOTLIN}"
     const val KOTLIN_COROUTINES =
-            "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.COROUTINES}"
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.COROUTINES}"
     const val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:${Versions.KOTLIN}"
+    const val KOTLIN_SERIALIZATION_JSON =
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.SERIALIZATION}"
 
     const val KTOR_CORE = "io.ktor:ktor-client-core:${Versions.KTOR}"
     const val KTOR_CIO = "io.ktor:ktor-client-cio:${Versions.KTOR}"
@@ -164,18 +166,20 @@ object Libs {
     const val KODEIN_ANDROIDX =
             "org.kodein.di:kodein-di-framework-android-x:${Versions.KODEIN}"
     const val KODEIN_ANDROIDX_VIEWMODE =
-            "org.kodein.di:kodein-di-framework-android-x-viewmodel:${Versions.KODEIN}"
+        "org.kodein.di:kodein-di-framework-android-x-viewmodel:${Versions.KODEIN}"
     const val KODEIN_ANDROIDX_VIEWMODE_SAVEDSTATE =
-            "org.kodein.di:kodein-di-framework-android-x-viewmodel-savedstate:${Versions.KODEIN}"
+        "org.kodein.di:kodein-di-framework-android-x-viewmodel-savedstate:${Versions.KODEIN}"
     const val KODEIN_COMPOSE =
-            "org.kodein.di:kodein-di-framework-compose:${Versions.KODEIN}"
+        "org.kodein.di:kodein-di-framework-compose:${Versions.KODEIN}"
 
     const val ABOUT_LIBRARIES_COMPOSE =
-            "com.mikepenz:aboutlibraries-compose:${Versions.ABOUT_LIBRARIES}"
+        "com.mikepenz:aboutlibraries-compose:${Versions.ABOUT_LIBRARIES}"
     const val ABOUT_LIBRARIES_CORE = "com.mikepenz:aboutlibraries-core:${Versions.ABOUT_LIBRARIES}"
     const val KM_LOGGING = "org.lighthousegames:logging:${Versions.KM_LOGGING}"
+    const val KOTLINX_COLLECTION =
+        "org.jetbrains.kotlinx:kotlinx-collections-immutable:${Versions.KOTLINX_COLLECTION}"
     const val KOTLINX_DATETIME =
-            "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KOTLINX_DATETIME}"
+        "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KOTLINX_DATETIME}"
     const val LOGBACK = "ch.qos.logback:logback-classic:${Versions.LOGBACK}"
     const val QRGEN = "com.github.kenglxn.QRGen:android:${Versions.QRGEN}" // jitpack
     const val SKRAPE_IT = "it.skrape:skrapeit:${Versions.SKRAPE_IT}"

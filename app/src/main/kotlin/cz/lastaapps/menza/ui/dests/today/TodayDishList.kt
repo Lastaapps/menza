@@ -68,6 +68,7 @@ import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.menza.ui.isMetered
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 
 @Composable
@@ -136,7 +137,7 @@ fun TodayDishList(
 @Composable
 private fun DishContent(
     menzaId: MenzaId,
-    data: List<DishTypeList>,
+    data: ImmutableList<DishTypeList>,
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
@@ -194,7 +195,7 @@ private fun NoItems(modifier: Modifier, menzaId: MenzaId) {
             visible = true
         }
         AnimatedVisibility(visible) {
-            TextButton(onClick = { uriHandler.openUri("https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}") }) {
+            TextButton(onClick = { uriHandler.openUri("index.php?clPodsystem=${menzaId.id}") }) {
                 Text(stringResource(R.string.today_list_web))
             }
         }

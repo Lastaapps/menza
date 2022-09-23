@@ -28,6 +28,9 @@ import cz.lastaapps.menza.compareToLocal
 import cz.lastaapps.menza.di.WeekRepoFactory
 import cz.lastaapps.storage.repo.MenzaError
 import cz.lastaapps.storage.repo.WeekRepo
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,15 +43,15 @@ class WeekViewModel constructor(
 ) : ViewModel() {
 
     private val repos = HashMap<MenzaId, WeekRepo>()
-    private val cache = HashMap<MenzaId, MutableStateFlow<List<DayDishList>>>()
+    private val cache = HashMap<MenzaId, MutableStateFlow<ImmutableList<DayDishList>>>()
     val errors = Channel<MenzaError>(Channel.BUFFERED)
 
-    fun getData(menzaId: MenzaId, locale: Locale): StateFlow<List<DayDishList>> {
+    fun getData(menzaId: MenzaId, locale: Locale): StateFlow<ImmutableList<DayDishList>> {
 
         val data = cache[menzaId]
         if (data != null) return data
 
-        return MutableStateFlow<List<DayDishList>>(emptyList()).also {
+        return MutableStateFlow<ImmutableList<DayDishList>>(persistentListOf()).also {
             cache[menzaId] = it
             refresh(menzaId, locale)
         }
@@ -66,7 +69,7 @@ class WeekViewModel constructor(
             val data = repo.getData()
 
             if (data != null) {
-                cache.getOrPut(menzaId) { MutableStateFlow(emptyList()) }.value =
+                cache.getOrPut(menzaId) { MutableStateFlow(persistentListOf()) }.value =
                     data.toDayDishList(locale)
             }
             while (true)
@@ -79,7 +82,7 @@ class WeekViewModel constructor(
         weekRepoFactory.create(menzaId)
     }
 
-    private fun Collection<WeekDish>.toDayDishList(locale: Locale): List<DayDishList> {
+    private fun Collection<WeekDish>.toDayDishList(locale: Locale): ImmutableList<DayDishList> {
         val map = mutableMapOf<LocalDate, MutableList<WeekDish>>()
 
         //group of days
@@ -109,7 +112,14 @@ class WeekViewModel constructor(
             pair.key to sortedCourses
         }
             .sortedBy { it.first }
-            .map { DayDishList(it.first, it.second) }
+            .map {
+                DayDishList(
+                    it.first,
+                    it.second.map { list -> list.first to list.second.toImmutableList() }
+                        .toImmutableList()
+                )
+            }
+            .toImmutableList()
     }
 
 

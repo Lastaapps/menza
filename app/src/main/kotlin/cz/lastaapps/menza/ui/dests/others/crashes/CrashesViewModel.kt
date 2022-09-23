@@ -28,6 +28,9 @@ import cz.lastaapps.crash.CrashDatabase
 import cz.lastaapps.crash.entity.Crash
 import cz.lastaapps.crash.entity.ErrorSeverity
 import cz.lastaapps.crash.entity.ReportState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,11 +42,11 @@ class CrashesViewModel constructor(
     private val database: CrashDatabase,
 ) : ViewModel() {
 
-    val errors: StateFlow<List<Pair<Long, Crash>>> get() = mErrors
-    private val mErrors = MutableStateFlow<List<Pair<Long, Crash>>>(emptyList())
+    val errors: StateFlow<ImmutableList<Pair<Long, Crash>>> get() = mErrors
+    private val mErrors = MutableStateFlow<ImmutableList<Pair<Long, Crash>>>(persistentListOf())
 
-    val unreported: StateFlow<List<Pair<Long, Crash>>> get() = mUnreported
-    private val mUnreported = MutableStateFlow<List<Pair<Long, Crash>>>(emptyList())
+    val unreported: StateFlow<ImmutableList<Pair<Long, Crash>>> get() = mUnreported
+    private val mUnreported = MutableStateFlow<ImmutableList<Pair<Long, Crash>>>(persistentListOf())
 
     val hasErrors: StateFlow<Boolean> get() = mHasErrors
     private val mHasErrors = MutableStateFlow(false)
@@ -62,7 +65,7 @@ class CrashesViewModel constructor(
             database.crashQueries.getCrashes() { id: Long, date: ZonedDateTime, severity: ErrorSeverity, message: String?, trace: String, reported: ReportState ->
                 id to Crash(date, severity, message, trace, reported)
             }.asFlow().mapToList(coroutineContext).collectLatest {
-                mErrors.emit(it)
+                mErrors.emit(it.toImmutableList())
                 mHasErrors.emit(it.isNotEmpty())
             }
         }
@@ -70,7 +73,7 @@ class CrashesViewModel constructor(
             database.crashQueries.getUnreported { id: Long, date: ZonedDateTime, severity: ErrorSeverity, message: String?, trace: String, reported: ReportState ->
                 id to Crash(date, severity, message, trace, reported)
             }.asFlow().mapToList(coroutineContext).collectLatest {
-                mUnreported.emit(it)
+                mUnreported.emit(it.toImmutableList())
             }
         }
         viewModelScope.launch(Dispatchers.IO) {

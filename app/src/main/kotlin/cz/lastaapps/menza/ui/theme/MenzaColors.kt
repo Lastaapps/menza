@@ -20,10 +20,12 @@
 package cz.lastaapps.menza.ui.theme
 
 import androidx.compose.ui.graphics.Color
-import cz.lastaapps.entity.menza.Menza
+import cz.lastaapps.entity.menza.MenzaId
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlin.math.abs
 
-private val menzaColors = listOf(
+private val menzaColors = persistentListOf(
     Color(0xfff44333) to Color(0xffff795e),
     Color(0xffe91e63) to Color(0xffff6090),
     Color(0xff9c27b0) to Color(0xffd05ce3),
@@ -42,9 +44,9 @@ private val menzaColors = listOf(
     Color(0xffff5722) to Color(0xffff8a50),
 )
 
-fun colorForMenza(menza: Menza): List<Color> {
+fun colorForMenza(menzaId: MenzaId): ImmutableList<Color> {
     //val hash = menza.name.hashCode()
-    val hash = menza.menzaId.id
+    val hash = menzaId.id
     return menzaColors[abs(hash % menzaColors.size)]
-        .let { listOf(it.first, it.second) }
+        .let { persistentListOf(it.first, it.second) }
 }

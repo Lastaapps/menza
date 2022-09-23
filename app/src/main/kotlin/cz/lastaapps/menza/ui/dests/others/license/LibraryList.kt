@@ -34,11 +34,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.entity.Library
 import cz.lastaapps.menza.R
+import kotlinx.collections.immutable.ImmutableList
 import org.lighthousegames.logging.logging
 
 @Composable
 fun LibraryList(
-    libraries: List<Library>,
+    libraries: ImmutableList<Library>,
     onLibrarySelected: (Library?) -> Unit,
     modifier: Modifier = Modifier,
 ) {

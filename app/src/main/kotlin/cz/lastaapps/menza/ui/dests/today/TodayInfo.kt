@@ -49,6 +49,7 @@ import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.day.IssueLocation
 import cz.lastaapps.menza.R
+import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.max
 
 @Composable
@@ -100,7 +101,7 @@ private fun PriceView(dish: Dish, modifier: Modifier = Modifier) {
 
 @Composable
 private fun IssueLocationList(
-    list: List<IssueLocation>,
+    list: ImmutableList<IssueLocation>,
     modifier: Modifier = Modifier,
 ) {
     if (list.isEmpty()) return

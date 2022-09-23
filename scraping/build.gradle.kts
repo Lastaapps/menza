@@ -55,6 +55,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(Libs.KOTLINX_DATETIME)
+                implementation(Libs.KOTLINX_COLLECTION)
                 implementation(Libs.KOTLIN_COROUTINES)
 
                 implementation(Libs.KTOR_CORE)
@@ -123,6 +124,7 @@ android {
         sourceCompatibility = Versions.JAVA
         targetCompatibility = Versions.JAVA
     }
+    namespace = "cz.lastaapps.scraping"
 
     dependencies {
         coreLibraryDesugaring(Libs.DESUGARING)

@@ -39,6 +39,7 @@ import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.dests.others.ReportDialog
 import cz.lastaapps.menza.ui.dests.others.sendReport
+import kotlinx.collections.immutable.ImmutableList
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -100,7 +101,10 @@ private fun NoContent() {
 }
 
 @Composable
-private fun Content(crashes: List<Pair<Long, Crash>>, onItemSelected: (Pair<Long, Crash>) -> Unit) {
+private fun Content(
+    crashes: ImmutableList<Pair<Long, Crash>>,
+    onItemSelected: (Pair<Long, Crash>) -> Unit
+) {
     Text(
         stringResource(R.string.crash_title),
         style = MaterialTheme.typography.headlineMedium

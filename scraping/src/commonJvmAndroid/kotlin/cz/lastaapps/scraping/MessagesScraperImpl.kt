@@ -28,7 +28,7 @@ import it.skrape.selects.Doc
 object MessagesScraperImpl : MessagesScraper {
 
     override suspend fun createRequest() =
-        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/index.php")
+        agataClient.get("index.php")
 
     /**
      * Accepts any url /jidelnicky/index.php???

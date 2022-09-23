@@ -32,7 +32,7 @@ import it.skrape.selects.html5.td
 object ContactsScraperImpl : ContactsScraper {
 
     override suspend fun createRequest() =
-        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/kontakty.php")
+        agataClient.get("kontakty.php")
 
     override fun scrape(html: String): Set<Contact> {
         return htmlDocument(html) { parseHtml() }

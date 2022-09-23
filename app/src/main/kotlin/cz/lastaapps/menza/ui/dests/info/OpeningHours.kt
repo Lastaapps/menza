@@ -30,16 +30,18 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.entity.LocalTime
 import cz.lastaapps.menza.R
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.toJavaLocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 
 @Composable
 fun OpeningHoursList(
-    data: List<OpeningLocation>,
+    data: ImmutableList<OpeningLocation>,
     modifier: Modifier = Modifier,
 ) {
     if (data.isNotEmpty()) {
@@ -96,8 +98,8 @@ fun OpeningHoursLocationUI(
                 }
                 Column {
                     data.list.forEach {
-                        val start = it.startTime.toJavaLocalDate().format(formatter)
-                        val end = it.endTime.toJavaLocalDate().format(formatter)
+                        val start = it.startTime.toJavaLocalTime().format(formatter)
+                        val end = it.endTime.toJavaLocalTime().format(formatter)
                         Text("$start - $end")
                     }
                 }
@@ -111,10 +113,6 @@ fun OpeningHoursLocationUI(
     }
 }
 
-private fun LocalTime.toJavaLocalDate(): java.time.LocalTime {
-    return java.time.LocalTime.of(hours, minutes, seconds)
-}
-
 data class OpeningInterval(
     val startDay: DayOfWeek,
     val endDay: DayOfWeek,
@@ -123,4 +121,4 @@ data class OpeningInterval(
     val comment: String?,
 )
 
-data class OpeningLocation(val name: String, val list: List<OpeningInterval>)
+data class OpeningLocation(val name: String, val list: ImmutableList<OpeningInterval>)

@@ -47,6 +47,7 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
@@ -99,7 +100,7 @@ fun WeekDishList(
 @Composable
 private fun WeekDishContent(
     menzaId: MenzaId,
-    data: List<DayDishList>,
+    data: ImmutableList<DayDishList>,
     modifier: Modifier = Modifier,
 ) {
     //no data handling
@@ -152,7 +153,7 @@ private fun NoItems(modifier: Modifier, menzaId: MenzaId) {
             visible = true
         }
         AnimatedVisibility(visible) {
-            TextButton(onClick = { uriHandler.openUri("https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}") }) {
+            TextButton(onClick = { uriHandler.openUri("index.php?clPodsystem=${menzaId.id}") }) {
                 Text(stringResource(R.string.week_list_web))
             }
         }

@@ -22,6 +22,7 @@ package cz.lastaapps.menza.ui.dests.others.whatsnew
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,7 +78,7 @@ class WhatsNewViewModel constructor(
             return@withContext map
         }
 
-    fun getDataForLocales(locales: List<Locale>): Flow<List<WhatsNewInfo>> =
+    fun getDataForLocales(locales: ImmutableList<Locale>): Flow<List<WhatsNewInfo>> =
         data.map { map ->
             val locale = locales.firstOrNull { map.containsKey(it) } ?: Locale.US
             map.getOrDefault(locale, emptySet())

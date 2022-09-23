@@ -32,12 +32,16 @@ import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import it.skrape.selects.DocElement
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.roundToInt
 
 object TodayScraperImpl : TodayScraper {
 
     override suspend fun createRequest(menzaId: MenzaId) =
-        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}")
+        agataClient.get("index.php?clPodsystem=${menzaId.id}")
 
     override fun scrape(html: String): Set<Dish> {
         return htmlDocument(html) { parseHtml() }
@@ -100,15 +104,16 @@ object TodayScraperImpl : TodayScraper {
         return dishSet
     }
 
-    private fun DocElement.parseAllergens(): List<AllergenId> {
+    private fun DocElement.parseAllergens(): ImmutableList<AllergenId> {
         return tryFindFirst("a") {
             attributes["title"]!!
                 .removePrefix("Alergeny: ")
-                .split(',', ' ')
+                .split(',', ' ', '.')
                 .filter { it.isNotBlank() }
                 .map { AllergenId(it.toInt()) }
                 .sortedBy { it.id }
-        } ?: emptyList()
+                .toImmutableList()
+        } ?: persistentListOf()
     }
 
     private fun DocElement.parseAllergensPage(): DishAllergensPage? {
@@ -118,36 +123,37 @@ object TodayScraperImpl : TodayScraper {
         }
     }
 
-    private fun DocElement.parseImage(): String? {
-        return tryFindFirst("a") {
-            "https://agata.suz.cvut.cz/jidelnicky/" +
-                    attribute("href").replace("imgshow.php", "showfoto.php")
+    private fun DocElement.parseImage(): String? =
+        // old Agata version support, must precede the new one
+        tryFindFirst("a") {
+            backendUrl + attribute("href").replace("imgshow.php", "showfoto.php")
             /*.removeSpaces().let {
                 val toFind = "&xFile="
                 val index = it.indexOf(toFind)
                 it.substring(index + toFind.length)
             }*/
+        } ?:
+        // new version
+        tryFindFirst("img") {
+            backendUrl + attribute("alt")
         }
-    }
+}
 
-    private val moneyRegex = """(\d+([,|.]\d{1,2})?)?""".toRegex()
+private val moneyRegex = """(\d+([,|.]\d{1,2})?)?""".toRegex()
 
-    private fun DocElement.parseMoney(): Int {
-        val text = ownText.removeSpaces()
-        val money = moneyRegex.find(text)!!.destructured.component1()
-        return money.replace(',', '.').toDouble().roundToInt()
-    }
+private fun DocElement.parseMoney(): Int {
+    val text = ownText.removeSpaces()
+    val money = moneyRegex.find(text)!!.destructured.component1()
+    return money.replace(',', '.').toDouble().roundToInt()
+}
 
-    private val issuePlaceIdRegex = """v(\d+)v(\d+)""".toRegex()
-    private fun DocElement.parseIssuePlaces(): List<IssueLocation> {
-        val issuePlaces = mutableListOf<IssueLocation>()
+private val issuePlaceIdRegex = """v(\d+)v(\d+)""".toRegex()
+private fun DocElement.parseIssuePlaces(): ImmutableList<IssueLocation> =
+    persistentListOf<IssueLocation>().mutate { issuePlaces ->
         findAllAndCycle("span") {
             val (windowId, terminalId) = issuePlaceIdRegex.find(id)!!.destructured
             issuePlaces += IssueLocation(
                 terminalId.toInt(), windowId.toInt(), ownText, attribute("title"),
             )
         }
-        return issuePlaces
     }
-}
-

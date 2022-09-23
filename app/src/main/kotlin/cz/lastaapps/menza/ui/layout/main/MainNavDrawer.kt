@@ -46,7 +46,10 @@ fun MenzaModalDrawer(
         modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
-            DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, lazyListState)
+            ModalDrawerSheet {
+                Spacer(Modifier.height(12.dp))
+                DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, lazyListState)
+            }
         },
         content = content,
     )
@@ -84,10 +87,12 @@ fun MenzaDismissibleDrawer(
         drawerState = drawerState,
         gesturesEnabled = true,
         drawerContent = {
-            DrawerContent(selectedMenza, {
-                scope.launch { drawerState.close() }
-                onMenzaSelected(it)
-            }, menzaListViewModel, lazyListState)
+            DismissibleDrawerSheet {
+                DrawerContent(selectedMenza, {
+                    scope.launch { drawerState.close() }
+                    onMenzaSelected(it)
+                }, menzaListViewModel, lazyListState)
+            }
         },
         content = content,
     )
@@ -108,7 +113,9 @@ fun MenzaPermanentDrawer(
     PermanentNavigationDrawer(
         modifier = modifier,
         drawerContent = {
-            DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, lazyListState)
+            PermanentDrawerSheet {
+                DrawerContent(selectedMenza, onMenzaSelected, menzaListViewModel, lazyListState)
+            }
         },
         content = content,
     )

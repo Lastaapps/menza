@@ -21,6 +21,7 @@ package cz.lastaapps.menza.ui.dests.settings.modules
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -44,9 +45,9 @@ fun ImageSizeSetting(settingsViewModel: SettingsViewModel, modifier: Modifier = 
     var progress by remember(savedProgress) { mutableStateOf(savedProgress) }
 
     Column(modifier) {
-        //Text("Title", style = MaterialTheme.typography.titleMedium)
         Text(stringResource(R.string.settings_image_size_title))
         Row(
+            Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Slider(

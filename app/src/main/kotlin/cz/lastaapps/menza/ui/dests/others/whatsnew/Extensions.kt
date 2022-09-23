@@ -23,20 +23,21 @@ import android.content.Context
 import android.os.Build
 import android.os.LocaleList
 import androidx.annotation.RequiresApi
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentListOf
 import java.util.*
 
 @Suppress("DEPRECATION")
-fun Context.getLocales(): List<Locale> {
+fun Context.getLocales(): ImmutableList<Locale> {
     val config = resources.configuration
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         config.locales.toList()
-    } else listOf(config.locale)
+    } else persistentListOf(config.locale)
 }
 
 @RequiresApi(Build.VERSION_CODES.N)
-private fun LocaleList.toList(): List<Locale> {
-    val list = mutableListOf<Locale>()
+private fun LocaleList.toList(): ImmutableList<Locale> = persistentListOf<Locale>().mutate { list ->
     for (i in 0 until size())
         list += get(i)
-    return list
 }

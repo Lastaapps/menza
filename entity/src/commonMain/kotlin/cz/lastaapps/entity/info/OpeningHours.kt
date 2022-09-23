@@ -19,10 +19,10 @@
 
 package cz.lastaapps.entity.info
 
-import cz.lastaapps.entity.LocalTime
 import cz.lastaapps.entity.compareInWeek
 import cz.lastaapps.entity.menza.MenzaId
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalTime
 
 /**
  * Represents the open and close time for a day of week

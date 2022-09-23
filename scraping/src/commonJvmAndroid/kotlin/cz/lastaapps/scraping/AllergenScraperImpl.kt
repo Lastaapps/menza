@@ -31,10 +31,10 @@ import it.skrape.selects.html5.td
 object AllergenScraperImpl : AllergenScraper {
 
     override suspend fun createRequestForAll() =
-        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/alergenyall.php")
+        agataClient.get("alergenyall.php")
 
     override suspend fun createRequestForDish(dishId: DishAllergensPage) =
-        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/alergeny.php?alergen=${dishId.pageId}")
+        agataClient.get("alergeny.php?alergen=${dishId.pageId}")
 
     override fun scrape(html: String): Set<Allergen> {
         return htmlDocument(html) { parseHtml() }

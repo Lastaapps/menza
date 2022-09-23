@@ -20,7 +20,6 @@
 package cz.lastaapps.storage.db
 
 import com.squareup.sqldelight.ColumnAdapter
-import cz.lastaapps.entity.LocalTime
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.info.Email
 import cz.lastaapps.entity.info.Name
@@ -31,6 +30,7 @@ import cz.lastaapps.entity.menza.Coordinates
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.Opened
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalTime
 
 internal object ColumnConvertors {
 
@@ -86,11 +86,11 @@ internal object ColumnConvertors {
 
     val localTime = object : ColumnAdapter<LocalTime, Long> {
         override fun decode(databaseValue: Long): LocalTime {
-            return LocalTime.fromSeconds(databaseValue.toInt())
+            return LocalTime.fromSecondOfDay(databaseValue.toInt())
         }
 
         override fun encode(value: LocalTime): Long {
-            return value.toSeconds().toLong()
+            return value.toSecondOfDay().toLong()
         }
     }
 

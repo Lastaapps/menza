@@ -70,9 +70,7 @@ kotlin {
             }
         }
         val androidMain by getting {
-            dependencies {
-                implementation(Libs.DAGGER_HILT)
-            }
+            dependencies {}
         }
         val androidTest by getting {
             dependencies {
@@ -121,6 +119,7 @@ android {
         sourceCompatibility = Versions.JAVA
         targetCompatibility = Versions.JAVA
     }
+    namespace = "cz.lastaapps.storage.repo"
     dependencies {
         coreLibraryDesugaring(Libs.DESUGARING)
     }

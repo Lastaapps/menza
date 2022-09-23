@@ -19,7 +19,6 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.LocalTime
 import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldBeIn
@@ -31,6 +30,7 @@ import io.ktor.client.statement.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalTime
 import org.junit.jupiter.api.Test
 
 @ExperimentalCoroutinesApi

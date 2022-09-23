@@ -25,6 +25,7 @@ import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.common.Price
 import cz.lastaapps.entity.exceptions.DishNameEmpty
 import cz.lastaapps.entity.menza.MenzaId
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * Holds data about a dish in a day
@@ -35,12 +36,12 @@ data class Dish(
     val courseType: CourseType,
     val amount: Amount?,
     val name: String,
-    val allergens: List<AllergenId>,
+    val allergens: ImmutableList<AllergenId>,
     val allergenDishId: DishAllergensPage?,
     val imageUrl: String?,
     val priceStudent: Price,
     val priceNormal: Price,
-    val issuePlaces: List<IssueLocation>,
+    val issuePlaces: ImmutableList<IssueLocation>,
 ) {
     init {
         if (name.isBlank()) throw DishNameEmpty()

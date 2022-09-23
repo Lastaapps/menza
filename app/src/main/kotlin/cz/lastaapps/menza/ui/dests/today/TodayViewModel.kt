@@ -31,12 +31,15 @@ import cz.lastaapps.menza.di.TodayRepoFactory
 import cz.lastaapps.storage.repo.AllergenRepo
 import cz.lastaapps.storage.repo.MenzaError
 import cz.lastaapps.storage.repo.TodayRepo
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 
-typealias DishTypeList = Pair<CourseType, List<Dish>>
+typealias DishTypeList = Pair<CourseType, ImmutableList<Dish>>
 
 class TodayViewModel constructor(
     private val todayRepoFactory: TodayRepoFactory,
@@ -64,7 +67,10 @@ class TodayViewModel constructor(
 
     // I was lazy to pass AllergenViewModel in the whole hierarchy
     // so there is the important method
-    fun getAllergenForIds(list: List<AllergenId>, unknownAllergen: Allergen): Flow<List<Allergen>> {
+    fun getAllergenForIds(
+        list: ImmutableList<AllergenId>,
+        unknownAllergen: Allergen
+    ): Flow<List<Allergen>> {
         return flow {
             emit(list.map {
                 allergenRepo.getAllergenInfo(it).first() ?: unknownAllergen.copy(id = it)
@@ -74,16 +80,16 @@ class TodayViewModel constructor(
 
 
     private val repos = HashMap<MenzaId, TodayRepo>()
-    private val cache = HashMap<MenzaId, MutableStateFlow<List<DishTypeList>>>()
+    private val cache = HashMap<MenzaId, MutableStateFlow<ImmutableList<DishTypeList>>>()
 
     val errors = Channel<MenzaError>(Channel.BUFFERED)
 
-    fun getData(menzaId: MenzaId, locale: Locale): StateFlow<List<DishTypeList>> {
+    fun getData(menzaId: MenzaId, locale: Locale): StateFlow<ImmutableList<DishTypeList>> {
 
         val data = cache[menzaId]
         if (data != null) return data
 
-        return MutableStateFlow<List<DishTypeList>>(emptyList()).also {
+        return MutableStateFlow<ImmutableList<DishTypeList>>(persistentListOf()).also {
             cache[menzaId] = it
             refresh(menzaId, locale)
         }
@@ -101,7 +107,7 @@ class TodayViewModel constructor(
             val data = repo.getData()
 
             if (data != null) {
-                cache.getOrPut(menzaId) { MutableStateFlow(emptyList()) }.value =
+                cache.getOrPut(menzaId) { MutableStateFlow(persistentListOf()) }.value =
                     data.toDishTypeList().toDishList(locale)
             }
             while (true)
@@ -114,15 +120,15 @@ class TodayViewModel constructor(
         todayRepoFactory.create(menzaId)
     }
 
-    private fun Collection<Dish>.toDishTypeList(): List<DishTypeList> {
+    private fun Collection<Dish>.toDishTypeList(): ImmutableList<DishTypeList> {
         val map = HashMap<CourseType, MutableList<Dish>>()
         this.forEach { dish ->
             map.getOrPut(dish.courseType) { mutableListOf() }.add(dish)
         }
-        return map.entries.map { it.key to it.value }
+        return map.entries.map { it.key to it.value.toImmutableList() }.toImmutableList()
     }
 
-    private fun Collection<DishTypeList>.toDishList(locale: Locale): List<DishTypeList> {
+    private fun Collection<DishTypeList>.toDishList(locale: Locale): ImmutableList<DishTypeList> {
         return this.sortedWith { d1, d2 ->
             d1.first.webOrder.compareTo(d2.first.webOrder)
                 .takeIf { it != 0 }?.let { return@sortedWith it }
@@ -132,7 +138,7 @@ class TodayViewModel constructor(
         }.map {
             it.first to it.second.sortedWith { d1, d2 ->
                 d1.name.compareToLocal(d2.name, locale)
-            }
-        }
+            }.toImmutableList()
+        }.toImmutableList()
     }
 }

@@ -30,10 +30,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Message
 import cz.lastaapps.menza.R
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun MessageList(
-    messages: List<Message>,
+    messages: ImmutableList<Message>,
     modifier: Modifier = Modifier,
 ) {
     if (messages.isNotEmpty()) {

@@ -31,6 +31,7 @@ import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.collections.*
 import io.kotest.matchers.shouldBe
 import io.ktor.client.statement.*
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -410,12 +411,12 @@ class TodayScraperTest {
             CourseType("Hlavní jídla", 2),
             Amount("120 g"),
             "Hovězí pečeně frankfurtská, karlovarské knedlíky",
-            listOf(1, 3, 5, 6, 7, 9, 10, 14).map { AllergenId(it) },
+            listOf(1, 3, 5, 6, 7, 9, 10, 14).map { AllergenId(it) }.toImmutableList(),
             DishAllergensPage(340616),
-            "https://agata.suz.cvut.cz/jidelnicky/showfoto.php?clPodsystem=4&xFile=IMG-2022-01-06-100010746.JPG",
+            "showfoto.php?clPodsystem=4&xFile=IMG-2022-01-06-100010746.JPG",
             Price(79),
             Price(101),
-            listOf(IssueLocation(21, 1, "J", "Jídelna"))
+            listOf(IssueLocation(21, 1, "J", "Jídelna")).toImmutableList()
         )
     }
 

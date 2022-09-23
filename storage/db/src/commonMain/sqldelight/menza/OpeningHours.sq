@@ -1,6 +1,6 @@
-import cz.lastaapps.entity.LocalTime;
 import cz.lastaapps.entity.menza.MenzaId;
 import kotlinx.datetime.DayOfWeek;
+import kotlinx.datetime.LocalTime;
 
 CREATE TABLE openingHoursEntity (
     menza_id INTEGER AS MenzaId NOT NULL,

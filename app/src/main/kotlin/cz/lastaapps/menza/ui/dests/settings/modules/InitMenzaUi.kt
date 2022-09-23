@@ -27,6 +27,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
@@ -37,6 +38,8 @@ import cz.lastaapps.menza.ui.dests.settings.store.InitMenza
 import cz.lastaapps.menza.ui.dests.settings.store.initMenza
 import cz.lastaapps.menza.ui.dests.settings.store.preferredMenza
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun InitMenzaUI(
@@ -86,32 +89,31 @@ private fun InitMenzaRow(
     onMode: (InitMenza) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val options = listOf(
-        InitMenza.Ask to stringResource(R.string.settings_init_menza_ask),
-        InitMenza.Remember to stringResource(R.string.settings_init_menza_remember),
-        InitMenza.Specific to stringResource(R.string.settings_init_menza_specific),
-    )
-
-    //TODO try to rework in next version
-    var exp by remember { mutableStateOf(false) }
-    LaunchedEffect(expanded) { exp = expanded }
+    val context = LocalContext.current
+    val options = remember(context) {
+        persistentListOf(
+            InitMenza.Ask to context.getString(R.string.settings_init_menza_ask),
+            InitMenza.Remember to context.getString(R.string.settings_init_menza_remember),
+            InitMenza.Specific to context.getString(R.string.settings_init_menza_specific),
+        )
+    }
 
     ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { onExpanded(!expanded) },
         modifier = modifier,
-        expanded = exp,
-        onExpandedChange = { onExpanded(!exp) },
     ) {
         TextField(
             readOnly = true,
             value = options.first { it.first == mode }.second,
             onValueChange = { },
             label = { Text(stringResource(R.string.settings_init_menza_behaviour)) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(exp) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
             modifier = Modifier.fillMaxWidth(),
         )
         ExposedDropdownMenu(
-            expanded = exp,
+            expanded = expanded,
             onDismissRequest = { onExpanded(false) }
         ) {
             options.forEach { selectionOption ->
@@ -134,17 +136,13 @@ private fun PreferredMenza(
     onExpanded: (Boolean) -> Unit,
     menza: MenzaId?,
     onMenza: (MenzaId) -> Unit,
-    menzaList: List<Menza>,
+    menzaList: ImmutableList<Menza>,
     modifier: Modifier = Modifier
 ) {
-    //TODO try to rework in next version
-    var exp by remember { mutableStateOf(false) }
-    LaunchedEffect(expanded) { exp = expanded }
-
     ExposedDropdownMenuBox(
         modifier = modifier,
-        expanded = exp,
-        onExpandedChange = { onExpanded(!exp) },
+        expanded = expanded,
+        onExpandedChange = { onExpanded(!expanded) },
     ) {
         TextField(
             readOnly = true,
@@ -152,12 +150,12 @@ private fun PreferredMenza(
                 ?: stringResource(R.string.settings_init_menza_select_placeholder),
             onValueChange = { },
             label = { Text(stringResource(R.string.settings_init_menza_select_title)) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(exp) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
             modifier = Modifier.fillMaxWidth(),
         )
         ExposedDropdownMenu(
-            expanded = exp,
+            expanded = expanded,
             onDismissRequest = { onExpanded(false) }
         ) {
             menzaList.forEach { selectionOption ->

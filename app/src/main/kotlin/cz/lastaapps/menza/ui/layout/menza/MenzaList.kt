@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.ui.layout.menza
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,7 +45,6 @@ import cz.lastaapps.menza.ui.components.draggablelazylist.makeDraggableItem
 import cz.lastaapps.menza.ui.components.draggablelazylist.rememberDraggableLazyListState
 import cz.lastaapps.menza.ui.theme.colorForMenza
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MenzaList(
     selectedMenza: MenzaId?,
@@ -119,7 +117,7 @@ private fun MenzaItem(
 
 @Composable
 private fun MenzaLetter(menza: Menza, modifier: Modifier = Modifier) {
-    val colors = colorForMenza(menza)
+    val colors = colorForMenza(menza.menzaId)
     val brush = Brush.horizontalGradient(colors)
     val size = 32.dp
 

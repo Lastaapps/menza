@@ -101,7 +101,8 @@ class App : Application(), ImageLoaderFactory, DIAware {
             memoryCachePolicy(CachePolicy.ENABLED)
             networkCachePolicy(CachePolicy.ENABLED)
             networkObserverEnabled(true)
-            logger(DebugLogger())
+            if (BuildConfig.DEBUG)
+                logger(DebugLogger())
             diskCache {
                 with(DiskCache.Builder()) {
                     maxSizeBytes(1024 * 1024 * 32) // 32 MB

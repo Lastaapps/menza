@@ -20,6 +20,7 @@
 plugins {
     id(Plugins.APPLICATION)
     id(Plugins.KOTLIN_ANDROID)
+    id(Plugins.SERIALIZATION)
     id(Plugins.ABOUT_LIBRARIES)
 }
 
@@ -39,8 +40,8 @@ android {
         applicationId = App.APP_ID
 
         //have to be specified explicitly for FDroid to work
-        versionCode = 1020000 // 1x major . 2x minor . 2x path . 2x build diff
-        versionName = "1.2.0"
+        versionCode = 1020100 // 1x major . 2x minor . 2x path . 2x build diff
+        versionName = "1.2.1"
         require(versionCode == App.VERSION_CODE)
         require(versionName == App.VERSION_NAME)
 
@@ -102,6 +103,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.COMPOSE_COMPILER
     }
+    namespace = "cz.lastaapps.menza"
 }
 
 dependencies {
@@ -134,6 +136,8 @@ dependencies {
     initCompose()
 
     implementation(Libs.KOTLINX_DATETIME)
+    implementation(Libs.KOTLINX_COLLECTION)
+    implementation(Libs.KOTLIN_SERIALIZATION_JSON)
     implementation(Libs.COIL_COMPOSE_COMPLETE)
     implementation(Libs.ABOUT_LIBRARIES_CORE)
 

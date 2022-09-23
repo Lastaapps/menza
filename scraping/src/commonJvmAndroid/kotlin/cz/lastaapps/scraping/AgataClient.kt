@@ -21,5 +21,13 @@ package cz.lastaapps.scraping
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
 
-internal val agataClient = HttpClient(CIO)
+internal const val backendUrl = "https://agata.suz.cvut.cz/jidelnicky/"
+//internal const val backendUrl = "https://agata-new.suz.cvut.cz/jidelnicky/"
+
+internal val agataClient = HttpClient(CIO) {
+    install(DefaultRequest) {
+        url(backendUrl)
+    }
+}

@@ -17,6 +17,8 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+
 buildscript {
     dependencies {}
 }
@@ -25,49 +27,44 @@ group = App.GROUP
 version = App.VERSION_NAME
 
 plugins {
-    val gradleVersion = "7.2.1"
+    val gradleVersion = "7.3.0"
     id(Plugins.APPLICATION) version gradleVersion apply false
     id(Plugins.LIBRARY) version gradleVersion apply false
     id(Plugins.KOTLIN_ANDROID) version Versions.KOTLIN apply false
+    id(Plugins.KOTLIN_MULTIPLATFORM) version Versions.KOTLIN apply false
+    id(Plugins.SERIALIZATION) version Versions.KOTLIN apply false
     id(Plugins.SQLDELIGHT) version Versions.SQLDELIGHT apply false
     id(Plugins.KSP) version Versions.KSP apply false
     id(Plugins.ABOUT_LIBRARIES) version Versions.ABOUT_LIBRARIES apply false
-}
 
-
-/*
-// Address https://github.com/gradle/gradle/issues/4823: Force parent project evaluation before sub-project evaluation for Kotlin build scripts
-// Enables Kotlin DSL scripts to run while org.gradle.configureondemand = true
-subprojects {
-    @Suppress("UnstableApiUsage")
-    if (gradle.startParameter.isConfigureOnDemand
-        && buildscript.sourceFile?.extension?.toLowerCase() == "kts"
-        && parent != rootProject
-    ) {
-        generateSequence(parent) { project -> project.parent.takeIf { it != rootProject } }
-            .forEach { evaluationDependsOn(it.path) }
-    }
-}
-*/
-
-allprojects {
-    afterEvaluate {
-        // Remove log pollution until Android support in KMP improves.
-        // https://discuss.kotlinlang.org/t/disabling-androidandroidtestrelease-source-set-in-gradle-kotlin-dsl-script/21448/5
-        project.extensions.findByType<org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension>()
-            ?.let { kmpExt ->
-                kmpExt.sourceSets.removeAll { sourceSet ->
-                    setOf(
-                        "androidAndroidTestRelease",
-                        "androidTestFixtures",
-                        "androidTestFixturesDebug",
-                        "androidTestFixturesRelease",
-                    ).contains(sourceSet.name)
-                }
-            }
-    }
+    id("com.github.ben-manes.versions") version "0.42.0"
 }
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
+}
+//
+//versionCatalogUpdate {
+//    sortByKey.set(true)
+//    // pins version - wouldn't be changed
+//    pin {}
+//    // keeps entry - wouldn't be deleted when unused
+//    keep {
+//        keepUnusedVersions.set(true)
+//        keepUnusedLibraries.set(true)
+//        keepUnusedPlugins.set(true)
+//    }
+//}
+
+tasks.withType<DependencyUpdatesTask> {
+    rejectVersionIf {
+        isNonStable(candidate.version) && !isNonStable(currentVersion)
+    }
+}
+
+fun isNonStable(version: String): Boolean {
+    val stableKeyword = listOf("rc", "beta", "release").any { version.toUpperCase().contains(it) }
+    val regex = """^[0-9,.v-]+(-r)?$""".toRegex()
+    val isStable = stableKeyword || regex.matches(version)
+    return isStable.not()
 }

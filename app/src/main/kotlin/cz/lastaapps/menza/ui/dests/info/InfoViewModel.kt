@@ -28,6 +28,8 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.entity.menza.Message
 import cz.lastaapps.storage.repo.*
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -78,19 +80,19 @@ class InfoViewModel constructor(
         }
     }
 
-    fun getMessage(menzaId: MenzaId): Flow<List<Message>> {
-        return messageRepo.getMessage(menzaId)
+    fun getMessage(menzaId: MenzaId): Flow<ImmutableList<Message>> {
+        return messageRepo.getMessage(menzaId).map { it.toImmutableList() }
     }
 
-    fun getContacts(menzaId: MenzaId): Flow<List<Contact>> {
-        return contactsRepo.getContactsForMenza(menzaId)
+    fun getContacts(menzaId: MenzaId): Flow<ImmutableList<Contact>> {
+        return contactsRepo.getContactsForMenza(menzaId).map { it.toImmutableList() }
     }
 
-    fun getLocation(menzaId: MenzaId): Flow<List<MenzaLocation>> {
-        return locationRepo.getMenzaLocation(menzaId)
+    fun getLocation(menzaId: MenzaId): Flow<ImmutableList<MenzaLocation>> {
+        return locationRepo.getMenzaLocation(menzaId).map { it.toImmutableList() }
     }
 
-    fun getOpeningHours(menzaId: MenzaId): Flow<List<OpeningLocation>> {
+    fun getOpeningHours(menzaId: MenzaId): Flow<ImmutableList<OpeningLocation>> {
         return openingHoursRepo.getForMenza(menzaId).map { input ->
             val places = mutableMapOf<String, MutableList<OpeningHours>>()
             input.forEach {
@@ -133,8 +135,8 @@ class InfoViewModel constructor(
                 }
             }
             combined.map { pair ->
-                OpeningLocation(pair.first, pair.second)
+                OpeningLocation(pair.first, pair.second.toImmutableList())
             }
-        }
+        }.map { it.toImmutableList() }
     }
 }

@@ -35,6 +35,8 @@ import com.mikepenz.aboutlibraries.util.withContext
 import cz.lastaapps.menza.ui.root.UseSplitLayout
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.root.locals.WindowSizeClass
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun LicenseLayout() {
@@ -57,7 +59,7 @@ fun LicenseLayout() {
 
     val libraryList = remember(libraries) {
         // to filter out wrongly named libraries
-        libraries!!.libraries.filter { !it.name.startsWith("$") }
+        libraries!!.libraries.filter { !it.name.startsWith("$") }.toImmutableList()
     }
 
     when (LocalWindowWidth.current) {
@@ -87,7 +89,7 @@ fun LicenseLayout() {
 
 @Composable
 fun LicenseLayoutCompact(
-    libraries: List<Library>,
+    libraries: ImmutableList<Library>,
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
 ) {
@@ -108,7 +110,7 @@ fun LicenseLayoutCompact(
 
 @Composable
 fun LicenseLayoutMedium(
-    libraries: List<Library>,
+    libraries: ImmutableList<Library>,
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
 ) = LicenseLayoutExpanded(
@@ -119,7 +121,7 @@ fun LicenseLayoutMedium(
 
 @Composable
 fun LicenseLayoutExpanded(
-    libraries: List<Library>,
+    libraries: ImmutableList<Library>,
     selectedLibrary: Library?,
     onLibrarySelected: (Library?) -> Unit,
 ) {

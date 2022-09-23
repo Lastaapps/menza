@@ -53,6 +53,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(Libs.KOTLINX_DATETIME)
+                implementation(Libs.KOTLINX_COLLECTION)
             }
         }
         val commonTest by getting {
@@ -109,6 +110,7 @@ android {
         sourceCompatibility = Versions.JAVA
         targetCompatibility = Versions.JAVA
     }
+    namespace = "cz.lastaapps.entity"
     dependencies {
         coreLibraryDesugaring(Libs.DESUGARING)
     }

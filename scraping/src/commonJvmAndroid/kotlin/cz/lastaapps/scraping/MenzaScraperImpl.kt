@@ -29,11 +29,12 @@ import it.skrape.selects.html5.img
 
 object MenzaScraperImpl : MenzaScraper {
 
-    private const val openImgName = "img/Otevreno.png"
-    private const val closeImgName = "img/Zavreno.png"
+    // the first images are from the old Agata version
+    private val openImages = arrayOf("img/Otevreno.png", "img/OtevrenoX1.png")
+    private val closeImages = arrayOf("img/Zavreno.png", "img/ZavrenoX1.png")
 
     override suspend fun createRequest() =
-        agataClient.get("https://agata.suz.cvut.cz/jidelnicky/indexTyden.php")
+        agataClient.get("indexTyden.php")
 
     /**
      * Accepts all the results
@@ -55,8 +56,8 @@ object MenzaScraperImpl : MenzaScraper {
                 val opened = img {
                     findFirst {
                         when (val imgName = attributes["src"]) {
-                            openImgName -> true
-                            closeImgName -> false
+                            in openImages -> true
+                            in closeImages -> false
                             else -> error("Illegal open state image: $imgName")
                         }
                     }
