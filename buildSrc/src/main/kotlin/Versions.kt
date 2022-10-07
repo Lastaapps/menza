@@ -29,12 +29,12 @@ object Versions {
     const val DESUGAR = "1.2.2"
 
     //JetBrains
-    const val KOTLIN = "1.7.10"
+    const val KOTLIN = "1.7.20"
     const val KOTLIN_LANGUAGE_VERSION = "1.7"
     const val KSP = "$KOTLIN-1.0.6"
     const val COROUTINES = "1.6.4"
     const val SERIALIZATION = "1.4.0"
-    const val KTOR = "2.1.1"
+    const val KTOR = "2.1.2"
 
     //androidx
     const val ACTIVITY = "1.6.0"
@@ -52,7 +52,7 @@ object Versions {
     const val FRAGMENT = "1.5.0-rc01"
     const val HILT = "1.0.0"
     const val LIFECYCLE = "2.6.0-alpha02"
-    const val NAVIGATION = "2.6.0-alpha01"
+    const val NAVIGATION = "2.5.2"
     const val PREFERENCES = "1.2.0-rc01"
     const val RECYCLER_VIEW = "1.3.0-alpha02"
     const val ROOM = "2.4.2"
@@ -66,9 +66,9 @@ object Versions {
 
 
     //compose
-    const val COMPOSE = "1.3.0-beta03"
-    const val COMPOSE_COMPILER = "1.3.1"
-    const val COMPOSE_MATERIAL_3 = "1.0.0-beta02"
+    const val COMPOSE = "1.3.0-rc01"
+    const val COMPOSE_COMPILER = "1.3.2"
+    const val COMPOSE_MATERIAL_3 = "1.0.0-rc01"
     const val CONSTRAINTLAYOUT_COMPOSE = "1.0.1"
     const val VIEWMODEL_COMPOSE = LIFECYCLE
     const val HILT_NAVIGATION_COMPOSE = "1.0.0"
@@ -78,23 +78,23 @@ object Versions {
     const val PLAY_SERVICES = "1.8.1"
     const val PLAY_SERVICES_LOCATION = "20.0.0"
     const val MLKIT_BARCODE = "17.0.2"
-    const val ACCOMPANIST = "0.26.4-beta"
+    const val ACCOMPANIST = "0.26.5-rc"
 
     //firebase
     const val FIREBASE_BOM = "31.1.0"
 
     //others
-    const val ABOUT_LIBRARIES = "10.4.0"
-    const val COIL = "2.2.1"
+    const val ABOUT_LIBRARIES = "10.5.0"
+    const val COIL = "2.2.2"
     const val KM_LOGGING = "1.1.1"
     const val KODEIN = "7.14.0"
-    const val KOTEST = "5.4.2"
+    const val KOTEST = "5.5.0"
     const val KOTLINX_DATETIME = "0.4.0"
     const val KOTLINX_COLLECTION = "0.3.5"
     const val LOGBACK = "1.2.11"
     const val QRGEN = "2.6.0"
     const val SKRAPE_IT = "1.2.1"
-    const val SQLDELIGHT = "1.5.3"
+    const val SQLDELIGHT = "1.5.4"
 
     //testing android
     const val TEST_JUNIT = "4.13.2"

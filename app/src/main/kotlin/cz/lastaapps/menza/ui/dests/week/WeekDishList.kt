@@ -153,7 +153,7 @@ private fun NoItems(modifier: Modifier, menzaId: MenzaId) {
             visible = true
         }
         AnimatedVisibility(visible) {
-            TextButton(onClick = { uriHandler.openUri("index.php?clPodsystem=${menzaId.id}") }) {
+            TextButton(onClick = { uriHandler.openUri("https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=${menzaId.id}") }) {
                 Text(stringResource(R.string.week_list_web))
             }
         }

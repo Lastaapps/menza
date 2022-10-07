@@ -1,0 +1,2 @@
+Oprava pádu při otevření webu z prázdného seznamu
+Aktualizace knihoven

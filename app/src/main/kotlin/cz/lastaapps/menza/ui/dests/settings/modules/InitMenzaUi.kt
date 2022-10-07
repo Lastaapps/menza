@@ -110,7 +110,7 @@ private fun InitMenzaRow(
             label = { Text(stringResource(R.string.settings_init_menza_behaviour)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.menuAnchor(),
         )
         ExposedDropdownMenu(
             expanded = expanded,
@@ -118,11 +118,12 @@ private fun InitMenzaRow(
         ) {
             options.forEach { selectionOption ->
                 DropdownMenuItem(
+                    text = { Text(text = selectionOption.second) },
                     onClick = {
                         onMode(selectionOption.first)
                         onExpanded(false)
                     },
-                    text = { Text(text = selectionOption.second) },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
             }
         }
@@ -152,7 +153,7 @@ private fun PreferredMenza(
             label = { Text(stringResource(R.string.settings_init_menza_select_title)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.menuAnchor(),
         )
         ExposedDropdownMenu(
             expanded = expanded,
@@ -160,11 +161,12 @@ private fun PreferredMenza(
         ) {
             menzaList.forEach { selectionOption ->
                 DropdownMenuItem(
+                    text = { Text(text = selectionOption.name) },
                     onClick = {
                         onMenza(selectionOption.menzaId)
                         onExpanded(false)
                     },
-                    text = { Text(text = selectionOption.name) },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
             }
         }
