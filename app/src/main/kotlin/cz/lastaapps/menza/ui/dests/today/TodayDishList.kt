@@ -308,16 +308,18 @@ private fun DishImageWithBadge(
 
 @Composable
 private fun DishBadge(dish: Dish, priceType: PriceType, modifier: Modifier = Modifier) {
-    Surface(
-        modifier,
-        color = MaterialTheme.colorScheme.tertiary,
-        shape = MaterialTheme.shapes.medium,
-    ) {
-        Text(
-            text = "${dish.getPrice(priceType).price} Kč",
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(2.dp)
-        )
+    dish.getPrice(priceType)?.let { price ->
+        Surface(
+            modifier,
+            color = MaterialTheme.colorScheme.tertiary,
+            shape = MaterialTheme.shapes.medium,
+        ) {
+            Text(
+                text = "${price.price} Kč",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(2.dp)
+            )
+        }
     }
 }
 

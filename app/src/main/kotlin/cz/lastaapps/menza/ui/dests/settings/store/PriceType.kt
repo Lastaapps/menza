@@ -44,7 +44,7 @@ suspend fun SettingsStore.setPriceType(priceType: PriceType) {
     edit { it[priceTypeKey] = priceType.id }
 }
 
-fun Dish.getPrice(type: PriceType): Price {
+fun Dish.getPrice(type: PriceType): Price? {
     return when (type) {
         PriceType.Discounted -> this.priceStudent
         else -> this.priceNormal

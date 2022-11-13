@@ -1,0 +1,3 @@
+Oprava načítání alergenů
+Oprava nezobrazování jídel, když není zadána cena jídla
+Aktualizace knihoven

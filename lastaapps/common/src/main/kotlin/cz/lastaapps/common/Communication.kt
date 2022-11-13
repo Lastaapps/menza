@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 
 object Communication {
@@ -40,7 +41,16 @@ object Communication {
         var uri = Uri.parse(url)
         try {
             val applicationInfo =
-                context.packageManager.getApplicationInfo("com.facebook.katana", 0)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    context.packageManager.getApplicationInfo(
+                        "com.facebook.katana",
+                        PackageManager.ApplicationInfoFlags.of(0),
+                    )
+                else
+                    @Suppress("DEPRECATION")
+                    context.packageManager.getApplicationInfo(
+                        "com.facebook.katana", 0
+                    )
 
             if (applicationInfo.enabled) {
                 uri = Uri.parse("fb://facewebmodal/f?href=$url")

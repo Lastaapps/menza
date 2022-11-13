@@ -40,8 +40,8 @@ android {
         applicationId = App.APP_ID
 
         //have to be specified explicitly for FDroid to work
-        versionCode = 1020200 // 1x major . 2x minor . 2x path . 2x build diff
-        versionName = "1.2.2"
+        versionCode = 1020300 // 1x major . 2x minor . 2x path . 2x build diff
+        versionName = "1.2.3"
         require(versionCode == App.VERSION_CODE)
         require(versionName == App.VERSION_NAME)
 

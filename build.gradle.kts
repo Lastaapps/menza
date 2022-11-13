@@ -27,7 +27,7 @@ group = App.GROUP
 version = App.VERSION_NAME
 
 plugins {
-    val gradleVersion = "7.3.0"
+    val gradleVersion = "7.3.1"
     id(Plugins.APPLICATION) version gradleVersion apply false
     id(Plugins.LIBRARY) version gradleVersion apply false
     id(Plugins.KOTLIN_ANDROID) version Versions.KOTLIN apply false
@@ -37,7 +37,7 @@ plugins {
     id(Plugins.KSP) version Versions.KSP apply false
     id(Plugins.ABOUT_LIBRARIES) version Versions.ABOUT_LIBRARIES apply false
 
-    id("com.github.ben-manes.versions") version "0.42.0"
+    id("com.github.ben-manes.versions") version "0.44.0"
 }
 
 tasks.register("clean", Delete::class) {

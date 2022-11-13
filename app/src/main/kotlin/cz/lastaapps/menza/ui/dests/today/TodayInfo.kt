@@ -92,7 +92,7 @@ private fun PriceView(dish: Dish, modifier: Modifier = Modifier) {
     Row(modifier) {
         Text(text = dish.amount?.amount ?: "")
         Text(
-            text = "${dish.priceStudent.price} / ${dish.priceNormal.price} Kč",
+            text = "${dish.priceStudent?.price ?: "???"} / ${dish.priceNormal?.price ?: "???"} Kč",
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f),
         )

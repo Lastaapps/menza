@@ -1,0 +1,3 @@
+Fixed allergens loading
+Fixed no dish price given bug
+Libs update

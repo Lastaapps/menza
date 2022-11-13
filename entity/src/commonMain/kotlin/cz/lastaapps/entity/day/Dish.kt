@@ -39,8 +39,8 @@ data class Dish(
     val allergens: ImmutableList<AllergenId>,
     val allergenDishId: DishAllergensPage?,
     val imageUrl: String?,
-    val priceStudent: Price,
-    val priceNormal: Price,
+    val priceStudent: Price?,
+    val priceNormal: Price?,
     val issuePlaces: ImmutableList<IssueLocation>,
 ) {
     init {

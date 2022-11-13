@@ -69,16 +69,16 @@ object TodayScraperImpl : TodayScraper {
                     }
                 }
                 "td" -> {
-                    val amount = children[1].ownText.removeSpaces().takeIf { it.isNotBlank() }
-                    val name = children[2].ownText.removeSpaces()
-                    val dishAllergens = children[3].parseAllergens()
-                    val dishAllergensPage = children[3].parseAllergensPage()
-                    val imgUrl = children[4].parseImage()
-                    val priceStudent = children[5].parseMoney()
-                    val priceNormal = children[6].parseMoney()
-                    val issuePlaces = children[7].parseIssuePlaces()
-
                     try {
+                        val amount = children[1].ownText.removeSpaces().takeIf { it.isNotBlank() }
+                        val name = children[2].ownText.removeSpaces()
+                        val dishAllergens = children[3].parseAllergens()
+                        val dishAllergensPage = children[3].parseAllergensPage()
+                        val imgUrl = children[4].parseImage()
+                        val priceStudent = children[5].parseMoney()
+                        val priceNormal = children[6].parseMoney()
+                        val issuePlaces = children[7].parseIssuePlaces()
+
                         dishSet += Dish(
                             MenzaId(menzaId),
                             CourseType(currentType!!, webOrder),
@@ -87,8 +87,8 @@ object TodayScraperImpl : TodayScraper {
                             dishAllergens,
                             dishAllergensPage,
                             imgUrl,
-                            Price(priceStudent),
-                            Price(priceNormal),
+                            priceStudent?.let(::Price),
+                            priceNormal?.let(::Price),
                             issuePlaces,
                         )
                     } catch (e: DishNameEmpty) {
@@ -105,7 +105,7 @@ object TodayScraperImpl : TodayScraper {
     }
 
     private fun DocElement.parseAllergens(): ImmutableList<AllergenId> {
-        return tryFindFirst("a") {
+        return tryFindFirst("img") {
             attributes["title"]!!
                 .removePrefix("Alergeny: ")
                 .split(',', ' ', '.')
@@ -124,16 +124,6 @@ object TodayScraperImpl : TodayScraper {
     }
 
     private fun DocElement.parseImage(): String? =
-        // old Agata version support, must precede the new one
-        tryFindFirst("a") {
-            backendUrl + attribute("href").replace("imgshow.php", "showfoto.php")
-            /*.removeSpaces().let {
-                val toFind = "&xFile="
-                val index = it.indexOf(toFind)
-                it.substring(index + toFind.length)
-            }*/
-        } ?:
-        // new version
         tryFindFirst("img") {
             backendUrl + attribute("alt")
         }
@@ -141,9 +131,10 @@ object TodayScraperImpl : TodayScraper {
 
 private val moneyRegex = """(\d+([,|.]\d{1,2})?)?""".toRegex()
 
-private fun DocElement.parseMoney(): Int {
+private fun DocElement.parseMoney(): Int? {
     val text = ownText.removeSpaces()
-    val money = moneyRegex.find(text)!!.destructured.component1()
+    if (text.isBlank()) return null
+    val money = moneyRegex.find(text)?.destructured?.component1() ?: return null
     return money.replace(',', '.').toDouble().roundToInt()
 }
 

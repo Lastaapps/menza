@@ -24,7 +24,6 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 
 internal const val backendUrl = "https://agata.suz.cvut.cz/jidelnicky/"
-//internal const val backendUrl = "https://agata-new.suz.cvut.cz/jidelnicky/"
 
 internal val agataClient = HttpClient(CIO) {
     install(DefaultRequest) {

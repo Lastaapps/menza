@@ -3,3 +3,13 @@
 /workspace.xml
 /kotlinc.xml
 /git_toolbox_prj.xml
+/compiler.xml
+/misc.xml
+/artifacts/
+/caches
+/libraries
+/modules.xml
+/navEditor.xml
+/assetWizardSettings.xml
+/deploymentTargetDropDown.xml
+/gradle.xml

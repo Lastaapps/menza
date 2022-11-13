@@ -101,7 +101,6 @@ private fun InitMenzaRow(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { onExpanded(!expanded) },
-        modifier = modifier,
     ) {
         TextField(
             readOnly = true,
@@ -110,7 +109,7 @@ private fun InitMenzaRow(
             label = { Text(stringResource(R.string.settings_init_menza_behaviour)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier.menuAnchor(),
+            modifier = modifier.menuAnchor(),
         )
         ExposedDropdownMenu(
             expanded = expanded,
@@ -141,7 +140,6 @@ private fun PreferredMenza(
     modifier: Modifier = Modifier
 ) {
     ExposedDropdownMenuBox(
-        modifier = modifier,
         expanded = expanded,
         onExpandedChange = { onExpanded(!expanded) },
     ) {
@@ -153,7 +151,7 @@ private fun PreferredMenza(
             label = { Text(stringResource(R.string.settings_init_menza_select_title)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier.menuAnchor(),
+            modifier = modifier.menuAnchor(),
         )
         ExposedDropdownMenu(
             expanded = expanded,
