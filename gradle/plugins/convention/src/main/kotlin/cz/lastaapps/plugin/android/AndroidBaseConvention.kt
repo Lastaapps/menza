@@ -17,10 +17,22 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-}
+package cz.lastaapps.plugin.android
 
-android {
-    namespace = "cz.lastaapps.entity"
-}
+import cz.lastaapps.extensions.implementation
+import cz.lastaapps.extensions.libs
+import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.common.DetektConvention
+import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.dependencies
+
+class AndroidBaseConvention : BasePlugin({
+
+    apply<DetektConvention>()
+
+    dependencies {
+        implementation(libs.androidx.appcompat)
+        implementation(libs.androidx.lifecycle.runtime)
+        implementation(libs.androidx.lifecycle.viewModel)
+    }
+})

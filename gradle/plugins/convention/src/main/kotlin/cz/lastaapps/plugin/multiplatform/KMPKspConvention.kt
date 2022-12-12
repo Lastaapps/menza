@@ -17,37 +17,33 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-}
+package cz.lastaapps.plugin.multiplatform
 
-kotlin {
-    sourceSets {
-        val androidMain by getting {
-            kotlin.srcDir("src/commonJvmAndroid/kotlin")
+import cz.lastaapps.extensions.*
+import cz.lastaapps.plugin.BasePlugin
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
+
+class KMPKspConvention : BasePlugin({
+    pluginManager {
+        alias(libs.plugins.google.ksp)
+    }
+
+    multiplatform {
+        sourceSets.all {
+            kotlin.srcDir("build/generated/ksp/$name/kotlin")
         }
-        val androidTest by getting {
-            kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
-        }
-        val jvmMain by getting {
-            kotlin.srcDir("src/commonJvmAndroid/kotlin")
-        }
-        val jvmTest by getting {
-            kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
+        sourceSets.apply {
+            getByName("jvmMain") {
+                kotlin.srcDir("build/generated/ksp/jvm/jvmMain/kotlin")
+            }
         }
     }
-}
 
-android {
-    namespace = "cz.lastaapps.scraping"
-}
-
-dependencies {
-    commonMainImplementation(libs.ktor.client.core)
-    androidMainImplementation(libs.ktor.client.cio)
-    jvmMainImplementation(libs.ktor.client.cio)
-
-    commonMainImplementation(projects.entity)
-    commonMainImplementation(projects.htmlParser)
-}
-
+    androidLibrary {
+        kotlinExtension.apply {
+            sourceSets.all {
+                kotlin.srcDir("build/generated/ksp/android/$name/kotlin")
+            }
+        }
+    }
+})

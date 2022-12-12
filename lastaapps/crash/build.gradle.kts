@@ -18,41 +18,8 @@
  */
 
 plugins {
-    id(Plugins.LIBRARY)
-    id(Plugins.KOTLIN_ANDROID)
-    id(Plugins.SQLDELIGHT)
-}
-
-android {
-    compileSdk = App.COMPILE_SDK
-
-    defaultConfig {
-        minSdk = App.MIN_SDK
-        targetSdk = App.TARGET_SDK
-
-        multiDexEnabled = true
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = Versions.JAVA
-        targetCompatibility = Versions.JAVA
-    }
-    kotlinOptions {
-        jvmTarget = Versions.JVM_TARGET
-    }
-    namespace = "cz.lastaapps.crash"
+    alias(libs.plugins.lastaapps.android.library.core)
+    alias(libs.plugins.sqldelight)
 }
 
 sqldelight {
@@ -62,19 +29,14 @@ sqldelight {
     }
 }
 
+android {
+    namespace = "cz.lastaapps.crash"
+}
+
 dependencies {
-    coreLibraryDesugaring(Libs.DESUGARING)
+    implementation(libs.androidx.startup)
 
-    implementation(Libs.STARTUP)
-
-    implementation(Libs.SQLDELIGHT_ANDROID)
-    implementation(Libs.SQLDELIGHT_RUNTIME)
-    implementation(Libs.SQLDELIGHT_COROUTINES)
-
-    implementation(Libs.KODEIN)
-    implementation(Libs.KODEIN_ANDROIDX)
-    implementation(Libs.KODEIN_ANDROIDX_VIEWMODE)
-    implementation(Libs.KODEIN_ANDROIDX_VIEWMODE_SAVEDSTATE)
-
-    implementation(Libs.KM_LOGGING)
+    implementation(libs.sqldelight.android)
+    implementation(libs.sqldelight.runtime)
+    implementation(libs.sqldelight.coroutines)
 }

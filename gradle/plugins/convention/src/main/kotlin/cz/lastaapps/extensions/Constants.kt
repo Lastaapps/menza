@@ -17,9 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-object Classpath {
+package cz.lastaapps.extensions
 
-    const val DAGGER_HILT = "com.google.dagger:hilt-android-gradle-plugin:${Versions.DAGGER_HILT}"
-    const val ABOUT_LIBRARIES = "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:${Versions.ABOUT_LIBRARIES}"
-
+object Constants {
+    const val IMPLEMENTATION = "implementation"
+    const val TEST_IMPLEMENTATION = "implementation"
+    const val API = "api"
+    const val DESUGARING = "coreLibraryDesugaring"
+    const val KSP = "ksp"
 }

@@ -17,10 +17,14 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-}
+package cz.lastaapps.plugin
 
-android {
-    namespace = "cz.lastaapps.entity"
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+
+
+abstract class BasePlugin(private val configuration: Project.() -> Unit) : Plugin<Project> {
+    final override fun apply(project: Project) {
+        configuration(project)
+    }
 }

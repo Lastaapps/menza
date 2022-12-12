@@ -18,49 +18,12 @@
  */
 
 plugins {
-    id(Plugins.KOTLIN_MULTIPLATFORM)
-    id(Plugins.LIBRARY)
-}
-
-group = App.GROUP
-version = App.VERSION_NAME
-
-tasks.withType<Test> {
-    useJUnitPlatform()
+    alias(libs.plugins.lastaapps.kmp.library)
 }
 
 kotlin {
-    sourceSets.all {
-        languageSettings.apply {
-            languageVersion = Versions.KOTLIN_LANGUAGE_VERSION
-            apiVersion = Versions.KOTLIN_LANGUAGE_VERSION
-        }
-    }
-    android {
-        compilations.all {
-            kotlinOptions.jvmTarget = Versions.JVM_TARGET
-        }
-    }
-    jvm("desktop") {
-        compilations.all {
-            kotlinOptions.jvmTarget = Versions.JVM_TARGET
-        }
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
-        }
-    }
-
     val jsoup = "1.13.1" // 1.14.3
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
         val androidMain by getting {
             kotlin.srcDir("src/commonJvmAndroid/kotlin")
             dependencies {
@@ -69,56 +32,20 @@ kotlin {
         }
         val androidTest by getting {
             kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
-            dependencies {
-            }
         }
-        val desktopMain by getting {
+        val jvmMain by getting {
             kotlin.srcDir("src/commonJvmAndroid/kotlin")
             dependencies {
                 api("org.jsoup:jsoup:$jsoup")
             }
         }
-        val desktopTest by getting {
+        val jvmTest by getting {
             kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
-            dependencies {
-                implementation(Tests.JUNIT)
-            }
         }
     }
 }
 
 android {
-    compileSdk = App.COMPILE_SDK
-
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-
-    defaultConfig {
-        minSdk = App.MIN_SDK
-        targetSdk = App.TARGET_SDK
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-
-        sourceCompatibility = Versions.JAVA
-        targetCompatibility = Versions.JAVA
-    }
     namespace = "it.skrape"
-
-    dependencies {
-        coreLibraryDesugaring(Libs.DESUGARING)
-    }
 }
 

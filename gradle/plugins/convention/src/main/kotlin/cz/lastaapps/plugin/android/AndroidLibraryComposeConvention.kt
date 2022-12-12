@@ -17,10 +17,21 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-}
+package cz.lastaapps.plugin.android
 
-android {
-    namespace = "cz.lastaapps.entity"
-}
+import com.android.build.api.dsl.LibraryExtension
+import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.android.config.configureComposeCompiler
+import cz.lastaapps.plugin.android.config.configureComposeDependencies
+import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
+
+@Suppress("unused")
+class AndroidLibraryComposeConvention : BasePlugin({
+    apply<AndroidLibraryConvention>()
+
+    extensions.configure<LibraryExtension> {
+        configureComposeCompiler(this)
+    }
+    configureComposeDependencies()
+})

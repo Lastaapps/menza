@@ -17,57 +17,27 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    id(Plugins.LIBRARY)
-    id(Plugins.KOTLIN_ANDROID)
+import java.time.LocalDate
+import java.time.ZoneOffset.UTC
+import java.time.format.DateTimeFormatter
 
-    id(Plugins.MAVEN)
+plugins {
+    alias(libs.plugins.lastaapps.android.library.core)
+    `maven-publish`
 }
 
 android {
-    compileSdk = App.COMPILE_SDK
+    namespace = "cz.lastaapps.common"
 
     defaultConfig {
-        minSdk = App.MIN_SDK
-        targetSdk = App.TARGET_SDK
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-
-        multiDexEnabled = true
-
-        buildConfigField("java.lang.String", "BUILD_DATE", "\"${App.buildDate}\"")
-    }
-
-    buildTypes {
-        getByName("release") {
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-
-        sourceCompatibility = Versions.JAVA
-        targetCompatibility = Versions.JAVA
-    }
-    kotlinOptions {
-        jvmTarget = Versions.JVM_TARGET
+        val buildDateTime = LocalDate.now(UTC).format(DateTimeFormatter.ISO_DATE)
+        buildConfigField("java.lang.String", "BUILD_DATE", "\"$buildDateTime\"")
     }
     buildFeatures {
         buildConfig = true
     }
-    namespace = "cz.lastaapps.common"
 }
 
 dependencies {
-
-    coreLibraryDesugaring(Libs.DESUGARING)
-
-    implementation(Libs.APPCOMPAT)
-    implementation(Libs.MATERIAL)
-    //implementation(Libs.PLAY_SERVICES)
-
+    implementation(libs.google.material)
 }

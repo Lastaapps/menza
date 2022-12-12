@@ -18,6 +18,7 @@
  */
 
 pluginManagement {
+    includeBuild("gradle/plugins")
     repositories {
         gradlePluginPortal()
         google()
@@ -44,6 +45,6 @@ include(
     ":storage:db",
     ":storage:repo",
     ":lastaapps:common",
+    ":lastaapps:crash",
     ":html-parser",
 )
-include(":lastaapps:crash")

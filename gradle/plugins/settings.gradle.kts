@@ -17,37 +17,29 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        google()
+    }
 }
 
-kotlin {
-    sourceSets {
-        val androidMain by getting {
-            kotlin.srcDir("src/commonJvmAndroid/kotlin")
-        }
-        val androidTest by getting {
-            kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
-        }
-        val jvmMain by getting {
-            kotlin.srcDir("src/commonJvmAndroid/kotlin")
-        }
-        val jvmTest by getting {
-            kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
+dependencyResolutionManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        google()
+    }
+    versionCatalogs {
+        create("libs") {
+            from(files("../libs.versions.toml"))
         }
     }
 }
 
-android {
-    namespace = "cz.lastaapps.scraping"
-}
-
-dependencies {
-    commonMainImplementation(libs.ktor.client.core)
-    androidMainImplementation(libs.ktor.client.cio)
-    jvmMainImplementation(libs.ktor.client.cio)
-
-    commonMainImplementation(projects.entity)
-    commonMainImplementation(projects.htmlParser)
-}
-
+rootProject.name = "convention-plugins"
+include("convention")
