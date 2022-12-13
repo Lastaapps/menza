@@ -30,10 +30,13 @@ import io.ktor.client.request.*
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import kotlinx.datetime.LocalDate
+import org.lighthousegames.logging.logging
 
 object WeekScraperImpl : WeekScraper {
 
-    private val dateRegex = "^([0-9]{1,2}). ([0-9]{1,2}). ([0-9]{4})$".toRegex()
+    private val log = logging()
+
+    private val dateRegex = """([0-9]{1,2}).\s*([0-9]{1,2}).\s*([0-9]{4})""".toRegex()
 
     override suspend fun createRequest(
         menzaId: MenzaId, @Suppress("UNUSED_PARAMETER") weekNumber: WeekNumber
@@ -48,8 +51,8 @@ object WeekScraperImpl : WeekScraper {
     private fun Doc.parseHtml(): Set<WeekDish> {
         val set = mutableSetOf<WeekDish>()
 
-        tryFindFirst(".data") {
-            if (ownText == "Tato provozovna nevystavuje týdenní jídelní lístek.") {
+        findFirst("#jidelnicek").let { root ->
+            if (root.children.size <= 1) {
                 throw WeekNotAvailable()
             }
         }
@@ -58,42 +61,47 @@ object WeekScraperImpl : WeekScraper {
             attribute("value").removeSpaces().takeIf { it.isNotBlank() }?.toInt()
         } ?: error("Menza id not found")
 
-        findFirst("#jidelnicek tbody") {
+        findAll("#jidelnicek tbody tr") {
 
             var currentDate: LocalDate? = null
             var currentOrder = 0
             val currentDateOrders = HashMap<String, Int>()
 
-            children.forEachApply {
-                //to skip day dividers
-                if (children.first().className == "thkategorie") {
-
-                    children[0].ownText.removeSpaces().takeIf { it.isNotBlank() }?.let {
-                        val values = dateRegex.find(it)?.destructured!!
-                        val (day, month, year) = values
-                        currentDate = LocalDate(
-                            year.toInt(), month.toInt(), day.toInt()
-                        )
+            forEachApply {
+                when (children.size) {
+                    // date
+                    1 -> {
+                        children[0].text.removeSpaces().takeIf { it.isNotBlank() }?.let {
+                            runCatching {
+                                val values = dateRegex.find(it)?.destructured!!
+                                val (day, month, year) = values
+                                currentDate = LocalDate(
+                                    year.toInt(), month.toInt(), day.toInt()
+                                )
+                            }.getOrElse { log.e(it) { "Failed to parse date" } }
+                        } ?: log.e { "Failed to parse date - empty" }
                     }
+                    // dish
+                    3 -> {
+                        val type = children[0].text.removeSpaces()
+                        currentDateOrders.getOrPut(type) { currentOrder.also { currentOrder++ } }
 
-                    val type = children[2].text.removeSpaces()
-                    currentDateOrders.getOrPut(type) { currentOrder.also { currentOrder++ } }
+                        val amount: String? =
+                            children[1].ownText.removeSpaces().takeIf { it.isNotBlank() }
+                        val name = children[2].ownText.removeSpaces()
 
-                    val amount: String? =
-                        children[3].ownText.removeSpaces().takeIf { it.isNotBlank() }
-                    val name = children[4].ownText.removeSpaces()
-
-                    if (name.isNotBlank() && name.isNameValid()) {
-                        try {
-                            set += WeekDish(
-                                MenzaId(menzaId),
-                                currentDate!!,
-                                CourseType(type, currentDateOrders[type]!!),
-                                amount?.let { Amount(it) },
-                                name,
-                            )
-                        } catch (e: DishNameEmpty) {
-                            e.printStackTrace()
+                        if (name.isNotBlank() && name.isNameValid()) {
+                            try {
+                                set += WeekDish(
+                                    MenzaId(menzaId),
+                                    currentDate!!,
+                                    CourseType(type, currentDateOrders[type]!!),
+                                    amount?.let { Amount(it) },
+                                    name,
+                                )
+                            } catch (e: DishNameEmpty) {
+                                e.printStackTrace()
+                            }
                         }
                     }
                 }

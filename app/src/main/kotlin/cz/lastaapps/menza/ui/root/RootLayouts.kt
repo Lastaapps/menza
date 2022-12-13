@@ -96,7 +96,9 @@ fun AppLayoutCompact(
             Box(
                 Modifier
                     .padding(insets)
-                    .padding(sidesPadding)
+                    .padding(horizontal = sidesPadding)
+                    // top omitted because of the pull to refresh gesture
+                    .padding(bottom = sidesPadding)
                     .fillMaxSize()
             ) {
                 content()
@@ -151,7 +153,9 @@ fun AppLayoutMedium(
                 drawerState = drawerState,
                 menzaListViewModel = menzaViewModel,
                 modifier = Modifier
-                    .padding(sidesPadding)
+                    .padding(horizontal = sidesPadding)
+                    // top omitted because of the pull to refresh gesture
+                    .padding(bottom = sidesPadding)
                     .fillMaxSize(),
                 content = content,
             )
@@ -240,7 +244,9 @@ private fun AppLayoutExpandedNoFold(
             ) {
                 BoxWithConstraints(
                     Modifier
-                        .padding(sidesPadding)
+                        .padding(horizontal = sidesPadding)
+                        // top omitted because of the pull to refresh gesture
+                        .padding(bottom = sidesPadding)
                         .fillMaxSize()
                 ) {
                     val totalWidthAvailable = maxWidth
@@ -309,7 +315,9 @@ fun AppLayoutExpandedFold(
             ) {
                 BoxWithConstraints(
                     Modifier
-                        .padding(sidesPadding)
+                        .padding(horizontal = sidesPadding)
+                        // top omitted because of the pull to refresh gesture
+                        .padding(bottom = sidesPadding)
                         .fillMaxSize(),
                 ) {
                     val totalWidthAvailable = maxWidth - spacesWidth + railWidth
@@ -337,7 +345,7 @@ fun UseSplitLayout(
             Modifier
                 .width(size.first)
                 .padding(
-                    top = sidesPadding, bottom = sidesPadding,
+                    bottom = sidesPadding,
                     start = sidesPadding, end = sidesPadding / 2
                 )
         ) { panel1() }
@@ -348,7 +356,7 @@ fun UseSplitLayout(
             Modifier
                 .width(size.third)
                 .padding(
-                    top = sidesPadding, bottom = sidesPadding,
+                    bottom = sidesPadding,
                     start = sidesPadding / 2, end = sidesPadding
                 )
         ) { panel2() }

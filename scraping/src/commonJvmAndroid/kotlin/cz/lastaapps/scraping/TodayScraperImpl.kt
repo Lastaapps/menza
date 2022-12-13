@@ -28,7 +28,7 @@ import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.day.IssueLocation
 import cz.lastaapps.entity.exceptions.DishNameEmpty
 import cz.lastaapps.entity.menza.MenzaId
-import io.ktor.client.request.*
+import io.ktor.client.request.get
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import it.skrape.selects.DocElement
@@ -36,9 +36,12 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.lighthousegames.logging.logging
 import kotlin.math.roundToInt
 
 object TodayScraperImpl : TodayScraper {
+
+    private val log = logging()
 
     override suspend fun createRequest(menzaId: MenzaId) =
         agataClient.get("index.php?clPodsystem=${menzaId.id}")
@@ -127,24 +130,25 @@ object TodayScraperImpl : TodayScraper {
         tryFindFirst("img") {
             backendUrl + attribute("alt")
         }
-}
 
-private val moneyRegex = """(\d+([,|.]\d{1,2})?)?""".toRegex()
+    private val moneyRegex = """(\d+([,|.]\d{1,2})?)?""".toRegex()
 
-private fun DocElement.parseMoney(): Int? {
-    val text = ownText.removeSpaces()
-    if (text.isBlank()) return null
-    val money = moneyRegex.find(text)?.destructured?.component1() ?: return null
-    return money.replace(',', '.').toDouble().roundToInt()
-}
-
-private val issuePlaceIdRegex = """v(\d+)v(\d+)""".toRegex()
-private fun DocElement.parseIssuePlaces(): ImmutableList<IssueLocation> =
-    persistentListOf<IssueLocation>().mutate { issuePlaces ->
-        findAllAndCycle("span") {
-            val (windowId, terminalId) = issuePlaceIdRegex.find(id)!!.destructured
-            issuePlaces += IssueLocation(
-                terminalId.toInt(), windowId.toInt(), ownText, attribute("title"),
-            )
-        }
+    private fun DocElement.parseMoney(): Int? {
+        val text = ownText.removeSpaces()
+        if (text.isBlank()) return null
+        val money = moneyRegex.find(text)?.destructured?.component1() ?: return null
+        return money.replace(',', '.').toDouble().roundToInt()
     }
+
+    private fun DocElement.parseIssuePlaces(): ImmutableList<IssueLocation> =
+        persistentListOf<IssueLocation>().mutate { issuePlaces ->
+            findAllAndCycle("span") {
+                runCatching {
+                    issuePlaces += IssueLocation(
+                        name = attribute("data-bs-title"),
+                        abbrev = ownText,
+                    )
+                }.getOrElse { log.e(it) { "Failed to parse issue places" } }
+            }
+        }
+}

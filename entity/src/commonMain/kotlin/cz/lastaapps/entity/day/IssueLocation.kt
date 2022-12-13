@@ -30,15 +30,11 @@ package cz.lastaapps.entity.day
  * https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=4
  */
 data class IssueLocation(
-    val terminalId: Int,
-    val windowsId: Int,
-    val abbrev: String,
     val name: String,
+    val abbrev: String,
 ) {
     init {
-        require(terminalId >= 0) { "Terminal id is negative $terminalId" }
-        require(windowsId >= 0) { "Window id is negative $windowsId" }
-        require(abbrev.isNotBlank()) { "Issue location abbrev is blank" }
         require(name.isNotBlank()) { "Issue location abbrev is blank" }
+        require(abbrev.isNotBlank()) { "Issue location abbrev is blank" }
     }
 }

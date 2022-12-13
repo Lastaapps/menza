@@ -45,6 +45,6 @@ data class Dish(
 ) {
     init {
         if (name.isBlank()) throw DishNameEmpty()
-        require(issuePlaces.isNotEmpty()) { "There are no issue places" }
+        // require(issuePlaces.isNotEmpty()) { "There are no issue places" }
     }
 }

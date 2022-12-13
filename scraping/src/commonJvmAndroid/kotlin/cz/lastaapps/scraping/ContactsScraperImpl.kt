@@ -19,10 +19,14 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.info.*
+import cz.lastaapps.entity.info.Contact
+import cz.lastaapps.entity.info.Email
+import cz.lastaapps.entity.info.Name
+import cz.lastaapps.entity.info.PhoneNumber
+import cz.lastaapps.entity.info.Role
 import cz.lastaapps.entity.menza.MenzaId
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.request.get
+import io.ktor.http.decodeURLPart
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import it.skrape.selects.DocElement
@@ -39,6 +43,8 @@ object ContactsScraperImpl : ContactsScraper {
     }
 
     private fun Doc.parseHtml(): Set<Contact> {
+        return emptySet()
+
         val set = mutableSetOf<Contact>()
 
         findFirst("#otdoby") {

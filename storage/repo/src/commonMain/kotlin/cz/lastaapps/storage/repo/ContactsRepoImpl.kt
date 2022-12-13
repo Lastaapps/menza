@@ -26,10 +26,19 @@ import cz.lastaapps.entity.info.Contact
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.ContactsScraper
-import io.ktor.client.statement.*
-import kotlinx.coroutines.*
+import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.lighthousegames.logging.logging
 
 class ContactsRepoImpl(
@@ -116,7 +125,8 @@ class ContactsRepoImpl(
     }.also { mRequestInProgress.value = false }
 
     override suspend fun hasData(): Boolean =
-        hasDataStored().first().also { log.i { "hasData: $it" } }
+        true // TODO revert
+    // hasDataStored().first().also { log.i { "hasData: $it" } }
 
     override fun hasDataStored(): Flow<Boolean> {
         log.i { "Asking hasData" }

@@ -43,6 +43,12 @@
     <string name="info_location_choose_app">Vyberte mapovací aplikaci</string>
     <string name="info_message_title">Oznámení</string>
     <string name="info_opening_hours_title">Otevírací hodiny</string>
+    <string name="info_new_be_warning_title">Chybí kontakty?</string>
+    <string name="info_new_be_warning_description">
+        Je mi líto, ale kvůli změnám webu Agáty nelze kontakty v tuto chvíli načíst.
+        Po zkouškovém to opravím, do té doby nebudu mít nejspíše čas.
+        Vždy se můžete podívat na web.
+    </string>
     <string name="privacy_title">Zásady ochrany osobních údajů</string>
     <string name="privacy_text">
         Tato aplikace neshromažďuje žádná (osobní) data.

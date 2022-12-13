@@ -19,13 +19,15 @@
 
 package cz.lastaapps.scraping
 
-import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.Message
-import io.ktor.client.request.*
+import io.ktor.client.request.get
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
+import org.lighthousegames.logging.logging
 
 object MessagesScraperImpl : MessagesScraper {
+
+    private val log = logging()
 
     override suspend fun createRequest() =
         agataClient.get("index.php")
@@ -38,24 +40,30 @@ object MessagesScraperImpl : MessagesScraper {
     }
 
     private fun Doc.parseHtml(): Set<Message> {
+
+        val menzas = MenzaScraperImpl.scrape(html).map {
+            it.name to it.menzaId
+        }.toMap()
+
         val set = mutableSetOf<Message>()
 
         tryFindFirst("#aktuality") {
             tryFindAllAndCycle("div div div") {
-                val menzaId =
-                    id.removePrefix("Info").removeSpaces().takeIf { it.isNotBlank() }?.toInt()
+                runCatching {
+                    val menzaId = menzas[children[0].ownText.removeSpaces()]
                         ?: error("Invalid menza id")
 
-                val text = findByIndex(1, "p") {
-                    html
-                        .replace("<BR>", "\n")
-                        .replace("<br>", "\n")
-                        .replace(" +".toRegex(), " ")
-                        .replace("^ +".toRegex(RegexOption.MULTILINE), "")
-                        .replace(" +$".toRegex(RegexOption.MULTILINE), "")
-                        .removeSpaces()
-                }
-                set += Message(MenzaId(menzaId), text)
+                    val text = children[1].run {
+                        html
+                            .replace("<BR>", "\n")
+                            .replace("<br>", "\n")
+                            .replace(" +".toRegex(), " ")
+                            .replace("^ +".toRegex(RegexOption.MULTILINE), "")
+                            .replace(" +$".toRegex(RegexOption.MULTILINE), "")
+                            .removeSpaces()
+                    }
+                    set += Message(menzaId, text)
+                }.getOrElse { log.e(it) { "Failed to parse a menza message" } }
             }
         }
 

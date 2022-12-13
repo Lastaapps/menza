@@ -23,7 +23,7 @@ import cz.lastaapps.entity.TimeUtils
 import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.toCzechDayShortcutToDayOfWeek
-import io.ktor.client.request.*
+import io.ktor.client.request.get
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import kotlinx.datetime.LocalTime
@@ -41,7 +41,7 @@ object OpeningHoursScraperImpl : OpeningHoursScraper {
         val set = mutableSetOf<OpeningHours>()
 
         findFirst("#otdoby") {
-            children.forEachApply {
+            findAllAndCycle("section") {
 
                 val id = id.removePrefix("section").toInt()
 

@@ -44,8 +44,8 @@ android {
 
 dependencies {
     commonMainImplementation(libs.ktor.client.core)
-    androidMainImplementation(libs.ktor.client.cio)
-    jvmMainImplementation(libs.ktor.client.cio)
+    androidMainImplementation(libs.ktor.client.okhttp)
+    jvmMainImplementation(libs.ktor.client.okhttp)
 
     commonMainImplementation(projects.entity)
     commonMainImplementation(projects.htmlParser)

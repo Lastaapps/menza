@@ -46,6 +46,14 @@
     <string name="info_location_choose_app">Choose map app</string>
     <string name="info_message_title">Announcements</string>
     <string name="info_opening_hours_title">Opening hours</string>
+    <string name="info_new_be_warning_title">Contacts missing?</string>
+    <string name="info_new_be_warning_description">
+        The contacts section may be missing.
+        It is caused by Agata using a new website and
+        me not adapting to it yet.
+        After the examination period it will get fixed.
+        Just have a look at the website.
+    </string>
 
     <string name="privacy_title">Privacy Policy</string>
     <string name="privacy_text">

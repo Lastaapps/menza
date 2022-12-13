@@ -27,11 +27,23 @@ import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.entity.menza.Message
-import cz.lastaapps.storage.repo.*
+import cz.lastaapps.storage.repo.ContactsRepo
+import cz.lastaapps.storage.repo.LocationRepo
+import cz.lastaapps.storage.repo.MenzaError
+import cz.lastaapps.storage.repo.MessagesRepo
+import cz.lastaapps.storage.repo.OpeningHoursRepo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class InfoViewModel constructor(
@@ -64,7 +76,6 @@ class InfoViewModel constructor(
                 locationRepo.requestInProgress,
                 openingHoursRepo.requestInProgress,
             ) { b0, b1, b2, b3 ->
-                println("FIND ME: $b0 $b1 $b2 $b3")
                 b0 || b1 || b2 || b3 }.collectLatest {
                 mIsRefreshing.emit(it)
             }

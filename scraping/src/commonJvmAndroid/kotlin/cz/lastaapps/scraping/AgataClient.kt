@@ -19,14 +19,27 @@
 
 package cz.lastaapps.scraping
 
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.*
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.request.url
 
-internal const val backendUrl = "https://agata.suz.cvut.cz/jidelnicky/"
+internal const val backendUrl = "https://agata-new.suz.cvut.cz/jidelnicky/"
+internal const val backendUrlNormal = "https://agata.suz.cvut.cz/jidelnicky/"
 
-internal val agataClient = HttpClient(CIO) {
+internal val agataClient = HttpClient() {
     install(DefaultRequest) {
         url(backendUrl)
+    }
+
+    // delete after the migration to API
+    install(HttpRequestRetry) {
+        retryOnException(
+            maxRetries = 1,
+            retryOnTimeout = false,
+        )
+        modifyRequest {
+            it.url(backendUrlNormal)
+        }
     }
 }

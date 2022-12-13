@@ -31,10 +31,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -53,15 +56,13 @@ import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.LocalConnectivityProvider
+import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.dests.panels.Panels
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.*
@@ -71,6 +72,7 @@ import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TodayDishList(
     navController: NavController,
@@ -109,12 +111,15 @@ fun TodayDishList(
                 viewModel.isRefreshing(menzaId)
             }.collectAsState()
 
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing),
+            val pullState = rememberPullRefreshState(
+                refreshing = isRefreshing,
                 onRefresh = { viewModel.refresh(menzaId, locale) },
+            )
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
+                    .weight(1f)
+                    .pullRefresh(pullState),
             ) {
                 Crossfade(targetState = data) { currentData ->
                     Surface(shape = MaterialTheme.shapes.large) {
@@ -127,6 +132,8 @@ fun TodayDishList(
                         )
                     }
                 }
+
+                MaterialPullIndicatorAligned(isRefreshing, pullState)
             }
         }
         Panels(Modifier.fillMaxWidth())
@@ -241,38 +248,7 @@ private fun DishItem(
 
 @Composable
 private fun DishNameRow(dish: Dish, modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.Top,
-        modifier = modifier,
-    ) {
-        Text(dish.name, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
-
-        // TODO resolve dish issue windows
-        // Hidden to a normal user until it's verified
-        // Still available in dish details
-        if (BuildConfig.DEBUG) {
-            Column(
-                Modifier.width(IntrinsicSize.Max),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                dish.issuePlaces.forEach {
-                    Surface(
-                        color = MaterialTheme.colorScheme.secondary,
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(
-                            text = "${it.abbrev} ${it.windowsId}",
-                            textAlign = TextAlign.End,
-                            modifier = Modifier.padding(2.dp),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
-                }
-            }
-        }
-    }
+    Text(dish.name, modifier, style = MaterialTheme.typography.titleMedium)
 }
 
 @Composable

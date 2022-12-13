@@ -40,6 +40,8 @@ object LocationScraperImpl : LocationScraper {
     }
 
     private fun Doc.parseHtml(): Set<MenzaLocation> {
+        return emptySet()
+
         val set = mutableSetOf<MenzaLocation>()
 
         findFirst("#otdoby") {

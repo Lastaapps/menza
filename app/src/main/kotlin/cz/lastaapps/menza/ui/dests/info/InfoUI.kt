@@ -19,21 +19,33 @@
 
 package cz.lastaapps.menza.ui.dests.info
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.CollectErrors
+import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 
 @Composable
@@ -65,6 +77,7 @@ fun InfoAllTogether(
                         ContactList(contact = contacts!!, fillModifier)
                         AddressList(locations = location!!, fillModifier)
                         MessageList(messages = messages!!)
+                        MissingContacts()
                     }
                 }
             }
@@ -99,6 +112,7 @@ fun InfoPrimary(
                     ) {
                         ContactList(contact = contacts!!, fillModifier)
                         MessageList(messages = messages!!)
+                        MissingContacts()
                     }
                 }
             }
@@ -139,6 +153,7 @@ fun InfoSecondary(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun InfoRefresh(
     viewModel: InfoViewModel,
@@ -149,7 +164,36 @@ fun InfoRefresh(
     CollectErrors(snackbarHost, viewModel.errors)
 
     val isRefreshing by viewModel.isRefreshing.collectAsState()
-    SwipeRefresh(rememberSwipeRefreshState(isRefreshing), { viewModel.refresh() }, modifier) {
+
+    val pullState = rememberPullRefreshState(
+        refreshing = isRefreshing, onRefresh = viewModel::refresh,
+    )
+    Box(modifier.pullRefresh(pullState)) {
         content()
+        MaterialPullIndicatorAligned(isRefreshing, pullState)
+    }
+}
+
+@Composable
+private fun MissingContacts(modifier: Modifier = Modifier) {
+    Card(
+        modifier,
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer),
+    ) {
+        Column(
+            Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(
+                stringResource(R.string.info_new_be_warning_title),
+                style = MaterialTheme.typography.titleLarge,
+            )
+            Text(
+                stringResource(R.string.info_new_be_warning_description),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
 }
