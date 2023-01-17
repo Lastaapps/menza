@@ -17,36 +17,21 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
+package cz.lastaapps.menza.api.agata.domain.model.dto
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
-    }
-}
+import kotlinx.serialization.SerialName
 
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-    ":html-parser",
+/**
+ * TTyden
+ */
+@kotlinx.serialization.Serializable
+data class WeekDto(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("popis")
+    val description: String,
+    @SerialName("platnost_od")
+    val from: String, // YYYY-MM-DD
+    @SerialName("platnost_do")
+    val to: String,
 )

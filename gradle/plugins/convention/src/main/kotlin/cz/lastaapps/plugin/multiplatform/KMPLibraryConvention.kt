@@ -112,6 +112,7 @@ class KMPLibraryConvention : BasePlugin({
                     implementation(libs.kotlin.coroutines.common)
                     implementation(libs.kotlinx.dateTime)
                     implementation(libs.kotlinx.collection)
+                    implementation(libs.kotlinx.serializationJson)
                     implementation(libs.kodein.core)
                     // implementation(libs.koin.core)
                     // implementation(libs.koin.annotations)

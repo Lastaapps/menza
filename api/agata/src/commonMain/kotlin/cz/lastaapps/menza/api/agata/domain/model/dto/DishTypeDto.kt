@@ -17,36 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
+package cz.lastaapps.menza.api.agata.domain.model.dto
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
-    }
-}
+import kotlinx.serialization.SerialName
 
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-    ":html-parser",
+/**
+ * TTypStravy
+ */
+@kotlinx.serialization.Serializable
+data class DishTypeDto(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("podsystem_id")
+    val subsystemId: Int,
+    @SerialName("nazev")
+    val name: String,
+    @SerialName("popis")
+    val description: String,
+    @SerialName("poradi")
+    val order: Int,
 )

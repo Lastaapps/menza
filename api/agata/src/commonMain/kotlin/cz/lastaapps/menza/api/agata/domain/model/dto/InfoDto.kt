@@ -17,36 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
+package cz.lastaapps.menza.api.agata.domain.model.dto
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
-    }
-}
+import kotlinx.serialization.SerialName
 
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-    ":html-parser",
+/**
+ * TInfo
+ */
+@kotlinx.serialization.Serializable
+data class InfoDto(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("podsystem_id")
+    val subsystemId: Int,
+    @SerialName("podsystem_web")
+    val subsystemWeb: String,
+    @SerialName("text_nahore")
+    val header: String,
+    @SerialName("text_dole")
+    val footer: String,
+//    @SerialName("menu")
+//    val menuType: Int, // [0 - lunch, 1 - dinner]
 )

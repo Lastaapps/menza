@@ -17,36 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
+package cz.lastaapps.menza.api.agata.domain.model.dto
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
-    }
-}
+import kotlinx.serialization.SerialName
 
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-    ":html-parser",
+/**
+ * TDenJidlo
+ */
+@kotlinx.serialization.Serializable
+data class WeekDishDto(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("id_tyden")
+    val weekId: Int,
+    @SerialName("datum")
+    val date: String,
+    @Suppress("SpellCheckingInspection")
+    @SerialName("typstravy")
+    val typeId: Int,
+    @SerialName("TypStravyNazev")
+    val typeName: String,
+    @SerialName("nazev")
+    val name: String,
+    @SerialName("vaha")
+    val amount: String,
 )
