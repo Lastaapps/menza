@@ -17,35 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
+package cz.lastaapps.plugin.common
+
+import cz.lastaapps.extensions.implementation
+import cz.lastaapps.extensions.libs
+import cz.lastaapps.plugin.BasePlugin
+import org.gradle.kotlin.dsl.dependencies
+
+class ArrowKtConvention : BasePlugin({
+    dependencies {
+        implementation(platform(libs.arrowkt.bom))
+        implementation(libs.arrowkt.core)
+        implementation(libs.arrowkt.fx.coroutines)
+        implementation(libs.arrowkt.fx.stm)
     }
-}
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":app",
-    ":scraping",
-    ":entity",
-    ":storage:db",
-    ":storage:repo",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-    ":html-parser",
-)
+})

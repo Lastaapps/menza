@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,6 +28,7 @@ import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.android.AndroidLibraryConvention
 import cz.lastaapps.plugin.android.common.KotlinBaseConvention
 import cz.lastaapps.plugin.android.config.configureKotlinAndroid
+import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
 import org.gradle.api.JavaVersion
 import org.gradle.api.tasks.testing.Test
@@ -45,6 +46,7 @@ class KMPLibraryConvention : BasePlugin({
     apply<KotlinBaseConvention>()
     apply<AndroidLibraryConvention>()
     apply<DetektConvention>()
+    apply<ArrowKtConvention>()
 
     afterEvaluate {
         multiplatform {
