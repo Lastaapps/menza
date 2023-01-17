@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
 /**
  * TOtDoba
  */
-data class OpenTime(
+data class OpenTimeDto(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")

@@ -17,13 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.extensions
+package cz.lastaapps.core.domain.error
 
-object Constants {
-    const val IMPLEMENTATION = "implementation"
-    const val COMMON_IMPLEMENTATION = "commonMainImplementation"
-    const val TEST_IMPLEMENTATION = "implementation"
-    const val API = "api"
-    const val DESUGARING = "coreLibraryDesugaring"
-    const val KSP = "ksp"
+sealed interface NetworkError : MenzaError.Runtime {
+    data object Timeout : NetworkError
+    data object NoInternet : NetworkError
+    data object ConnectionClosed : NetworkError
+
+    data object SerializationError : NetworkError
 }

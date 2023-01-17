@@ -24,3 +24,9 @@ plugins {
 android {
     namespace = "cz.lastaapps.api.agata"
 }
+
+dependencies {
+    commonMainImplementation(projects.core)
+
+    commonMainImplementation(libs.ktor.client.core)
+}

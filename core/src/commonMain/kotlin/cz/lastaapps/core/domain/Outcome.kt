@@ -17,13 +17,9 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.extensions
+package cz.lastaapps.core.domain
 
-object Constants {
-    const val IMPLEMENTATION = "implementation"
-    const val COMMON_IMPLEMENTATION = "commonMainImplementation"
-    const val TEST_IMPLEMENTATION = "implementation"
-    const val API = "api"
-    const val DESUGARING = "coreLibraryDesugaring"
-    const val KSP = "ksp"
-}
+import arrow.core.Either
+import cz.lastaapps.core.domain.error.MenzaError
+
+typealias Outcome<A> = Either<MenzaError, A>

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,6 +26,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 fun DependencyHandlerScope.implementation(dependencyNotation: Any) =
     add(Constants.IMPLEMENTATION, dependencyNotation)
+
+fun DependencyHandlerScope.commonImplementation(dependencyNotation: Any) =
+    add(Constants.COMMON_IMPLEMENTATION, dependencyNotation)
 
 fun DependencyHandlerScope.testImplementation(dependencyNotation: Any) =
     add(Constants.TEST_IMPLEMENTATION, dependencyNotation)

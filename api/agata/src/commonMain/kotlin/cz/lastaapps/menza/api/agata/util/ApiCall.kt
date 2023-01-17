@@ -17,13 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.extensions
+package cz.lastaapps.menza.api.agata.util
 
-object Constants {
-    const val IMPLEMENTATION = "implementation"
-    const val COMMON_IMPLEMENTATION = "commonMainImplementation"
-    const val TEST_IMPLEMENTATION = "implementation"
-    const val API = "api"
-    const val DESUGARING = "coreLibraryDesugaring"
-    const val KSP = "ksp"
+import cz.lastaapps.menza.api.agata.domain.Func
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+
+internal suspend fun HttpClient.getFun(
+    func: Func,
+    subsystemId: Int? = null,
+    secondId: Int? = null,
+) = get() {
+    parameter("Funkce", func.funName)
+    subsystemId?.let {
+        parameter("Podsystem", it)
+    }
+    secondId?.let {
+        parameter("SecondID", it)
+    }
 }

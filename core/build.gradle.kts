@@ -17,13 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.extensions
+plugins {
+    alias(libs.plugins.lastaapps.kmp.library)
+}
 
-object Constants {
-    const val IMPLEMENTATION = "implementation"
-    const val COMMON_IMPLEMENTATION = "commonMainImplementation"
-    const val TEST_IMPLEMENTATION = "implementation"
-    const val API = "api"
-    const val DESUGARING = "coreLibraryDesugaring"
-    const val KSP = "ksp"
+android {
+    namespace = "cz.lastaapps.core"
 }

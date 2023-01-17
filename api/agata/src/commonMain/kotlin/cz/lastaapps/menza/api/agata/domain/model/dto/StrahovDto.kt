@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TMinutka
  */
 @kotlinx.serialization.Serializable
-data class RestaurantDto(
+data class StrahovDto(
     @SerialName("id")
     val id: Int,
     @SerialName("skupina_id")

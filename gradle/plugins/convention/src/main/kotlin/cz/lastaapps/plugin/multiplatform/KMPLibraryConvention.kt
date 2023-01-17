@@ -21,6 +21,7 @@ package cz.lastaapps.plugin.multiplatform
 
 import com.android.build.gradle.LibraryExtension
 import cz.lastaapps.extensions.alias
+import cz.lastaapps.extensions.commonImplementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.multiplatform
 import cz.lastaapps.extensions.pluginManager
@@ -114,8 +115,8 @@ class KMPLibraryConvention : BasePlugin({
                     implementation(libs.kotlinx.collection)
                     implementation(libs.kotlinx.serializationJson)
                     implementation(libs.kodein.core)
-                    // implementation(libs.koin.core)
-                    // implementation(libs.koin.annotations)
+                    implementation(libs.koin.core)
+//                    implementation(libs.koin.annotations)
                     implementation(libs.kmLogging)
                 }
             }
@@ -176,5 +177,10 @@ class KMPLibraryConvention : BasePlugin({
             add("kspJvm", libs.koin.annotations.compiler)
         } catch (_: Exception) {
         }
+
+        commonImplementation(platform(libs.arrowkt.bom))
+        commonImplementation(libs.arrowkt.core)
+        commonImplementation(libs.arrowkt.fx.coroutines)
+        commonImplementation(libs.arrowkt.fx.stm)
     }
 })

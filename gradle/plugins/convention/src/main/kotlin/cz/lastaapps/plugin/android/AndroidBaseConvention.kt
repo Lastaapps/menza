@@ -36,5 +36,10 @@ class AndroidBaseConvention : BasePlugin({
         implementation(libs.androidx.appcompat)
         implementation(libs.androidx.lifecycle.runtime)
         implementation(libs.androidx.lifecycle.viewModel)
+
+        implementation(platform(libs.arrowkt.bom))
+        implementation(libs.arrowkt.core)
+        implementation(libs.arrowkt.fx.coroutines)
+        implementation(libs.arrowkt.fx.stm)
     }
 })

@@ -17,13 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.extensions
+package cz.lastaapps.menza.api.agata.di
 
-object Constants {
-    const val IMPLEMENTATION = "implementation"
-    const val COMMON_IMPLEMENTATION = "commonMainImplementation"
-    const val TEST_IMPLEMENTATION = "implementation"
-    const val API = "api"
-    const val DESUGARING = "coreLibraryDesugaring"
-    const val KSP = "ksp"
+import cz.lastaapps.menza.api.agata.api.CafeteriaApi
+import cz.lastaapps.menza.api.agata.api.CafeteriaApiImpl
+import cz.lastaapps.menza.api.agata.api.DishApi
+import cz.lastaapps.menza.api.agata.api.DishApiImpl
+import cz.lastaapps.menza.api.agata.api.SubsystemApi
+import cz.lastaapps.menza.api.agata.api.SubsystemApiImpl
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
+
+val api_agata_module = module {
+    factoryOf(::CafeteriaApiImpl) bind CafeteriaApi::class
+    factoryOf(::DishApiImpl) bind DishApi::class
+    factoryOf(::SubsystemApiImpl) bind SubsystemApi::class
 }
