@@ -49,17 +49,6 @@ class KMPLibraryConvention : BasePlugin({
     apply<DetektConvention>()
     apply<ArrowKtConvention>()
 
-    afterEvaluate {
-        multiplatform {
-            sourceSets.removeAll { sourceSet ->
-                setOf(
-                    "androidAndroidTestRelease", "androidTestFixtures",
-                    "androidTestFixturesDebug", "androidTestFixturesRelease",
-                ).contains(sourceSet.name)
-            }
-        }
-    }
-
     extensions.configure<LibraryExtension> {
 
         sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -140,7 +129,7 @@ class KMPLibraryConvention : BasePlugin({
                 }
             }
 
-            getByName("androidTest") {
+            getByName("androidUnitTest") {
                 dependencies {
                     implementation(libs.kotlin.coroutines.test)
                     implementation(libs.kotest.jUnit5runner)

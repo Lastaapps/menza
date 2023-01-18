@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,7 @@ kotlin {
         val androidMain by getting {
             kotlin.srcDir("src/commonJvmAndroid/kotlin")
         }
-        val androidTest by getting {
+        val androidUnitTest by getting {
             kotlin.srcDir("src/commonJvmAndroidTest/kotlin")
         }
         val jvmMain by getting {
