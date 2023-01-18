@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TAdresa
  */
 @kotlinx.serialization.Serializable
-data class AddressDto(
+internal data class AddressDto(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")

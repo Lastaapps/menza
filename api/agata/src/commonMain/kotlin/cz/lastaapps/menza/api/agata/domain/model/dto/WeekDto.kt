@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TTyden
  */
 @kotlinx.serialization.Serializable
-data class WeekDto(
+internal data class WeekDto(
     @SerialName("id")
     val id: Int,
     @SerialName("popis")

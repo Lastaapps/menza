@@ -25,7 +25,12 @@ import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.api.DishApiImpl
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.api.SubsystemApiImpl
+import cz.lastaapps.menza.api.agata.data.AgataRepoImpl
+import cz.lastaapps.menza.api.agata.data.HashStoreImpl
+import cz.lastaapps.menza.api.agata.domain.AgataRepo
+import cz.lastaapps.menza.api.agata.domain.HashStore
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -33,4 +38,7 @@ val api_agata_module = module {
     factoryOf(::CafeteriaApiImpl) bind CafeteriaApi::class
     factoryOf(::DishApiImpl) bind DishApi::class
     factoryOf(::SubsystemApiImpl) bind SubsystemApi::class
+
+    singleOf(::HashStoreImpl) bind HashStore::class
+    singleOf(::AgataRepoImpl) bind AgataRepo::class
 }

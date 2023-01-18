@@ -29,4 +29,7 @@ dependencies {
     commonMainImplementation(projects.core)
 
     commonMainImplementation(libs.ktor.client.core)
+
+    commonMainImplementation(libs.russhwolf.settins.core)
+    commonMainImplementation(libs.russhwolf.settins.coroutines)
 }

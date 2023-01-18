@@ -21,7 +21,7 @@ package cz.lastaapps.menza.api.agata.api
 
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.util.catchingNetwork
-import cz.lastaapps.menza.api.agata.domain.Func
+import cz.lastaapps.menza.api.agata.domain.model.Func
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishTypeDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.MenuDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.ServingPlace

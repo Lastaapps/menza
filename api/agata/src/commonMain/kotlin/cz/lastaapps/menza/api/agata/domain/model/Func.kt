@@ -17,9 +17,9 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain
+package cz.lastaapps.menza.api.agata.domain.model
 
-enum class Func(val funName: String) {
+internal enum class Func(val funName: String) {
     MenuHash("GetJidelnickyHash"),
     Menu("GetJidelnicky"),
     SubsystemHash("GetPodsystemyHash"),
@@ -34,15 +34,17 @@ enum class Func(val funName: String) {
     InfoHash("GetInfoHash"),
     Info("GetInfo"),
     News("GetAktuality"),
-    InfoGlobal("GetGlobalInfo"),
+
+    //    InfoGlobal("GetGlobalInfo"),
     OpeningHash("GetOtDobyHash"),
     Opening("GetOtDoby"),
     ContactsHash("GetKontaktyHash"),
     Contacts("GetKontakty"),
     PictogramHash("GetPiktogramyHash"),
     Pictogram("GetPiktogramy"),
-    AddressHash("GetAdresyHash"),
-    Address("GetAdresy"),
+
+    //    AddressHash("GetAdresyHash"),
+//    Address("GetAdresy"),
     LinkHash("GetOdkazyHash"),
     Link("GetOdkazy"),
     Week("GetTydny"),

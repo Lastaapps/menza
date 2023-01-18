@@ -25,13 +25,13 @@ import kotlinx.serialization.SerialName
  * TInfo
  */
 @kotlinx.serialization.Serializable
-data class InfoDto(
+internal class InfoDto(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")
     val subsystemId: Int,
-    @SerialName("podsystem_web")
-    val subsystemWeb: String,
+//    @SerialName("podsystem_web")
+//    val subsystemWeb: String, // name
     @SerialName("text_nahore")
     val header: String,
     @SerialName("text_dole")

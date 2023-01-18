@@ -22,24 +22,12 @@ package cz.lastaapps.menza.api.agata.domain.model.dto
 import kotlinx.serialization.SerialName
 
 /**
- * TKontakt
+ * TPiktogram
  */
 @kotlinx.serialization.Serializable
-internal data class ContactDto(
+internal class PictogramDto(
     @SerialName("id")
-    val id: Int,
-    @SerialName("podsystem_id")
-    val subsystemId: Int,
-    @SerialName("maps")
-    val gps: String,
-    @SerialName("poradi_web")
-    val order: Int,
-    @SerialName("pozice")
-    val role: String,
-    @SerialName("jmeno")
+    val id: String,
+    @SerialName("nazev")
     val name: String,
-    @SerialName("telefon")
-    val phone: String,
-    @SerialName("email")
-    val email: String,
 )

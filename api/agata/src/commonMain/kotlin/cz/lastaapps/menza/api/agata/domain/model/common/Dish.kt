@@ -17,29 +17,31 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model.dto
+package cz.lastaapps.menza.api.agata.domain.model.common
 
-import kotlinx.serialization.SerialName
+import kotlinx.collections.immutable.ImmutableList
 
-/**
- * TKontakt
- */
-@kotlinx.serialization.Serializable
-internal data class ContactDto(
-    @SerialName("id")
-    val id: Int,
-    @SerialName("podsystem_id")
-    val subsystemId: Int,
-    @SerialName("maps")
-    val gps: String,
-    @SerialName("poradi_web")
-    val order: Int,
-    @SerialName("pozice")
-    val role: String,
-    @SerialName("jmeno")
+data class DishCategory(
+    val nameShort: String,
+    val nameCs: String,
+    val nameEn: String?,
+    val dishList: ImmutableList<Dish>,
+)
+
+data class Dish(
+    val amountCs: String?,
+    val amountEn: String?,
+    val nameEn: String?,
+    val nameCs: String?,
+    val priceDiscount: Float?,
+    val priceNormal: Float?,
+    val allergens: ImmutableList<Int>,
+    val photoLink: String?,
+    val pictogram: String?,
+    val servingPlaces: ImmutableList<ServingPlace>,
+)
+
+data class ServingPlace(
     val name: String,
-    @SerialName("telefon")
-    val phone: String,
-    @SerialName("email")
-    val email: String,
+    val abbrev: String,
 )

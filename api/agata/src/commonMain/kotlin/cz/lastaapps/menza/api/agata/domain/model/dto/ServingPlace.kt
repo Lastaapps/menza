@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TVydejna
  */
 @kotlinx.serialization.Serializable
-data class ServingPlace(
+internal class ServingPlace(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")

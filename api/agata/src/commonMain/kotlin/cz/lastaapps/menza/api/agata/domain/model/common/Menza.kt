@@ -17,29 +17,14 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model.dto
+package cz.lastaapps.menza.api.agata.domain.model.common
 
-import kotlinx.serialization.SerialName
+import cz.lastaapps.menza.api.agata.domain.model.MenzaType
 
-/**
- * TKontakt
- */
-@kotlinx.serialization.Serializable
-internal data class ContactDto(
-    @SerialName("id")
-    val id: Int,
-    @SerialName("podsystem_id")
-    val subsystemId: Int,
-    @SerialName("maps")
-    val gps: String,
-    @SerialName("poradi_web")
-    val order: Int,
-    @SerialName("pozice")
-    val role: String,
-    @SerialName("jmeno")
+data class Menza internal constructor(
+    internal val type: MenzaType,
     val name: String,
-    @SerialName("telefon")
-    val phone: String,
-    @SerialName("email")
-    val email: String,
+    val subsystemId: Int,
+    val isOpened: Boolean,
+    val isImportant: Boolean, // true if it is not returned only by the AllPodsystem endpoint
 )

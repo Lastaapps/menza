@@ -21,12 +21,15 @@ package cz.lastaapps.menza.api.agata.api
 
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.util.catchingNetwork
-import cz.lastaapps.menza.api.agata.domain.Func
-import cz.lastaapps.menza.api.agata.domain.Func.Dish
-import cz.lastaapps.menza.api.agata.domain.Func.DishHash
-import cz.lastaapps.menza.api.agata.domain.Func.Week
-import cz.lastaapps.menza.api.agata.domain.Func.WeekDays
+import cz.lastaapps.menza.api.agata.domain.model.Func
+import cz.lastaapps.menza.api.agata.domain.model.Func.Dish
+import cz.lastaapps.menza.api.agata.domain.model.Func.DishHash
+import cz.lastaapps.menza.api.agata.domain.model.Func.Pictogram
+import cz.lastaapps.menza.api.agata.domain.model.Func.PictogramHash
+import cz.lastaapps.menza.api.agata.domain.model.Func.Week
+import cz.lastaapps.menza.api.agata.domain.model.Func.WeekDays
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishDto
+import cz.lastaapps.menza.api.agata.domain.model.dto.PictogramDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.StrahovDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDishDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDto
@@ -38,6 +41,9 @@ internal interface DishApi {
 
     suspend fun getDishes(subsystemId: Int): Outcome<List<DishDto>>
     suspend fun getDishesHash(subsystemId: Int): Outcome<String>
+
+    suspend fun getPictogram(): Outcome<List<PictogramDto>>
+    suspend fun getPictogramHash(): Outcome<String>
 
     suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>>
     suspend fun getWeekDishList(weekId: Int): Outcome<List<WeekDishDto>>
@@ -54,6 +60,14 @@ internal class DishApiImpl(
 
     override suspend fun getDishesHash(subsystemId: Int): Outcome<String> = catchingNetwork {
         client.getFun(DishHash, subsystemId = subsystemId).body()
+    }
+
+    override suspend fun getPictogram(): Outcome<List<PictogramDto>> = catchingNetwork {
+        client.getFun(Pictogram).body()
+    }
+
+    override suspend fun getPictogramHash(): Outcome<String> = catchingNetwork {
+        client.getFun(PictogramHash).body()
     }
 
     override suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>> = catchingNetwork {

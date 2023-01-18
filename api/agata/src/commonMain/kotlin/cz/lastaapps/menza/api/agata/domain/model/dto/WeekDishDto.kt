@@ -25,11 +25,11 @@ import kotlinx.serialization.SerialName
  * TDenJidlo
  */
 @kotlinx.serialization.Serializable
-data class WeekDishDto(
+internal class WeekDishDto(
     @SerialName("id")
     val id: Int,
-    @SerialName("id_tyden")
-    val weekId: Int,
+//    @SerialName("id_tyden")
+//    val weekId: Int,
     @SerialName("datum")
     val date: String,
     @Suppress("SpellCheckingInspection")

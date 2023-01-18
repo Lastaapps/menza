@@ -17,29 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model.dto
+package cz.lastaapps.menza.api.agata.domain
 
-import kotlinx.serialization.SerialName
+import cz.lastaapps.menza.api.agata.domain.model.HashType
 
-/**
- * TKontakt
- */
-@kotlinx.serialization.Serializable
-internal data class ContactDto(
-    @SerialName("id")
-    val id: Int,
-    @SerialName("podsystem_id")
-    val subsystemId: Int,
-    @SerialName("maps")
-    val gps: String,
-    @SerialName("poradi_web")
-    val order: Int,
-    @SerialName("pozice")
-    val role: String,
-    @SerialName("jmeno")
-    val name: String,
-    @SerialName("telefon")
-    val phone: String,
-    @SerialName("email")
-    val email: String,
-)
+internal interface HashStore {
+    suspend fun storeHash(type: HashType, hash: String)
+    suspend fun shouldReload(type: HashType, hash: String): Boolean
+}

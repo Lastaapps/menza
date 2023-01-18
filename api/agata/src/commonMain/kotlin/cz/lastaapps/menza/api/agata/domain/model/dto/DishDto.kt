@@ -25,17 +25,17 @@ import kotlinx.serialization.SerialName
  * TJidlo2
  */
 @kotlinx.serialization.Serializable
-data class DishDto(
+internal class DishDto(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")
     val subsystemId: Int,
-    @SerialName("datum")
-    val date: String, // YYYY-MM-DD
+//    @SerialName("datum")
+//    val date: String, // YYYY-MM-DD
     @SerialName("vydejny")
     val servingPlaceList: String, // semicolon separated
-    @SerialName("jidelnicek")
-    val menuList: String, // semicolon separated
+//    @SerialName("jidelnicek")
+//    val menuList: String, // semicolon separated
     @SerialName("kategorie")
     val typeId: Int,
     @SerialName("vaha")
@@ -55,7 +55,7 @@ data class DishDto(
     @SerialName("foto")
     val photoName: String,
     @SerialName("piktogram")
-    val piktogram: Int,
+    val pictogram: Int,
     @Suppress("SpellCheckingInspection")
     @SerialName("aktivni")
     val isActive: String, // True, False

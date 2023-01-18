@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TJidelnicek
  */
 @kotlinx.serialization.Serializable
-data class MenuDto(
+internal class MenuDto(
     @SerialName("id")
     val id: Int,
     @SerialName("nazev")

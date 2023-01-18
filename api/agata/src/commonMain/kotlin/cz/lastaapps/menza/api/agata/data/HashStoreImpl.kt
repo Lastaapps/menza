@@ -17,17 +17,26 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model.dto
+package cz.lastaapps.menza.api.agata.data
 
-import kotlinx.serialization.SerialName
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.set
+import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.model.HashType
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
-/**
- * TPiktogram
- */
-@kotlinx.serialization.Serializable
-data class PiktogramDto(
-    @SerialName("id")
-    val id: String,
-    @SerialName("nazev")
-    val name: String,
-)
+internal class HashStoreImpl(
+    private val settings: Settings,
+) : HashStore {
+
+    private val mutex = Mutex()
+
+    override suspend fun storeHash(type: HashType, hash: String) = mutex.withLock {
+        settings[type.func] = hash
+    }
+
+    override suspend fun shouldReload(type: HashType, hash: String): Boolean = mutex.withLock {
+        settings.getStringOrNull(type.func) != hash
+    }
+}

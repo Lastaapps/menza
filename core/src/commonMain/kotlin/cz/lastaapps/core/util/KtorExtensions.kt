@@ -31,7 +31,7 @@ suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
             -> NetworkError.Timeout
 
             "ConnectException",
-            -> NetworkError.NoInternet
+            -> NetworkError.ConnectionClosed
 
             "UnknownHostException",
             "NoRouteToHostException",

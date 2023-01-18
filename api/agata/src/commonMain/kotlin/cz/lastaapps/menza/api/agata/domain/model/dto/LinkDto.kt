@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TLink
  */
 @kotlinx.serialization.Serializable
-data class LinkDto(
+internal class LinkDto(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")
