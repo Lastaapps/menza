@@ -1,0 +1,17 @@
+CREATE TABLE AddressEntity(
+    id INTEGER NOT NULL,
+    subsystem INTEGER NOT NULL,
+    address TEXT,
+    gps TEXT,
+    PRIMARY KEY (id)
+);
+
+getForSubsystem:
+    SELECT * FROM AddressEntity WHERE subsystem = :subsystemId;
+
+insert:
+    INSERT OR REPLACE INTO AddressEntity(id, subsystem, address, gps)
+    VALUES (:id, :subsystem, :address, :gps);
+
+deleteAll:
+    DELETE FROM AddressEntity;

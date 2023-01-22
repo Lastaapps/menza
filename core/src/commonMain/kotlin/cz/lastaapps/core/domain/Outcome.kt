@@ -20,6 +20,14 @@
 package cz.lastaapps.core.domain
 
 import arrow.core.Either
+import arrow.core.continuations.Raise
+import arrow.core.continuations.either
 import cz.lastaapps.core.domain.error.MenzaError
+import kotlin.experimental.ExperimentalTypeInference
 
 typealias Outcome<A> = Either<MenzaError, A>
+
+@OptIn(ExperimentalTypeInference::class)
+inline fun <A> outcome(
+    @BuilderInference block: Raise<MenzaError>.() -> A,
+): Outcome<A> = either(block)

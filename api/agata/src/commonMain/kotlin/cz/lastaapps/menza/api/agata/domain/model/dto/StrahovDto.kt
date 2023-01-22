@@ -48,6 +48,8 @@ internal class StrahovDto(
     val nameEn: String,
     @SerialName("cena")
     val price: Float,
+    @SerialName("cenaS")
+    val priceStudent: Float,
     @SerialName("alergeny")
     val allergens: String,
     @SerialName("foto")

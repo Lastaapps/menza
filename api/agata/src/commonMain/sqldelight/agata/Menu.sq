@@ -1,0 +1,15 @@
+CREATE TABLE MenuEntity(
+    id INTEGER NOT NULL,
+    subsystems TEXT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+getMenus:
+    SELECT * FROM MenuEntity;
+
+insert:
+    INSERT INTO MenuEntity(id, subsystems)
+    VALUES(:id, :subsystems);
+
+deleteAll:
+    DELETE FROM MenuEntity;

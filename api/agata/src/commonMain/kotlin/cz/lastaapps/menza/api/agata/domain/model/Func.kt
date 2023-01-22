@@ -42,9 +42,8 @@ internal enum class Func(val funName: String) {
     Contacts("GetKontakty"),
     PictogramHash("GetPiktogramyHash"),
     Pictogram("GetPiktogramy"),
-
-    //    AddressHash("GetAdresyHash"),
-//    Address("GetAdresy"),
+    AddressHash("GetAdresyHash"),
+    Address("GetAdresy"),
     LinkHash("GetOdkazyHash"),
     Link("GetOdkazy"),
     Week("GetTydny"),

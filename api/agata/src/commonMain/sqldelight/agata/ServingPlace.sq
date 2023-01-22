@@ -1,0 +1,13 @@
+CREATE TABLE ServingPlaceEntity(
+    id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    abbrev TEXT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+getById:
+    SELECT * FROM ServingPlaceEntity WHERE id = :id;
+
+deleteAll:
+    DELETE FROM ServingPlaceEntity;

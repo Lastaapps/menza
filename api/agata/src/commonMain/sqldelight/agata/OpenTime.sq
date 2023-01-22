@@ -1,0 +1,25 @@
+import kotlinx.datetime.DayOfWeek;
+import kotlinx.datetime.LocalTime;
+
+CREATE TABLE OpenTimeEntity(
+    id INTEGER NOT NULL,
+    subsystemId INTEGER NOT NULL,
+    servingPlaceId INTEGER NOT NULL,
+    description TEXT,
+    itemOrder INTEGER NOT NULL,
+    dayFrom INTEGER AS DayOfWeek,
+    dayTo INTEGER AS DayOfWeek,
+    timeFrom INTEGER AS LocalTime,
+    timeTo INTEGER AS LocalTime,
+    PRIMARY KEY (id)
+);
+
+getForSubsystem:
+    SELECT * FROM OpenTimeEntity WHERE subsystemId = :subsystemId;
+
+insert:
+    INSERT INTO OpenTimeEntity(id, subsystemId, servingPlaceId, description, itemOrder, dayFrom, dayTo,timeFrom, timeTo)
+    VALUES (:id, :subsystemId, :servingPlaceId, :description, :itemOrder, :dayFrom, :dayTo,:timeFrom, :timeTo);
+
+deleteAll:
+    DELETE FROM OpenTimeEntity;

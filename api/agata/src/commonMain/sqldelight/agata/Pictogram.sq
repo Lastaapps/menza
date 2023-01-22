@@ -1,0 +1,15 @@
+CREATE TABLE PictogramEntity(
+    id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+getById:
+    SELECT * FROM PictogramEntity WHERE id = :id;
+
+insert:
+    INSERT INTO PictogramEntity(id, name)
+    VALUES (:id, :name);
+
+deleteAll:
+    DELETE FROM PictogramEntity;

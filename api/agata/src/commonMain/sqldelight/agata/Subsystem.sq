@@ -1,0 +1,16 @@
+CREATE TABLE SubsystemEntity(
+    id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    opened INTEGER AS Boolean NOT NULL,
+    PRIMARY KEY (id)
+);
+
+getAll:
+    SELECT * FROM SubsystemEntity;
+
+insert:
+    INSERT INTO SubsystemEntity(id, name, opened)
+    VALUES (:id, :name, :opened);
+
+deleteAll:
+    DELETE FROM SubsystemEntity;

@@ -22,7 +22,16 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
-        mavenCentral()
+        mavenCentral {
+            content {
+                excludeGroup("io.arrow-kt")
+            }
+        }
+        maven("https://oss.sonatype.org/content/repositories/snapshots") {
+            content {
+                includeGroup("io.arrow-kt")
+            }
+        }
     }
 }
 
@@ -31,9 +40,16 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-        mavenCentral()
-        maven("https://jitpack.io")
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
+        mavenCentral {
+            content {
+                excludeGroup("io.arrow-kt")
+            }
+        }
+        maven("https://oss.sonatype.org/content/repositories/snapshots") {
+            content {
+                includeGroup("io.arrow-kt")
+            }
+        }
     }
 }
 

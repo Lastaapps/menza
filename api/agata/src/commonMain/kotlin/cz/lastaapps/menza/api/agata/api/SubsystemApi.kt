@@ -21,6 +21,8 @@ package cz.lastaapps.menza.api.agata.api
 
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.util.catchingNetwork
+import cz.lastaapps.menza.api.agata.domain.model.Func.Address
+import cz.lastaapps.menza.api.agata.domain.model.Func.AddressHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.Contacts
 import cz.lastaapps.menza.api.agata.domain.model.Func.ContactsHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.Info
@@ -30,6 +32,7 @@ import cz.lastaapps.menza.api.agata.domain.model.Func.LinkHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.News
 import cz.lastaapps.menza.api.agata.domain.model.Func.Opening
 import cz.lastaapps.menza.api.agata.domain.model.Func.OpeningHash
+import cz.lastaapps.menza.api.agata.domain.model.dto.AddressDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.ContactDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.InfoDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.LinkDto
@@ -50,6 +53,9 @@ internal sealed interface SubsystemApi {
 
     suspend fun getContacts(): Outcome<List<ContactDto>>
     suspend fun getContactsHash(): Outcome<String>
+
+    suspend fun getAddress(): Outcome<List<AddressDto>>
+    suspend fun getAddressHash(): Outcome<String>
 
     suspend fun getLink(subsystemId: Int): Outcome<List<LinkDto>>
     suspend fun getLinkHash(subsystemId: Int): Outcome<String>
@@ -87,6 +93,14 @@ internal class SubsystemApiImpl(
 
     override suspend fun getContactsHash(): Outcome<String> = catchingNetwork {
         client.getFun(ContactsHash).body()
+    }
+
+    override suspend fun getAddress(): Outcome<List<AddressDto>> = catchingNetwork {
+        client.getFun(Address).body()
+    }
+
+    override suspend fun getAddressHash(): Outcome<String> = catchingNetwork {
+        client.getFun(AddressHash).body()
     }
 
     override suspend fun getLink(subsystemId: Int): Outcome<List<LinkDto>> = catchingNetwork {

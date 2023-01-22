@@ -30,7 +30,8 @@ data class Info(
     val contacts: ImmutableList<Contact>,
     val openingTimes: ImmutableList<PlaceOpeningTime>,
     val link: String?,
-    val gps: LogLat,
+    val gps: LogLat?,
+    val address: String?,
 )
 
 data class Contact(

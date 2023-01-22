@@ -53,7 +53,7 @@ internal class DishDto(
     @SerialName("alergeny")
     val allergens: String, // however a cook want's to separated
     @SerialName("foto")
-    val photoName: String,
+    val photoLink: String,
     @SerialName("piktogram")
     val pictogram: Int,
     @Suppress("SpellCheckingInspection")

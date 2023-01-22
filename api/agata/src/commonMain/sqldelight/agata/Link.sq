@@ -1,0 +1,17 @@
+CREATE TABLE LinkEntity(
+    id INTEGER NOT NULL,
+    subsystemId INTEGER NOT NULL,
+    link TEXT NOT NULL,
+    description TEXT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+getForSubsystem:
+    SELECT * FROM LinkEntity WHERE subsystemId = :subsystemId;
+
+insert:
+    INSERT INTO LinkEntity(id, subsystemId, link, description)
+    VALUES (:id, :subsystemId, :link, :description);
+
+deleteAll:
+    DELETE FROM LinkEntity;

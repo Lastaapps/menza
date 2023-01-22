@@ -1,0 +1,17 @@
+CREATE TABLE InfoEntity(
+    id INTEGER NOT NULL,
+    subsystemId INTEGER NOT NULL,
+    header TEXT,
+    footer TEXT,
+    PRIMARY KEY (id)
+);
+
+getForSubsystem:
+    SELECT * FROM InfoEntity WHERE subsystemId = :subsystemId;
+
+insert:
+    INSERT INTO InfoEntity(id, subsystemId, header, footer)
+    VALUES (:id, :subsystemId, :header, :footer);
+
+deleteAll:
+    DELETE FROM InfoEntity;

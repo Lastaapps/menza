@@ -1,0 +1,20 @@
+CREATE TABLE ContactEntity(
+    id INTEGER NOT NULL,
+    subsystemId INTEGER NOT NULL,
+    itemOrder INTEGER NOT NULL,
+    role TEXT,
+    name TEXT,
+    phone TEXT,
+    email TEXT,
+    PRIMARY KEY (id)
+);
+
+getForSubsystem:
+    SELECT * FROM ContactEntity WHERE subsystemId = :subsystemId;
+
+insert:
+    INSERT INTO ContactEntity(id, subsystemId, itemOrder, role, name, phone, email)
+    VALUES(:id, :subsystemId, :itemOrder, :role, :name, :phone, :email);
+
+deleteAll:
+    DELETE FROM ContactEntity;

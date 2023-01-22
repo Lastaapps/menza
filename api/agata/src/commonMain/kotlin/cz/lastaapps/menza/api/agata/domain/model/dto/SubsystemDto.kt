@@ -29,7 +29,7 @@ internal class SubsystemDto(
     @SerialName("id")
     val id: Int,
     @SerialName("popis")
-    val description: String,
+    val name: String,
     @Suppress("SpellCheckingInspection")
     @SerialName("otevreno")
     val opened: Int, // [0 - Closed, 1 - Open]

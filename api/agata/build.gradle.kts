@@ -19,6 +19,7 @@
 
 plugins {
     alias(libs.plugins.lastaapps.kmp.library)
+    alias(libs.plugins.lastaapps.kmp.sqldelight)
 }
 
 android {
@@ -32,4 +33,11 @@ dependencies {
 
     commonMainImplementation(libs.russhwolf.settins.core)
     commonMainImplementation(libs.russhwolf.settins.coroutines)
+}
+
+sqldelight {
+    database("AgataDatabase") {
+        packageName = "cz.lastaapps.api.agata"
+        sourceFolders = listOf("sqldelight")
+    }
 }
