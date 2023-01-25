@@ -51,5 +51,8 @@ internal data class HashType(val func: String) {
 
         fun linkHash(subsystemId: Int) =
             HashType("links_$subsystemId")
+
+        fun addressHash() =
+            HashType("address")
     }
 }

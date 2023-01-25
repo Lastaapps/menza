@@ -1,20 +1,22 @@
+import cz.lastaapps.menza.api.agata.domain.model.common.LatLong;
+
 CREATE TABLE AddressEntity(
     id INTEGER NOT NULL,
-    subsystem INTEGER NOT NULL,
+    subsystemId INTEGER NOT NULL,
     address TEXT,
-    gps TEXT,
+    gps TEXT AS LatLong,
     PRIMARY KEY (id)
 );
 
 getForSubsystem:
-    SELECT * FROM AddressEntity WHERE subsystem = :subsystemId;
+    SELECT * FROM AddressEntity WHERE subsystemId = :subsystemId;
 
 insert:
-    INSERT OR REPLACE INTO AddressEntity(id, subsystem, address, gps)
+    INSERT OR REPLACE INTO AddressEntity(id, subsystemId, address, gps)
     VALUES (:id, :subsystem, :address, :gps);
 
 insertEntity:
-    INSERT OR REPLACE INTO AddressEntity(id, subsystem, address, gps)
+    INSERT OR REPLACE INTO AddressEntity(id, subsystemId, address, gps)
     VALUES ?;
 
 deleteAll:

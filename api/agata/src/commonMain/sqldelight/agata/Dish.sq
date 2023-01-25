@@ -1,4 +1,4 @@
-import kotlin.collection.List;
+import kotlin.collections.List;
 
 
 CREATE TABLE DishEntity(

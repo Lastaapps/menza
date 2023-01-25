@@ -17,5 +17,8 @@ insertEntity:
     INSERT INTO InfoEntity(id, subsystemId, header, footer)
     VALUES ?;
 
+deleteSubsystem:
+    DELETE FROM InfoEntity WHERE subsystemId = :subsystemId;
+
 deleteAll:
     DELETE FROM InfoEntity;

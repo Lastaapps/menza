@@ -19,15 +19,26 @@
 
 package cz.lastaapps.menza.api.agata.domain.model.mapers
 
+import agata.AddressEntity
+import agata.ContactEntity
 import agata.DishEntity
 import agata.DishTypeEntity
+import agata.InfoEntity
+import agata.LinkEntity
+import agata.OpenTimeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
 import agata.SubsystemEntity
 import cz.lastaapps.menza.api.agata.domain.model.MenzaType.Subsystem
+import cz.lastaapps.menza.api.agata.domain.model.common.Contact
 import cz.lastaapps.menza.api.agata.domain.model.common.Dish
 import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
+import cz.lastaapps.menza.api.agata.domain.model.common.Info
+import cz.lastaapps.menza.api.agata.domain.model.common.Link
 import cz.lastaapps.menza.api.agata.domain.model.common.Menza
+import cz.lastaapps.menza.api.agata.domain.model.common.NewsHeader
+import cz.lastaapps.menza.api.agata.domain.model.common.OpeningTime
+import cz.lastaapps.menza.api.agata.domain.model.common.PlaceOpeningTime
 import cz.lastaapps.menza.api.agata.domain.model.common.ServingPlace
 import cz.lastaapps.menza.api.agata.domain.model.common.fullName
 import kotlinx.collections.immutable.toImmutableList
@@ -64,4 +75,57 @@ internal fun DishTypeEntity.toDomain(dishList: List<Dish>) =
         nameCs = nameLong,
         nameEn = null,
         dishList = dishList.toImmutableList(),
+    )
+
+internal fun InfoEntity?.toDomain(
+    news: NewsHeader?,
+    contacts: List<ContactEntity>,
+    openingTimes: List<OpenTimeEntity>,
+    links: List<LinkEntity>,
+    address: AddressEntity?,
+) = Info(
+    header = this?.header,
+    footer = this?.footer,
+    news = news,
+    contacts = contacts.map { it.toDomain() }.toImmutableList(),
+    openingTimes = openingTimes.toDomain().toImmutableList(),
+    links = links.map { it.toDomain() }.toImmutableList(),
+    gps = address?.gps,
+    address = address?.address,
+)
+
+private fun ContactEntity.toDomain() =
+    Contact(
+        role = role,
+        name = name,
+        phone = phone,
+        email = email,
+    )
+
+private fun List<OpenTimeEntity>.toDomain() =
+    groupBy { it.servingPlaceId }
+        .entries
+        .sortedBy { it.value.first().itemOrder }
+        .map { (_, values) ->
+            values.first().let { value ->
+                PlaceOpeningTime(
+                    placeName = value.servingPlaceName,
+                    placeAbbrev = value.servingPlaceAbbrev,
+                    description = value.description,
+                    times = values.map { it.toDomain() }.toImmutableList(),
+                )
+            }
+        }
+
+private fun OpenTimeEntity.toDomain() =
+    OpeningTime(
+        from = dayFrom to timeFrom,
+        to = dayTo to timeTo,
+    )
+
+
+private fun LinkEntity.toDomain() =
+    Link(
+        link = link,
+        description = description,
     )

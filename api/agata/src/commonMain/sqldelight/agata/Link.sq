@@ -17,5 +17,8 @@ insertEntity:
     INSERT INTO LinkEntity(id, subsystemId, link, description)
     VALUES ?;
 
+deleteSubsystem:
+    DELETE FROM LinkEntity WHERE subsystemId = :subsystemId;
+
 deleteAll:
     DELETE FROM LinkEntity;

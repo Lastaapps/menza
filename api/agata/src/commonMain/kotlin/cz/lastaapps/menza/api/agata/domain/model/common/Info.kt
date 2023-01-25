@@ -26,11 +26,11 @@ import kotlinx.datetime.LocalTime
 data class Info(
     val header: String?,
     val footer: String?,
-    val news: String?,
+    val news: NewsHeader?,
     val contacts: ImmutableList<Contact>,
     val openingTimes: ImmutableList<PlaceOpeningTime>,
-    val link: String?,
-    val gps: LogLat?,
+    val links: ImmutableList<Link>,
+    val gps: LatLong?,
     val address: String?,
 )
 
@@ -41,11 +41,15 @@ data class Contact(
     val email: String?,
 )
 
+data class Link(
+    val link: String,
+    val description: String,
+)
+
 data class PlaceOpeningTime(
     val placeName: String,
     val placeAbbrev: String,
-    val placeOrder: Int,
-    val description: String,
+    val description: String?,
     val times: ImmutableList<OpeningTime>,
 )
 
@@ -54,4 +58,7 @@ data class OpeningTime(
     val to: Pair<DayOfWeek, LocalTime>,
 )
 
-data class LogLat(val log: Float, val lat: Float)
+data class LatLong(val lat: Float, val long: Float)
+
+@JvmInline
+value class NewsHeader(val text: String)

@@ -19,11 +19,13 @@
 
 package cz.lastaapps.menza.api.agata.data
 
+import agata.AddressEntity
 import agata.DishEntity
 import agata.OpenTimeEntity
 import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.api.agata.AgataDatabase
+import cz.lastaapps.menza.api.agata.domain.model.common.LatLong
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 
@@ -45,6 +47,9 @@ internal object AgataDatabaseFactory {
             dayToAdapter = DayOfWeekAdapter,
             timeFromAdapter = LocalTimeAdapter,
             timeToAdapter = LocalTimeAdapter,
+        ),
+        AddressEntityAdapter = AddressEntity.Adapter(
+            gpsAdapter = LatLongAdapter,
         ),
     )
 }
@@ -73,4 +78,16 @@ private object LocalTimeAdapter : ColumnAdapter<LocalTime, Long> {
 
     override fun encode(value: LocalTime): Long =
         value.toSecondOfDay().toLong()
+}
+
+private object LatLongAdapter : ColumnAdapter<LatLong, String> {
+    private const val delimitter = ';'
+    override fun decode(databaseValue: String): LatLong =
+        databaseValue
+            .split(delimitter)
+            .map { it.toFloat() }
+            .let { (lat, long) -> LatLong(lat = lat, long = long) }
+
+    override fun encode(value: LatLong): String =
+        "${value.lat}$delimitter${value.long}"
 }
