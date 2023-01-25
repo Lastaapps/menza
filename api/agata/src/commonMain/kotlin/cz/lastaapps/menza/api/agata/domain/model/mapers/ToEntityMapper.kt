@@ -19,7 +19,16 @@
 
 package cz.lastaapps.menza.api.agata.domain.model.mapers
 
+import agata.DishEntity
+import agata.DishTypeEntity
+import agata.PictogramEntity
+import agata.ServingPlaceEntity
 import agata.SubsystemEntity
+import cz.lastaapps.core.util.takeIfNotBlack
+import cz.lastaapps.menza.api.agata.domain.model.dto.DishDto
+import cz.lastaapps.menza.api.agata.domain.model.dto.DishTypeDto
+import cz.lastaapps.menza.api.agata.domain.model.dto.PictogramDto
+import cz.lastaapps.menza.api.agata.domain.model.dto.ServingPlaceDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 
 internal fun SubsystemDto.toEntity(isImportant: Boolean) =
@@ -28,4 +37,53 @@ internal fun SubsystemDto.toEntity(isImportant: Boolean) =
         name = name,
         opened = opened == 1,
         isImportant = isImportant,
+    )
+
+internal fun DishDto.toEntity() =
+    DishEntity(
+        id = id.toLong(),
+        subsystemId = subsystemId.toLong(),
+        typeId = typeId.toLong(),
+        servingPlaces = servingPlaceList.split(';').map { it.toLong() },
+        amount = amount,
+        name = name,
+        sideDishA = sideDishA,
+        sideDishB = sideDishB,
+        priceNormal = priceNormal.toDouble(),
+        priceDiscount = priceDiscount.toDouble(),
+        allergens = parseAllergens(),
+        photoLink = photoLink.takeIfNotBlack(),
+        pictogram = pictogram.toLong(),
+        isActive = isActive,
+    )
+
+
+private fun DishDto.parseAllergens() =
+    allergens
+        .split(',', ' ', '.' /*just for sure*/, ';', '-', '_', '|')
+        .filter { it.isNotBlank() }
+        .mapNotNull { it.toLongOrNull() }
+
+internal fun DishTypeDto.toEntity() =
+    DishTypeEntity(
+        id = id.toLong(),
+        subsystemId = subsystemId.toLong(),
+        nameShort = nameShort,
+        nameLong = nameLong,
+        itemOrder = order.toLong(),
+    )
+
+internal fun PictogramDto.toEntity() =
+    PictogramEntity(
+        id = id.toLong(),
+        name = name,
+    )
+
+internal fun ServingPlaceDto.toEntity() =
+    ServingPlaceEntity(
+        id = id.toLong(),
+        subsystemId = subsystemId.toLong(),
+        name = name,
+        description = description,
+        abbrev = abbrev,
     )

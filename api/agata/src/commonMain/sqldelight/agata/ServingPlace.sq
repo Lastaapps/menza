@@ -1,5 +1,6 @@
 CREATE TABLE ServingPlaceEntity(
     id INTEGER NOT NULL,
+    subsystemId INTEGER NOT NULL,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     abbrev TEXT NOT NULL,
@@ -13,12 +14,15 @@ getByIds:
     SELECT * FROM ServingPlaceEntity WHERE id IN :id;
 
 insert:
-    INSERT INTO ServingPlaceEntity(id, name, description, abbrev)
-    VALUES (:id, :name, :description, :abbrev);
+    INSERT INTO ServingPlaceEntity(id, subsystemId, name, description, abbrev)
+    VALUES (:id, :subsystemId, :name, :description, :abbrev);
 
 insertEntity:
-    INSERT INTO ServingPlaceEntity(id, name, description, abbrev)
+    INSERT INTO ServingPlaceEntity(id, subsystemId, name, description, abbrev)
     VALUES ?;
+
+deleteSubsystem:
+    DELETE FROM ServingPlaceEntity WHERE subsystemId = :subsystemId;
 
 deleteAll:
     DELETE FROM ServingPlaceEntity;

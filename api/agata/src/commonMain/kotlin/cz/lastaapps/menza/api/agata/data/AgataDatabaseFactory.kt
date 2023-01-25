@@ -24,8 +24,6 @@ import agata.OpenTimeEntity
 import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.api.agata.AgataDatabase
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 
@@ -39,7 +37,8 @@ internal object AgataDatabaseFactory {
     ) = AgataDatabase.invoke(
         driver.sqlDriver,
         DishEntityAdapter = DishEntity.Adapter(
-            allergensAdapter = AllergensAdapter,
+            allergensAdapter = LongListAdapter,
+            servingPlacesAdapter = LongListAdapter,
         ),
         OpenTimeEntityAdapter = OpenTimeEntity.Adapter(
             dayFromAdapter = DayOfWeekAdapter,
@@ -50,13 +49,13 @@ internal object AgataDatabaseFactory {
     )
 }
 
-private object AllergensAdapter : ColumnAdapter<ImmutableList<Int>, String> {
+private object LongListAdapter : ColumnAdapter<List<Long>, String> {
     private const val delimiter = ";"
 
-    override fun decode(databaseValue: String): ImmutableList<Int> =
-        databaseValue.split(delimiter).map { it.toInt() }.toImmutableList()
+    override fun decode(databaseValue: String): List<Long> =
+        databaseValue.split(delimiter).map { it.toLong() }
 
-    override fun encode(value: ImmutableList<Int>): String =
+    override fun encode(value: List<Long>): String =
         value.joinToString(separator = delimiter)
 }
 

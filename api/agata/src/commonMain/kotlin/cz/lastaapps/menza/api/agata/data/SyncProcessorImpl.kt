@@ -20,7 +20,7 @@
 package cz.lastaapps.menza.api.agata.data
 
 import arrow.core.continuations.Raise
-import arrow.fx.coroutines.parTraverse
+import arrow.fx.coroutines.parMap
 import com.squareup.sqldelight.Transacter
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.outcome
@@ -38,7 +38,7 @@ internal class SyncProcessorImpl(
     override suspend fun run(list: Iterable<SyncJob<*>>) = outcome {
         list
             // Fetches hash codes from a remote source
-            .parTraverse { job ->
+            .parMap { job ->
                 val hash = job.getHashCode().bind()
 
                 if (hashStore.shouldReload(job.hashType, hash)) {
@@ -57,7 +57,7 @@ internal class SyncProcessorImpl(
             .filterNotNull()
 
             // fetch data from api
-            .parTraverse { (job, hash) ->
+            .parMap { (job, hash) ->
                 val storeAction = processJob(job)
                 Pair(storeAction, hash)
             }.let { results ->

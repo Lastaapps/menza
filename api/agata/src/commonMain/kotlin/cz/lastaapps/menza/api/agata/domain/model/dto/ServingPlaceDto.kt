@@ -22,41 +22,18 @@ package cz.lastaapps.menza.api.agata.domain.model.dto
 import kotlinx.serialization.SerialName
 
 /**
- * TJidlo2
+ * TVydejna
  */
 @kotlinx.serialization.Serializable
-internal class DishDto(
+internal class ServingPlaceDto(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")
     val subsystemId: Int,
-//    @SerialName("datum")
-//    val date: String, // YYYY-MM-DD
-    @SerialName("vydejny")
-    val servingPlaceList: String, // semicolon separated
-//    @SerialName("jidelnicek")
-//    val menuList: String, // semicolon separated
-    @SerialName("kategorie")
-    val typeId: Int,
-    @SerialName("vaha")
-    val amount: String,
     @SerialName("nazev")
     val name: String,
-    @SerialName("priloha_a")
-    val sideDishA: String,
-    @SerialName("priloha_b")
-    val sideDishB: String,
-    @SerialName("cena_stud")
-    val priceDiscount: Float,
-    @SerialName("cena")
-    val priceNormal: Float,
-    @SerialName("alergeny")
-    val allergens: String, // however a cook want's to separated
-    @SerialName("foto")
-    val photoLink: String,
-    @SerialName("piktogram")
-    val pictogram: Int,
-    @Suppress("SpellCheckingInspection")
-    @SerialName("aktivni")
-    val isActive: Boolean, // True, False
+    @SerialName("popis")
+    val description: String,
+    @SerialName("zkratka")
+    val abbrev: String,
 )

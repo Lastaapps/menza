@@ -17,9 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain
+package cz.lastaapps.core.util
 
-import cz.lastaapps.menza.api.agata.domain.model.common.Menza
-import kotlinx.collections.immutable.ImmutableList
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.takeIfNotEmpty() = takeIf { it.isNotEmpty() }
 
-interface MenzaListRepo : SyncSource<ImmutableList<Menza>>
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.takeIfNotBlack() = takeIf { it.isNotBlank() }

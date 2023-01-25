@@ -24,7 +24,7 @@ import cz.lastaapps.core.util.catchingNetwork
 import cz.lastaapps.menza.api.agata.domain.model.Func
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishTypeDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.MenuDto
-import cz.lastaapps.menza.api.agata.domain.model.dto.ServingPlace
+import cz.lastaapps.menza.api.agata.domain.model.dto.ServingPlaceDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.util.getFun
 import io.ktor.client.HttpClient
@@ -39,7 +39,7 @@ internal interface CafeteriaApi {
     suspend fun getAllSubsystems(): Outcome<List<SubsystemDto>>
     suspend fun getSubsystemsHash(): Outcome<String>
 
-    suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlace>>
+    suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlaceDto>>
     suspend fun getServingPlacesHash(subsystemId: Int): Outcome<String>
 
     suspend fun getDishTypes(subsystemId: Int): Outcome<List<DishTypeDto>>
@@ -69,7 +69,7 @@ internal class CafeteriaApiImpl(
         client.getFun(Func.SubsystemHash).body()
     }
 
-    override suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlace>> =
+    override suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlaceDto>> =
         catchingNetwork {
             client.getFun(Func.ServingPaces, subsystemId = subsystemId).body()
         }

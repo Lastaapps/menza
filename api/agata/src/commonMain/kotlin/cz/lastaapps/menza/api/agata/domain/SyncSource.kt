@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.util
+package cz.lastaapps.menza.api.agata.domain
 
 import cz.lastaapps.core.domain.Outcome
 import kotlinx.coroutines.flow.Flow

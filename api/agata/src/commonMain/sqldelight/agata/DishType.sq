@@ -1,5 +1,6 @@
 CREATE TABLE DishTypeEntity(
     id INTEGER NOT NULL,
+    subsystemId INTEGER NOT NULL,
     nameShort TEXT NOT NULL,
     nameLong TEXT NOT NULL,
     itemOrder INTEGER NOT NULL,
@@ -10,12 +11,15 @@ getByDishId:
     SELECT * FROM DishTypeEntity WHERE id = :dishId;
 
 insert:
-    INSERT INTO DishTypeEntity(id, nameShort, nameLong, itemOrder)
-    VALUES (:id, :nameShort, :nameLong, :itemOrder);
+    INSERT INTO DishTypeEntity(id, subsystemId, nameShort, nameLong, itemOrder)
+    VALUES (:id, :subsystemId, :nameShort, :nameLong, :itemOrder);
 
 insertEntity:
-    INSERT INTO DishTypeEntity(id, nameShort, nameLong, itemOrder)
+    INSERT INTO DishTypeEntity(id, subsystemId, nameShort, nameLong, itemOrder)
     VALUES ?;
+
+deleteSubsystem:
+    DELETE FROM DishTypeEntity WHERE subsystemId = :subsystemId;
 
 deleteAll:
     DELETE FROM DishTypeEntity;
