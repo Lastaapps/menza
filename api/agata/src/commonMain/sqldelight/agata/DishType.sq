@@ -1,7 +1,7 @@
 CREATE TABLE DishTypeEntity(
     id INTEGER NOT NULL,
-    name TEXT NOT NULL,
-    description TEXT NOT NULL,
+    nameShort TEXT NOT NULL,
+    nameLong TEXT NOT NULL,
     itemOrder INTEGER NOT NULL,
     PRIMARY KEY (id)
 );
@@ -10,8 +10,12 @@ getByDishId:
     SELECT * FROM DishTypeEntity WHERE id = :dishId;
 
 insert:
-    INSERT INTO DishTypeEntity(id, name, description, itemOrder)
-    VALUES (:id, :name, :description, :itemOrder);
+    INSERT INTO DishTypeEntity(id, nameShort, nameLong, itemOrder)
+    VALUES (:id, :nameShort, :nameLong, :itemOrder);
+
+insertEntity:
+    INSERT INTO DishTypeEntity(id, nameShort, nameLong, itemOrder)
+    VALUES ?;
 
 deleteAll:
     DELETE FROM DishTypeEntity;

@@ -19,16 +19,14 @@
 
 package cz.lastaapps.menza.api.agata.domain.model
 
-import cz.lastaapps.menza.api.agata.domain.model.common.Menza
+import cz.lastaapps.core.domain.Outcome
 
-internal sealed interface MenzaType {
-    data class Subsystem(val subsystemId: Int) : MenzaType
-    data object Strahov : MenzaType {
-        val instance = Menza(
-            Strahov,
-            "Restaurace Strahov",
-            isOpened = true,
-            isImportant = true
-        )
-    }
-}
+/**
+ * Job info for a sync processor
+ */
+internal class SyncJob<T>(
+    val hashType: HashType,
+    val getHashCode: suspend () -> Outcome<String>,
+    val fetchApi: suspend () -> Outcome<T>,
+    val store: (T) -> Unit,
+)

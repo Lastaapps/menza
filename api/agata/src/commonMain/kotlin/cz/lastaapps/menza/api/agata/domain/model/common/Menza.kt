@@ -24,7 +24,6 @@ import cz.lastaapps.menza.api.agata.domain.model.MenzaType
 data class Menza internal constructor(
     internal val type: MenzaType,
     val name: String,
-    val subsystemId: Int,
     val isOpened: Boolean,
     val isImportant: Boolean, // true if it is not returned only by the AllPodsystem endpoint
 )

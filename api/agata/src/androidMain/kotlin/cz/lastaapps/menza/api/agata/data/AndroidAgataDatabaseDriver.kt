@@ -17,18 +17,14 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model
+package cz.lastaapps.menza.api.agata.data
 
-import cz.lastaapps.menza.api.agata.domain.model.common.Menza
+import android.content.Context
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import cz.lastaapps.api.agata.AgataDatabase
 
-internal sealed interface MenzaType {
-    data class Subsystem(val subsystemId: Int) : MenzaType
-    data object Strahov : MenzaType {
-        val instance = Menza(
-            Strahov,
-            "Restaurace Strahov",
-            isOpened = true,
-            isImportant = true
-        )
-    }
-}
+internal const val DB_NAME = "agata_api.db"
+
+internal fun createAgataDBDriver(
+    context: Context,
+) = AgataDatabaseSqlDriver(AndroidSqliteDriver(AgataDatabase.Schema, context, DB_NAME))

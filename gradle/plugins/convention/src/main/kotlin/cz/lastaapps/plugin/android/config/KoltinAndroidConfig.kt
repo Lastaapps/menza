@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -55,6 +55,7 @@ internal fun Project.configureKotlinAndroid(
 
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-opt-in=kotlin.RequiresOptIn",
+                "-Xcontext-receivers",
             )
 
             // Set JVM target to 1.8

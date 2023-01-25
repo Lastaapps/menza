@@ -11,5 +11,9 @@ insert:
     INSERT INTO MenuEntity(id, subsystems)
     VALUES(:id, :subsystems);
 
+insertEntity:
+    INSERT INTO MenuEntity(id, subsystems)
+    VALUES ?;
+
 deleteAll:
     DELETE FROM MenuEntity;

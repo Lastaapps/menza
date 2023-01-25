@@ -31,9 +31,9 @@ internal class DishTypeDto(
     @SerialName("podsystem_id")
     val subsystemId: Int,
     @SerialName("nazev")
-    val name: String,
+    val nameShort: String,
     @SerialName("popis")
-    val description: String,
+    val nameLong: String,
     @SerialName("poradi")
     val order: Int,
 )

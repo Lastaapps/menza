@@ -9,5 +9,16 @@ CREATE TABLE ServingPlaceEntity(
 getById:
     SELECT * FROM ServingPlaceEntity WHERE id = :id;
 
+getByIds:
+    SELECT * FROM ServingPlaceEntity WHERE id IN :id;
+
+insert:
+    INSERT INTO ServingPlaceEntity(id, name, description, abbrev)
+    VALUES (:id, :name, :description, :abbrev);
+
+insertEntity:
+    INSERT INTO ServingPlaceEntity(id, name, description, abbrev)
+    VALUES ?;
+
 deleteAll:
     DELETE FROM ServingPlaceEntity;

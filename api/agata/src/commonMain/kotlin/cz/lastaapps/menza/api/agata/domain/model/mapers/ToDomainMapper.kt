@@ -17,18 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model
+package cz.lastaapps.menza.api.agata.domain.model.mapers
 
+import agata.SubsystemEntity
+import cz.lastaapps.menza.api.agata.domain.model.MenzaType.Subsystem
 import cz.lastaapps.menza.api.agata.domain.model.common.Menza
 
-internal sealed interface MenzaType {
-    data class Subsystem(val subsystemId: Int) : MenzaType
-    data object Strahov : MenzaType {
-        val instance = Menza(
-            Strahov,
-            "Restaurace Strahov",
-            isOpened = true,
-            isImportant = true
-        )
-    }
-}
+internal fun SubsystemEntity.toDomain() =
+    Menza(Subsystem(id.toInt()), name, opened, isImportant)
+

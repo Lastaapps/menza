@@ -13,5 +13,9 @@ insert:
     INSERT INTO InfoEntity(id, subsystemId, header, footer)
     VALUES (:id, :subsystemId, :header, :footer);
 
+insertEntity:
+    INSERT INTO InfoEntity(id, subsystemId, header, footer)
+    VALUES ?;
+
 deleteAll:
     DELETE FROM InfoEntity;

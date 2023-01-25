@@ -11,5 +11,9 @@ insert:
     INSERT INTO PictogramEntity(id, name)
     VALUES (:id, :name);
 
+insertEntity:
+    INSERT INTO PictogramEntity(id, name)
+    VALUES ?;
+
 deleteAll:
     DELETE FROM PictogramEntity;

@@ -21,5 +21,9 @@ insert:
     INSERT INTO OpenTimeEntity(id, subsystemId, servingPlaceId, description, itemOrder, dayFrom, dayTo,timeFrom, timeTo)
     VALUES (:id, :subsystemId, :servingPlaceId, :description, :itemOrder, :dayFrom, :dayTo,:timeFrom, :timeTo);
 
+insertEntity:
+    INSERT INTO OpenTimeEntity(id, subsystemId, servingPlaceId, description, itemOrder, dayFrom, dayTo,timeFrom, timeTo)
+    VALUES ?;
+
 deleteAll:
     DELETE FROM OpenTimeEntity;

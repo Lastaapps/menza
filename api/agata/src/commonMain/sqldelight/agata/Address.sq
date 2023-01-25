@@ -13,5 +13,9 @@ insert:
     INSERT OR REPLACE INTO AddressEntity(id, subsystem, address, gps)
     VALUES (:id, :subsystem, :address, :gps);
 
+insertEntity:
+    INSERT OR REPLACE INTO AddressEntity(id, subsystem, address, gps)
+    VALUES ?;
+
 deleteAll:
     DELETE FROM AddressEntity;

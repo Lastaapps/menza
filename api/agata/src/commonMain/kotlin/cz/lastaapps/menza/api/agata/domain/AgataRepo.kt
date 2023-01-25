@@ -33,9 +33,6 @@ interface AgataRepo {
     fun getIsReady(): Flow<Boolean>
     suspend fun syncRepo(): Outcome<Unit>
 
-    fun getMenzaList(): Flow<ImmutableList<Menza>>
-    suspend fun syncMenzas(force: Boolean = false): Outcome<Unit>
-
     fun getDishListFor(menza: Menza): Flow<ImmutableList<DishCategory>>
     suspend fun syncDishList(menza: Menza, force: Boolean = false): Outcome<Unit>
 

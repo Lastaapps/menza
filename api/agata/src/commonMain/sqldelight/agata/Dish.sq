@@ -4,25 +4,30 @@ CREATE TABLE DishEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,
     typeId INTEGER NOT NULL,
-    amount TEXT ,
+    servingPlaces TEXT AS ImmutableList<Long> NOT NULL,
+    amount TEXT,
     name TEXT,
     sideDishA TEXT,
     sideDishB TEXT,
     priceNormal REAL,
     priceDiscount REAL,
-    allergens TEXT AS ImmutableList<Int> NOT NULL,
+    allergens TEXT AS ImmutableList<Long> NOT NULL,
     photoLink TEXT,
     pictogram INTEGER,
     isActive INTEGER AS Boolean,
-    PRIMARY KEY (id, subsystemId)
+    PRIMARY KEY (id)
 );
 
 getForSubsystem:
     SELECT * FROM DishEntity WHERE subsystemId = :subsystemId AND isActive = 1;
 
 insert:
-    INSERT INTO DishEntity(id, subsystemId, typeId, amount, name, sideDishA, sideDishB, priceNormal, priceDiscount, allergens, photoLink, pictogram, isActive)
-    VALUES (:id, :subsystemId, :typeId, :amount, :name, :sideDishA, :sideDishB, :priceNormal, :priceDiscount, :allergens, :photoLink, :pictogram, :isActive);
+    INSERT INTO DishEntity(id, subsystemId, typeId, servingPlaces, amount, name, sideDishA, sideDishB, priceNormal, priceDiscount, allergens, photoLink, pictogram, isActive)
+    VALUES (:id, :subsystemId, :typeId, :servingPlaces, :amount, :name, :sideDishA, :sideDishB, :priceNormal, :priceDiscount, :allergens, :photoLink, :pictogram, :isActive);
+
+insertEntity:
+    INSERT INTO DishEntity(id, subsystemId, typeId, servingPlaces, amount, name, sideDishA, sideDishB, priceNormal, priceDiscount, allergens, photoLink, pictogram, isActive)
+    VALUES ?;
 
 deleteAll:
     DELETE FROM DishEntity;

@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.domain.model.common
 
+import agata.DishEntity
 import kotlinx.collections.immutable.ImmutableList
 
 data class DishCategory(
@@ -45,3 +46,6 @@ data class ServingPlace(
     val name: String,
     val abbrev: String,
 )
+
+internal fun DishEntity.fullName() =
+    name + sideDishA?.let { " $it" } + sideDishB?.let { " $it" }

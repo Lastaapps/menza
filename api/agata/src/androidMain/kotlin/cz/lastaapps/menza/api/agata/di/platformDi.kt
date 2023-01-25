@@ -17,18 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model
+package cz.lastaapps.menza.api.agata.di
 
-import cz.lastaapps.menza.api.agata.domain.model.common.Menza
+import cz.lastaapps.menza.api.agata.data.createAgataDBDriver
+import org.koin.core.module.Module
+import org.koin.dsl.module
 
-internal sealed interface MenzaType {
-    data class Subsystem(val subsystemId: Int) : MenzaType
-    data object Strahov : MenzaType {
-        val instance = Menza(
-            Strahov,
-            "Restaurace Strahov",
-            isOpened = true,
-            isImportant = true
-        )
-    }
+internal actual val platform: Module = module {
+    factory { createAgataDBDriver(get()) }
 }

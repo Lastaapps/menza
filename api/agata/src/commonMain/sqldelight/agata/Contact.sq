@@ -16,5 +16,9 @@ insert:
     INSERT INTO ContactEntity(id, subsystemId, itemOrder, role, name, phone, email)
     VALUES(:id, :subsystemId, :itemOrder, :role, :name, :phone, :email);
 
+insertEntity:
+    INSERT INTO ContactEntity(id, subsystemId, itemOrder, role, name, phone, email)
+    VALUES ?;
+
 deleteAll:
     DELETE FROM ContactEntity;
