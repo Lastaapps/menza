@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.api.agata.domain.model.common
 
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 
@@ -32,7 +33,18 @@ data class Info(
     val links: ImmutableList<Link>,
     val gps: LatLong?,
     val address: String?,
-)
+) {
+    companion object {
+        val empty: Info
+            get() = Info(
+                null, null, null,
+                persistentListOf(),
+                persistentListOf(),
+                persistentListOf(),
+                null, null,
+            )
+    }
+}
 
 data class Contact(
     val role: String?,

@@ -22,4 +22,4 @@ package cz.lastaapps.menza.api.agata.domain
 import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
 import kotlinx.collections.immutable.ImmutableList
 
-interface DishListRepository : SyncSource<ImmutableList<DishCategory>>
+interface DishListRepo : SyncSource<ImmutableList<DishCategory>>

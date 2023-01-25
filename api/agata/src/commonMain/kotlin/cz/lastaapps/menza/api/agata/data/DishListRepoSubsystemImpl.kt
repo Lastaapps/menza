@@ -31,7 +31,7 @@ import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
-import cz.lastaapps.menza.api.agata.domain.DishListRepository
+import cz.lastaapps.menza.api.agata.domain.DishListRepo
 import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
@@ -48,13 +48,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-internal class DishListRepositorySubsystemImpl(
+internal class DishListRepoSubsystemImpl(
     private val subsystemId: Int,
     private val cafeteriaApi: CafeteriaApi,
     private val dishApi: DishApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
-) : DishListRepository {
+) : DishListRepo {
     override fun getData(): Flow<ImmutableList<DishCategory>> = flow {
         // Get dish list
         db.dishQueries.getForSubsystem(subsystemId.toLong())

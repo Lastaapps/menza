@@ -23,7 +23,7 @@ import agata.DishEntity
 import kotlinx.collections.immutable.ImmutableList
 
 data class DishCategory(
-    val nameShort: String,
+    val nameShort: String?,
     val nameCs: String,
     val nameEn: String?,
     val dishList: ImmutableList<Dish>,

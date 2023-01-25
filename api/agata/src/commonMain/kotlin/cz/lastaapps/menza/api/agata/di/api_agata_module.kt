@@ -26,10 +26,21 @@ import cz.lastaapps.menza.api.agata.api.DishApiImpl
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.api.SubsystemApiImpl
 import cz.lastaapps.menza.api.agata.data.AgataDatabaseFactory
+import cz.lastaapps.menza.api.agata.data.DishListRepoStrahovImpl
+import cz.lastaapps.menza.api.agata.data.DishListRepoSubsystemImpl
 import cz.lastaapps.menza.api.agata.data.HashStoreImpl
+import cz.lastaapps.menza.api.agata.data.InfoRepositoryImpl
+import cz.lastaapps.menza.api.agata.data.InfoRepositoryStrahovImpl
+import cz.lastaapps.menza.api.agata.data.MenzaListRepoImpl
 import cz.lastaapps.menza.api.agata.data.SyncProcessorImpl
+import cz.lastaapps.menza.api.agata.domain.DishListRepo
 import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.MenzaListRepo
 import cz.lastaapps.menza.api.agata.domain.SyncProcessor
+import cz.lastaapps.menza.api.agata.domain.model.InfoRepository
+import cz.lastaapps.menza.api.agata.domain.model.MenzaType.Strahov
+import cz.lastaapps.menza.api.agata.domain.model.MenzaType.Subsystem
+import cz.lastaapps.menza.api.agata.domain.model.common.Menza
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -48,4 +59,19 @@ val api_agata_module = module {
 
     singleOf(::HashStoreImpl) bind HashStore::class
     single { AgataDatabaseFactory.createDatabase(get()) }
+
+    // Repos
+    singleOf(::MenzaListRepoImpl) bind MenzaListRepo::class
+    single { (menza: Menza) ->
+        when (val type = menza.type) {
+            is Subsystem -> DishListRepoSubsystemImpl(type.subsystemId, get(), get(), get(), get())
+            Strahov -> DishListRepoStrahovImpl(get(), get())
+        }
+    } bind DishListRepo::class
+    single { (menza: Menza) ->
+        when (val type = menza.type) {
+            is Subsystem -> InfoRepositoryImpl(type.subsystemId, get(), get(), get())
+            Strahov -> InfoRepositoryStrahovImpl
+        }
+    } bind InfoRepository::class
 }

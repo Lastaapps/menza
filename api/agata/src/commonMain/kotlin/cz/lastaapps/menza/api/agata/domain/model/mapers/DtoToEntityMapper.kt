@@ -66,18 +66,17 @@ internal fun DishDto.toEntity() =
         sideDishB = sideDishB,
         priceNormal = priceNormal.toDouble(),
         priceDiscount = priceDiscount.toDouble(),
-        allergens = parseAllergens(),
+        allergens = allergens.parseAllergens().map { it.toLong() },
         photoLink = photoLink.takeIfNotBlack(),
         pictogram = pictogram.toLong(),
         isActive = isActive,
     )
 
 
-private fun DishDto.parseAllergens() =
-    allergens
-        .split(',', ' ', '.' /*just for sure*/, ';', '-', '_', '|')
+internal fun String.parseAllergens() =
+    split(',', ' ', '.' /*just for sure*/, ';', '-', '_', '|')
         .filter { it.isNotBlank() }
-        .mapNotNull { it.toLongOrNull() }
+        .mapNotNull { it.toIntOrNull() }
 
 internal fun DishTypeDto.toEntity() =
     DishTypeEntity(

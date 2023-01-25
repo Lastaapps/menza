@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.data
 
+import arrow.core.right
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
@@ -38,6 +39,7 @@ import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toNews
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 
 internal class InfoRepositoryImpl(
     private val subsystemId: Int,
@@ -132,4 +134,11 @@ internal class InfoRepositoryImpl(
 
     override suspend fun sync(): Outcome<Unit> =
         processor.run(jobs)
+}
+
+internal object InfoRepositoryStrahovImpl : InfoRepository {
+    private val flow = flow { emit(Info.empty) }
+
+    override fun getData(): Flow<Info> = flow
+    override suspend fun sync(): Outcome<Unit> = Unit.right()
 }
