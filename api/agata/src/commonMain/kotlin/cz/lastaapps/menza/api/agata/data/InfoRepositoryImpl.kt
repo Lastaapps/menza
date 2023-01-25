@@ -29,11 +29,13 @@ import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.InfoRepository
-import cz.lastaapps.menza.api.agata.domain.model.SyncJob
+import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
+import cz.lastaapps.menza.api.agata.domain.model.SyncJobNoCache
 import cz.lastaapps.menza.api.agata.domain.model.common.Info
 import cz.lastaapps.menza.api.agata.domain.model.common.NewsHeader
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
+import cz.lastaapps.menza.api.agata.domain.model.mapers.toNews
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -44,7 +46,6 @@ internal class InfoRepositoryImpl(
     private val processor: SyncProcessor,
 ) : InfoRepository {
 
-    // TODO global news
     private val newsFlow = MutableStateFlow<NewsHeader?>(null)
 
     override fun getData(): Flow<Info> =
@@ -61,7 +62,7 @@ internal class InfoRepositoryImpl(
 
     private val jobs = listOf(
         // Info
-        SyncJob(
+        SyncJobHash(
             hashType = HashType.infoHash(subsystemId),
             getHashCode = { subsystemApi.getInfoHash(subsystemId) },
             fetchApi = { subsystemApi.getInfo(subsystemId) },
@@ -72,8 +73,15 @@ internal class InfoRepositoryImpl(
                 }
             },
         ),
+        // News
+        SyncJobNoCache(
+            fetchApi = { subsystemApi.getNews(subsystemId) },
+            store = { data ->
+                newsFlow.value = data.toNews()
+            },
+        ),
         // Contacts
-        SyncJob(
+        SyncJobHash(
             hashType = HashType.contactsHash(),
             getHashCode = { subsystemApi.getContactsHash() },
             fetchApi = { subsystemApi.getContacts() },
@@ -85,7 +93,7 @@ internal class InfoRepositoryImpl(
             },
         ),
         // OpenTimes
-        SyncJob(
+        SyncJobHash(
             hashType = HashType.openingHash(subsystemId),
             getHashCode = { subsystemApi.getOpeningTimesHash(subsystemId) },
             fetchApi = { subsystemApi.getOpeningTimes(subsystemId) },
@@ -97,7 +105,7 @@ internal class InfoRepositoryImpl(
             },
         ),
         // Links
-        SyncJob(
+        SyncJobHash(
             hashType = HashType.linkHash(subsystemId),
             getHashCode = { subsystemApi.getLinkHash(subsystemId) },
             fetchApi = { subsystemApi.getLink(subsystemId) },
@@ -109,7 +117,7 @@ internal class InfoRepositoryImpl(
             },
         ),
         // Address
-        SyncJob(
+        SyncJobHash(
             hashType = HashType.addressHash(),
             getHashCode = { subsystemApi.getAddressHash() },
             fetchApi = { subsystemApi.getAddress() },

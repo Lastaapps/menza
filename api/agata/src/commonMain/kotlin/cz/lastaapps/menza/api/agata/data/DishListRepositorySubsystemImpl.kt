@@ -34,7 +34,7 @@ import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.domain.DishListRepository
 import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.HashType
-import cz.lastaapps.menza.api.agata.domain.model.SyncJob
+import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
@@ -119,7 +119,7 @@ internal class DishListRepositorySubsystemImpl(
             }
     }
 
-    private val dishListJob = SyncJob(
+    private val dishListJob = SyncJobHash(
         hashType = HashType.dishHash(subsystemId),
         getHashCode = { dishApi.getDishesHash(subsystemId) },
         fetchApi = { dishApi.getDishes(subsystemId) },
@@ -131,7 +131,7 @@ internal class DishListRepositorySubsystemImpl(
         }
     )
 
-    private val dishTypeJob = SyncJob(
+    private val dishTypeJob = SyncJobHash(
         hashType = HashType.typesHash(subsystemId),
         getHashCode = { cafeteriaApi.getDishTypesHash(subsystemId) },
         fetchApi = { cafeteriaApi.getDishTypes(subsystemId) },
@@ -143,7 +143,7 @@ internal class DishListRepositorySubsystemImpl(
         },
     )
 
-    private val pictogramJob = SyncJob(
+    private val pictogramJob = SyncJobHash(
         hashType = HashType.pictogramHash(),
         getHashCode = { dishApi.getPictogramHash() },
         fetchApi = { dishApi.getPictogram() },
@@ -155,7 +155,7 @@ internal class DishListRepositorySubsystemImpl(
         }
     )
 
-    private val servingPlacesJob = SyncJob(
+    private val servingPlacesJob = SyncJobHash(
         hashType = HashType.servingPacesHash(subsystemId),
         getHashCode = { cafeteriaApi.getServingPlacesHash(subsystemId) },
         fetchApi = { cafeteriaApi.getServingPlaces(subsystemId) },

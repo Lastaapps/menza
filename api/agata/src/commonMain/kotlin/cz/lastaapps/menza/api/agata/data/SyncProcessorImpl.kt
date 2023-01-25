@@ -27,6 +27,8 @@ import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.SyncJob
+import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
+import cz.lastaapps.menza.api.agata.domain.model.SyncJobNoCache
 
 
 // TODO rework with context receivers when usable in AS
@@ -39,18 +41,26 @@ internal class SyncProcessorImpl(
         list
             // Fetches hash codes from a remote source
             .parMap { job ->
-                val hash = job.getHashCode().bind()
+                when (job) {
+                    is SyncJobHash -> {
+                        val hash = job.getHashCode().bind()
 
-                if (hashStore.shouldReload(job.hashType, hash)) {
-                    // deferred job to save the new hash code
-                    val storeHashAction: suspend () -> Unit =
-                        { hashStore.storeHash(job.hashType, hash) }
+                        if (hashStore.shouldReload(job.hashType, hash)) {
+                            // deferred job to save the new hash code
+                            val storeHashAction: suspend () -> Unit =
+                                { hashStore.storeHash(job.hashType, hash) }
 
-                    // process this job
-                    Pair(job, storeHashAction)
-                } else {
-                    // skip this job
-                    null
+                            // process this job
+                            Pair(job, storeHashAction)
+                        } else {
+                            // skip this job
+                            null
+                        }
+                    }
+                    is SyncJobNoCache -> {
+                        val noOp: suspend () -> Unit = {}
+                        Pair(job, noOp)
+                    }
                 }
             }
             // remove skipped jobs

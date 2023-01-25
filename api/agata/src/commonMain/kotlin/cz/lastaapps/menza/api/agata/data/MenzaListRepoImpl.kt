@@ -29,7 +29,7 @@ import cz.lastaapps.menza.api.agata.domain.MenzaListRepo
 import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.MenzaType
-import cz.lastaapps.menza.api.agata.domain.model.SyncJob
+import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.model.common.Menza
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
@@ -54,7 +54,7 @@ internal class MenzaListRepoImpl(
             .map { it.add(MenzaType.Strahov.instance) }
 
     override suspend fun sync(): Outcome<Unit> =
-        SyncJob(
+        SyncJobHash(
             hashType = HashType.subsystemHash(),
             getHashCode = api::getSubsystemsHash,
             fetchApi = {

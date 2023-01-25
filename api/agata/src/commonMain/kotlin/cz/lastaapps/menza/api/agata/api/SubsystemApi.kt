@@ -46,7 +46,7 @@ internal sealed interface SubsystemApi {
     suspend fun getInfo(subsystemId: Int): Outcome<List<InfoDto>>
     suspend fun getInfoHash(subsystemId: Int): Outcome<String>
 
-    suspend fun getNews(subsystemId: Int): Outcome<List<String>>
+    suspend fun getNews(subsystemId: Int): Outcome<String>
 
     suspend fun getOpeningTimes(subsystemId: Int): Outcome<List<OpenTimeDto>>
     suspend fun getOpeningTimesHash(subsystemId: Int): Outcome<String>
@@ -74,7 +74,7 @@ internal class SubsystemApiImpl(
         client.getFun(InfoHash, subsystemId = subsystemId).body()
     }
 
-    override suspend fun getNews(subsystemId: Int): Outcome<List<String>> = catchingNetwork {
+    override suspend fun getNews(subsystemId: Int): Outcome<String> = catchingNetwork {
         client.getFun(News, subsystemId = subsystemId).body()
     }
 

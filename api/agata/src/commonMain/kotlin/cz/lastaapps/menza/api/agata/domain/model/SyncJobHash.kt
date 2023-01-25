@@ -21,12 +21,25 @@ package cz.lastaapps.menza.api.agata.domain.model
 
 import cz.lastaapps.core.domain.Outcome
 
+internal sealed interface SyncJob<T> {
+    val fetchApi: suspend () -> Outcome<T>
+    val store: (T) -> Unit
+}
+
 /**
- * Job info for a sync processor
+ * Job info for a sync processor using hash
  */
-internal class SyncJob<T>(
+internal class SyncJobHash<T>(
     val hashType: HashType,
     val getHashCode: suspend () -> Outcome<String>,
-    val fetchApi: suspend () -> Outcome<T>,
-    val store: (T) -> Unit,
-)
+    override val fetchApi: suspend () -> Outcome<T>,
+    override val store: (T) -> Unit,
+) : SyncJob<T>
+
+/**
+ * Job info for a sync processor, no cache check
+ */
+internal class SyncJobNoCache<T>(
+    override val fetchApi: suspend () -> Outcome<T>,
+    override val store: (T) -> Unit,
+) : SyncJob<T>
