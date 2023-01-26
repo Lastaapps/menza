@@ -17,15 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.domain.error
+package cz.lastaapps.menza.api.agata.domain.sync
 
-import arrow.core.continuations.Raise
+import cz.lastaapps.menza.api.agata.domain.model.SyncJob
 
-sealed interface MenzaError {
-    sealed interface Runtime : MenzaError
-    sealed interface Logic : MenzaError
 
-    data class Unknown(val throwable: Throwable) : Runtime
+internal interface SyncProcessor {
+    suspend fun <T, R> run(job: SyncJob<T, R>) = run(listOf(job))
+    suspend fun run(list: Iterable<SyncJob<*, *>>): SyncOutcome
 }
-
-typealias MenzaRaise = Raise<MenzaError>

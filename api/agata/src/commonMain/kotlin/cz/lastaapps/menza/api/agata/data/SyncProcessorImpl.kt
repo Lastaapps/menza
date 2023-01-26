@@ -19,16 +19,24 @@
 
 package cz.lastaapps.menza.api.agata.data
 
-import arrow.core.continuations.Raise
+import arrow.core.Ior.Both
+import arrow.core.Ior.Left
+import arrow.core.Ior.Right
+import arrow.core.IorNel
+import arrow.core.toNonEmptyListOrNull
 import arrow.fx.coroutines.parMap
 import com.squareup.sqldelight.Transacter
+import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.SyncJob
 import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.model.SyncJobNoCache
+import cz.lastaapps.menza.api.agata.domain.sync.SyncOutcome
+import cz.lastaapps.menza.api.agata.domain.sync.SyncProcessor
+import cz.lastaapps.menza.api.agata.domain.sync.SyncResult
+import kotlinx.collections.immutable.persistentListOf
 
 
 // TODO rework with context receivers when usable in AS
@@ -37,13 +45,13 @@ internal class SyncProcessorImpl(
     private val database: Transacter,
 ) : SyncProcessor {
 
-    override suspend fun run(list: Iterable<SyncJob<*>>) = outcome {
+    override suspend fun run(list: Iterable<SyncJob<*, *>>): SyncOutcome = outcome {
         list
             // Fetches hash codes from a remote source
             .parMap { job ->
                 when (job) {
                     is SyncJobHash -> {
-                        val hash = job.getHashCode().bind()
+                        val hash = job.getHashCode()
 
                         if (hashStore.shouldReload(job.hashType, hash)) {
                             // deferred job to save the new hash code
@@ -66,25 +74,49 @@ internal class SyncProcessorImpl(
             // remove skipped jobs
             .filterNotNull()
 
-            // fetch data from api
+            // Fetch data from api and convert then
             .parMap { (job, hash) ->
-                val storeAction = processJob(job)
+                val storeAction = job.processFetchAndConvert().bind()
                 Pair(storeAction, hash)
-            }.let { results ->
+            }
+
+            // Store data
+            .also { results ->
 
                 // store data in a single transaction
                 database.transaction {
-                    results.forEach { (action, _) -> action() }
+                    results.forEach { (action, _) -> action.map { it() } }
                 }
 
                 // store new hash codes
                 results.forEach { (_, hash) -> hash() }
             }
+
+            // collect noncritical errors
+            .map(Pair<IorNel<MenzaError, *>, *>::first)
+            .foldRight(persistentListOf<MenzaError>()) { item, acu ->
+                acu.addAll(
+                    // defeated male leaves
+                    when (item) {
+                        is Both -> item.leftValue
+                        is Left -> item.value
+                        is Right -> emptyList()
+                    }
+                )
+            }.let {
+                it.toNonEmptyListOrNull()?.let { nel ->
+                    SyncResult.Problem(nel)
+                } ?: SyncResult.Updated
+            }
     }
 
     // used to simply generics resolution
-    private suspend fun <T> Raise<MenzaError>.processJob(job: SyncJob<T>): () -> Unit {
-        val res = job.fetchApi().bind()
-        return { job.store(res) }
-    }
+    private suspend fun <T, R> SyncJob<T, R>.processFetchAndConvert(): Outcome<IorNel<MenzaError, () -> Unit>> =
+        outcome {
+            val fetched = fetchApi()
+
+            convert(fetched).map { data ->
+                { store(data) }
+            }
+        }
 }

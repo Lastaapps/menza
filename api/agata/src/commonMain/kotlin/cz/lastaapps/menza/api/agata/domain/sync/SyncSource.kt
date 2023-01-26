@@ -17,12 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain
+package cz.lastaapps.menza.api.agata.domain.sync
 
-import cz.lastaapps.core.domain.Outcome
 import kotlinx.coroutines.flow.Flow
 
 interface SyncSource<T> {
     fun getData(): Flow<T>
-    suspend fun sync(): Outcome<Unit>
+    suspend fun sync(): SyncOutcome
 }

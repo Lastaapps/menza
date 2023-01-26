@@ -19,27 +19,32 @@
 
 package cz.lastaapps.menza.api.agata.domain.model
 
-import cz.lastaapps.core.domain.Outcome
+import arrow.core.IorNel
+import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.MenzaRaise
 
-internal sealed interface SyncJob<T> {
-    val fetchApi: suspend () -> Outcome<T>
-    val store: (T) -> Unit
+internal sealed interface SyncJob<T, R> {
+    val fetchApi: suspend MenzaRaise.() -> T
+    val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>
+    val store: (R) -> Unit
 }
 
 /**
  * Job info for a sync processor using hash
  */
-internal class SyncJobHash<T>(
+internal class SyncJobHash<T, R>(
     val hashType: HashType,
-    val getHashCode: suspend () -> Outcome<String>,
-    override val fetchApi: suspend () -> Outcome<T>,
-    override val store: (T) -> Unit,
-) : SyncJob<T>
+    val getHashCode: suspend MenzaRaise.() -> String,
+    override val fetchApi: suspend MenzaRaise.() -> T,
+    override val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
+    override val store: (R) -> Unit,
+) : SyncJob<T, R>
 
 /**
  * Job info for a sync processor, no cache check
  */
-internal class SyncJobNoCache<T>(
-    override val fetchApi: suspend () -> Outcome<T>,
-    override val store: (T) -> Unit,
-) : SyncJob<T>
+internal class SyncJobNoCache<T, R>(
+    override val fetchApi: suspend MenzaRaise.() -> T,
+    override val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
+    override val store: (R) -> Unit,
+) : SyncJob<T, R>

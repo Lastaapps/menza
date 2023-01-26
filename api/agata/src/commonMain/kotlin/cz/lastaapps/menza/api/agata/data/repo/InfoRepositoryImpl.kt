@@ -17,17 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.data
+package cz.lastaapps.menza.api.agata.data.repo
 
 import arrow.core.right
+import arrow.core.rightIor
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.util.combine6
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
-import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.model.SyncJobNoCache
@@ -37,6 +36,9 @@ import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toNews
 import cz.lastaapps.menza.api.agata.domain.repo.InfoRepository
+import cz.lastaapps.menza.api.agata.domain.sync.SyncOutcome
+import cz.lastaapps.menza.api.agata.domain.sync.SyncProcessor
+import cz.lastaapps.menza.api.agata.domain.sync.SyncResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
@@ -66,73 +68,79 @@ internal class InfoRepositoryImpl(
         // Info
         SyncJobHash(
             hashType = HashType.infoHash(subsystemId),
-            getHashCode = { subsystemApi.getInfoHash(subsystemId) },
-            fetchApi = { subsystemApi.getInfo(subsystemId) },
+            getHashCode = { subsystemApi.getInfoHash(subsystemId).bind() },
+            fetchApi = { subsystemApi.getInfo(subsystemId).bind() },
+            convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.infoQueries.deleteSubsystem(subsystemId.toLong())
                 data.forEach {
-                    db.infoQueries.insertEntity(it.toEntity())
+                    db.infoQueries.insertEntity(it)
                 }
             },
         ),
         // News
         SyncJobNoCache(
-            fetchApi = { subsystemApi.getNews(subsystemId) },
+            fetchApi = { subsystemApi.getNews(subsystemId).bind() },
+            convert = { data -> data.toNews().rightIor() },
             store = { data ->
-                newsFlow.value = data.toNews()
+                newsFlow.value = data
             },
         ),
         // Contacts
         SyncJobHash(
             hashType = HashType.contactsHash(),
-            getHashCode = { subsystemApi.getContactsHash() },
-            fetchApi = { subsystemApi.getContacts() },
+            getHashCode = { subsystemApi.getContactsHash().bind() },
+            fetchApi = { subsystemApi.getContacts().bind() },
+            convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.contactQueries.deleteAll()
                 data.forEach {
-                    db.contactQueries.insertEntity(it.toEntity())
+                    db.contactQueries.insertEntity(it)
                 }
             },
         ),
         // OpenTimes
         SyncJobHash(
             hashType = HashType.openingHash(subsystemId),
-            getHashCode = { subsystemApi.getOpeningTimesHash(subsystemId) },
-            fetchApi = { subsystemApi.getOpeningTimes(subsystemId) },
+            getHashCode = { subsystemApi.getOpeningTimesHash(subsystemId).bind() },
+            fetchApi = { subsystemApi.getOpeningTimes(subsystemId).bind() },
+            convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.openTimeQueries.deleteSubsystem(subsystemId.toLong())
                 data.forEach {
-                    db.openTimeQueries.insertEntity(it.toEntity())
+                    db.openTimeQueries.insertEntity(it)
                 }
             },
         ),
         // Links
         SyncJobHash(
             hashType = HashType.linkHash(subsystemId),
-            getHashCode = { subsystemApi.getLinkHash(subsystemId) },
-            fetchApi = { subsystemApi.getLink(subsystemId) },
+            getHashCode = { subsystemApi.getLinkHash(subsystemId).bind() },
+            fetchApi = { subsystemApi.getLink(subsystemId).bind() },
+            convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.linkQueries.deleteSubsystem(subsystemId.toLong())
                 data.forEach {
-                    db.linkQueries.insertEntity(it.toEntity())
+                    db.linkQueries.insertEntity(it)
                 }
             },
         ),
         // Address
         SyncJobHash(
             hashType = HashType.addressHash(),
-            getHashCode = { subsystemApi.getAddressHash() },
-            fetchApi = { subsystemApi.getAddress() },
+            getHashCode = { subsystemApi.getAddressHash().bind() },
+            fetchApi = { subsystemApi.getAddress().bind() },
+            convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.addressQueries.deleteAll()
                 data.forEach {
-                    db.addressQueries.insertEntity(it.toEntity())
+                    db.addressQueries.insertEntity(it)
                 }
             },
         ),
     )
 
-    override suspend fun sync(): Outcome<Unit> =
+    override suspend fun sync(): SyncOutcome =
         processor.run(jobs)
 }
 
@@ -140,5 +148,5 @@ internal object InfoRepositoryStrahovImpl : InfoRepository {
     private val flow = flow { emit(Info.empty) }
 
     override fun getData(): Flow<Info> = flow
-    override suspend fun sync(): Outcome<Unit> = Unit.right()
+    override suspend fun sync(): SyncOutcome = SyncResult.Unavailable.right()
 }

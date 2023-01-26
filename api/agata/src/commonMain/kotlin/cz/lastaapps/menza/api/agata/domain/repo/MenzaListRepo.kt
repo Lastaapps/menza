@@ -19,8 +19,8 @@
 
 package cz.lastaapps.menza.api.agata.domain.repo
 
-import cz.lastaapps.menza.api.agata.domain.SyncSource
 import cz.lastaapps.menza.api.agata.domain.model.common.Menza
+import cz.lastaapps.menza.api.agata.domain.sync.SyncSource
 import kotlinx.collections.immutable.ImmutableList
 
 interface MenzaListRepo : SyncSource<ImmutableList<Menza>>

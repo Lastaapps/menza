@@ -17,27 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.data
+package cz.lastaapps.menza.api.agata.data.repo
 
 import agata.DishEntity
 import agata.DishTypeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
 import arrow.core.Tuple4
+import arrow.core.rightIor
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
-import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import cz.lastaapps.menza.api.agata.domain.repo.DishListRepo
+import cz.lastaapps.menza.api.agata.domain.sync.SyncOutcome
+import cz.lastaapps.menza.api.agata.domain.sync.SyncProcessor
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -121,54 +122,58 @@ internal class DishListRepoSubsystemImpl(
 
     private val dishListJob = SyncJobHash(
         hashType = HashType.dishHash(subsystemId),
-        getHashCode = { dishApi.getDishesHash(subsystemId) },
-        fetchApi = { dishApi.getDishes(subsystemId) },
+        getHashCode = { dishApi.getDishesHash(subsystemId).bind() },
+        fetchApi = { dishApi.getDishes(subsystemId).bind() },
+        convert = { data -> data.map { it.toEntity() }.rightIor() },
         store = { data ->
             db.dishQueries.deleteSubsytem(subsystemId.toLong())
             data.forEach {
-                db.dishQueries.insertEntity(it.toEntity())
+                db.dishQueries.insertEntity(it)
             }
         }
     )
 
     private val dishTypeJob = SyncJobHash(
         hashType = HashType.typesHash(subsystemId),
-        getHashCode = { cafeteriaApi.getDishTypesHash(subsystemId) },
-        fetchApi = { cafeteriaApi.getDishTypes(subsystemId) },
+        getHashCode = { cafeteriaApi.getDishTypesHash(subsystemId).bind() },
+        fetchApi = { cafeteriaApi.getDishTypes(subsystemId).bind() },
+        convert = { data -> data.map { it.toEntity() }.rightIor() },
         store = { data ->
             db.dishTypeQueries.deleteSubsystem(subsystemId.toLong())
-            data.forEach { dto ->
-                db.dishTypeQueries.insertEntity(dto.toEntity())
+            data.forEach {
+                db.dishTypeQueries.insertEntity(it)
             }
         },
     )
 
     private val pictogramJob = SyncJobHash(
         hashType = HashType.pictogramHash(),
-        getHashCode = { dishApi.getPictogramHash() },
-        fetchApi = { dishApi.getPictogram() },
+        getHashCode = { dishApi.getPictogramHash().bind() },
+        fetchApi = { dishApi.getPictogram().bind() },
+        convert = { data -> data.map { it.toEntity() }.rightIor() },
         store = { data ->
             db.pictogramQueries.deleteAll()
             data.forEach {
-                db.pictogramQueries.insertEntity(it.toEntity())
+                db.pictogramQueries.insertEntity(it)
             }
         }
     )
 
     private val servingPlacesJob = SyncJobHash(
         hashType = HashType.servingPacesHash(subsystemId),
-        getHashCode = { cafeteriaApi.getServingPlacesHash(subsystemId) },
-        fetchApi = { cafeteriaApi.getServingPlaces(subsystemId) },
+        getHashCode = { cafeteriaApi.getServingPlacesHash(subsystemId).bind() },
+        fetchApi = { cafeteriaApi.getServingPlaces(subsystemId).bind() },
+        convert = { data -> data.map { it.toEntity() }.rightIor() },
         store = { data ->
             db.servingPlaceQueries.deleteSubsystem(subsystemId.toLong())
             data.forEach {
-                db.servingPlaceQueries.insertEntity(it.toEntity())
+                db.servingPlaceQueries.insertEntity(it)
             }
         }
     )
 
     private val jobs = listOf(dishListJob, dishTypeJob, pictogramJob, servingPlacesJob)
 
-    override suspend fun sync(): Outcome<Unit> =
+    override suspend fun sync(): SyncOutcome =
         processor.run(jobs)
 }

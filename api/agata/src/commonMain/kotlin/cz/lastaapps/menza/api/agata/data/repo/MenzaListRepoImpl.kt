@@ -17,15 +17,13 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.data
+package cz.lastaapps.menza.api.agata.data.repo
 
+import arrow.core.rightIor
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
-import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.MenzaType
 import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
@@ -34,6 +32,8 @@ import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import cz.lastaapps.menza.api.agata.domain.repo.MenzaListRepo
+import cz.lastaapps.menza.api.agata.domain.sync.SyncOutcome
+import cz.lastaapps.menza.api.agata.domain.sync.SyncProcessor
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
@@ -53,30 +53,32 @@ internal class MenzaListRepoImpl(
             .map { it.toPersistentList() }
             .map { it.add(MenzaType.Strahov.instance) }
 
-    override suspend fun sync(): Outcome<Unit> =
+    private val subsystemJob =
         SyncJobHash(
             hashType = HashType.subsystemHash(),
-            getHashCode = api::getSubsystemsHash,
+            getHashCode = { api.getSubsystemsHash().bind() },
             fetchApi = {
-                outcome {
-                    val subsystems = api.getSubsystems().bind()
-                    val importantIds = subsystems.map(SubsystemDto::id)
-                    val allSubsystems = api.getAllSubsystems().bind()
-                    allSubsystems.map {
-                        (it.id in importantIds) to it
-                    }
+                val subsystems = api.getSubsystems().bind()
+                val importantIds = subsystems.map(SubsystemDto::id)
+                val allSubsystems = api.getAllSubsystems().bind()
+                allSubsystems.map {
+                    (it.id in importantIds) to it
                 }
+            },
+            convert = { dtos ->
+                dtos.map { (important, dto) ->
+                    dto.toEntity(isImportant = important)
+                }.rightIor()
             },
             store = { result ->
                 db.subsystemQueries.deleteAll()
-                result.forEach { (important, dto) ->
-                    db.subsystemQueries.insertEntity(
-                        dto.toEntity(isImportant = important)
-                    )
+                result.forEach { dto ->
+                    db.subsystemQueries.insertEntity(dto)
                 }
             },
-        ).let { job ->
-            processor.run(job)
-        }
+        )
+
+    override suspend fun sync(): SyncOutcome =
+        processor.run(subsystemJob)
 }
 

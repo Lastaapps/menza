@@ -17,52 +17,38 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.data
+package cz.lastaapps.menza.api.agata.data.repo
 
-import arrow.core.right
-import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.domain.outcome
+import arrow.core.rightIor
 import cz.lastaapps.menza.api.agata.api.DishApi
-import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.SyncJobNoCache
-import cz.lastaapps.menza.api.agata.domain.model.common.WeekDayDish
+import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
-import cz.lastaapps.menza.api.agata.domain.repo.WeekRepository
+import cz.lastaapps.menza.api.agata.domain.repo.DishListRepo
+import cz.lastaapps.menza.api.agata.domain.sync.SyncOutcome
+import cz.lastaapps.menza.api.agata.domain.sync.SyncProcessor
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 
-internal class WeekDishRepoImpl(
-    private val subsystemId: Int,
+internal class DishListRepoStrahovImpl(
     private val dishApi: DishApi,
     private val processor: SyncProcessor,
-) : WeekRepository {
+) : DishListRepo {
 
-    private val weekDishList = MutableStateFlow<ImmutableList<WeekDayDish>>(persistentListOf())
+    private val dishList = MutableStateFlow<ImmutableList<DishCategory>>(persistentListOf())
 
-    override fun getData(): Flow<ImmutableList<WeekDayDish>> = weekDishList
+    override fun getData(): Flow<ImmutableList<DishCategory>> = dishList
 
-    private val syncJob = SyncJobNoCache(
-        fetchApi = {
-            outcome {
-                val weeks = dishApi.getWeeks(subsystemId).bind()
-                val week = weeks.firstOrNull()!! // TODO
-                dishApi.getWeekDishList(week.id).bind()
-            }
-        },
+    private val job = SyncJobNoCache(
+        fetchApi = { dishApi.getStrahov().bind() },
+        convert = { it.toDomain().toImmutableList().rightIor() },
         store = { data ->
-            weekDishList.value = data.toDomain().toImmutableList()
+            dishList.value = data
         }
     )
 
-    override suspend fun sync(): Outcome<Unit> =
-        processor.run(syncJob)
-}
-
-internal object WeekDishRepoStrahovImpl : WeekRepository {
-    override fun getData(): Flow<ImmutableList<WeekDayDish>> = flow { emit(persistentListOf()) }
-    override suspend fun sync(): Outcome<Unit> = Unit.right()
+    override suspend fun sync(): SyncOutcome = processor.run(job)
 }
