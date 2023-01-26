@@ -32,9 +32,8 @@ internal class MenuDto(
     val name: String,
     @SerialName("popis")
     val description: String,
-    @Suppress("SpellCheckingInspection")
-    @SerialName("podsystemy")
-    val subsystems: String, // semicolon (;) separated
-    @SerialName("")
-    val priceType: String, //[cena_stud, cena_ost]
+//    @SerialName("podsystemy")
+//    val subsystems: String, // semicolon (;) separated
+//    @SerialName("")
+//    val priceType: String, // [cena_stud, cena_ost]
 )

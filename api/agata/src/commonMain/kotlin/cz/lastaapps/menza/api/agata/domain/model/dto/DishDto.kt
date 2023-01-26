@@ -39,24 +39,23 @@ internal class DishDto(
     @SerialName("kategorie")
     val typeId: Int,
     @SerialName("vaha")
-    val amount: String,
+    val amount: String?,
     @SerialName("nazev")
-    val name: String,
+    val name: String?,
     @SerialName("priloha_a")
-    val sideDishA: String,
+    val sideDishA: String?,
     @SerialName("priloha_b")
-    val sideDishB: String,
+    val sideDishB: String?,
     @SerialName("cena_stud")
-    val priceDiscount: Float,
+    val priceDiscount: Float?,
     @SerialName("cena")
-    val priceNormal: Float,
+    val priceNormal: Float?,
     @SerialName("alergeny")
-    val allergens: String, // however a cook want's to separated
+    val allergens: String?, // however a cook want's to separated
     @SerialName("foto")
-    val photoLink: String,
+    val photoLink: String?,
     @SerialName("piktogram")
-    val pictogram: Int,
-    @Suppress("SpellCheckingInspection")
+    val pictogram: String?, // semicolon separated
     @SerialName("aktivni")
-    val isActive: Boolean, // True, False
+    val isActive: Boolean,
 )

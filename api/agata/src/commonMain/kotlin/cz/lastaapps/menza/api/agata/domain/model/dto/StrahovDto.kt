@@ -39,9 +39,9 @@ internal class StrahovDto(
     @SerialName("poradi")
     val order: String,
     @SerialName("vaha")
-    val amountCs: String,
+    val amountCs: String?,
     @SerialName("vaha_en")
-    val amountEn: String,
+    val amountEn: String?,
     @SerialName("nazev")
     val nameCs: String,
     @SerialName("nazev_en")
@@ -51,7 +51,7 @@ internal class StrahovDto(
     @SerialName("cenaS")
     val priceStudent: Float,
     @SerialName("alergeny")
-    val allergens: String,
+    val allergens: String?,
     @SerialName("foto")
-    val photoLink: String,
+    val photoLink: String?,
 )

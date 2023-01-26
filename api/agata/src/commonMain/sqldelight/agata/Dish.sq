@@ -14,7 +14,7 @@ CREATE TABLE DishEntity(
     priceDiscount REAL,
     allergens TEXT AS List<Long> NOT NULL,
     photoLink TEXT,
-    pictogram INTEGER,
+    pictogram TEXT AS List<Long> NOT NULL,
     isActive INTEGER AS Boolean,
     PRIMARY KEY (id)
 );

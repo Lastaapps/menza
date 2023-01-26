@@ -17,23 +17,13 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model.dto
+package cz.lastaapps.menza.api.agata.domain.model.mapers
 
-import kotlinx.serialization.SerialName
 
-/**
- * TLink
- */
-@kotlinx.serialization.Serializable
-internal class LinkDto(
-    @SerialName("id")
-    val id: Int,
-    @SerialName("podsystem_id")
-    val subsystemId: Int,
-//    @SerialName("podsystem_nazev")
-//    val subsystemName: String,
-    @SerialName("link")
-    val link: String,
-    @SerialName("popis")
-    val description: String,
-)
+internal fun String.parseSemicolonSeparated() =
+    split(';').map { it.toLong() }
+
+internal fun String.parseAllergens() =
+    split(',', ' ', '.' /*just for sure*/, ';', '-', '_', '|')
+        .filter { it.isNotBlank() }
+        .map { it.toInt() }

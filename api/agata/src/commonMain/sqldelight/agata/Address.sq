@@ -3,8 +3,8 @@ import cz.lastaapps.menza.api.agata.domain.model.common.LatLong;
 CREATE TABLE AddressEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,
-    address TEXT,
-    gps TEXT AS LatLong,
+    address TEXT NOT NULL,
+    gps TEXT AS LatLong NOT NULL,
     PRIMARY KEY (id)
 );
 

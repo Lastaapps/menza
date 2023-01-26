@@ -45,9 +45,9 @@ internal class OpenTimeDto(
     @SerialName("od_den_od")
     val dayFrom: String, // Po, Út, ...
     @SerialName("od_den_do")
-    val dayTo: String,
+    val dayTo: String?,
     @SerialName("od_cas_od")
     val timeFrom: String, // HH:MM
     @SerialName("od_cas_do")
-    val timeTo: String,
+    val timeTo: String?,
 )

@@ -7,6 +7,9 @@ CREATE TABLE PictogramEntity(
 getById:
     SELECT * FROM PictogramEntity WHERE id = :id;
 
+getByIds:
+    SELECT * FROM PictogramEntity WHERE id IN :id;
+
 insert:
     INSERT INTO PictogramEntity(id, name)
     VALUES (:id, :name);

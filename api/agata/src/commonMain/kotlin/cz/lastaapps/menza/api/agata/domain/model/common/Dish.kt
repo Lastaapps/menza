@@ -38,7 +38,7 @@ data class Dish(
     val priceNormal: Float?,
     val allergens: ImmutableList<Int>,
     val photoLink: String?,
-    val pictogram: String?,
+    val pictogram: ImmutableList<String>,
     val servingPlaces: ImmutableList<ServingPlace>,
 )
 

@@ -32,13 +32,12 @@ internal class WeekDishDto(
 //    val weekId: Int,
     @SerialName("datum")
     val date: String,
-    @Suppress("SpellCheckingInspection")
     @SerialName("typstravy")
     val typeId: Int,
-    @SerialName("TypStravyNazev")
+    @SerialName("typstravy_nazev")
     val typeName: String,
     @SerialName("nazev")
     val name: String,
     @SerialName("vaha")
-    val amount: String,
+    val amount: String?,
 )

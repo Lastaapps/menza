@@ -30,7 +30,6 @@ internal class SubsystemDto(
     val id: Int,
     @SerialName("popis")
     val name: String,
-    @Suppress("SpellCheckingInspection")
     @SerialName("otevreno")
-    val opened: Int, // [0 - Closed, 1 - Open]
+    val opened: Boolean,
 )

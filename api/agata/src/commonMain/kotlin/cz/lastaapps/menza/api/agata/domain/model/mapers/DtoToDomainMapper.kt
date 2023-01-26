@@ -39,9 +39,12 @@ internal fun List<StrahovDto>.toDomain() =
             val value = values.first()
             DishCategory(
                 nameShort = null,
-                nameCs = value.nameCs.trim(),
-                nameEn = value.nameEn.trim(),
-                dishList = values.map { it.toDomain() }.toImmutableList(),
+                nameCs = value.groupNameCs.trim(),
+                nameEn = value.groupNameEn.trim(),
+                dishList = values
+                    .sortedBy { it.order }
+                    .map { it.toDomain() }
+                    .toImmutableList(),
             )
         }
 
@@ -52,9 +55,9 @@ private fun StrahovDto.toDomain() = Dish(
     nameCs = nameCs,
     priceDiscount = priceStudent,
     priceNormal = price,
-    allergens = allergens.parseAllergens().toImmutableList(),
+    allergens = allergens?.parseAllergens().orEmpty().toImmutableList(),
     photoLink = photoLink,
-    pictogram = null,
+    pictogram = persistentListOf(),
     servingPlaces = persistentListOf(),
 )
 
@@ -78,7 +81,7 @@ private fun List<WeekDishDto>.toCategory() =
         .map { (_, values) ->
             val value = values.first()
             WeekDishCategory(
-                name = value.name,
+                name = value.typeName,
                 dishList = values.map { it.toDomain() }.toImmutableList(),
             )
         }

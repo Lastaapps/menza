@@ -72,10 +72,7 @@ internal class DishListRepoSubsystemImpl(
                         db.dishTypeQueries.getByDishId(entity.id).asFlow().mapToOneNotNull(),
 
                         // get dish piktogram
-                        entity.pictogram?.let {
-                            db.pictogramQueries.getById(it).asFlow().mapToOneNotNull()
-                        }
-                            ?: flow<PictogramEntity?> { emit(null) }, // no pictogram id
+                        db.pictogramQueries.getByIds(entity.pictogram).asFlow().mapToList(),
 
                         // Get dish serving places
                         db.servingPlaceQueries.getByIds(entity.servingPlaces).asFlow()
@@ -92,7 +89,7 @@ internal class DishListRepoSubsystemImpl(
 
                 // for an empty list an empty list will be returned
                 val baseCase =
-                    flow<PersistentList<Tuple4<DishEntity, DishTypeEntity, PictogramEntity?, List<ServingPlaceEntity>>>> {
+                    flow<PersistentList<Tuple4<DishEntity, DishTypeEntity, List<PictogramEntity>, List<ServingPlaceEntity>>>> {
                         emit(persistentListOf())
                     }
 

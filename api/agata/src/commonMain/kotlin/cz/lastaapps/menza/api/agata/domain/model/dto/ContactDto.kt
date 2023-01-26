@@ -30,16 +30,16 @@ internal data class ContactDto(
     val id: Int,
     @SerialName("podsystem_id")
     val subsystemId: Int,
-    @SerialName("maps")
-    val gps: String,
-    @SerialName("poradi_web")
+//    @SerialName("maps")
+//    val gps: String,
+    @SerialName("poradi")
     val order: Int,
     @SerialName("pozice")
-    val role: String,
+    val role: String?,
     @SerialName("jmeno")
-    val name: String,
+    val name: String?,
     @SerialName("telefon")
-    val phone: String,
+    val phone: String?,
     @SerialName("email")
-    val email: String,
+    val email: String?,
 )

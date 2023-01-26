@@ -47,7 +47,7 @@ internal fun SubsystemEntity.toDomain() =
     Menza(Subsystem(id.toInt()), name, opened, isImportant)
 
 internal fun DishEntity.toDomain(
-    pictogram: PictogramEntity?,
+    pictograms: List<PictogramEntity>,
     servingPlaces: List<ServingPlaceEntity>,
 ) = let { dish ->
     Dish(
@@ -59,7 +59,7 @@ internal fun DishEntity.toDomain(
         priceNormal = dish.priceNormal?.toFloat(),
         allergens = dish.allergens.map(Long::toInt).toImmutableList(),
         photoLink = dish.photoLink,
-        pictogram = pictogram?.name,
+        pictogram = pictograms.map(PictogramEntity::name).toImmutableList(),
         servingPlaces = servingPlaces.map { entity ->
             ServingPlace(
                 name = entity.name,
@@ -105,14 +105,17 @@ private fun ContactEntity.toDomain() =
 private fun List<OpenTimeEntity>.toDomain() =
     groupBy { it.servingPlaceId }
         .entries
-        .sortedBy { it.value.first().itemOrder }
+        .sortedBy { it.value.first().servingPlaceOrder }
         .map { (_, values) ->
             values.first().let { value ->
                 PlaceOpeningTime(
                     placeName = value.servingPlaceName,
                     placeAbbrev = value.servingPlaceAbbrev,
                     description = value.description,
-                    times = values.map { it.toDomain() }.toImmutableList(),
+                    times = values
+                        .sortedBy { it.itemOrder }
+                        .map { it.toDomain() }
+                        .toImmutableList(),
                 )
             }
         }

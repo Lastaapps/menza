@@ -41,6 +41,7 @@ internal object AgataDatabaseFactory {
         DishEntityAdapter = DishEntity.Adapter(
             allergensAdapter = LongListAdapter,
             servingPlacesAdapter = LongListAdapter,
+            pictogramAdapter = LongListAdapter,
         ),
         OpenTimeEntityAdapter = OpenTimeEntity.Adapter(
             dayFromAdapter = DayOfWeekAdapter,

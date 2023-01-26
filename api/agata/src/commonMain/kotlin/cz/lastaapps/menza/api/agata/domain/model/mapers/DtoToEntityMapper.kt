@@ -50,7 +50,7 @@ internal fun SubsystemDto.toEntity(isImportant: Boolean) =
     SubsystemEntity(
         id = id.toLong(),
         name = name,
-        opened = opened == 1,
+        opened = opened,
         isImportant = isImportant,
     )
 
@@ -59,24 +59,18 @@ internal fun DishDto.toEntity() =
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
         typeId = typeId.toLong(),
-        servingPlaces = servingPlaceList.split(';').map { it.toLong() },
+        servingPlaces = servingPlaceList.parseSemicolonSeparated(),
         amount = amount,
         name = name,
         sideDishA = sideDishA,
         sideDishB = sideDishB,
-        priceNormal = priceNormal.toDouble(),
-        priceDiscount = priceDiscount.toDouble(),
-        allergens = allergens.parseAllergens().map { it.toLong() },
-        photoLink = photoLink.takeIfNotBlack(),
-        pictogram = pictogram.toLong(),
+        priceNormal = priceNormal?.toDouble(),
+        priceDiscount = priceDiscount?.toDouble(),
+        allergens = allergens?.parseAllergens()?.map { it.toLong() }.orEmpty(),
+        photoLink = photoLink?.takeIfNotBlack(),
+        pictogram = pictogram?.parseSemicolonSeparated().orEmpty(),
         isActive = isActive,
     )
-
-
-internal fun String.parseAllergens() =
-    split(',', ' ', '.' /*just for sure*/, ';', '-', '_', '|')
-        .filter { it.isNotBlank() }
-        .mapNotNull { it.toIntOrNull() }
 
 internal fun DishTypeDto.toEntity() =
     DishTypeEntity(
@@ -106,8 +100,8 @@ internal fun InfoDto.toEntity() =
     InfoEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
-        header = header.removeHtml(),
-        footer = footer.removeHtml(),
+        header = header?.removeHtml(),
+        footer = footer?.removeHtml(),
     )
 
 internal fun String.toNews() =
@@ -137,12 +131,13 @@ internal fun OpenTimeDto.toEntity() =
         servingPlaceId = servingPlaceId.toLong(),
         servingPlaceName = servingPlaceName,
         servingPlaceAbbrev = servingPlaceAbbrev,
+        servingPlaceOrder = servingPlaceOrder.toLong(),
         description = description,
         itemOrder = order.toLong(),
         dayFrom = dayFrom.toDayOfWeek(),
-        dayTo = dayTo.toDayOfWeek(),
+        dayTo = (dayTo ?: dayFrom).toDayOfWeek(),
         timeFrom = Json.decodeFromString(timeFrom),
-        timeTo = Json.decodeFromString(timeTo),
+        timeTo = Json.decodeFromString(timeTo ?: timeFrom),
     )
 
 private val czechDaysOfWeek = arrayOf("Po", "Út", "St", "Čt", "Pá", "So", "Ne")
