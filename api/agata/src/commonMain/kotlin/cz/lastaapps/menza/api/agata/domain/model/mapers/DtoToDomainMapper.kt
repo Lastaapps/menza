@@ -21,9 +21,15 @@ package cz.lastaapps.menza.api.agata.domain.model.mapers
 
 import cz.lastaapps.menza.api.agata.domain.model.common.Dish
 import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
+import cz.lastaapps.menza.api.agata.domain.model.common.WeekDayDish
+import cz.lastaapps.menza.api.agata.domain.model.common.WeekDish
+import cz.lastaapps.menza.api.agata.domain.model.common.WeekDishCategory
 import cz.lastaapps.menza.api.agata.domain.model.dto.StrahovDto
+import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDishDto
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 internal fun List<StrahovDto>.toDomain() =
     groupBy { it.groupId }
@@ -51,3 +57,36 @@ private fun StrahovDto.toDomain() = Dish(
     pictogram = null,
     servingPlaces = persistentListOf(),
 )
+
+internal fun List<WeekDishDto>.toDomain() =
+    groupBy { it.date }
+        .entries
+        .sortedBy { it.key }
+        .map { (_, values) ->
+            val value = values.first()
+            WeekDayDish(
+                date = Json.decodeFromString(value.date),
+                categories = values.toCategory()
+            )
+        }
+        .toImmutableList()
+
+private fun List<WeekDishDto>.toCategory() =
+    groupBy { it.typeId }
+        .entries
+        .sortedBy { it.key }
+        .map { (_, values) ->
+            val value = values.first()
+            WeekDishCategory(
+                name = value.name,
+                dishList = values.map { it.toDomain() }.toImmutableList(),
+            )
+        }
+        .toImmutableList()
+
+
+private fun WeekDishDto.toDomain() =
+    WeekDish(
+        name = name,
+        amount = amount,
+    )

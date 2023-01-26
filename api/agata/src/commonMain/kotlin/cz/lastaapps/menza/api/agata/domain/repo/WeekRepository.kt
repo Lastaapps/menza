@@ -17,9 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain
+package cz.lastaapps.menza.api.agata.domain.repo
 
-import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
+import cz.lastaapps.menza.api.agata.domain.SyncSource
+import cz.lastaapps.menza.api.agata.domain.model.common.WeekDayDish
 import kotlinx.collections.immutable.ImmutableList
 
-interface DishListRepo : SyncSource<ImmutableList<DishCategory>>
+internal interface WeekRepository : SyncSource<ImmutableList<WeekDayDish>>

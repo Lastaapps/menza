@@ -31,13 +31,13 @@ import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
-import cz.lastaapps.menza.api.agata.domain.DishListRepo
 import cz.lastaapps.menza.api.agata.domain.SyncProcessor
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
+import cz.lastaapps.menza.api.agata.domain.repo.DishListRepo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
