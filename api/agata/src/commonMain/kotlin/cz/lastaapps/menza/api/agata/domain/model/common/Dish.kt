@@ -36,7 +36,9 @@ data class Dish(
     val nameCs: String?,
     val priceDiscount: Float?,
     val priceNormal: Float?,
-    val allergens: ImmutableList<Int>,
+    // empty - no allergens
+    // null  - unknown
+    val allergens: ImmutableList<Int>?,
     val photoLink: String?,
     val pictogram: ImmutableList<String>,
     val servingPlaces: ImmutableList<ServingPlace>,

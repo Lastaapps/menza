@@ -57,6 +57,7 @@ rootProject.name = "Menza"
 
 include(
     ":api:agata",
+    ":api:buffet",
     ":app",
     ":core",
     ":scraping",

@@ -17,20 +17,27 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.domain
+plugins {
+    alias(libs.plugins.lastaapps.kmp.library)
+    alias(libs.plugins.lastaapps.kmp.sqldelight)
+}
 
-import arrow.core.Either
-import arrow.core.IorNel
-import arrow.core.continuations.Raise
-import arrow.core.continuations.either
-import cz.lastaapps.core.domain.error.MenzaError
-import kotlin.experimental.ExperimentalTypeInference
+android {
+    namespace = "cz.lastaapps.api.buffet"
+}
 
-typealias Outcome<A> = Either<MenzaError, A>
+dependencies {
+    commonMainImplementation(projects.core)
 
-@OptIn(ExperimentalTypeInference::class)
-inline fun <A> outcome(
-    @BuilderInference block: Raise<MenzaError>.() -> A,
-): Outcome<A> = either(block)
+    commonMainImplementation(libs.ktor.client.core)
 
-typealias OutcomeIor<A> = IorNel<MenzaError, A>
+    commonMainImplementation(libs.russhwolf.settins.core)
+    commonMainImplementation(libs.russhwolf.settins.coroutines)
+}
+
+sqldelight {
+    database("BuffetDatabase") {
+        packageName = "cz.lastaapps.api.buffet"
+        sourceFolders = listOf("sqldelight")
+    }
+}

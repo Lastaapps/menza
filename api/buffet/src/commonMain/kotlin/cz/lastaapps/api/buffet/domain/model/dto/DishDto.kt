@@ -17,20 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.domain
+package cz.lastaapps.api.buffet.domain.model.dto
 
-import arrow.core.Either
-import arrow.core.IorNel
-import arrow.core.continuations.Raise
-import arrow.core.continuations.either
-import cz.lastaapps.core.domain.error.MenzaError
-import kotlin.experimental.ExperimentalTypeInference
+import kotlinx.datetime.DayOfWeek
 
-typealias Outcome<A> = Either<MenzaError, A>
+internal data class DishDayDto(
+    val dayOfWeek: DayOfWeek,
+    val dishList: List<DishDto>,
+)
 
-@OptIn(ExperimentalTypeInference::class)
-inline fun <A> outcome(
-    @BuilderInference block: Raise<MenzaError>.() -> A,
-): Outcome<A> = either(block)
-
-typealias OutcomeIor<A> = IorNel<MenzaError, A>
+internal class DishDto(
+    val type: String,
+    val name: String,
+    val price: Int,
+    val ingredients: List<String>,
+)

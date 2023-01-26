@@ -17,20 +17,14 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.domain
+package cz.lastaapps.api.buffet.di
 
-import arrow.core.Either
-import arrow.core.IorNel
-import arrow.core.continuations.Raise
-import arrow.core.continuations.either
-import cz.lastaapps.core.domain.error.MenzaError
-import kotlin.experimental.ExperimentalTypeInference
+import cz.lastaapps.api.buffet.api.BuffetApi
+import cz.lastaapps.api.buffet.api.BuffetApiImpl
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-typealias Outcome<A> = Either<MenzaError, A>
-
-@OptIn(ExperimentalTypeInference::class)
-inline fun <A> outcome(
-    @BuilderInference block: Raise<MenzaError>.() -> A,
-): Outcome<A> = either(block)
-
-typealias OutcomeIor<A> = IorNel<MenzaError, A>
+val apiBuffetModule = module {
+    factoryOf(::BuffetApiImpl) bind BuffetApi::class
+}

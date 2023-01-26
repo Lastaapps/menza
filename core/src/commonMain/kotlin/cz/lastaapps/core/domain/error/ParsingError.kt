@@ -17,20 +17,13 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.domain
+package cz.lastaapps.core.domain.error
 
-import arrow.core.Either
-import arrow.core.IorNel
-import arrow.core.continuations.Raise
-import arrow.core.continuations.either
-import cz.lastaapps.core.domain.error.MenzaError
-import kotlin.experimental.ExperimentalTypeInference
-
-typealias Outcome<A> = Either<MenzaError, A>
-
-@OptIn(ExperimentalTypeInference::class)
-inline fun <A> outcome(
-    @BuilderInference block: Raise<MenzaError>.() -> A,
-): Outcome<A> = either(block)
-
-typealias OutcomeIor<A> = IorNel<MenzaError, A>
+sealed interface ParsingError : MenzaError.Runtime {
+    sealed interface Buffet : ParsingError {
+        data object DateRangeCannotBeParsed : Buffet
+        data object DayCannotBeParsed : Buffet
+        data object DishCannotBeParsed : Buffet
+        data object DishListCannotBeParsed : Buffet
+    }
+}
