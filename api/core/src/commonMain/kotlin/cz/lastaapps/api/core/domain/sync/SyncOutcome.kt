@@ -17,18 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model
+package cz.lastaapps.api.core.domain.sync
 
-import cz.lastaapps.menza.api.agata.domain.model.common.Menza
+import arrow.core.Nel
+import cz.lastaapps.core.domain.Outcome
+import cz.lastaapps.core.domain.error.MenzaError
 
-internal sealed interface MenzaType {
-    data class Subsystem(val subsystemId: Int) : MenzaType
-    data object Strahov : MenzaType {
-        val instance = Menza(
-            Strahov,
-            "Restaurace Strahov",
-            isOpened = true,
-            isImportant = true
-        )
-    }
+typealias SyncOutcome = Outcome<SyncResult>
+
+interface SyncResult {
+    data object Updated : SyncResult
+    data object Skipped : SyncResult
+    data object Unavailable : SyncResult
+
+    @JvmInline
+    value class Problem(val errors: Nel<MenzaError>) : SyncResult
 }

@@ -19,7 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.domain.repo
 
-import cz.lastaapps.menza.api.agata.domain.model.common.Info
-import cz.lastaapps.menza.api.agata.domain.sync.SyncSource
+import cz.lastaapps.api.core.domain.model.common.Info
+import cz.lastaapps.api.core.domain.sync.SyncSource
 
 internal interface InfoRepository : SyncSource<Info>

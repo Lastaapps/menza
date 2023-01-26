@@ -28,6 +28,7 @@ android {
 
 dependencies {
     commonMainImplementation(projects.core)
+    commonMainImplementation(projects.api.core)
 
     commonMainImplementation(libs.ktor.client.core)
 

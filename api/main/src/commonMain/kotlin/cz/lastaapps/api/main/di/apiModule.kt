@@ -17,28 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-}
+package cz.lastaapps.api.main.di
 
-android {
-    namespace = "cz.lastaapps.api.buffet"
-}
+import cz.lastaapps.api.buffet.di.apiBuffetModule
+import cz.lastaapps.api.core.di.apiCoreModule
+import cz.lastaapps.menza.api.agata.di.apiAgataModule
+import org.koin.dsl.module
 
-dependencies {
-    commonMainImplementation(projects.core)
-    commonMainImplementation(projects.api.core)
-
-    commonMainImplementation(libs.ktor.client.core)
-
-    commonMainImplementation(libs.russhwolf.settins.core)
-    commonMainImplementation(libs.russhwolf.settins.coroutines)
-}
-
-sqldelight {
-    database("BuffetDatabase") {
-        packageName = "cz.lastaapps.api.buffet"
-        sourceFolders = listOf("sqldelight")
-    }
+val apiModule = module {
+    includes(
+        apiAgataModule,
+        apiBuffetModule,
+        apiCoreModule,
+    )
 }

@@ -19,11 +19,11 @@
 
 package cz.lastaapps.menza.api.agata.domain.model.mapers
 
-import cz.lastaapps.menza.api.agata.domain.model.common.Dish
-import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
-import cz.lastaapps.menza.api.agata.domain.model.common.WeekDayDish
-import cz.lastaapps.menza.api.agata.domain.model.common.WeekDish
-import cz.lastaapps.menza.api.agata.domain.model.common.WeekDishCategory
+import cz.lastaapps.api.core.domain.model.common.Dish
+import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.api.core.domain.model.common.WeekDayDish
+import cz.lastaapps.api.core.domain.model.common.WeekDish
+import cz.lastaapps.api.core.domain.model.common.WeekDishCategory
 import cz.lastaapps.menza.api.agata.domain.model.dto.StrahovDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDishDto
 import kotlinx.collections.immutable.persistentListOf

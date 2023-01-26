@@ -17,9 +17,9 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model
+package cz.lastaapps.api.core.domain.model
 
-internal data class HashType(val func: String) {
+data class HashType(val func: String) {
 
     companion object {
         fun menuHash() =

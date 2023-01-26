@@ -17,13 +17,14 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model
+package cz.lastaapps.api.core.domain.sync
 
 import arrow.core.IorNel
+import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.MenzaRaise
 
-internal sealed interface SyncJob<T, R> {
+sealed interface SyncJob<T, R> {
     val fetchApi: suspend MenzaRaise.() -> T
     val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>
     val store: (R) -> Unit
@@ -32,7 +33,8 @@ internal sealed interface SyncJob<T, R> {
 /**
  * Job info for a sync processor using hash
  */
-internal class SyncJobHash<T, R>(
+// TODO consider adding shouldRun condition and movidn this to the Agata module
+class SyncJobHash<T, R>(
     val hashType: HashType,
     val getHashCode: suspend MenzaRaise.() -> String,
     override val fetchApi: suspend MenzaRaise.() -> T,
@@ -43,7 +45,7 @@ internal class SyncJobHash<T, R>(
 /**
  * Job info for a sync processor, no cache check
  */
-internal class SyncJobNoCache<T, R>(
+class SyncJobNoCache<T, R>(
     override val fetchApi: suspend MenzaRaise.() -> T,
     override val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
     override val store: (R) -> Unit,

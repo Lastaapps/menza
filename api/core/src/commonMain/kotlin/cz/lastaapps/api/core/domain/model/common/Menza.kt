@@ -17,12 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model.common
+package cz.lastaapps.api.core.domain.model.common
 
-import cz.lastaapps.menza.api.agata.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.MenzaType
 
-data class Menza internal constructor(
-    internal val type: MenzaType,
+data class Menza constructor(
+    val type: MenzaType,
     val name: String,
     val isOpened: Boolean,
     val isImportant: Boolean, // true if it is not returned only by the AllPodsystem endpoint

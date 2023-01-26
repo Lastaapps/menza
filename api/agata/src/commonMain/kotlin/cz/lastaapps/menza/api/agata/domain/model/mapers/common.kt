@@ -19,6 +19,8 @@
 
 package cz.lastaapps.menza.api.agata.domain.model.mapers
 
+import agata.DishEntity
+
 
 internal fun String.parseSemicolonSeparated() =
     split(';').map { it.toLong() }
@@ -27,3 +29,6 @@ internal fun String.parseAllergens() =
     split(',', ' ', '.' /*just for sure*/, ';', '-', '_', '|')
         .filter { it.isNotBlank() }
         .map { it.toInt() }
+
+internal fun DishEntity.fullName() =
+    name + sideDishA?.let { " $it" } + sideDishB?.let { " $it" }

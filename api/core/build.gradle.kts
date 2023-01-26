@@ -17,11 +17,14 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.sync
+plugins {
+    alias(libs.plugins.lastaapps.kmp.library)
+}
 
-import kotlinx.coroutines.flow.Flow
+android {
+    namespace = "cz.lastaapps.api.core"
+}
 
-interface SyncSource<T> {
-    fun getData(): Flow<T>
-    suspend fun sync(): SyncOutcome
+dependencies {
+    commonMainImplementation(projects.core)
 }

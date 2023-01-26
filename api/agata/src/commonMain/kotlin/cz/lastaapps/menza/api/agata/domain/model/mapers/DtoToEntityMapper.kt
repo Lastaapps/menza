@@ -29,9 +29,9 @@ import agata.OpenTimeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
 import agata.SubsystemEntity
+import cz.lastaapps.api.core.domain.model.common.LatLong
+import cz.lastaapps.api.core.domain.model.common.NewsHeader
 import cz.lastaapps.core.util.takeIfNotBlack
-import cz.lastaapps.menza.api.agata.domain.model.common.LatLong
-import cz.lastaapps.menza.api.agata.domain.model.common.NewsHeader
 import cz.lastaapps.menza.api.agata.domain.model.dto.AddressDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.ContactDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishDto

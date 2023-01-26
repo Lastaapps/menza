@@ -19,6 +19,10 @@
 
 package cz.lastaapps.menza.api.agata.di
 
+import cz.lastaapps.api.core.domain.model.MenzaType.Strahov
+import cz.lastaapps.api.core.domain.model.MenzaType.Subsystem
+import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.CafeteriaApiImpl
 import cz.lastaapps.menza.api.agata.api.DishApi
@@ -36,14 +40,10 @@ import cz.lastaapps.menza.api.agata.data.repo.MenzaListRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.WeekDishRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.WeekDishRepoStrahovImpl
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import cz.lastaapps.menza.api.agata.domain.model.MenzaType.Strahov
-import cz.lastaapps.menza.api.agata.domain.model.MenzaType.Subsystem
-import cz.lastaapps.menza.api.agata.domain.model.common.Menza
 import cz.lastaapps.menza.api.agata.domain.repo.DishListRepo
 import cz.lastaapps.menza.api.agata.domain.repo.InfoRepository
 import cz.lastaapps.menza.api.agata.domain.repo.MenzaListRepo
 import cz.lastaapps.menza.api.agata.domain.repo.WeekRepository
-import cz.lastaapps.menza.api.agata.domain.sync.SyncProcessor
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -52,7 +52,7 @@ import org.koin.dsl.module
 
 internal expect val platform: Module
 
-val api_agata_module = module {
+val apiAgataModule = module {
     includes(platform)
 
     factoryOf(::CafeteriaApiImpl) bind CafeteriaApi::class

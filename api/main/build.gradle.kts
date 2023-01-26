@@ -17,12 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.sync
+plugins {
+    alias(libs.plugins.lastaapps.kmp.library)
+}
 
-import cz.lastaapps.menza.api.agata.domain.model.SyncJob
+android {
+    namespace = "cz.lastaapps.api.main"
+}
 
-
-internal interface SyncProcessor {
-    suspend fun <T, R> run(job: SyncJob<T, R>) = run(listOf(job))
-    suspend fun run(list: Iterable<SyncJob<*, *>>): SyncOutcome
+dependencies {
+    commonMainImplementation(projects.core)
+    commonMainImplementation(projects.api.agata)
+    commonMainImplementation(projects.api.buffet)
+    commonMainImplementation(projects.api.core)
 }

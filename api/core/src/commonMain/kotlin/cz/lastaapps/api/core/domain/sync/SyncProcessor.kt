@@ -17,19 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.sync
+package cz.lastaapps.api.core.domain.sync
 
-import arrow.core.Nel
-import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.domain.error.MenzaError
 
-typealias SyncOutcome = Outcome<SyncResult>
-
-interface SyncResult {
-    data object Updated : SyncResult
-    data object Skipped : SyncResult
-    data object Unavailable : SyncResult
-
-    @JvmInline
-    value class Problem(val errors: Nel<MenzaError>) : SyncResult
+interface SyncProcessor {
+    suspend fun <T, R> run(job: SyncJob<T, R>) = run(listOf(job))
+    suspend fun run(list: Iterable<SyncJob<*, *>>): SyncOutcome
 }

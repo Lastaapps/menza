@@ -26,16 +26,16 @@ import arrow.core.IorNel
 import arrow.core.toNonEmptyListOrNull
 import arrow.fx.coroutines.parMap
 import com.squareup.sqldelight.Transacter
+import cz.lastaapps.api.core.domain.sync.SyncJob
+import cz.lastaapps.api.core.domain.sync.SyncJobHash
+import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
+import cz.lastaapps.api.core.domain.sync.SyncOutcome
+import cz.lastaapps.api.core.domain.sync.SyncProcessor
+import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import cz.lastaapps.menza.api.agata.domain.model.SyncJob
-import cz.lastaapps.menza.api.agata.domain.model.SyncJobHash
-import cz.lastaapps.menza.api.agata.domain.model.SyncJobNoCache
-import cz.lastaapps.menza.api.agata.domain.sync.SyncOutcome
-import cz.lastaapps.menza.api.agata.domain.sync.SyncProcessor
-import cz.lastaapps.menza.api.agata.domain.sync.SyncResult
 import kotlinx.collections.immutable.persistentListOf
 
 

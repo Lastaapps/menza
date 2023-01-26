@@ -17,37 +17,22 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model.common
+package cz.lastaapps.api.core.domain.model.common
 
-import agata.DishEntity
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.datetime.LocalDate
 
-data class DishCategory(
-    val nameShort: String?,
-    val nameCs: String,
-    val nameEn: String?,
-    val dishList: ImmutableList<Dish>,
+data class WeekDayDish(
+    val date: LocalDate,
+    val categories: ImmutableList<WeekDishCategory>,
 )
 
-data class Dish(
-    val amountCs: String?,
-    val amountEn: String?,
-    val nameEn: String?,
-    val nameCs: String?,
-    val priceDiscount: Float?,
-    val priceNormal: Float?,
-    // empty - no allergens
-    // null  - unknown
-    val allergens: ImmutableList<Int>?,
-    val photoLink: String?,
-    val pictogram: ImmutableList<String>,
-    val servingPlaces: ImmutableList<ServingPlace>,
-)
-
-data class ServingPlace(
+data class WeekDishCategory(
     val name: String,
-    val abbrev: String,
+    val dishList: ImmutableList<WeekDish>,
 )
 
-internal fun DishEntity.fullName() =
-    name + sideDishA?.let { " $it" } + sideDishB?.let { " $it" }
+data class WeekDish(
+    val name: String,
+    val amount: String?,
+)

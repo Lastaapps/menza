@@ -17,28 +17,33 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-}
+package cz.lastaapps.api.core.domain.model.common
 
-android {
-    namespace = "cz.lastaapps.api.buffet"
-}
+import kotlinx.collections.immutable.ImmutableList
 
-dependencies {
-    commonMainImplementation(projects.core)
-    commonMainImplementation(projects.api.core)
+data class DishCategory(
+    val nameShort: String?,
+    val nameCs: String,
+    val nameEn: String?,
+    val dishList: ImmutableList<Dish>,
+)
 
-    commonMainImplementation(libs.ktor.client.core)
+data class Dish(
+    val amountCs: String?,
+    val amountEn: String?,
+    val nameEn: String?,
+    val nameCs: String?,
+    val priceDiscount: Float?,
+    val priceNormal: Float?,
+    // empty - no allergens
+    // null  - unknown
+    val allergens: ImmutableList<Int>?,
+    val photoLink: String?,
+    val pictogram: ImmutableList<String>,
+    val servingPlaces: ImmutableList<ServingPlace>,
+)
 
-    commonMainImplementation(libs.russhwolf.settins.core)
-    commonMainImplementation(libs.russhwolf.settins.coroutines)
-}
-
-sqldelight {
-    database("BuffetDatabase") {
-        packageName = "cz.lastaapps.api.buffet"
-        sourceFolders = listOf("sqldelight")
-    }
-}
+data class ServingPlace(
+    val name: String,
+    val abbrev: String,
+)

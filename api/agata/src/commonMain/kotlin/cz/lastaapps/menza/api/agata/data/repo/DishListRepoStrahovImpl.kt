@@ -20,13 +20,13 @@
 package cz.lastaapps.menza.api.agata.data.repo
 
 import arrow.core.rightIor
+import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
+import cz.lastaapps.api.core.domain.sync.SyncOutcome
+import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.menza.api.agata.api.DishApi
-import cz.lastaapps.menza.api.agata.domain.model.SyncJobNoCache
-import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.repo.DishListRepo
-import cz.lastaapps.menza.api.agata.domain.sync.SyncOutcome
-import cz.lastaapps.menza.api.agata.domain.sync.SyncProcessor
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

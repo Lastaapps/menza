@@ -25,7 +25,7 @@ import agata.OpenTimeEntity
 import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.menza.api.agata.domain.model.common.LatLong
+import cz.lastaapps.api.core.domain.model.common.LatLong
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 

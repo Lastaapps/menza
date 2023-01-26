@@ -19,11 +19,11 @@
 
 package cz.lastaapps.menza.api.agata.domain
 
+import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.api.core.domain.model.common.Info
+import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.common.WeekDayDish
 import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
-import cz.lastaapps.menza.api.agata.domain.model.common.Info
-import cz.lastaapps.menza.api.agata.domain.model.common.Menza
-import cz.lastaapps.menza.api.agata.domain.model.common.WeekDayDish
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate

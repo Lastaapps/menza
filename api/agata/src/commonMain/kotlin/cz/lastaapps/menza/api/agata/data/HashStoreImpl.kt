@@ -21,8 +21,8 @@ package cz.lastaapps.menza.api.agata.data
 
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.set
+import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import cz.lastaapps.menza.api.agata.domain.model.HashType
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 

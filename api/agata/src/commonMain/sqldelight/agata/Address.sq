@@ -1,4 +1,4 @@
-import cz.lastaapps.menza.api.agata.domain.model.common.LatLong;
+import cz.lastaapps.api.core.domain.model.common.LatLong;
 
 CREATE TABLE AddressEntity(
     id INTEGER NOT NULL,

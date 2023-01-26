@@ -29,18 +29,17 @@ import agata.OpenTimeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
 import agata.SubsystemEntity
-import cz.lastaapps.menza.api.agata.domain.model.MenzaType.Subsystem
-import cz.lastaapps.menza.api.agata.domain.model.common.Contact
-import cz.lastaapps.menza.api.agata.domain.model.common.Dish
-import cz.lastaapps.menza.api.agata.domain.model.common.DishCategory
-import cz.lastaapps.menza.api.agata.domain.model.common.Info
-import cz.lastaapps.menza.api.agata.domain.model.common.Link
-import cz.lastaapps.menza.api.agata.domain.model.common.Menza
-import cz.lastaapps.menza.api.agata.domain.model.common.NewsHeader
-import cz.lastaapps.menza.api.agata.domain.model.common.OpeningTime
-import cz.lastaapps.menza.api.agata.domain.model.common.PlaceOpeningTime
-import cz.lastaapps.menza.api.agata.domain.model.common.ServingPlace
-import cz.lastaapps.menza.api.agata.domain.model.common.fullName
+import cz.lastaapps.api.core.domain.model.MenzaType.Subsystem
+import cz.lastaapps.api.core.domain.model.common.Contact
+import cz.lastaapps.api.core.domain.model.common.Dish
+import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.api.core.domain.model.common.Info
+import cz.lastaapps.api.core.domain.model.common.Link
+import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.common.NewsHeader
+import cz.lastaapps.api.core.domain.model.common.OpeningTime
+import cz.lastaapps.api.core.domain.model.common.PlaceOpeningTime
+import cz.lastaapps.api.core.domain.model.common.ServingPlace
 import kotlinx.collections.immutable.toImmutableList
 
 internal fun SubsystemEntity.toDomain() =

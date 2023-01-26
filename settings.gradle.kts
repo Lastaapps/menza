@@ -46,6 +46,9 @@ dependencyResolutionManagement {
             }
         }
         maven("https://oss.sonatype.org/content/repositories/snapshots") {
+            mavenContent {
+                snapshotsOnly()
+            }
             content {
                 includeGroup("io.arrow-kt")
             }
@@ -58,6 +61,8 @@ rootProject.name = "Menza"
 include(
     ":api:agata",
     ":api:buffet",
+    ":api:core",
+    ":api:main",
     ":app",
     ":core",
     ":scraping",

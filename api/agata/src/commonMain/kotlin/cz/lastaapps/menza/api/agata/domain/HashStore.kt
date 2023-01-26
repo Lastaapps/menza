@@ -19,7 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.domain
 
-import cz.lastaapps.menza.api.agata.domain.model.HashType
+import cz.lastaapps.api.core.domain.model.HashType
 
 internal interface HashStore {
     suspend fun storeHash(type: HashType, hash: String)
