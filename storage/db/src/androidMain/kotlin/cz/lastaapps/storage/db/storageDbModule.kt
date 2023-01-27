@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,13 +20,9 @@
 package cz.lastaapps.storage.db
 
 import cz.lastaapps.menza.db.MenzaDatabase
-import org.kodein.di.DI
-import org.kodein.di.bindProvider
-import org.kodein.di.bindSingleton
-import org.kodein.di.instance
+import org.koin.dsl.module
 
-@Suppress("RemoveExplicitTypeArguments")
-actual val DIModule = DI.Module("db") {
-    bindProvider<MenzaDriverFactory> { MenzaDriverFactoryFactoryImpl(instance()) }
-    bindSingleton<MenzaDatabase> { createMenzaDatabase(instance()) }
+actual val storageDbModule = module {
+    factory<MenzaDriverFactory> { MenzaDriverFactoryFactoryImpl(get()) }
+    single<MenzaDatabase> { createMenzaDatabase(get()) }
 }

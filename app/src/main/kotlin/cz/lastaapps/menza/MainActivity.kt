@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,14 +27,10 @@ import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import cz.lastaapps.menza.ui.root.AppRoot
 import cz.lastaapps.menza.ui.root.RootViewModel
-import org.kodein.di.DI
-import org.kodein.di.DIAware
-import org.kodein.di.android.closestDI
-import org.kodein.di.android.x.viewmodel.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity(), DIAware {
+class MainActivity : AppCompatActivity() {
 
-    override val di: DI by closestDI()
     private val rootViewModel: RootViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -49,7 +49,7 @@ import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDialog
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewViewModel
-import cz.lastaapps.menza.ui.root.locals.rememberActivityViewModel
+import cz.lastaapps.menza.ui.root.locals.koinActivityViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -172,7 +172,7 @@ private fun WhatsNewButton(modifier: Modifier = Modifier) {
         )
     }
     if (showWhatsNew) {
-        WhatsNewDialog(rememberActivityViewModel<WhatsNewViewModel>().value) {
+        WhatsNewDialog(koinActivityViewModel<WhatsNewViewModel>()) {
             showWhatsNew = false
         }
     }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,14 +36,14 @@ import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewPanel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewViewModel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.whatsNewPanelState
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.root.locals.rememberActivityViewModel
+import cz.lastaapps.menza.ui.root.locals.koinActivityViewModel
 
 @Composable
 fun Panels(
     modifier: Modifier = Modifier,
-    settingsViewModel: SettingsViewModel = rememberActivityViewModel<SettingsViewModel>().value,
-    crashesViewModel: CrashesViewModel = rememberActivityViewModel<CrashesViewModel>().value,
-    whatsNewViewModel: WhatsNewViewModel = rememberActivityViewModel<WhatsNewViewModel>().value,
+    settingsViewModel: SettingsViewModel = koinActivityViewModel<SettingsViewModel>(),
+    crashesViewModel: CrashesViewModel = koinActivityViewModel<CrashesViewModel>(),
+    whatsNewViewModel: WhatsNewViewModel = koinActivityViewModel<WhatsNewViewModel>(),
 ) {
     Box(modifier.animateContentSize()) {
         val showPrice = priceTypeUnspecifiedState(settingsViewModel)

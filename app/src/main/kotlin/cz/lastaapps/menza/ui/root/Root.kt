@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -67,10 +67,10 @@ fun AppRoot(
     val useDark by viewModel.sett.darkMode.collectAsState()
     val useSystem by viewModel.sett.systemTheme.collectAsState()
 
-    val privacyViewModel: PrivacyViewModel by rememberActivityViewModel()
-    val initViewModel: InitViewModel by rememberActivityViewModel()
-    val menzaViewModel: MenzaViewModel by rememberActivityViewModel()
-    val settingsViewModel: SettingsViewModel by rememberActivityViewModel()
+    val privacyViewModel: PrivacyViewModel = koinActivityViewModel()
+    val initViewModel: InitViewModel = koinActivityViewModel()
+    val menzaViewModel: MenzaViewModel = koinActivityViewModel()
+    val settingsViewModel: SettingsViewModel = koinActivityViewModel()
 
     AppTheme(
         darkTheme = useDark.resolveShouldUseDark(),
@@ -155,7 +155,7 @@ private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsVie
                         TodayDest(
                             navController = navHostState,
                             menzaId = menzaId,
-                            todayViewModel = rememberActivityViewModel<TodayViewModel>().value,
+                            todayViewModel = koinActivityViewModel<TodayViewModel>(),
                             settingsViewModel = settingsViewModel,
                         )
                     }
@@ -163,7 +163,7 @@ private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsVie
                         WeekLayout(
                             navController = navHostState,
                             menzaId = menzaId,
-                            weekViewModel = rememberActivityViewModel<WeekViewModel>().value,
+                            weekViewModel = koinActivityViewModel<WeekViewModel>(),
                         )
                     }
                     composable(Dest.R.info) {
@@ -171,7 +171,7 @@ private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsVie
                             navController = navHostState,
                             snackbarHostState = snackbarHostState,
                             menzaId = menzaId,
-                            infoViewModel = rememberActivityViewModel<InfoViewModel>().value,
+                            infoViewModel = koinActivityViewModel<InfoViewModel>(),
                         )
                     }
                     composable(Dest.R.settings) {

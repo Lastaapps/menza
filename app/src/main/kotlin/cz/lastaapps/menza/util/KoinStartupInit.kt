@@ -17,16 +17,33 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage.repo
+package cz.lastaapps.menza.util
 
-import kotlinx.coroutines.Dispatchers
-import org.koin.dsl.module
+import android.content.Context
+import androidx.annotation.Keep
+import androidx.startup.Initializer
+import cz.lastaapps.menza.di.appModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.lighthousegames.logging.logging
 
-val repoModule = module {
-    single<AllergenRepo> { AllergenRepoImpl(get(), get(), Dispatchers.IO) }
-    single<ContactsRepo> { ContactsRepoImpl(get(), get(), Dispatchers.IO) }
-    single<LocationRepo> { LocationRepoImpl(get(), get(), Dispatchers.IO) }
-    single<MenzaRepo> { MenzaRepoImpl(get(), get(), Dispatchers.IO) }
-    single<MessagesRepo> { MessagesRepoImpl(get(), get(), Dispatchers.IO) }
-    single<OpeningHoursRepo> { OpeningHoursRepoImpl(get(), get(), Dispatchers.IO) }
+@Keep
+@Suppress("unused")
+class KoinStartupInit : Initializer<Unit> {
+    companion object {
+        private val log = logging()
+    }
+
+    override fun create(context: Context) {
+        log.d { "Starting" }
+
+        startKoin {
+            androidLogger()
+            androidContext(context.applicationContext)
+            modules(appModule)
+        }
+    }
+
+    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }

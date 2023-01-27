@@ -17,16 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.storage.repo
+package cz.lastaapps.menza.util
 
-import kotlinx.coroutines.Dispatchers
-import org.koin.dsl.module
+import android.content.Context
+import androidx.annotation.Keep
+import androidx.startup.AppInitializer
+import androidx.startup.Initializer
+import cz.lastaapps.crash.StartInit
+import org.lighthousegames.logging.logging
 
-val repoModule = module {
-    single<AllergenRepo> { AllergenRepoImpl(get(), get(), Dispatchers.IO) }
-    single<ContactsRepo> { ContactsRepoImpl(get(), get(), Dispatchers.IO) }
-    single<LocationRepo> { LocationRepoImpl(get(), get(), Dispatchers.IO) }
-    single<MenzaRepo> { MenzaRepoImpl(get(), get(), Dispatchers.IO) }
-    single<MessagesRepo> { MessagesRepoImpl(get(), get(), Dispatchers.IO) }
-    single<OpeningHoursRepo> { OpeningHoursRepoImpl(get(), get(), Dispatchers.IO) }
+@Keep
+@Suppress("unused")
+internal class ReEnableCrashInit : Initializer<Unit> {
+    companion object {
+        private val log = logging()
+    }
+
+    override fun create(context: Context) {
+        log.d { "Starting" }
+        AppInitializer.getInstance(context)
+            .initializeComponent(StartInit::class.java)
+    }
+
+    override fun dependencies(): List<Class<out Initializer<*>>> =
+        listOf(KoinStartupInit::class.java)
 }

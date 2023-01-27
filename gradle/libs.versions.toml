@@ -25,7 +25,6 @@ google-ksp = "1.8.0-1.0.8"
 # @keep
 java-jvmTarget = "11"
 junit5-bom = "5.9.2"
-kodein = "7.18.0"
 koin = "3.3.0"
 koin-annotations = "1.0.3"
 kotest = "5.5.4"
@@ -165,12 +164,6 @@ junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5-bom" }
 junit5-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 junit5-jupiter-runtime = { module = "org.junit.jupiter:junit-jupiter-engine" }
 kmLogging = "org.lighthousegames:logging:1.1.2"
-kodein-androidCore = { module = "org.kodein.di:kodein-di-framework-android-core", version.ref = "kodein" }
-kodein-androidx = { module = "org.kodein.di:kodein-di-framework-android-x", version.ref = "kodein" }
-kodein-androidxViewmode = { module = "org.kodein.di:kodein-di-framework-android-x-viewmodel", version.ref = "kodein" }
-kodein-androidxViewmodeSavedstate = { module = "org.kodein.di:kodein-di-framework-android-x-viewmodel-savedstate", version.ref = "kodein" }
-kodein-compose = { module = "org.kodein.di:kodein-di-framework-compose", version.ref = "kodein" }
-kodein-core = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
 koin-android-compose = "io.insert-koin:koin-androidx-compose:3.4.1"
 koin-android-core = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-navigation = "io.insert-koin:koin-androidx-navigation:3.3.2"

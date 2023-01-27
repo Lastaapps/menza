@@ -103,7 +103,6 @@ class KMPLibraryConvention : BasePlugin({
                     implementation(libs.kotlinx.dateTime)
                     implementation(libs.kotlinx.collection)
                     implementation(libs.kotlinx.serializationJson)
-                    implementation(libs.kodein.core)
                     implementation(libs.koin.core)
 //                    implementation(libs.koin.annotations)
                     implementation(libs.kmLogging)
@@ -121,11 +120,7 @@ class KMPLibraryConvention : BasePlugin({
 
             getByName("androidMain") {
                 dependencies {
-                    // implementation(libs.koin.android.core)
-                    implementation(libs.kodein.androidCore)
-                    implementation(libs.kodein.androidx)
-                    implementation(libs.kodein.androidxViewmode)
-                    implementation(libs.kodein.androidxViewmodeSavedstate)
+                     implementation(libs.koin.android.core)
                 }
             }
 

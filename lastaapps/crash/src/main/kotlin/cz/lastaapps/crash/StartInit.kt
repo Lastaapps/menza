@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,23 +22,21 @@ package cz.lastaapps.crash
 import android.content.Context
 import androidx.annotation.Keep
 import androidx.startup.Initializer
-import org.kodein.di.android.closestDI
-import org.kodein.di.instance
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import org.lighthousegames.logging.logging
 
 @Keep
-internal class StartInit : Initializer<Unit> {
+class StartInit : Initializer<Unit>, KoinComponent {
 
     companion object {
         private val log = logging()
     }
 
     override fun create(context: Context) {
-        val di by closestDI(context)
-        val database: CrashDatabase by di.instance()
-
         log.i { "Initializing crash storage" }
-        Catcher.register(database)
+
+        Catcher.register(get())
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()

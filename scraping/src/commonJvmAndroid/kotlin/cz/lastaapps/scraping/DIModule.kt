@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,17 +19,15 @@
 
 package cz.lastaapps.scraping
 
-import org.kodein.di.DI
-import org.kodein.di.bindProvider
+import org.koin.dsl.module
 
-@Suppress("RemoveExplicitTypeArguments")
-actual val DIModule = DI.Module("scraping") {
-    bindProvider<AllergenScraper> { AllergenScraperImpl }
-    bindProvider<ContactsScraper> { ContactsScraperImpl }
-    bindProvider<LocationScraper> { LocationScraperImpl }
-    bindProvider<MenzaScraper> { MenzaScraperImpl }
-    bindProvider<MessagesScraper> { MessagesScraperImpl }
-    bindProvider<OpeningHoursScraper> { OpeningHoursScraperImpl }
-    bindProvider<TodayScraper> { TodayScraperImpl }
-    bindProvider<WeekScraper> { WeekScraperImpl }
+actual val scrapingModule = module {
+    factory<AllergenScraper> { AllergenScraperImpl }
+    factory<ContactsScraper> { ContactsScraperImpl }
+    factory<LocationScraper> { LocationScraperImpl }
+    factory<MenzaScraper> { MenzaScraperImpl }
+    factory<MessagesScraper> { MessagesScraperImpl }
+    factory<OpeningHoursScraper> { OpeningHoursScraperImpl }
+    factory<TodayScraper> { TodayScraperImpl }
+    factory<WeekScraper> { WeekScraperImpl }
 }

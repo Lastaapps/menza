@@ -52,6 +52,8 @@ android {
 
 dependencies {
 
+    implementation(projects.api.main)
+    implementation(projects.core)
     implementation(projects.entity)
     implementation(projects.scraping)
     implementation(projects.storage.db)

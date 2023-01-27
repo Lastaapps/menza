@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,12 +22,18 @@ package cz.lastaapps.menza.ui.root.locals
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
-import androidx.lifecycle.*
-import org.kodein.di.compose.localDI
-import org.kodein.di.direct
-import org.kodein.di.instance
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.ViewTreeViewModelStoreOwner
+import androidx.lifecycle.viewmodel.CreationExtras
+import org.koin.androidx.compose.defaultExtras
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.annotation.KoinInternalApi
+import org.koin.core.context.GlobalContext
+import org.koin.core.parameter.ParametersDefinition
+import org.koin.core.qualifier.Qualifier
+import org.koin.core.scope.Scope
 
 // Stolen from LocalViewModelOwner
 object LocalActivityViewModelOwner {
@@ -45,23 +51,15 @@ object LocalActivityViewModelOwner {
     }
 }
 
+@OptIn(KoinInternalApi::class)
 @Composable
-inline fun <reified VM : ViewModel> rememberActivityViewModel(tag: Any? = null): ViewModelLazy<VM> =
-    with(localDI()) {
-        val viewModelStoreOwner = LocalActivityViewModelOwner.current
-
-        remember {
-            ViewModelLazy(
-                viewModelClass = VM::class,
-                storeProducer = { viewModelStoreOwner.viewModelStore },
-                factoryProducer = {
-                    object : ViewModelProvider.Factory {
-                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                            @Suppress("UNCHECKED_CAST")
-                            return direct.instance<VM>(tag) as T
-                        }
-                    }
-                }
-            )
-        }
-    }
+inline fun <reified VM : ViewModel> koinActivityViewModel(
+    qualifier: Qualifier? = null,
+    viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalActivityViewModelOwner.current) {
+        "No ViewModelStoreOwner was provided via LocalActivityViewModelStoreOwner"
+    },
+    key: String? = null,
+    extras: CreationExtras = defaultExtras(viewModelStoreOwner),
+    scope: Scope = GlobalContext.get().scopeRegistry.rootScope,
+    noinline parameters: ParametersDefinition? = null,
+): VM = koinViewModel<VM>(qualifier, viewModelStoreOwner, key, extras, scope, parameters)

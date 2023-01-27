@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,14 +21,37 @@ package cz.lastaapps.menza.ui.dests.settings
 
 import android.content.Intent
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.ReceiptLong
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -55,7 +78,7 @@ import cz.lastaapps.menza.ui.dests.settings.store.imagesOnMetered
 import cz.lastaapps.menza.ui.dests.settings.store.priceType
 import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
-import cz.lastaapps.menza.ui.root.locals.rememberActivityViewModel
+import cz.lastaapps.menza.ui.root.locals.koinActivityViewModel
 import cz.lastaapps.menza.ui.theme.isDynamicThemeSupported
 
 @Composable
@@ -273,7 +296,7 @@ private fun ReportButton(modifier: Modifier = Modifier) {
 @Composable
 fun CrashesButton(
     modifier: Modifier = Modifier,
-    viewModel: CrashesViewModel = rememberActivityViewModel<CrashesViewModel>().value
+    viewModel: CrashesViewModel = koinActivityViewModel<CrashesViewModel>(),
 ) {
     var dialogShown by remember { mutableStateOf(false) }
 
