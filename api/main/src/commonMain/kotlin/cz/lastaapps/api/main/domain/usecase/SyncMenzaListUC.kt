@@ -17,15 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.di
+package cz.lastaapps.api.main.domain.usecase
 
+import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.core.domain.UCContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.datetime.Clock
-import org.koin.dsl.bind
-import org.koin.dsl.module
+import cz.lastaapps.core.domain.UseCase
 
-val coreModule = module {
-    single { Clock.System } bind Clock::class
-    single { UCContext(Dispatchers.Default) }
+class SyncMenzaListUC(
+    context: UCContext,
+    private val menzaRepo: MenzaRepo,
+) : UseCase(context) {
+    suspend operator fun invoke() = launch {
+        menzaRepo.getData()
+    }
 }

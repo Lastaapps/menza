@@ -17,15 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.di
+package cz.lastaapps.core.domain
 
-import cz.lastaapps.core.domain.UCContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.datetime.Clock
-import org.koin.dsl.bind
-import org.koin.dsl.module
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.withContext
 
-val coreModule = module {
-    single { Clock.System } bind Clock::class
-    single { UCContext(Dispatchers.Default) }
+@JvmInline
+value class UCContext(val context: CoroutineContext)
+
+abstract class UseCase(private val context: UCContext) {
+    protected suspend fun launch(block: suspend CoroutineScope.() -> Unit) {
+        withContext(context.context, block)
+    }
 }

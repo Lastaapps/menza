@@ -24,7 +24,16 @@ import cz.lastaapps.api.core.di.apiCoreModule
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.main.data.MenzaMasterRepoImpl
+import cz.lastaapps.api.main.domain.usecase.GetInfoUC
+import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
+import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
+import cz.lastaapps.api.main.domain.usecase.GetWeekDishListUC
+import cz.lastaapps.api.main.domain.usecase.SyncInfoUC
+import cz.lastaapps.api.main.domain.usecase.SyncMenzaListUC
+import cz.lastaapps.api.main.domain.usecase.SyncTodayDishListUC
+import cz.lastaapps.api.main.domain.usecase.SyncWeekDishListUC
 import cz.lastaapps.menza.api.agata.di.apiAgataModule
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
@@ -36,6 +45,15 @@ val apiModule = module {
     )
 
     single { MenzaMasterRepoImpl() }
+
+    factoryOf(::GetInfoUC)
+    factoryOf(::SyncInfoUC)
+    factoryOf(::GetMenzaListUC)
+    factoryOf(::SyncMenzaListUC)
+    factoryOf(::GetTodayDishListUC)
+    factoryOf(::SyncTodayDishListUC)
+    factoryOf(::GetWeekDishListUC)
+    factoryOf(::SyncWeekDishListUC)
 }
 
 private fun Scope.MenzaMasterRepoImpl() =

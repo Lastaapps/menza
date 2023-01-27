@@ -17,15 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.di
+package cz.lastaapps.api.main.domain.usecase
 
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.core.domain.UCContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.datetime.Clock
-import org.koin.dsl.bind
-import org.koin.dsl.module
+import cz.lastaapps.core.domain.UseCase
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
-val coreModule = module {
-    single { Clock.System } bind Clock::class
-    single { UCContext(Dispatchers.Default) }
+class GetTodayDishListUC(
+    context: UCContext,
+) : UseCase(context), KoinComponent {
+    suspend operator fun invoke(menza: MenzaType) = launch {
+        get<TodayDishRepo> { parametersOf(menza) }.getData()
+    }
 }
