@@ -19,8 +19,8 @@
 
 package cz.lastaapps.api.core.domain.repo
 
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.common.WeekDayDish
 import cz.lastaapps.api.core.domain.sync.SyncSource
 import kotlinx.collections.immutable.ImmutableList
 
-interface MenzaListRepo : SyncSource<ImmutableList<Menza>>
+interface WeekDishRepo : SyncSource<ImmutableList<WeekDayDish>>

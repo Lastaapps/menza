@@ -19,34 +19,38 @@
 
 package cz.lastaapps.menza.api.agata.data.repo
 
+import arrow.core.right
 import arrow.core.rightIor
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.api.core.domain.model.HashType
-import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.common.Menza
-import cz.lastaapps.api.core.domain.repo.MenzaListRepo
+import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
+import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-internal class MenzaListRepoImpl(
+internal class MenzaSubsystemRepoImpl(
     private val api: CafeteriaApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
     hashStore: HashStore,
-) : MenzaListRepo {
+) : MenzaRepo {
 
     override fun getData(): Flow<ImmutableList<Menza>> =
         db.subsystemQueries.getAll()
@@ -54,7 +58,6 @@ internal class MenzaListRepoImpl(
             .mapToList()
             .map { it.map { item -> item.toDomain() } }
             .map { it.toPersistentList() }
-            .map { it.add(MenzaType.Agata.Strahov.instance) }
 
     private val subsystemJob =
         SyncJobHash(
@@ -84,4 +87,20 @@ internal class MenzaListRepoImpl(
 
     override suspend fun sync(): SyncOutcome =
         processor.runSync(subsystemJob, db)
+}
+
+internal object MenzaStrahovRepoImpl : MenzaRepo {
+    override fun getData(): Flow<ImmutableList<Menza>> = flow {
+        @Suppress("SpellCheckingInspection")
+        persistentListOf(
+            Menza(
+                type = Strahov,
+                name = "Restaurace Strahov",
+                isOpened = true,
+                isImportant = true
+            )
+        ).let { emit(it) }
+    }
+
+    override suspend fun sync(): SyncOutcome = SyncResult.Skipped.right()
 }

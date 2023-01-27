@@ -22,7 +22,7 @@ package cz.lastaapps.menza.api.agata.data.repo
 import arrow.core.right
 import arrow.core.rightIor
 import cz.lastaapps.api.core.domain.model.common.WeekDayDish
-import cz.lastaapps.api.core.domain.repo.WeekRepository
+import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
@@ -40,7 +40,7 @@ internal class WeekDishRepoImpl(
     private val subsystemId: Int,
     private val dishApi: DishApi,
     private val processor: SyncProcessor,
-) : WeekRepository {
+) : WeekDishRepo {
 
     private val weekDishList = MutableStateFlow<ImmutableList<WeekDayDish>>(persistentListOf())
 
@@ -62,7 +62,7 @@ internal class WeekDishRepoImpl(
         processor.runSync(syncJob)
 }
 
-internal object WeekRepoStrahovImpl : WeekRepository {
+internal object WeekRepoStrahovImpl : WeekDishRepo {
     override fun getData(): Flow<ImmutableList<WeekDayDish>> = flow { emit(persistentListOf()) }
     override suspend fun sync(): SyncOutcome = SyncResult.Unavailable.right()
 }

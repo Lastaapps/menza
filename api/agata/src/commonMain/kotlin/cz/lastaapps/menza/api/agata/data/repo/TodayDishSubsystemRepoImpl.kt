@@ -29,9 +29,8 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.api.core.domain.model.common.DishCategory
-import cz.lastaapps.api.core.domain.repo.DishListRepo
+import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.runSync
@@ -39,6 +38,7 @@ import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import kotlinx.collections.immutable.ImmutableList
@@ -51,14 +51,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-internal class DishListRepoSubsystemImpl(
+internal class TodayDishSubsystemRepoImpl(
     private val subsystemId: Int,
     private val cafeteriaApi: CafeteriaApi,
     private val dishApi: DishApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
     hashStore: HashStore,
-) : DishListRepo {
+) : TodayDishRepo {
     override fun getData(): Flow<ImmutableList<DishCategory>> = flow {
         // Get dish list
         db.dishQueries.getForSubsystem(subsystemId.toLong())

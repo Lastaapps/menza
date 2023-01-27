@@ -19,20 +19,22 @@
 
 package cz.lastaapps.api.core.domain.model
 
-import cz.lastaapps.api.core.domain.model.common.Menza
+import org.koin.core.qualifier.named
 
 // All the types must have unique names, or the DI will break
 sealed interface MenzaType {
+    companion object {
+        val all = listOf(
+            named<Agata.Strahov>(),
+            named<Agata.Subsystem>(),
+            named<Buffet.FS>(),
+            named<Buffet.FEL>(),
+        )
+    }
+
     sealed interface Agata : MenzaType {
         data class Subsystem(val subsystemId: Int) : Agata
-        data object Strahov : Agata {
-            val instance = Menza(
-                Strahov,
-                "Restaurace Strahov",
-                isOpened = true,
-                isImportant = true
-            )
-        }
+        data object Strahov : Agata
     }
 
     sealed interface Buffet : MenzaType {

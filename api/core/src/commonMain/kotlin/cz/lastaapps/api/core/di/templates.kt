@@ -20,17 +20,22 @@
 package cz.lastaapps.api.core.di
 
 import cz.lastaapps.api.core.domain.model.MenzaType
-import cz.lastaapps.api.core.domain.repo.DishListRepo
-import cz.lastaapps.api.core.domain.repo.InfoRepository
-import cz.lastaapps.api.core.domain.repo.WeekRepository
+import cz.lastaapps.api.core.domain.repo.InfoRepo
+import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.core.domain.repo.TodayDishRepo
+import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 
 inline fun <reified T : MenzaType> Module.registerMenzaType(
-    crossinline dishRepo: Scope.(T) -> DishListRepo,
-    crossinline infoRepo: Scope.(T) -> InfoRepository,
-    crossinline weekRepo: Scope.(T) -> WeekRepository,
+    crossinline menzaRepo: Scope.() -> MenzaRepo,
+    crossinline dishRepo: Scope.(T) -> TodayDishRepo,
+    crossinline infoRepo: Scope.(T) -> InfoRepo,
+    crossinline weekRepo: Scope.(T) -> WeekDishRepo,
 ) {
+    single(named<T>()) { menzaRepo() }
+
     scope<T> {
         scoped { (menza: T) -> dishRepo(menza) }
         scoped { (menza: T) -> infoRepo(menza) }

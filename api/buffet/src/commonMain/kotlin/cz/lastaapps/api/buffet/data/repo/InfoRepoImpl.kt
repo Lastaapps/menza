@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.buffet.data
+package cz.lastaapps.api.buffet.data.repo
 
 import arrow.core.right
 import cz.lastaapps.api.buffet.domain.model.BuffetType
@@ -28,7 +28,7 @@ import cz.lastaapps.api.core.domain.model.common.Info
 import cz.lastaapps.api.core.domain.model.common.Link
 import cz.lastaapps.api.core.domain.model.common.OpeningTime
 import cz.lastaapps.api.core.domain.model.common.PlaceOpeningTime
-import cz.lastaapps.api.core.domain.repo.InfoRepository
+import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import kotlinx.collections.immutable.persistentListOf
@@ -37,9 +37,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 
-internal class InfoRepositoryImpl(
+internal class InfoRepoImpl(
     private val type: BuffetType,
-) : InfoRepository {
+) : InfoRepo {
     override fun getData(): Flow<Info> = flow {
         // I don't wanna parse this shit, really
         emit(

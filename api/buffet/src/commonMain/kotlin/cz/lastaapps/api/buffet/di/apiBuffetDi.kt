@@ -22,11 +22,13 @@ package cz.lastaapps.api.buffet.di
 import cz.lastaapps.api.buffet.api.BuffetApi
 import cz.lastaapps.api.buffet.api.BuffetApiImpl
 import cz.lastaapps.api.buffet.data.BuffetDatabaseFactory
-import cz.lastaapps.api.buffet.data.DishLogicImpl
-import cz.lastaapps.api.buffet.data.InfoRepositoryImpl
-import cz.lastaapps.api.buffet.data.TodayDishRepository
 import cz.lastaapps.api.buffet.data.ValidityStoreImpl
-import cz.lastaapps.api.buffet.data.WeekDishRepository
+import cz.lastaapps.api.buffet.data.repo.DishLogicImpl
+import cz.lastaapps.api.buffet.data.repo.InfoRepoImpl
+import cz.lastaapps.api.buffet.data.repo.MenzaFELRepoImpl
+import cz.lastaapps.api.buffet.data.repo.MenzaFSRepoImpl
+import cz.lastaapps.api.buffet.data.repo.TodayDishRepository
+import cz.lastaapps.api.buffet.data.repo.WeekDishRepository
 import cz.lastaapps.api.buffet.domain.ValidityStore
 import cz.lastaapps.api.buffet.domain.model.toType
 import cz.lastaapps.api.core.di.registerMenzaType
@@ -48,14 +50,18 @@ val apiBuffetModule = module {
     single { BuffetDatabaseFactory.createDatabase(get()) }
 
     singleOf(::DishLogicImpl)
+    // FS
     registerMenzaType<MenzaType.Buffet.FS>(
+        menzaRepo = { MenzaFSRepoImpl },
         dishRepo = { TodayDishRepository(it.toType(), get()) },
-        infoRepo = { InfoRepositoryImpl(it.toType()) },
+        infoRepo = { InfoRepoImpl(it.toType()) },
         weekRepo = { WeekDishRepository(it.toType(), get()) }
     )
+    // FEL
     registerMenzaType<MenzaType.Buffet.FEL>(
+        menzaRepo = { MenzaFELRepoImpl },
         dishRepo = { TodayDishRepository(it.toType(), get()) },
-        infoRepo = { InfoRepositoryImpl(it.toType()) },
+        infoRepo = { InfoRepoImpl(it.toType()) },
         weekRepo = { WeekDishRepository(it.toType(), get()) }
     )
 }

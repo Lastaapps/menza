@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.domain.model
+package cz.lastaapps.menza.api.agata.domain.model
 
 data class HashType(val func: String) {
 

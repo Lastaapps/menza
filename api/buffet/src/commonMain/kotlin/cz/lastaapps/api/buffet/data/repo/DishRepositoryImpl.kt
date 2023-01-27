@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.buffet.data
+package cz.lastaapps.api.buffet.data.repo
 
 import arrow.core.None
 import arrow.core.Some
@@ -34,8 +34,8 @@ import cz.lastaapps.api.buffet.domain.model.mappers.toDomainWeek
 import cz.lastaapps.api.buffet.domain.model.mappers.toEntity
 import cz.lastaapps.api.core.domain.model.common.DishCategory
 import cz.lastaapps.api.core.domain.model.common.WeekDayDish
-import cz.lastaapps.api.core.domain.repo.DishListRepo
-import cz.lastaapps.api.core.domain.repo.WeekRepository
+import cz.lastaapps.api.core.domain.repo.TodayDishRepo
+import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncJob
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
@@ -97,7 +97,7 @@ internal class DishLogicImpl(
 internal class WeekDishRepository(
     private val type: BuffetType,
     private val logic: DishLogicImpl,
-) : WeekRepository {
+) : WeekDishRepo {
     override fun getData(): Flow<ImmutableList<WeekDayDish>> = logic.getDataWeek(type)
     override suspend fun sync(): SyncOutcome = logic.sync()
 }
@@ -105,7 +105,7 @@ internal class WeekDishRepository(
 internal class TodayDishRepository(
     private val type: BuffetType,
     private val logic: DishLogicImpl,
-) : DishListRepo {
+) : TodayDishRepo {
     override fun getData(): Flow<ImmutableList<DishCategory>> = logic.getDataToday(type)
     override suspend fun sync(): SyncOutcome = logic.sync()
 }

@@ -21,7 +21,7 @@ package cz.lastaapps.menza.api.agata.di
 
 import cz.lastaapps.api.core.di.registerMenzaType
 import cz.lastaapps.api.core.domain.model.MenzaType
-import cz.lastaapps.api.core.domain.repo.MenzaListRepo
+import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.CafeteriaApiImpl
 import cz.lastaapps.menza.api.agata.api.DishApi
@@ -30,11 +30,12 @@ import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.api.SubsystemApiImpl
 import cz.lastaapps.menza.api.agata.data.AgataDatabaseFactory
 import cz.lastaapps.menza.api.agata.data.HashStoreImpl
-import cz.lastaapps.menza.api.agata.data.repo.DishListRepoStrahovImpl
-import cz.lastaapps.menza.api.agata.data.repo.DishListRepoSubsystemImpl
-import cz.lastaapps.menza.api.agata.data.repo.InfoRepositoryImpl
-import cz.lastaapps.menza.api.agata.data.repo.InfoRepositoryStrahovImpl
-import cz.lastaapps.menza.api.agata.data.repo.MenzaListRepoImpl
+import cz.lastaapps.menza.api.agata.data.repo.InfoRepoImpl
+import cz.lastaapps.menza.api.agata.data.repo.InfoStrahovRepoImpl
+import cz.lastaapps.menza.api.agata.data.repo.MenzaStrahovRepoImpl
+import cz.lastaapps.menza.api.agata.data.repo.MenzaSubsystemRepoImpl
+import cz.lastaapps.menza.api.agata.data.repo.TodayDishStrahovRepoImpl
+import cz.lastaapps.menza.api.agata.data.repo.TodayDishSubsystemRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.WeekDishRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.WeekRepoStrahovImpl
 import cz.lastaapps.menza.api.agata.domain.HashStore
@@ -58,20 +59,22 @@ val apiAgataModule = module {
 
     // Repos
     // Menza list
-    singleOf(::MenzaListRepoImpl) bind MenzaListRepo::class
+    singleOf(::MenzaSubsystemRepoImpl) bind MenzaRepo::class
 
     registerMenzaType<MenzaType.Agata.Strahov>(
-        dishRepo = { DishListRepoStrahovImpl(get(), get()) },
-        infoRepo = { InfoRepositoryStrahovImpl },
+        menzaRepo = { MenzaSubsystemRepoImpl(get(), get(), get(), get()) },
+        dishRepo = { TodayDishStrahovRepoImpl(get(), get()) },
+        infoRepo = { InfoStrahovRepoImpl },
         weekRepo = { WeekRepoStrahovImpl },
     )
 
     registerMenzaType<MenzaType.Agata.Subsystem>(
+        menzaRepo = { MenzaStrahovRepoImpl },
         dishRepo = { menza ->
-            DishListRepoSubsystemImpl(menza.subsystemId, get(), get(), get(), get(), get())
+            TodayDishSubsystemRepoImpl(menza.subsystemId, get(), get(), get(), get(), get())
         },
         infoRepo = { menza ->
-            InfoRepositoryImpl(menza.subsystemId, get(), get(), get(), get())
+            InfoRepoImpl(menza.subsystemId, get(), get(), get(), get())
         },
         weekRepo = { menza ->
             WeekDishRepoImpl(menza.subsystemId, get(), get())

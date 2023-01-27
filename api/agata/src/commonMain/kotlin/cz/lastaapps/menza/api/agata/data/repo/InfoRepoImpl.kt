@@ -25,10 +25,9 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.api.core.domain.model.common.Info
 import cz.lastaapps.api.core.domain.model.common.NewsHeader
-import cz.lastaapps.api.core.domain.repo.InfoRepository
+import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
@@ -38,6 +37,7 @@ import cz.lastaapps.core.util.combine6
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toNews
@@ -45,13 +45,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 
-internal class InfoRepositoryImpl(
+internal class InfoRepoImpl(
     private val subsystemId: Int,
     private val subsystemApi: SubsystemApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
     hashStore: HashStore,
-) : InfoRepository {
+) : InfoRepo {
 
     private val newsFlow = MutableStateFlow<NewsHeader?>(null)
 
@@ -152,7 +152,7 @@ internal class InfoRepositoryImpl(
         processor.runSync(jobs, db)
 }
 
-internal object InfoRepositoryStrahovImpl : InfoRepository {
+internal object InfoStrahovRepoImpl : InfoRepo {
     private val flow = flow { emit(Info.empty) }
 
     override fun getData(): Flow<Info> = flow

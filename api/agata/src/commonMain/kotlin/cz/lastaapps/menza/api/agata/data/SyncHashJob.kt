@@ -22,11 +22,11 @@ package cz.lastaapps.menza.api.agata.data
 import arrow.core.IorNel
 import arrow.core.None
 import arrow.core.Some
-import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.api.core.domain.sync.SyncJob
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.MenzaRaise
 import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.model.HashType
 
 /**
  * Job info for a sync processor using hash

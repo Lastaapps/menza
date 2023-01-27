@@ -25,9 +25,9 @@ import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
-import cz.lastaapps.api.core.domain.repo.DishListRepo
-import cz.lastaapps.api.core.domain.repo.InfoRepository
-import cz.lastaapps.api.core.domain.repo.WeekRepository
+import cz.lastaapps.api.core.domain.repo.InfoRepo
+import cz.lastaapps.api.core.domain.repo.TodayDishRepo
+import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -54,15 +54,15 @@ val apiCoreModule = module {
 
     factory { (menza: MenzaType) ->
         get<MenzaTypeScope> { parametersOf(menza) }
-            .scope.get<DishListRepo> { parametersOf(menza) }
+            .scope.get<TodayDishRepo> { parametersOf(menza) }
     }
     factory { (menza: MenzaType) ->
         get<MenzaTypeScope> { parametersOf(menza) }
-            .scope.get<InfoRepository> { parametersOf(menza) }
+            .scope.get<InfoRepo> { parametersOf(menza) }
     }
     factory { (menza: MenzaType) ->
         get<MenzaTypeScope> { parametersOf(menza) }
-            .scope.get<WeekRepository> { parametersOf(menza) }
+            .scope.get<WeekDishRepo> { parametersOf(menza) }
     }
 
 

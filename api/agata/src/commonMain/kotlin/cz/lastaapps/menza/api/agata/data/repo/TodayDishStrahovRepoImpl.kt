@@ -21,7 +21,7 @@ package cz.lastaapps.menza.api.agata.data.repo
 
 import arrow.core.rightIor
 import cz.lastaapps.api.core.domain.model.common.DishCategory
-import cz.lastaapps.api.core.domain.repo.DishListRepo
+import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
@@ -34,10 +34,10 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-internal class DishListRepoStrahovImpl(
+internal class TodayDishStrahovRepoImpl(
     private val dishApi: DishApi,
     private val processor: SyncProcessor,
-) : DishListRepo {
+) : TodayDishRepo {
 
     private val dishList = MutableStateFlow<ImmutableList<DishCategory>>(persistentListOf())
 

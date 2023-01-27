@@ -21,7 +21,11 @@ package cz.lastaapps.api.main.di
 
 import cz.lastaapps.api.buffet.di.apiBuffetModule
 import cz.lastaapps.api.core.di.apiCoreModule
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.main.data.MenzaMasterRepoImpl
 import cz.lastaapps.menza.api.agata.di.apiAgataModule
+import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
 val apiModule = module {
@@ -30,4 +34,13 @@ val apiModule = module {
         apiBuffetModule,
         apiCoreModule,
     )
+
+    single { MenzaMasterRepoImpl() }
 }
+
+private fun Scope.MenzaMasterRepoImpl() =
+    MenzaType.all.map { name ->
+        get<MenzaRepo>(name)
+    }.let {
+        MenzaMasterRepoImpl(it)
+    }
