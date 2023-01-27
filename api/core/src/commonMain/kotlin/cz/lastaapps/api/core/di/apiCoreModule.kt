@@ -19,6 +19,7 @@
 
 package cz.lastaapps.api.core.di
 
+import cz.lastaapps.api.core.data.SyncProcessorImpl
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
@@ -27,9 +28,12 @@ import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
 import cz.lastaapps.api.core.domain.repo.DishListRepo
 import cz.lastaapps.api.core.domain.repo.InfoRepository
 import cz.lastaapps.api.core.domain.repo.WeekRepository
+import cz.lastaapps.api.core.domain.sync.SyncProcessor
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val apiCoreModule = module {
@@ -60,6 +64,9 @@ val apiCoreModule = module {
         get<MenzaTypeScope> { parametersOf(menza) }
             .scope.get<WeekRepository> { parametersOf(menza) }
     }
+
+
+    factoryOf(::SyncProcessorImpl) bind SyncProcessor::class
 }
 
 @JvmInline

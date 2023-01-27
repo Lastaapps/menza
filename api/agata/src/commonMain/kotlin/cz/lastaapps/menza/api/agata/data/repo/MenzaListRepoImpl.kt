@@ -27,10 +27,12 @@ import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.api.core.domain.repo.MenzaListRepo
-import cz.lastaapps.api.core.domain.sync.SyncJobHash
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
+import cz.lastaapps.menza.api.agata.data.SyncJobHash
+import cz.lastaapps.menza.api.agata.data.runSync
+import cz.lastaapps.menza.api.agata.domain.HashStore
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
@@ -43,6 +45,7 @@ internal class MenzaListRepoImpl(
     private val api: CafeteriaApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
+    private val hashStore: HashStore,
 ) : MenzaListRepo {
 
     override fun getData(): Flow<ImmutableList<Menza>> =
@@ -51,10 +54,11 @@ internal class MenzaListRepoImpl(
             .mapToList()
             .map { it.map { item -> item.toDomain() } }
             .map { it.toPersistentList() }
-            .map { it.add(MenzaType.Strahov.instance) }
+            .map { it.add(MenzaType.Agata.Strahov.instance) }
 
     private val subsystemJob =
         SyncJobHash(
+            hashStore = hashStore,
             hashType = HashType.subsystemHash(),
             getHashCode = { api.getSubsystemsHash().bind() },
             fetchApi = {
@@ -79,6 +83,5 @@ internal class MenzaListRepoImpl(
         )
 
     override suspend fun sync(): SyncOutcome =
-        processor.run(subsystemJob)
+        processor.runSync(subsystemJob, db)
 }
-

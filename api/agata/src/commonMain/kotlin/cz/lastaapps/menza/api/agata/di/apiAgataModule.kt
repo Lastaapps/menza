@@ -22,7 +22,6 @@ package cz.lastaapps.menza.api.agata.di
 import cz.lastaapps.api.core.di.registerMenzaType
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.repo.MenzaListRepo
-import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.CafeteriaApiImpl
 import cz.lastaapps.menza.api.agata.api.DishApi
@@ -31,7 +30,6 @@ import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.api.SubsystemApiImpl
 import cz.lastaapps.menza.api.agata.data.AgataDatabaseFactory
 import cz.lastaapps.menza.api.agata.data.HashStoreImpl
-import cz.lastaapps.menza.api.agata.data.SyncProcessorImpl
 import cz.lastaapps.menza.api.agata.data.repo.DishListRepoStrahovImpl
 import cz.lastaapps.menza.api.agata.data.repo.DishListRepoSubsystemImpl
 import cz.lastaapps.menza.api.agata.data.repo.InfoRepositoryImpl
@@ -54,7 +52,6 @@ val apiAgataModule = module {
     factoryOf(::CafeteriaApiImpl) bind CafeteriaApi::class
     factoryOf(::DishApiImpl) bind DishApi::class
     factoryOf(::SubsystemApiImpl) bind SubsystemApi::class
-    factoryOf(::SyncProcessorImpl) bind SyncProcessor::class
 
     singleOf(::HashStoreImpl) bind HashStore::class
     single { AgataDatabaseFactory.createDatabase(get()) }

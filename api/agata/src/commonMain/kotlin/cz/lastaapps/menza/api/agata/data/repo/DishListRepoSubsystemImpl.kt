@@ -32,11 +32,13 @@ import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.api.core.domain.model.common.DishCategory
 import cz.lastaapps.api.core.domain.repo.DishListRepo
-import cz.lastaapps.api.core.domain.sync.SyncJobHash
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
+import cz.lastaapps.menza.api.agata.data.SyncJobHash
+import cz.lastaapps.menza.api.agata.data.runSync
+import cz.lastaapps.menza.api.agata.domain.HashStore
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import kotlinx.collections.immutable.ImmutableList
@@ -55,6 +57,7 @@ internal class DishListRepoSubsystemImpl(
     private val dishApi: DishApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
+    private val hashStore: HashStore,
 ) : DishListRepo {
     override fun getData(): Flow<ImmutableList<DishCategory>> = flow {
         // Get dish list
@@ -118,6 +121,7 @@ internal class DishListRepoSubsystemImpl(
     }
 
     private val dishListJob = SyncJobHash(
+        hashStore = hashStore,
         hashType = HashType.dishHash(subsystemId),
         getHashCode = { dishApi.getDishesHash(subsystemId).bind() },
         fetchApi = { dishApi.getDishes(subsystemId).bind() },
@@ -131,6 +135,7 @@ internal class DishListRepoSubsystemImpl(
     )
 
     private val dishTypeJob = SyncJobHash(
+        hashStore = hashStore,
         hashType = HashType.typesHash(subsystemId),
         getHashCode = { cafeteriaApi.getDishTypesHash(subsystemId).bind() },
         fetchApi = { cafeteriaApi.getDishTypes(subsystemId).bind() },
@@ -144,6 +149,7 @@ internal class DishListRepoSubsystemImpl(
     )
 
     private val pictogramJob = SyncJobHash(
+        hashStore = hashStore,
         hashType = HashType.pictogramHash(),
         getHashCode = { dishApi.getPictogramHash().bind() },
         fetchApi = { dishApi.getPictogram().bind() },
@@ -157,6 +163,7 @@ internal class DishListRepoSubsystemImpl(
     )
 
     private val servingPlacesJob = SyncJobHash(
+        hashStore = hashStore,
         hashType = HashType.servingPacesHash(subsystemId),
         getHashCode = { cafeteriaApi.getServingPlacesHash(subsystemId).bind() },
         fetchApi = { cafeteriaApi.getServingPlaces(subsystemId).bind() },
@@ -172,5 +179,5 @@ internal class DishListRepoSubsystemImpl(
     private val jobs = listOf(dishListJob, dishTypeJob, pictogramJob, servingPlacesJob)
 
     override suspend fun sync(): SyncOutcome =
-        processor.run(jobs)
+        processor.runSync(jobs, db)
 }

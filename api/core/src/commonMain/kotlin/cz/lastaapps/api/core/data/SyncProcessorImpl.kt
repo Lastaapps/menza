@@ -17,62 +17,40 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.data
+package cz.lastaapps.api.core.data
 
 import arrow.core.Ior.Both
 import arrow.core.Ior.Left
 import arrow.core.Ior.Right
 import arrow.core.IorNel
+import arrow.core.Some
 import arrow.core.toNonEmptyListOrNull
 import arrow.fx.coroutines.parMap
-import com.squareup.sqldelight.Transacter
 import cz.lastaapps.api.core.domain.sync.SyncJob
-import cz.lastaapps.api.core.domain.sync.SyncJobHash
-import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.outcome
-import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlinx.collections.immutable.persistentListOf
 
 
-// TODO rework with context receivers when usable in AS
-internal class SyncProcessorImpl(
-    private val hashStore: HashStore,
-    private val database: Transacter,
-) : SyncProcessor {
+internal class SyncProcessorImpl : SyncProcessor {
 
-    override suspend fun run(list: Iterable<SyncJob<*, *>>): SyncOutcome = outcome {
+    override suspend fun runSync(
+        list: Iterable<SyncJob<*, *>>,
+        scope: List<(() -> Unit) -> Unit>,
+    ): SyncOutcome = outcome {
         list
             // Fetches hash codes from a remote source
             .parMap { job ->
-                when (job) {
-                    is SyncJobHash -> {
-                        val hash = job.getHashCode()
-
-                        if (hashStore.shouldReload(job.hashType, hash)) {
-                            // deferred job to save the new hash code
-                            val storeHashAction: suspend () -> Unit =
-                                { hashStore.storeHash(job.hashType, hash) }
-
-                            // process this job
-                            Pair(job, storeHashAction)
-                        } else {
-                            // skip this job
-                            null
-                        }
-                    }
-                    is SyncJobNoCache -> {
-                        val noOp: suspend () -> Unit = {}
-                        Pair(job, noOp)
-                    }
-                }
+                job.shouldRun().map { job to it }
             }
+
             // remove skipped jobs
-            .filterNotNull()
+            .filterIsInstance<Some<Pair<SyncJob<*, *>, suspend () -> Unit>>>()
+            .map { it.value }
 
             // Fetch data from api and convert then
             .parMap { (job, hash) ->
@@ -84,8 +62,10 @@ internal class SyncProcessorImpl(
             .also { results ->
 
                 // store data in a single transaction
-                database.transaction {
-                    results.forEach { (action, _) -> action.map { it() } }
+                scope.foldRight(
+                    { results.forEach { (action, _) -> action.map { it() } } }
+                ) { func, acu ->
+                    { func(acu) }
                 }
 
                 // store new hash codes

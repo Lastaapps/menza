@@ -21,6 +21,13 @@ package cz.lastaapps.api.core.domain.sync
 
 
 interface SyncProcessor {
-    suspend fun <T, R> run(job: SyncJob<T, R>) = run(listOf(job))
-    suspend fun run(list: Iterable<SyncJob<*, *>>): SyncOutcome
+    suspend fun runSync(
+        list: Iterable<SyncJob<*, *>>,
+        scope: List<(() -> Unit) -> Unit> = emptyList(),
+    ): SyncOutcome
 }
+
+suspend fun <T, R> SyncProcessor.runSync(
+    job: SyncJob<T, R>,
+    scope: List<(() -> Unit) -> Unit> = emptyList(),
+): SyncOutcome = runSync(listOf(job), scope)

@@ -27,6 +27,7 @@ import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
+import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import kotlinx.collections.immutable.ImmutableList
@@ -58,7 +59,7 @@ internal class WeekDishRepoImpl(
     )
 
     override suspend fun sync(): SyncOutcome =
-        processor.run(syncJob)
+        processor.runSync(syncJob)
 }
 
 internal object WeekRepoStrahovImpl : WeekRepository {

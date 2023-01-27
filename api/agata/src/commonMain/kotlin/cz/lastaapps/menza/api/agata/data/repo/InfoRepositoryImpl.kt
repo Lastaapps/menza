@@ -29,13 +29,15 @@ import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.api.core.domain.model.common.Info
 import cz.lastaapps.api.core.domain.model.common.NewsHeader
 import cz.lastaapps.api.core.domain.repo.InfoRepository
-import cz.lastaapps.api.core.domain.sync.SyncJobHash
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.util.combine6
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
+import cz.lastaapps.menza.api.agata.data.SyncJobHash
+import cz.lastaapps.menza.api.agata.data.runSync
+import cz.lastaapps.menza.api.agata.domain.HashStore
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toNews
@@ -48,6 +50,7 @@ internal class InfoRepositoryImpl(
     private val subsystemApi: SubsystemApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
+    private val hashStore: HashStore,
 ) : InfoRepository {
 
     private val newsFlow = MutableStateFlow<NewsHeader?>(null)
@@ -67,6 +70,7 @@ internal class InfoRepositoryImpl(
     private val jobs = listOf(
         // Info
         SyncJobHash(
+            hashStore = hashStore,
             hashType = HashType.infoHash(subsystemId),
             getHashCode = { subsystemApi.getInfoHash(subsystemId).bind() },
             fetchApi = { subsystemApi.getInfo(subsystemId).bind() },
@@ -88,6 +92,7 @@ internal class InfoRepositoryImpl(
         ),
         // Contacts
         SyncJobHash(
+            hashStore = hashStore,
             hashType = HashType.contactsHash(),
             getHashCode = { subsystemApi.getContactsHash().bind() },
             fetchApi = { subsystemApi.getContacts().bind() },
@@ -101,6 +106,7 @@ internal class InfoRepositoryImpl(
         ),
         // OpenTimes
         SyncJobHash(
+            hashStore = hashStore,
             hashType = HashType.openingHash(subsystemId),
             getHashCode = { subsystemApi.getOpeningTimesHash(subsystemId).bind() },
             fetchApi = { subsystemApi.getOpeningTimes(subsystemId).bind() },
@@ -114,6 +120,7 @@ internal class InfoRepositoryImpl(
         ),
         // Links
         SyncJobHash(
+            hashStore = hashStore,
             hashType = HashType.linkHash(subsystemId),
             getHashCode = { subsystemApi.getLinkHash(subsystemId).bind() },
             fetchApi = { subsystemApi.getLink(subsystemId).bind() },
@@ -127,6 +134,7 @@ internal class InfoRepositoryImpl(
         ),
         // Address
         SyncJobHash(
+            hashStore = hashStore,
             hashType = HashType.addressHash(),
             getHashCode = { subsystemApi.getAddressHash().bind() },
             fetchApi = { subsystemApi.getAddress().bind() },
@@ -141,7 +149,7 @@ internal class InfoRepositoryImpl(
     )
 
     override suspend fun sync(): SyncOutcome =
-        processor.run(jobs)
+        processor.runSync(jobs, db)
 }
 
 internal object InfoRepositoryStrahovImpl : InfoRepository {
