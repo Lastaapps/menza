@@ -26,6 +26,7 @@ import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.repo.MenzaListRepo
 import cz.lastaapps.api.core.domain.sync.SyncJobHash
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
@@ -33,7 +34,6 @@ import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
-import cz.lastaapps.menza.api.agata.domain.repo.MenzaListRepo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow

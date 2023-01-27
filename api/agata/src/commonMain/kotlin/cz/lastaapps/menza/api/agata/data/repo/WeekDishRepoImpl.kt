@@ -22,13 +22,13 @@ package cz.lastaapps.menza.api.agata.data.repo
 import arrow.core.right
 import arrow.core.rightIor
 import cz.lastaapps.api.core.domain.model.common.WeekDayDish
+import cz.lastaapps.api.core.domain.repo.WeekRepository
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
-import cz.lastaapps.menza.api.agata.domain.repo.WeekRepository
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
@@ -61,7 +61,7 @@ internal class WeekDishRepoImpl(
         processor.run(syncJob)
 }
 
-internal object WeekDishRepoStrahovImpl : WeekRepository {
+internal object WeekRepoStrahovImpl : WeekRepository {
     override fun getData(): Flow<ImmutableList<WeekDayDish>> = flow { emit(persistentListOf()) }
     override suspend fun sync(): SyncOutcome = SyncResult.Unavailable.right()
 }

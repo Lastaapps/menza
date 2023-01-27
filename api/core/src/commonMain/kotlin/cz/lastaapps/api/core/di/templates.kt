@@ -17,10 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.repo
+package cz.lastaapps.api.core.di
 
-import cz.lastaapps.api.core.domain.model.common.Menza
-import cz.lastaapps.api.core.domain.sync.SyncSource
-import kotlinx.collections.immutable.ImmutableList
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.repo.DishListRepo
+import cz.lastaapps.api.core.domain.repo.InfoRepository
+import cz.lastaapps.api.core.domain.repo.WeekRepository
+import org.koin.core.module.Module
+import org.koin.core.scope.Scope
 
-interface MenzaListRepo : SyncSource<ImmutableList<Menza>>
+inline fun <reified T : MenzaType> Module.registerMenzaType(
+    crossinline dishRepo: Scope.(T) -> DishListRepo,
+    crossinline infoRepo: Scope.(T) -> InfoRepository,
+    crossinline weekRepo: Scope.(T) -> WeekRepository,
+) {
+    scope<T> {
+        scoped { (menza: T) -> dishRepo(menza) }
+        scoped { (menza: T) -> infoRepo(menza) }
+        scoped { (menza: T) -> weekRepo(menza) }
+    }
+}

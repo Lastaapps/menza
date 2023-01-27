@@ -29,7 +29,7 @@ import agata.OpenTimeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
 import agata.SubsystemEntity
-import cz.lastaapps.api.core.domain.model.MenzaType.Subsystem
+import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
 import cz.lastaapps.api.core.domain.model.common.Contact
 import cz.lastaapps.api.core.domain.model.common.Dish
 import cz.lastaapps.api.core.domain.model.common.DishCategory

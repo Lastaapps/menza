@@ -19,7 +19,56 @@
 
 package cz.lastaapps.api.core.di
 
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
+import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
+import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
+import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
+import cz.lastaapps.api.core.domain.repo.DishListRepo
+import cz.lastaapps.api.core.domain.repo.InfoRepository
+import cz.lastaapps.api.core.domain.repo.WeekRepository
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.parameter.parametersOf
+import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
 val apiCoreModule = module {
+    // Once global
+    singleOf(::MenzaScopeStore)
+
+    factory { (menza: MenzaType) ->
+        val store = get<MenzaScopeStore>()
+        store.getOrPut(menza) {
+            when (menza) {
+                Strahov -> createScope<Strahov>()
+                is Subsystem -> createScope<Subsystem>()
+                FEL -> createScope<FEL>()
+                FS -> createScope<FS>()
+            }
+        }
+    }
+
+    factory { (menza: MenzaType) ->
+        get<MenzaTypeScope> { parametersOf(menza) }
+            .scope.get<DishListRepo> { parametersOf(menza) }
+    }
+    factory { (menza: MenzaType) ->
+        get<MenzaTypeScope> { parametersOf(menza) }
+            .scope.get<InfoRepository> { parametersOf(menza) }
+    }
+    factory { (menza: MenzaType) ->
+        get<MenzaTypeScope> { parametersOf(menza) }
+            .scope.get<WeekRepository> { parametersOf(menza) }
+    }
 }
+
+@JvmInline
+private value class MenzaTypeScope(val scope: Scope)
+
+private inline fun <reified T : MenzaType> Scope.createScope() =
+    MenzaTypeScope(getKoin().createScope<T>())
+
+// Is not atomic, won't break hopefully
+// I have had PA1, it will break, but I won't fix this
+// Fuck me
+private class MenzaScopeStore : MutableMap<MenzaType, MenzaTypeScope> by HashMap()

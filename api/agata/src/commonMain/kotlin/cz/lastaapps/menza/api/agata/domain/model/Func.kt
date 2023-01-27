@@ -30,7 +30,7 @@ internal enum class Func(val funName: String) {
     TypesHash("GetKategorieHash"),
     Types("GetKategorie"),
     DishHash("GetJidlaHash"),
-    Dish("GetJidla2"),
+    Dish("GetJidla"),
     InfoHash("GetInfoHash"),
     Info("GetInfo"),
     News("GetAktuality"),

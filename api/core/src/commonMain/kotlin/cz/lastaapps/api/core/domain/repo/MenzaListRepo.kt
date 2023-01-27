@@ -17,26 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.domain.model
+package cz.lastaapps.api.core.domain.repo
 
 import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.sync.SyncSource
+import kotlinx.collections.immutable.ImmutableList
 
-// All the types must have unique names, or the DI will break
-sealed interface MenzaType {
-    sealed interface Agata : MenzaType {
-        data class Subsystem(val subsystemId: Int) : Agata
-        data object Strahov : Agata {
-            val instance = Menza(
-                Strahov,
-                "Restaurace Strahov",
-                isOpened = true,
-                isImportant = true
-            )
-        }
-    }
-
-    sealed interface Buffet : MenzaType {
-        data object FS : Buffet
-        data object FEL : Buffet
-    }
-}
+interface MenzaListRepo : SyncSource<ImmutableList<Menza>>

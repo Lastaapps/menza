@@ -28,6 +28,7 @@ import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.api.core.domain.model.common.Info
 import cz.lastaapps.api.core.domain.model.common.NewsHeader
+import cz.lastaapps.api.core.domain.repo.InfoRepository
 import cz.lastaapps.api.core.domain.sync.SyncJobHash
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
@@ -38,7 +39,6 @@ import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toNews
-import cz.lastaapps.menza.api.agata.domain.repo.InfoRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
