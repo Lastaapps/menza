@@ -31,4 +31,5 @@ internal class DishDto(
     val name: String,
     val price: Int,
     val ingredients: List<String>,
+    val order: Int,
 )

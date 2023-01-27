@@ -19,9 +19,8 @@
 
 package cz.lastaapps.menza.api.agata.data
 
-import com.squareup.sqldelight.db.SqlDriver
-
 internal const val DB_NAME = "agata_api.db"
 
 internal fun createAgataDBDriver(
-): SqlDriver = TODO("Implement JVM driver")
+
+): AgataDatabaseSqlDriver = TODO("Implement JVM driver")

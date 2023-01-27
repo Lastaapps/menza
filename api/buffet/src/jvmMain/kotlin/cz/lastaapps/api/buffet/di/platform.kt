@@ -17,24 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.domain.model.common
+package cz.lastaapps.api.buffet.di
 
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.datetime.LocalDate
+import cz.lastaapps.api.buffet.data.createBuffetDBDriver
+import org.koin.core.module.Module
+import org.koin.dsl.module
 
-data class WeekDayDish(
-    val date: LocalDate,
-    val categories: ImmutableList<WeekDishCategory>,
-)
-
-data class WeekDishCategory(
-    val name: String,
-    val dishList: ImmutableList<WeekDish>,
-)
-
-data class WeekDish(
-    val name: String,
-    val amount: String?,
-    val priceNormal: Float?,
-    val ingredients: ImmutableList<String>,
-)
+internal actual val platform: Module = module {
+    factory { createBuffetDBDriver() }
+}

@@ -17,24 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.domain.model.common
+package cz.lastaapps.api.buffet.domain.model
 
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.datetime.LocalDate
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
+import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
 
-data class WeekDayDish(
-    val date: LocalDate,
-    val categories: ImmutableList<WeekDishCategory>,
-)
+enum class BuffetType {
+    FS, FEL,
+    ;
+}
 
-data class WeekDishCategory(
-    val name: String,
-    val dishList: ImmutableList<WeekDish>,
-)
-
-data class WeekDish(
-    val name: String,
-    val amount: String?,
-    val priceNormal: Float?,
-    val ingredients: ImmutableList<String>,
-)
+internal fun MenzaType.Buffet.toType(): BuffetType =
+    when (this) {
+        FS -> BuffetType.FS
+        FEL -> BuffetType.FEL
+    }

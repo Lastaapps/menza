@@ -197,14 +197,15 @@ internal class BuffetApiImpl(
             }
 
     private fun String.findDays(): ParsingRes<List<DishDto>> =
-        dishesRegex.findAll(this).map { match ->
+        dishesRegex.findAll(this).mapIndexed { index, match ->
             Either.catch {
                 val (type, name, price, contains) = match.destructured
                 DishDto(
                     type = type,
                     name = name,
                     price = price.toInt(),
-                    ingredients = contains.split(",").map { it.trim() }
+                    ingredients = contains.split(",").map { it.trim() },
+                    order = index,
                 )
             }.mapLeft {
                 ParsingError.Buffet.DayCannotBeParsed

@@ -59,6 +59,7 @@ private fun StrahovDto.toDomain() = Dish(
     photoLink = photoLink,
     pictogram = persistentListOf(),
     servingPlaces = persistentListOf(),
+    ingredients = persistentListOf(),
 )
 
 internal fun List<WeekDishDto>.toDomain() =
@@ -92,4 +93,6 @@ private fun WeekDishDto.toDomain() =
     WeekDish(
         name = name,
         amount = amount,
+        priceNormal = null,
+        ingredients = persistentListOf(),
     )

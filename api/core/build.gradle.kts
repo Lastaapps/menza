@@ -27,4 +27,6 @@ android {
 
 dependencies {
     commonMainImplementation(projects.core)
+
+    commonMainImplementation(libs.sqldelight.runtime)
 }

@@ -29,9 +29,9 @@ import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.api.core.domain.repo.MenzaListRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
+import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
-import cz.lastaapps.menza.api.agata.data.runSync
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
@@ -45,7 +45,7 @@ internal class MenzaListRepoImpl(
     private val api: CafeteriaApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
-    private val hashStore: HashStore,
+    hashStore: HashStore,
 ) : MenzaListRepo {
 
     override fun getData(): Flow<ImmutableList<Menza>> =

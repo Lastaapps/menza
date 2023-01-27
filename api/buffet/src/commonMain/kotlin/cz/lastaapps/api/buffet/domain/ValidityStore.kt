@@ -17,24 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.domain.model.common
+package cz.lastaapps.api.buffet.domain
 
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.datetime.LocalDate
 
-data class WeekDayDish(
-    val date: LocalDate,
-    val categories: ImmutableList<WeekDishCategory>,
-)
-
-data class WeekDishCategory(
-    val name: String,
-    val dishList: ImmutableList<WeekDish>,
-)
-
-data class WeekDish(
-    val name: String,
-    val amount: String?,
-    val priceNormal: Float?,
-    val ingredients: ImmutableList<String>,
-)
+internal interface ValidityStore {
+    suspend fun shouldReload(): Boolean
+    suspend fun storeValidUntil(until: LocalDate)
+}

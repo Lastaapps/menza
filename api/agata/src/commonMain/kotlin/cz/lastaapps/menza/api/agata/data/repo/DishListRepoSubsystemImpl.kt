@@ -34,10 +34,10 @@ import cz.lastaapps.api.core.domain.model.common.DishCategory
 import cz.lastaapps.api.core.domain.repo.DishListRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
+import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
-import cz.lastaapps.menza.api.agata.data.runSync
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
@@ -57,7 +57,7 @@ internal class DishListRepoSubsystemImpl(
     private val dishApi: DishApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
-    private val hashStore: HashStore,
+    hashStore: HashStore,
 ) : DishListRepo {
     override fun getData(): Flow<ImmutableList<DishCategory>> = flow {
         // Get dish list

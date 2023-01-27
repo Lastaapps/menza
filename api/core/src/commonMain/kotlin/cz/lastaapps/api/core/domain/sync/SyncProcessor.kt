@@ -19,6 +19,8 @@
 
 package cz.lastaapps.api.core.domain.sync
 
+import com.squareup.sqldelight.Transacter
+
 
 interface SyncProcessor {
     suspend fun runSync(
@@ -31,3 +33,12 @@ suspend fun <T, R> SyncProcessor.runSync(
     job: SyncJob<T, R>,
     scope: List<(() -> Unit) -> Unit> = emptyList(),
 ): SyncOutcome = runSync(listOf(job), scope)
+
+suspend fun <T, R> SyncProcessor.runSync(job: SyncJob<T, R>, db: Transacter) =
+    runSync(listOf(job), db)
+
+suspend fun SyncProcessor.runSync(
+    list: Iterable<SyncJob<*, *>>,
+    db: Transacter,
+): SyncOutcome =
+    runSync(list, listOf { db.transaction { it() } })

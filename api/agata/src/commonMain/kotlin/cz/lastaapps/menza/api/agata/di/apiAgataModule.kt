@@ -68,10 +68,10 @@ val apiAgataModule = module {
 
     registerMenzaType<MenzaType.Agata.Subsystem>(
         dishRepo = { menza ->
-            DishListRepoSubsystemImpl(menza.subsystemId, get(), get(), get(), get())
+            DishListRepoSubsystemImpl(menza.subsystemId, get(), get(), get(), get(), get())
         },
         infoRepo = { menza ->
-            InfoRepositoryImpl(menza.subsystemId, get(), get(), get())
+            InfoRepositoryImpl(menza.subsystemId, get(), get(), get(), get())
         },
         weekRepo = { menza ->
             WeekDishRepoImpl(menza.subsystemId, get(), get())

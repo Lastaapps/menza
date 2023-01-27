@@ -41,6 +41,7 @@ data class Dish(
     val photoLink: String?,
     val pictogram: ImmutableList<String>,
     val servingPlaces: ImmutableList<ServingPlace>,
+    val ingredients: ImmutableList<String>,
 )
 
 data class ServingPlace(

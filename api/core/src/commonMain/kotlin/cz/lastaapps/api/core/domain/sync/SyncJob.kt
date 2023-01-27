@@ -25,25 +25,28 @@ import arrow.core.some
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.MenzaRaise
 
-interface SyncJob<T, R> {
+abstract class SyncJob<T, R>(
     // Some -> will be run
     // None -> should be skipped
-    val shouldRun: suspend MenzaRaise.() -> Option<suspend () -> Unit>
-    val fetchApi: suspend MenzaRaise.() -> T
-    val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>
-    val store: (R) -> Unit
-}
+    val shouldRun: suspend MenzaRaise.() -> Option<suspend () -> Unit>,
+    val fetchApi: suspend MenzaRaise.() -> T,
+    val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
+    val store: (R) -> Unit,
+)
 
 /**
  * Job info for a sync processor, no cache check
  */
 class SyncJobNoCache<T, R>(
-    override val fetchApi: suspend MenzaRaise.() -> T,
-    override val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
-    override val store: (R) -> Unit,
-) : SyncJob<T, R> {
-    override val shouldRun: suspend MenzaRaise.() -> Option<suspend () -> Unit> = {
+    fetchApi: suspend MenzaRaise.() -> T,
+    convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
+    store: (R) -> Unit,
+) : SyncJob<T, R>(
+    {
         val noOp: suspend () -> Unit = {}
         noOp.some()
-    }
-}
+    },
+    fetchApi,
+    convert,
+    store,
+)

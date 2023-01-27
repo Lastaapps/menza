@@ -40,6 +40,7 @@ import cz.lastaapps.api.core.domain.model.common.NewsHeader
 import cz.lastaapps.api.core.domain.model.common.OpeningTime
 import cz.lastaapps.api.core.domain.model.common.PlaceOpeningTime
 import cz.lastaapps.api.core.domain.model.common.ServingPlace
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 internal fun SubsystemEntity.toDomain() =
@@ -65,6 +66,7 @@ internal fun DishEntity.toDomain(
                 abbrev = entity.abbrev,
             )
         }.toImmutableList(),
+        ingredients = persistentListOf(),
     )
 }
 

@@ -33,10 +33,10 @@ import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
+import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.core.util.combine6
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
-import cz.lastaapps.menza.api.agata.data.runSync
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
@@ -50,7 +50,7 @@ internal class InfoRepositoryImpl(
     private val subsystemApi: SubsystemApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
-    private val hashStore: HashStore,
+    hashStore: HashStore,
 ) : InfoRepository {
 
     private val newsFlow = MutableStateFlow<NewsHeader?>(null)

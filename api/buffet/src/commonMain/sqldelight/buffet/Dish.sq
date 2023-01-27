@@ -1,0 +1,26 @@
+import cz.lastaapps.api.buffet.domain.model.BuffetType;
+import kotlin.collections.List;
+import kotlinx.datetime.DayOfWeek;
+
+CREATE TABLE DishEntity (
+    buffet TEXT AS BuffetType NOT NULL,
+    dayOfWeek INTEGER AS DayOfWeek NOT NULL,
+    type TEXT NOT NULL,
+    name TEXT NOT NULL,
+    price INTEGER NOT NULL,
+    ingredients TEXT AS List<String> NOT NULL,
+    itemOrder INTEGER NOT NULL,
+    PRIMARY KEY (buffet, dayOfWeek, type)
+);
+
+getForBuffet:
+    SELECT * FROM DishEntity WHERE buffet = :buffet;
+
+getForBuffetAndDayOfWeek:
+    SELECT * FROM DishEntity WHERE buffet = :buffet AND dayOfWeek = :dayOfWeek;
+
+insert:
+    INSERT INTO DishEntity VALUES ?;
+
+deleteAll:
+    DELETE FROM DishEntity;

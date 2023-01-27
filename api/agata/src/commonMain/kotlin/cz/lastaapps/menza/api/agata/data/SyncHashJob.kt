@@ -21,13 +21,9 @@ package cz.lastaapps.menza.api.agata.data
 
 import arrow.core.IorNel
 import arrow.core.None
-import arrow.core.Option
 import arrow.core.Some
-import com.squareup.sqldelight.Transacter
 import cz.lastaapps.api.core.domain.model.HashType
 import cz.lastaapps.api.core.domain.sync.SyncJob
-import cz.lastaapps.api.core.domain.sync.SyncOutcome
-import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.MenzaRaise
 import cz.lastaapps.menza.api.agata.domain.HashStore
@@ -35,16 +31,15 @@ import cz.lastaapps.menza.api.agata.domain.HashStore
 /**
  * Job info for a sync processor using hash
  */
-// TODO consider adding shouldRun condition and moving this to the Agata module
 internal class SyncJobHash<T, R>(
     private val hashStore: HashStore,
     private val hashType: HashType,
     private val getHashCode: suspend MenzaRaise.() -> String,
-    override val fetchApi: suspend MenzaRaise.() -> T,
-    override val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
-    override val store: (R) -> Unit,
-) : SyncJob<T, R> {
-    override val shouldRun: suspend MenzaRaise.() -> Option<suspend () -> Unit> = {
+    fetchApi: suspend MenzaRaise.() -> T,
+    convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
+    store: (R) -> Unit,
+) : SyncJob<T, R>(
+    {
         val hash = getHashCode()
 
         if (hashStore.shouldReload(hashType, hash)) {
@@ -58,14 +53,8 @@ internal class SyncJobHash<T, R>(
             // skip this job
             None
         }
-    }
-}
-
-internal suspend fun <T, R> SyncProcessor.runSync(job: SyncJob<T, R>, db: Transacter) =
-    runSync(listOf(job), db)
-
-internal suspend fun SyncProcessor.runSync(
-    list: Iterable<SyncJob<*, *>>,
-    db: Transacter,
-): SyncOutcome =
-    runSync(list, listOf { db.transaction { it() } })
+    },
+    fetchApi,
+    convert,
+    store,
+)
