@@ -29,5 +29,5 @@ dependencies {
     commonMainImplementation(projects.core)
     commonMainImplementation(projects.api.agata)
     commonMainImplementation(projects.api.buffet)
-    commonMainImplementation(projects.api.core)
+    commonMainApi(projects.api.core)
 }

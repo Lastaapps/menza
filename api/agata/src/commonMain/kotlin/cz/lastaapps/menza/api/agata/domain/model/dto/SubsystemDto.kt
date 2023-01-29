@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TPodsystem
  */
 @kotlinx.serialization.Serializable
-internal class SubsystemDto(
+internal data class SubsystemDto(
     @SerialName("id")
     val id: Int,
     @SerialName("popis")

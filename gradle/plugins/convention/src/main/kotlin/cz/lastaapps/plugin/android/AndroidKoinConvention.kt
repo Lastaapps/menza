@@ -21,7 +21,6 @@ package cz.lastaapps.plugin.android
 
 import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.kotlin.dsl.dependencies
 
@@ -37,6 +36,6 @@ class AndroidKoinConvention : BasePlugin({
         // } catch (_: Exception) {
         // }
 
-        testImplementation(libs.koin.test)
+//         testImplementation(libs.koin.test.jUnit5)
     }
 })

@@ -46,6 +46,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
@@ -59,7 +60,7 @@ internal class TodayDishSubsystemRepoImpl(
     private val processor: SyncProcessor,
     hashStore: HashStore,
 ) : TodayDishRepo {
-    override fun getData(): Flow<ImmutableList<DishCategory>> = flow {
+    override fun getData(): Flow<ImmutableList<DishCategory>> = channelFlow {
         // Get dish list
         db.dishQueries.getForSubsystem(subsystemId.toLong())
             .asFlow()
@@ -115,7 +116,7 @@ internal class TodayDishSubsystemRepoImpl(
                 }
 
                 mapped.collectLatest {
-                    emit(it)
+                    send(it)
                 }
             }
     }
@@ -125,7 +126,7 @@ internal class TodayDishSubsystemRepoImpl(
         hashType = HashType.dishHash(subsystemId),
         getHashCode = { dishApi.getDishesHash(subsystemId).bind() },
         fetchApi = { dishApi.getDishes(subsystemId).bind() },
-        convert = { data -> data.map { it.toEntity() }.rightIor() },
+        convert = { data -> data?.map { it.toEntity() }.orEmpty().rightIor() },
         store = { data ->
             db.dishQueries.deleteSubsytem(subsystemId.toLong())
             data.forEach {
@@ -139,7 +140,7 @@ internal class TodayDishSubsystemRepoImpl(
         hashType = HashType.typesHash(subsystemId),
         getHashCode = { cafeteriaApi.getDishTypesHash(subsystemId).bind() },
         fetchApi = { cafeteriaApi.getDishTypes(subsystemId).bind() },
-        convert = { data -> data.map { it.toEntity() }.rightIor() },
+        convert = { data -> data?.map { it.toEntity() }.orEmpty().rightIor() },
         store = { data ->
             db.dishTypeQueries.deleteSubsystem(subsystemId.toLong())
             data.forEach {

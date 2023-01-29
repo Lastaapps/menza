@@ -28,6 +28,6 @@ class SyncMenzaListUC(
     private val menzaRepo: MenzaRepo,
 ) : UseCase(context) {
     suspend operator fun invoke() = launch {
-        menzaRepo.getData()
+        menzaRepo.sync()
     }
 }

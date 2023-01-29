@@ -34,7 +34,9 @@ import cz.lastaapps.api.main.domain.usecase.SyncTodayDishListUC
 import cz.lastaapps.api.main.domain.usecase.SyncWeekDishListUC
 import cz.lastaapps.menza.api.agata.di.apiAgataModule
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val apiModule = module {
@@ -44,12 +46,13 @@ val apiModule = module {
         apiCoreModule,
     )
 
-    single { MenzaMasterRepoImpl() }
+    val rootName = named<MenzaMasterRepoImpl>()
+    single(rootName) { MenzaMasterRepoImpl() } bind MenzaRepo::class
 
+    factory { GetMenzaListUC(get(), get(rootName)) }
+    factory { SyncMenzaListUC(get(), get(rootName)) }
     factoryOf(::GetInfoUC)
     factoryOf(::SyncInfoUC)
-    factoryOf(::GetMenzaListUC)
-    factoryOf(::SyncMenzaListUC)
     factoryOf(::GetTodayDishListUC)
     factoryOf(::SyncTodayDishListUC)
     factoryOf(::GetWeekDishListUC)

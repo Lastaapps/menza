@@ -26,7 +26,7 @@ import org.gradle.kotlin.dsl.dependencies
 
 class ArrowKtConvention : BasePlugin({
     dependencies {
-        implementation(platform(libs.arrowkt.bom))
+        implementation(project.dependencies.platform(libs.arrowkt.bom))
         implementation(libs.arrowkt.core)
         implementation(libs.arrowkt.fx.coroutines)
         implementation(libs.arrowkt.fx.stm)

@@ -31,6 +31,9 @@ dependencies {
     commonMainImplementation(projects.api.core)
 
     commonMainImplementation(libs.ktor.client.core)
+    commonMainImplementation(libs.ktor.client.contentNegotiation)
+    commonMainImplementation(libs.ktor.client.logging)
+    commonMainImplementation(libs.ktor.client.serialization)
 
     commonMainImplementation(libs.russhwolf.settins.core)
     commonMainImplementation(libs.russhwolf.settins.coroutines)

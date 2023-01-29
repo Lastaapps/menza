@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TMinutka
  */
 @kotlinx.serialization.Serializable
-internal class StrahovDto(
+internal data class StrahovDto(
     @SerialName("id")
     val id: Int,
     @SerialName("skupina_id")
@@ -37,7 +37,7 @@ internal class StrahovDto(
     @SerialName("skupina_poradi")
     val groupOrder: Int,
     @SerialName("poradi")
-    val order: String,
+    val order: Int,
     @SerialName("vaha")
     val amountCs: String?,
     @SerialName("vaha_en")
@@ -48,7 +48,7 @@ internal class StrahovDto(
     val nameEn: String,
     @SerialName("cena")
     val price: Float,
-    @SerialName("cenaS")
+    @SerialName("cena_stud")
     val priceStudent: Float,
     @SerialName("alergeny")
     val allergens: String?,

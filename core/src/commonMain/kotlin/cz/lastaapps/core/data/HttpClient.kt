@@ -17,5 +17,27 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.buffet.data
+package cz.lastaapps.core.data
 
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+
+@OptIn(ExperimentalSerializationApi::class)
+internal val httpClient = HttpClient() {
+    install(ContentNegotiation) {
+        json(Json {
+            encodeDefaults = true
+            ignoreUnknownKeys = true
+            explicitNulls = true
+        })
+    }
+
+    install(Logging) {
+        level = LogLevel.INFO
+    }
+}

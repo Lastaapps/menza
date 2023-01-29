@@ -23,4 +23,22 @@ plugins {
 
 android {
     namespace = "cz.lastaapps.core"
+
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+dependencies {
+
+    // Settings
+    commonMainImplementation(libs.russhwolf.settins.core)
+
+    // Ktor
+    commonMainImplementation(libs.ktor.client.core)
+    commonMainImplementation(libs.ktor.client.contentNegotiation)
+    commonMainImplementation(libs.ktor.client.serialization)
+    commonMainImplementation(libs.ktor.client.logging)
+    androidMainImplementation(libs.ktor.client.okhttp)
+    jvmMainImplementation(libs.ktor.client.okhttp)
 }

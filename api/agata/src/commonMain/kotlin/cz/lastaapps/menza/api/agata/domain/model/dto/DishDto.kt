@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TJidlo2
  */
 @kotlinx.serialization.Serializable
-internal class DishDto(
+internal data class DishDto(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")

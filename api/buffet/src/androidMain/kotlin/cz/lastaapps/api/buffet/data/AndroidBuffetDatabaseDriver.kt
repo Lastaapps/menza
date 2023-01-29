@@ -23,7 +23,7 @@ import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import cz.lastaapps.api.buffet.BuffetDatabase
 
-internal const val DB_NAME = "agata_api.db"
+internal const val DB_NAME = "buffet_api.db"
 
 internal fun createBuffetDBDriver(
     context: Context,

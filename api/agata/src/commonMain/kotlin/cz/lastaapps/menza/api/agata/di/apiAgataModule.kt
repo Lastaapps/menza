@@ -30,6 +30,7 @@ import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.api.SubsystemApiImpl
 import cz.lastaapps.menza.api.agata.data.AgataDatabaseFactory
 import cz.lastaapps.menza.api.agata.data.HashStoreImpl
+import cz.lastaapps.menza.api.agata.data.createAgataClient
 import cz.lastaapps.menza.api.agata.data.repo.InfoRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.InfoStrahovRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.MenzaStrahovRepoImpl
@@ -56,6 +57,7 @@ val apiAgataModule = module {
 
     singleOf(::HashStoreImpl) bind HashStore::class
     single { AgataDatabaseFactory.createDatabase(get()) }
+    single { createAgataClient(get()) }
 
     // Repos
     // Menza list
@@ -77,7 +79,7 @@ val apiAgataModule = module {
             InfoRepoImpl(menza.subsystemId, get(), get(), get(), get())
         },
         weekRepo = { menza ->
-            WeekDishRepoImpl(menza.subsystemId, get(), get())
+            WeekDishRepoImpl(menza.subsystemId, get(), get(), get())
         },
     )
 }

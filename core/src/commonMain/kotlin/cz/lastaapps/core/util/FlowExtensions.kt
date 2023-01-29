@@ -21,7 +21,6 @@ package cz.lastaapps.core.util
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
 
 fun <T1, T2, T3, T4, T5, T6, R> combine6(
     flow1: Flow<T1>,
@@ -30,12 +29,10 @@ fun <T1, T2, T3, T4, T5, T6, R> combine6(
     flow4: Flow<T4>,
     flow5: Flow<T5>,
     flow6: Flow<T6>,
-    transform: (T1, T2, T3, T4, T5, T6) -> R,
-): Flow<R> = flow {
-    combine(
-        combine(flow1, flow2, flow3, ::Triple),
-        combine(flow4, flow5, flow6, ::Triple),
-    ) { (v1, v2, v3), (v4, v5, v6) ->
-        emit(transform(v1, v2, v3, v4, v5, v6))
-    }
+    transform: suspend (T1, T2, T3, T4, T5, T6) -> R,
+): Flow<R> = combine(
+    combine(flow1, flow2, flow3, ::Triple),
+    combine(flow4, flow5, flow6, ::Triple),
+) { (v1, v2, v3), (v4, v5, v6) ->
+    transform(v1, v2, v3, v4, v5, v6)
 }

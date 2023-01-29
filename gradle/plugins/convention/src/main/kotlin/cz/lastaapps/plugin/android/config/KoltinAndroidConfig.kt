@@ -21,6 +21,7 @@ package cz.lastaapps.plugin.android.config
 
 import com.android.build.api.dsl.CommonExtension
 import cz.lastaapps.extensions.coreLibraryDesugaring
+import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.kotlinOptions
 import cz.lastaapps.extensions.libs
 import org.gradle.api.JavaVersion
@@ -72,5 +73,7 @@ internal fun Project.configureKotlinAndroid(
 
     dependencies {
         coreLibraryDesugaring(libs.android.desugaring)
+
+        implementation(platform(libs.kotlin.bom))
     }
 }

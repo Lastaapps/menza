@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
  * TTypStravy
  */
 @kotlinx.serialization.Serializable
-internal class DishTypeDto(
+internal data class DishTypeDto(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")

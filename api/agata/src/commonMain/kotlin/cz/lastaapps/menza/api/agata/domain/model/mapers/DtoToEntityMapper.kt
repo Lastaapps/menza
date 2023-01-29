@@ -38,13 +38,13 @@ import cz.lastaapps.menza.api.agata.domain.model.dto.DishDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishTypeDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.InfoDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.LinkDto
+import cz.lastaapps.menza.api.agata.domain.model.dto.NewsDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.OpenTimeDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.PictogramDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.ServingPlaceDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import kotlinx.datetime.DayOfWeek
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
+import kotlinx.datetime.LocalTime
 
 internal fun SubsystemDto.toEntity(isImportant: Boolean) =
     SubsystemEntity(
@@ -104,8 +104,8 @@ internal fun InfoDto.toEntity() =
         footer = footer?.removeHtml(),
     )
 
-internal fun String.toNews() =
-    NewsHeader(removeHtml())
+internal fun NewsDto.toNews() =
+    NewsHeader(html.removeHtml())
 
 private fun String.removeHtml() = this
     .replace("<br>", "\n")
@@ -136,13 +136,20 @@ internal fun OpenTimeDto.toEntity() =
         itemOrder = order.toLong(),
         dayFrom = dayFrom.toDayOfWeek(),
         dayTo = (dayTo ?: dayFrom).toDayOfWeek(),
-        timeFrom = Json.decodeFromString(timeFrom),
-        timeTo = Json.decodeFromString(timeTo ?: timeFrom),
+        timeFrom = timeFrom.toLocalTime()!!,
+        timeTo = timeTo?.toLocalTime() ?: timeFrom.toLocalTime()!!,
     )
 
 private val czechDaysOfWeek = arrayOf("Po", "Út", "St", "Čt", "Pá", "So", "Ne")
 private fun String.toDayOfWeek() =
-    DayOfWeek.of(czechDaysOfWeek.indexOf(this) - 1)
+    DayOfWeek.of(czechDaysOfWeek.indexOf(this) + 1)
+
+private val timeRegex = """(\d+):(\d+)""".toRegex()
+private fun String.toLocalTime() =
+    timeRegex.find(this)?.let { match ->
+        val (hours, minutes) = match.destructured
+        LocalTime(hours.toInt(), minutes.toInt())
+    }
 
 internal fun LinkDto.toEntity() =
     LinkEntity(

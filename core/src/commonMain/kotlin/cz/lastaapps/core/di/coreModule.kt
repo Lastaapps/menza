@@ -19,13 +19,20 @@
 
 package cz.lastaapps.core.di
 
+import cz.lastaapps.core.data.httpClient
 import cz.lastaapps.core.domain.UCContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.datetime.Clock
+import org.koin.core.module.Module
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+internal expect val platform: Module
+
 val coreModule = module {
+    includes(platform)
+
     single { Clock.System } bind Clock::class
     single { UCContext(Dispatchers.Default) }
+    single { httpClient }
 }

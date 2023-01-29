@@ -21,6 +21,8 @@ package cz.lastaapps.api.buffet.di
 
 import cz.lastaapps.api.buffet.api.BuffetApi
 import cz.lastaapps.api.buffet.api.BuffetApiImpl
+import cz.lastaapps.api.buffet.api.BuffetScraper
+import cz.lastaapps.api.buffet.api.BuffetScraperImpl
 import cz.lastaapps.api.buffet.data.BuffetDatabaseFactory
 import cz.lastaapps.api.buffet.data.ValidityStoreImpl
 import cz.lastaapps.api.buffet.data.repo.DishLogicImpl
@@ -44,6 +46,7 @@ internal expect val platform: Module
 val apiBuffetModule = module {
     includes(platform)
 
+    factoryOf(::BuffetScraperImpl) bind BuffetScraper::class
     factoryOf(::BuffetApiImpl) bind BuffetApi::class
     singleOf(::ValidityStoreImpl) bind ValidityStore::class
 

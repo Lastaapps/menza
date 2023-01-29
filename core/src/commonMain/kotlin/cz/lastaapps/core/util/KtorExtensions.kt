@@ -23,9 +23,12 @@ import arrow.core.Either
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.NetworkError
+import org.lighthousegames.logging.logging
 
 suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
     Either.catch { block() }.mapLeft {
+        logging("catchingNetwork").e(it) { "Failed network call" }
+        it.printStackTrace()
         when (it::class.simpleName) {
             "TimeoutException",
             -> NetworkError.Timeout
@@ -43,7 +46,7 @@ suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
             -> NetworkError.NoInternet
 
             "JsonConvertException",
-            -> NetworkError.SerializationError
+            -> NetworkError.SerializationError(it)
 
             else -> MenzaError.Unknown(it)
         }

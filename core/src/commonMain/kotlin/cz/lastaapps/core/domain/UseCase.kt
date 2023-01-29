@@ -27,7 +27,6 @@ import kotlinx.coroutines.withContext
 value class UCContext(val context: CoroutineContext)
 
 abstract class UseCase(private val context: UCContext) {
-    protected suspend fun launch(block: suspend CoroutineScope.() -> Unit) {
+    protected suspend fun <T> launch(block: suspend CoroutineScope.() -> T) =
         withContext(context.context, block)
-    }
 }

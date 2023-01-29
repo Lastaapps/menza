@@ -75,7 +75,7 @@ internal class DishLogicImpl(
 
     private val job = object : SyncJob<OutcomeIor<WebContentDto>, List<DishEntity>>(
         shouldRun = {
-            if (validityStore.shouldReload()) Some({}) else None
+            if (validityStore.shouldReload()) Some {} else None
         },
         fetchApi = {
             api.process()

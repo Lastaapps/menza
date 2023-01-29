@@ -24,5 +24,5 @@ sealed interface NetworkError : MenzaError.Runtime {
     data object NoInternet : NetworkError
     data object ConnectionClosed : NetworkError
 
-    data object SerializationError : NetworkError
+    data class SerializationError(val throwable: Throwable) : NetworkError
 }

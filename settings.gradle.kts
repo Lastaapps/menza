@@ -28,6 +28,9 @@ pluginManagement {
             }
         }
         maven("https://oss.sonatype.org/content/repositories/snapshots") {
+            mavenContent {
+                snapshotsOnly()
+            }
             content {
                 includeGroup("io.arrow-kt")
             }

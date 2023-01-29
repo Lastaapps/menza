@@ -25,7 +25,7 @@ google-ksp = "1.8.0-1.0.8"
 # @keep
 java-jvmTarget = "11"
 junit5-bom = "5.9.2"
-koin = "3.3.0"
+koin = "3.3.2"
 koin-annotations = "1.0.3"
 kotest = "5.5.4"
 kotlin = "1.8.0"
@@ -34,7 +34,7 @@ kotlin-coroutines = "1.6.4"
 kotlin-languageVersion = "1.9"
 ktor = "2.2.2"
 logback = "1.4.5"
-russhwolf-settings = "0.9"
+russhwolf-settings = "1.0.0"
 sdk-compile = "33"
 sdk-min = "21"
 sdk-target = "33"
@@ -163,31 +163,33 @@ gradlePlugins-shadow = { module = "gradle.plugin.com.github.johnrengelman:shadow
 junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5-bom" }
 junit5-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 junit5-jupiter-runtime = { module = "org.junit.jupiter:junit-jupiter-engine" }
-kmLogging = "org.lighthousegames:logging:1.1.2"
+kmLogging = "org.lighthousegames:logging:1.2.1"
 koin-android-compose = "io.insert-koin:koin-androidx-compose:3.4.1"
 koin-android-core = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-android-navigation = "io.insert-koin:koin-androidx-navigation:3.3.2"
+koin-android-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 koin-android-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
 koin-annotations-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
-koin-core = "io.insert-koin:koin-core:3.2.2"
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-ktorServer = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-ktorServer-logger = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
-koin-test = "io.insert-koin:koin-test:3.3.2"
-koin-testJUnit = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
+koin-test-core = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-test-jUnit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
+koin-test-jUnit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin" }
 kotest-assertion = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-jUnit5runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
 kotlin-coroutines-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
-kotlin-reflect = "org.jetbrains.kotlin:kotlin-reflect:1.6.21"
-kotlin-standardLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
-kotlin-test-annotation = { module = "org.jetbrains:kotlin.kotlin-test-annotations-common" }
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlin-standardLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
+kotlin-test-annotation = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common" }
 kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common" }
+kotlin-test-core = { module = "org.jetbrains.kotlin:kotlin-test" }
 kotlin-test-jUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit" }
 kotlin-test-jUnit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
-kotlin-test-jvm = { module = "org.jetbrains.kotlin:kotlin-test" }
 kotlinx-collection = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
 kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"

@@ -25,9 +25,9 @@ import kotlinx.serialization.SerialName
  * TPiktogram
  */
 @kotlinx.serialization.Serializable
-internal class PictogramDto(
+internal data class PictogramDto(
     @SerialName("id")
-    val id: String,
+    val id: Int,
     @SerialName("nazev")
     val name: String,
 )

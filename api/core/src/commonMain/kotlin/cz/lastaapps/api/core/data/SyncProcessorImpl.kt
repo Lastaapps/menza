@@ -66,7 +66,7 @@ internal class SyncProcessorImpl : SyncProcessor {
                     { results.forEach { (action, _) -> action.map { it() } } }
                 ) { func, acu ->
                     { func(acu) }
-                }
+                }.invoke()
 
                 // store new hash codes
                 results.forEach { (_, hash) -> hash() }

@@ -19,7 +19,7 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
-import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
@@ -30,7 +30,7 @@ import org.koin.core.parameter.parametersOf
 class SyncTodayDishListUC(
     context: UCContext,
 ) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(menza: MenzaType) = launch {
-        get<TodayDishRepo> { parametersOf(menza) }.getData()
+    suspend operator fun invoke(menza: Menza) = launch {
+        get<TodayDishRepo> { parametersOf(menza.type) }.sync()
     }
 }

@@ -4,14 +4,16 @@
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$/scraping" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="--tests &quot;cz.lastaapps.scraping.*&quot;" />
+      <option name="scriptParameters" value="" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value=":scraping:cleanDesktopTest" />
-          <option value=":scraping:desktopTest" />
+          <option value=":scraping:cleanJvmTest" />
+          <option value=":scraping:JvmTest" />
+          <option value="--tests" />
+          <option value="&quot;cz.lastaapps.scraping.*&quot;" />
         </list>
       </option>
       <option name="vmOptions" value="" />

@@ -26,7 +26,7 @@ internal data class DishDayDto(
     val dishList: List<DishDto>,
 )
 
-internal class DishDto(
+internal data class DishDto(
     val type: String,
     val name: String,
     val price: Int,

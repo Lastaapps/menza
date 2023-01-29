@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.domain.model.dto
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 
 /**
@@ -31,7 +32,7 @@ internal data class WeekDto(
     @SerialName("popis")
     val description: String,
     @SerialName("platnost_od")
-    val from: String, // YYYY-MM-DD
+    val from: LocalDate, // YYYY-MM-DD
     @SerialName("platnost_do")
-    val to: String,
+    val to: LocalDate,
 )

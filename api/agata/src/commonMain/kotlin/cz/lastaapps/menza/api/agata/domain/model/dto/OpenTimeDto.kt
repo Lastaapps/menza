@@ -25,7 +25,7 @@ import kotlinx.serialization.SerialName
 /**
  * TOtDoba
  */
-internal class OpenTimeDto(
+internal data class OpenTimeDto(
     @SerialName("id")
     val id: Int,
     @SerialName("podsystem_id")
@@ -39,7 +39,7 @@ internal class OpenTimeDto(
     @SerialName("vydejna_poradi")
     val servingPlaceOrder: Int,
     @SerialName("od_popisek")
-    val description: String,
+    val description: String?,
     @SerialName("od_poradi")
     val order: Int,
     @SerialName("od_den_od")

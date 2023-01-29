@@ -21,6 +21,7 @@ package cz.lastaapps.menza.api.agata.api
 
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.util.catchingNetwork
+import cz.lastaapps.menza.api.agata.data.AgataClient
 import cz.lastaapps.menza.api.agata.domain.model.Func
 import cz.lastaapps.menza.api.agata.domain.model.Func.Dish
 import cz.lastaapps.menza.api.agata.domain.model.Func.DishHash
@@ -34,32 +35,33 @@ import cz.lastaapps.menza.api.agata.domain.model.dto.StrahovDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDishDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDto
 import cz.lastaapps.menza.api.agata.util.getFun
-import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 
 internal interface DishApi {
 
-    suspend fun getDishes(subsystemId: Int): Outcome<List<DishDto>>
+    suspend fun getDishes(subsystemId: Int): Outcome<List<DishDto>?>
     suspend fun getDishesHash(subsystemId: Int): Outcome<String>
 
     suspend fun getPictogram(): Outcome<List<PictogramDto>>
     suspend fun getPictogramHash(): Outcome<String>
 
     suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>>
-    suspend fun getWeekDishList(weekId: Int): Outcome<List<WeekDishDto>>
+    suspend fun getWeekDishList(weekId: Int): Outcome<List<WeekDishDto>?>
 
     suspend fun getStrahov(): Outcome<List<StrahovDto>>
 }
 
 internal class DishApiImpl(
-    private val client: HttpClient,
+    agataClient: AgataClient,
 ) : DishApi {
-    override suspend fun getDishes(subsystemId: Int): Outcome<List<DishDto>> = catchingNetwork {
-        client.getFun(Dish, subsystemId = subsystemId).body()
+    private val client = agataClient.client
+
+    override suspend fun getDishes(subsystemId: Int): Outcome<List<DishDto>?> = catchingNetwork {
+        client.getFun(Dish, subsystemId = subsystemId, secondId = 1).body()
     }
 
     override suspend fun getDishesHash(subsystemId: Int): Outcome<String> = catchingNetwork {
-        client.getFun(DishHash, subsystemId = subsystemId).body()
+        client.getFun(DishHash, subsystemId = subsystemId, secondId = 1).body()
     }
 
     override suspend fun getPictogram(): Outcome<List<PictogramDto>> = catchingNetwork {
@@ -71,12 +73,12 @@ internal class DishApiImpl(
     }
 
     override suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>> = catchingNetwork {
-        client.getFun(Week).body()
+        client.getFun(Week, subsystemId = subsystemId).body()
     }
 
-    override suspend fun getWeekDishList(weekId: Int): Outcome<List<WeekDishDto>> =
+    override suspend fun getWeekDishList(weekId: Int): Outcome<List<WeekDishDto>?> =
         catchingNetwork {
-            client.getFun(WeekDays).body()
+            client.getFun(WeekDays, secondId = weekId).body()
         }
 
     override suspend fun getStrahov(): Outcome<List<StrahovDto>> = catchingNetwork {

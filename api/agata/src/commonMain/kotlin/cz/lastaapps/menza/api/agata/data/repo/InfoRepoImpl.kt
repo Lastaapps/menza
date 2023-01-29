@@ -153,8 +153,6 @@ internal class InfoRepoImpl(
 }
 
 internal object InfoStrahovRepoImpl : InfoRepo {
-    private val flow = flow { emit(Info.empty) }
-
-    override fun getData(): Flow<Info> = flow
+    override fun getData(): Flow<Info> = flow { emit(Info.empty) }
     override suspend fun sync(): SyncOutcome = SyncResult.Unavailable.right()
 }

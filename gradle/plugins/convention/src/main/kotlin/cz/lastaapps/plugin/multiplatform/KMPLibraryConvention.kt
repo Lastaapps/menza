@@ -99,6 +99,7 @@ class KMPLibraryConvention : BasePlugin({
         sourceSets.apply {
             getByName("commonMain") {
                 dependencies {
+                    implementation(project.dependencies.platform(libs.kotlin.bom))
                     implementation(libs.kotlin.coroutines.common)
                     implementation(libs.kotlinx.dateTime)
                     implementation(libs.kotlinx.collection)
@@ -111,10 +112,13 @@ class KMPLibraryConvention : BasePlugin({
 
             getByName("commonTest") {
                 dependencies {
-                    implementation(kotlin("test"))
+                    implementation(libs.kotlin.test.annotation)
+                    implementation(libs.kotlin.test.common)
+                    implementation(libs.kotlin.test.core)
+                    implementation(libs.kotlin.test.jUnit5)
                     implementation(libs.kotest.assertion)
                     implementation(libs.kotlin.coroutines.test)
-                    implementation(libs.koin.test)
+//                    implementation(libs.koin.test.jUnit5)
                 }
             }
 
