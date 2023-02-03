@@ -26,9 +26,7 @@ import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.common.Info
-import cz.lastaapps.api.core.domain.model.common.NewsHeader
 import cz.lastaapps.api.core.domain.repo.InfoRepo
-import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
@@ -43,7 +41,6 @@ import cz.lastaapps.menza.api.agata.domain.HashStore
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
-import cz.lastaapps.menza.api.agata.domain.model.mapers.toNews
 import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,12 +56,11 @@ internal class InfoRepoImpl(
 ) : InfoRepo {
 
     private val hasBeenSynced = MutableStateFlow(false)
-    private val newsFlow = MutableStateFlow<NewsHeader?>(null)
 
     override fun getData(): Flow<Info> =
         combine6(
             db.infoQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToOneOrNull(),
-            newsFlow,
+            db.newsQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToOneOrNull(),
             db.contactQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(),
             db.openTimeQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(),
             db.linkQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(),
@@ -84,16 +80,20 @@ internal class InfoRepoImpl(
             store = { data ->
                 db.infoQueries.deleteSubsystem(subsystemId.toLong())
                 data.forEach {
-                    db.infoQueries.insertEntity(it)
+                    db.infoQueries.insert(it)
                 }
             },
         ),
         // News
-        SyncJobNoCache(
+        SyncJobHash(
+            hashStore = hashStore,
+            hashType = HashType.newsHash(subsystemId),
+            getHashCode = { subsystemApi.getNewsHash(subsystemId).bind() },
             fetchApi = { subsystemApi.getNews(subsystemId).bind() },
-            convert = { data -> data.toNews().rightIor() },
+            convert = { data -> data.toEntity(subsystemId).rightIor() },
             store = { data ->
-                newsFlow.value = data
+                db.newsQueries.deleteForSubsystem(subsystemId.toLong())
+                db.newsQueries.insert(data)
             },
         ),
         // Contacts
@@ -106,7 +106,7 @@ internal class InfoRepoImpl(
             store = { data ->
                 db.contactQueries.deleteAll()
                 data.forEach {
-                    db.contactQueries.insertEntity(it)
+                    db.contactQueries.insert(it)
                 }
             },
         ),
@@ -120,7 +120,7 @@ internal class InfoRepoImpl(
             store = { data ->
                 db.openTimeQueries.deleteSubsystem(subsystemId.toLong())
                 data.forEach {
-                    db.openTimeQueries.insertEntity(it)
+                    db.openTimeQueries.insert(it)
                 }
             },
         ),
@@ -134,7 +134,7 @@ internal class InfoRepoImpl(
             store = { data ->
                 db.linkQueries.deleteSubsystem(subsystemId.toLong())
                 data.forEach {
-                    db.linkQueries.insertEntity(it)
+                    db.linkQueries.insert(it)
                 }
             },
         ),
@@ -148,7 +148,7 @@ internal class InfoRepoImpl(
             store = { data ->
                 db.addressQueries.deleteAll()
                 data.forEach {
-                    db.addressQueries.insertEntity(it)
+                    db.addressQueries.insert(it)
                 }
             },
         ),

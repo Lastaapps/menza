@@ -141,7 +141,7 @@ internal class TodayDishSubsystemRepoImpl(
         store = { data ->
             db.dishQueries.deleteSubsytem(subsystemId.toLong())
             data.forEach {
-                db.dishQueries.insertEntity(it)
+                db.dishQueries.insert(it)
             }
         }
     )
@@ -155,7 +155,7 @@ internal class TodayDishSubsystemRepoImpl(
         store = { data ->
             db.dishTypeQueries.deleteSubsystem(subsystemId.toLong())
             data.forEach {
-                db.dishTypeQueries.insertEntity(it)
+                db.dishTypeQueries.insert(it)
             }
         },
     )
@@ -169,7 +169,7 @@ internal class TodayDishSubsystemRepoImpl(
         store = { data ->
             db.pictogramQueries.deleteAll()
             data.forEach {
-                db.pictogramQueries.insertEntity(it)
+                db.pictogramQueries.insert(it)
             }
         }
     )
@@ -183,7 +183,7 @@ internal class TodayDishSubsystemRepoImpl(
         store = { data ->
             db.servingPlaceQueries.deleteSubsystem(subsystemId.toLong())
             data.forEach {
-                db.servingPlaceQueries.insertEntity(it)
+                db.servingPlaceQueries.insert(it)
             }
         }
     )

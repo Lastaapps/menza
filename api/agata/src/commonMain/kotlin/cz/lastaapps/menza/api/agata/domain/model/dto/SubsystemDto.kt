@@ -32,4 +32,10 @@ internal data class SubsystemDto(
     val name: String,
     @SerialName("otevreno")
     val opened: Boolean,
+    @SerialName("jidelnicek_denni")
+    val supportsDaily: Boolean,
+    @SerialName("jidelnicek_tydenni")
+    val supportsWeekly: Boolean,
+    @SerialName("poradi")
+    val order: Int,
 )

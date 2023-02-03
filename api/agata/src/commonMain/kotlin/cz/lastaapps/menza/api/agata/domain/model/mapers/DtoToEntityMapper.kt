@@ -25,13 +25,13 @@ import agata.DishEntity
 import agata.DishTypeEntity
 import agata.InfoEntity
 import agata.LinkEntity
+import agata.NewsEntity
 import agata.OpenTimeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
+import agata.StrahovEntiy
 import agata.SubsystemEntity
 import cz.lastaapps.api.core.domain.model.common.LatLong
-import cz.lastaapps.api.core.domain.model.common.NewsHeader
-import cz.lastaapps.core.util.takeIfNotBlack
 import cz.lastaapps.menza.api.agata.domain.model.dto.AddressDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.ContactDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishDto
@@ -42,16 +42,19 @@ import cz.lastaapps.menza.api.agata.domain.model.dto.NewsDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.OpenTimeDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.PictogramDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.ServingPlaceDto
+import cz.lastaapps.menza.api.agata.domain.model.dto.StrahovDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 
-internal fun SubsystemDto.toEntity(isImportant: Boolean) =
+internal fun SubsystemDto.toEntity() =
     SubsystemEntity(
         id = id.toLong(),
         name = name,
         opened = opened,
-        isImportant = isImportant,
+        supportsDaily = supportsDaily,
+        supportsWeekly = supportsWeekly,
+        itemOrder = order.toLong(),
     )
 
 internal fun DishDto.toEntity() =
@@ -59,16 +62,16 @@ internal fun DishDto.toEntity() =
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
         typeId = typeId.toLong(),
-        servingPlaces = servingPlaceList.parseSemicolonSeparated(),
+        servingPlaces = servingPlaceList,
         amount = amount,
         name = name,
         sideDishA = sideDishA,
         sideDishB = sideDishB,
-        priceNormal = priceNormal?.toDouble(),
-        priceDiscount = priceDiscount?.toDouble(),
-        allergens = allergens?.parseAllergens()?.map { it.toLong() }.orEmpty(),
-        photoLink = photoLink?.takeIfNotBlack(),
-        pictogram = pictogram?.parseSemicolonSeparated().orEmpty(),
+        priceNormal = priceNormal.toDouble(),
+        priceDiscount = priceDiscount.toDouble(),
+        allergens = allergens,
+        photoLink = photoLink,
+        pictogram = pictogram,
         isActive = isActive,
     )
 
@@ -100,12 +103,14 @@ internal fun InfoDto.toEntity() =
     InfoEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
-        header = header?.removeHtml(),
         footer = footer?.removeHtml(),
     )
 
-internal fun NewsDto.toNews() =
-    NewsHeader(html.removeHtml())
+internal fun NewsDto.toEntity(subsystemId: Int) =
+    NewsEntity(
+        subsystemId = subsystemId.toLong(),
+        text = html.removeHtml(),
+    )
 
 private fun String.removeHtml() = this
     .replace("<br>", "\n")
@@ -134,8 +139,8 @@ internal fun OpenTimeDto.toEntity() =
         servingPlaceOrder = servingPlaceOrder.toLong(),
         description = description,
         itemOrder = order.toLong(),
-        dayFrom = dayFrom.toDayOfWeek(),
-        dayTo = (dayTo ?: dayFrom).toDayOfWeek(),
+        dayFrom = dayFrom?.toDayOfWeek(),
+        dayTo = (dayTo ?: dayFrom)?.toDayOfWeek(),
         timeFrom = timeFrom.toLocalTime()!!,
         timeTo = timeTo?.toLocalTime() ?: timeFrom.toLocalTime()!!,
     )
@@ -174,3 +179,21 @@ private fun String.toLatLong() =
         .let { (lat, long) ->
             LatLong(lat = lat, long = long)
         }
+
+internal fun StrahovDto.toEntity() =
+    StrahovEntiy(
+        id = id.toLong(),
+        groupId = groupId.toLong(),
+        groupNameCs = groupNameCs,
+        groupNameEn = groupNameEn,
+        groupOrder = groupOrder.toLong(),
+        itemOrder = order.toLong(),
+        amountCs = amountCs,
+        amountEn = amountEn,
+        nameCs = nameCs,
+        nameEn = nameEn,
+        priceNormal = price.toDouble(),
+        priceStudent = priceStudent.toDouble(),
+        allergens = allergens,
+        photoLink = photoLink,
+    )

@@ -20,10 +20,10 @@
 package cz.lastaapps.api.agata.test
 
 import arrow.core.Either.Right
+import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import cz.lastaapps.menza.api.agata.api.CafeteriaApiImpl
 import cz.lastaapps.menza.api.agata.data.createAgataClient
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishTypeDto
-import cz.lastaapps.menza.api.agata.domain.model.dto.MenuDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.ServingPlaceDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import io.kotest.core.spec.style.StringSpec
@@ -31,8 +31,12 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
+import org.lighthousegames.logging.KmLogging
 
 class CafeteriaTest : StringSpec({
+
+    KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
+
     fun client() = createAgataClient(HttpClient() {
         install(Logging) {
             level = BODY
@@ -42,11 +46,6 @@ class CafeteriaTest : StringSpec({
     fun api() = CafeteriaApiImpl(client())
 
     val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
-
-    "getMenus" {
-        val res = api().getMenus()
-        res.shouldBeInstanceOf<Right<List<MenuDto>>>()
-    }
 
     "getSubsystems" {
         val res = api().getSubsystems()

@@ -12,11 +12,7 @@ getForSubsystem:
     SELECT * FROM AddressEntity WHERE subsystemId = :subsystemId;
 
 insert:
-    INSERT OR REPLACE INTO AddressEntity(id, subsystemId, address, gps)
-    VALUES (:id, :subsystem, :address, :gps);
-
-insertEntity:
-    INSERT OR REPLACE INTO AddressEntity(id, subsystemId, address, gps)
+    INSERT OR REPLACE INTO AddressEntity
     VALUES ?;
 
 deleteAll:

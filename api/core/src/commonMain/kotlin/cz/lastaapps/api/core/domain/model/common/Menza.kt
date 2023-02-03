@@ -25,5 +25,6 @@ data class Menza constructor(
     val type: MenzaType,
     val name: String,
     val isOpened: Boolean,
-    val isImportant: Boolean, // true if it is not returned only by the AllPodsystem endpoint
+    val supportsDaily: Boolean,
+    val supportsWeekly: Boolean,
 )

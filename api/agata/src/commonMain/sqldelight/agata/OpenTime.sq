@@ -10,8 +10,8 @@ CREATE TABLE OpenTimeEntity(
     servingPlaceOrder INTEGER NOT NULL,
     description TEXT,
     itemOrder INTEGER NOT NULL,
-    dayFrom INTEGER AS DayOfWeek NOT NULL,
-    dayTo INTEGER AS DayOfWeek NOT NULL,
+    dayFrom INTEGER AS DayOfWeek,
+    dayTo INTEGER AS DayOfWeek,
     timeFrom INTEGER AS LocalTime NOT NULL,
     timeTo INTEGER AS LocalTime NOT NULL,
     PRIMARY KEY (id)
@@ -21,11 +21,7 @@ getForSubsystem:
     SELECT * FROM OpenTimeEntity WHERE subsystemId = :subsystemId;
 
 insert:
-    INSERT INTO OpenTimeEntity(id, subsystemId, servingPlaceId, servingPlaceName, servingPlaceAbbrev, servingPlaceOrder, description, itemOrder, dayFrom, dayTo,timeFrom, timeTo)
-    VALUES (:id, :subsystemId, :servingPlaceId, :servingPlaceName, :servingPlaceAbbrev, :servingPlaceOrder, :description, :itemOrder, :dayFrom, :dayTo,:timeFrom, :timeTo);
-
-insertEntity:
-    INSERT INTO OpenTimeEntity(id, subsystemId, servingPlaceId, servingPlaceName, servingPlaceAbbrev, servingPlaceOrder, description, itemOrder, dayFrom, dayTo,timeFrom, timeTo)
+    INSERT INTO OpenTimeEntity
     VALUES ?;
 
 deleteSubsystem:

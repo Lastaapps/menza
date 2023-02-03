@@ -22,6 +22,7 @@ package cz.lastaapps.menza.api.agata.data
 import agata.AddressEntity
 import agata.DishEntity
 import agata.OpenTimeEntity
+import agata.StrahovEntiy
 import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.api.agata.AgataDatabase
@@ -51,6 +52,9 @@ internal object AgataDatabaseFactory {
         ),
         AddressEntityAdapter = AddressEntity.Adapter(
             gpsAdapter = LatLongAdapter,
+        ),
+        StrahovEntiyAdapter = StrahovEntiy.Adapter(
+            allergensAdapter = LongListAdapter,
         ),
     )
 }

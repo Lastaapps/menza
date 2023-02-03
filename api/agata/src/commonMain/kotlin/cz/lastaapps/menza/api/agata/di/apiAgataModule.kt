@@ -65,7 +65,7 @@ val apiAgataModule = module {
 
     registerMenzaType<MenzaType.Agata.Strahov>(
         menzaRepo = { MenzaSubsystemRepoImpl(get(), get(), get(), get(), get()) },
-        dishRepo = { TodayDishStrahovRepoImpl(get(), get(), get()) },
+        dishRepo = { TodayDishStrahovRepoImpl(get(), get(), get(), get(), get()) },
         infoRepo = { InfoStrahovRepoImpl },
         weekRepo = { WeekRepoStrahovImpl },
     )

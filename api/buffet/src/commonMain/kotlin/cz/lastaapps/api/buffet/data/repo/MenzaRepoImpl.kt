@@ -37,8 +37,9 @@ internal object MenzaFSRepoImpl : MenzaRepo {
             Menza(
                 type = MenzaType.Buffet.FS,
                 name = "Bufet FS",
-                isImportant = true,
                 isOpened = true,
+                supportsDaily = true,
+                supportsWeekly = true,
             )
         ).let { emit(it) }
     }
@@ -53,8 +54,9 @@ internal object MenzaFELRepoImpl : MenzaRepo {
             Menza(
                 type = MenzaType.Buffet.FEL,
                 name = "Bufet FEL",
-                isImportant = true,
                 isOpened = true,
+                supportsDaily = true,
+                supportsWeekly = true,
             )
         ).let { emit(it) }
     }

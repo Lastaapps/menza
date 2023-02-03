@@ -31,11 +31,9 @@ internal data class InfoDto(
     @SerialName("podsystem_id")
     val subsystemId: Int,
 //    @SerialName("podsystem_web")
-//    val subsystemWeb: String, // name
-    @SerialName("text_nahore")
-    val header: String?,
+//    val webName: String,
     @SerialName("text_dole")
     val footer: String?,
 //    @SerialName("menu")
-//    val menuType: Int, // [0 - lunch, 1 - dinner]
+//    val currentMenu: Int, // [0 - lunch, 1 - dinner]
 )

@@ -7,18 +7,11 @@ CREATE TABLE ServingPlaceEntity(
     PRIMARY KEY (id)
 );
 
-getById:
-    SELECT * FROM ServingPlaceEntity WHERE id = :id;
-
 getByIds:
     SELECT * FROM ServingPlaceEntity WHERE id IN :id;
 
 insert:
-    INSERT INTO ServingPlaceEntity(id, subsystemId, name, description, abbrev)
-    VALUES (:id, :subsystemId, :name, :description, :abbrev);
-
-insertEntity:
-    INSERT INTO ServingPlaceEntity(id, subsystemId, name, description, abbrev)
+    INSERT INTO ServingPlaceEntity
     VALUES ?;
 
 deleteSubsystem:

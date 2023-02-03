@@ -31,6 +31,7 @@ import cz.lastaapps.menza.api.agata.domain.model.Func.InfoHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.Link
 import cz.lastaapps.menza.api.agata.domain.model.Func.LinkHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.News
+import cz.lastaapps.menza.api.agata.domain.model.Func.NewsHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.Opening
 import cz.lastaapps.menza.api.agata.domain.model.Func.OpeningHash
 import cz.lastaapps.menza.api.agata.domain.model.dto.AddressDto
@@ -48,6 +49,7 @@ internal sealed interface SubsystemApi {
     suspend fun getInfoHash(subsystemId: Int): Outcome<String>
 
     suspend fun getNews(subsystemId: Int): Outcome<NewsDto>
+    suspend fun getNewsHash(subsystemId: Int): Outcome<String>
 
     suspend fun getOpeningTimes(subsystemId: Int): Outcome<List<OpenTimeDto>>
     suspend fun getOpeningTimesHash(subsystemId: Int): Outcome<String>
@@ -78,6 +80,10 @@ internal class SubsystemApiImpl(
 
     override suspend fun getNews(subsystemId: Int): Outcome<NewsDto> = catchingNetwork {
         client.getFun(News, subsystemId = subsystemId).body<String>().let { NewsDto(it) }
+    }
+
+    override suspend fun getNewsHash(subsystemId: Int): Outcome<String> = catchingNetwork {
+        client.getFun(NewsHash, subsystemId = subsystemId).body()
     }
 
     override suspend fun getOpeningTimes(subsystemId: Int): Outcome<List<OpenTimeDto>> =

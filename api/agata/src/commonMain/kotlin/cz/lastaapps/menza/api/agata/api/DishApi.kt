@@ -27,6 +27,7 @@ import cz.lastaapps.menza.api.agata.domain.model.Func.Dish
 import cz.lastaapps.menza.api.agata.domain.model.Func.DishHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.Pictogram
 import cz.lastaapps.menza.api.agata.domain.model.Func.PictogramHash
+import cz.lastaapps.menza.api.agata.domain.model.Func.StrahovHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.Week
 import cz.lastaapps.menza.api.agata.domain.model.Func.WeekDays
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishDto
@@ -45,10 +46,11 @@ internal interface DishApi {
     suspend fun getPictogram(): Outcome<List<PictogramDto>>
     suspend fun getPictogramHash(): Outcome<String>
 
-    suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>>
+    suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>?>
     suspend fun getWeekDishList(weekId: Int): Outcome<List<WeekDishDto>?>
 
     suspend fun getStrahov(): Outcome<List<StrahovDto>>
+    suspend fun getStrahovHash(): Outcome<String>
 }
 
 internal class DishApiImpl(
@@ -72,7 +74,7 @@ internal class DishApiImpl(
         client.getFun(PictogramHash).body()
     }
 
-    override suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>> = catchingNetwork {
+    override suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>?> = catchingNetwork {
         client.getFun(Week, subsystemId = subsystemId).body()
     }
 
@@ -83,5 +85,9 @@ internal class DishApiImpl(
 
     override suspend fun getStrahov(): Outcome<List<StrahovDto>> = catchingNetwork {
         client.getFun(Func.Strahov).body()
+    }
+
+    override suspend fun getStrahovHash(): Outcome<String> = catchingNetwork {
+        client.getFun(StrahovHash).body()
     }
 }

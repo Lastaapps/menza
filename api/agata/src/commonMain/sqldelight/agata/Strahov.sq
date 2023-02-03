@@ -1,0 +1,29 @@
+import kotlin.collections.List;
+
+CREATE TABLE StrahovEntiy (
+    id INTEGER NOT NULL,
+    groupId INTEGER NOT NULL ,
+    groupNameCs TEXT NOT NULL,
+    groupNameEn TEXT NOT NULL,
+    groupOrder INTEGER NOT NULL,
+    itemOrder INTEGER NOT NULL,
+    amountCs TEXT,
+    amountEn TEXT,
+    nameCs TEXT NOT NULL,
+    nameEn TEXT NOT NULL,
+    priceNormal REAL NOT NULL,
+    priceStudent REAL NOT NULL,
+    allergens TEXT AS List<Long> NOT NULL,
+    photoLink TEXT,
+    PRIMARY KEY (id)
+);
+
+get:
+    SELECT * FROM StrahovEntiy;
+
+insert:
+    INSERT INTO StrahovEntiy
+    VALUES ?;
+
+deleteAll:
+    DELETE FROM StrahovEntiy;

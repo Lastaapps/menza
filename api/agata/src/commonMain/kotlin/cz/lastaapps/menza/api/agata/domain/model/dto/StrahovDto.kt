@@ -51,7 +51,7 @@ internal data class StrahovDto(
     @SerialName("cena_stud")
     val priceStudent: Float,
     @SerialName("alergeny")
-    val allergens: String?,
+    val allergens: List<Long>,
     @SerialName("foto")
     val photoLink: String?,
 )

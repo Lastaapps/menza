@@ -23,11 +23,7 @@ getForSubsystem:
     SELECT * FROM DishEntity WHERE subsystemId = :subsystemId AND isActive = 1;
 
 insert:
-    INSERT INTO DishEntity(id, subsystemId, typeId, servingPlaces, amount, name, sideDishA, sideDishB, priceNormal, priceDiscount, allergens, photoLink, pictogram, isActive)
-    VALUES (:id, :subsystemId, :typeId, :servingPlaces, :amount, :name, :sideDishA, :sideDishB, :priceNormal, :priceDiscount, :allergens, :photoLink, :pictogram, :isActive);
-
-insertEntity:
-    INSERT INTO DishEntity(id, subsystemId, typeId, servingPlaces, amount, name, sideDishA, sideDishB, priceNormal, priceDiscount, allergens, photoLink, pictogram, isActive)
+    INSERT INTO DishEntity
     VALUES ?;
 
 deleteSubsytem:

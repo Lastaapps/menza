@@ -38,13 +38,11 @@ import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import cz.lastaapps.menza.api.agata.domain.model.HashType
-import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -61,8 +59,7 @@ internal class MenzaSubsystemRepoImpl(
         db.subsystemQueries.getAll()
             .asFlow()
             .mapToList()
-            .map { it.map { item -> item.toDomain() } }
-            .map { it.toPersistentList() }
+            .map { it.toDomain() }
 
     private val subsystemJob =
         SyncJobHash(
@@ -70,22 +67,17 @@ internal class MenzaSubsystemRepoImpl(
             hashType = HashType.subsystemHash(),
             getHashCode = { api.getSubsystemsHash().bind() },
             fetchApi = {
-                val subsystems = api.getSubsystems().bind()
-                val importantIds = subsystems.map(SubsystemDto::id)
-                val allSubsystems = api.getAllSubsystems().bind()
-                allSubsystems.map {
-                    (it.id in importantIds) to it
-                }
+                api.getSubsystems().bind()
             },
             convert = { dtos ->
-                dtos.map { (important, dto) ->
-                    dto.toEntity(isImportant = important)
+                dtos.map { dto ->
+                    dto.toEntity()
                 }.rightIor()
             },
             store = { result ->
                 db.subsystemQueries.deleteAll()
                 result.forEach { dto ->
-                    db.subsystemQueries.insertEntity(dto)
+                    db.subsystemQueries.insert(dto)
                 }
             },
         )
@@ -104,7 +96,8 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
                 type = Strahov,
                 name = "Restaurace Strahov",
                 isOpened = true,
-                isImportant = true
+                supportsDaily = true,
+                supportsWeekly = false,
             )
         ).let { emit(it) }
     }

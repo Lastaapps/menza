@@ -25,9 +25,11 @@ import agata.DishEntity
 import agata.DishTypeEntity
 import agata.InfoEntity
 import agata.LinkEntity
+import agata.NewsEntity
 import agata.OpenTimeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
+import agata.StrahovEntiy
 import agata.SubsystemEntity
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
 import cz.lastaapps.api.core.domain.model.common.Contact
@@ -36,15 +38,20 @@ import cz.lastaapps.api.core.domain.model.common.DishCategory
 import cz.lastaapps.api.core.domain.model.common.Info
 import cz.lastaapps.api.core.domain.model.common.Link
 import cz.lastaapps.api.core.domain.model.common.Menza
-import cz.lastaapps.api.core.domain.model.common.NewsHeader
 import cz.lastaapps.api.core.domain.model.common.OpeningTime
 import cz.lastaapps.api.core.domain.model.common.PlaceOpeningTime
 import cz.lastaapps.api.core.domain.model.common.ServingPlace
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.DayOfWeek
 
-internal fun SubsystemEntity.toDomain() =
-    Menza(Subsystem(id.toInt()), name, opened, isImportant)
+internal fun List<SubsystemEntity>.toDomain() =
+    sortedBy { it.itemOrder }
+        .map { it.toDomain() }
+        .toImmutableList()
+
+private fun SubsystemEntity.toDomain() =
+    Menza(Subsystem(id.toInt()), name, opened, supportsDaily, supportsWeekly)
 
 internal fun DishEntity.toDomain(
     pictograms: List<PictogramEntity>,
@@ -70,6 +77,23 @@ internal fun DishEntity.toDomain(
     )
 }
 
+private fun DishEntity.fullName() =
+    buildString {
+        append(name)
+        if (sideDishA != null || sideDishB != null) {
+            append(" (")
+
+            sideDishA?.let { append(it) }
+
+            if (sideDishA != null && sideDishB != null)
+                append(" / ")
+
+            sideDishB?.let { append(it) }
+
+            append(')')
+        }
+    }
+
 internal fun DishTypeEntity.toDomain(dishList: List<Dish>) =
     DishCategory(
         nameShort = nameShort,
@@ -79,15 +103,14 @@ internal fun DishTypeEntity.toDomain(dishList: List<Dish>) =
     )
 
 internal fun InfoEntity?.toDomain(
-    news: NewsHeader?,
+    news: NewsEntity?,
     contacts: List<ContactEntity>,
     openingTimes: List<OpenTimeEntity>,
     links: List<LinkEntity>,
     address: AddressEntity?,
 ) = Info(
-    header = this?.header,
+    header = news?.text,
     footer = this?.footer,
-    news = news,
     contacts = contacts.map { it.toDomain() }.toImmutableList(),
     openingTimes = openingTimes.toDomain().toImmutableList(),
     links = links.map { it.toDomain() }.toImmutableList(),
@@ -123,8 +146,8 @@ private fun List<OpenTimeEntity>.toDomain() =
 
 private fun OpenTimeEntity.toDomain() =
     OpeningTime(
-        from = dayFrom to timeFrom,
-        to = dayTo to timeTo,
+        from = (dayFrom ?: DayOfWeek.MONDAY) to timeFrom,
+        to = (dayTo ?: DayOfWeek.FRIDAY) to timeTo,
     )
 
 
@@ -133,3 +156,35 @@ private fun LinkEntity.toDomain() =
         link = link,
         description = description,
     )
+
+@JvmName("javaIsFuckingStupidShit")
+internal fun List<StrahovEntiy>.toDomain() =
+    groupBy { it.groupId }
+        .entries
+        .sortedBy { it.value.first().groupOrder }
+        .map { (_, values) ->
+            val value = values.first()
+            DishCategory(
+                nameShort = null,
+                nameCs = value.groupNameCs.trim(),
+                nameEn = value.groupNameEn.trim(),
+                dishList = values
+                    .sortedBy { it.itemOrder }
+                    .map { it.toDomain() }
+                    .toImmutableList(),
+            )
+        }.toImmutableList()
+
+private fun StrahovEntiy.toDomain() = Dish(
+    amountCs = amountCs,
+    amountEn = amountEn,
+    nameEn = nameEn,
+    nameCs = nameCs,
+    priceDiscount = priceStudent.toFloat(),
+    priceNormal = priceNormal.toFloat(),
+    allergens = allergens.map { it.toInt() }.toImmutableList(),
+    photoLink = photoLink,
+    pictogram = persistentListOf(),
+    servingPlaces = persistentListOf(),
+    ingredients = persistentListOf(),
+)

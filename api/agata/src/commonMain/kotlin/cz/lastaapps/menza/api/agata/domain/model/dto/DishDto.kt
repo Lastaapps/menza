@@ -22,7 +22,7 @@ package cz.lastaapps.menza.api.agata.domain.model.dto
 import kotlinx.serialization.SerialName
 
 /**
- * TJidlo2
+ * TJidlo
  */
 @kotlinx.serialization.Serializable
 internal data class DishDto(
@@ -33,29 +33,27 @@ internal data class DishDto(
 //    @SerialName("datum")
 //    val date: String, // YYYY-MM-DD
     @SerialName("vydejny")
-    val servingPlaceList: String, // semicolon separated
-//    @SerialName("jidelnicek")
-//    val menuList: String, // semicolon separated
+    val servingPlaceList: List<Long>,
     @SerialName("kategorie")
     val typeId: Int,
     @SerialName("vaha")
     val amount: String?,
     @SerialName("nazev")
-    val name: String?,
+    val name: String,
     @SerialName("priloha_a")
     val sideDishA: String?,
     @SerialName("priloha_b")
     val sideDishB: String?,
     @SerialName("cena_stud")
-    val priceDiscount: Float?,
+    val priceDiscount: Float,
     @SerialName("cena")
-    val priceNormal: Float?,
+    val priceNormal: Float,
     @SerialName("alergeny")
-    val allergens: String?, // however a cook want's to separated
+    val allergens: List<Long>,
     @SerialName("foto")
     val photoLink: String?,
-    @SerialName("piktogram")
-    val pictogram: String?, // semicolon separated
+    @SerialName("piktogramy")
+    val pictogram: List<Long>,
     @SerialName("aktivni")
     val isActive: Boolean,
 )

@@ -19,48 +19,14 @@
 
 package cz.lastaapps.menza.api.agata.domain.model.mapers
 
-import cz.lastaapps.api.core.domain.model.common.Dish
-import cz.lastaapps.api.core.domain.model.common.DishCategory
 import cz.lastaapps.api.core.domain.model.common.WeekDayDish
 import cz.lastaapps.api.core.domain.model.common.WeekDish
 import cz.lastaapps.api.core.domain.model.common.WeekDishCategory
-import cz.lastaapps.menza.api.agata.domain.model.dto.StrahovDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDishDto
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-
-internal fun List<StrahovDto>.toDomain() =
-    groupBy { it.groupId }
-        .entries
-        .sortedBy { it.value.first().groupOrder }
-        .map { (_, values) ->
-            val value = values.first()
-            DishCategory(
-                nameShort = null,
-                nameCs = value.groupNameCs.trim(),
-                nameEn = value.groupNameEn.trim(),
-                dishList = values
-                    .sortedBy { it.order }
-                    .map { it.toDomain() }
-                    .toImmutableList(),
-            )
-        }
-
-private fun StrahovDto.toDomain() = Dish(
-    amountCs = amountCs,
-    amountEn = amountEn,
-    nameEn = nameEn,
-    nameCs = nameCs,
-    priceDiscount = priceStudent,
-    priceNormal = price,
-    allergens = allergens?.parseAllergens().orEmpty().toImmutableList(),
-    photoLink = photoLink,
-    pictogram = persistentListOf(),
-    servingPlaces = persistentListOf(),
-    ingredients = persistentListOf(),
-)
 
 internal fun List<WeekDishDto>.toDomain() =
     groupBy { it.date }

@@ -27,7 +27,6 @@ import kotlinx.datetime.LocalTime
 data class Info(
     val header: String?,
     val footer: String?,
-    val news: NewsHeader?,
     val contacts: ImmutableList<Contact>,
     val openingTimes: ImmutableList<PlaceOpeningTime>,
     val links: ImmutableList<Link>,
@@ -37,7 +36,7 @@ data class Info(
     companion object {
         val empty: Info
             get() = Info(
-                null, null, null,
+                null, null,
                 persistentListOf(),
                 persistentListOf(),
                 persistentListOf(),
@@ -71,6 +70,3 @@ data class OpeningTime(
 )
 
 data class LatLong(val lat: Float, val long: Float)
-
-@JvmInline
-value class NewsHeader(val text: String)

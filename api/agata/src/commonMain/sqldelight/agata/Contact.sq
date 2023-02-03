@@ -13,11 +13,7 @@ getForSubsystem:
     SELECT * FROM ContactEntity WHERE subsystemId = :subsystemId;
 
 insert:
-    INSERT INTO ContactEntity(id, subsystemId, itemOrder, role, name, phone, email)
-    VALUES(:id, :subsystemId, :itemOrder, :role, :name, :phone, :email);
-
-insertEntity:
-    INSERT INTO ContactEntity(id, subsystemId, itemOrder, role, name, phone, email)
+    INSERT INTO ContactEntity
     VALUES ?;
 
 deleteAll:

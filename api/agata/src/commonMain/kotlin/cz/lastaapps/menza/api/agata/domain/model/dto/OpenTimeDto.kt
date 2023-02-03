@@ -43,7 +43,7 @@ internal data class OpenTimeDto(
     @SerialName("od_poradi")
     val order: Int,
     @SerialName("od_den_od")
-    val dayFrom: String, // Po, Út, ...
+    val dayFrom: String?, // Po, Út, ...
     @SerialName("od_den_do")
     val dayTo: String?,
     @SerialName("od_cas_od")

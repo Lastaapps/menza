@@ -22,9 +22,6 @@ package cz.lastaapps.menza.api.agata.domain.model
 data class HashType(val func: String) {
 
     companion object {
-        fun menuHash() =
-            HashType("menus")
-
         fun subsystemHash() =
             HashType("subsystems")
 
@@ -54,5 +51,11 @@ data class HashType(val func: String) {
 
         fun addressHash() =
             HashType("address")
+
+        fun newsHash(subsystemId: Int) =
+            HashType("news_$subsystemId")
+
+        fun strahovHash() =
+            HashType("strahov")
     }
 }

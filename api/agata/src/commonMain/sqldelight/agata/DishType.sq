@@ -11,11 +11,7 @@ getByDishId:
     SELECT * FROM DishTypeEntity WHERE id = :dishId;
 
 insert:
-    INSERT INTO DishTypeEntity(id, subsystemId, nameShort, nameLong, itemOrder)
-    VALUES (:id, :subsystemId, :nameShort, :nameLong, :itemOrder);
-
-insertEntity:
-    INSERT INTO DishTypeEntity(id, subsystemId, nameShort, nameLong, itemOrder)
+    INSERT INTO DishTypeEntity
     VALUES ?;
 
 deleteSubsystem:

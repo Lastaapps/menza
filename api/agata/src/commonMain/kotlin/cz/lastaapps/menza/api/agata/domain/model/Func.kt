@@ -17,37 +17,48 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:Suppress("SpellCheckingInspection")
+
 package cz.lastaapps.menza.api.agata.domain.model
 
 internal enum class Func(val funName: String) {
-    MenuHash("GetJidelnickyHash"),
-    Menu("GetJidelnicky"),
     SubsystemHash("GetPodsystemyHash"),
     Subsystem("GetPodsystemy"),
-    SubsystemAll("GetPodsystemyAll"),
+
     ServingPacesHash("GetVydejnyHash"),
     ServingPaces("GetVydejny"),
+
     TypesHash("GetKategorieHash"),
     Types("GetKategorie"),
+
     DishHash("GetJidlaHash"),
     Dish("GetJidla"),
+
     InfoHash("GetInfoHash"),
     Info("GetInfo"),
-    News("GetAktuality"),
 
-    //    InfoGlobal("GetGlobalInfo"),
+    NewsHash("GetAktualityHash"),
+    News("GetAktualityS"),
+
     OpeningHash("GetOtDobyHash"),
     Opening("GetOtDoby"),
+
     ContactsHash("GetKontaktyHash"),
     Contacts("GetKontakty"),
+
     PictogramHash("GetPiktogramyHash"),
     Pictogram("GetPiktogramy"),
+
     AddressHash("GetAdresyHash"),
     Address("GetAdresy"),
+
     LinkHash("GetOdkazyHash"),
     Link("GetOdkazy"),
+
     Week("GetTydny"),
     WeekDays("GetTydnyDny"),
+
+    StrahovHash("GetMinutkySHHash"),
     Strahov("GetMinutkySH"),
     ;
 }

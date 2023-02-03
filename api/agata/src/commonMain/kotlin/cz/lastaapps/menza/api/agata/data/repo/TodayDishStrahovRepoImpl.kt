@@ -20,9 +20,11 @@
 package cz.lastaapps.menza.api.agata.data.repo
 
 import arrow.core.rightIor
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
+import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.common.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
-import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.runSync
@@ -30,35 +32,48 @@ import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckRecent
 import cz.lastaapps.menza.api.agata.api.DishApi
+import cz.lastaapps.menza.api.agata.data.SyncJobHash
+import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
+import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 internal class TodayDishStrahovRepoImpl(
     private val dishApi: DishApi,
+    private val db: AgataDatabase,
     private val processor: SyncProcessor,
     private val checker: ValidityChecker,
+    hashStore: HashStore,
 ) : TodayDishRepo {
 
     private val validityKey = ValidityKey.strahovToday()
     private val isValidFlow = checker.isFromToday(validityKey)
 
-    private val dishList = MutableStateFlow<ImmutableList<DishCategory>>(persistentListOf())
+    override fun getData(): Flow<ImmutableList<DishCategory>> =
+        db.strahovQueries
+            .get()
+            .asFlow()
+            .mapToList()
+            .combine(isValidFlow) { data, validity ->
+                data.takeIf { validity }.orEmpty()
+            }
+            .map { it.toDomain() }
 
-    override fun getData(): Flow<ImmutableList<DishCategory>> = dishList
-        .combine(isValidFlow) { data, validity ->
-            data.takeIf { validity } ?: persistentListOf()
-        }
-
-    private val job = SyncJobNoCache(
+    private val job = SyncJobHash(
+        hashStore = hashStore,
+        hashType = HashType.strahovHash(),
+        getHashCode = { dishApi.getStrahovHash().bind() },
         fetchApi = { dishApi.getStrahov().bind() },
-        convert = { it.toDomain().toImmutableList().rightIor() },
+        convert = { data -> data.map { it.toEntity() }.rightIor() },
         store = { data ->
-            dishList.value = data
+            db.strahovQueries.deleteAll()
+            data.forEach {
+                db.strahovQueries.insert(it)
+            }
         }
     )
 

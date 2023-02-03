@@ -32,6 +32,7 @@ import cz.lastaapps.api.buffet.domain.model.dto.DishDayDto
 import cz.lastaapps.api.buffet.domain.model.dto.WebContentDto
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -40,18 +41,17 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.HttpClient
 import kotlinx.datetime.LocalDate
 import org.lighthousegames.logging.KmLogging
-import org.lighthousegames.logging.Slf4jLogFactory
 import org.lighthousegames.logging.logging
 
 class BuffetScraperTest : StringSpec({
+
+    KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
+
     fun loadPage(name: String): String =
         BuffetScraperTest::class.java.classLoader?.getResource(name)!!.readText()
 
     fun scraper() = BuffetScraperImpl()
     fun client() = HttpClient()
-
-    // breaks otherwise for some fucking reason
-    KmLogging.setLogFactory(Slf4jLogFactory())
 
     "Scrape live" {
         val log = logging("Live")

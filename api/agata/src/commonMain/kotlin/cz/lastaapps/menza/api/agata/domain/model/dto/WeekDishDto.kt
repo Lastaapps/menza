@@ -32,6 +32,8 @@ internal data class WeekDishDto(
 //    val weekId: Int,
     @SerialName("datum")
     val date: String,
+//    @SerialName("den")
+//    val dayOfWeek: Int,
     @SerialName("typstravy")
     val typeId: Int,
     @SerialName("typstravy_nazev")

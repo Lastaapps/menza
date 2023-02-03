@@ -46,7 +46,6 @@ internal class InfoRepoImpl(
             Info(
                 header = null,
                 footer = null,
-                news = null,
                 contacts = commonContacts,
                 openingTimes = openTime(type),
                 links = persistentListOf(

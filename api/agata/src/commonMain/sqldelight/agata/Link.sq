@@ -10,11 +10,7 @@ getForSubsystem:
     SELECT * FROM LinkEntity WHERE subsystemId = :subsystemId;
 
 insert:
-    INSERT INTO LinkEntity(id, subsystemId, link, description)
-    VALUES (:id, :subsystemId, :link, :description);
-
-insertEntity:
-    INSERT INTO LinkEntity(id, subsystemId, link, description)
+    INSERT INTO LinkEntity
     VALUES ?;
 
 deleteSubsystem:

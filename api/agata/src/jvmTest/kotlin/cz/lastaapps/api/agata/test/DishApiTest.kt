@@ -19,9 +19,8 @@
 
 package cz.lastaapps.api.agata.test
 
-import arrow.core.Either.Left
 import arrow.core.Either.Right
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import cz.lastaapps.menza.api.agata.api.DishApiImpl
 import cz.lastaapps.menza.api.agata.data.createAgataClient
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishDto
@@ -30,12 +29,18 @@ import cz.lastaapps.menza.api.agata.domain.model.dto.StrahovDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDishDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDto
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
+import org.lighthousegames.logging.KmLogging
 
 class DishApiTest : StringSpec({
+
+    KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
+
     fun client() = createAgataClient(HttpClient() {
         install(Logging) {
             level = BODY
@@ -45,6 +50,7 @@ class DishApiTest : StringSpec({
     fun api() = DishApiImpl(client())
 
     val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
+    val weekIds = listOf(1, 2, 3, 6, 8, 9)
 
     "getDishes" {
         ids.forEach { subsystemId ->
@@ -56,18 +62,20 @@ class DishApiTest : StringSpec({
         val res = api().getPictogram()
         res.shouldBeInstanceOf<Right<List<PictogramDto>>>()
     }
-    "getWeeks" {
-        ids.forEach { subsystemId ->
+    "getWeeksValid" {
+        weekIds.forEach { subsystemId ->
             val res = api().getWeeks(subsystemId)
             res.shouldBeInstanceOf<Right<List<WeekDto>>>()
+            res.value.shouldNotBeEmpty()
             res.value.map { it.id }.forEach { id ->
                 val res2 = api().getWeekDishList(id)
-                if (id != 0) {
-                    res2.shouldBeInstanceOf<Right<List<WeekDishDto>>>()
-                } else {
-                    res2.shouldBeInstanceOf<Left<MenzaError>>()
-                }
+                res2.shouldBeInstanceOf<Right<List<WeekDishDto>>>()
             }
+        }
+        (ids - weekIds).forEach { subsystemId ->
+            val res = api().getWeeks(subsystemId)
+            res.shouldBeInstanceOf<Right<List<WeekDto>?>>()
+            res.value shouldBe null
         }
     }
     "getStrahov" {

@@ -17,18 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.domain.model.mapers
+package cz.lastaapps.core.util
 
-import agata.DishEntity
+import org.lighthousegames.logging.KmLogging
+import org.lighthousegames.logging.Slf4jLogFactory
 
-
-internal fun String.parseSemicolonSeparated() =
-    split(';').map { it.toLong() }
-
-internal fun String.parseAllergens() =
-    split(',', ' ', '.' /*just for sure*/, ';', '-', '_', '|')
-        .filter { it.isNotBlank() }
-        .map { it.toInt() }
-
-internal fun DishEntity.fullName() =
-    name + sideDishA?.let { " $it" } + sideDishB?.let { " $it" }
+@Suppress("NOTHING_TO_INLINE")
+inline fun KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken() {
+    setLogFactory(Slf4jLogFactory())
+}

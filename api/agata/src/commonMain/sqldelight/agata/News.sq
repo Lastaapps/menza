@@ -1,0 +1,20 @@
+CREATE TABLE NewsEntity (
+    subsystemId INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    PRIMARY KEY (subsystemId)
+);
+
+getForSubsystem:
+    SELECT * FROM NewsEntity
+    WHERE subsystemId = :subsystemId;
+
+insert:
+    INSERT INTO NewsEntity
+    VALUES ?;
+
+deleteForSubsystem:
+    DELETE FROM NewsEntity
+    WHERE subsystemId = :subsystemId;
+
+deleteAll:
+    DELETE FROM NewsEntity;
