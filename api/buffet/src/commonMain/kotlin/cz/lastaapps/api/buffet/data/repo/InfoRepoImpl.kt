@@ -115,5 +115,5 @@ internal class InfoRepoImpl(
             ),
         )
 
-    override suspend fun sync(): SyncOutcome = SyncResult.Skipped.right()
+    override suspend fun sync(isForced: Boolean): SyncOutcome = SyncResult.Skipped.right()
 }

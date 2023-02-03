@@ -41,11 +41,12 @@ internal class SyncProcessorImpl : SyncProcessor {
     override suspend fun runSync(
         list: Iterable<SyncJob<*, *>>,
         scope: List<(() -> Unit) -> Unit>,
+        isForced: Boolean,
     ): SyncOutcome = outcome {
         list
             // Fetches hash codes from a remote source
             .parMap { job ->
-                job.shouldRun().map { job to it }
+                job.shouldRun(this@outcome, isForced).map { job to it }
             }
 
             // remove skipped jobs

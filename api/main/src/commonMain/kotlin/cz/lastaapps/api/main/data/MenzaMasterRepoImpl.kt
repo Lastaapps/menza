@@ -59,7 +59,7 @@ internal class MenzaMasterRepoImpl(
             }
             .fold(monoid)
 
-    override suspend fun sync(): SyncOutcome =
+    override suspend fun sync(isForced: Boolean): SyncOutcome =
         sources.parMap {
             it.sync()
         }.let { res ->

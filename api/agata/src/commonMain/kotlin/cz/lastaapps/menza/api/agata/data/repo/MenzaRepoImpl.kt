@@ -31,6 +31,9 @@ import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.api.core.domain.sync.runSync
+import cz.lastaapps.api.core.domain.validity.ValidityChecker
+import cz.lastaapps.api.core.domain.validity.ValidityKey
+import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.HashStore
@@ -38,6 +41,7 @@ import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
+import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -49,6 +53,7 @@ internal class MenzaSubsystemRepoImpl(
     private val api: CafeteriaApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
+    private val checker: ValidityChecker,
     hashStore: HashStore,
 ) : MenzaRepo {
 
@@ -85,8 +90,10 @@ internal class MenzaSubsystemRepoImpl(
             },
         )
 
-    override suspend fun sync(): SyncOutcome =
-        processor.runSync(subsystemJob, db)
+    override suspend fun sync(isForced: Boolean): SyncOutcome =
+        checker.withCheckSince(ValidityKey.agataMenza(), isForced, 7.days) {
+            processor.runSync(subsystemJob, db, isForced)
+        }
 }
 
 internal object MenzaStrahovRepoImpl : MenzaRepo {
@@ -102,5 +109,5 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
         ).let { emit(it) }
     }
 
-    override suspend fun sync(): SyncOutcome = SyncResult.Skipped.right()
+    override suspend fun sync(isForced: Boolean): SyncOutcome = SyncResult.Skipped.right()
 }

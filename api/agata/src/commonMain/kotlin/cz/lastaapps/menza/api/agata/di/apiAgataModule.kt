@@ -64,8 +64,8 @@ val apiAgataModule = module {
     singleOf(::MenzaSubsystemRepoImpl) bind MenzaRepo::class
 
     registerMenzaType<MenzaType.Agata.Strahov>(
-        menzaRepo = { MenzaSubsystemRepoImpl(get(), get(), get(), get()) },
-        dishRepo = { TodayDishStrahovRepoImpl(get(), get()) },
+        menzaRepo = { MenzaSubsystemRepoImpl(get(), get(), get(), get(), get()) },
+        dishRepo = { TodayDishStrahovRepoImpl(get(), get(), get()) },
         infoRepo = { InfoStrahovRepoImpl },
         weekRepo = { WeekRepoStrahovImpl },
     )
@@ -73,13 +73,13 @@ val apiAgataModule = module {
     registerMenzaType<MenzaType.Agata.Subsystem>(
         menzaRepo = { MenzaStrahovRepoImpl },
         dishRepo = { menza ->
-            TodayDishSubsystemRepoImpl(menza.subsystemId, get(), get(), get(), get(), get())
+            TodayDishSubsystemRepoImpl(menza.subsystemId, get(), get(), get(), get(), get(), get())
         },
         infoRepo = { menza ->
-            InfoRepoImpl(menza.subsystemId, get(), get(), get(), get())
+            InfoRepoImpl(menza.subsystemId, get(), get(), get(), get(), get())
         },
         weekRepo = { menza ->
-            WeekDishRepoImpl(menza.subsystemId, get(), get(), get())
+            WeekDishRepoImpl(menza.subsystemId, get(), get(), get(), get())
         },
     )
 }

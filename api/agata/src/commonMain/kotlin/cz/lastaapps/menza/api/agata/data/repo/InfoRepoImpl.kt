@@ -33,6 +33,9 @@ import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.api.core.domain.sync.runSync
+import cz.lastaapps.api.core.domain.validity.ValidityChecker
+import cz.lastaapps.api.core.domain.validity.ValidityKey
+import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.util.combine6
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
@@ -41,6 +44,7 @@ import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toNews
+import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
@@ -50,9 +54,11 @@ internal class InfoRepoImpl(
     private val subsystemApi: SubsystemApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
+    private val checker: ValidityChecker,
     hashStore: HashStore,
 ) : InfoRepo {
 
+    private val hasBeenSynced = MutableStateFlow(false)
     private val newsFlow = MutableStateFlow<NewsHeader?>(null)
 
     override fun getData(): Flow<Info> =
@@ -148,11 +154,17 @@ internal class InfoRepoImpl(
         ),
     )
 
-    override suspend fun sync(): SyncOutcome =
-        processor.runSync(jobs, db)
+    override suspend fun sync(isForced: Boolean): SyncOutcome {
+        val localForce = isForced || !hasBeenSynced.value
+        return checker.withCheckSince(ValidityKey.agataInfo(subsystemId), localForce, 7.days) {
+            processor.runSync(jobs, db, localForce)
+        }.onRight {
+            hasBeenSynced.value = true
+        }
+    }
 }
 
 internal object InfoStrahovRepoImpl : InfoRepo {
     override fun getData(): Flow<Info> = flow { emit(Info.empty) }
-    override suspend fun sync(): SyncOutcome = SyncResult.Unavailable.right()
+    override suspend fun sync(isForced: Boolean): SyncOutcome = SyncResult.Unavailable.right()
 }

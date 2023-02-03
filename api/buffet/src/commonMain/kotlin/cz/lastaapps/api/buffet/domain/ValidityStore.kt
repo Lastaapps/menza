@@ -21,6 +21,7 @@ package cz.lastaapps.api.buffet.domain
 
 import kotlinx.datetime.LocalDate
 
+// TODO Most probably redundant, remove later
 internal interface ValidityStore {
     suspend fun shouldReload(): Boolean
     suspend fun storeValidUntil(until: LocalDate)

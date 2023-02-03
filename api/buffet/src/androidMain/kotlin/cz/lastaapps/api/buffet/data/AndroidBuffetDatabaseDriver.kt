@@ -19,12 +19,11 @@
 
 package cz.lastaapps.api.buffet.data
 
-import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import cz.lastaapps.api.buffet.BuffetDatabase
+import org.koin.core.scope.Scope
 
 internal const val DB_NAME = "buffet_api.db"
 
-internal fun createBuffetDBDriver(
-    context: Context,
-) = BuffetDatabaseSqlDriver(AndroidSqliteDriver(BuffetDatabase.Schema, context, DB_NAME))
+internal fun Scope.createBuffetDBDriver() =
+    BuffetDatabaseSqlDriver(AndroidSqliteDriver(BuffetDatabase.Schema, get(), DB_NAME))

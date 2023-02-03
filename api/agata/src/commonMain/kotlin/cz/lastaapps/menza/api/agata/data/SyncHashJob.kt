@@ -39,10 +39,10 @@ internal class SyncJobHash<T, R>(
     convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
     store: (R) -> Unit,
 ) : SyncJob<T, R>(
-    {
+    { forced ->
         val hash = getHashCode()
 
-        if (hashStore.shouldReload(hashType, hash)) {
+        if (forced || hashStore.shouldReload(hashType, hash)) {
             // deferred job to save the new hash code
             val storeHashAction: suspend () -> Unit =
                 { hashStore.storeHash(hashType, hash) }

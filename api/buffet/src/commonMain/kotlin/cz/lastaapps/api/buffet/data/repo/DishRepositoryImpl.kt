@@ -19,14 +19,12 @@
 
 package cz.lastaapps.api.buffet.data.repo
 
-import arrow.core.None
 import arrow.core.Some
 import buffet.DishEntity
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import cz.lastaapps.api.buffet.BuffetDatabase
 import cz.lastaapps.api.buffet.api.BuffetApi
-import cz.lastaapps.api.buffet.domain.ValidityStore
 import cz.lastaapps.api.buffet.domain.model.BuffetType
 import cz.lastaapps.api.buffet.domain.model.dto.WebContentDto
 import cz.lastaapps.api.buffet.domain.model.mappers.toDomainDays
@@ -40,22 +38,42 @@ import cz.lastaapps.api.core.domain.sync.SyncJob
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.runSync
+import cz.lastaapps.api.core.domain.validity.ValidityChecker
+import cz.lastaapps.api.core.domain.validity.ValidityKey
+import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.domain.OutcomeIor
+import cz.lastaapps.core.util.CET
+import cz.lastaapps.core.util.findDayOfWeek
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 internal class DishLogicImpl(
-    private val validityStore: ValidityStore,
     private val api: BuffetApi,
     private val db: BuffetDatabase,
     private val processor: SyncProcessor,
     private val clock: Clock,
+    private val checker: ValidityChecker,
 ) {
+
+    private val validFrom = clock.now()
+        .toLocalDateTime(TimeZone.CET).date
+        .findDayOfWeek(DayOfWeek.SATURDAY)
+        .let { LocalDateTime(it, LocalTime(12, 0)) }
+        .toInstant(TimeZone.CET)
+
+    private val validityKey = ValidityKey.buffetDish()
+    private val hasValidData = checker.isUpdatedSince(validityKey, validFrom)
+
     fun getDataToday(type: BuffetType): Flow<ImmutableList<DishCategory>> =
         db.dishQueries.getForBuffetAndDayOfWeek(
             buffet = type,
@@ -63,6 +81,9 @@ internal class DishLogicImpl(
         )
             .asFlow()
             .mapToList()
+            .combine(hasValidData) { data, validity ->
+                data.takeIf { validity }.orEmpty()
+            }
             .map { it.toDomainDays() }
             .map { it.firstOrNull()?.second ?: emptyList() }
             .map { it.toImmutableList() }
@@ -71,12 +92,13 @@ internal class DishLogicImpl(
         db.dishQueries.getForBuffet(type)
             .asFlow()
             .mapToList()
+            .combine(hasValidData) { data, validity ->
+                data.takeIf { validity }.orEmpty()
+            }
             .map { it.toDomainWeek(clock) }
 
     private val job = object : SyncJob<OutcomeIor<WebContentDto>, List<DishEntity>>(
-        shouldRun = {
-            if (validityStore.shouldReload()) Some {} else None
-        },
+        shouldRun = { Some {} },
         fetchApi = {
             api.process()
         },
@@ -91,7 +113,11 @@ internal class DishLogicImpl(
         },
     ) {}
 
-    suspend fun sync(): SyncOutcome = processor.runSync(job, db)
+    suspend fun sync(isForced: Boolean): SyncOutcome {
+        return checker.withCheckSince(validityKey, isForced, validFrom) {
+            processor.runSync(job, db, isForced = isForced)
+        }
+    }
 }
 
 internal class WeekDishRepository(
@@ -99,7 +125,7 @@ internal class WeekDishRepository(
     private val logic: DishLogicImpl,
 ) : WeekDishRepo {
     override fun getData(): Flow<ImmutableList<WeekDayDish>> = logic.getDataWeek(type)
-    override suspend fun sync(): SyncOutcome = logic.sync()
+    override suspend fun sync(isForced: Boolean): SyncOutcome = logic.sync(isForced)
 }
 
 internal class TodayDishRepository(
@@ -107,5 +133,5 @@ internal class TodayDishRepository(
     private val logic: DishLogicImpl,
 ) : TodayDishRepo {
     override fun getData(): Flow<ImmutableList<DishCategory>> = logic.getDataToday(type)
-    override suspend fun sync(): SyncOutcome = logic.sync()
+    override suspend fun sync(isForced: Boolean): SyncOutcome = logic.sync(isForced)
 }

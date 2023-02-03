@@ -19,10 +19,22 @@
 
 package cz.lastaapps.api.buffet.di
 
+import android.content.Context
+import com.russhwolf.settings.SharedPreferencesSettings
+import cz.lastaapps.api.buffet.data.ValiditySettings
 import cz.lastaapps.api.buffet.data.createBuffetDBDriver
 import org.koin.core.module.Module
+import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
 internal actual val platform: Module = module {
-    factory { createBuffetDBDriver(get()) }
+    factory { createBuffetDBDriver() }
+    factory { createValiditySettings() }
 }
+
+private fun Scope.createValiditySettings() =
+    ValiditySettings(
+        SharedPreferencesSettings(
+            get<Context>().getSharedPreferences("validity", Context.MODE_PRIVATE)
+        )
+    )

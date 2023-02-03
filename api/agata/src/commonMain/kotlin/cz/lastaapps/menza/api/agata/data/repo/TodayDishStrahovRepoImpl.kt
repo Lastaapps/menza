@@ -26,6 +26,9 @@ import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.runSync
+import cz.lastaapps.api.core.domain.validity.ValidityChecker
+import cz.lastaapps.api.core.domain.validity.ValidityKey
+import cz.lastaapps.api.core.domain.validity.withCheckRecent
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import kotlinx.collections.immutable.ImmutableList
@@ -33,15 +36,23 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 
 internal class TodayDishStrahovRepoImpl(
     private val dishApi: DishApi,
     private val processor: SyncProcessor,
+    private val checker: ValidityChecker,
 ) : TodayDishRepo {
+
+    private val validityKey = ValidityKey.strahovToday()
+    private val isValidFlow = checker.isFromToday(validityKey)
 
     private val dishList = MutableStateFlow<ImmutableList<DishCategory>>(persistentListOf())
 
     override fun getData(): Flow<ImmutableList<DishCategory>> = dishList
+        .combine(isValidFlow) { data, validity ->
+            data.takeIf { validity } ?: persistentListOf()
+        }
 
     private val job = SyncJobNoCache(
         fetchApi = { dishApi.getStrahov().bind() },
@@ -51,5 +62,8 @@ internal class TodayDishStrahovRepoImpl(
         }
     )
 
-    override suspend fun sync(): SyncOutcome = processor.runSync(job)
+    override suspend fun sync(isForced: Boolean): SyncOutcome =
+        checker.withCheckRecent(validityKey, isForced) {
+            processor.runSync(job, isForced = isForced)
+        }
 }

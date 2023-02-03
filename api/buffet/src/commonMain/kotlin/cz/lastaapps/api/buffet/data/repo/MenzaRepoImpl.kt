@@ -43,7 +43,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
         ).let { emit(it) }
     }
 
-    override suspend fun sync(): SyncOutcome = SyncResult.Skipped.right()
+    override suspend fun sync(isForced: Boolean): SyncOutcome = SyncResult.Skipped.right()
 }
 
 internal object MenzaFELRepoImpl : MenzaRepo {
@@ -59,5 +59,5 @@ internal object MenzaFELRepoImpl : MenzaRepo {
         ).let { emit(it) }
     }
 
-    override suspend fun sync(): SyncOutcome = SyncResult.Skipped.right()
+    override suspend fun sync(isForced: Boolean): SyncOutcome = SyncResult.Skipped.right()
 }

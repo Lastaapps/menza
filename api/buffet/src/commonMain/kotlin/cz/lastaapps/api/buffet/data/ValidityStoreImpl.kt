@@ -24,25 +24,30 @@ import com.russhwolf.settings.Settings
 import com.russhwolf.settings.serialization.decodeValue
 import com.russhwolf.settings.serialization.encodeValue
 import cz.lastaapps.api.buffet.domain.ValidityStore
+import cz.lastaapps.core.util.CET
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.ExperimentalSerializationApi
 
+@JvmInline
+internal value class ValiditySettings(val settings: Settings)
+
 @OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
 internal class ValidityStoreImpl(
-    private val settings: Settings,
+    validitySettings: ValiditySettings,
     private val clock: Clock,
 ) : ValidityStore {
     companion object {
         private const val untilKey = "buffet_until"
-        private val timeZone = TimeZone.of("Europe/Prague")
     }
+
+    private val settings = validitySettings.settings
 
     override suspend fun shouldReload(): Boolean {
         val stored = settings.decodeValue(LocalDate.serializer(), untilKey, LocalDate(2023, 1, 1))
-        val now = clock.now().toLocalDateTime(timeZone).date
+        val now = clock.now().toLocalDateTime(TimeZone.CET).date
         return stored < now
     }
 

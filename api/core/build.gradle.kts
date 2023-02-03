@@ -29,4 +29,8 @@ dependencies {
     commonMainImplementation(projects.core)
 
     commonMainImplementation(libs.sqldelight.runtime)
+
+    commonMainImplementation(libs.russhwolf.settins.core)
+    commonMainImplementation(libs.russhwolf.settins.coroutines)
+    commonMainImplementation(libs.russhwolf.settins.serialization)
 }

@@ -34,6 +34,9 @@ import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.runSync
+import cz.lastaapps.api.core.domain.validity.ValidityChecker
+import cz.lastaapps.api.core.domain.validity.ValidityKey
+import cz.lastaapps.api.core.domain.validity.withCheckRecent
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
@@ -58,13 +61,21 @@ internal class TodayDishSubsystemRepoImpl(
     private val dishApi: DishApi,
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
+    private val checker: ValidityChecker,
     hashStore: HashStore,
 ) : TodayDishRepo {
+
+    private val validityKey = ValidityKey.agataToday(subsystemId)
+    private val isValidFlow = checker.isFromToday(validityKey)
+
     override fun getData(): Flow<ImmutableList<DishCategory>> = channelFlow {
         // Get dish list
         db.dishQueries.getForSubsystem(subsystemId.toLong())
             .asFlow()
             .mapToList()
+            .combine(isValidFlow) { data, validity ->
+                data.takeIf { validity }.orEmpty()
+            }
             .collectLatest { dtoList ->
 
                 // Finds flows that corresponds to each dish item
@@ -179,6 +190,8 @@ internal class TodayDishSubsystemRepoImpl(
 
     private val jobs = listOf(dishListJob, dishTypeJob, pictogramJob, servingPlacesJob)
 
-    override suspend fun sync(): SyncOutcome =
-        processor.runSync(jobs, db)
+    override suspend fun sync(isForced: Boolean): SyncOutcome =
+        checker.withCheckRecent(validityKey, isForced) {
+            processor.runSync(jobs, db, isForced = isForced)
+        }
 }

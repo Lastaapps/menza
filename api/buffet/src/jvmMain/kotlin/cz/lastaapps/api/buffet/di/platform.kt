@@ -19,10 +19,19 @@
 
 package cz.lastaapps.api.buffet.di
 
+import com.russhwolf.settings.PreferencesSettings
+import cz.lastaapps.api.buffet.data.ValiditySettings
 import cz.lastaapps.api.buffet.data.createBuffetDBDriver
+import java.util.prefs.Preferences
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 internal actual val platform: Module = module {
     factory { createBuffetDBDriver() }
+    factory { createValiditySettings() }
+}
+
+private fun createValiditySettings(): ValiditySettings {
+    val delegate: Preferences = Preferences.systemRoot()
+    return ValiditySettings(PreferencesSettings(delegate))
 }

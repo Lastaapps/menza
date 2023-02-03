@@ -28,7 +28,7 @@ import cz.lastaapps.core.domain.error.MenzaRaise
 abstract class SyncJob<T, R>(
     // Some -> will be run
     // None -> should be skipped
-    val shouldRun: suspend MenzaRaise.() -> Option<suspend () -> Unit>,
+    val shouldRun: suspend MenzaRaise.(force: Boolean) -> Option<suspend () -> Unit>,
     val fetchApi: suspend MenzaRaise.() -> T,
     val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
     val store: (R) -> Unit,

@@ -20,6 +20,7 @@
 package cz.lastaapps.api.core.di
 
 import cz.lastaapps.api.core.data.SyncProcessorImpl
+import cz.lastaapps.api.core.data.ValidityCheckerImpl
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
@@ -29,6 +30,8 @@ import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
+import cz.lastaapps.api.core.domain.validity.ValidityChecker
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf
@@ -36,7 +39,11 @@ import org.koin.core.scope.Scope
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+internal expect val platform: Module
+
 val apiCoreModule = module {
+    includes(platform)
+
     // Once global
     singleOf(::MenzaScopeStore)
 
@@ -65,7 +72,7 @@ val apiCoreModule = module {
             .scope.get<WeekDishRepo> { parametersOf(menza) }
     }
 
-
+    singleOf(::ValidityCheckerImpl) bind ValidityChecker::class
     factoryOf(::SyncProcessorImpl) bind SyncProcessor::class
 }
 

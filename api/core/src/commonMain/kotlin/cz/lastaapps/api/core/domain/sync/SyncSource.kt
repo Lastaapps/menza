@@ -23,5 +23,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SyncSource<T> {
     fun getData(): Flow<T>
-    suspend fun sync(): SyncOutcome
+    suspend fun sync(isForced: Boolean = false): SyncOutcome
 }

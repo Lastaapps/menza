@@ -17,29 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
+package cz.lastaapps.api.core.di
+
+import android.content.Context
+import com.russhwolf.settings.SharedPreferencesSettings
+import cz.lastaapps.api.core.data.ValiditySettings
+import cz.lastaapps.core.util.StateFlowSettings
+import org.koin.core.module.Module
+import org.koin.core.scope.Scope
+import org.koin.dsl.module
+
+internal actual val platform: Module = module {
+    single { createValiditySettings() }
 }
 
-android {
-    namespace = "cz.lastaapps.core"
-
-    buildFeatures {
-        buildConfig = true
-    }
-}
-
-dependencies {
-
-    // Settings
-    commonMainImplementation(libs.russhwolf.settins.core)
-    commonMainImplementation(libs.russhwolf.settins.coroutines)
-
-    // Ktor
-    commonMainImplementation(libs.ktor.client.core)
-    commonMainImplementation(libs.ktor.client.contentNegotiation)
-    commonMainImplementation(libs.ktor.client.serialization)
-    commonMainImplementation(libs.ktor.client.logging)
-    androidMainImplementation(libs.ktor.client.okhttp)
-    jvmMainImplementation(libs.ktor.client.okhttp)
-}
+private fun Scope.createValiditySettings() =
+    ValiditySettings(
+        SharedPreferencesSettings(
+            get<Context>().getSharedPreferences("validity", Context.MODE_PRIVATE)
+        ).let {
+            StateFlowSettings(it)
+        }
+    )

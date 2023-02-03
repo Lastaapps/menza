@@ -26,19 +26,24 @@ interface SyncProcessor {
     suspend fun runSync(
         list: Iterable<SyncJob<*, *>>,
         scope: List<(() -> Unit) -> Unit> = emptyList(),
+        isForced: Boolean,
     ): SyncOutcome
 }
 
 suspend fun <T, R> SyncProcessor.runSync(
     job: SyncJob<T, R>,
     scope: List<(() -> Unit) -> Unit> = emptyList(),
-): SyncOutcome = runSync(listOf(job), scope)
+    isForced: Boolean,
+): SyncOutcome = runSync(listOf(job), scope, isForced)
 
-suspend fun <T, R> SyncProcessor.runSync(job: SyncJob<T, R>, db: Transacter) =
-    runSync(listOf(job), db)
+suspend fun <T, R> SyncProcessor.runSync(
+    job: SyncJob<T, R>,
+    db: Transacter,
+    isForced: Boolean,
+) = runSync(listOf(job), db, isForced)
 
 suspend fun SyncProcessor.runSync(
     list: Iterable<SyncJob<*, *>>,
     db: Transacter,
-): SyncOutcome =
-    runSync(list, listOf { db.transaction { it() } })
+    isForced: Boolean,
+): SyncOutcome = runSync(list, listOf { db.transaction { it() } }, isForced)

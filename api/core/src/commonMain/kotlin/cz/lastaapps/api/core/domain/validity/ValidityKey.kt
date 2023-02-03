@@ -17,29 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-}
+package cz.lastaapps.api.core.domain.validity
 
-android {
-    namespace = "cz.lastaapps.core"
+@JvmInline
+value class ValidityKey private constructor(val name: String) {
 
-    buildFeatures {
-        buildConfig = true
+    companion object {
+        fun agataToday(subsystemId: Int) = ValidityKey("agata_today_$subsystemId")
+        fun agataInfo(subsystemId: Int) = ValidityKey("agata_info_$subsystemId")
+        fun agataWeek(subsystemId: Int) = ValidityKey("agata_week_$subsystemId")
+        fun agataMenza() = ValidityKey("agata_menza")
+        fun strahovToday() = ValidityKey("strahov_today")
+        fun buffetDish() = ValidityKey("buffet_dish")
     }
-}
-
-dependencies {
-
-    // Settings
-    commonMainImplementation(libs.russhwolf.settins.core)
-    commonMainImplementation(libs.russhwolf.settins.coroutines)
-
-    // Ktor
-    commonMainImplementation(libs.ktor.client.core)
-    commonMainImplementation(libs.ktor.client.contentNegotiation)
-    commonMainImplementation(libs.ktor.client.serialization)
-    commonMainImplementation(libs.ktor.client.logging)
-    androidMainImplementation(libs.ktor.client.okhttp)
-    jvmMainImplementation(libs.ktor.client.okhttp)
 }
