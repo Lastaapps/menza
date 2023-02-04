@@ -41,6 +41,7 @@ import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
@@ -62,6 +63,7 @@ internal class TodayDishSubsystemRepoImpl(
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
     private val checker: ValidityChecker,
+    private val beConfig: AgataBEConfig,
     hashStore: HashStore,
 ) : TodayDishRepo {
 
@@ -137,7 +139,7 @@ internal class TodayDishSubsystemRepoImpl(
         hashType = HashType.dishHash(subsystemId),
         getHashCode = { dishApi.getDishesHash(subsystemId).bind() },
         fetchApi = { dishApi.getDishes(subsystemId).bind() },
-        convert = { data -> data?.map { it.toEntity() }.orEmpty().rightIor() },
+        convert = { data -> data?.map { it.toEntity(beConfig) }.orEmpty().rightIor() },
         store = { data ->
             db.dishQueries.deleteSubsytem(subsystemId.toLong())
             data.forEach {

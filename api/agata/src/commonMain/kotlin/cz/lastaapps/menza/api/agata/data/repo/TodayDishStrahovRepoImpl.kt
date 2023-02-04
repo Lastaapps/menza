@@ -34,6 +34,7 @@ import cz.lastaapps.api.core.domain.validity.withCheckRecent
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.domain.model.HashType
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
@@ -47,6 +48,7 @@ internal class TodayDishStrahovRepoImpl(
     private val db: AgataDatabase,
     private val processor: SyncProcessor,
     private val checker: ValidityChecker,
+    private val beConfig: AgataBEConfig,
     hashStore: HashStore,
 ) : TodayDishRepo {
 
@@ -68,7 +70,7 @@ internal class TodayDishStrahovRepoImpl(
         hashType = HashType.strahovHash(),
         getHashCode = { dishApi.getStrahovHash().bind() },
         fetchApi = { dishApi.getStrahov().bind() },
-        convert = { data -> data.map { it.toEntity() }.rightIor() },
+        convert = { data -> data.map { it.toEntity(beConfig) }.rightIor() },
         store = { data ->
             db.strahovQueries.deleteAll()
             data.forEach {

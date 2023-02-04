@@ -40,6 +40,7 @@ import cz.lastaapps.menza.api.agata.data.repo.TodayDishSubsystemRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.WeekDishRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.WeekRepoStrahovImpl
 import cz.lastaapps.menza.api.agata.domain.HashStore
+import cz.lastaapps.menza.api.agata.domain.model.AgataBEConfig
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -57,7 +58,8 @@ val apiAgataModule = module {
 
     singleOf(::HashStoreImpl) bind HashStore::class
     single { AgataDatabaseFactory.createDatabase(get()) }
-    single { createAgataClient(get()) }
+    factory { AgataBEConfig.prod }
+    single { createAgataClient(get(), get()) }
 
     // Repos
     // Menza list
@@ -65,7 +67,7 @@ val apiAgataModule = module {
 
     registerMenzaType<MenzaType.Agata.Strahov>(
         menzaRepo = { MenzaSubsystemRepoImpl(get(), get(), get(), get(), get()) },
-        dishRepo = { TodayDishStrahovRepoImpl(get(), get(), get(), get(), get()) },
+        dishRepo = { TodayDishStrahovRepoImpl(get(), get(), get(), get(), get(), get()) },
         infoRepo = { InfoStrahovRepoImpl },
         weekRepo = { WeekRepoStrahovImpl },
     )
@@ -73,7 +75,10 @@ val apiAgataModule = module {
     registerMenzaType<MenzaType.Agata.Subsystem>(
         menzaRepo = { MenzaStrahovRepoImpl },
         dishRepo = { menza ->
-            TodayDishSubsystemRepoImpl(menza.subsystemId, get(), get(), get(), get(), get(), get())
+            TodayDishSubsystemRepoImpl(
+                menza.subsystemId,
+                get(), get(), get(), get(), get(), get(), get(),
+            )
         },
         infoRepo = { menza ->
             InfoRepoImpl(menza.subsystemId, get(), get(), get(), get(), get())

@@ -19,10 +19,10 @@
 
 package cz.lastaapps.menza.api.agata.data
 
+import cz.lastaapps.menza.api.agata.domain.model.AgataBEConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -32,22 +32,24 @@ import kotlinx.serialization.json.Json
 internal value class AgataClient(val client: HttpClient)
 
 @OptIn(ExperimentalSerializationApi::class)
-internal fun createAgataClient(httpClient: HttpClient) =
-    AgataClient(httpClient.config {
-        install(DefaultRequest) {
-            url {
-                protocol = URLProtocol.HTTPS
-                host = "agata.suz.cvut.cz"
-                path("jidelnicky/JAPIV2/json_API.php")
-                parameters.append("api", "v1XiWjvD")
-            }
+internal fun createAgataClient(
+    httpClient: HttpClient,
+    beConfig: AgataBEConfig,
+) = AgataClient(httpClient.config {
+    install(DefaultRequest) {
+        url {
+            protocol = beConfig.protocol
+            host = beConfig.host
+            path(beConfig.apiPath)
+            parameters.append("api", beConfig.apiKey)
         }
+    }
 
-        install(ContentNegotiation) {
-            json(Json {
-                encodeDefaults = true
-                ignoreUnknownKeys = true
-                explicitNulls = true
-            })
-        }
-    })
+    install(ContentNegotiation) {
+        json(Json {
+            encodeDefaults = true
+            ignoreUnknownKeys = true
+            explicitNulls = true
+        })
+    }
+})

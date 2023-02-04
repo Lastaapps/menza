@@ -32,6 +32,7 @@ import agata.ServingPlaceEntity
 import agata.StrahovEntiy
 import agata.SubsystemEntity
 import cz.lastaapps.api.core.domain.model.common.LatLong
+import cz.lastaapps.menza.api.agata.domain.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.domain.model.dto.AddressDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.ContactDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishDto
@@ -57,7 +58,7 @@ internal fun SubsystemDto.toEntity() =
         itemOrder = order.toLong(),
     )
 
-internal fun DishDto.toEntity() =
+internal fun DishDto.toEntity(beConfig: AgataBEConfig) =
     DishEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -70,7 +71,9 @@ internal fun DishDto.toEntity() =
         priceNormal = priceNormal.toDouble(),
         priceDiscount = priceDiscount.toDouble(),
         allergens = allergens,
-        photoLink = photoLink,
+        photoLink = photoLink?.let {
+            beConfig.photoLinkForName(subsystemId, it)
+        },
         pictogram = pictogram,
         isActive = isActive,
     )
@@ -180,7 +183,7 @@ private fun String.toLatLong() =
             LatLong(lat = lat, long = long)
         }
 
-internal fun StrahovDto.toEntity() =
+internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
     StrahovEntiy(
         id = id.toLong(),
         groupId = groupId.toLong(),
@@ -195,5 +198,7 @@ internal fun StrahovDto.toEntity() =
         priceNormal = price.toDouble(),
         priceStudent = priceStudent.toDouble(),
         allergens = allergens,
-        photoLink = photoLink,
+        photoLink = photoLink?.let {
+            beConfig.photoLinkForName(null, it)
+        },
     )
