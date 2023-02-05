@@ -20,8 +20,10 @@
 package cz.lastaapps.plugin.android.config
 
 import com.android.build.api.dsl.CommonExtension
+import cz.lastaapps.extensions.alias
 import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
+import cz.lastaapps.extensions.pluginManager
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
@@ -39,6 +41,11 @@ internal fun Project.configureComposeCompiler(
 }
 
 internal fun Project.configureComposeDependencies() {
+    pluginManager {
+        // Required by Appyx
+        alias(libs.plugins.kotlin.parcelize)
+    }
+
     dependencies {
 
         implementation(libs.androidx.fragment)

@@ -1,0 +1,4 @@
+[submodule "appyx"]
+	path = appyx
+	url = git@github.com:Lastaapps/appyx.git
+	branch = viewmodel-owners

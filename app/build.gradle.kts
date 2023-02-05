@@ -52,6 +52,9 @@ android {
 
 dependencies {
 
+    // Just until they fix ViewModel stuff
+    implementation("lib.stolen:appyx")
+
     implementation(projects.api.main)
     implementation(projects.core)
     implementation(projects.entity)

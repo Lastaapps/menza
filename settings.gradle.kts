@@ -61,6 +61,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "Menza"
 
+includeBuild("appyx")  {
+    dependencySubstitution {
+        substitute(module("lib.stolen:appyx")).using(project(":libraries:core"))
+    }
+}
+
 include(
     ":api:agata",
     ":api:buffet",
