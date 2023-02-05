@@ -2,17 +2,17 @@
 aboutLibraries = "10.5.2"
 accompanist = "0.28.0"
 android-gradle = "7.3.1"
-androidx-activity = "1.6.1"
+androidx-activity = "1.7.0-alpha04"
 androidx-appsearch = "1.1.0-alpha01"
 androidx-camera = "1.1.0"
-androidx-compose = "1.3.3"
+androidx-compose = "1.4.0-alpha05"
 # @keep
 androidx-compose-compiler = "1.4.0"
 androidx-compose-material = "1.3.1"
 androidx-compose-material3 = "1.0.1"
 androidx-emoji2 = "1.2.0-rc01"
 androidx-hilt = "1.0.0"
-androidx-lifecycle = "2.6.0-alpha04"
+androidx-lifecycle = "2.6.0-alpha05"
 androidx-navigation = "2.5.3"
 androidx-room = "2.4.0"
 androidx-test = "1.4.0"
@@ -21,7 +21,7 @@ dagger = "2.42"
 detekt = "1.22.0"
 espresso = "3.4.0"
 firebase-bom = "30.2.0"
-google-ksp = "1.8.0-1.0.8"
+google-ksp = "1.8.0-1.0.9"
 # @keep
 java-jvmTarget = "11"
 junit5-bom = "5.9.2"
@@ -32,7 +32,7 @@ kotlin = "1.8.0"
 kotlin-coroutines = "1.6.4"
 # @keep
 kotlin-languageVersion = "1.9"
-ktor = "2.2.2"
+ktor = "2.2.3"
 logback = "1.4.5"
 russhwolf-settings = "1.0.0"
 sdk-compile = "33"
@@ -152,7 +152,7 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx"
 firebase-database = { module = "com.google.firebase:firebase-database-ktx" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 fluidLocale = "io.fluidsonic.locale:fluid-locale:0.12.0"
-google-material = "com.google.android.material:material:1.8.0-rc01"
+google-material = "com.google.android.material:material:1.8.0"
 google-mlkitBarcode = "com.google.mlkit:barcode-scanning:17.0.2"
 google-playServices = "com.google.android.play:core-ktx:1.8.1"
 google-playServicesLocation = "com.google.android.gms:play-services-location:20.0.0"
@@ -179,10 +179,10 @@ koin-test-jUnit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "
 kotest-assertion = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-jUnit5runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
 kotlin-coroutines-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
-kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-standardLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 kotlin-test-annotation = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common" }
@@ -240,7 +240,7 @@ sqldelight-runtime = { module = "com.squareup.sqldelight:runtime", version.ref =
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
-benNamesVersions = "com.github.ben-manes.versions:0.44.0"
+benNamesVersions = "com.github.ben-manes.versions:0.45.0"
 daggerHilt = { id = "dagger.hilt.android.plugin", version.ref = "dagger" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 firebase-crashlytics = "com.google.firebase.crashlytics:2.8.1"

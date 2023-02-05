@@ -22,10 +22,8 @@ package cz.lastaapps.menza.ui.root.locals
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.lifecycle.viewmodel.CreationExtras
 import org.koin.androidx.compose.defaultExtras
 import org.koin.androidx.compose.koinViewModel
@@ -42,8 +40,7 @@ object LocalActivityViewModelOwner {
 
     val current: ViewModelStoreOwner
         @Composable
-        get() = LocalActivityViewModelOwner.current
-            ?: ViewTreeViewModelStoreOwner.get(LocalView.current)!!
+        get() = LocalActivityViewModelOwner.current!!
 
     infix fun provides(viewModelStoreOwner: ViewModelStoreOwner):
             ProvidedValue<ViewModelStoreOwner?> {
