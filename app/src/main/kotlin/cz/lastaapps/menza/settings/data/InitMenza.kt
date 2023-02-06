@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,52 +17,47 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings.store
+package cz.lastaapps.menza.settings.data
 
 import androidx.datastore.preferences.core.intPreferencesKey
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.settings.domain.model.InitialMenza
 import kotlinx.coroutines.flow.StateFlow
-
-sealed class InitMenza private constructor(val id: Int) {
-    object Ask : InitMenza(0)
-    object Remember : InitMenza(1)
-    object Specific : InitMenza(2)
-}
 
 private val menzaModeKey = intPreferencesKey("menzaMode")
 private val menzaPreferredKey = intPreferencesKey("menzaPreferred")
 private val menzaLatestKey = intPreferencesKey("menzaLatest")
 
-val SettingsStore.initMenza: StateFlow<InitMenza>
+internal val SettingsStore.initialMenza: StateFlow<InitialMenza>
     get() = data.mapState { pref ->
         when (pref[menzaModeKey] ?: 0) {
-            1 -> InitMenza.Remember
-            2 -> InitMenza.Specific
-            else -> InitMenza.Ask
+            1 -> InitialMenza.Remember
+            2 -> InitialMenza.Specific
+            else -> InitialMenza.Ask
         }
     }
 
-suspend fun SettingsStore.setInitMenza(mode: InitMenza) {
+internal suspend fun SettingsStore.setInitialMenza(mode: InitialMenza) {
     edit { pref ->
         pref[menzaModeKey] = mode.id
     }
 }
 
 
-val SettingsStore.preferredMenza: StateFlow<MenzaId?>
+internal val SettingsStore.preferredMenza: StateFlow<MenzaId?>
     get() = data.mapState { pref -> pref[menzaPreferredKey]?.let { MenzaId(it) } }
 
-suspend fun SettingsStore.setPreferredMenza(menzaId: MenzaId) {
+internal suspend fun SettingsStore.setPreferredMenza(menzaId: MenzaId) {
     edit { pref ->
         pref[menzaPreferredKey] = menzaId.id
     }
 }
 
 
-val SettingsStore.latestMenza: StateFlow<MenzaId?>
+internal val SettingsStore.latestMenza: StateFlow<MenzaId?>
     get() = data.mapState { pref -> pref[menzaLatestKey]?.let { MenzaId(it) } }
 
-suspend fun SettingsStore.setLatestMenza(menzaId: MenzaId) {
+internal suspend fun SettingsStore.setLatestMenza(menzaId: MenzaId) {
     edit { pref ->
         pref[menzaLatestKey] = menzaId.id
     }

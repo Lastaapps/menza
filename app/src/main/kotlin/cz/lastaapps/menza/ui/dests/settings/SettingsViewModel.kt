@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,13 +25,26 @@ import androidx.lifecycle.viewModelScope
 import coil.annotation.ExperimentalCoilApi
 import coil.imageLoader
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.ui.dests.settings.store.*
+import cz.lastaapps.menza.settings.data.SettingsStore
+import cz.lastaapps.menza.settings.data.setAppTheme
+import cz.lastaapps.menza.settings.data.setDarkMode
+import cz.lastaapps.menza.settings.data.setImageSize
+import cz.lastaapps.menza.settings.data.setImagesOnMetered
+import cz.lastaapps.menza.settings.data.setInitialMenza
+import cz.lastaapps.menza.settings.data.setLatestMenza
+import cz.lastaapps.menza.settings.data.setPreferredMenza
+import cz.lastaapps.menza.settings.data.setPriceType
+import cz.lastaapps.menza.settings.data.setSettingsEverOpened
+import cz.lastaapps.menza.settings.domain.model.AppThemeType
+import cz.lastaapps.menza.settings.domain.model.DarkMode
+import cz.lastaapps.menza.settings.domain.model.InitialMenza
+import cz.lastaapps.menza.settings.domain.model.PriceType
 import cz.lastaapps.storage.repo.*
+import kotlin.system.exitProcess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.system.exitProcess
 
 class SettingsViewModel constructor(
     private val app: Application,
@@ -57,7 +70,7 @@ class SettingsViewModel constructor(
 
     fun setUseSystemTheme(mode: Boolean) {
         viewModelScope.launch {
-            sett.setUseSystemTheme(mode)
+            sett.setAppTheme(if (mode) AppThemeType.System else AppThemeType.Agata)
         }
     }
 
@@ -67,9 +80,9 @@ class SettingsViewModel constructor(
         }
     }
 
-    fun setInitMenza(mode: InitMenza) {
+    fun setInitMenza(mode: InitialMenza) {
         viewModelScope.launch {
-            sett.setInitMenza(mode)
+            sett.setInitialMenza(mode)
         }
     }
 

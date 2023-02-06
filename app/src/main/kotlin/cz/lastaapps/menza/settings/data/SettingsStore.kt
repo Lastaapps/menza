@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings.store
+package cz.lastaapps.menza.settings.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -26,7 +26,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
@@ -64,7 +68,7 @@ class SettingsStore(
     ) = mapState(coroutineScope, transform)
 }
 
-inline fun <T, R> StateFlow<T>.mapState(
+internal inline fun <T, R> StateFlow<T>.mapState(
     scope: CoroutineScope,
     crossinline transform: (T) -> R,
 ): StateFlow<R> =

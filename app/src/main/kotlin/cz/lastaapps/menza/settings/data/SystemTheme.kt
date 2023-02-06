@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,17 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings.store
+package cz.lastaapps.menza.settings.data
 
-import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import cz.lastaapps.menza.settings.domain.model.AppThemeType
 import kotlinx.coroutines.flow.StateFlow
 
-private val imagesOnMeteredKey = booleanPreferencesKey("imagesMetered")
+private val appThemeKey = intPreferencesKey("appTheme")
 
-val SettingsStore.imagesOnMetered: StateFlow<Boolean>
-    get() = data.mapState { pref -> pref[imagesOnMeteredKey] ?: true }
+internal val SettingsStore.appTheme: StateFlow<AppThemeType?>
+    get() = data.mapState {
+        val id = it[appThemeKey]
+        AppThemeType.values().firstOrNull { type -> type.id == id }
+    }
 
-suspend fun SettingsStore.setImagesOnMetered(enabled: Boolean) {
-    edit { pref -> pref[imagesOnMeteredKey] = enabled }
+internal suspend fun SettingsStore.setAppTheme(theme: AppThemeType) {
+    edit { it[appThemeKey] = theme.id }
 }
-

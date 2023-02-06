@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -40,9 +40,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.settings.data.darkMode
+import cz.lastaapps.menza.settings.domain.model.DarkMode
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.dests.settings.store.DarkMode
-import cz.lastaapps.menza.ui.dests.settings.store.darkMode
 import kotlin.math.min
 
 

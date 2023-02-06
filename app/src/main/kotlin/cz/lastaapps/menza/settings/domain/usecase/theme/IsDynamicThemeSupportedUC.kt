@@ -17,22 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.root.ui
+package cz.lastaapps.menza.settings.domain.usecase.theme
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.google.android.material.color.DynamicColors
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
 
-internal sealed class RootNavType : Parcelable {
-    companion object {
-        val types = listOf(Loading, SetupFlow, Main)
+class IsDynamicThemeSupportedUC internal constructor(
+    context: UCContext,
+) : UseCase(context) {
+    suspend operator fun invoke() = launch {
+        DynamicColors.isDynamicColorAvailable()
     }
-
-    @Parcelize
-    object Loading : RootNavType()
-
-    @Parcelize
-    object SetupFlow : RootNavType()
-
-    @Parcelize
-    object Main : RootNavType()
 }

@@ -64,6 +64,11 @@ import androidx.compose.ui.unit.min
 import androidx.navigation.NavController
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.navigation.Dest
+import cz.lastaapps.menza.settings.data.appTheme
+import cz.lastaapps.menza.settings.data.imagesOnMetered
+import cz.lastaapps.menza.settings.data.priceType
+import cz.lastaapps.menza.settings.domain.model.AppThemeType
+import cz.lastaapps.menza.settings.domain.model.PriceType
 import cz.lastaapps.menza.ui.dests.others.AboutUi
 import cz.lastaapps.menza.ui.dests.others.ReportDialog
 import cz.lastaapps.menza.ui.dests.others.crashes.CrashesDialog
@@ -73,10 +78,6 @@ import cz.lastaapps.menza.ui.dests.settings.modules.DarkThemeSettings
 import cz.lastaapps.menza.ui.dests.settings.modules.FullReloadDialog
 import cz.lastaapps.menza.ui.dests.settings.modules.ImageSizeSetting
 import cz.lastaapps.menza.ui.dests.settings.modules.InitMenzaUI
-import cz.lastaapps.menza.ui.dests.settings.store.PriceType
-import cz.lastaapps.menza.ui.dests.settings.store.imagesOnMetered
-import cz.lastaapps.menza.ui.dests.settings.store.priceType
-import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.locals.koinActivityViewModel
 import cz.lastaapps.menza.ui.theme.isDynamicThemeSupported
@@ -178,12 +179,12 @@ private fun Switches(viewModel: SettingsViewModel, modifier: Modifier = Modifier
 @Composable
 private fun UseThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifier) {
     if (isDynamicThemeSupported()) {
-        val mode by viewModel.sett.systemTheme.collectAsState()
+        val mode by viewModel.sett.appTheme.collectAsState()
 
         SettingsSwitch(
             title = stringResource(R.string.settings_switch_system_theme),
-            checked = mode,
-            onClick = { viewModel.setUseSystemTheme(!mode) },
+            checked = mode == AppThemeType.System,
+            onClick = { viewModel.setUseSystemTheme(mode != AppThemeType.System) },
             modifier = modifier,
         )
     }

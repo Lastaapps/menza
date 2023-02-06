@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -33,10 +33,10 @@ import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.settings.data.initialMenza
+import cz.lastaapps.menza.settings.data.preferredMenza
+import cz.lastaapps.menza.settings.domain.model.InitialMenza
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.dests.settings.store.InitMenza
-import cz.lastaapps.menza.ui.dests.settings.store.initMenza
-import cz.lastaapps.menza.ui.dests.settings.store.preferredMenza
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -50,7 +50,7 @@ fun InitMenzaUI(
     var initExpanded by rememberSaveable { mutableStateOf(false) }
     var preferredExpanded by rememberSaveable { mutableStateOf(false) }
 
-    val mode by settingsViewModel.sett.initMenza.collectAsState()
+    val mode by settingsViewModel.sett.initialMenza.collectAsState()
     val menzaId by settingsViewModel.sett.preferredMenza.collectAsState()
     val menzaList by menzaViewModel.data.collectAsState()
 
@@ -67,7 +67,7 @@ fun InitMenzaUI(
             modifier = Modifier.fillMaxWidth()
         )
 
-        if (mode == InitMenza.Specific) {
+        if (mode == InitialMenza.Specific) {
             PreferredMenza(
                 expanded = preferredExpanded,
                 onExpanded = { preferredExpanded = it },
@@ -85,16 +85,16 @@ fun InitMenzaUI(
 private fun InitMenzaRow(
     expanded: Boolean,
     onExpanded: (Boolean) -> Unit,
-    mode: InitMenza,
-    onMode: (InitMenza) -> Unit,
-    modifier: Modifier = Modifier
+    mode: InitialMenza,
+    onMode: (InitialMenza) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val options = remember(context) {
         persistentListOf(
-            InitMenza.Ask to context.getString(R.string.settings_init_menza_ask),
-            InitMenza.Remember to context.getString(R.string.settings_init_menza_remember),
-            InitMenza.Specific to context.getString(R.string.settings_init_menza_specific),
+            InitialMenza.Ask to context.getString(R.string.settings_init_menza_ask),
+            InitialMenza.Remember to context.getString(R.string.settings_init_menza_remember),
+            InitialMenza.Specific to context.getString(R.string.settings_init_menza_specific),
         )
     }
 

@@ -17,22 +17,21 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.root.ui
+package cz.lastaapps.menza.settings.domain.usecase
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.settings.data.SettingsStore
+import cz.lastaapps.menza.settings.data.setImageSize
 
-internal sealed class RootNavType : Parcelable {
-    companion object {
-        val types = listOf(Loading, SetupFlow, Main)
+class SetImageSizeUC internal constructor(
+    context: UCContext,
+    private val getImageSizeRange: GetImageSizeRangeUC,
+    private val store: SettingsStore,
+) : UseCase(context) {
+    suspend operator fun invoke(size: Float) = launch {
+        val range = getImageSizeRange()
+        val new = size.coerceIn(range)
+        store.setImageSize(new)
     }
-
-    @Parcelize
-    object Loading : RootNavType()
-
-    @Parcelize
-    object SetupFlow : RootNavType()
-
-    @Parcelize
-    object Main : RootNavType()
 }

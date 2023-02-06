@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,16 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings.store
+package cz.lastaapps.menza.settings.domain.usecase.initialmenza
 
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import kotlinx.coroutines.flow.StateFlow
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.settings.data.SettingsStore
+import cz.lastaapps.menza.settings.data.setInitialMenza
+import cz.lastaapps.menza.settings.domain.model.InitialMenza
 
-private val settingsEverOpenedKey = booleanPreferencesKey("settingsEverOpened")
-
-val SettingsStore.settingsEverOpened: StateFlow<Boolean>
-    get() = data.mapState { it[settingsEverOpenedKey] ?: false }
-
-suspend fun SettingsStore.setSettingsEverOpened(opened: Boolean) {
-    edit { it[settingsEverOpenedKey] = opened }
+class SetInitialMenzaUC internal constructor(
+    context: UCContext,
+    private val store: SettingsStore,
+) : UseCase(context) {
+    suspend operator fun invoke(menza: InitialMenza) = launch {
+        store.setInitialMenza(menza)
+    }
 }

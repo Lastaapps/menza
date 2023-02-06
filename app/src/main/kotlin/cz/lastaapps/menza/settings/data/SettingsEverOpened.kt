@@ -17,22 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.root.ui
+package cz.lastaapps.menza.settings.data
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import kotlinx.coroutines.flow.StateFlow
 
-internal sealed class RootNavType : Parcelable {
-    companion object {
-        val types = listOf(Loading, SetupFlow, Main)
-    }
+private val settingsEverOpenedKey = booleanPreferencesKey("settingsEverOpened")
 
-    @Parcelize
-    object Loading : RootNavType()
+internal val SettingsStore.settingsEverOpened: StateFlow<Boolean>
+    get() = data.mapState { it[settingsEverOpenedKey] ?: false }
 
-    @Parcelize
-    object SetupFlow : RootNavType()
-
-    @Parcelize
-    object Main : RootNavType()
+internal suspend fun SettingsStore.setSettingsEverOpened(opened: Boolean) {
+    edit { it[settingsEverOpenedKey] = opened }
 }

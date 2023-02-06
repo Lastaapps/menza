@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -60,12 +60,16 @@ import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.settings.data.imageSize
+import cz.lastaapps.menza.settings.data.imagesOnMetered
+import cz.lastaapps.menza.settings.data.priceType
+import cz.lastaapps.menza.settings.domain.model.PriceType
+import cz.lastaapps.menza.settings.domain.model.getPrice
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.LocalConnectivityProvider
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.dests.panels.Panels
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.dests.settings.store.*
 import cz.lastaapps.menza.ui.isMetered
 import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
@@ -214,7 +218,6 @@ private fun DishHeader(courseType: CourseType, modifier: Modifier = Modifier) {
     Text(text = courseType.type, modifier = modifier, style = MaterialTheme.typography.titleMedium)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DishItem(
     dish: Dish,

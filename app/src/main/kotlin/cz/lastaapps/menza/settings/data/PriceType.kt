@@ -17,22 +17,22 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.root.ui
+package cz.lastaapps.menza.settings.data
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.datastore.preferences.core.intPreferencesKey
+import cz.lastaapps.menza.settings.domain.model.PriceType
+import kotlinx.coroutines.flow.StateFlow
 
-internal sealed class RootNavType : Parcelable {
-    companion object {
-        val types = listOf(Loading, SetupFlow, Main)
+private val priceTypeKey = intPreferencesKey("priceType")
+internal val SettingsStore.priceType: StateFlow<PriceType>
+    get() = data.mapState {
+        when (it[priceTypeKey]) {
+            PriceType.Discounted.id -> PriceType.Discounted
+            PriceType.Normal.id -> PriceType.Normal
+            else -> PriceType.Unset
+        }
     }
 
-    @Parcelize
-    object Loading : RootNavType()
-
-    @Parcelize
-    object SetupFlow : RootNavType()
-
-    @Parcelize
-    object Main : RootNavType()
+internal suspend fun SettingsStore.setPriceType(priceType: PriceType) {
+    edit { it[priceTypeKey] = priceType.id }
 }

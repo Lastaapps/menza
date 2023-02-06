@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,16 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings.store
+package cz.lastaapps.menza.settings.domain.model
 
-import androidx.datastore.preferences.core.floatPreferencesKey
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
 
-private val imageSizeKey = floatPreferencesKey("imageSize")
+sealed class DarkMode private constructor(
+    internal val id: Int,
+) {
+    object Light : DarkMode(0)
+    object Dark : DarkMode(1)
+    object System : DarkMode(2)
 
-val SettingsStore.imageSize: StateFlow<Float>
-    get() = data.mapState { pref -> pref[imageSizeKey] ?: 1f }
+    companion object {
+        val modes = listOf(Light, Dark, System)
+    }
+}
 
-suspend fun SettingsStore.setImageSize(ration: Float) {
-    edit { pref -> pref[imageSizeKey] = ration }
+@Composable
+fun DarkMode.shouldUseDark(): Boolean {
+    return when (this) {
+        DarkMode.Dark -> true
+        DarkMode.Light -> false
+        DarkMode.System -> isSystemInDarkTheme()
+    }
 }

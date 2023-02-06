@@ -27,8 +27,15 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.material.color.DynamicColors
+import cz.lastaapps.menza.settings.domain.model.AppThemeType
+import cz.lastaapps.menza.settings.domain.model.AppThemeType.Agata
+import cz.lastaapps.menza.settings.domain.model.AppThemeType.CTU
+import cz.lastaapps.menza.settings.domain.model.AppThemeType.System
+import cz.lastaapps.menza.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.ui.theme.generated.AppTypography
 import cz.lastaapps.menza.ui.theme.generated.DarkThemeColors
 import cz.lastaapps.menza.ui.theme.generated.LightThemeColors
@@ -36,29 +43,44 @@ import cz.lastaapps.menza.ui.theme.generated.LightThemeColors
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    useCustomTheme: Boolean = false,
-    content: @Composable () -> Unit
+    theme: AppThemeType = Agata,
+    content: @Composable () -> Unit,
 ) {
-    val dynamicColor = isDynamicThemeSupported() && !useCustomTheme
-    val colorScheme = when {
-        dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
-        dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
-        darkTheme -> DarkThemeColors
-        else -> LightThemeColors
+    val colorScheme = when (theme) {
+        System ->
+            if (darkTheme)
+                dynamicDarkColorScheme(LocalContext.current)
+            else
+                dynamicLightColorScheme(LocalContext.current)
+        Agata ->
+            if (darkTheme)
+                DarkThemeColors
+            else
+                LightThemeColors
+        CTU ->
+            if (darkTheme)
+                DarkThemeColors
+            else
+                LightThemeColors
+        Uwu ->
+            if (darkTheme)
+                DarkThemeColors
+            else
+                LightThemeColors
     }.animated()
 
-//    val systemUiController = rememberSystemUiController()
-//
-//    SideEffect {
-//        systemUiController.setStatusBarColor(
-//            color = colorScheme.background,
-//            darkIcons = !darkTheme,
-//        )
-//        systemUiController.setNavigationBarColor(
-//            color = colorScheme.surfaceVariant,
-//            darkIcons = !darkTheme,
-//        )
-//    }
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = colorScheme.background,
+            darkIcons = !darkTheme,
+        )
+        systemUiController.setNavigationBarColor(
+            color = colorScheme.surfaceVariant,
+            darkIcons = !darkTheme,
+        )
+    }
 
     MaterialTheme(
         colorScheme = colorScheme,

@@ -17,22 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.root.ui
+package cz.lastaapps.menza.settings.data
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import kotlinx.coroutines.flow.StateFlow
 
-internal sealed class RootNavType : Parcelable {
-    companion object {
-        val types = listOf(Loading, SetupFlow, Main)
-    }
+private val imagesOnMeteredKey = booleanPreferencesKey("imagesMetered")
 
-    @Parcelize
-    object Loading : RootNavType()
+internal val SettingsStore.imagesOnMetered: StateFlow<Boolean>
+    get() = data.mapState { pref -> pref[imagesOnMeteredKey] ?: true }
 
-    @Parcelize
-    object SetupFlow : RootNavType()
-
-    @Parcelize
-    object Main : RootNavType()
+internal suspend fun SettingsStore.setImagesOnMetered(enabled: Boolean) {
+    edit { pref -> pref[imagesOnMeteredKey] = enabled }
 }
+

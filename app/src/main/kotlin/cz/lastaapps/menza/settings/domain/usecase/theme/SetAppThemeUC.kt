@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,16 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings.store
+package cz.lastaapps.menza.settings.domain.usecase.theme
 
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import kotlinx.coroutines.flow.StateFlow
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.settings.data.SettingsStore
+import cz.lastaapps.menza.settings.data.setAppTheme
+import cz.lastaapps.menza.settings.domain.model.AppThemeType
 
-private val systemThemeKey = booleanPreferencesKey("systemTheme")
-
-val SettingsStore.systemTheme: StateFlow<Boolean>
-    get() = data.mapState { it[systemThemeKey] ?: true }
-
-suspend fun SettingsStore.setUseSystemTheme(useSystem: Boolean) {
-    edit { it[systemThemeKey] = useSystem }
+class SetAppThemeUC internal constructor(
+    context: UCContext,
+    private val store: SettingsStore,
+) : UseCase(context) {
+    suspend operator fun invoke(theme: AppThemeType) = launch {
+        store.setAppTheme(theme)
+    }
 }

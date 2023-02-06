@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,8 +31,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.navigation.routesEquals
+import cz.lastaapps.menza.settings.data.settingsEverOpened
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.dests.settings.store.settingsEverOpened
 
 @Composable
 fun MainNavRail(

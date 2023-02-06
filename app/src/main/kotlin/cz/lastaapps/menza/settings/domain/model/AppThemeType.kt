@@ -17,22 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.root.ui
+package cz.lastaapps.menza.settings.domain.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-internal sealed class RootNavType : Parcelable {
-    companion object {
-        val types = listOf(Loading, SetupFlow, Main)
-    }
-
-    @Parcelize
-    object Loading : RootNavType()
-
-    @Parcelize
-    object SetupFlow : RootNavType()
-
-    @Parcelize
-    object Main : RootNavType()
+enum class AppThemeType(val id: Int, val order: Int) {
+    System(0, 0),
+    Agata(1, 1),
+    CTU(2, 2),
+    Uwu(3, 3),
 }

@@ -17,22 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.root.ui
+package cz.lastaapps.menza.settings.domain.usecase
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.settings.data.SettingsStore
+import cz.lastaapps.menza.settings.data.setPriceType
+import cz.lastaapps.menza.settings.domain.model.PriceType
 
-internal sealed class RootNavType : Parcelable {
-    companion object {
-        val types = listOf(Loading, SetupFlow, Main)
+class SetPriceTypeUC internal constructor(
+    context: UCContext,
+    private val store: SettingsStore,
+) : UseCase(context) {
+    suspend operator fun invoke(type: PriceType) = launch {
+        if (type == PriceType.Unset) return@launch
+        store.setPriceType(type)
     }
-
-    @Parcelize
-    object Loading : RootNavType()
-
-    @Parcelize
-    object SetupFlow : RootNavType()
-
-    @Parcelize
-    object Main : RootNavType()
 }

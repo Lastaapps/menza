@@ -17,22 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.root.ui
+package cz.lastaapps.menza.settings.data
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.datastore.preferences.core.floatPreferencesKey
+import kotlinx.coroutines.flow.StateFlow
 
-internal sealed class RootNavType : Parcelable {
-    companion object {
-        val types = listOf(Loading, SetupFlow, Main)
-    }
+private val imageSizeKey = floatPreferencesKey("imageSize")
 
-    @Parcelize
-    object Loading : RootNavType()
+internal val SettingsStore.imageSize: StateFlow<Float>
+    get() = data.mapState { pref -> pref[imageSizeKey] ?: 1f }
 
-    @Parcelize
-    object SetupFlow : RootNavType()
-
-    @Parcelize
-    object Main : RootNavType()
+internal suspend fun SettingsStore.setImageSize(ration: Float) {
+    edit { pref -> pref[imageSizeKey] = ration }
 }

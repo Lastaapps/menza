@@ -43,9 +43,6 @@ import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
 import cz.lastaapps.menza.ui.dests.others.osturak.OsturakLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.dests.settings.store.darkMode
-import cz.lastaapps.menza.ui.dests.settings.store.resolveShouldUseDark
-import cz.lastaapps.menza.ui.dests.settings.store.systemTheme
 import cz.lastaapps.menza.ui.dests.today.TodayDest
 import cz.lastaapps.menza.ui.dests.today.TodayViewModel
 import cz.lastaapps.menza.ui.dests.week.WeekLayout
@@ -62,18 +59,12 @@ fun AppRoot(
     viewModelStoreOwner: ViewModelStoreOwner,
 ) {
 
-    val useDark by viewModel.sett.darkMode.collectAsState()
-    val useSystem by viewModel.sett.systemTheme.collectAsState()
-
     val privacyViewModel: PrivacyViewModel = koinActivityViewModel()
     val initViewModel: DownloadViewModel = koinActivityViewModel()
     val menzaViewModel: MenzaViewModel = koinActivityViewModel()
     val settingsViewModel: SettingsViewModel = koinActivityViewModel()
 
-    AppTheme(
-        darkTheme = useDark.resolveShouldUseDark(),
-        useCustomTheme = !useSystem,
-    ) {
+    AppTheme() {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
@@ -83,7 +74,7 @@ fun AppRoot(
                 viewModelStoreOwner = viewModelStoreOwner,
             ) {
 
-                    //show app if ready
+                //show app if ready
                     AppContent(menzaViewModel, settingsViewModel)
             }
         }

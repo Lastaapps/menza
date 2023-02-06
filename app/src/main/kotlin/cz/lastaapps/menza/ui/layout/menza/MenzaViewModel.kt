@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,12 @@ import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.compareToLocal
-import cz.lastaapps.menza.ui.dests.settings.store.*
+import cz.lastaapps.menza.settings.data.SettingsStore
+import cz.lastaapps.menza.settings.data.initialMenza
+import cz.lastaapps.menza.settings.data.latestMenza
+import cz.lastaapps.menza.settings.data.preferredMenza
+import cz.lastaapps.menza.settings.data.setLatestMenza
+import cz.lastaapps.menza.settings.domain.model.InitialMenza
 import cz.lastaapps.storage.repo.MenzaRepo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -62,10 +67,10 @@ class MenzaViewModel constructor(
 
                 log.i { "Data ready" }
 
-                val menzaId = when (sett.initMenza.first()) {
-                    InitMenza.Ask -> null
-                    InitMenza.Remember -> sett.latestMenza.first()
-                    InitMenza.Specific -> sett.preferredMenza.first()
+                val menzaId = when (sett.initialMenza.first()) {
+                    InitialMenza.Ask -> null
+                    InitialMenza.Remember -> sett.latestMenza.first()
+                    InitialMenza.Specific -> sett.preferredMenza.first()
                 }
                 selectMenza(menzaId)
 

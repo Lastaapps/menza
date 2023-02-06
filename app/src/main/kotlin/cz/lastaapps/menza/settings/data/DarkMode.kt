@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,41 +17,21 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings.store
+package cz.lastaapps.menza.settings.data
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
 import androidx.datastore.preferences.core.intPreferencesKey
+import cz.lastaapps.menza.settings.domain.model.DarkMode
 import kotlinx.coroutines.flow.StateFlow
 
-sealed class DarkMode private constructor(val id: Int) {
-    object Light : DarkMode(0)
-    object Dark : DarkMode(1)
-    object System : DarkMode(2)
-
-    companion object {
-        val modes = listOf(Light, Dark, System)
-    }
-}
-
 private val darkModeKey = intPreferencesKey("darkMode")
-val SettingsStore.darkMode: StateFlow<DarkMode>
+internal val SettingsStore.darkMode: StateFlow<DarkMode>
     get() = data.mapState { pref ->
         val key = pref[darkModeKey]
         DarkMode.modes.firstOrNull { it.id == key } ?: DarkMode.System
     }
 
-suspend fun SettingsStore.setDarkMode(darkMode: DarkMode) {
+internal suspend fun SettingsStore.setDarkMode(darkMode: DarkMode) {
     edit {
         it[darkModeKey] = darkMode.id
-    }
-}
-
-@Composable
-fun DarkMode.resolveShouldUseDark(): Boolean {
-    return when (this) {
-        DarkMode.Dark -> true
-        DarkMode.Light -> false
-        DarkMode.System -> isSystemInDarkTheme()
     }
 }

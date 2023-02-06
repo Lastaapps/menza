@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,31 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings.store
+package cz.lastaapps.menza.settings.domain.model
 
-import androidx.datastore.preferences.core.intPreferencesKey
 import cz.lastaapps.entity.common.Price
 import cz.lastaapps.entity.day.Dish
-import kotlinx.coroutines.flow.StateFlow
 
 sealed class PriceType(val id: Int) {
     object Unset : PriceType(-1)
     object Discounted : PriceType(0)
     object Normal : PriceType(1)
-}
-
-private val priceTypeKey = intPreferencesKey("priceType")
-val SettingsStore.priceType: StateFlow<PriceType>
-    get() = data.mapState {
-        when (it[priceTypeKey]) {
-            PriceType.Discounted.id -> PriceType.Discounted
-            PriceType.Normal.id -> PriceType.Normal
-            else -> PriceType.Unset
-        }
-    }
-
-suspend fun SettingsStore.setPriceType(priceType: PriceType) {
-    edit { it[priceTypeKey] = priceType.id }
 }
 
 fun Dish.getPrice(type: PriceType): Price? {
@@ -50,4 +34,3 @@ fun Dish.getPrice(type: PriceType): Price? {
         else -> this.priceNormal
     }
 }
-
