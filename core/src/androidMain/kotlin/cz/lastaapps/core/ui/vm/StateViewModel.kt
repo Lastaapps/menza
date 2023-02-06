@@ -17,12 +17,26 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.domain.error
+package cz.lastaapps.core.ui.vm
 
-sealed interface NetworkError : MenzaError.Runtime {
-    data object Timeout : NetworkError
-    data object NoInternet : NetworkError
-    data object ConnectionClosed : NetworkError
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
-    data class SerializationError(override val throwable: Throwable) : NetworkError
+abstract class StateViewModel<State : Any>(
+    val init: State,
+    context: VMContext,
+) : BaseViewModel(context) {
+    private val myState = MutableStateFlow(init)
+
+    protected fun lastState() = myState.value
+    protected fun updateState(block: State.(State) -> State) =
+        myState.update { with(it) { block(it) } }
+
+    val flow = myState.asStateFlow()
+    val flowState
+        @Composable
+        get() = myState.collectAsStateWithLifecycle()
 }

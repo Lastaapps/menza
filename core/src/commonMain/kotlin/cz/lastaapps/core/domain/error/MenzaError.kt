@@ -22,10 +22,13 @@ package cz.lastaapps.core.domain.error
 import arrow.core.continuations.Raise
 
 sealed interface MenzaError {
+    val throwable: Throwable?
+        get() = null
+
     sealed interface Runtime : MenzaError
     sealed interface Logic : MenzaError
 
-    data class Unknown(val throwable: Throwable) : Runtime
+    data class Unknown(override val throwable: Throwable) : Runtime
 }
 
 typealias MenzaRaise = Raise<MenzaError>

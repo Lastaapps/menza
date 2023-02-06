@@ -19,10 +19,27 @@
 
 package cz.lastaapps.core.domain.error
 
-sealed interface NetworkError : MenzaError.Runtime {
-    data object Timeout : NetworkError
-    data object NoInternet : NetworkError
-    data object ConnectionClosed : NetworkError
+import cz.lastaapps.core.domain.error.NetworkError.ConnectionClosed
+import cz.lastaapps.core.domain.error.NetworkError.NoInternet
+import cz.lastaapps.core.domain.error.NetworkError.SerializationError
+import cz.lastaapps.core.domain.error.NetworkError.Timeout
 
-    data class SerializationError(override val throwable: Throwable) : NetworkError
-}
+val MenzaError.shouldBeReported: Boolean
+    get() = when (this) {
+        is MenzaError.Logic -> false
+
+        is MenzaError.Unknown -> true
+        is NetworkError -> shouldBeReported
+        is ParsingError -> true
+    }
+
+val NetworkError.shouldBeReported: Boolean
+    get() = when (this) {
+        ConnectionClosed,
+        NoInternet,
+        Timeout,
+        -> false
+
+        is SerializationError,
+        -> true
+    }

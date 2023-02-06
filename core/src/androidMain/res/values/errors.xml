@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~
+  ~     This file is part of Menza.
+  ~
+  ~     Menza is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Menza is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="error_unknown">Unknown error: %s</string>
+    <string name="error_network_connection_closed">Connection closed</string>
+    <string name="error_network_no_internet">No internet</string>
+    <string name="error_network_timeout">Timeout</string>
+    <string name="error_network_serialization">Failed to process API content</string>
+    <string name="error_parsing_date_range">Failed to parse valid dates</string>
+    <string name="error_parsing_day">Failed to parse some day dishes</string>
+    <string name="error_parsing_dish">Failed to parse a dish</string>
+    <string name="error_parsing_menu">Failed to parse menu</string>
+    <string name="error_api_week_not_available">Week menu not supported</string>
+</resources>

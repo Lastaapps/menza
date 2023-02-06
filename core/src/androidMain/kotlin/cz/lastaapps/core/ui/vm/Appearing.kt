@@ -17,12 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.domain.error
+package cz.lastaapps.core.ui.vm
 
-sealed interface NetworkError : MenzaError.Runtime {
-    data object Timeout : NetworkError
-    data object NoInternet : NetworkError
-    data object ConnectionClosed : NetworkError
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 
-    data class SerializationError(override val throwable: Throwable) : NetworkError
+interface Appearing {
+    fun onAppeared()
+}
+
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+fun HandleAppear(appearing: Appearing) {
+    LaunchedEffect(appearing) {
+        appearing.onAppeared()
+    }
 }

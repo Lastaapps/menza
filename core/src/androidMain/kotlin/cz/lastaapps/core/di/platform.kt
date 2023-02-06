@@ -20,7 +20,7 @@
 package cz.lastaapps.core.di
 
 import cz.lastaapps.core.data.createSettings
-import cz.lastaapps.core.ui.VMContext
+import cz.lastaapps.core.ui.vm.VMContext
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.module.Module
 import org.koin.dsl.module

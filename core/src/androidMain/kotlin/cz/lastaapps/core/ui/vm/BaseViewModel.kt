@@ -17,38 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.ui
+package cz.lastaapps.core.ui.vm
 
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @JvmInline
 value class VMContext(val context: CoroutineContext)
 
-abstract class StateViewModel<State : Any>(
-    val init: State,
-    private val context: VMContext,
-) : ViewModel() {
-    private val myState = MutableStateFlow(init)
-
+abstract class BaseViewModel(private val context: VMContext) : ViewModel() {
     protected fun launch(block: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch(context.context, block = block)
     }
-
-    protected fun lastState() = myState.value
-    protected fun updateState(block: State.(State) -> State) =
-        myState.update { with(it) { block(it) } }
-
-    val flow = myState.asStateFlow()
-    val flowState
-        @Composable
-        get() = myState.collectAsStateWithLifecycle()
 }

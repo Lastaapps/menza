@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,23 +20,26 @@
 package cz.lastaapps.menza.ui
 
 import android.content.Context
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import cz.lastaapps.menza.ui.dests.others.ReportDialog
 import cz.lastaapps.menza.ui.dests.others.sendReport
-import cz.lastaapps.storage.repo.MenzaError
+import cz.lastaapps.storage.repo.MenzaScrapingError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CollectErrors(snackbarHost: SnackbarHostState, channel: Channel<MenzaError>) {
+fun CollectErrors(snackbarHost: SnackbarHostState, channel: Channel<MenzaScrapingError>) {
     val context = LocalContext.current
-    var errorToReport by remember { mutableStateOf<MenzaError?>(null) }
+    var errorToReport by remember { mutableStateOf<MenzaScrapingError?>(null) }
 
     LaunchedEffect(Unit) {
         channel.receiveAsFlow().collect { error ->
@@ -54,8 +57,8 @@ fun CollectErrors(snackbarHost: SnackbarHostState, channel: Channel<MenzaError>)
 private suspend fun handleError(
     context: Context,
     snackbarHost: SnackbarHostState,
-    error: MenzaError,
-    onReported: (MenzaError) -> Unit
+    error: MenzaScrapingError,
+    onReported: (MenzaScrapingError) -> Unit,
 ) {
     if (error.isReportable) {
         val result = snackbarHost.showSnackbar(
@@ -73,16 +76,16 @@ private suspend fun handleError(
     }
 }
 
-fun MenzaError.toMessage(context: Context): String {
+fun MenzaScrapingError.toMessage(context: Context): String {
     val errorMessage = throwable?.message?.let { "\n$it" } ?: ""
     return when (this) {
-        MenzaError.WeekNotSupported -> cz.lastaapps.menza.R.string.error_week_not_supported
-        is MenzaError.ParsingError -> cz.lastaapps.menza.R.string.error_parsing
-        is MenzaError.UnknownConnectionError -> cz.lastaapps.menza.R.string.error_unknown_connection_error
-        is MenzaError.ConnectionClosed -> cz.lastaapps.menza.R.string.error_connection_closed
-        is MenzaError.FailedToConnect -> cz.lastaapps.menza.R.string.error_failed_to_connect
-        is MenzaError.NoInternet -> cz.lastaapps.menza.R.string.error_no_internet
-        is MenzaError.Timeout -> cz.lastaapps.menza.R.string.error_timeout
+        MenzaScrapingError.WeekNotSupported -> cz.lastaapps.menza.R.string.error_week_not_supported
+        is MenzaScrapingError.ParsingError -> cz.lastaapps.menza.R.string.error_parsing
+        is MenzaScrapingError.UnknownConnectionError -> cz.lastaapps.menza.R.string.error_unknown_connection_error
+        is MenzaScrapingError.ConnectionClosed -> cz.lastaapps.menza.R.string.error_connection_closed
+        is MenzaScrapingError.FailedToConnect -> cz.lastaapps.menza.R.string.error_failed_to_connect
+        is MenzaScrapingError.NoInternet -> cz.lastaapps.menza.R.string.error_no_internet
+        is MenzaScrapingError.Timeout -> cz.lastaapps.menza.R.string.error_timeout
     }.let { context.getString(it) }.let {
         if (showMessage) it + errorMessage else it
     }

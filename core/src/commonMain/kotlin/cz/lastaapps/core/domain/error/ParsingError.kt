@@ -24,6 +24,6 @@ sealed interface ParsingError : MenzaError.Runtime {
         data object DateRangeCannotBeParsed : Buffet
         data object DayCannotBeParsed : Buffet
         data object DishCannotBeParsed : Buffet
-        data object DishListCannotBeParsed : Buffet
+        data object MenuCannotBeParsed : Buffet
     }
 }

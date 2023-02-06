@@ -22,10 +22,12 @@ package cz.lastaapps.core.data
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import org.lighthousegames.logging.logging
 
 @OptIn(ExperimentalSerializationApi::class)
 internal val httpClient = HttpClient() {
@@ -39,5 +41,11 @@ internal val httpClient = HttpClient() {
 
     install(Logging) {
         level = LogLevel.INFO
+        logger = object : Logger {
+            private val log = logging("Ktor")
+            override fun log(message: String) {
+                log.i { message }
+            }
+        }
     }
 }
