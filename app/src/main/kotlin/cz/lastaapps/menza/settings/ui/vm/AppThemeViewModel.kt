@@ -17,56 +17,52 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.root.ui
+package cz.lastaapps.menza.settings.ui.vm
 
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
-import cz.lastaapps.menza.root.domain.usecase.IsAppSetUpUC
 import cz.lastaapps.menza.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.settings.domain.model.DarkMode
 import cz.lastaapps.menza.settings.domain.usecase.GetDarkModeUC
+import cz.lastaapps.menza.settings.domain.usecase.SetDarkModeUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.GetAppThemeUC
+import cz.lastaapps.menza.settings.domain.usecase.theme.GetThemeListUC
+import cz.lastaapps.menza.settings.domain.usecase.theme.SetAppThemeUC
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 
-internal class RootViewModel(
+internal class AppThemeViewModel(
     context: VMContext,
-    private val isAppSetUp: IsAppSetUpUC,
+    private val getAppThemeList: GetThemeListUC,
     private val getAppTheme: GetAppThemeUC,
     private val getDarkMode: GetDarkModeUC,
-) : StateViewModel<RootState>(RootState(), context), Appearing {
-
+    private val setAppTheme: SetAppThemeUC,
+    private val setDarkMode: SetDarkModeUC,
+) : StateViewModel<AppThemeState>(AppThemeState(), context), Appearing {
     override fun onAppeared() = launch {
-        val isSetUp = isAppSetUp()
-        val appTheme = getAppTheme().first()
-        val darkMode = getDarkMode().first()
-
-        updateState {
-            copy(
-                isSetUp = isSetUp,
-                appTheme = appTheme,
-                darkMode = darkMode,
-                isReady = true,
-            )
-        }
-
         launch {
-            getAppTheme().collectLatest {
-                updateState { copy(appTheme = it) }
+            getAppTheme().collectLatest { theme ->
+                updateState { copy(theme = theme) }
             }
         }
         launch {
-            getDarkMode().collectLatest {
-                updateState { copy(darkMode = it) }
+            getDarkMode().collectLatest { mode ->
+                updateState { copy(darkMode = mode) }
             }
+        }
+        getAppThemeList().let {
+            updateState { copy(availableThemes = it) }
         }
     }
+
+    fun setAppTheme(theme: AppThemeType) = launch { setAppTheme.invoke(theme) }
+    fun setDarkMode(mode: DarkMode) = launch { setDarkMode.invoke(mode) }
 }
 
-internal data class RootState(
-    val isReady: Boolean = false,
-    val isSetUp: Boolean = false,
-    val appTheme: AppThemeType = AppThemeType.defaultTemp,
-    val darkMode: DarkMode = DarkMode.System,
+internal data class AppThemeState(
+    val theme: AppThemeType? = null,
+    val darkMode: DarkMode? = null,
+    val availableThemes: ImmutableList<AppThemeType> = persistentListOf(),
 )

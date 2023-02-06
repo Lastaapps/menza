@@ -144,10 +144,16 @@
     </string>
     <string name="settings_reload_cancel">Cancel</string>
     <string name="settings_reload_ok">Close app and reload</string>
-    <string name="settings_theme_title">App theme</string>
-    <string name="settings_theme_light">Light</string>
-    <string name="settings_theme_dark">Dark</string>
-    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_title">Choose app theme</string>
+    <string name="settings_theme_dark_title">Dark mode</string>
+    <string name="settings_theme_dark_light">Light</string>
+    <string name="settings_theme_dark_dark">Dark</string>
+    <string name="settings_theme_dark_system">System</string>
+    <string name="settings_theme_app_title">App style</string>
+    <string name="settings_theme_app_system">System</string>
+    <string name="settings_theme_app_agata">Agáta</string>
+    <string name="settings_theme_app_ctu">CTU</string>
+    <string name="settings_theme_app_uwu">UwU</string>
 
     <string name="panel_price_title">Which prices do you want to see?</string>
     <string name="panel_price_discounted">Discounted</string>
@@ -232,4 +238,5 @@
     <string name="license_detail_description">Description</string>
     <string name="license_detail_no_license">No license available</string>
 
+    <string name="button_continue">Continue</string>
 </resources>

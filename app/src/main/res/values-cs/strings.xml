@@ -130,9 +130,15 @@
     <string name="settings_reload_cancel">Zrušit</string>
     <string name="settings_reload_ok">Zavřít aplikaci a znovunačíst</string>
     <string name="settings_theme_title">Vzhled aplikace</string>
-    <string name="settings_theme_light">Světlý</string>
-    <string name="settings_theme_dark">Tmavý</string>
-    <string name="settings_theme_system">Systémový</string>
+    <string name="settings_theme_dark_title">Tmavý režim</string>
+    <string name="settings_theme_dark_light">Světlý</string>
+    <string name="settings_theme_dark_dark">Tmavý</string>
+    <string name="settings_theme_dark_system">Systémový</string>
+    <string name="settings_theme_app_title">Styl appky</string>
+    <string name="settings_theme_app_system">Systémový</string>
+    <string name="settings_theme_app_agata">Agáta</string>
+    <string name="settings_theme_app_ctu">ČVUT</string>
+    <string name="settings_theme_app_uwu">UwU</string>
     <string name="panel_price_title">Jaké ceny se mají zobrazovat?</string>
     <string name="panel_price_discounted">Zlevněné</string>
     <string name="panel_price_normal">Běžné plné</string>
@@ -208,4 +214,6 @@
     <string name="license_detail_organization">Společnost</string>
     <string name="license_detail_description">Popis</string>
     <string name="license_detail_no_license">Není dostupná žádná licence</string>
+
+    <string name="button_continue">Pokračovat</string>
 </resources>

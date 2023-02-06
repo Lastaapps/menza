@@ -38,13 +38,17 @@ import cz.lastaapps.menza.settings.domain.usecase.theme.GetAppThemeUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.GetThemeListUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.IsDynamicThemeSupportedUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.SetAppThemeUC
+import cz.lastaapps.menza.settings.ui.vm.AppThemeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val settingsModule = module {
     single { SettingsStore(get(), CoroutineScope(Dispatchers.IO)) }
+
+    viewModelOf(::AppThemeViewModel)
 
     factoryOf(::GetAppThemeUC)
     factoryOf(::GetThemeListUC)

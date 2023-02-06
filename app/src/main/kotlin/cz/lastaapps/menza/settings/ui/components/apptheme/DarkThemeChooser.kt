@@ -17,10 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.settings.modules
+package cz.lastaapps.menza.settings.ui.components.apptheme
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -29,93 +30,84 @@ import androidx.compose.material.icons.filled.BrightnessMedium
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.settings.data.darkMode
 import cz.lastaapps.menza.settings.domain.model.DarkMode
-import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import kotlin.math.min
 
-
 @Composable
-fun DarkThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifier) {
-    val selected by viewModel.sett.darkMode.collectAsState()
+internal fun DarkThemeChooser(
+    selected: DarkMode,
+    onSelect: (DarkMode) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val items = listOf(
+        DarkThemeItem(R.string.settings_theme_dark_light, Icons.Default.WbSunny, DarkMode.Light),
+        DarkThemeItem(
+            R.string.settings_theme_dark_system, Icons.Default.BrightnessMedium, DarkMode.System
+        ),
+        DarkThemeItem(R.string.settings_theme_dark_dark, Icons.Default.Brightness3, DarkMode.Dark),
+    )
+    Layout(
+        modifier = modifier,
+        content = {
+            items.forEach { item ->
+                val isSelected = item.mode == selected
+                DarkThemeItem(item = item, isSelected = isSelected) {
+                    onSelect(item.mode)
+                }
+            }
+        },
+    ) { measurable, constrains ->
 
-    Column(
-        modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
-    ) {
+        val itemNumber = measurable.size
+        val maxItemWidth = constrains.maxWidth / itemNumber
 
-        Text(stringResource(R.string.settings_theme_title))
+        val placeableWidth =
+            measurable.map { it.minIntrinsicWidth(maxItemWidth) }
+                .maxOf { it }
+                //.takeIf {it <= maxItemWidth} ?: maxItemWidth
+                .let { min(it, maxItemWidth) }
+        val placeablesHeight =
+            measurable.map { it.minIntrinsicHeight(constrains.maxHeight) }.maxOf { it }
 
-        val items = listOf(
-            DarkThemeItem(R.string.settings_theme_light, Icons.Default.WbSunny, DarkMode.Light),
-            DarkThemeItem(
-                R.string.settings_theme_system, Icons.Default.BrightnessMedium, DarkMode.System
-            ),
-            DarkThemeItem(R.string.settings_theme_dark, Icons.Default.Brightness3, DarkMode.Dark),
+        val smallerConst = Constraints(
+            placeableWidth, placeableWidth,
+            placeablesHeight, placeablesHeight,
         )
-        Layout(
-            content = {
-                items.forEach { item ->
-                    val isSelected = item.mode == selected
-                    ThemeItem(item = item, isSelected = isSelected) {
-                        viewModel.setDarkMode(item.mode)
-                    }
-                }
-            },
-        ) { measurable, constrains ->
 
-            val itemNumber = measurable.size
-            val maxItemWidth = constrains.maxWidth / itemNumber
-
-            val placeableWidth =
-                measurable.map { it.minIntrinsicWidth(maxItemWidth) }
-                    .maxOf { it }
-                    //.takeIf {it <= maxItemWidth} ?: maxItemWidth
-                    .let { min(it, maxItemWidth) }
-            val placeablesHeight =
-                measurable.map { it.minIntrinsicHeight(constrains.maxHeight) }.maxOf { it }
-
-            val smallerConst = Constraints(
-                placeableWidth, placeableWidth,
-                placeablesHeight, placeablesHeight,
-            )
-
-            val placeables = measurable.map {
-                it.measure(smallerConst)
-            }
-
-            val width = constrains.maxWidth
-            val height = min(placeables.first().height, constrains.maxHeight)
-
-            layout(width, height) {
-                val remainingWidth = width - (placeableWidth * itemNumber)
-                val spacing = remainingWidth / (itemNumber + 1)
-
-                placeables.forEachIndexed { index, placeable ->
-                    val offset = index * (spacing + placeableWidth) + spacing
-                    val center = (placeableWidth - placeable.width) / 2
-                    placeable.placeRelative(offset + center, 0)
-                }
-            }
+        val placeables = measurable.map {
+            it.measure(smallerConst)
         }
 
+        val width = constrains.maxWidth
+        val height = min(placeables.first().height, constrains.maxHeight)
+
+        layout(width, height) {
+            val remainingWidth = width - (placeableWidth * itemNumber)
+            val spacing = remainingWidth / (itemNumber + 1)
+
+            placeables.forEachIndexed { index, placeable ->
+                val offset = index * (spacing + placeableWidth) + spacing
+                val center = (placeableWidth - placeable.width) / 2
+                placeable.placeRelative(offset + center, 0)
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ThemeItem(
+private fun DarkThemeItem(
     item: DarkThemeItem,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
@@ -127,13 +119,16 @@ private fun ThemeItem(
         MaterialTheme.colorScheme.tertiary
 
     val interaction = remember { MutableInteractionSource() }
+    val scale by animateFloatAsState(
+        if (isSelected) 1f else DarkThemeChooser.unselectedScale
+    )
     Card(
         onClick = onItemSelected,
         interactionSource = interaction,
         colors = CardDefaults.cardColors(
             containerColor = animateColorAsState(color).value,
         ),
-        modifier = modifier,
+        modifier = modifier.scale(scale),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -153,3 +148,7 @@ private fun ThemeItem(
 private data class DarkThemeItem(
     @StringRes val title: Int, val icon: ImageVector, val mode: DarkMode,
 )
+
+private object DarkThemeChooser {
+    const val unselectedScale = .95f
+}

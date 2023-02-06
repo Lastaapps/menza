@@ -30,56 +30,61 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.android.material.color.DynamicColors
 import cz.lastaapps.menza.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.settings.domain.model.AppThemeType.Agata
 import cz.lastaapps.menza.settings.domain.model.AppThemeType.CTU
 import cz.lastaapps.menza.settings.domain.model.AppThemeType.System
 import cz.lastaapps.menza.settings.domain.model.AppThemeType.Uwu
+import cz.lastaapps.menza.settings.domain.model.DarkMode
 import cz.lastaapps.menza.ui.theme.generated.AppTypography
 import cz.lastaapps.menza.ui.theme.generated.DarkThemeColors
 import cz.lastaapps.menza.ui.theme.generated.LightThemeColors
 
 @Composable
 fun AppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkMode: DarkMode = DarkMode.System,
     theme: AppThemeType = Agata,
+    colorSystemBars: Boolean = false,
     content: @Composable () -> Unit,
 ) {
+    val isLightMode = !darkMode.shouldUseDark()
+
     val colorScheme = when (theme) {
         System ->
-            if (darkTheme)
-                dynamicDarkColorScheme(LocalContext.current)
-            else
+            if (isLightMode)
                 dynamicLightColorScheme(LocalContext.current)
-        Agata ->
-            if (darkTheme)
-                DarkThemeColors
             else
+                dynamicDarkColorScheme(LocalContext.current)
+        Agata ->
+            if (isLightMode)
                 LightThemeColors
+            else
+                DarkThemeColors
         CTU ->
-            if (darkTheme)
+            if (isLightMode)
                 DarkThemeColors
             else
                 LightThemeColors
         Uwu ->
-            if (darkTheme)
-                DarkThemeColors
-            else
+            if (isLightMode)
                 LightThemeColors
+            else
+                DarkThemeColors
     }.animated()
 
-    val systemUiController = rememberSystemUiController()
+    if (colorSystemBars) {
+        val systemUiController = rememberSystemUiController()
 
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = colorScheme.background,
-            darkIcons = !darkTheme,
-        )
-        systemUiController.setNavigationBarColor(
-            color = colorScheme.surfaceVariant,
-            darkIcons = !darkTheme,
-        )
+        SideEffect {
+            systemUiController.setStatusBarColor(
+                color = colorScheme.background,
+                darkIcons = isLightMode,
+            )
+            systemUiController.setNavigationBarColor(
+                color = colorScheme.surfaceVariant,
+                darkIcons = isLightMode,
+            )
+        }
     }
 
     MaterialTheme(
@@ -90,8 +95,6 @@ fun AppTheme(
     )
 }
 
-fun isDynamicThemeSupported() = DynamicColors.isDynamicColorAvailable()
-
 private val Shapes = Shapes(
     /*extraSmall = ShapeTokens.CornerExtraSmall
     small = ShapeTokens.CornerSmall,
@@ -99,6 +102,14 @@ private val Shapes = Shapes(
     large = ShapeTokens.CornerLarge,
     extraLarge = ShapeTokens.CornerExtraLarge,*/
 )
+
+@Composable
+private fun DarkMode.shouldUseDark(): Boolean =
+    when (this) {
+        DarkMode.Dark -> true
+        DarkMode.Light -> false
+        DarkMode.System -> isSystemInDarkTheme()
+    }
 
 @Composable
 private fun ColorScheme.animated(): ColorScheme {

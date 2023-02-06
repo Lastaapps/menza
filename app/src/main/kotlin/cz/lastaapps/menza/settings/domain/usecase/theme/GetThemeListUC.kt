@@ -33,7 +33,7 @@ class GetThemeListUC internal constructor(
         AppThemeType.values()
             .toMutableList()
             .also {
-                if (isDynamicThemeSupported()) {
+                if (!isDynamicThemeSupported()) {
                     it.remove(System)
                 }
             }

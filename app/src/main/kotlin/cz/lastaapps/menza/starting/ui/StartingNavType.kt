@@ -24,7 +24,7 @@ import kotlinx.parcelize.Parcelize
 
 sealed interface StartingNavType : Parcelable {
     companion object {
-        val allTypes = listOf(PolicyBackground, DownloadData, ChoosePrice, ChooseTheme)
+        val allTypes = listOf(PolicyBackground, DownloadData, ChooseTheme, ChoosePrice)
     }
 
     @Parcelize

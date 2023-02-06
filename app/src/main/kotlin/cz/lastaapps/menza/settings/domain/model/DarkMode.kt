@@ -19,26 +19,9 @@
 
 package cz.lastaapps.menza.settings.domain.model
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
-
-sealed class DarkMode private constructor(
-    internal val id: Int,
-) {
-    object Light : DarkMode(0)
-    object Dark : DarkMode(1)
-    object System : DarkMode(2)
-
-    companion object {
-        val modes = listOf(Light, Dark, System)
-    }
-}
-
-@Composable
-fun DarkMode.shouldUseDark(): Boolean {
-    return when (this) {
-        DarkMode.Dark -> true
-        DarkMode.Light -> false
-        DarkMode.System -> isSystemInDarkTheme()
-    }
+enum class DarkMode(internal val id: Int) {
+    Light(0),
+    Dark(1),
+    System(2),
+    ;
 }

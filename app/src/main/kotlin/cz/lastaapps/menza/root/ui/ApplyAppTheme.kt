@@ -17,19 +17,24 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.choosetheme
+package cz.lastaapps.menza.root.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
+import androidx.compose.runtime.getValue
+import cz.lastaapps.menza.ui.theme.AppTheme
 
-internal class ChooseThemeNode(
-    buildContext: BuildContext,
-) : Node(
-    buildContext = buildContext,
+@Composable
+internal fun ApplyAppTheme(
+    viewModel: RootViewModel,
+    content: @Composable () -> Unit,
 ) {
-    @Composable
-    override fun View(modifier: Modifier) {
+    val state by viewModel.flowState
+    if (state.isReady) {
+        AppTheme(
+            theme = state.appTheme,
+            darkMode = state.darkMode,
+            colorSystemBars = true,
+            content = content,
+        )
     }
 }

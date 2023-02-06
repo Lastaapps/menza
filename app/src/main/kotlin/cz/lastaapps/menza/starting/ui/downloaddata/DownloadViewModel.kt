@@ -51,7 +51,7 @@ internal class DownloadViewModel constructor(
         when (checkDownloadNeeded()) {
             true -> {
                 log.i { "No data, starting" }
-                updateState { it.copy(isReady = true) }
+                updateState { copy(isReady = true) }
                 startDownload()
             }
             false -> {

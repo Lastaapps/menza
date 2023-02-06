@@ -34,12 +34,12 @@ import com.bumble.appyx.navmodel.spotlight.Spotlight
 import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.next
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightSlider
+import cz.lastaapps.menza.settings.ui.nodes.ChooseAppThemeNode
 import cz.lastaapps.menza.starting.ui.StartingNavType.ChoosePrice
 import cz.lastaapps.menza.starting.ui.StartingNavType.ChooseTheme
 import cz.lastaapps.menza.starting.ui.StartingNavType.DownloadData
 import cz.lastaapps.menza.starting.ui.StartingNavType.PolicyBackground
 import cz.lastaapps.menza.starting.ui.chooseprice.ChoosePriceNode
-import cz.lastaapps.menza.starting.ui.choosetheme.ChooseThemeNode
 import cz.lastaapps.menza.starting.ui.downloaddata.DownloadNode
 import cz.lastaapps.menza.starting.ui.privacy.PrivacyDialogDest
 import kotlinx.coroutines.flow.first
@@ -62,7 +62,7 @@ class StartingNode(
             PolicyBackground -> node(buildContext) {}
             DownloadData -> DownloadNode(buildContext, onNext)
             ChoosePrice -> ChoosePriceNode(buildContext)
-            ChooseTheme -> ChooseThemeNode(buildContext)
+            ChooseTheme -> ChooseAppThemeNode(buildContext, onNext)
         }
     }
 

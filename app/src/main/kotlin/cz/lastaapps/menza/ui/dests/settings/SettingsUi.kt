@@ -62,6 +62,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.navigation.NavController
+import com.google.android.material.color.DynamicColors
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.settings.data.appTheme
@@ -69,18 +70,16 @@ import cz.lastaapps.menza.settings.data.imagesOnMetered
 import cz.lastaapps.menza.settings.data.priceType
 import cz.lastaapps.menza.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.settings.domain.model.PriceType
+import cz.lastaapps.menza.settings.ui.components.FullReloadDialog
+import cz.lastaapps.menza.settings.ui.components.ImageSizeSetting
+import cz.lastaapps.menza.settings.ui.components.InitMenzaUI
 import cz.lastaapps.menza.ui.dests.others.AboutUi
 import cz.lastaapps.menza.ui.dests.others.ReportDialog
 import cz.lastaapps.menza.ui.dests.others.crashes.CrashesDialog
 import cz.lastaapps.menza.ui.dests.others.crashes.CrashesViewModel
 import cz.lastaapps.menza.ui.dests.others.sendReport
-import cz.lastaapps.menza.ui.dests.settings.modules.DarkThemeSettings
-import cz.lastaapps.menza.ui.dests.settings.modules.FullReloadDialog
-import cz.lastaapps.menza.ui.dests.settings.modules.ImageSizeSetting
-import cz.lastaapps.menza.ui.dests.settings.modules.InitMenzaUI
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.locals.koinActivityViewModel
-import cz.lastaapps.menza.ui.theme.isDynamicThemeSupported
 
 @Composable
 fun SettingsUI(
@@ -125,7 +124,7 @@ fun SettingsUI(
                     textAlign = TextAlign.Center,
                 )
 
-                DarkThemeSettings(viewModel, Modifier.fillMaxWidth())
+//                DarkThemeChooser(viewModel, Modifier.fillMaxWidth())
 
                 Switches(viewModel, Modifier.fillMaxWidth())
 
@@ -175,6 +174,8 @@ private fun Switches(viewModel: SettingsViewModel, modifier: Modifier = Modifier
         ImagesOnMeteredSetting(viewModel = viewModel)
     }
 }
+
+private fun isDynamicThemeSupported() = DynamicColors.isDynamicColorAvailable()
 
 @Composable
 private fun UseThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifier) {

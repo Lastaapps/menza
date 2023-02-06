@@ -35,6 +35,7 @@ import com.bumble.appyx.navmodel.spotlight.Spotlight
 import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.activate
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightFader
+import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.root.ui.RootNavType.Loading
 import cz.lastaapps.menza.root.ui.RootNavType.Main
 import cz.lastaapps.menza.root.ui.RootNavType.SetupFlow
@@ -68,29 +69,28 @@ internal class RootNode(
     override fun View(modifier: Modifier) {
         val viewModel: RootViewModel = koinViewModel()
 
-        LaunchedEffect(viewModel) {
-            viewModel.appeared()
-        }
-        val isReady by viewModel.isReady.collectAsStateWithLifecycle()
-        val isSetup by viewModel.isSetUp.collectAsStateWithLifecycle()
+        HandleAppear(viewModel)
+        val state by viewModel.flowState
 
-        LaunchedEffect(isReady, isSetup) {
-            if (isReady) {
-                (if (isSetup) Main else SetupFlow)
+        LaunchedEffect(state.isReady, state.isSetUp) {
+            if (state.isReady) {
+                (if (state.isSetUp) Main else SetupFlow)
                     .let { spotlight.activate(indexOfType(it)) }
             }
         }
 
-        val activeIndex by spotlight.activeIndex().collectAsStateWithLifecycle(-1)
+        ApplyAppTheme(viewModel) {
+            val activeIndex by spotlight.activeIndex().collectAsStateWithLifecycle(-1)
 
-        Children(
-            navModel = spotlight,
-            modifier = modifier.onPlaced {
-                if (indexOfType(Loading) != activeIndex) {
-                    onDecided()
-                }
-            },
-            transitionHandler = rememberSpotlightFader(),
-        )
+            Children(
+                navModel = spotlight,
+                modifier = modifier.onPlaced {
+                    if (indexOfType(Loading) != activeIndex) {
+                        onDecided()
+                    }
+                },
+                transitionHandler = rememberSpotlightFader(),
+            )
+        }
     }
 }

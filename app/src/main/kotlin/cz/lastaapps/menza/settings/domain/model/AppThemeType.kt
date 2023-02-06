@@ -24,4 +24,9 @@ enum class AppThemeType(val id: Int, val order: Int) {
     Agata(1, 1),
     CTU(2, 2),
     Uwu(3, 3),
+    ;
+
+    companion object {
+        val defaultTemp = Agata
+    }
 }

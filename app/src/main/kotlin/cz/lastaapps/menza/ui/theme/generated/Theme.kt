@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,8 +21,8 @@ package cz.lastaapps.menza.ui.theme.generated
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import cz.lastaapps.menza.ui.theme.generated.*
 
+// TODO add missing fields
 val LightThemeColors = lightColorScheme(
 
     primary = md_theme_light_primary,

@@ -29,4 +29,8 @@ object MenzaPadding {
     val Medium = 16.dp
     val MidLarge = 24.dp
     val Large = 32.dp
+
+    object More {
+        val Screen = MidSmall
+    }
 }

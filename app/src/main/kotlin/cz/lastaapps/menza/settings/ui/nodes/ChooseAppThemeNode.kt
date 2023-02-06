@@ -17,21 +17,29 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.settings.data
+package cz.lastaapps.menza.settings.ui.nodes
 
-import androidx.datastore.preferences.core.intPreferencesKey
-import cz.lastaapps.menza.settings.domain.model.DarkMode
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.settings.ui.screens.AppThemeScreen
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 
-private val darkModeKey = intPreferencesKey("darkMode")
-internal val SettingsStore.darkMode: StateFlow<DarkMode>
-    get() = data.mapState { pref ->
-        val key = pref[darkModeKey]
-        DarkMode.values().firstOrNull { it.id == key } ?: DarkMode.System
-    }
+internal class ChooseAppThemeNode(
+    buildContext: BuildContext,
+    private val onDone: () -> Unit,
+) : Node(buildContext) {
 
-internal suspend fun SettingsStore.setDarkMode(darkMode: DarkMode) {
-    edit {
-        it[darkModeKey] = darkMode.id
+    @Composable
+    override fun View(modifier: Modifier) {
+        AppThemeScreen(
+            onDone = onDone,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(MenzaPadding.More.Screen),
+        )
     }
 }

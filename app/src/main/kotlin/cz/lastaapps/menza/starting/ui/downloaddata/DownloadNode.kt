@@ -20,10 +20,12 @@
 package cz.lastaapps.menza.starting.ui.downloaddata
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 
 internal class DownloadNode(
     buildContext: BuildContext,
@@ -34,7 +36,9 @@ internal class DownloadNode(
     @Composable
     override fun View(modifier: Modifier) {
         DownloadScreen(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier
+                .fillMaxSize()
+                .padding(MenzaPadding.More.Screen),
             onDone = onNext,
         )
     }

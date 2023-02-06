@@ -32,8 +32,8 @@ abstract class StateViewModel<State : Any>(
     private val myState = MutableStateFlow(init)
 
     protected fun lastState() = myState.value
-    protected fun updateState(block: State.(State) -> State) =
-        myState.update { with(it) { block(it) } }
+    protected fun updateState(block: State.() -> State) =
+        myState.update(block)
 
     val flow = myState.asStateFlow()
     val flowState

@@ -111,7 +111,10 @@ private fun DownloadContent(
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                Crossfade(targetState = state.isLoading to state.isReady) { (isLoading, isReady) ->
+                Crossfade(
+                    targetState = state.isLoading to state.isReady,
+                    modifier = Modifier.fillMaxWidth(),
+                ) { (isLoading, isReady) ->
                     when {
                         isLoading && isReady -> {
                             Column(verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small)) {
@@ -150,7 +153,9 @@ private fun DownloadContent(
                             }
                         }
                         else -> {
-                            CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
+                            Box(Modifier.fillMaxWidth()) {
+                                CircularProgressIndicator(Modifier.align(Alignment.Center))
+                            }
                         }
                     }
                 }

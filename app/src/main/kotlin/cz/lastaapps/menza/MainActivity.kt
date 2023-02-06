@@ -27,7 +27,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import cz.lastaapps.menza.root.ui.RootNode
-import cz.lastaapps.menza.ui.theme.AppTheme
 
 
 class MainActivity : NodeComponentActivity() {
@@ -42,15 +41,11 @@ class MainActivity : NodeComponentActivity() {
         }
 
         setContent {
-            AppTheme() {
-                NodeHost(
-                    integrationPoint = appyxIntegrationPoint,
-                    modifier = Modifier.fillMaxSize(),
-                ) { buildContext ->
-                    RootNode(buildContext) {
-                        isReady = true
-                    }
-                }
+            NodeHost(
+                integrationPoint = appyxIntegrationPoint,
+                modifier = Modifier.fillMaxSize(),
+            ) { buildContext ->
+                RootNode(buildContext) { isReady = true }
             }
         }
     }
