@@ -54,6 +54,20 @@ class KMPLibraryConvention : BasePlugin({
         sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
         configureKotlinAndroid(this)
+//        configureComposeCompiler(this)
+
+        // KMP plugin is fucking broken
+        // https://issuetracker.google.com/issues/155536223#comment7
+        val composeCompilerDependency = libs.androidx.compose.compiler
+        dependencies {
+            val namePrefixAndroid = "kotlinCompilerPluginClasspathAndroid"
+            val namePrefixCommon = "kotlinCompilerPluginClasspathCommon"
+            configurations.configureEach {
+                if (name.startsWith(namePrefixAndroid) || name.startsWith(namePrefixCommon)) {
+                    add(name, composeCompilerDependency)
+                }
+            }
+        }
     }
 
     tasks.withType<Test> {
