@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,7 @@ import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.entity.menza.Message
 import cz.lastaapps.storage.repo.ContactsRepo
 import cz.lastaapps.storage.repo.LocationRepo
-import cz.lastaapps.storage.repo.MenzaError
+import cz.lastaapps.storage.repo.MenzaScrapingError
 import cz.lastaapps.storage.repo.MessagesRepo
 import cz.lastaapps.storage.repo.OpeningHoursRepo
 import kotlinx.collections.immutable.ImmutableList
@@ -53,13 +53,13 @@ class InfoViewModel constructor(
     private val openingHoursRepo: OpeningHoursRepo,
 ) : ViewModel() {
 
-    val errors = Channel<MenzaError>(Channel.BUFFERED)
+    val errors = Channel<MenzaScrapingError>(Channel.BUFFERED)
 
     val isRefreshing: StateFlow<Boolean> get() = mIsRefreshing
     private val mIsRefreshing = MutableStateFlow(false)
 
     init {
-        fun Flow<MenzaError>.moveToChannel() {
+        fun Flow<MenzaScrapingError>.moveToChannel() {
             viewModelScope.launch {
                 this@moveToChannel.collect { errors.send(it) }
             }

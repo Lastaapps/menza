@@ -22,5 +22,8 @@ package cz.lastaapps.api.core.domain.repo
 import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.api.core.domain.sync.SyncSource
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.Flow
 
-interface MenzaRepo : SyncSource<ImmutableList<Menza>>
+interface MenzaRepo : SyncSource<ImmutableList<Menza>> {
+    val isReady: Flow<Boolean>
+}

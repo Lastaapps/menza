@@ -25,34 +25,34 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.Instant
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class PrivacyStore(appContext: Context) {
 
     companion object {
-        private const val storeName = "privacy"
+        private const val storeName = "privacy_store"
         val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = storeName)
     }
 
     private val store = appContext.dataStore
 
     private val approvedKey = stringPreferencesKey("approved")
-    private val approvedFormat = DateTimeFormatter.ISO_DATE
-    val approved: Flow<LocalDate?>
+
+    val approved: Flow<Instant?>
         get() = store.data.map { pref ->
             pref[approvedKey]?.let {
-                LocalDate.parse(it, approvedFormat)
+                Json.decodeFromString<Instant>(it)
             }
         }
 
-    suspend fun setApproved(date: LocalDate) {
+    suspend fun setApproved(date: Instant) {
         store.edit {
-            it[approvedKey] = date.format(approvedFormat)
+            it[approvedKey] = Json.encodeToString<Instant>(date)
         }
     }
-
-
 }

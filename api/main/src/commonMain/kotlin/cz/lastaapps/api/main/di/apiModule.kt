@@ -28,6 +28,7 @@ import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
 import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
 import cz.lastaapps.api.main.domain.usecase.GetWeekDishListUC
+import cz.lastaapps.api.main.domain.usecase.SyncAllInfoUC
 import cz.lastaapps.api.main.domain.usecase.SyncInfoUC
 import cz.lastaapps.api.main.domain.usecase.SyncMenzaListUC
 import cz.lastaapps.api.main.domain.usecase.SyncTodayDishListUC
@@ -53,6 +54,7 @@ val apiModule = module {
     factory { SyncMenzaListUC(get(), get(rootName)) }
     factoryOf(::GetInfoUC)
     factoryOf(::SyncInfoUC)
+    factoryOf(::SyncAllInfoUC)
     factoryOf(::GetTodayDishListUC)
     factoryOf(::SyncTodayDishListUC)
     factoryOf(::GetWeekDishListUC)
@@ -60,7 +62,7 @@ val apiModule = module {
 }
 
 private fun Scope.MenzaMasterRepoImpl() =
-    MenzaType.all.map { name ->
+    MenzaType.allNamed.map { name ->
         get<MenzaRepo>(name)
     }.let {
         MenzaMasterRepoImpl(it)

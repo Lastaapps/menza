@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -63,83 +63,94 @@ fun ReportDialog(
     onModeSelected: (ReportMode) -> Unit,
 ) {
     if (shown) {
-        Dialog(onDismissRequest = onDismissRequest) {
-            Surface(shape = MaterialTheme.shapes.extraLarge) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .width(IntrinsicSize.Max)
-                        .padding(16.dp)
+        ReportDialog(
+            onDismissRequest, onModeSelected
+        )
+    }
+}
+
+@Composable
+fun ReportDialog(
+    onDismissRequest: () -> Unit,
+    onModeSelected: (ReportMode) -> Unit,
+) {
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(shape = MaterialTheme.shapes.extraLarge) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .width(IntrinsicSize.Max)
+                    .padding(16.dp)
+            ) {
+                Text(
+                    stringResource(cz.lastaapps.menza.R.string.report_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                )
+                Button(
+                    onClick = { onModeSelected(ReportMode.Telegram) },
+                    Modifier.fillMaxWidth()
                 ) {
-                    Text(
-                        stringResource(cz.lastaapps.menza.R.string.report_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center,
-                    )
-                    Button(
-                        onClick = { onModeSelected(ReportMode.Telegram) },
-                        Modifier.fillMaxWidth()
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Image(
-                                painterResource(R.drawable.ic_telegram),
-                                null,
-                                Modifier.size(24.dp)
-                            )
-                            Text(stringResource(cz.lastaapps.menza.R.string.report_telegram))
-                        }
+                        Image(
+                            painterResource(R.drawable.ic_telegram),
+                            null,
+                            Modifier.size(24.dp)
+                        )
+                        Text(stringResource(cz.lastaapps.menza.R.string.report_telegram))
                     }
-                    Button(
-                        onClick = { onModeSelected(ReportMode.GitHub) },
-                        Modifier.fillMaxWidth()
+                }
+                Button(
+                    onClick = { onModeSelected(ReportMode.GitHub) },
+                    Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Image(
-                                painterResource(id = R.drawable.ic_github),
-                                null,
-                                Modifier.size(24.dp)
-                            )
-                            Text(stringResource(cz.lastaapps.menza.R.string.report_github))
-                        }
+                        Image(
+                            painterResource(id = R.drawable.ic_github),
+                            null,
+                            Modifier.size(24.dp)
+                        )
+                        Text(stringResource(cz.lastaapps.menza.R.string.report_github))
                     }
-                    Button(
-                        onClick = { onModeSelected(ReportMode.Facebook) },
-                        Modifier.fillMaxWidth()
+                }
+                // Fuck Mark
+//                Button(
+//                    onClick = { onModeSelected(ReportMode.Facebook) },
+//                    Modifier.fillMaxWidth()
+//                ) {
+//                    Row(
+//                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+//                        verticalAlignment = Alignment.CenterVertically,
+//                    ) {
+//                        Image(
+//                            painterResource(R.drawable.ic_facebook),
+//                            null,
+//                            Modifier.size(24.dp)
+//                        )
+//                        Text(stringResource(cz.lastaapps.menza.R.string.report_facebook))
+//                    }
+//                }
+                Button(
+                    onClick = { onModeSelected(ReportMode.Email) },
+                    Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Image(
-                                painterResource(R.drawable.ic_facebook),
-                                null,
-                                Modifier.size(24.dp)
-                            )
-                            Text(stringResource(cz.lastaapps.menza.R.string.report_facebook))
-                        }
+                        Image(Icons.Default.Email, null, Modifier.size(24.dp))
+                        Text(stringResource(cz.lastaapps.menza.R.string.report_email))
                     }
-                    Button(
-                        onClick = { onModeSelected(ReportMode.Email) },
-                        Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Image(Icons.Default.Email, null, Modifier.size(24.dp))
-                            Text(stringResource(cz.lastaapps.menza.R.string.report_email))
-                        }
-                    }
-                    TextButton(onClick = onDismissRequest) {
-                        Text(stringResource(cz.lastaapps.menza.R.string.report_cancel))
-                    }
+                }
+                TextButton(onClick = onDismissRequest) {
+                    Text(stringResource(cz.lastaapps.menza.R.string.report_cancel))
                 }
             }
         }

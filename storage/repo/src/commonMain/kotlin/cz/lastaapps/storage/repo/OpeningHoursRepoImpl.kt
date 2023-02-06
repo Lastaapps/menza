@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,10 +26,20 @@ import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.scraping.OpeningHoursScraper
-import io.ktor.client.statement.*
-import kotlinx.coroutines.*
+import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.lighthousegames.logging.logging
 
 class OpeningHoursRepoImpl(
@@ -49,12 +59,12 @@ class OpeningHoursRepoImpl(
         }.asFlow().mapToList(dispatcher)
     }
 
-    override val errors: Channel<MenzaError>
+    override val errors: Channel<MenzaScrapingError>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<MenzaError>(Channel.BUFFERED)
+    private val mErrors = Channel<MenzaScrapingError>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
     override fun getData(scope: CoroutineScope): Flow<List<OpeningHours>> {
@@ -98,7 +108,7 @@ class OpeningHoursRepoImpl(
             log.i { "Scraping" }
             scraper.scrape(request)
         } catch (e: Exception) {
-            mErrors.send(MenzaError.ParsingError(e))
+            mErrors.send(MenzaScrapingError.ParsingError(e))
             log.e(e) { "Parsing error" }
             e.printStackTrace()
             return@withContext false

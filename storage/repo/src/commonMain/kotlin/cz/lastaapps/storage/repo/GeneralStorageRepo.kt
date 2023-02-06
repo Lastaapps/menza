@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface GeneralStorageRepo <R:Any> {
 
-    val errors: Channel<MenzaError>
+    val errors: Channel<MenzaScrapingError>
     val requestInProgress: StateFlow<Boolean>
 
     fun getData(scope: CoroutineScope): Flow<List<R>>

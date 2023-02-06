@@ -69,7 +69,7 @@ internal class TodayDishStrahovRepoImpl(
         hashStore = hashStore,
         hashType = HashType.strahovHash(),
         getHashCode = { dishApi.getStrahovHash().bind() },
-        fetchApi = { dishApi.getStrahov().bind() },
+        fetchApi = { dishApi.getStrahov().bind().orEmpty() },
         convert = { data -> data.map { it.toEntity(beConfig) }.rightIor() },
         store = { data ->
             db.strahovQueries.deleteAll()

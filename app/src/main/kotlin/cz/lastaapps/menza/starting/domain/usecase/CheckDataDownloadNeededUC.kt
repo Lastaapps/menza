@@ -17,25 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui
+package cz.lastaapps.menza.starting.domain.usecase
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import kotlinx.coroutines.flow.first
 
-sealed interface StartingNavType : Parcelable {
-    companion object {
-        val allTypes = listOf(PolicyBackground, DownloadData, ChoosePrice, ChooseTheme)
+internal class CheckDataDownloadNeededUC(
+    context: UCContext,
+    private val masterRepo: MenzaRepo,
+) : UseCase(context) {
+    suspend operator fun invoke() = launch {
+        !masterRepo.isReady.first()
     }
-
-    @Parcelize
-    object PolicyBackground : StartingNavType
-
-    @Parcelize
-    object DownloadData : StartingNavType
-
-    @Parcelize
-    object ChoosePrice : StartingNavType
-
-    @Parcelize
-    object ChooseTheme : StartingNavType
 }

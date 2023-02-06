@@ -19,20 +19,13 @@
 
 package cz.lastaapps.menza.starting.ui.downloaddata
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import kotlinx.coroutines.delay
 
-internal class DownloadDataNode(
+internal class DownloadNode(
     buildContext: BuildContext,
     private val onNext: () -> Unit,
 ) : Node(
@@ -40,17 +33,9 @@ internal class DownloadDataNode(
 ) {
     @Composable
     override fun View(modifier: Modifier) {
-        Column(
+        DownloadScreen(
             modifier = modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text("Downloading")
-            CircularProgressIndicator()
-            LaunchedEffect(Unit) {
-                delay(500)
-                onNext()
-            }
-        }
+            onDone = onNext,
+        )
     }
 }

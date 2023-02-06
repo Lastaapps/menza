@@ -24,7 +24,7 @@ import org.koin.core.qualifier.named
 // All the types must have unique names, or the DI will break
 sealed interface MenzaType {
     companion object {
-        val all = listOf(
+        val allNamed = listOf(
             named<Agata.Strahov>(),
             named<Agata.Subsystem>(),
             named<Buffet.FS>(),

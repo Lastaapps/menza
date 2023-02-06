@@ -77,7 +77,7 @@ internal class WeekDishRepoImpl(
         fetchApi = {
             val weeks = dishApi.getWeeks(subsystemId).bind()
             val week = weeks?.selectCurrent() ?: raise(WeekNotAvailable)
-            dishApi.getWeekDishList(week.id).bind() ?: emptyList()
+            dishApi.getWeekDishList(week.id).bind().orEmpty()
         },
         convert = { data -> data.toDomain().rightIor() },
         store = { data ->

@@ -28,9 +28,12 @@ import cz.lastaapps.api.core.domain.sync.SyncResult
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 
 internal object MenzaFSRepoImpl : MenzaRepo {
+    override val isReady: Flow<Boolean> = MutableStateFlow(true)
+
     override fun getData(): Flow<ImmutableList<Menza>> = flow {
         @Suppress("SpellCheckingInspection")
         persistentListOf(
@@ -48,6 +51,8 @@ internal object MenzaFSRepoImpl : MenzaRepo {
 }
 
 internal object MenzaFELRepoImpl : MenzaRepo {
+    override val isReady: Flow<Boolean> = MutableStateFlow(true)
+
     override fun getData(): Flow<ImmutableList<Menza>> = flow {
         @Suppress("SpellCheckingInspection")
         persistentListOf(

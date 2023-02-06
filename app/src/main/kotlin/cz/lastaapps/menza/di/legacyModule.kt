@@ -19,8 +19,6 @@
 
 package cz.lastaapps.menza.di
 
-import cz.lastaapps.menza.init.InitViewModel
-import cz.lastaapps.menza.starting.ui.privacy.PrivacyViewModel
 import cz.lastaapps.menza.ui.dests.info.InfoViewModel
 import cz.lastaapps.menza.ui.dests.others.crashes.CrashesViewModel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewViewModel
@@ -38,22 +36,11 @@ internal val legacyModule = module {
     factory<TodayRepoFactory> { TodayRepoFactoryImpl(get()) }
     factory<WeekRepoFactory> { WeekRepoFactoryImpl(get()) }
 
-    viewModel<InitViewModel> { InitViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel<InfoViewModel> { InfoViewModel(get(), get(), get(), get()) }
     viewModel<SettingsViewModel> {
-        SettingsViewModel(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-        )
+        SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get())
     }
     viewModel<MenzaViewModel> { MenzaViewModel(get(), get(), get(), get()) }
-    viewModel<PrivacyViewModel> { PrivacyViewModel(get()) }
     viewModel<WhatsNewViewModel> { WhatsNewViewModel(get(), get()) }
     viewModel<CrashesViewModel> { CrashesViewModel(get()) }
     viewModel<AllergenViewModel> { AllergenViewModel(get()) }

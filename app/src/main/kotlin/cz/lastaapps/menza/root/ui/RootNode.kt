@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.onPlaced
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.backpresshandlerstrategies.DontHandleBackPress
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
@@ -45,6 +46,7 @@ internal class RootNode(
     private val spotlight: Spotlight<RootNavType> = Spotlight(
         RootNavType.types,
         savedStateMap = buildContext.savedStateMap,
+        backPressHandler = DontHandleBackPress(),
     ),
     private val onDecided: () -> Unit,
 ) : ParentNode<RootNavType>(

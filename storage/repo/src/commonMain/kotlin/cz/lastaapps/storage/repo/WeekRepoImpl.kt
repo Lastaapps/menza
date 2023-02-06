@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,7 +24,7 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.entity.week.WeekNumber
 import cz.lastaapps.scraping.WeekScraper
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -43,12 +43,12 @@ class WeekRepoImpl(
         private val log = logging(WeekRepo::class.simpleName)
     }
 
-    override val errors: Channel<MenzaError>
+    override val errors: Channel<MenzaScrapingError>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<MenzaError>(Channel.BUFFERED)
+    private val mErrors = Channel<MenzaScrapingError>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
     override suspend fun getData(): Set<WeekDish>? =
@@ -71,11 +71,11 @@ class WeekRepoImpl(
                 log.i { "Scraping $menzaId" }
                 scraper.scrape(request)
             } catch (e: WeekNotAvailable) {
-                mErrors.send(MenzaError.WeekNotSupported)
+                mErrors.send(MenzaScrapingError.WeekNotSupported)
                 log.e { "Week not supported for $menzaId" }
                 return@withContext null
             } catch (e: Exception) {
-                mErrors.send(MenzaError.ParsingError(e))
+                mErrors.send(MenzaScrapingError.ParsingError(e))
                 log.e(e) { "Parsing error" }
                 return@withContext null
             }

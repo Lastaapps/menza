@@ -17,25 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui
+package cz.lastaapps.menza.starting.domain.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-sealed interface StartingNavType : Parcelable {
-    companion object {
-        val allTypes = listOf(PolicyBackground, DownloadData, ChoosePrice, ChooseTheme)
-    }
-
-    @Parcelize
-    object PolicyBackground : StartingNavType
-
-    @Parcelize
-    object DownloadData : StartingNavType
-
-    @Parcelize
-    object ChoosePrice : StartingNavType
-
-    @Parcelize
-    object ChooseTheme : StartingNavType
+internal enum class DownloadProgress(val progress: Float) {
+    INIT(0f),
+    MENZA_LIST(.42f),
+    INFO(.69f),
+    DONE(1f),
 }

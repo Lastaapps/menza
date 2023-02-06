@@ -75,7 +75,7 @@ internal class InfoRepoImpl(
             hashStore = hashStore,
             hashType = HashType.infoHash(subsystemId),
             getHashCode = { subsystemApi.getInfoHash(subsystemId).bind() },
-            fetchApi = { subsystemApi.getInfo(subsystemId).bind() },
+            fetchApi = { subsystemApi.getInfo(subsystemId).bind().orEmpty() },
             convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.infoQueries.deleteSubsystem(subsystemId.toLong())
@@ -90,10 +90,12 @@ internal class InfoRepoImpl(
             hashType = HashType.newsHash(subsystemId),
             getHashCode = { subsystemApi.getNewsHash(subsystemId).bind() },
             fetchApi = { subsystemApi.getNews(subsystemId).bind() },
-            convert = { data -> data.toEntity(subsystemId).rightIor() },
+            convert = { data -> data?.toEntity(subsystemId).rightIor() },
             store = { data ->
                 db.newsQueries.deleteForSubsystem(subsystemId.toLong())
-                db.newsQueries.insert(data)
+                data?.let {
+                    db.newsQueries.insert(data)
+                }
             },
         ),
         // Contacts
@@ -101,7 +103,7 @@ internal class InfoRepoImpl(
             hashStore = hashStore,
             hashType = HashType.contactsHash(),
             getHashCode = { subsystemApi.getContactsHash().bind() },
-            fetchApi = { subsystemApi.getContacts().bind() },
+            fetchApi = { subsystemApi.getContacts().bind().orEmpty() },
             convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.contactQueries.deleteAll()
@@ -115,7 +117,7 @@ internal class InfoRepoImpl(
             hashStore = hashStore,
             hashType = HashType.openingHash(subsystemId),
             getHashCode = { subsystemApi.getOpeningTimesHash(subsystemId).bind() },
-            fetchApi = { subsystemApi.getOpeningTimes(subsystemId).bind() },
+            fetchApi = { subsystemApi.getOpeningTimes(subsystemId).bind().orEmpty() },
             convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.openTimeQueries.deleteSubsystem(subsystemId.toLong())
@@ -129,7 +131,7 @@ internal class InfoRepoImpl(
             hashStore = hashStore,
             hashType = HashType.linkHash(subsystemId),
             getHashCode = { subsystemApi.getLinkHash(subsystemId).bind() },
-            fetchApi = { subsystemApi.getLink(subsystemId).bind() },
+            fetchApi = { subsystemApi.getLink(subsystemId).bind().orEmpty() },
             convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.linkQueries.deleteSubsystem(subsystemId.toLong())
@@ -143,7 +145,7 @@ internal class InfoRepoImpl(
             hashStore = hashStore,
             hashType = HashType.addressHash(),
             getHashCode = { subsystemApi.getAddressHash().bind() },
-            fetchApi = { subsystemApi.getAddress().bind() },
+            fetchApi = { subsystemApi.getAddress().bind().orEmpty() },
             convert = { data -> data.map { it.toEntity() }.rightIor() },
             store = { data ->
                 db.addressQueries.deleteAll()

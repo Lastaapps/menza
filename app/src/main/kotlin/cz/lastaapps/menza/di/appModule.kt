@@ -24,7 +24,11 @@ import cz.lastaapps.core.di.coreModule
 import cz.lastaapps.crash.crashModule
 import cz.lastaapps.menza.root.domain.usecase.IsAppSetUpUC
 import cz.lastaapps.menza.root.ui.RootViewModel
+import cz.lastaapps.menza.starting.domain.usecase.CheckDataDownloadNeededUC
+import cz.lastaapps.menza.starting.domain.usecase.DownloadInitDataUC
+import cz.lastaapps.menza.starting.ui.downloaddata.DownloadViewModel
 import cz.lastaapps.menza.starting.ui.privacy.PrivacyStore
+import cz.lastaapps.menza.starting.ui.privacy.PrivacyViewModel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDataStore
 import cz.lastaapps.menza.ui.dests.settings.store.SettingsStore
 import cz.lastaapps.menza.ui.layout.menza.MenzaOrderDataStore
@@ -54,6 +58,10 @@ val appModule = module {
     single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
 
     factoryOf(::IsAppSetUpUC)
+    factoryOf(::CheckDataDownloadNeededUC)
+    factoryOf(::DownloadInitDataUC)
 
     viewModelOf(::RootViewModel)
+    viewModelOf(::DownloadViewModel)
+    viewModelOf(::PrivacyViewModel)
 }

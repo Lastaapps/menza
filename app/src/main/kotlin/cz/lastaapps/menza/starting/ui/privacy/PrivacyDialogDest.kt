@@ -20,21 +20,27 @@
 package cz.lastaapps.menza.starting.ui.privacy
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun PrivacyDialogDest(
+    onNotNeeded: suspend () -> Unit,
     privacyViewModel: PrivacyViewModel = koinViewModel(),
 ) {
     val state by privacyViewModel.shouldShow.collectAsState()
 
-    if (state == true) {
-        PrivacyDialog(
-            onDismissRequest = {},
-            showAccept = true,
-            onAccept = privacyViewModel::onApprove
-        )
+    when (state) {
+        true ->
+            PrivacyDialog(
+                onDismissRequest = {},
+                showAccept = true,
+                onAccept = privacyViewModel::onApprove,
+            )
+        false ->
+            LaunchedEffect(Unit) { onNotNeeded() }
+        null -> {}
     }
 }

@@ -31,10 +31,10 @@ import io.ktor.client.call.body
 
 internal interface CafeteriaApi {
 
-    suspend fun getSubsystems(): Outcome<List<SubsystemDto>>
+    suspend fun getSubsystems(): Outcome<List<SubsystemDto>?>
     suspend fun getSubsystemsHash(): Outcome<String>
 
-    suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlaceDto>>
+    suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlaceDto>?>
     suspend fun getServingPlacesHash(subsystemId: Int): Outcome<String>
 
     suspend fun getDishTypes(subsystemId: Int): Outcome<List<DishTypeDto>?>
@@ -46,7 +46,7 @@ internal class CafeteriaApiImpl(
 ) : CafeteriaApi {
     private val client = agataClient.client
 
-    override suspend fun getSubsystems(): Outcome<List<SubsystemDto>> = catchingNetwork {
+    override suspend fun getSubsystems(): Outcome<List<SubsystemDto>?> = catchingNetwork {
         client.getFun(Func.Subsystem, secondId = 1).body()
     }
 
@@ -54,7 +54,7 @@ internal class CafeteriaApiImpl(
         client.getFun(Func.SubsystemHash, secondId = 1).body()
     }
 
-    override suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlaceDto>> =
+    override suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlaceDto>?> =
         catchingNetwork {
             client.getFun(Func.ServingPaces, subsystemId = subsystemId).body()
         }

@@ -44,6 +44,7 @@ import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
@@ -54,6 +55,11 @@ internal class MenzaSubsystemRepoImpl(
     private val checker: ValidityChecker,
     hashStore: HashStore,
 ) : MenzaRepo {
+    override val isReady: Flow<Boolean> =
+        db.subsystemQueries.getAll()
+            .asFlow()
+            .mapToList()
+            .map { it.isNotEmpty() }
 
     override fun getData(): Flow<ImmutableList<Menza>> =
         db.subsystemQueries.getAll()
@@ -67,7 +73,7 @@ internal class MenzaSubsystemRepoImpl(
             hashType = HashType.subsystemHash(),
             getHashCode = { api.getSubsystemsHash().bind() },
             fetchApi = {
-                api.getSubsystems().bind()
+                api.getSubsystems().bind().orEmpty()
             },
             convert = { dtos ->
                 dtos.map { dto ->
@@ -89,6 +95,8 @@ internal class MenzaSubsystemRepoImpl(
 }
 
 internal object MenzaStrahovRepoImpl : MenzaRepo {
+    override val isReady: Flow<Boolean> = MutableStateFlow(true)
+
     override fun getData(): Flow<ImmutableList<Menza>> = flow {
         @Suppress("SpellCheckingInspection")
         persistentListOf(

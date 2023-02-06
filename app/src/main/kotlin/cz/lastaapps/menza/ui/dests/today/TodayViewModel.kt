@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,15 +29,19 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.compareToLocal
 import cz.lastaapps.menza.di.TodayRepoFactory
 import cz.lastaapps.storage.repo.AllergenRepo
-import cz.lastaapps.storage.repo.MenzaError
+import cz.lastaapps.storage.repo.MenzaScrapingError
 import cz.lastaapps.storage.repo.TodayRepo
+import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import java.util.*
 
 typealias DishTypeList = Pair<CourseType, ImmutableList<Dish>>
 
@@ -82,7 +86,7 @@ class TodayViewModel constructor(
     private val repos = HashMap<MenzaId, TodayRepo>()
     private val cache = HashMap<MenzaId, MutableStateFlow<ImmutableList<DishTypeList>>>()
 
-    val errors = Channel<MenzaError>(Channel.BUFFERED)
+    val errors = Channel<MenzaScrapingError>(Channel.BUFFERED)
 
     fun getData(menzaId: MenzaId, locale: Locale): StateFlow<ImmutableList<DishTypeList>> {
 

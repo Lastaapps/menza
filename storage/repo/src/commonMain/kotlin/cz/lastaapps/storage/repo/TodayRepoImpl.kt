@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,7 +22,7 @@ package cz.lastaapps.storage.repo
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.scraping.TodayScraper
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -41,12 +41,12 @@ class TodayRepoImpl(
         private val log = logging(TodayRepo::class.simpleName)
     }
 
-    override val errors: Channel<MenzaError>
+    override val errors: Channel<MenzaScrapingError>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<MenzaError>(Channel.BUFFERED)
+    private val mErrors = Channel<MenzaScrapingError>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
     override suspend fun getData(): Set<Dish>? =
@@ -68,7 +68,7 @@ class TodayRepoImpl(
                 log.i { "Scraping $menzaId" }
                 scraper.scrape(request)
             } catch (e: Exception) {
-                mErrors.send(MenzaError.ParsingError(e))
+                mErrors.send(MenzaScrapingError.ParsingError(e))
                 log.e(e) { "Parsing error" }
                 e.printStackTrace()
                 return@withContext null

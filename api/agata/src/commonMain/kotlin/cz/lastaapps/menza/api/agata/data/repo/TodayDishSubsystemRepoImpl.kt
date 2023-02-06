@@ -166,7 +166,7 @@ internal class TodayDishSubsystemRepoImpl(
         hashStore = hashStore,
         hashType = HashType.pictogramHash(),
         getHashCode = { dishApi.getPictogramHash().bind() },
-        fetchApi = { dishApi.getPictogram().bind() },
+        fetchApi = { dishApi.getPictogram().bind().orEmpty() },
         convert = { data -> data.map { it.toEntity() }.rightIor() },
         store = { data ->
             db.pictogramQueries.deleteAll()
@@ -180,7 +180,7 @@ internal class TodayDishSubsystemRepoImpl(
         hashStore = hashStore,
         hashType = HashType.servingPacesHash(subsystemId),
         getHashCode = { cafeteriaApi.getServingPlacesHash(subsystemId).bind() },
-        fetchApi = { cafeteriaApi.getServingPlaces(subsystemId).bind() },
+        fetchApi = { cafeteriaApi.getServingPlaces(subsystemId).bind().orEmpty() },
         convert = { data -> data.map { it.toEntity() }.rightIor() },
         store = { data ->
             db.servingPlaceQueries.deleteSubsystem(subsystemId.toLong())

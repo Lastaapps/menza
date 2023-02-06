@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -21,13 +21,8 @@
     <string name="app_name_long">ČVUT Menza</string>
     <string name="init_message_preparing">Připravuji stažení dat</string>
     <string name="init_message_done">Hotovo, aplikace připravena</string>
-    <string name="init_message_error">Chyba, zkuste se připojit k internetu</string>
-    <string name="init_message_allergen">Prozkoumávám alergeny</string>
-    <string name="init_message_contacts">Volám kontaktům</string>
-    <string name="init_message_location">Zjišťuji adresy</string>
-    <string name="init_message_menza">Obědvám v menzách</string>
-    <string name="init_message_message">Čtu oznámení</string>
-    <string name="init_message_opening_hours">Kontroluji otevírací dobu</string>
+    <string name="init_message_menza">Načítám oblíbené menzy</string>
+    <string name="init_message_info">Připravuji si informace</string>
     <string name="init_title">Stahování dat</string>
     <string name="init_error">Vyskytla se chyba. Zkusit znovu?</string>
     <string name="info_contacts_title">Kontakty</string>

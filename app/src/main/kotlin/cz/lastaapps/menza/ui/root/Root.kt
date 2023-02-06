@@ -32,9 +32,8 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.init.InitDecision
-import cz.lastaapps.menza.init.InitViewModel
 import cz.lastaapps.menza.navigation.Dest
+import cz.lastaapps.menza.starting.ui.downloaddata.DownloadViewModel
 import cz.lastaapps.menza.starting.ui.privacy.PrivacyDialogContent
 import cz.lastaapps.menza.starting.ui.privacy.PrivacyViewModel
 import cz.lastaapps.menza.ui.WithConnectivity
@@ -67,7 +66,7 @@ fun AppRoot(
     val useSystem by viewModel.sett.systemTheme.collectAsState()
 
     val privacyViewModel: PrivacyViewModel = koinActivityViewModel()
-    val initViewModel: InitViewModel = koinActivityViewModel()
+    val initViewModel: DownloadViewModel = koinActivityViewModel()
     val menzaViewModel: MenzaViewModel = koinActivityViewModel()
     val settingsViewModel: SettingsViewModel = koinActivityViewModel()
 
@@ -83,12 +82,9 @@ fun AppRoot(
                 activity = activity,
                 viewModelStoreOwner = viewModelStoreOwner,
             ) {
-                //Download default data
-                InitDecision(initViewModel) {
 
                     //show app if ready
                     AppContent(menzaViewModel, settingsViewModel)
-                }
             }
         }
     }

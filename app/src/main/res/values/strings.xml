@@ -1,5 +1,5 @@
 <!--
-  ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -23,13 +23,8 @@
 
     <string name="init_message_preparing">Preparing data download</string>
     <string name="init_message_done">Done, the app is ready</string>
-    <string name="init_message_error">Error, try connecting to internet</string>
-    <string name="init_message_allergen">Checking allergens intolerances</string>
-    <string name="init_message_contacts">Calling contacts</string>
-    <string name="init_message_location">Looking up addresses</string>
-    <string name="init_message_menza">Eating in all the Menzas</string>
-    <string name="init_message_message">Reading announcements</string>
-    <string name="init_message_opening_hours">Controlling opening hours</string>
+    <string name="init_message_menza">Fetching your favourite menzas</string>
+    <string name="init_message_info">Collecting info</string>
     <string name="init_title">Downloading data</string>
     <string name="init_error">An error occurred. Retry now?</string>
 

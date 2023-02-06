@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -58,12 +58,12 @@ class LocationRepoImpl(
         }.asFlow().mapToList(dispatcher)
     }
 
-    override val errors: Channel<MenzaError>
+    override val errors: Channel<MenzaScrapingError>
         get() = mErrors
     override val requestInProgress: StateFlow<Boolean>
         get() = mRequestInProgress
 
-    private val mErrors = Channel<MenzaError>(Channel.BUFFERED)
+    private val mErrors = Channel<MenzaScrapingError>(Channel.BUFFERED)
     private val mRequestInProgress = MutableStateFlow(false)
 
     override fun getData(scope: CoroutineScope): Flow<List<MenzaLocation>> {
@@ -107,7 +107,7 @@ class LocationRepoImpl(
             log.i { "Scraping" }
             scraper.scrape(request)
         } catch (e: Exception) {
-            mErrors.send(MenzaError.ParsingError(e))
+            mErrors.send(MenzaScrapingError.ParsingError(e))
             log.e(e) { "Parsing error" }
             e.printStackTrace()
             return@withContext false

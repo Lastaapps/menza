@@ -52,6 +52,13 @@ internal class MenzaMasterRepoImpl(
         override fun empty(): Flow<PersistentList<Menza>> = flow { emit(persistentListOf()) }
     }
 
+    override val isReady: Flow<Boolean> =
+        sources.map { repo ->
+            repo.isReady
+        }.fold(flow { emit(true) }) { acu, isReady ->
+            acu.combine(isReady) { a, r -> a && r }
+        }
+
     override fun getData(): Flow<ImmutableList<Menza>> =
         sources
             .map { repo ->

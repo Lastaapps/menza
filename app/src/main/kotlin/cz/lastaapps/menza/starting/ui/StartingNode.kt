@@ -26,33 +26,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.backpresshandlerstrategies.DontHandleBackPress
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
+import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.spotlight.Spotlight
+import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.next
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightSlider
 import cz.lastaapps.menza.starting.ui.StartingNavType.ChoosePrice
 import cz.lastaapps.menza.starting.ui.StartingNavType.ChooseTheme
 import cz.lastaapps.menza.starting.ui.StartingNavType.DownloadData
+import cz.lastaapps.menza.starting.ui.StartingNavType.PolicyBackground
 import cz.lastaapps.menza.starting.ui.chooseprice.ChoosePriceNode
 import cz.lastaapps.menza.starting.ui.choosetheme.ChooseThemeNode
-import cz.lastaapps.menza.starting.ui.downloaddata.DownloadDataNode
+import cz.lastaapps.menza.starting.ui.downloaddata.DownloadNode
 import cz.lastaapps.menza.starting.ui.privacy.PrivacyDialogDest
+import kotlinx.coroutines.flow.first
 
 class StartingNode(
     buildContext: BuildContext,
     private val spotlight: Spotlight<StartingNavType> = Spotlight<StartingNavType>(
         items = StartingNavType.allTypes,
         savedStateMap = buildContext.savedStateMap,
+        backPressHandler = DontHandleBackPress(),
     ),
 ) : ParentNode<StartingNavType>(
     buildContext = buildContext,
     navModel = spotlight,
 ) {
+
     override fun resolve(navTarget: StartingNavType, buildContext: BuildContext): Node {
         val onNext = { spotlight.next() }
         return when (navTarget) {
-            DownloadData -> DownloadDataNode(buildContext, onNext)
+            PolicyBackground -> node(buildContext) {}
+            DownloadData -> DownloadNode(buildContext, onNext)
             ChoosePrice -> ChoosePriceNode(buildContext)
             ChooseTheme -> ChooseThemeNode(buildContext)
         }
@@ -70,7 +78,11 @@ class StartingNode(
                 transitionHandler = rememberSpotlightSlider(),
             )
 
-            PrivacyDialogDest()
+            PrivacyDialogDest(onNotNeeded = {
+                if (spotlight.activeIndex().first() == 0) {
+                    spotlight.next()
+                }
+            })
         }
     }
 }

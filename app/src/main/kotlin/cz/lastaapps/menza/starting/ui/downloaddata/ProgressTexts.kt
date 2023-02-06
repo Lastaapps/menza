@@ -17,21 +17,24 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.chooseprice
+package cz.lastaapps.menza.starting.ui.downloaddata
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
+import androidx.compose.ui.res.stringResource
+import cz.lastaapps.menza.R
+import cz.lastaapps.menza.starting.domain.model.DownloadProgress
+import cz.lastaapps.menza.starting.domain.model.DownloadProgress.DONE
+import cz.lastaapps.menza.starting.domain.model.DownloadProgress.INFO
+import cz.lastaapps.menza.starting.domain.model.DownloadProgress.INIT
+import cz.lastaapps.menza.starting.domain.model.DownloadProgress.MENZA_LIST
 
-internal class ChoosePriceNode(
-    buildContext: BuildContext,
-) : Node(
-    buildContext = buildContext,
-) {
+internal val DownloadProgress.text
     @Composable
-    override fun View(modifier: Modifier) {
-        Text(text = "Price")
-    }
-}
+    get() = stringResource(
+        when (this) {
+            INIT -> R.string.init_message_preparing
+            MENZA_LIST -> R.string.init_message_menza
+            INFO -> R.string.init_message_info
+            DONE -> R.string.init_message_done
+        }
+    )

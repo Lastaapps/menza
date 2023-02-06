@@ -27,7 +27,7 @@ class SyncMenzaListUC(
     context: UCContext,
     private val menzaRepo: MenzaRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        menzaRepo.sync()
+    suspend operator fun invoke(isForced: Boolean = false) = launch {
+        menzaRepo.sync(isForced = isForced)
     }
 }

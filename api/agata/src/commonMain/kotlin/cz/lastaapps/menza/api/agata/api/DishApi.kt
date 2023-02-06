@@ -43,13 +43,13 @@ internal interface DishApi {
     suspend fun getDishes(subsystemId: Int): Outcome<List<DishDto>?>
     suspend fun getDishesHash(subsystemId: Int): Outcome<String>
 
-    suspend fun getPictogram(): Outcome<List<PictogramDto>>
+    suspend fun getPictogram(): Outcome<List<PictogramDto>?>
     suspend fun getPictogramHash(): Outcome<String>
 
     suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>?>
     suspend fun getWeekDishList(weekId: Int): Outcome<List<WeekDishDto>?>
 
-    suspend fun getStrahov(): Outcome<List<StrahovDto>>
+    suspend fun getStrahov(): Outcome<List<StrahovDto>?>
     suspend fun getStrahovHash(): Outcome<String>
 }
 
@@ -66,7 +66,7 @@ internal class DishApiImpl(
         client.getFun(DishHash, subsystemId = subsystemId, secondId = 1).body()
     }
 
-    override suspend fun getPictogram(): Outcome<List<PictogramDto>> = catchingNetwork {
+    override suspend fun getPictogram(): Outcome<List<PictogramDto>?> = catchingNetwork {
         client.getFun(Pictogram).body()
     }
 
@@ -83,7 +83,7 @@ internal class DishApiImpl(
             client.getFun(WeekDays, secondId = weekId).body()
         }
 
-    override suspend fun getStrahov(): Outcome<List<StrahovDto>> = catchingNetwork {
+    override suspend fun getStrahov(): Outcome<List<StrahovDto>?> = catchingNetwork {
         client.getFun(Func.Strahov).body()
     }
 

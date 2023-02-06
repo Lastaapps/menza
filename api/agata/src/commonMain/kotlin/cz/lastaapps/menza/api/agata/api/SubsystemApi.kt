@@ -45,22 +45,22 @@ import io.ktor.client.call.body
 
 internal sealed interface SubsystemApi {
 
-    suspend fun getInfo(subsystemId: Int): Outcome<List<InfoDto>>
+    suspend fun getInfo(subsystemId: Int): Outcome<List<InfoDto>?>
     suspend fun getInfoHash(subsystemId: Int): Outcome<String>
 
-    suspend fun getNews(subsystemId: Int): Outcome<NewsDto>
+    suspend fun getNews(subsystemId: Int): Outcome<NewsDto?>
     suspend fun getNewsHash(subsystemId: Int): Outcome<String>
 
-    suspend fun getOpeningTimes(subsystemId: Int): Outcome<List<OpenTimeDto>>
+    suspend fun getOpeningTimes(subsystemId: Int): Outcome<List<OpenTimeDto>?>
     suspend fun getOpeningTimesHash(subsystemId: Int): Outcome<String>
 
-    suspend fun getContacts(): Outcome<List<ContactDto>>
+    suspend fun getContacts(): Outcome<List<ContactDto>?>
     suspend fun getContactsHash(): Outcome<String>
 
-    suspend fun getAddress(): Outcome<List<AddressDto>>
+    suspend fun getAddress(): Outcome<List<AddressDto>?>
     suspend fun getAddressHash(): Outcome<String>
 
-    suspend fun getLink(subsystemId: Int): Outcome<List<LinkDto>>
+    suspend fun getLink(subsystemId: Int): Outcome<List<LinkDto>?>
     suspend fun getLinkHash(subsystemId: Int): Outcome<String>
 
 }
@@ -70,7 +70,7 @@ internal class SubsystemApiImpl(
 ) : SubsystemApi {
     private val client = agataClient.client
 
-    override suspend fun getInfo(subsystemId: Int): Outcome<List<InfoDto>> = catchingNetwork {
+    override suspend fun getInfo(subsystemId: Int): Outcome<List<InfoDto>?> = catchingNetwork {
         client.getFun(Info, subsystemId = subsystemId).body()
     }
 
@@ -78,15 +78,15 @@ internal class SubsystemApiImpl(
         client.getFun(InfoHash, subsystemId = subsystemId).body()
     }
 
-    override suspend fun getNews(subsystemId: Int): Outcome<NewsDto> = catchingNetwork {
-        client.getFun(News, subsystemId = subsystemId).body<String>().let { NewsDto(it) }
+    override suspend fun getNews(subsystemId: Int): Outcome<NewsDto?> = catchingNetwork {
+        client.getFun(News, subsystemId = subsystemId).body<String?>()?.let { NewsDto(it) }
     }
 
     override suspend fun getNewsHash(subsystemId: Int): Outcome<String> = catchingNetwork {
         client.getFun(NewsHash, subsystemId = subsystemId).body()
     }
 
-    override suspend fun getOpeningTimes(subsystemId: Int): Outcome<List<OpenTimeDto>> =
+    override suspend fun getOpeningTimes(subsystemId: Int): Outcome<List<OpenTimeDto>?> =
         catchingNetwork {
             client.getFun(Opening, subsystemId = subsystemId).body()
         }
@@ -95,7 +95,7 @@ internal class SubsystemApiImpl(
         client.getFun(OpeningHash, subsystemId = subsystemId).body()
     }
 
-    override suspend fun getContacts(): Outcome<List<ContactDto>> = catchingNetwork {
+    override suspend fun getContacts(): Outcome<List<ContactDto>?> = catchingNetwork {
         client.getFun(Contacts).body()
     }
 
@@ -103,7 +103,7 @@ internal class SubsystemApiImpl(
         client.getFun(ContactsHash).body()
     }
 
-    override suspend fun getAddress(): Outcome<List<AddressDto>> = catchingNetwork {
+    override suspend fun getAddress(): Outcome<List<AddressDto>?> = catchingNetwork {
         client.getFun(Address).body()
     }
 
@@ -111,7 +111,7 @@ internal class SubsystemApiImpl(
         client.getFun(AddressHash).body()
     }
 
-    override suspend fun getLink(subsystemId: Int): Outcome<List<LinkDto>> = catchingNetwork {
+    override suspend fun getLink(subsystemId: Int): Outcome<List<LinkDto>?> = catchingNetwork {
         client.getFun(Link, subsystemId = subsystemId).body()
     }
 

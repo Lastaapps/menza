@@ -30,7 +30,7 @@ import org.koin.core.parameter.parametersOf
 class SyncInfoUC(
     context: UCContext,
 ) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(menza: Menza) = launch {
-        get<InfoRepo> { parametersOf(menza.type) }.sync()
+    suspend operator fun invoke(menza: Menza, isForced: Boolean = false) = launch {
+        get<InfoRepo> { parametersOf(menza.type) }.sync(isForced = isForced)
     }
 }

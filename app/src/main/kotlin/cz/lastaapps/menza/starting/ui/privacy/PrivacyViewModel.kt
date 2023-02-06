@@ -19,24 +19,31 @@
 
 package cz.lastaapps.menza.starting.ui.privacy
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import java.time.LocalDate
+import cz.lastaapps.core.ui.vm.BaseViewModel
+import cz.lastaapps.core.ui.vm.VMContext
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import org.lighthousegames.logging.logging
 
-class PrivacyViewModel constructor(
+internal class PrivacyViewModel(
     private val store: PrivacyStore,
-) : ViewModel() {
+    private val clock: Clock,
+    context: VMContext,
+) : BaseViewModel(context) {
+
+    companion object {
+        private val log = logging()
+    }
 
     val shouldShow = store.approved.map { it == null }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    fun onApprove() {
-        viewModelScope.launch {
-            store.setApproved(LocalDate.now())
-        }
+    fun onApprove() = launch {
+        log.i { "Setting approved" }
+
+        store.setApproved(clock.now())
     }
 }

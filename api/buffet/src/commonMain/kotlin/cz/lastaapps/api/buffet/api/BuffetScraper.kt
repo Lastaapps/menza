@@ -112,7 +112,7 @@ internal class BuffetScraperImpl : BuffetScraper {
                 }
         }.mapLeft {
             log.e(it) { "Overall parsing failed" }
-            ParsingError.Buffet.DishListCannotBeParsed
+            ParsingError.Buffet.MenuCannotBeParsed
         }
 
     private fun String.splitMain(): ParsingRes<Pair<List<DishDayDto>, List<DishDayDto>>> =

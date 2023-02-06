@@ -17,25 +17,24 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui
+package cz.lastaapps.api.main.domain.usecase
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import arrow.core.separateEither
+import arrow.fx.coroutines.parMap
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import kotlinx.coroutines.flow.first
+import org.koin.core.component.KoinComponent
 
-sealed interface StartingNavType : Parcelable {
-    companion object {
-        val allTypes = listOf(PolicyBackground, DownloadData, ChoosePrice, ChooseTheme)
+class SyncAllInfoUC(
+    context: UCContext,
+    private val getMenzaList: GetMenzaListUC,
+    private val syncInfo: SyncInfoUC,
+) : UseCase(context), KoinComponent {
+    suspend operator fun invoke(isForced: Boolean = false) = launch {
+        val menzas = getMenzaList().first()
+        menzas.parMap {
+            syncInfo(it, isForced)
+        }.separateEither()
     }
-
-    @Parcelize
-    object PolicyBackground : StartingNavType
-
-    @Parcelize
-    object DownloadData : StartingNavType
-
-    @Parcelize
-    object ChoosePrice : StartingNavType
-
-    @Parcelize
-    object ChooseTheme : StartingNavType
 }
