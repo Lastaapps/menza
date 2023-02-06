@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.others.privacy
+package cz.lastaapps.menza.starting.ui.privacy
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,21 +39,18 @@ import cz.lastaapps.common.Communication
 import cz.lastaapps.menza.R
 
 @Composable
-fun PrivacyDialog(
-    shown: Boolean,
+internal fun PrivacyDialog(
     onDismissRequest: () -> Unit,
     showAccept: Boolean,
     onAccept: () -> Unit,
 ) {
-    if (shown) {
-        Dialog(onDismissRequest = onDismissRequest) {
-            PrivacyDialogContent(showAccept = showAccept, onAccept = onAccept)
-        }
+    Dialog(onDismissRequest = onDismissRequest) {
+        PrivacyDialogContent(showAccept = showAccept, onAccept = onAccept)
     }
 }
 
 @Composable
-fun PrivacyDialogContent(
+internal fun PrivacyDialogContent(
     showAccept: Boolean,
     onAccept: () -> Unit,
 ) {

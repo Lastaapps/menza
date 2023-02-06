@@ -22,27 +22,19 @@ package cz.lastaapps.menza.di
 import cz.lastaapps.api.main.di.apiModule
 import cz.lastaapps.core.di.coreModule
 import cz.lastaapps.crash.crashModule
-import cz.lastaapps.menza.init.InitViewModel
-import cz.lastaapps.menza.ui.dests.info.InfoViewModel
-import cz.lastaapps.menza.ui.dests.others.crashes.CrashesViewModel
-import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyStore
-import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyViewModel
+import cz.lastaapps.menza.root.domain.usecase.IsAppSetUpUC
+import cz.lastaapps.menza.root.ui.RootViewModel
+import cz.lastaapps.menza.starting.ui.privacy.PrivacyStore
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDataStore
-import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewViewModel
-import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.SettingsStore
-import cz.lastaapps.menza.ui.dests.today.AllergenViewModel
-import cz.lastaapps.menza.ui.dests.today.TodayViewModel
-import cz.lastaapps.menza.ui.dests.week.WeekViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaOrderDataStore
-import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
-import cz.lastaapps.menza.ui.root.RootViewModel
 import cz.lastaapps.scraping.scrapingModule
 import cz.lastaapps.storage.db.storageDbModule
 import cz.lastaapps.storage.repo.repoModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val appModule = module {
@@ -53,6 +45,7 @@ val appModule = module {
         scrapingModule,
         repoModule,
         storageDbModule,
+        legacyModule,
     )
 
     single<SettingsStore> { SettingsStore(get(), CoroutineScope(Dispatchers.IO)) }
@@ -60,30 +53,7 @@ val appModule = module {
     single<MenzaOrderDataStore> { MenzaOrderDataStore(get()) }
     single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
 
+    factoryOf(::IsAppSetUpUC)
 
-    factory<TodayRepoFactory> { TodayRepoFactoryImpl(get()) }
-    factory<WeekRepoFactory> { WeekRepoFactoryImpl(get()) }
-
-    viewModel<InitViewModel> { InitViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel<InfoViewModel> { InfoViewModel(get(), get(), get(), get()) }
-    viewModel<SettingsViewModel> {
-        SettingsViewModel(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-        )
-    }
-    viewModel<MenzaViewModel> { MenzaViewModel(get(), get(), get(), get()) }
-    viewModel<PrivacyViewModel> { PrivacyViewModel(get()) }
-    viewModel<WhatsNewViewModel> { WhatsNewViewModel(get(), get()) }
-    viewModel<CrashesViewModel> { CrashesViewModel(get()) }
-    viewModel<AllergenViewModel> { AllergenViewModel(get()) }
-    viewModel<TodayViewModel> { TodayViewModel(get(), get()) }
-    viewModel<WeekViewModel> { WeekViewModel(get()) }
-    viewModel<RootViewModel> { RootViewModel(get(), get()) }
+    viewModelOf(::RootViewModel)
 }

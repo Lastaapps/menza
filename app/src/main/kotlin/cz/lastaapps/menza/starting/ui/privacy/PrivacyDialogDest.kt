@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,32 +17,24 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.others.privacy
+package cz.lastaapps.menza.starting.ui.privacy
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun PrivacyCheck(
-    privacyViewModel: PrivacyViewModel,
-    content: @Composable () -> Unit,
+internal fun PrivacyDialogDest(
+    privacyViewModel: PrivacyViewModel = koinViewModel(),
 ) {
     val state by privacyViewModel.shouldShow.collectAsState()
 
-    when (state) {
-        false -> {
-            content()
-        }
-        true -> {
-            PrivacyDialog(
-                shown = true,
-                onDismissRequest = {},
-                showAccept = true,
-            ) {
-                privacyViewModel.onApprove()
-            }
-        }
-        else -> {}
+    if (state == true) {
+        PrivacyDialog(
+            onDismissRequest = {},
+            showAccept = true,
+            onAccept = privacyViewModel::onApprove
+        )
     }
 }

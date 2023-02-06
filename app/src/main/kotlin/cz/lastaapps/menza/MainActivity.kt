@@ -21,36 +21,36 @@ package cz.lastaapps.menza
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import cz.lastaapps.menza.ui.root.AppRoot
-import cz.lastaapps.menza.ui.root.RootViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.bumble.appyx.core.integration.NodeHost
+import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
+import cz.lastaapps.menza.root.ui.RootNode
+import cz.lastaapps.menza.ui.theme.AppTheme
 
-class MainActivity : AppCompatActivity() {
 
-    private val rootViewModel: RootViewModel by viewModel()
+class MainActivity : NodeComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        var isReady = false
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition {
-            !rootViewModel.isReady.value
+            !isReady
         }
 
-        supportActionBar?.hide()
-
         setContent {
-            if (rootViewModel.isReady.collectAsState().value) {
-                val activity = remember(this) { this }
-                AppRoot(
-                    activity = activity,
-                    viewModel = rootViewModel,
-                    viewModelStoreOwner = this,
-                )
+            AppTheme() {
+                NodeHost(
+                    integrationPoint = appyxIntegrationPoint,
+                    modifier = Modifier.fillMaxSize(),
+                ) { buildContext ->
+                    RootNode(buildContext) {
+                        isReady = true
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,26 +17,14 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.others.privacy
+package cz.lastaapps.menza.root.ui
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import java.time.LocalDate
-
-class PrivacyViewModel constructor(
-    private val store: PrivacyStore,
-) : ViewModel() {
-
-    val shouldShow = store.approved.map { it == null }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
-    fun onApprove() {
-        viewModelScope.launch {
-            store.setApproved(LocalDate.now())
-        }
+internal sealed class RootNavType {
+    companion object {
+        val types = listOf(Loading, SetupFlow, Main)
     }
+
+    object Loading : RootNavType()
+    object SetupFlow : RootNavType()
+    object Main : RootNavType()
 }

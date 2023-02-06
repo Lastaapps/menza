@@ -35,14 +35,13 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.init.InitDecision
 import cz.lastaapps.menza.init.InitViewModel
 import cz.lastaapps.menza.navigation.Dest
+import cz.lastaapps.menza.starting.ui.privacy.PrivacyDialogContent
+import cz.lastaapps.menza.starting.ui.privacy.PrivacyViewModel
 import cz.lastaapps.menza.ui.WithConnectivity
 import cz.lastaapps.menza.ui.dests.info.InfoLayout
 import cz.lastaapps.menza.ui.dests.info.InfoViewModel
 import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
 import cz.lastaapps.menza.ui.dests.others.osturak.OsturakLayout
-import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyCheck
-import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyDialogContent
-import cz.lastaapps.menza.ui.dests.others.privacy.PrivacyViewModel
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.dests.settings.store.darkMode
@@ -84,15 +83,11 @@ fun AppRoot(
                 activity = activity,
                 viewModelStoreOwner = viewModelStoreOwner,
             ) {
-                //checks if privacy policy has been accepted
-                PrivacyCheck(privacyViewModel) {
+                //Download default data
+                InitDecision(initViewModel) {
 
-                    //Download default data
-                    InitDecision(initViewModel) {
-
-                        //show app if ready
-                        AppContent(menzaViewModel, settingsViewModel)
-                    }
+                    //show app if ready
+                    AppContent(menzaViewModel, settingsViewModel)
                 }
             }
         }
@@ -103,7 +98,7 @@ fun AppRoot(
 fun ApplyLocalProviders(
     activity: Activity,
     viewModelStoreOwner: ViewModelStoreOwner,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(LocalActivityViewModelOwner provides viewModelStoreOwner) {
         WithLocalWindowSizes(activity) {
@@ -208,7 +203,7 @@ private fun ChooseLayout(
     settingsViewModel: SettingsViewModel,
     snackbarHostState: SnackbarHostState,
     drawerState: DrawerState,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     when (LocalWindowWidth.current) {
         WindowSizeClass.COMPACT -> {
