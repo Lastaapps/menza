@@ -17,15 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.di
+package cz.lastaapps.menza.ui.theme
 
-import cz.lastaapps.core.data.createSettings
-import cz.lastaapps.core.ui.VMContext
-import kotlinx.coroutines.Dispatchers
-import org.koin.core.module.Module
-import org.koin.dsl.module
+import androidx.compose.ui.unit.dp
 
-internal actual val platform: Module = module {
-    single { createSettings(get()) }
-    single { VMContext(Dispatchers.Default) }
+object MenzaPadding {
+    val Tiny = 2.dp
+    val Smaller = 4.dp
+    val Small = 8.dp
+    val MidSmall = 12.dp
+    val Medium = 16.dp
+    val MidLarge = 24.dp
+    val Large = 32.dp
 }

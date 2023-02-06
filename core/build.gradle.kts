@@ -42,4 +42,9 @@ dependencies {
     commonMainImplementation(libs.ktor.client.logging)
     androidMainImplementation(libs.ktor.client.okhttp)
     jvmMainImplementation(libs.ktor.client.okhttp)
+
+    // Lifecycle
+    androidMainImplementation(libs.androidx.lifecycle.runtime)
+    androidMainImplementation(libs.androidx.lifecycle.runtime.compose)
+    androidMainImplementation(libs.androidx.lifecycle.viewModel)
 }
