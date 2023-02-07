@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,6 +21,7 @@ package cz.lastaapps.plugin.android.config
 
 import com.android.build.api.dsl.CommonExtension
 import cz.lastaapps.extensions.alias
+import cz.lastaapps.extensions.debugImplementation
 import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.pluginManager
@@ -58,7 +59,8 @@ internal fun Project.configureComposeDependencies() {
         implementation(libs.androidx.compose.iconsCore)
         implementation(libs.androidx.compose.iconsExtended)
         implementation(libs.androidx.compose.animation)
-        implementation(libs.androidx.compose.tooling)
+        debugImplementation(libs.androidx.compose.tooling)
+        implementation(libs.androidx.compose.toolingPreview)
         implementation(libs.accompanist.pager)
         implementation(libs.accompanist.placeholder)
         implementation(libs.accompanist.systemUi)

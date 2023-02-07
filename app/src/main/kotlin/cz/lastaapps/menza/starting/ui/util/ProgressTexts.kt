@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.downloaddata
+package cz.lastaapps.menza.starting.ui.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

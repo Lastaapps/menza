@@ -139,7 +139,8 @@
     <string name="settings_theme_app_agata">Agáta</string>
     <string name="settings_theme_app_ctu">ČVUT</string>
     <string name="settings_theme_app_uwu">UwU</string>
-    <string name="panel_price_title">Jaké ceny se mají zobrazovat?</string>
+    <string name="panel_price_title">Typ ceny</string>
+    <string name="panel_price_description">Jaké ceny se mají zobrazovat?</string>
     <string name="panel_price_discounted">Zlevněné</string>
     <string name="panel_price_normal">Běžné plné</string>
     <string name="panel_crash_title">Aplikace spadla</string>

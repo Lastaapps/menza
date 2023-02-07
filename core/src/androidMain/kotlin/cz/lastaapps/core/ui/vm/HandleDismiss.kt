@@ -17,29 +17,27 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.downloaddata
+package cz.lastaapps.core.ui.vm
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import androidx.compose.runtime.LaunchedEffect
+import kotlin.reflect.KFunction1
+import kotlin.reflect.KProperty1
 
-internal class DownloadNode(
-    buildContext: BuildContext,
-    private val onNext: () -> Unit,
-) : Node(
-    buildContext = buildContext,
+
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+inline fun <State : Any, VM : StateViewModel<State>> HandleDismiss(
+    viewModel: VM,
+    getVal: KProperty1<State, Boolean>,
+    dismiss: KFunction1<VM, Unit>,
+    noinline launch: () -> Unit,
 ) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        DownloadScreen(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(MenzaPadding.More.Screen),
-            onDone = onNext,
-        )
+    val isSelected = getVal(viewModel.flowState.value)
+    LaunchedEffect(isSelected) {
+        if (isSelected) {
+            dismiss(viewModel)
+            launch()
+        }
     }
 }

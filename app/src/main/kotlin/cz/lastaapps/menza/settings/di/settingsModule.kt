@@ -39,6 +39,7 @@ import cz.lastaapps.menza.settings.domain.usecase.theme.GetThemeListUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.IsDynamicThemeSupportedUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.SetAppThemeUC
 import cz.lastaapps.menza.settings.ui.vm.AppThemeViewModel
+import cz.lastaapps.menza.starting.ui.vm.PriceTypeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -49,6 +50,7 @@ val settingsModule = module {
     single { SettingsStore(get(), CoroutineScope(Dispatchers.IO)) }
 
     viewModelOf(::AppThemeViewModel)
+    viewModelOf(::PriceTypeViewModel)
 
     factoryOf(::GetAppThemeUC)
     factoryOf(::GetThemeListUC)

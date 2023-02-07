@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui
+package cz.lastaapps.menza.starting.ui.navigation
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

@@ -28,6 +28,9 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,6 +40,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cz.lastaapps.common.Communication
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.starting.ui.vm.PrivacyViewModel
+import org.koin.androidx.compose.koinViewModel
+
+
+@Composable
+internal fun PrivacyDialogDest(
+    onNotNeeded: suspend () -> Unit,
+    privacyViewModel: PrivacyViewModel = koinViewModel(),
+) {
+    val state by privacyViewModel.shouldShow.collectAsState()
+
+    when (state) {
+        true ->
+            PrivacyDialog(
+                onDismissRequest = {},
+                showAccept = true,
+                onAccept = privacyViewModel::onApprove,
+            )
+
+        false ->
+            LaunchedEffect(Unit) { onNotNeeded() }
+
+        null -> {}
+    }
+}
 
 @Composable
 internal fun PrivacyDialog(

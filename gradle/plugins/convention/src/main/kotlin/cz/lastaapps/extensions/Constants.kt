@@ -22,7 +22,8 @@ package cz.lastaapps.extensions
 object Constants {
     const val IMPLEMENTATION = "implementation"
     const val COMMON_IMPLEMENTATION = "commonMainImplementation"
-    const val TEST_IMPLEMENTATION = "implementation"
+    const val TEST_IMPLEMENTATION = "testImplementation"
+    const val DEBUG_IMPLEMENTATION = "debugImplementation"
     const val API = "api"
     const val DESUGARING = "coreLibraryDesugaring"
     const val KSP = "ksp"

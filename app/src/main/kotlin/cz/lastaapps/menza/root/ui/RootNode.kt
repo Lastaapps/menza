@@ -39,7 +39,7 @@ import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.root.ui.RootNavType.Loading
 import cz.lastaapps.menza.root.ui.RootNavType.Main
 import cz.lastaapps.menza.root.ui.RootNavType.SetupFlow
-import cz.lastaapps.menza.starting.ui.StartingNode
+import cz.lastaapps.menza.starting.ui.navigation.StartingNode
 import org.koin.androidx.compose.koinViewModel
 
 internal class RootNode(

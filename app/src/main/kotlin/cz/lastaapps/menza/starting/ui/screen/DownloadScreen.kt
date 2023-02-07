@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.downloaddata
+package cz.lastaapps.menza.starting.ui.screen
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
@@ -36,6 +36,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.starting.ui.util.text
+import cz.lastaapps.menza.starting.ui.vm.DownloadDataState
+import cz.lastaapps.menza.starting.ui.vm.DownloadViewModel
 import cz.lastaapps.menza.ui.HandleError
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 import org.koin.androidx.compose.koinViewModel

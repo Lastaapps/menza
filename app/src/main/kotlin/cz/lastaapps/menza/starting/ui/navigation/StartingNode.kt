@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui
+package cz.lastaapps.menza.starting.ui.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,12 +35,12 @@ import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.next
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightSlider
 import cz.lastaapps.menza.settings.ui.nodes.ChooseAppThemeNode
-import cz.lastaapps.menza.starting.ui.StartingNavType.ChoosePrice
-import cz.lastaapps.menza.starting.ui.StartingNavType.ChooseTheme
-import cz.lastaapps.menza.starting.ui.StartingNavType.DownloadData
-import cz.lastaapps.menza.starting.ui.StartingNavType.PolicyBackground
-import cz.lastaapps.menza.starting.ui.chooseprice.ChoosePriceNode
-import cz.lastaapps.menza.starting.ui.downloaddata.DownloadNode
+import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.ChoosePrice
+import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.ChooseTheme
+import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.DownloadData
+import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.PolicyBackground
+import cz.lastaapps.menza.starting.ui.node.DownloadNode
+import cz.lastaapps.menza.starting.ui.node.PriceTypeNode
 import cz.lastaapps.menza.starting.ui.privacy.PrivacyDialogDest
 import kotlinx.coroutines.flow.first
 
@@ -61,8 +61,8 @@ class StartingNode(
         return when (navTarget) {
             PolicyBackground -> node(buildContext) {}
             DownloadData -> DownloadNode(buildContext, onNext)
-            ChoosePrice -> ChoosePriceNode(buildContext)
             ChooseTheme -> ChooseAppThemeNode(buildContext, onNext)
+            ChoosePrice -> PriceTypeNode(buildContext, ::finish)
         }
     }
 

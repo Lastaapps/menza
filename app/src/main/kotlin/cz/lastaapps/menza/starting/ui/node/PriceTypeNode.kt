@@ -17,21 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.chooseprice
+package cz.lastaapps.menza.starting.ui.node
 
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.starting.ui.screen.PriceTypeScreen
+import cz.lastaapps.menza.ui.theme.MenzaPadding.More
 
-internal class ChoosePriceNode(
+class PriceTypeNode(
     buildContext: BuildContext,
-) : Node(
-    buildContext = buildContext,
-) {
+    private val onNext: () -> Unit,
+) : Node(buildContext) {
     @Composable
     override fun View(modifier: Modifier) {
-        Text(text = "Price")
+        PriceTypeScreen(
+            onDone = onNext,
+            modifier = modifier
+                .padding(More.Screen)
+                .fillMaxSize(),
+        )
     }
 }

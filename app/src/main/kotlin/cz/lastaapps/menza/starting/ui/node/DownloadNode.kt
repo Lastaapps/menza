@@ -17,30 +17,30 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.privacy
+package cz.lastaapps.menza.starting.ui.node
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import org.koin.androidx.compose.koinViewModel
+import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.starting.ui.screen.DownloadScreen
+import cz.lastaapps.menza.ui.theme.MenzaPadding.More
 
-@Composable
-internal fun PrivacyDialogDest(
-    onNotNeeded: suspend () -> Unit,
-    privacyViewModel: PrivacyViewModel = koinViewModel(),
+internal class DownloadNode(
+    buildContext: BuildContext,
+    private val onNext: () -> Unit,
+) : Node(
+    buildContext = buildContext,
 ) {
-    val state by privacyViewModel.shouldShow.collectAsState()
-
-    when (state) {
-        true ->
-            PrivacyDialog(
-                onDismissRequest = {},
-                showAccept = true,
-                onAccept = privacyViewModel::onApprove,
-            )
-        false ->
-            LaunchedEffect(Unit) { onNotNeeded() }
-        null -> {}
+    @Composable
+    override fun View(modifier: Modifier) {
+        DownloadScreen(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(More.Screen),
+            onDone = onNext,
+        )
     }
 }

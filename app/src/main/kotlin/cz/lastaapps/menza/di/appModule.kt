@@ -25,11 +25,11 @@ import cz.lastaapps.crash.crashModule
 import cz.lastaapps.menza.root.domain.usecase.IsAppSetUpUC
 import cz.lastaapps.menza.root.ui.RootViewModel
 import cz.lastaapps.menza.settings.di.settingsModule
+import cz.lastaapps.menza.starting.data.PrivacyStore
 import cz.lastaapps.menza.starting.domain.usecase.CheckDataDownloadNeededUC
 import cz.lastaapps.menza.starting.domain.usecase.DownloadInitDataUC
-import cz.lastaapps.menza.starting.ui.downloaddata.DownloadViewModel
-import cz.lastaapps.menza.starting.ui.privacy.PrivacyStore
-import cz.lastaapps.menza.starting.ui.privacy.PrivacyViewModel
+import cz.lastaapps.menza.starting.ui.vm.DownloadViewModel
+import cz.lastaapps.menza.starting.ui.vm.PrivacyViewModel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDataStore
 import cz.lastaapps.menza.ui.layout.menza.MenzaOrderDataStore
 import cz.lastaapps.scraping.scrapingModule

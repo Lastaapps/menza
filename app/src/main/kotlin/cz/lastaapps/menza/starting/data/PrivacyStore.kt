@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.privacy
+package cz.lastaapps.menza.starting.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore

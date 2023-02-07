@@ -33,6 +33,9 @@ fun DependencyHandlerScope.commonImplementation(dependencyNotation: Any) =
 fun DependencyHandlerScope.testImplementation(dependencyNotation: Any) =
     add(Constants.TEST_IMPLEMENTATION, dependencyNotation)
 
+fun DependencyHandlerScope.debugImplementation(dependencyNotation: Any) =
+    add(Constants.DEBUG_IMPLEMENTATION, dependencyNotation)
+
 fun DependencyHandlerScope.api(dependencyNotation: Any) = add(Constants.API, dependencyNotation)
 fun DependencyHandlerScope.coreLibraryDesugaring(dependencyNotation: Any) =
     add(Constants.DESUGARING, dependencyNotation)

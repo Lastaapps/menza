@@ -17,11 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.privacy
+package cz.lastaapps.menza.starting.ui.vm
 
 import androidx.lifecycle.viewModelScope
 import cz.lastaapps.core.ui.vm.BaseViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.menza.starting.data.PrivacyStore
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
