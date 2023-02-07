@@ -20,5 +20,5 @@
 package cz.lastaapps.core.domain.error
 
 sealed interface ApiErrorLogic : MenzaError.Logic {
-    data object WeekNotAvailable : ApiErrorLogic
+    object WeekNotAvailable : ApiErrorLogic
 }

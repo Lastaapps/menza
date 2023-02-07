@@ -31,7 +31,7 @@ import cz.lastaapps.plugin.android.common.KotlinBaseConvention
 import cz.lastaapps.plugin.android.config.configureKotlinAndroid
 import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
-import org.gradle.api.JavaVersion
+import cz.lastaapps.plugin.common.JavaConvention
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -44,6 +44,7 @@ class KMPLibraryConvention : BasePlugin({
         alias(libs.plugins.android.library)
     }
 
+    apply<JavaConvention>()
     apply<KotlinBaseConvention>()
     apply<AndroidLibraryConvention>()
     apply<DetektConvention>()
@@ -75,8 +76,8 @@ class KMPLibraryConvention : BasePlugin({
     }
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            languageVersion = libs.versions.kotlin.languageVersion.get()
-            apiVersion = libs.versions.kotlin.languageVersion.get()
+            languageVersion = libs.versions.kotlin.language.get()
+            apiVersion = libs.versions.kotlin.api.get()
         }
     }
 
@@ -86,8 +87,8 @@ class KMPLibraryConvention : BasePlugin({
             languageSettings.apply {
                 optIn("kotlin.RequiresOptIn")
                 optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-                languageVersion = libs.versions.kotlin.languageVersion.get()
-                apiVersion = libs.versions.kotlin.languageVersion.get()
+                languageVersion = libs.versions.kotlin.language.get()
+                apiVersion = libs.versions.kotlin.api.get()
             }
         }
 
@@ -97,16 +98,12 @@ class KMPLibraryConvention : BasePlugin({
 
         android {
             compilations.all {
-                kotlinOptions {
-                    jvmTarget = JavaVersion.VERSION_11.toString()
-                }
+                kotlinOptions { }
             }
         }
         jvm {
             compilations.all {
-                kotlinOptions {
-                    jvmTarget = JavaVersion.VERSION_11.toString()
-                }
+                kotlinOptions { }
             }
         }
 

@@ -20,21 +20,9 @@
 pluginManagement {
     includeBuild("gradle/plugins")
     repositories {
-        gradlePluginPortal()
+        mavenCentral()
         google()
-        mavenCentral {
-            content {
-                excludeGroup("io.arrow-kt")
-            }
-        }
-        maven("https://oss.sonatype.org/content/repositories/snapshots") {
-            mavenContent {
-                snapshotsOnly()
-            }
-            content {
-                includeGroup("io.arrow-kt")
-            }
-        }
+        gradlePluginPortal()
     }
 }
 
@@ -42,12 +30,12 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
         mavenCentral {
             content {
                 excludeGroup("io.arrow-kt")
             }
         }
+        google()
         maven("https://oss.sonatype.org/content/repositories/snapshots") {
             mavenContent {
                 snapshotsOnly()

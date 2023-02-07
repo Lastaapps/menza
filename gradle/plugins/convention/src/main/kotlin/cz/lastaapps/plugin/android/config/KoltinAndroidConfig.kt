@@ -58,9 +58,6 @@ internal fun Project.configureKotlinAndroid(
                 "-opt-in=kotlin.RequiresOptIn",
                 "-Xcontext-receivers",
             )
-
-            // Set JVM target to 1.8
-            jvmTarget = JavaVersion.VERSION_11.toString()
         }
     } catch (_: Exception) {
     }

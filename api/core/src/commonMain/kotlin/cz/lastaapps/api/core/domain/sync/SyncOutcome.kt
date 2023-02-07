@@ -26,9 +26,9 @@ import cz.lastaapps.core.domain.error.MenzaError
 typealias SyncOutcome = Outcome<SyncResult>
 
 interface SyncResult {
-    data object Updated : SyncResult
-    data object Skipped : SyncResult
-    data object Unavailable : SyncResult
+    object Updated : SyncResult
+    object Skipped : SyncResult
+    object Unavailable : SyncResult
 
     @JvmInline
     value class Problem(val errors: Nel<MenzaError>) : SyncResult

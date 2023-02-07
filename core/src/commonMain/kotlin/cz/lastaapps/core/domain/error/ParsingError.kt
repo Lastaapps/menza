@@ -21,9 +21,9 @@ package cz.lastaapps.core.domain.error
 
 sealed interface ParsingError : MenzaError.Runtime {
     sealed interface Buffet : ParsingError {
-        data object DateRangeCannotBeParsed : Buffet
-        data object DayCannotBeParsed : Buffet
-        data object DishCannotBeParsed : Buffet
-        data object MenuCannotBeParsed : Buffet
+        object DateRangeCannotBeParsed : Buffet
+        object DayCannotBeParsed : Buffet
+        object DishCannotBeParsed : Buffet
+        object MenuCannotBeParsed : Buffet
     }
 }

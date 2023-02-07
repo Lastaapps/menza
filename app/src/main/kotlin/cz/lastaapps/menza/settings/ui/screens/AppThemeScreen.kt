@@ -105,7 +105,7 @@ private fun AppThemeContent(
 
         item {
             Text(
-                text = stringResource(string.settings_theme_title),
+                text = stringResource(R.string.settings_theme_title),
                 style = MaterialTheme.typography.headlineSmall,
                 textAlign = TextAlign.Center,
             )

@@ -48,10 +48,8 @@ class KotlinBaseConvention : BasePlugin({
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            languageVersion = libs.versions.kotlin.languageVersion.get()
-            apiVersion = libs.versions.kotlin.languageVersion.get()
-
-            jvmTarget = JavaVersion.VERSION_11.toString()
+            languageVersion = libs.versions.kotlin.language.get()
+            apiVersion = libs.versions.kotlin.api.get()
 
             @Suppress("SuspiciousCollectionReassignment")
             freeCompilerArgs += listOf(

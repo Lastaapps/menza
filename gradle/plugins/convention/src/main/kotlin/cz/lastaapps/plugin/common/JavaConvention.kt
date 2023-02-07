@@ -17,28 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.domain.model
+package cz.lastaapps.plugin.common
 
-import org.koin.core.qualifier.named
+import cz.lastaapps.extensions.java
+import cz.lastaapps.extensions.libs
+import cz.lastaapps.plugin.BasePlugin
+import org.gradle.api.JavaVersion
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 
-// All the types must have unique names, or the DI will break
-sealed interface MenzaType {
-    companion object {
-        val allNamed = listOf(
-            named<Agata.Strahov>(),
-            named<Agata.Subsystem>(),
-            named<Buffet.FS>(),
-            named<Buffet.FEL>(),
-        )
+
+class JavaConvention : BasePlugin({
+    java {
+        val versionCode = libs.versions.java.jvmTarget.get().toInt()
+        val version = JavaVersion.toVersion(versionCode)
+        sourceCompatibility = version
+        targetCompatibility = version
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(versionCode))
+        }
     }
-
-    sealed interface Agata : MenzaType {
-        data class Subsystem(val subsystemId: Int) : Agata
-        object Strahov : Agata
-    }
-
-    sealed interface Buffet : MenzaType {
-        object FS : Buffet
-        object FEL : Buffet
-    }
-}
+})

@@ -44,7 +44,7 @@ android {
             exclude(group = "commons-logging", module = "commons-logging")
         }
     }
-    packagingOptions {
+    packaging {
         resources.excludes.add("META-INF/*")
         resources.excludes.add("mozilla/*")
     }

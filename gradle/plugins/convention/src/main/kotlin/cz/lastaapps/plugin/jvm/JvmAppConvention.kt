@@ -48,8 +48,8 @@ class JvmAppConvention : BasePlugin({
     }
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            languageVersion = libs.versions.kotlin.languageVersion.get()
-            apiVersion = libs.versions.kotlin.languageVersion.get()
+            languageVersion = libs.versions.kotlin.language.get()
+            apiVersion = libs.versions.kotlin.api.get()
         }
     }
 
@@ -58,8 +58,6 @@ class JvmAppConvention : BasePlugin({
             languageSettings.apply {
                 optIn("kotlin.RequiresOptIn")
                 optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-                languageVersion = libs.versions.kotlin.languageVersion.get()
-                apiVersion = libs.versions.kotlin.languageVersion.get()
             }
         }
     }

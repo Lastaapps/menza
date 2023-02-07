@@ -24,11 +24,13 @@ import cz.lastaapps.extensions.libs
 import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
+import cz.lastaapps.plugin.common.JavaConvention
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 
 class AndroidBaseConvention : BasePlugin({
 
+    apply<JavaConvention>()
     apply<DetektConvention>()
     apply<ArrowKtConvention>()
 

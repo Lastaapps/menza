@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,14 +25,17 @@ plugins {
 group = "cz.lastaapps.convention-plugins"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    val versionCode = libs.versions.java.jvmTarget.get().toInt()
+    val version = JavaVersion.toVersion(versionCode)
+    sourceCompatibility = version
+    targetCompatibility = version
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(versionCode))
+    }
 }
 
 kotlin {
-    kotlinDslPluginOptions {
-        jvmTarget.set(JavaVersion.VERSION_11.toString())
-    }
+    kotlinDslPluginOptions { }
 }
 
 dependencies {
@@ -77,7 +80,7 @@ gradlePlugin {
 }
 
 fun NamedDomainObjectContainer<PluginDeclaration>.plugin(
-    name: Provider<out PluginDependency>, plugin: String
+    name: Provider<out PluginDependency>, plugin: String,
 ) {
     val pluginId = name.get().pluginId
     register(pluginId) {
