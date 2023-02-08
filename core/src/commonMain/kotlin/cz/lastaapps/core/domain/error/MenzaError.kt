@@ -19,7 +19,7 @@
 
 package cz.lastaapps.core.domain.error
 
-import arrow.core.continuations.Raise
+import arrow.core.raise.Raise
 
 sealed interface MenzaError {
     val throwable: Throwable?

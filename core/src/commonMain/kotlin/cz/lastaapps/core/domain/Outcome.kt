@@ -21,8 +21,8 @@ package cz.lastaapps.core.domain
 
 import arrow.core.Either
 import arrow.core.IorNel
-import arrow.core.continuations.Raise
-import arrow.core.continuations.either
+import arrow.core.raise.Raise
+import arrow.core.raise.either
 import cz.lastaapps.core.domain.error.MenzaError
 import kotlin.experimental.ExperimentalTypeInference
 
