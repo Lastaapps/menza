@@ -60,11 +60,11 @@ import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.settings.data.imageSize
-import cz.lastaapps.menza.settings.data.imagesOnMetered
-import cz.lastaapps.menza.settings.data.priceType
-import cz.lastaapps.menza.settings.domain.model.PriceType
-import cz.lastaapps.menza.settings.domain.model.getPrice
+import cz.lastaapps.menza.features.settings.data.imageSize
+import cz.lastaapps.menza.features.settings.data.imagesOnMetered
+import cz.lastaapps.menza.features.settings.data.priceType
+import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.settings.domain.model.getPrice
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.LocalConnectivityProvider
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned

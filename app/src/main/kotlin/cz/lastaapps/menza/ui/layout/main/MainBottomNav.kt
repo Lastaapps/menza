@@ -29,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import cz.lastaapps.menza.features.settings.data.settingsEverOpened
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.navigation.routesEquals
-import cz.lastaapps.menza.settings.data.settingsEverOpened
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 
 @Composable

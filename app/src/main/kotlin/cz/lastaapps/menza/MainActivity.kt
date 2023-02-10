@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
-import cz.lastaapps.menza.root.ui.RootNode
+import cz.lastaapps.menza.features.root.ui.RootNode
 
 
 class MainActivity : NodeComponentActivity() {

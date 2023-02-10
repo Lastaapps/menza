@@ -39,8 +39,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.settings.data.priceType
-import cz.lastaapps.menza.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.settings.data.priceType
+import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import kotlinx.coroutines.flow.map
 
