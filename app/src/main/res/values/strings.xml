@@ -245,6 +245,10 @@
     <string name="menza_order_button_hide_menza">Hide menza</string>
     <string name="menza_order_button_show_menza">Show menza</string>
 
+    <string name="all_set_title">All set</string>
+    <string name="all_set_description">Bon appetite</string>
+    <string name="all_set_button">Let\'s go!</string>
+
     <string name="button_continue">Continue</string>
     <string name="button_done">Done</string>
 </resources>

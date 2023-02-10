@@ -36,11 +36,13 @@ import com.bumble.appyx.navmodel.spotlight.operation.next
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightSlider
 import cz.lastaapps.menza.settings.ui.nodes.ChooseAppThemeNode
 import cz.lastaapps.menza.settings.ui.nodes.ReorderMenzaNode
+import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.AllSet
 import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.ChoosePrice
 import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.ChooseTheme
 import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.DownloadData
 import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.OrderMenzaList
 import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.PolicyBackground
+import cz.lastaapps.menza.starting.ui.node.AllSetNode
 import cz.lastaapps.menza.starting.ui.node.DownloadNode
 import cz.lastaapps.menza.starting.ui.node.PriceTypeNode
 import cz.lastaapps.menza.starting.ui.privacy.PrivacyDialogDest
@@ -48,6 +50,7 @@ import kotlinx.coroutines.flow.first
 
 class StartingNode(
     buildContext: BuildContext,
+    private val onDone: () -> Unit,
     private val spotlight: Spotlight<StartingNavType> = Spotlight<StartingNavType>(
         items = StartingNavType.allTypes,
         savedStateMap = buildContext.savedStateMap,
@@ -66,7 +69,7 @@ class StartingNode(
             ChooseTheme -> ChooseAppThemeNode(buildContext, onNext)
             ChoosePrice -> PriceTypeNode(buildContext, onNext)
             OrderMenzaList -> ReorderMenzaNode(buildContext, onNext)
-            // TODO all set screen
+            AllSet -> AllSetNode(buildContext, onDone)
         }
     }
 

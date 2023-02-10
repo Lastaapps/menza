@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.root.ui
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -57,8 +58,8 @@ internal class RootNode(
     override fun resolve(navTarget: RootNavType, buildContext: BuildContext): Node {
         return when (navTarget) {
             Loading -> node(buildContext) {} // Splash screen will be shown
-            SetupFlow -> StartingNode(buildContext)
-            Main -> node(buildContext) {} // Nothing for now
+            SetupFlow -> StartingNode(buildContext, { spotlight.activate(indexOfType(Main)) })
+            Main -> node(buildContext) { Text("Main") } // Nothing for now
         }
     }
 

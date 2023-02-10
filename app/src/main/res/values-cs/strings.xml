@@ -222,6 +222,10 @@
     <string name="menza_order_button_hide_menza">Zobrazit menzu</string>
     <string name="menza_order_button_show_menza">Skrýt menzu</string>
 
+    <string name="all_set_title">Hotovo</string>
+    <string name="all_set_description">Dobrou chuť přeji</string>
+    <string name="all_set_button">Jdeme na to!</string>
+
     <string name="button_continue">Pokračovat</string>
     <string name="button_done">Hotovo</string>
 </resources>

@@ -17,38 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.starting.ui.navigation
+package cz.lastaapps.menza.starting.ui.node
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.starting.ui.screen.AllSetScreen
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 
-sealed interface StartingNavType : Parcelable {
-    companion object {
-        val allTypes = listOf(
-            PolicyBackground,
-            DownloadData,
-            ChooseTheme,
-            ChoosePrice,
-            OrderMenzaList,
-            AllSet,
+internal class AllSetNode(
+    buildContext: BuildContext,
+    private val onDone: () -> Unit,
+) : Node(buildContext) {
+    @Composable
+    override fun View(modifier: Modifier) {
+        AllSetScreen(
+            onDone = onDone,
+            modifier = modifier
+                .padding(MenzaPadding.More.Screen)
+                .fillMaxSize(),
         )
     }
-
-    @Parcelize
-    object PolicyBackground : StartingNavType
-
-    @Parcelize
-    object DownloadData : StartingNavType
-
-    @Parcelize
-    object ChoosePrice : StartingNavType
-
-    @Parcelize
-    object ChooseTheme : StartingNavType
-
-    @Parcelize
-    object OrderMenzaList : StartingNavType
-
-    @Parcelize
-    object AllSet : StartingNavType
 }
