@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,35 +19,41 @@
 
 package cz.lastaapps.menza.ui.dests.others.osturak
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import cz.lastaapps.menza.features.main.ui.layout.UseSplitLayout
 import cz.lastaapps.menza.ui.root.BackArrow
-import cz.lastaapps.menza.ui.root.UseSplitLayout
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.root.locals.WindowSizeClass
 
 @Composable
 fun OsturakLayout(
     navController: NavController,
 ) {
     when (LocalWindowWidth.current) {
-        WindowSizeClass.COMPACT -> {
+        WindowWidthSizeClass.Compact -> {
             OsturakLayoutCompact(
                 navController = navController,
             )
         }
-        WindowSizeClass.MEDIUM -> {
+
+        WindowWidthSizeClass.Medium -> {
             OsturakLayoutMedium(
                 navController = navController,
             )
         }
-        WindowSizeClass.EXPANDED -> {
+
+        WindowWidthSizeClass.Expanded -> {
             OsturakLayoutExpanded()
         }
     }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,88 +17,34 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+
 package cz.lastaapps.menza.ui.root.locals
 
 import android.app.Activity
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.toComposeRect
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
-import androidx.window.layout.WindowMetricsCalculator
-import org.lighthousegames.logging.logging
 
-sealed class WindowSizeClass private constructor(val name: String) {
-    object COMPACT : WindowSizeClass("Compact")
-    object MEDIUM : WindowSizeClass("Medium")
-    object EXPANDED : WindowSizeClass("Expanded")
-    companion object {
-        val log = logging(WindowSizeClass::class.simpleName)
-    }
-}
-
-
-val LocalWindowWidth = compositionLocalOf<WindowSizeClass> { WindowSizeClass.COMPACT }
-val LocalWindowHeight = compositionLocalOf<WindowSizeClass> { WindowSizeClass.COMPACT }
+val LocalWindowSize = compositionLocalOf { WindowSizeClass.calculateFromSize(DpSize.Zero) }
+val LocalWindowWidth = compositionLocalOf { WindowWidthSizeClass.Compact }
+val LocalWindowHeight = compositionLocalOf { WindowHeightSizeClass.Compact }
 
 @Composable
 fun WithLocalWindowSizes(
     activity: Activity,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-    val size = activity.rememberWindowDpSize()
-    CompositionLocalProvider(LocalWindowWidth provides getWindowWidthClass(size)) {
-        CompositionLocalProvider(LocalWindowHeight provides getWindowHeightClass(size)) {
-            content()
-        }
-    }
-}
-
-//Stolen from https://github.com/android/compose-samples/blob/d38047520c00d5eed71eb731b1fa5ecd99f59a32/JetNews/app/src/main/java/com/example/jetnews/utils/WindowSize.kt
-@Composable
-fun Activity.rememberWindowDpSize(): DpSize {
-    // Get the size (in pixels) of the window
-    val windowSize = rememberWindowSize()
-
-    // Convert the window size to [Dp]
-    return with(LocalDensity.current) {
-        windowSize.toDpSize()
-    }
-}
-
-/**
- * Remembers the [Size] in pixels of the window corresponding to the current window metrics.
- */
-@Composable
-private fun Activity.rememberWindowSize(): Size {
-    val configuration = LocalConfiguration.current
-    // WindowMetricsCalculator implicitly depends on the configuration through the activity,
-    // so re-calculate it upon changes.
-    val windowMetrics = remember(configuration) {
-        WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)
-    }
-    return windowMetrics.bounds.toComposeRect().size
-}
-
-private fun getWindowWidthClass(windowDpSize: DpSize): WindowSizeClass = when {
-    windowDpSize.width < 0.dp -> throw IllegalArgumentException("Dp value cannot be negative")
-    windowDpSize.width < 600.dp -> WindowSizeClass.COMPACT
-    windowDpSize.width < 840.dp -> WindowSizeClass.MEDIUM
-    else -> WindowSizeClass.EXPANDED
-}.also {
-    WindowSizeClass.log.i { "Layout width mode: ${it.name}" }
-}
-
-private fun getWindowHeightClass(windowDpSize: DpSize): WindowSizeClass = when {
-    windowDpSize.width < 0.dp -> throw IllegalArgumentException("Dp value cannot be negative")
-    windowDpSize.width < 480.dp -> WindowSizeClass.COMPACT
-    windowDpSize.width < 900.dp -> WindowSizeClass.MEDIUM
-    else -> WindowSizeClass.EXPANDED
-}.also {
-    WindowSizeClass.log.i { "Layout height mode: ${it.name}" }
+    val size = calculateWindowSizeClass(activity)
+    CompositionLocalProvider(
+        LocalWindowSize provides size,
+        LocalWindowWidth provides size.widthSizeClass,
+        LocalWindowHeight provides size.heightSizeClass,
+    ) { content() }
 }

@@ -19,33 +19,20 @@
 
 package cz.lastaapps.menza.features.settings.domain.usecase.menzaorder
 
-import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.domain.OrderRepo
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.map
 
-class GetOrderedMenzaListUC internal constructor(
+class GetOrderedVisibleMenzaListUC internal constructor(
     context: UCContext,
-    private val getMenzaList: GetMenzaListUC,
-    private val orderRepo: OrderRepo,
+    private val getOrderedMenzaList: GetOrderedMenzaListUC,
 ) : UseCase(context) {
     suspend operator fun invoke() = launch {
-        channelFlow {
-            getMenzaList().collect { list ->
-                orderRepo.initFromIfNeeded(list.map { menza ->
-                    menza.type to (menza.supportsDaily || menza.supportsWeekly)
-                })
-
-                orderRepo.getOrderFor(list.map { it.type }).collect { ordered ->
-                    ordered.map { (type, order) ->
-                        list.first { menza -> menza.type == type } to order
-                    }
-                        .toImmutableList()
-                        .let { send(it) }
-                }
-            }
+        getOrderedMenzaList().map { list ->
+            list.filter { it.second.visible }
+                .map { it.first }
+                .toImmutableList()
         }
     }
 }

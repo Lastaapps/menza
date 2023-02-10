@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,8 +23,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -32,9 +38,8 @@ import androidx.compose.ui.window.Dialog
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.util.withContext
-import cz.lastaapps.menza.ui.root.UseSplitLayout
+import cz.lastaapps.menza.features.main.ui.layout.UseSplitLayout
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.root.locals.WindowSizeClass
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -63,21 +68,23 @@ fun LicenseLayout() {
     }
 
     when (LocalWindowWidth.current) {
-        WindowSizeClass.COMPACT -> {
+        WindowWidthSizeClass.Compact -> {
             LicenseLayoutCompact(
                 libraries = libraryList,
                 selectedLibrary = selectedLibrary,
                 onLibrarySelected = onLibrarySelected,
             )
         }
-        WindowSizeClass.MEDIUM -> {
+
+        WindowWidthSizeClass.Medium -> {
             LicenseLayoutMedium(
                 libraries = libraryList,
                 selectedLibrary = selectedLibrary,
                 onLibrarySelected = onLibrarySelected,
             )
         }
-        WindowSizeClass.EXPANDED -> {
+
+        WindowWidthSizeClass.Expanded -> {
             LicenseLayoutExpanded(
                 libraries = libraryList,
                 selectedLibrary = selectedLibrary,

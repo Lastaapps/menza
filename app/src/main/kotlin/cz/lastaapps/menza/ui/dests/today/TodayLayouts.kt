@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,6 +22,7 @@ package cz.lastaapps.menza.ui.dests.today
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -30,11 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.features.main.ui.layout.UseSplitLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.root.BackArrow
-import cz.lastaapps.menza.ui.root.UseSplitLayout
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.root.locals.WindowSizeClass
 
 @Composable
 fun TodayDest(
@@ -52,7 +52,7 @@ fun TodayDest(
 
     Crossfade(targetState = menzaId) { currentMenzaId ->
         when (LocalWindowWidth.current) {
-            WindowSizeClass.COMPACT -> {
+            WindowWidthSizeClass.Compact -> {
                 TodayDestCompact(
                     navController = navController,
                     menzaId = currentMenzaId,
@@ -62,7 +62,8 @@ fun TodayDest(
                     settingsViewModel = settingsViewModel,
                 )
             }
-            WindowSizeClass.MEDIUM -> {
+
+            WindowWidthSizeClass.Medium -> {
                 TodayDestMedium(
                     navController = navController,
                     menzaId = currentMenzaId,
@@ -72,7 +73,8 @@ fun TodayDest(
                     settingsViewModel = settingsViewModel,
                 )
             }
-            WindowSizeClass.EXPANDED -> {
+
+            WindowWidthSizeClass.Expanded -> {
                 TodayDestExpanded(
                     navController = navController,
                     menzaId = currentMenzaId,

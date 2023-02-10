@@ -22,11 +22,16 @@ package cz.lastaapps.menza
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import cz.lastaapps.menza.features.root.ui.RootNode
+import cz.lastaapps.menza.ui.root.locals.LocalActivityViewModelOwner
+import cz.lastaapps.menza.ui.root.locals.WithFoldingFeature
+import cz.lastaapps.menza.ui.root.locals.WithLocalWindowSizes
 
 
 class MainActivity : NodeComponentActivity() {
@@ -41,11 +46,28 @@ class MainActivity : NodeComponentActivity() {
         }
 
         setContent {
-            NodeHost(
-                integrationPoint = appyxIntegrationPoint,
-                modifier = Modifier.fillMaxSize(),
-            ) { buildContext ->
-                RootNode(buildContext) { isReady = true }
+            ApplyProviders {
+                NodeHost(
+                    integrationPoint = appyxIntegrationPoint,
+                    modifier = Modifier.fillMaxSize(),
+                ) { buildContext ->
+                    RootNode(buildContext) { isReady = true }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun ApplyProviders(
+        content: @Composable () -> Unit,
+    ) {
+        WithLocalWindowSizes(this) {
+            WithFoldingFeature(this) {
+                CompositionLocalProvider(
+                    LocalActivityViewModelOwner provides this,
+                ) {
+                    content()
+                }
             }
         }
     }

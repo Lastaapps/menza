@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -44,9 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.main.ui.components.MenzaNotSelected
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
-import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 
 @Composable
 fun InfoAllTogether(

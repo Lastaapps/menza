@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.root.ui
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,6 +36,7 @@ import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.activate
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightFader
 import cz.lastaapps.core.ui.vm.HandleAppear
+import cz.lastaapps.menza.features.main.ui.navigation.MainNode
 import cz.lastaapps.menza.features.root.ui.RootNavType.Loading
 import cz.lastaapps.menza.features.root.ui.RootNavType.Main
 import cz.lastaapps.menza.features.root.ui.RootNavType.SetupFlow
@@ -59,7 +59,7 @@ internal class RootNode(
         return when (navTarget) {
             Loading -> node(buildContext) {} // Splash screen will be shown
             SetupFlow -> StartingNode(buildContext, { spotlight.activate(indexOfType(Main)) })
-            Main -> node(buildContext) { Text("Main") } // Nothing for now
+            Main -> MainNode(buildContext)
         }
     }
 

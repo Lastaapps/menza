@@ -202,7 +202,8 @@
     <string name="ui_top_bar_action_description">Další</string>
     <string name="ui_top_bar_action_privacy">Ochrana soukromí</string>
     <string name="ui_top_bar_action_license">Použité knihovny</string>
-    <string name="ui_top_bar_action_web">Web</string>
+    <string name="ui_top_bar_action_web_agata">We Agáty</string>
+    <string name="ui_top_bar_action_web_buffet">Webs bufetů</string>
     <string name="menza_none_selected">Není vybrána žádná menza</string>
     <string name="menza_none_osturak">Seznamte se s ošťurákem</string>
     <string name="menza_none_swipe">Přejetím vyberete Menzu</string>
@@ -228,4 +229,5 @@
 
     <string name="button_continue">Pokračovat</string>
     <string name="button_done">Hotovo</string>
+    <string name="button_edit">Upravit</string>
 </resources>

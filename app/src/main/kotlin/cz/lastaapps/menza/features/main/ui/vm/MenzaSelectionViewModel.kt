@@ -17,56 +17,52 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.ui.vm
+package cz.lastaapps.menza.features.main.ui.vm
 
 import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
-import cz.lastaapps.menza.features.settings.domain.model.MenzaOrder
-import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.GetOrderedMenzaListUC
+import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
+import cz.lastaapps.menza.features.main.domain.usecase.SelectMenzaUC
+import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.GetOrderedVisibleMenzaListUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.IsMenzaOrderFromTopUC
-import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.SetMenzaOrderFromTopUC
-import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.ToggleMenzaVisibilityUC
-import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.UpdateMenzaOrderUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.collectLatest
 
-internal class ReorderMenzaViewModel(
+internal class MenzaSelectionViewModel(
     context: VMContext,
-    private val toggleVisibility: ToggleMenzaVisibilityUC,
-    private val getOrderedMenzaList: GetOrderedMenzaListUC,
-    private val updateMenzaOrder: UpdateMenzaOrderUC,
+    private val getMenzaList: GetOrderedVisibleMenzaListUC,
     private val isMenzaOrderFromTop: IsMenzaOrderFromTopUC,
-    private val setMenzaOrderFromTop: SetMenzaOrderFromTopUC,
-) : StateViewModel<ReorderMenzaState>(ReorderMenzaState(), context), Appearing {
+    private val getSelectedMenza: GetSelectedMenzaUC,
+    private val selectMenza: SelectMenzaUC,
+) : StateViewModel<MenzaSelectionState>(MenzaSelectionState(), context), Appearing {
     override fun onAppeared() = launch {
         launch {
-            getOrderedMenzaList().collect {
+            getSelectedMenza().collectLatest {
+                updateState { copy(selectedMenza = it) }
+            }
+        }
+        launch {
+            getMenzaList().collectLatest {
                 updateState { copy(menzaList = it) }
             }
         }
         launch {
-            isMenzaOrderFromTop().collect {
+            isMenzaOrderFromTop().collectLatest {
                 updateState { copy(fromTop = it) }
             }
         }
     }
 
-    fun toggleVisibility(menza: Menza) = launch {
-        toggleVisibility.invoke(menza)
-    }
-
-    fun saveOrder(items: List<Pair<Menza, MenzaOrder>>) = launch {
-        updateMenzaOrder(items.map { (menza, order) -> menza to order.visible })
-    }
-
-    fun reverseOrder() = launch {
-        setMenzaOrderFromTop(!lastState().fromTop)
+    fun selectMenza(menza: Menza) = launch {
+        selectMenza.invoke(menza)
     }
 }
 
-internal data class ReorderMenzaState(
+internal data class MenzaSelectionState(
+    val selectedMenza: Menza? = null,
     val fromTop: Boolean = true,
-    val menzaList: ImmutableList<Pair<Menza, MenzaOrder>> = persistentListOf(),
+    val menzaList: ImmutableList<Menza> = persistentListOf(),
 )

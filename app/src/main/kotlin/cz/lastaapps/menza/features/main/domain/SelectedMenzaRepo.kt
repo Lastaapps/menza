@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,21 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.layout.main
+package cz.lastaapps.menza.features.main.domain
 
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
+import cz.lastaapps.api.core.domain.model.MenzaType
+import kotlinx.coroutines.flow.Flow
 
-val LocalDrawerListState = compositionLocalOf { LazyListState() }
-
-@Composable
-fun WithDrawerListStateProvider(
-    lazyListState: LazyListState,
-    content: @Composable () -> Unit,
-) {
-    CompositionLocalProvider(LocalDrawerListState provides lazyListState) {
-        content()
-    }
+internal interface SelectedMenzaRepo {
+    suspend fun getSelectedMenza(): Flow<MenzaType?>
+    suspend fun selectMenza(menza: MenzaType?)
 }

@@ -17,33 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.layout.menza
+package cz.lastaapps.menza.features.main.ui.components
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.GenericShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.ui.components.draggablelazylist.DraggableLazyColumn
-import cz.lastaapps.menza.ui.components.draggablelazylist.makeDraggableItem
 import cz.lastaapps.menza.ui.components.draggablelazylist.rememberDraggableLazyListState
-import cz.lastaapps.menza.ui.theme.colorForMenza
+import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 
 @Composable
 fun MenzaList(
@@ -81,60 +73,14 @@ fun MenzaList(
             horizontalAlignment = Alignment.Start,
         ) {
             itemsIndexed(menzaList) { index, item ->
-                MenzaItem(
-                    menza = item, selected = item.menzaId == selectedMenza,
-                    onClick = onMenzaSelected,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .makeDraggableItem(state, index),
-                )
+//                MenzaItem(
+//                    menza = item, selected = item.menzaId == selectedMenza,
+//                    onClick = onMenzaSelected,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .makeDraggableItem(state, index),
+//                )
             }
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun MenzaItem(
-    menza: Menza,
-    selected: Boolean,
-    onClick: (MenzaId) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    NavigationDrawerItem(
-        icon = { MenzaLetter(menza) },
-        label = { Text(menza.name) },
-        selected = selected,
-        onClick = { onClick(menza.menzaId) },
-        shape = GenericShape { size, direction ->
-            if (LayoutDirection.Ltr == direction) {
-                addRect(Rect(0f, 0f, size.width - size.height / 2, size.height))
-                addOval(Rect(size.width - size.height, 0f, size.width, size.height))
-            } else {
-                addRect(Rect(size.width, 0f, size.height / 2, size.height))
-                addOval(Rect(size.height, 0f, 0f, size.height))
-            }
-        },
-        modifier = modifier,
-    )
-}
-
-@Composable
-private fun MenzaLetter(menza: Menza, modifier: Modifier = Modifier) {
-    val colors = colorForMenza(menza.menzaId)
-    val brush = Brush.horizontalGradient(colors)
-    val size = 32.dp
-
-    Box(
-        modifier.size(size),
-        contentAlignment = Alignment.Center
-    ) {
-        Canvas(modifier = Modifier.size(size)) {
-            drawCircle(brush)
-        }
-        Text(
-            text = "" + menza.shorterName[0],
-            color = Color(0xffffffff)
-        )
     }
 }

@@ -60,6 +60,7 @@ import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.main.ui.components.MenzaNotSelected
 import cz.lastaapps.menza.features.settings.data.imageSize
 import cz.lastaapps.menza.features.settings.data.imagesOnMetered
 import cz.lastaapps.menza.features.settings.data.priceType
@@ -71,7 +72,6 @@ import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.dests.panels.Panels
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.isMetered
-import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay

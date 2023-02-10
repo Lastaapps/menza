@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,13 +22,13 @@ package cz.lastaapps.menza.ui.dests.info
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.ui.root.UseSplitLayout
+import cz.lastaapps.menza.features.main.ui.layout.UseSplitLayout
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.root.locals.WindowSizeClass
 
 @Composable
 fun InfoLayout(
@@ -39,7 +39,7 @@ fun InfoLayout(
 ) {
     Crossfade(targetState = menzaId) { currentMenzaId ->
         when (LocalWindowWidth.current) {
-            WindowSizeClass.COMPACT -> {
+            WindowWidthSizeClass.Compact -> {
                 InfoLayoutCompact(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
@@ -47,7 +47,8 @@ fun InfoLayout(
                     viewModel = infoViewModel,
                 )
             }
-            WindowSizeClass.MEDIUM -> {
+
+            WindowWidthSizeClass.Medium -> {
                 InfoLayoutMedium(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
@@ -55,7 +56,8 @@ fun InfoLayout(
                     viewModel = infoViewModel,
                 )
             }
-            WindowSizeClass.EXPANDED -> {
+
+            WindowWidthSizeClass.Expanded -> {
                 InfoLayoutExpanded(
                     navController = navController,
                     snackbarHostState = snackbarHostState,

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,17 +22,17 @@ package cz.lastaapps.menza.ui.dests.settings
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import cz.lastaapps.menza.features.main.ui.layout.UseSplitLayout
 import cz.lastaapps.menza.ui.dests.others.AboutUi
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.BackArrow
-import cz.lastaapps.menza.ui.root.UseSplitLayout
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.root.locals.WindowSizeClass
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +45,7 @@ fun SettingsLayout(
     val onAboutClicked = { settingsViewModel.showAbout(!aboutShown) }
 
     when (LocalWindowWidth.current) {
-        WindowSizeClass.COMPACT ->
+        WindowWidthSizeClass.Compact ->
             SettingsLayoutCompact(
                 navController = navController,
                 menzaViewModel = menzaViewModel,
@@ -54,7 +54,8 @@ fun SettingsLayout(
                 aboutShown = aboutShown,
                 onAboutClicked = onAboutClicked,
             )
-        WindowSizeClass.MEDIUM ->
+
+        WindowWidthSizeClass.Medium ->
             SettingsLayoutMedium(
                 navController = navController,
                 menzaViewModel = menzaViewModel,
@@ -63,7 +64,8 @@ fun SettingsLayout(
                 aboutShown = aboutShown,
                 onAboutClicked = onAboutClicked,
             )
-        WindowSizeClass.EXPANDED ->
+
+        WindowWidthSizeClass.Expanded ->
             SettingsLayoutExpanded(
                 navController = navController,
                 menzaViewModel = menzaViewModel,

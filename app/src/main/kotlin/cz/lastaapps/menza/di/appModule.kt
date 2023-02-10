@@ -22,6 +22,7 @@ package cz.lastaapps.menza.di
 import cz.lastaapps.api.main.di.apiModule
 import cz.lastaapps.core.di.coreModule
 import cz.lastaapps.crash.crashModule
+import cz.lastaapps.menza.features.main.di.mainModule
 import cz.lastaapps.menza.features.root.domain.usecase.IsAppSetUpUC
 import cz.lastaapps.menza.features.root.ui.RootViewModel
 import cz.lastaapps.menza.features.settings.di.settingsModule
@@ -49,6 +50,7 @@ val appModule = module {
         repoModule,
         storageDbModule,
         settingsModule,
+        mainModule,
     )
 
     single<PrivacyStore> { PrivacyStore(get()) }

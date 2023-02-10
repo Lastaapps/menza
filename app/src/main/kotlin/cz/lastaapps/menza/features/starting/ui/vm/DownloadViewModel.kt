@@ -76,7 +76,13 @@ internal class DownloadViewModel constructor(
             log.i { "Download progress: $res" }
 
             when (res) {
-                is Left -> updateState { copy(error = res.value, isLoading = false) }
+                is Left -> updateState {
+                    log.i { "Setting an error" };copy(
+                    error = res.value,
+                    isLoading = false
+                )
+                }
+
                 is Right -> {
                     updateState { copy(downloadProgress = res.value) }
 
@@ -98,7 +104,7 @@ internal class DownloadViewModel constructor(
 
     @Composable
     override fun getError(): MenzaError? = flowState.value.error
-    override fun dismissError() = updateState { copy(error = null) }
+    override fun dismissError() = updateState { log.i { "Clearing error" }; copy(error = null) }
 }
 
 internal data class DownloadDataState(

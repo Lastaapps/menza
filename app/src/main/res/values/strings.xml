@@ -223,7 +223,8 @@
     <string name="ui_top_bar_action_privacy">Privacy policy</string>
     <string name="ui_top_bar_action_license">License notices</string>
     <string name="ui_top_bar_action_osturak" translatable="false">Ošťurák</string>
-    <string name="ui_top_bar_action_web">Website</string>
+    <string name="ui_top_bar_action_web_agata">Website Agáta</string>
+    <string name="ui_top_bar_action_web_buffet">Website buffets</string>
 
     <string name="menza_none_selected">No menza selected</string>
     <string name="menza_none_osturak">Find out about ošťurák</string>
@@ -251,4 +252,5 @@
 
     <string name="button_continue">Continue</string>
     <string name="button_done">Done</string>
+    <string name="button_edit">Edit</string>
 </resources>

@@ -24,9 +24,9 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import kotlinx.coroutines.flow.StateFlow
 
-private val menzaModeKey = intPreferencesKey("menzaMode")
-private val menzaPreferredKey = intPreferencesKey("menzaPreferred")
-private val menzaLatestKey = intPreferencesKey("menzaLatest")
+private val menzaModeKey = intPreferencesKey("menza_mode")
+private val menzaPreferredKey = intPreferencesKey("menza_preferred")
+private val menzaLatestKey = intPreferencesKey("menza_latest")
 
 internal val SettingsStore.initialMenza: StateFlow<InitialMenza>
     get() = data.mapState { pref ->

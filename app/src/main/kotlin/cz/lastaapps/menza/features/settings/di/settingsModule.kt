@@ -39,7 +39,8 @@ import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetIniti
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetInitialMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetLatestMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetPreferredMenzaUC
-import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.GetOrderMenzaListUC
+import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.GetOrderedMenzaListUC
+import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.GetOrderedVisibleMenzaListUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.IsMenzaOrderFromTopUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.SetMenzaOrderFromTopUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.ToggleMenzaVisibilityUC
@@ -90,7 +91,8 @@ val settingsModule = module {
     singleOf(::OrderRepoImpl) bind OrderRepo::class
     single { OrderSettings.create(get()) }
     factoryOf(::OrderDataSourceImpl) bind OrderDataSource::class
-    factoryOf(::GetOrderMenzaListUC)
+    factoryOf(::GetOrderedMenzaListUC)
+    factoryOf(::GetOrderedVisibleMenzaListUC)
     factoryOf(::ToggleMenzaVisibilityUC)
     factoryOf(::UpdateMenzaOrderUC)
     factoryOf(::IsMenzaOrderFromTopUC)

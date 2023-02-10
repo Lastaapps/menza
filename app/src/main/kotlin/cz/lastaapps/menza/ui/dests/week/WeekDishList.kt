@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -45,16 +45,16 @@ import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.main.ui.components.MenzaNotSelected
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
-import cz.lastaapps.menza.ui.layout.menza.MenzaNotSelected
 import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

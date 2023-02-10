@@ -17,34 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase.menzaorder
+package cz.lastaapps.menza.features.main.domain.usecase
 
 import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.domain.OrderRepo
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.channelFlow
+import cz.lastaapps.menza.features.main.domain.SelectedMenzaRepo
+import kotlinx.coroutines.flow.combine
 
-class GetOrderedMenzaListUC internal constructor(
+class GetSelectedMenzaUC internal constructor(
     context: UCContext,
+    private val repo: SelectedMenzaRepo,
     private val getMenzaList: GetMenzaListUC,
-    private val orderRepo: OrderRepo,
 ) : UseCase(context) {
     suspend operator fun invoke() = launch {
-        channelFlow {
-            getMenzaList().collect { list ->
-                orderRepo.initFromIfNeeded(list.map { menza ->
-                    menza.type to (menza.supportsDaily || menza.supportsWeekly)
-                })
-
-                orderRepo.getOrderFor(list.map { it.type }).collect { ordered ->
-                    ordered.map { (type, order) ->
-                        list.first { menza -> menza.type == type } to order
-                    }
-                        .toImmutableList()
-                        .let { send(it) }
-                }
+        combine(
+            repo.getSelectedMenza(),
+            getMenzaList()
+        ) { selected, all ->
+            if (selected == null) {
+                null
+            } else {
+                all.firstOrNull { it.type == selected }
             }
         }
     }
