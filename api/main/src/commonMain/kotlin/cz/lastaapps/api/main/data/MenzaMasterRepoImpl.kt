@@ -23,15 +23,14 @@ import arrow.core.Either
 import arrow.core.fold
 import arrow.core.right
 import arrow.fx.coroutines.parMap
-import arrow.typeclasses.Monoid
 import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.util.FlowListMonoid
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -42,15 +41,6 @@ import org.koin.core.component.KoinComponent
 internal class MenzaMasterRepoImpl(
     private val sources: List<MenzaRepo>,
 ) : MenzaRepo, KoinComponent {
-
-    private val monoid = object : Monoid<Flow<PersistentList<Menza>>> {
-        override fun append(
-            a: Flow<PersistentList<Menza>>,
-            b: Flow<PersistentList<Menza>>,
-        ): Flow<PersistentList<Menza>> = combine(a, b) { x, y -> x.addAll(y) }
-
-        override fun empty(): Flow<PersistentList<Menza>> = flow { emit(persistentListOf()) }
-    }
 
     override val isReady: Flow<Boolean> =
         sources.map { repo ->
@@ -64,7 +54,8 @@ internal class MenzaMasterRepoImpl(
             .map { repo ->
                 repo.getData().map { it.toPersistentList() }
             }
-            .fold(monoid)
+            .fold(FlowListMonoid())
+            .map { it.toImmutableList() }
 
     override suspend fun sync(isForced: Boolean): SyncOutcome =
         sources.parMap {

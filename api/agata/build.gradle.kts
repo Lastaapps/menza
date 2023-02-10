@@ -35,8 +35,7 @@ dependencies {
     commonMainImplementation(libs.ktor.client.logging)
     commonMainImplementation(libs.ktor.client.serialization)
 
-    commonMainImplementation(libs.russhwolf.settins.core)
-    commonMainImplementation(libs.russhwolf.settins.coroutines)
+    commonMainImplementation(libs.bundles.russhwolf.settings)
 }
 
 sqldelight {

@@ -25,7 +25,6 @@ import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.android.common.KotlinBaseConvention
 import cz.lastaapps.plugin.android.config.configureKotlinAndroid
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
@@ -76,8 +75,6 @@ class AndroidAppConvention : BasePlugin({
 
     }
 
-    apply<KotlinBaseConvention>()
-    apply<AndroidKoinConvention>()
     apply<AndroidBaseConvention>()
 
     dependencies {

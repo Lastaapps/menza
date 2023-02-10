@@ -21,6 +21,9 @@ package cz.lastaapps.core.util
 
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.coroutines.FlowSettings
+import com.russhwolf.settings.coroutines.SuspendSettings
 import com.russhwolf.settings.coroutines.getStringOrNullFlow
 import com.russhwolf.settings.set
 import kotlinx.coroutines.flow.map
@@ -28,19 +31,19 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
 
-inline fun <reified T> ObservableSettings.serializeValue(
+inline fun <reified T> Settings.serializeValue(
     serializer: KSerializer<T>,
     key: String,
     value: T,
 ) = set(key, Json.encodeToString(serializer, value))
 
-inline fun <reified T> ObservableSettings.deserializeValue(
+inline fun <reified T> Settings.deserializeValue(
     serializer: KSerializer<T>,
     key: String,
     default: T,
 ) = deserializeValueOrNull(serializer, key) ?: default
 
-inline fun <reified T> ObservableSettings.deserializeValueOrNull(
+inline fun <reified T> Settings.deserializeValueOrNull(
     serializer: KSerializer<T>,
     key: String,
 ) = getStringOrNull(key)?.let {
@@ -55,6 +58,45 @@ inline fun <reified T> ObservableSettings.deserializeValueFlow(
 
 @OptIn(ExperimentalSettingsApi::class)
 inline fun <reified T> ObservableSettings.deserializeValueOrNullFlow(
+    serializer: KSerializer<T>,
+    key: String,
+) = getStringOrNullFlow(key).map {
+    it?.let {
+        Json.decodeFromString(serializer, it)
+    }
+}
+
+@OptIn(ExperimentalSettingsApi::class)
+suspend inline fun <reified T> SuspendSettings.serializeValue(
+    serializer: KSerializer<T>,
+    key: String,
+    value: T,
+) = putString(key, Json.encodeToString(serializer, value))
+
+@OptIn(ExperimentalSettingsApi::class)
+suspend inline fun <reified T> SuspendSettings.deserializeValue(
+    serializer: KSerializer<T>,
+    key: String,
+    default: T,
+) = deserializeValueOrNull(serializer, key) ?: default
+
+@OptIn(ExperimentalSettingsApi::class)
+suspend inline fun <reified T> SuspendSettings.deserializeValueOrNull(
+    serializer: KSerializer<T>,
+    key: String,
+) = getStringOrNull(key)?.let {
+    Json.decodeFromString(serializer, it)
+}
+
+@OptIn(ExperimentalSettingsApi::class)
+inline fun <reified T> FlowSettings.deserializeValueFlow(
+    serializer: KSerializer<T>,
+    key: String,
+    default: T,
+) = deserializeValueOrNullFlow(serializer, key).map { it ?: default }
+
+@OptIn(ExperimentalSettingsApi::class)
+inline fun <reified T> FlowSettings.deserializeValueOrNullFlow(
     serializer: KSerializer<T>,
     key: String,
 ) = getStringOrNullFlow(key).map {

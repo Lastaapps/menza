@@ -216,5 +216,12 @@
     <string name="license_detail_description">Popis</string>
     <string name="license_detail_no_license">Není dostupná žádná licence</string>
 
+    <string name="menza_order_title">Pořadí menz</string>
+    <string name="menza_order_button_align_top">Zarovnat nahoru</string>
+    <string name="menza_order_text_total">Celkem %s dostupných zařízení</string>
+    <string name="menza_order_button_hide_menza">Zobrazit menzu</string>
+    <string name="menza_order_button_show_menza">Skrýt menzu</string>
+
     <string name="button_continue">Pokračovat</string>
+    <string name="button_done">Hotovo</string>
 </resources>

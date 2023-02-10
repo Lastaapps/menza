@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,10 +20,11 @@
 package cz.lastaapps.menza.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.entity.menza.MenzaId
+import kotlin.math.abs
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlin.math.abs
 
 private val menzaColors = persistentListOf(
     Color(0xfff44333) to Color(0xffff795e),
@@ -47,6 +48,12 @@ private val menzaColors = persistentListOf(
 fun colorForMenza(menzaId: MenzaId): ImmutableList<Color> {
     //val hash = menza.name.hashCode()
     val hash = menzaId.id
+    return menzaColors[abs(hash % menzaColors.size)]
+        .let { persistentListOf(it.first, it.second) }
+}
+
+fun colorForMenza(menza: Menza): ImmutableList<Color> {
+    val hash = menza.type.hashCode()
     return menzaColors[abs(hash % menzaColors.size)]
         .let { persistentListOf(it.first, it.second) }
 }

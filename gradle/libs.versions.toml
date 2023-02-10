@@ -226,10 +226,10 @@ logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "lo
 logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
 qrgen = "com.github.kenglxn.QRGen:android:2.6.0"
 robolectric = "org.robolectric:robolectric:4.8"
-russhwolf-settins-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "russhwolf-settings" }
-russhwolf-settins-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "russhwolf-settings" }
-russhwolf-settins-datastore = { module = "com.russhwolf:multiplatform-settings-datastore", version.ref = "russhwolf-settings" }
-russhwolf-settins-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "russhwolf-settings" }
+russhwolf-settings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "russhwolf-settings" }
+russhwolf-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "russhwolf-settings" }
+russhwolf-settings-datastore = { module = "com.russhwolf:multiplatform-settings-datastore", version.ref = "russhwolf-settings" }
+russhwolf-settings-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "russhwolf-settings" }
 skrapeIt = "it.skrape:skrapeit:1.2.1"
 slf4j = "org.slf4j:slf4j-api:2.0.6"
 sqldelight-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -266,3 +266,43 @@ playServices = "com.google.gms.google-services:1.0.0"
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
 versionCatalogUpdate = "nl.littlerobots.version-catalog-update:0.7.0"
+
+[bundles]
+russhwolf-settings = [
+    "russhwolf-settings-core",
+    "russhwolf-settings-coroutines",
+    "russhwolf-settings-datastore",
+    "russhwolf-settings-serialization"
+]
+ktor-client = [
+    "ktor-client-auth",
+    "ktor-client-contentNegotiation",
+    "ktor-client-core",
+    "ktor-client-encoding",
+    "ktor-client-logging",
+    "ktor-client-serialization",
+]
+ktor-server = [
+    "ktor-server-auth",
+    "ktor-server-autoHeadResponse",
+    "ktor-server-caching",
+    "ktor-server-callLogging",
+    "ktor-server-compression",
+    "ktor-server-conditionalsHeaders",
+    "ktor-server-contentNegotiation",
+    "ktor-server-core",
+    "ktor-server-defaultHeaders",
+    "ktor-server-forwardedHeaders",
+    "ktor-server-httpRedirect",
+    "ktor-server-jsonSerialization",
+    "ktor-server-partialContent",
+    "ktor-server-sesstions",
+    "ktor-server-statusPages",
+    "ktor-server-unofficial-apiKeyAuth",
+]
+sqldelight = [
+    "sqldelight-android",
+    "sqldelight-coroutines",
+    "sqldelight-jvm",
+    "sqldelight-runtime",
+]

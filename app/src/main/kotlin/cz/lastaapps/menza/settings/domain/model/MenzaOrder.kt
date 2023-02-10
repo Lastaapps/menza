@@ -17,27 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-}
+package cz.lastaapps.menza.settings.domain.model
 
-android {
-    namespace = "cz.lastaapps.api.buffet"
-}
+data class MenzaOrder(
+    val order: Int,
+    val visible: Boolean,
+) : Comparable<MenzaOrder> {
+    override fun compareTo(other: MenzaOrder): Int =
+        visible.compareTo(other.visible).let { -1 * it }.takeUnless { it == 0 }
+            ?: order.compareTo(other.order)
 
-dependencies {
-    commonMainImplementation(projects.core)
-    commonMainImplementation(projects.api.core)
-
-    commonMainImplementation(libs.ktor.client.core)
-
-    commonMainImplementation(libs.bundles.russhwolf.settings)
-}
-
-sqldelight {
-    database("BuffetDatabase") {
-        packageName = "cz.lastaapps.api.buffet"
-        sourceFolders = listOf("sqldelight")
+    companion object {
+        val largest get() = MenzaOrder(Int.MAX_VALUE, false)
     }
 }

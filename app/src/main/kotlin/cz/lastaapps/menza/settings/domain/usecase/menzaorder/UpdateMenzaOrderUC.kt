@@ -17,27 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-}
+package cz.lastaapps.menza.settings.domain.usecase.menzaorder
 
-android {
-    namespace = "cz.lastaapps.api.buffet"
-}
+import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.settings.domain.OrderRepo
 
-dependencies {
-    commonMainImplementation(projects.core)
-    commonMainImplementation(projects.api.core)
-
-    commonMainImplementation(libs.ktor.client.core)
-
-    commonMainImplementation(libs.bundles.russhwolf.settings)
-}
-
-sqldelight {
-    database("BuffetDatabase") {
-        packageName = "cz.lastaapps.api.buffet"
-        sourceFolders = listOf("sqldelight")
+class UpdateMenzaOrderUC internal constructor(
+    context: UCContext,
+    private val repo: OrderRepo,
+) : UseCase(context) {
+    suspend operator fun invoke(list: List<Pair<Menza, Boolean>>) = launch {
+        repo.updateOrder(list.map { (menza, visible) ->
+            menza.type to visible
+        })
     }
 }

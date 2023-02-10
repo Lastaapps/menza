@@ -19,7 +19,12 @@
 
 package cz.lastaapps.menza.settings.di
 
+import cz.lastaapps.menza.settings.data.OrderRepoImpl
 import cz.lastaapps.menza.settings.data.SettingsStore
+import cz.lastaapps.menza.settings.data.datasource.OrderDataSource
+import cz.lastaapps.menza.settings.data.datasource.OrderDataSourceImpl
+import cz.lastaapps.menza.settings.data.datasource.OrderSettings
+import cz.lastaapps.menza.settings.domain.OrderRepo
 import cz.lastaapps.menza.settings.domain.usecase.GetDarkModeUC
 import cz.lastaapps.menza.settings.domain.usecase.GetImageSizeUC
 import cz.lastaapps.menza.settings.domain.usecase.GetImagesOnMeteredUC
@@ -34,16 +39,24 @@ import cz.lastaapps.menza.settings.domain.usecase.initialmenza.GetInitialMenzaUC
 import cz.lastaapps.menza.settings.domain.usecase.initialmenza.SetInitialMenzaUC
 import cz.lastaapps.menza.settings.domain.usecase.initialmenza.SetLatestMenzaUC
 import cz.lastaapps.menza.settings.domain.usecase.initialmenza.SetPreferredMenzaUC
+import cz.lastaapps.menza.settings.domain.usecase.menzaorder.GetOrderMenzaListUC
+import cz.lastaapps.menza.settings.domain.usecase.menzaorder.IsMenzaOrderFromTopUC
+import cz.lastaapps.menza.settings.domain.usecase.menzaorder.SetMenzaOrderFromTopUC
+import cz.lastaapps.menza.settings.domain.usecase.menzaorder.ToggleMenzaVisibilityUC
+import cz.lastaapps.menza.settings.domain.usecase.menzaorder.UpdateMenzaOrderUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.GetAppThemeUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.GetThemeListUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.IsDynamicThemeSupportedUC
 import cz.lastaapps.menza.settings.domain.usecase.theme.SetAppThemeUC
 import cz.lastaapps.menza.settings.ui.vm.AppThemeViewModel
+import cz.lastaapps.menza.settings.ui.vm.ReorderMenzaViewModel
 import cz.lastaapps.menza.starting.ui.vm.PriceTypeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val settingsModule = module {
@@ -71,4 +84,15 @@ val settingsModule = module {
     factoryOf(::SetLatestMenzaUC)
     factoryOf(::SetPreferredMenzaUC)
     factoryOf(::SetPriceTypeUC)
+
+    // Menza order
+    viewModelOf(::ReorderMenzaViewModel)
+    singleOf(::OrderRepoImpl) bind OrderRepo::class
+    single { OrderSettings.create(get()) }
+    factoryOf(::OrderDataSourceImpl) bind OrderDataSource::class
+    factoryOf(::GetOrderMenzaListUC)
+    factoryOf(::ToggleMenzaVisibilityUC)
+    factoryOf(::UpdateMenzaOrderUC)
+    factoryOf(::IsMenzaOrderFromTopUC)
+    factoryOf(::SetMenzaOrderFromTopUC)
 }

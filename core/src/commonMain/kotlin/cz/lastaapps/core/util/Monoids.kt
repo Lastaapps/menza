@@ -17,27 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
+package cz.lastaapps.core.util
+
+import arrow.typeclasses.Monoid
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+
+
+class FlowListMonoid<T> : Monoid<Flow<List<T>>> {
+    override fun append(
+        a: Flow<List<T>>,
+        b: Flow<List<T>>,
+    ): Flow<List<T>> = combine(a, b) { x, y -> (x as PersistentList<T>).addAll(y) }
+
+    override fun empty(): Flow<List<T>> = flow { emit(persistentListOf()) }
 }
 
-android {
-    namespace = "cz.lastaapps.api.buffet"
-}
-
-dependencies {
-    commonMainImplementation(projects.core)
-    commonMainImplementation(projects.api.core)
-
-    commonMainImplementation(libs.ktor.client.core)
-
-    commonMainImplementation(libs.bundles.russhwolf.settings)
-}
-
-sqldelight {
-    database("BuffetDatabase") {
-        packageName = "cz.lastaapps.api.buffet"
-        sourceFolders = listOf("sqldelight")
-    }
-}
+fun <T> persistentListFlow() = flow<PersistentList<T>> { emit(persistentListOf()) }

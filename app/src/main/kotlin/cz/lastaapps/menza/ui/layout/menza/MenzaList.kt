@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -61,14 +61,18 @@ fun MenzaList(
             mutableStateListOf<Menza>().also { list -> list.addAll(menzaListPermanent) }
         }
         val updatableMenzaList = rememberUpdatedState(newValue = menzaList)
-        val state = rememberDraggableLazyListState(lazyListState, onMove = { from, to ->
-            val list = updatableMenzaList.value
-            val tmp = list[from]
-            list[from] = list[to]
-            list[to] = tmp
-        }, onMoveFinished = {
-            menzaViewModel.saveNewOrder(updatableMenzaList.value)
-        })
+        val state = rememberDraggableLazyListState(
+            lazyListState,
+            onMove = { from, to ->
+                val list = updatableMenzaList.value
+                val tmp = list[from]
+                list[from] = list[to]
+                list[to] = tmp
+            },
+            onMoveFinished = {
+                menzaViewModel.saveNewOrder(updatableMenzaList.value)
+            },
+        )
 
         DraggableLazyColumn(
             modifier = modifier,

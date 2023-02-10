@@ -73,8 +73,9 @@ dependencies {
 
     implementation(libs.aboutLibraries.core)
 
-    implementation(libs.sqldelight.runtime)
-    implementation(libs.sqldelight.coroutines)
+    implementation(libs.bundles.sqldelight)
 
     implementation(libs.kotlinx.serializationJson)
+
+    implementation(libs.bundles.russhwolf.settings)
 }

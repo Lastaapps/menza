@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,7 +25,6 @@ import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.android.common.KotlinBaseConvention
 import cz.lastaapps.plugin.android.config.configureComposeCompiler
 import cz.lastaapps.plugin.android.config.configureKotlinAndroid
 import org.gradle.kotlin.dsl.apply
@@ -57,7 +56,5 @@ class AndroidLibraryConvention : BasePlugin({
         implementation(libs.androidx.compose.runtime)
     }
 
-    apply<KotlinBaseConvention>()
-    apply<AndroidKoinConvention>()
     apply<AndroidBaseConvention>()
 })

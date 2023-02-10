@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,7 +22,11 @@ package cz.lastaapps.menza.ui.components.draggablelazylist
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import kotlinx.coroutines.Job
 
@@ -31,20 +35,22 @@ fun rememberDraggableLazyListState(
     lazyListState: LazyListState = rememberLazyListState(),
     onMove: (Int, Int) -> Unit,
     onMoveFinished: () -> Unit,
-): DraggableLazyListState {
-    return remember {
+    reverse: Boolean = false,
+): DraggableLazyListState =
+    remember(lazyListState, reverse) {
         DraggableLazyListState(
             lazyListState = lazyListState,
             onMove = onMove,
-            onMoveFinished = onMoveFinished
+            onMoveFinished = onMoveFinished,
+            reverse = reverse,
         )
     }
-}
 
 class DraggableLazyListState(
     val lazyListState: LazyListState,
     private val onMove: (Int, Int) -> Unit,
     private val onMoveFinished: () -> Unit,
+    private val reverse: Boolean = false,
 ) {
     var draggedDistance by mutableStateOf(0f)
 
@@ -52,18 +58,20 @@ class DraggableLazyListState(
     var initiallyDraggedElement by mutableStateOf<LazyListItemInfo?>(null)
 
     var currentIndexOfDraggedItem by mutableStateOf<Int?>(null)
+    var lastIndexOfDraggedItem by mutableStateOf<Int?>(null)
 
     val initialOffsets: Pair<Int, Int>?
         get() = initiallyDraggedElement?.let { Pair(it.offset, it.offsetEnd) }
 
     val elementDisplacement: Float?
-        get() = currentIndexOfDraggedItem
-            ?.let { lazyListState.getVisibleItemInfoFor(absoluteIndex = it) }
+        get() = currentElement
             ?.let { item ->
                 (initiallyDraggedElement?.offset ?: 0f).toFloat() + draggedDistance - item.offset
+            }?.let {
+                if (reverse) -1 * it else it
             }
 
-    val currentElement: LazyListItemInfo?
+    private val currentElement: LazyListItemInfo?
         get() = currentIndexOfDraggedItem?.let {
             lazyListState.getVisibleItemInfoFor(absoluteIndex = it)
         }
@@ -71,10 +79,14 @@ class DraggableLazyListState(
     var overscrollJob by mutableStateOf<Job?>(null)
 
     fun onDragStart(offset: Offset) {
+        val relativeYOffset =
+            if (reverse) (lazyListState.layoutInfo.viewportEndOffset - offset.y) else offset.y
+
         lazyListState.layoutInfo.visibleItemsInfo
-            .firstOrNull { item -> offset.y.toInt() in item.offset..(item.offset + item.size) }
+            .firstOrNull { item -> relativeYOffset.toInt() in item.offset..(item.offset + item.size) }
             ?.also {
                 currentIndexOfDraggedItem = it.index
+                lastIndexOfDraggedItem = currentIndexOfDraggedItem
                 initiallyDraggedElement = it
             }
     }
@@ -92,7 +104,7 @@ class DraggableLazyListState(
     }
 
     fun onDrag(offset: Offset) {
-        draggedDistance += offset.y
+        draggedDistance += offset.y * if (reverse) -1 else 1
 
         initialOffsets?.let { (topOffset, bottomOffset) ->
             val startOffset = topOffset + draggedDistance
@@ -116,6 +128,7 @@ class DraggableLazyListState(
                             )
                         }
                         currentIndexOfDraggedItem = item.index
+                        lastIndexOfDraggedItem = currentIndexOfDraggedItem
                     }
             }
         }

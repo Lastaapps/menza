@@ -17,27 +17,24 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-}
+package cz.lastaapps.menza.settings.ui.nodes
 
-android {
-    namespace = "cz.lastaapps.api.buffet"
-}
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.settings.ui.screens.ReorderMenzaScreen
 
-dependencies {
-    commonMainImplementation(projects.core)
-    commonMainImplementation(projects.api.core)
-
-    commonMainImplementation(libs.ktor.client.core)
-
-    commonMainImplementation(libs.bundles.russhwolf.settings)
-}
-
-sqldelight {
-    database("BuffetDatabase") {
-        packageName = "cz.lastaapps.api.buffet"
-        sourceFolders = listOf("sqldelight")
+class ReorderMenzaNode(
+    buildContext: BuildContext,
+    private val onDone: () -> Unit,
+) : Node(buildContext) {
+    @Composable
+    override fun View(modifier: Modifier) {
+        ReorderMenzaScreen(
+            modifier = modifier.padding(),
+            onDone = onDone,
+        )
     }
 }

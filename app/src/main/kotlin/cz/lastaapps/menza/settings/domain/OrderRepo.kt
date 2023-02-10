@@ -17,27 +17,27 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-}
+package cz.lastaapps.menza.settings.domain
 
-android {
-    namespace = "cz.lastaapps.api.buffet"
-}
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.menza.settings.domain.model.MenzaOrder
+import kotlinx.coroutines.flow.Flow
 
-dependencies {
-    commonMainImplementation(projects.core)
-    commonMainImplementation(projects.api.core)
+interface OrderRepo {
+    /**
+     * Adds unknown systems at the end of the visible spectrum if they are considered important
+     */
+    suspend fun initFromIfNeeded(list: List<Pair<MenzaType, Boolean>>)
 
-    commonMainImplementation(libs.ktor.client.core)
+    suspend fun toggleVisible(menza: MenzaType)
 
-    commonMainImplementation(libs.bundles.russhwolf.settings)
-}
+    suspend fun switch(m1: MenzaType, m2: MenzaType)
 
-sqldelight {
-    database("BuffetDatabase") {
-        packageName = "cz.lastaapps.api.buffet"
-        sourceFolders = listOf("sqldelight")
-    }
+    suspend fun updateOrder(list: List<Pair<MenzaType, Boolean>>)
+
+    fun getOrderFor(list: List<MenzaType>): Flow<List<Pair<MenzaType, MenzaOrder>>>
+
+    fun isFromTop(): Flow<Boolean>
+
+    suspend fun setFromTop(fromTop: Boolean)
 }

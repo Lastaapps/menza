@@ -35,9 +35,11 @@ import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.next
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightSlider
 import cz.lastaapps.menza.settings.ui.nodes.ChooseAppThemeNode
+import cz.lastaapps.menza.settings.ui.nodes.ReorderMenzaNode
 import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.ChoosePrice
 import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.ChooseTheme
 import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.DownloadData
+import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.OrderMenzaList
 import cz.lastaapps.menza.starting.ui.navigation.StartingNavType.PolicyBackground
 import cz.lastaapps.menza.starting.ui.node.DownloadNode
 import cz.lastaapps.menza.starting.ui.node.PriceTypeNode
@@ -62,7 +64,9 @@ class StartingNode(
             PolicyBackground -> node(buildContext) {}
             DownloadData -> DownloadNode(buildContext, onNext)
             ChooseTheme -> ChooseAppThemeNode(buildContext, onNext)
-            ChoosePrice -> PriceTypeNode(buildContext, ::finish)
+            ChoosePrice -> PriceTypeNode(buildContext, onNext)
+            OrderMenzaList -> ReorderMenzaNode(buildContext, onNext)
+            // TODO all set screen
         }
     }
 

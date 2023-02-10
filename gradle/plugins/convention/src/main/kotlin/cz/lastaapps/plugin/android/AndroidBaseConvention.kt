@@ -22,6 +22,7 @@ package cz.lastaapps.plugin.android
 import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.android.common.KotlinBaseConvention
 import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
 import cz.lastaapps.plugin.common.JavaConvention
@@ -31,6 +32,8 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidBaseConvention : BasePlugin({
 
     apply<JavaConvention>()
+    apply<KotlinBaseConvention>()
+    apply<AndroidKoinConvention>()
     apply<DetektConvention>()
     apply<ArrowKtConvention>()
 

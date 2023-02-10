@@ -31,8 +31,6 @@ class GetInfoUC(
     context: UCContext,
 ) : UseCase(context), KoinComponent {
     suspend operator fun invoke(menza: Menza) = launch {
-        get<InfoRepo> { parametersOf(menza.type) }
-            .also { println(it) }
-            .getData()
+        get<InfoRepo> { parametersOf(menza.type) }.getData()
     }
 }

@@ -23,6 +23,8 @@ import org.koin.core.qualifier.named
 
 // All the types must have unique names, or the DI will break
 sealed interface MenzaType {
+    val id: String
+
     companion object {
         val allNamed = listOf(
             named<Agata.Strahov>(),
@@ -33,12 +35,22 @@ sealed interface MenzaType {
     }
 
     sealed interface Agata : MenzaType {
-        data class Subsystem(val subsystemId: Int) : Agata
-        object Strahov : Agata
+        data class Subsystem(val subsystemId: Int) : Agata {
+            override val id: String = "agata_subsystem_$subsystemId"
+        }
+
+        object Strahov : Agata {
+            override val id: String = "agata_strahov"
+        }
     }
 
     sealed interface Buffet : MenzaType {
-        object FS : Buffet
-        object FEL : Buffet
+        object FS : Buffet {
+            override val id: String = "buffet_fs"
+        }
+
+        object FEL : Buffet {
+            override val id: String = "buffet_fel"
+        }
     }
 }

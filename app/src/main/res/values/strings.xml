@@ -239,5 +239,12 @@
     <string name="license_detail_description">Description</string>
     <string name="license_detail_no_license">No license available</string>
 
+    <string name="menza_order_title">Menza Order</string>
+    <string name="menza_order_button_align_top">Align to the top</string>
+    <string name="menza_order_text_total">Total of %s services</string>
+    <string name="menza_order_button_hide_menza">Hide menza</string>
+    <string name="menza_order_button_show_menza">Show menza</string>
+
     <string name="button_continue">Continue</string>
+    <string name="button_done">Done</string>
 </resources>

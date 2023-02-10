@@ -19,10 +19,12 @@
 
 package cz.lastaapps.plugin.android.common
 
+import cz.lastaapps.extensions.alias
 import cz.lastaapps.extensions.android
 import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.java
 import cz.lastaapps.extensions.libs
+import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.api.JavaVersion
 import org.gradle.kotlin.dsl.apply
@@ -31,6 +33,10 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class KotlinBaseConvention : BasePlugin({
+
+    pluginManager {
+        alias(libs.plugins.kotlin.serialization)
+    }
 
     apply<CoroutinesConvention>()
 
