@@ -19,8 +19,8 @@
 
 package cz.lastaapps.menza.features.main.ui.navigation
 
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue.Closed
 import androidx.compose.material3.DrawerValue.Open
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +28,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,7 +43,8 @@ import com.bumble.appyx.navmodel.spotlight.Spotlight
 import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.activate
 import cz.lastaapps.core.ui.vm.HandleAppear
-import cz.lastaapps.menza.features.main.ui.screen.MenzaSelectionScreen
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.DrawerContent
+import cz.lastaapps.menza.features.main.ui.node.DrawerNode
 import cz.lastaapps.menza.features.main.ui.vm.MainViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -51,14 +53,23 @@ import org.koin.androidx.compose.koinViewModel
 class MainNode(
     buildContext: BuildContext,
     private val spotlight: Spotlight<MainNavType> = Spotlight(
-        items = MainNavType.allTypes,
+        items = MainNavType.allMainTypes,
         // backPressHandler = TODO(),
         savedStateMap = buildContext.savedStateMap,
     ),
 ) : ParentNode<MainNavType>(spotlight, buildContext) {
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    private var currentDrawerState: DrawerState? = null
+
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun resolve(navTarget: MainNavType, buildContext: BuildContext): Node =
-        node(buildContext) {
-            Text(text = navTarget.toString())
+        when (navTarget) {
+            DrawerContent -> DrawerNode(buildContext, ::currentDrawerState)
+            else ->
+                node(buildContext) {
+                    Text(text = navTarget.toString())
+                }
         }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -71,6 +82,10 @@ class MainNode(
 
         val drawerInitial = if (state.selectedMenza == null) Open else Closed
         val drawerState = rememberDrawerState(drawerInitial)
+        LaunchedEffect(drawerState) {
+            currentDrawerState = drawerState
+        }
+
         val hostState = remember { SnackbarHostState() }
         val scope = rememberCoroutineScope()
 
@@ -91,22 +106,11 @@ class MainNode(
                 }
             },
             drawerContent = {
-                MenzaSelectionScreen(
-                    onEdit = {},
-                    onMenzaSelected = {
-                        scope.launch {
-                            when (drawerState.targetValue) {
-                                Closed -> Open
-                                Open -> Closed
-                            }.let { drawerState.animateTo(it, spring()) }
-                        }
-                    },
-                    modifier = Modifier.fillMaxSize(),
-                )
+                PermanentChild(navTarget = DrawerContent)
             },
             content = {
                 Children(
-                    navModel = navModel,
+                    navModel = spotlight,
                     modifier = Modifier.fillMaxSize(),
                 )
             },

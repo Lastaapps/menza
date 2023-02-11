@@ -85,7 +85,8 @@ internal class OrderRepoImpl(
             .fold(persistentListFlow<MenzaOrder>()) { acu, item ->
                 combine(acu, item) { a, i -> a.add(i) }
             }
-            .debounce(42.milliseconds) // to handle data store updates
+            // TODO add better transaction processing
+            .debounce(42.milliseconds)
             .map { data ->
                 data.zip(list) { o, m -> m to o }
             }.map { data ->

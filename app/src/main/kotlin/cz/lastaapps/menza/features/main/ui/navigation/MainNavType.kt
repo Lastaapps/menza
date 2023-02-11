@@ -24,7 +24,7 @@ import kotlinx.parcelize.Parcelize
 
 sealed interface MainNavType : Parcelable {
     companion object {
-        val allTypes = listOf(
+        val allMainTypes = listOf(
             Today,
             Week,
             Info,
@@ -53,4 +53,7 @@ sealed interface MainNavType : Parcelable {
 
     @Parcelize
     object LicenseNotices : MainNavType
+
+    @Parcelize
+    object DrawerContent : MainNavType
 }
