@@ -23,8 +23,7 @@ import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.data.SettingsStore
 import cz.lastaapps.menza.features.settings.data.initialMenza
-import cz.lastaapps.menza.features.settings.data.latestMenza
-import cz.lastaapps.menza.features.settings.data.preferredMenza
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza.Ask
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza.Remember
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza.Specific
@@ -33,12 +32,13 @@ import kotlinx.coroutines.flow.combine
 class GetInitialMenzaUC internal constructor(
     context: UCContext,
     private val store: SettingsStore,
+    private val repo: MainSettingsRepo,
 ) : UseCase(context) {
     suspend operator fun invoke() = launch {
         combine(
             store.initialMenza,
-            store.preferredMenza,
-            store.latestMenza,
+            repo.getPreferredMenza(),
+            repo.getLatestMenza(),
         ) { mode, preferred, latest ->
             when (mode) {
                 Ask -> null

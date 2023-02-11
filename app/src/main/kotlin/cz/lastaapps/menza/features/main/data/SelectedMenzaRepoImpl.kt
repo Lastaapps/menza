@@ -22,15 +22,15 @@ package cz.lastaapps.menza.features.main.data
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.menza.features.main.domain.SelectedMenzaRepo
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaUC
-import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetInitialMenzaUC
+import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetLatestMenzaUC
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 
 internal class SelectedMenzaRepoImpl(
-    // TODO get initial menza
     private val getInitialMenza: GetInitialMenzaUC,
-    private val setInitialMenza: SetInitialMenzaUC,
+    private val setLatestMenza: SetLatestMenzaUC,
 ) : SelectedMenzaRepo {
 
     private var isReady = false
@@ -39,15 +39,15 @@ internal class SelectedMenzaRepoImpl(
     override suspend fun getSelectedMenza(): Flow<MenzaType?> {
         if (isReady) {
             isReady = true
-//             getInitialMenza().first().let { initial ->
-//                 selected.update {initial}
-//             }
+            getInitialMenza().first().let { initial ->
+                selected.update { initial }
+            }
         }
         return selected
     }
 
     override suspend fun selectMenza(menza: MenzaType?) {
-//        setInitialMenza(menza)
+        menza?.let { setLatestMenza(menza) }
         selected.update { menza }
     }
 }

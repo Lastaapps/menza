@@ -17,18 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase.initialmenza
+package cz.lastaapps.menza.features.settings.data
 
 import cz.lastaapps.api.core.domain.model.MenzaType
-import cz.lastaapps.core.domain.UCContext
-import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
+import kotlinx.coroutines.flow.Flow
 
-class SetPreferredMenzaUC internal constructor(
-    context: UCContext,
-    private val repo: MainSettingsRepo,
-) : UseCase(context) {
-    suspend operator fun invoke(menza: MenzaType) = launch {
-        repo.storeLatestMenza(menza)
-    }
+internal class MainSettingsRepoImpl(
+    private val initDataSource: InitMenzaDataSource,
+) : MainSettingsRepo {
+    override suspend fun storeLatestMenza(type: MenzaType) =
+        initDataSource.storeLatestMenza(type)
+
+    override fun getLatestMenza(): Flow<MenzaType?> =
+        initDataSource.getLatestMenza()
+
+    override suspend fun storePreferredMenza(type: MenzaType) =
+        initDataSource.storePreferredMenza(type)
+
+    override fun getPreferredMenza(): Flow<MenzaType?> =
+        initDataSource.getPreferredMenza()
 }

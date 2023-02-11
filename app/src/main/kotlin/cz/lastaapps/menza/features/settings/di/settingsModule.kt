@@ -19,11 +19,16 @@
 
 package cz.lastaapps.menza.features.settings.di
 
+import cz.lastaapps.menza.features.settings.data.MainSettingsRepoImpl
 import cz.lastaapps.menza.features.settings.data.OrderRepoImpl
 import cz.lastaapps.menza.features.settings.data.SettingsStore
+import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
+import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl
+import cz.lastaapps.menza.features.settings.data.datasource.InitialSettings
 import cz.lastaapps.menza.features.settings.data.datasource.OrderDataSource
 import cz.lastaapps.menza.features.settings.data.datasource.OrderDataSourceImpl
 import cz.lastaapps.menza.features.settings.data.datasource.OrderSettings
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDarkModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageSizeUC
@@ -62,6 +67,11 @@ import org.koin.dsl.module
 
 val settingsModule = module {
     single { SettingsStore(get(), CoroutineScope(Dispatchers.IO)) }
+
+    single { InitialSettings.create(get()) }
+    factoryOf(::InitMenzaDataSourceImpl) bind InitMenzaDataSource::class
+
+    singleOf(::MainSettingsRepoImpl) bind MainSettingsRepo::class
 
     viewModelOf(::AppThemeViewModel)
     viewModelOf(::PriceTypeViewModel)
