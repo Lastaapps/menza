@@ -21,7 +21,6 @@ package cz.lastaapps.menza.features.settings.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,8 +32,6 @@ import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.data.initialMenza
-import cz.lastaapps.menza.features.settings.data.preferredMenza
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
@@ -50,8 +47,8 @@ fun InitMenzaUI(
     var initExpanded by rememberSaveable { mutableStateOf(false) }
     var preferredExpanded by rememberSaveable { mutableStateOf(false) }
 
-    val mode by settingsViewModel.sett.initialMenza.collectAsState()
-    val menzaId by settingsViewModel.sett.preferredMenza.collectAsState()
+//    val mode by settingsViewModel.sett.initialMenza.collectAsState()
+//    val menzaId by settingsViewModel.sett.preferredMenza.collectAsState()
     val menzaList by menzaViewModel.data.collectAsState()
 
     Column(
@@ -59,24 +56,24 @@ fun InitMenzaUI(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        InitMenzaRow(
-            expanded = initExpanded,
-            onExpanded = { initExpanded = it },
-            mode = mode,
-            onMode = { settingsViewModel.setInitMenza(it) },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        if (mode == InitialMenza.Specific) {
-            PreferredMenza(
-                expanded = preferredExpanded,
-                onExpanded = { preferredExpanded = it },
-                menza = menzaId,
-                onMenza = { settingsViewModel.setPreferredMenza(it) },
-                menzaList = menzaList,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+//        InitMenzaRow(
+//            expanded = initExpanded,
+//            onExpanded = { initExpanded = it },
+//            mode = mode,
+//            onMode = { settingsViewModel.setInitMenza(it) },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//
+//        if (mode == InitialMenza.Specific) {
+//            PreferredMenza(
+//                expanded = preferredExpanded,
+//                onExpanded = { preferredExpanded = it },
+//                menza = menzaId,
+//                onMenza = { settingsViewModel.setPreferredMenza(it) },
+//                menzaList = menzaList,
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//        }
     }
 }
 

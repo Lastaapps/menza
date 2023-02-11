@@ -31,8 +31,6 @@ import cz.lastaapps.menza.features.settings.data.setDarkMode
 import cz.lastaapps.menza.features.settings.data.setImageSize
 import cz.lastaapps.menza.features.settings.data.setImagesOnMetered
 import cz.lastaapps.menza.features.settings.data.setInitialMenza
-import cz.lastaapps.menza.features.settings.data.setLatestMenza
-import cz.lastaapps.menza.features.settings.data.setPreferredMenza
 import cz.lastaapps.menza.features.settings.data.setPriceType
 import cz.lastaapps.menza.features.settings.data.setSettingsEverOpened
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
@@ -88,13 +86,13 @@ class SettingsViewModel constructor(
 
     fun setPreferredMenza(menzaId: MenzaId) {
         viewModelScope.launch {
-            sett.setPreferredMenza(menzaId)
+//            sett.setPreferredMenza(menzaId)
         }
     }
 
     fun setLatestMenza(menzaId: MenzaId) {
         viewModelScope.launch {
-            sett.setLatestMenza(menzaId)
+//            sett.setLatestMenza(menzaId)
         }
     }
 

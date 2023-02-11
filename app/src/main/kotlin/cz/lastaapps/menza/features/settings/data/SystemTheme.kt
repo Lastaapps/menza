@@ -21,12 +21,13 @@ package cz.lastaapps.menza.features.settings.data
 
 import androidx.datastore.preferences.core.intPreferencesKey
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 private val appThemeKey = intPreferencesKey("appTheme")
 
-internal val SettingsStore.appTheme: StateFlow<AppThemeType?>
-    get() = data.mapState {
+internal val SettingsStore.appTheme: Flow<AppThemeType?>
+    get() = data.map {
         val id = it[appThemeKey]
         AppThemeType.values().firstOrNull { type -> type.id == id }
     }

@@ -46,7 +46,7 @@ private const val imageSizeMax = 3f
 
 @Composable
 fun ImageSizeSetting(settingsViewModel: SettingsViewModel, modifier: Modifier = Modifier) {
-    val savedProgress by settingsViewModel.sett.imageSize.collectAsState()
+    val savedProgress by settingsViewModel.sett.imageSize.collectAsState(0f)
     var progress by remember(savedProgress) { mutableStateOf(savedProgress) }
 
     Column(modifier) {

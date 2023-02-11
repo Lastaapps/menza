@@ -24,7 +24,6 @@ import androidx.lifecycle.viewModelScope
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.menza.features.settings.data.SettingsStore
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.lighthousegames.logging.logging
 
@@ -44,10 +43,6 @@ class RootViewModel constructor(
         viewModelScope.launch {
             //open database
             database.allergenQueries.rowNumber()
-
-            //cache settings
-            sett.isReady.first { it }
-            log.i { "Settings ready" }
 
             //hide splashscreen
             isReady.emit(true)

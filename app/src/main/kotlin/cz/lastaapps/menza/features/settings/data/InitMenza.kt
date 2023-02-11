@@ -20,16 +20,14 @@
 package cz.lastaapps.menza.features.settings.data
 
 import androidx.datastore.preferences.core.intPreferencesKey
-import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 private val menzaModeKey = intPreferencesKey("menza_mode")
-private val menzaPreferredKey = intPreferencesKey("menza_preferred")
-private val menzaLatestKey = intPreferencesKey("menza_latest")
 
-internal val SettingsStore.initialMenza: StateFlow<InitialMenza>
-    get() = data.mapState { pref ->
+internal val SettingsStore.initialMenza: Flow<InitialMenza>
+    get() = data.map { pref ->
         when (pref[menzaModeKey] ?: 0) {
             1 -> InitialMenza.Remember
             2 -> InitialMenza.Specific
@@ -42,24 +40,3 @@ internal suspend fun SettingsStore.setInitialMenza(mode: InitialMenza) {
         pref[menzaModeKey] = mode.id
     }
 }
-
-
-internal val SettingsStore.preferredMenza: StateFlow<MenzaId?>
-    get() = data.mapState { pref -> pref[menzaPreferredKey]?.let { MenzaId(it) } }
-
-internal suspend fun SettingsStore.setPreferredMenza(menzaId: MenzaId) {
-    edit { pref ->
-        pref[menzaPreferredKey] = menzaId.id
-    }
-}
-
-
-internal val SettingsStore.latestMenza: StateFlow<MenzaId?>
-    get() = data.mapState { pref -> pref[menzaLatestKey]?.let { MenzaId(it) } }
-
-internal suspend fun SettingsStore.setLatestMenza(menzaId: MenzaId) {
-    edit { pref ->
-        pref[menzaLatestKey] = menzaId.id
-    }
-}
-

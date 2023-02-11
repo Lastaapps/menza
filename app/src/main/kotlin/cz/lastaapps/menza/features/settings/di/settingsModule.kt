@@ -22,6 +22,9 @@ package cz.lastaapps.menza.features.settings.di
 import cz.lastaapps.menza.features.settings.data.MainSettingsRepoImpl
 import cz.lastaapps.menza.features.settings.data.OrderRepoImpl
 import cz.lastaapps.menza.features.settings.data.SettingsStore
+import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSource
+import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSourceImpl
+import cz.lastaapps.menza.features.settings.data.datasource.GeneralSettings
 import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
 import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl
 import cz.lastaapps.menza.features.settings.data.datasource.InitialSettings
@@ -56,9 +59,6 @@ import cz.lastaapps.menza.features.settings.domain.usecase.theme.IsDynamicThemeS
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetAppThemeUC
 import cz.lastaapps.menza.features.settings.ui.vm.AppThemeViewModel
 import cz.lastaapps.menza.features.settings.ui.vm.ReorderMenzaViewModel
-import cz.lastaapps.menza.features.starting.ui.vm.PriceTypeViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -66,15 +66,15 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val settingsModule = module {
-    single { SettingsStore(get(), CoroutineScope(Dispatchers.IO)) }
+    single { SettingsStore(get()) }
 
     single { InitialSettings.create(get()) }
     factoryOf(::InitMenzaDataSourceImpl) bind InitMenzaDataSource::class
-
+    single { GeneralSettings.create(get()) }
+    factoryOf(::GeneralDataSourceImpl) bind GeneralDataSource::class
     singleOf(::MainSettingsRepoImpl) bind MainSettingsRepo::class
 
     viewModelOf(::AppThemeViewModel)
-    viewModelOf(::PriceTypeViewModel)
 
     factoryOf(::GetAppThemeUC)
     factoryOf(::GetThemeListUC)

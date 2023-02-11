@@ -22,6 +22,7 @@ package cz.lastaapps.menza.features.root.ui
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.menza.features.root.domain.usecase.IsAppSetUpUC
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDarkModeUC
@@ -31,7 +32,7 @@ import kotlinx.coroutines.flow.first
 
 internal class RootViewModel(
     context: VMContext,
-    private val isAppSetUp: cz.lastaapps.menza.features.root.domain.usecase.IsAppSetUpUC,
+    private val isAppSetUp: IsAppSetUpUC,
     private val getAppTheme: GetAppThemeUC,
     private val getDarkMode: GetDarkModeUC,
 ) : StateViewModel<RootState>(RootState(), context), Appearing {

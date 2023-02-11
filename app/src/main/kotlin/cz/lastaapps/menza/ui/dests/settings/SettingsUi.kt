@@ -46,7 +46,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,11 +63,6 @@ import androidx.compose.ui.unit.min
 import androidx.navigation.NavController
 import com.google.android.material.color.DynamicColors
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.data.appTheme
-import cz.lastaapps.menza.features.settings.data.imagesOnMetered
-import cz.lastaapps.menza.features.settings.data.priceType
-import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
-import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.ui.components.FullReloadDialog
 import cz.lastaapps.menza.features.settings.ui.components.ImageSizeSetting
 import cz.lastaapps.menza.features.settings.ui.components.InitMenzaUI
@@ -180,43 +174,43 @@ private fun isDynamicThemeSupported() = DynamicColors.isDynamicColorAvailable()
 @Composable
 private fun UseThemeSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifier) {
     if (isDynamicThemeSupported()) {
-        val mode by viewModel.sett.appTheme.collectAsState()
+//        val mode by viewModel.sett.appTheme.collectAsState()
 
-        SettingsSwitch(
-            title = stringResource(R.string.settings_switch_system_theme),
-            checked = mode == AppThemeType.System,
-            onClick = { viewModel.setUseSystemTheme(mode != AppThemeType.System) },
-            modifier = modifier,
-        )
+//        SettingsSwitch(
+//            title = stringResource(R.string.settings_switch_system_theme),
+//            checked = mode == AppThemeType.System,
+//            onClick = { viewModel.setUseSystemTheme(mode != AppThemeType.System) },
+//            modifier = modifier,
+//        )
     }
 }
 
 @Composable
 private fun PriceSettings(viewModel: SettingsViewModel, modifier: Modifier = Modifier) {
-    val mode by viewModel.sett.priceType.collectAsState()
-
-    SettingsSwitch(
-        title = stringResource(R.string.settings_switch_price),
-        checked = mode is PriceType.Discounted,
-        onClick = {
-            viewModel.setPriceType(
-                if (mode is PriceType.Discounted) PriceType.Normal else PriceType.Discounted
-            )
-        },
-        modifier = modifier,
-    )
+//    val mode by viewModel.sett.priceType.collectAsState()
+//
+//    SettingsSwitch(
+//        title = stringResource(R.string.settings_switch_price),
+//        checked = mode is PriceType.Discounted,
+//        onClick = {
+//            viewModel.setPriceType(
+//                if (mode is PriceType.Discounted) PriceType.Normal else PriceType.Discounted
+//            )
+//        },
+//        modifier = modifier,
+//    )
 }
 
 @Composable
 private fun ImagesOnMeteredSetting(viewModel: SettingsViewModel, modifier: Modifier = Modifier) {
-    val mode by viewModel.sett.imagesOnMetered.collectAsState()
-
-    SettingsSwitch(
-        title = stringResource(R.string.settings_switch_metered),
-        checked = mode,
-        onClick = { viewModel.setImagesOnMetered(!mode) },
-        modifier = modifier,
-    )
+//    val mode by viewModel.sett.imagesOnMetered.collectAsState()
+//
+//    SettingsSwitch(
+//        title = stringResource(R.string.settings_switch_metered),
+//        checked = mode,
+//        onClick = { viewModel.setImagesOnMetered(!mode) },
+//        modifier = modifier,
+//    )
 }
 
 @Composable

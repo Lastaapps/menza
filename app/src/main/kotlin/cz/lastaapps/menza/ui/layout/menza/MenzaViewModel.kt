@@ -27,11 +27,6 @@ import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.compareToLocal
 import cz.lastaapps.menza.features.settings.data.SettingsStore
-import cz.lastaapps.menza.features.settings.data.initialMenza
-import cz.lastaapps.menza.features.settings.data.latestMenza
-import cz.lastaapps.menza.features.settings.data.preferredMenza
-import cz.lastaapps.menza.features.settings.data.setLatestMenza
-import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import cz.lastaapps.storage.repo.MenzaRepo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -67,12 +62,12 @@ class MenzaViewModel constructor(
 
                 log.i { "Data ready" }
 
-                val menzaId = when (sett.initialMenza.first()) {
-                    InitialMenza.Ask -> null
-                    InitialMenza.Remember -> sett.latestMenza.first()
-                    InitialMenza.Specific -> sett.preferredMenza.first()
-                }
-                selectMenza(menzaId)
+//                val menzaId = when (sett.initialMenza.first()) {
+//                    InitialMenza.Ask -> null
+//                    InitialMenza.Remember -> sett.latestMenza.first()
+//                    InitialMenza.Specific -> sett.preferredMenza.first()
+//                }
+//                selectMenza(menzaId)
 
                 isReady.value = true
             } else {
@@ -109,7 +104,7 @@ class MenzaViewModel constructor(
     fun selectMenza(menzaId: MenzaId?) {
         mSelectedMenza.value = menzaId
         viewModelScope.launch {
-            menzaId?.let { sett.setLatestMenza(it) }
+//            menzaId?.let { sett.setLatestMenza(it) }
         }
     }
 

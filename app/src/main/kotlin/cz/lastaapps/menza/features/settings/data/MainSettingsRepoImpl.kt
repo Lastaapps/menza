@@ -20,22 +20,30 @@
 package cz.lastaapps.menza.features.settings.data
 
 import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSource
 import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import kotlinx.coroutines.flow.Flow
 
 internal class MainSettingsRepoImpl(
-    private val initDataSource: InitMenzaDataSource,
+    private val initial: InitMenzaDataSource,
+    private val general: GeneralDataSource,
 ) : MainSettingsRepo {
     override suspend fun storeLatestMenza(type: MenzaType) =
-        initDataSource.storeLatestMenza(type)
+        initial.storeLatestMenza(type)
 
     override fun getLatestMenza(): Flow<MenzaType?> =
-        initDataSource.getLatestMenza()
+        initial.getLatestMenza()
 
     override suspend fun storePreferredMenza(type: MenzaType) =
-        initDataSource.storePreferredMenza(type)
+        initial.storePreferredMenza(type)
 
     override fun getPreferredMenza(): Flow<MenzaType?> =
-        initDataSource.getPreferredMenza()
+        initial.getPreferredMenza()
+
+    override suspend fun storeAppSetupFinished() =
+        general.storeAppSetupFinished()
+
+    override fun isAppSetupFinished(): Flow<Boolean> =
+        general.isAppSetupFinished()
 }

@@ -21,11 +21,12 @@ package cz.lastaapps.menza.features.settings.data
 
 import androidx.datastore.preferences.core.intPreferencesKey
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 private val darkModeKey = intPreferencesKey("darkMode")
-internal val SettingsStore.darkMode: StateFlow<DarkMode>
-    get() = data.mapState { pref ->
+internal val SettingsStore.darkMode: Flow<DarkMode>
+    get() = data.map { pref ->
         val key = pref[darkModeKey]
         DarkMode.values().firstOrNull { it.id == key } ?: DarkMode.System
     }

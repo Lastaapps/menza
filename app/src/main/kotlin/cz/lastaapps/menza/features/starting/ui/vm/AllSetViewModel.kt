@@ -17,17 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.data
+package cz.lastaapps.menza.features.starting.ui.vm
 
-import androidx.datastore.preferences.core.floatPreferencesKey
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import cz.lastaapps.core.ui.vm.BaseViewModel
+import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.menza.features.root.domain.usecase.AppSetupFinishedUC
 
-private val imageSizeKey = floatPreferencesKey("imageSize")
-
-internal val SettingsStore.imageSize: Flow<Float>
-    get() = data.map { pref -> pref[imageSizeKey] ?: 1f }
-
-internal suspend fun SettingsStore.setImageSize(ration: Float) {
-    edit { pref -> pref[imageSizeKey] = ration }
+class AllSetViewModel(
+    context: VMContext,
+    private val appSetupFinished: AppSetupFinishedUC,
+) : BaseViewModel(context) {
+    fun onFinished() = launch {
+        appSetupFinished()
+    }
 }

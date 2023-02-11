@@ -23,14 +23,11 @@ import cz.lastaapps.api.main.di.apiModule
 import cz.lastaapps.core.di.coreModule
 import cz.lastaapps.crash.crashModule
 import cz.lastaapps.menza.features.main.di.mainModule
+import cz.lastaapps.menza.features.root.domain.usecase.AppSetupFinishedUC
 import cz.lastaapps.menza.features.root.domain.usecase.IsAppSetUpUC
 import cz.lastaapps.menza.features.root.ui.RootViewModel
 import cz.lastaapps.menza.features.settings.di.settingsModule
-import cz.lastaapps.menza.features.starting.data.PrivacyStore
-import cz.lastaapps.menza.features.starting.domain.usecase.CheckDataDownloadNeededUC
-import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
-import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
-import cz.lastaapps.menza.features.starting.ui.vm.PrivacyViewModel
+import cz.lastaapps.menza.features.starting.di.startingModule
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDataStore
 import cz.lastaapps.menza.ui.layout.menza.MenzaOrderDataStore
 import cz.lastaapps.scraping.scrapingModule
@@ -51,17 +48,14 @@ val appModule = module {
         storageDbModule,
         settingsModule,
         mainModule,
+        startingModule,
     )
 
-    single<PrivacyStore> { PrivacyStore(get()) }
     single<MenzaOrderDataStore> { MenzaOrderDataStore(get()) }
     single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
 
     factoryOf(::IsAppSetUpUC)
-    factoryOf(::CheckDataDownloadNeededUC)
-    factoryOf(::DownloadInitDataUC)
+    factoryOf(::AppSetupFinishedUC)
 
     viewModelOf(::RootViewModel)
-    viewModelOf(::DownloadViewModel)
-    viewModelOf(::PrivacyViewModel)
 }

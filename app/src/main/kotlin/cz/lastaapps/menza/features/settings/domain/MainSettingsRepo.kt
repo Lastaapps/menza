@@ -28,4 +28,7 @@ internal interface MainSettingsRepo {
 
     suspend fun storePreferredMenza(type: MenzaType)
     fun getPreferredMenza(): Flow<MenzaType?>
+
+    suspend fun storeAppSetupFinished()
+    fun isAppSetupFinished(): Flow<Boolean>
 }

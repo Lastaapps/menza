@@ -21,11 +21,12 @@ package cz.lastaapps.menza.features.settings.data
 
 import androidx.datastore.preferences.core.intPreferencesKey
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 private val priceTypeKey = intPreferencesKey("priceType")
-internal val SettingsStore.priceType: StateFlow<PriceType>
-    get() = data.mapState {
+internal val SettingsStore.priceType: Flow<PriceType>
+    get() = data.map {
         when (it[priceTypeKey]) {
             PriceType.Discounted.id -> PriceType.Discounted
             PriceType.Normal.id -> PriceType.Normal

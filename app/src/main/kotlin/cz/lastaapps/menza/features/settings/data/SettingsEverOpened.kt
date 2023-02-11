@@ -20,12 +20,13 @@
 package cz.lastaapps.menza.features.settings.data
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 private val settingsEverOpenedKey = booleanPreferencesKey("settingsEverOpened")
 
-internal val SettingsStore.settingsEverOpened: StateFlow<Boolean>
-    get() = data.mapState { it[settingsEverOpenedKey] ?: false }
+internal val SettingsStore.settingsEverOpened: Flow<Boolean>
+    get() = data.map { it[settingsEverOpenedKey] ?: false }
 
 internal suspend fun SettingsStore.setSettingsEverOpened(opened: Boolean) {
     edit { it[settingsEverOpenedKey] = opened }

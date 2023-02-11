@@ -61,9 +61,6 @@ import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.components.MenzaNotSelected
-import cz.lastaapps.menza.features.settings.data.imageSize
-import cz.lastaapps.menza.features.settings.data.imagesOnMetered
-import cz.lastaapps.menza.features.settings.data.priceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.getPrice
 import cz.lastaapps.menza.ui.CollectErrors
@@ -87,9 +84,9 @@ fun TodayDishList(
     modifier: Modifier = Modifier,
     scroll: LazyListState = rememberLazyListState(),
 ) {
-    val priceType by settingsViewModel.sett.priceType.collectAsState()
-    val downloadOnMetered by settingsViewModel.sett.imagesOnMetered.collectAsState()
-    val imageSizeRation by settingsViewModel.sett.imageSize.collectAsState()
+//    val priceType by settingsViewModel.sett.priceType.collectAsState()
+//    val downloadOnMetered by settingsViewModel.sett.imagesOnMetered.collectAsState()
+//    val imageSizeRation by settingsViewModel.sett.imageSize.collectAsState()
 
     Column(modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         if (menzaId == null) {
@@ -127,13 +124,13 @@ fun TodayDishList(
             ) {
                 Crossfade(targetState = data) { currentData ->
                     Surface(shape = MaterialTheme.shapes.large) {
-                        DishContent(
-                            menzaId, currentData, onDishSelected,
-                            priceType, downloadOnMetered, imageSizeRation, scroll,
-                            Modifier
-                                .padding(top = 4.dp) // so text is not cut off
-                                .fillMaxSize(),
-                        )
+//                        DishContent(
+//                            menzaId, currentData, onDishSelected,
+//                            priceType, downloadOnMetered, imageSizeRation, scroll,
+//                            Modifier
+//                                .padding(top = 4.dp) // so text is not cut off
+//                                .fillMaxSize(),
+//                        )
                     }
                 }
 

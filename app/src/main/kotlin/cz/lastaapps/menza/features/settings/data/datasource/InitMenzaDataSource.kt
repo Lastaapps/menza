@@ -31,10 +31,6 @@ import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
-import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl.Companion.MenzaStoreType.AgataStrahov
-import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl.Companion.MenzaStoreType.AgataSubsystem
-import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl.Companion.MenzaStoreType.BuffetFel
-import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl.Companion.MenzaStoreType.BuffetFs
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
@@ -45,7 +41,7 @@ import kotlinx.coroutines.flow.combine
 @JvmInline
 internal value class InitialSettings(val settings: FlowSettings) {
     companion object {
-        private val Context.store by preferencesDataStore("menza_main_store")
+        private val Context.store by preferencesDataStore("menza_initial_store")
 
         fun create(context: Context) = InitialSettings(DataStoreSettings(context.store))
     }
@@ -107,10 +103,10 @@ internal class InitMenzaDataSourceImpl(
             val type = MenzaStoreType.values()
                 .firstOrNull { it.name == name } ?: return@combine null
             when (type) {
-                AgataStrahov -> Strahov
-                AgataSubsystem -> Subsystem(id ?: return@combine null)
-                BuffetFel -> FEL
-                BuffetFs -> FS
+                MenzaStoreType.AgataStrahov -> Strahov
+                MenzaStoreType.AgataSubsystem -> Subsystem(id ?: return@combine null)
+                MenzaStoreType.BuffetFel -> FEL
+                MenzaStoreType.BuffetFs -> FS
             }
         }
 }

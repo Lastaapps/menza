@@ -35,16 +35,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.starting.ui.vm.AllSetViewModel
 import cz.lastaapps.menza.ui.components.AppIcon
 import cz.lastaapps.menza.ui.theme.MenzaPadding
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun AllSetScreen(
     onDone: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: AllSetViewModel = koinViewModel(),
 ) {
     AllSetContent(
-        onDone = onDone,
+        onDone = {
+            viewModel.onFinished()
+            onDone()
+        },
         modifier = modifier,
     )
 }

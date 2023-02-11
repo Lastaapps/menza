@@ -25,51 +25,20 @@ import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 
 class SettingsStore(
     appContext: Context,
-    private val coroutineScope: CoroutineScope,
 ) {
-
     companion object {
         private const val storeName = "settings"
         val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = storeName)
     }
 
-    val isReady = MutableStateFlow(false)
     private val store = appContext.dataStore
-
-    val data: StateFlow<Preferences>
-        get() = mData
-    private lateinit var mData: StateFlow<Preferences>
-
-    init {
-        coroutineScope.launch {
-            mData = store.data.stateIn(this)
-            isReady.emit(true)
-            store.edit { }
-        }
-    }
+    val data = store.data
 
     suspend fun edit(
         transform: suspend (MutablePreferences) -> Unit
     ): Preferences = store.edit(transform)
-
-    fun <T, R> StateFlow<T>.mapState(
-        transform: (T) -> R,
-    ) = mapState(coroutineScope, transform)
 }
-
-internal inline fun <T, R> StateFlow<T>.mapState(
-    scope: CoroutineScope,
-    crossinline transform: (T) -> R,
-): StateFlow<R> =
-    map(transform).stateIn(scope, SharingStarted.WhileSubscribed(), transform(value))

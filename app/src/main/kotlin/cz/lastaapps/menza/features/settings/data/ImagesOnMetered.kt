@@ -20,12 +20,13 @@
 package cz.lastaapps.menza.features.settings.data
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 private val imagesOnMeteredKey = booleanPreferencesKey("imagesMetered")
 
-internal val SettingsStore.imagesOnMetered: StateFlow<Boolean>
-    get() = data.mapState { pref -> pref[imagesOnMeteredKey] ?: true }
+internal val SettingsStore.imagesOnMetered: Flow<Boolean>
+    get() = data.map { pref -> pref[imagesOnMeteredKey] ?: true }
 
 internal suspend fun SettingsStore.setImagesOnMetered(enabled: Boolean) {
     edit { pref -> pref[imagesOnMeteredKey] = enabled }
