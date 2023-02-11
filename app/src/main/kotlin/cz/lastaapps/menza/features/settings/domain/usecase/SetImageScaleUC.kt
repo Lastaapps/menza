@@ -21,17 +21,16 @@ package cz.lastaapps.menza.features.settings.domain.usecase
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.data.SettingsStore
-import cz.lastaapps.menza.features.settings.data.setImageSize
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
-class SetImageSizeUC internal constructor(
+class SetImageScaleUC internal constructor(
     context: UCContext,
-    private val getImageSizeRange: GetImageSizeRangeUC,
-    private val store: SettingsStore,
+    private val getImageSizeRange: GetImageScaleRangeUC,
+    private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(size: Float) = launch {
+    suspend operator fun invoke(scale: Float) = launch {
         val range = getImageSizeRange()
-        val new = size.coerceIn(range)
-        store.setImageSize(new)
+        val new = scale.coerceIn(range)
+        repo.setImageScale(new)
     }
 }

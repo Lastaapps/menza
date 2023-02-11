@@ -26,7 +26,6 @@ import androidx.lifecycle.viewModelScope
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.compareToLocal
-import cz.lastaapps.menza.features.settings.data.SettingsStore
 import cz.lastaapps.storage.repo.MenzaRepo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -38,7 +37,6 @@ import org.lighthousegames.logging.logging
 class MenzaViewModel constructor(
     private val app: Application,
     private val menzaRepo: MenzaRepo,
-    private val sett: SettingsStore,
     private val menzaOrder: MenzaOrderDataStore,
 ) : ViewModel() {
 

@@ -38,13 +38,13 @@ internal val legacyModule = module {
 
     viewModel<InfoViewModel> { InfoViewModel(get(), get(), get(), get()) }
     viewModel<SettingsViewModel> {
-        SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get())
+        SettingsViewModel(get(), get(), get(), get(), get(), get(), get())
     }
-    viewModel<MenzaViewModel> { MenzaViewModel(get(), get(), get(), get()) }
+    viewModel<MenzaViewModel> { MenzaViewModel(get(), get(), get()) }
     viewModel<WhatsNewViewModel> { WhatsNewViewModel(get(), get()) }
     viewModel<CrashesViewModel> { CrashesViewModel(get()) }
     viewModel<AllergenViewModel> { AllergenViewModel(get()) }
     viewModel<TodayViewModel> { TodayViewModel(get(), get()) }
     viewModel<WeekViewModel> { WeekViewModel(get()) }
-    viewModel<RootViewModel> { RootViewModel(get(), get()) }
+    viewModel<RootViewModel> { RootViewModel(get()) }
 }

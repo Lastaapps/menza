@@ -25,15 +25,6 @@ import androidx.lifecycle.viewModelScope
 import coil.annotation.ExperimentalCoilApi
 import coil.imageLoader
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.features.settings.data.SettingsStore
-import cz.lastaapps.menza.features.settings.data.setAppTheme
-import cz.lastaapps.menza.features.settings.data.setDarkMode
-import cz.lastaapps.menza.features.settings.data.setImageSize
-import cz.lastaapps.menza.features.settings.data.setImagesOnMetered
-import cz.lastaapps.menza.features.settings.data.setInitialMenza
-import cz.lastaapps.menza.features.settings.data.setPriceType
-import cz.lastaapps.menza.features.settings.data.setSettingsEverOpened
-import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
@@ -46,7 +37,6 @@ import kotlinx.coroutines.withContext
 
 class SettingsViewModel constructor(
     private val app: Application,
-    val sett: SettingsStore,
     private val allergenRepo: AllergenRepo,
     private val locationRepo: LocationRepo,
     private val messagesRepo: MessagesRepo,
@@ -62,25 +52,25 @@ class SettingsViewModel constructor(
 
     fun setDarkMode(mode: DarkMode) {
         viewModelScope.launch {
-            sett.setDarkMode(mode)
+//            sett.setDarkMode(mode)
         }
     }
 
     fun setUseSystemTheme(mode: Boolean) {
         viewModelScope.launch {
-            sett.setAppTheme(if (mode) AppThemeType.System else AppThemeType.Agata)
+//            sett.setAppTheme(if (mode) AppThemeType.System else AppThemeType.Agata)
         }
     }
 
     fun setPriceType(type: PriceType) {
         viewModelScope.launch {
-            sett.setPriceType(type)
+//            sett.setPriceType(type)
         }
     }
 
     fun setInitMenza(mode: InitialMenza) {
         viewModelScope.launch {
-            sett.setInitialMenza(mode)
+//            sett.setInitialMenza(mode)
         }
     }
 
@@ -98,16 +88,16 @@ class SettingsViewModel constructor(
 
     fun setImagesOnMetered(enabled: Boolean) {
         viewModelScope.launch {
-            sett.setImagesOnMetered(enabled)
+//            sett.setImagesOnMetered(enabled)
         }
     }
 
     fun setImageSize(ration: Float) {
-        viewModelScope.launch { sett.setImageSize(ration) }
+//        viewModelScope.launch { sett.setImageSize(ration) }
     }
 
     fun setSettingsEverOpened(enabled: Boolean) {
-        viewModelScope.launch { sett.setSettingsEverOpened(enabled) }
+//        viewModelScope.launch { sett.setSettingsEverOpened(enabled) }
     }
 
     @OptIn(ExperimentalCoilApi::class)

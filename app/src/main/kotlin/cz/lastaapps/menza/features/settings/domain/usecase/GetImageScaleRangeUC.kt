@@ -17,18 +17,13 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.data
+package cz.lastaapps.menza.features.settings.domain.usecase
 
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
 
-private val imagesOnMeteredKey = booleanPreferencesKey("imagesMetered")
-
-internal val SettingsStore.imagesOnMetered: Flow<Boolean>
-    get() = data.map { pref -> pref[imagesOnMeteredKey] ?: true }
-
-internal suspend fun SettingsStore.setImagesOnMetered(enabled: Boolean) {
-    edit { pref -> pref[imagesOnMeteredKey] = enabled }
+class GetImageScaleRangeUC internal constructor(
+    context: UCContext,
+) : UseCase(context) {
+    operator fun invoke() = .5f..5f
 }
-

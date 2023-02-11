@@ -24,11 +24,11 @@ import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
-import cz.lastaapps.menza.features.settings.domain.usecase.GetDarkModeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.SetDarkModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetAppThemeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetDarkModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetThemeListUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetAppThemeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetDarkModeUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest

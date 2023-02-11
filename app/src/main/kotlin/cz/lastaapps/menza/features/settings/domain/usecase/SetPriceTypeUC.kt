@@ -21,16 +21,15 @@ package cz.lastaapps.menza.features.settings.domain.usecase
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.data.SettingsStore
-import cz.lastaapps.menza.features.settings.data.setPriceType
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 
 class SetPriceTypeUC internal constructor(
     context: UCContext,
-    private val store: SettingsStore,
+    private val repo: MainSettingsRepo,
 ) : UseCase(context) {
     suspend operator fun invoke(type: PriceType) = launch {
         if (type == PriceType.Unset) return@launch
-        store.setPriceType(type)
+        repo.setPriceType(type)
     }
 }

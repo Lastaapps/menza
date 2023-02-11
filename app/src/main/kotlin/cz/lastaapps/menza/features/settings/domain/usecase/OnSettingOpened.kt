@@ -21,14 +21,13 @@ package cz.lastaapps.menza.features.settings.domain.usecase
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.data.SettingsStore
-import cz.lastaapps.menza.features.settings.data.setSettingsEverOpened
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
 class OnSettingsOpenedUC internal constructor(
     context: UCContext,
-    private val store: SettingsStore,
+    private val repo: MainSettingsRepo,
 ) : UseCase(context) {
     suspend operator fun invoke() = launch {
-        store.setSettingsEverOpened(true)
+        repo.storeSettingsEverOpened()
     }
 }

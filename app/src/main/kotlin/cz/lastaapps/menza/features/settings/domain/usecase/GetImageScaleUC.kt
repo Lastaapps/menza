@@ -17,26 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.data
+package cz.lastaapps.menza.features.settings.domain.usecase
 
-import androidx.datastore.preferences.core.intPreferencesKey
-import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
-private val menzaModeKey = intPreferencesKey("menza_mode")
-
-internal val SettingsStore.initialMenza: Flow<InitialMenza>
-    get() = data.map { pref ->
-        when (pref[menzaModeKey] ?: 0) {
-            1 -> InitialMenza.Remember
-            2 -> InitialMenza.Specific
-            else -> InitialMenza.Ask
-        }
-    }
-
-internal suspend fun SettingsStore.setInitialMenza(mode: InitialMenza) {
-    edit { pref ->
-        pref[menzaModeKey] = mode.id
+class GetImageScaleUC internal constructor(
+    context: UCContext,
+    private val repo: MainSettingsRepo,
+) : UseCase(context) {
+    suspend operator fun invoke() = launch {
+        repo.getImageScale()
     }
 }

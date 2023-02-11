@@ -17,17 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.data
+package cz.lastaapps.menza.features.settings.domain.usecase.theme
 
-import androidx.datastore.preferences.core.floatPreferencesKey
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
-private val imageSizeKey = floatPreferencesKey("imageSize")
-
-internal val SettingsStore.imageSize: Flow<Float>
-    get() = data.map { pref -> pref[imageSizeKey] ?: 1f }
-
-internal suspend fun SettingsStore.setImageSize(ration: Float) {
-    edit { pref -> pref[imageSizeKey] = ration }
+class GetDarkModeUC internal constructor(
+    context: UCContext,
+    private val repo: MainSettingsRepo,
+) : UseCase(context) {
+    suspend operator fun invoke() = launch {
+        repo.getDarkMode()
+    }
 }

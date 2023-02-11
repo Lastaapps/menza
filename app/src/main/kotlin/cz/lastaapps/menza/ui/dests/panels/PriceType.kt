@@ -39,15 +39,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.data.priceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun priceTypeUnspecifiedState(settingsViewModel: SettingsViewModel): State<Boolean> {
     return remember {
-        settingsViewModel.sett.priceType.map { it == PriceType.Unset }
+//        settingsViewModel.sett.priceType.map { it == PriceType.Unset }
+        flow { emit(false) }
     }.collectAsState(false)
 }
 

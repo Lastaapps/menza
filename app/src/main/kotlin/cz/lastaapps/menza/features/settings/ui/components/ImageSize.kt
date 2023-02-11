@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +36,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.data.imageSize
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import kotlin.math.roundToInt
 
@@ -46,7 +44,7 @@ private const val imageSizeMax = 3f
 
 @Composable
 fun ImageSizeSetting(settingsViewModel: SettingsViewModel, modifier: Modifier = Modifier) {
-    val savedProgress by settingsViewModel.sett.imageSize.collectAsState(0f)
+    val savedProgress = 1f //by settingsViewModel.sett.imageSize.collectAsState(0f)
     var progress by remember(savedProgress) { mutableStateOf(savedProgress) }
 
     Column(modifier) {

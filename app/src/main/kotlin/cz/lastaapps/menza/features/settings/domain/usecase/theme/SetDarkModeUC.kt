@@ -17,19 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase
+package cz.lastaapps.menza.features.settings.domain.usecase.theme
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.data.SettingsStore
-import cz.lastaapps.menza.features.settings.data.setDarkMode
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 
 class SetDarkModeUC internal constructor(
     context: UCContext,
-    private val store: SettingsStore,
+    private val repo: MainSettingsRepo,
 ) : UseCase(context) {
     suspend operator fun invoke(mode: DarkMode) = launch {
-        store.setDarkMode(mode)
+        repo.setDarkMode(mode)
     }
 }

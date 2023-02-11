@@ -116,7 +116,10 @@ private fun MenzaSelectionListContent(
             FilledTonalButton(
                 onClick = onEdit,
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                ) {
                     Icon(Icons.Default.Edit, null)
                     Text(stringResource(R.string.button_edit))
                 }

@@ -21,18 +21,17 @@ package cz.lastaapps.menza.features.settings.domain.usecase.theme
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.data.SettingsStore
-import cz.lastaapps.menza.features.settings.data.appTheme
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import kotlinx.coroutines.flow.map
 
 class GetAppThemeUC internal constructor(
     context: UCContext,
-    private val store: SettingsStore,
+    private val repo: MainSettingsRepo,
     private val isDynamicThemeSupported: IsDynamicThemeSupportedUC,
 ) : UseCase(context) {
     suspend operator fun invoke() = launch {
-        store.appTheme.map {
+        repo.getAppTheme().map {
             it ?: run {
                 if (isDynamicThemeSupported()) {
                     AppThemeType.System

@@ -21,7 +21,6 @@ package cz.lastaapps.menza.features.settings.di
 
 import cz.lastaapps.menza.features.settings.data.MainSettingsRepoImpl
 import cz.lastaapps.menza.features.settings.data.OrderRepoImpl
-import cz.lastaapps.menza.features.settings.data.SettingsStore
 import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSource
 import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSourceImpl
 import cz.lastaapps.menza.features.settings.data.datasource.GeneralSettings
@@ -33,14 +32,12 @@ import cz.lastaapps.menza.features.settings.data.datasource.OrderDataSourceImpl
 import cz.lastaapps.menza.features.settings.data.datasource.OrderSettings
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
-import cz.lastaapps.menza.features.settings.domain.usecase.GetDarkModeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetImageSizeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.OnSettingsOpenedUC
-import cz.lastaapps.menza.features.settings.domain.usecase.SetDarkModeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.SetImageSizeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaUC
@@ -54,9 +51,11 @@ import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.SetMenzaOr
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.ToggleMenzaVisibilityUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.UpdateMenzaOrderUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetAppThemeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetDarkModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetThemeListUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.IsDynamicThemeSupportedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetAppThemeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetDarkModeUC
 import cz.lastaapps.menza.features.settings.ui.vm.AppThemeViewModel
 import cz.lastaapps.menza.features.settings.ui.vm.ReorderMenzaViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -66,7 +65,6 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val settingsModule = module {
-    single { SettingsStore(get()) }
 
     single { InitialSettings.create(get()) }
     factoryOf(::InitMenzaDataSourceImpl) bind InitMenzaDataSource::class
@@ -81,15 +79,15 @@ val settingsModule = module {
     factoryOf(::SetAppThemeUC)
     factoryOf(::IsDynamicThemeSupportedUC)
     factoryOf(::GetDarkModeUC)
-    factoryOf(::GetImageSizeUC)
-    factoryOf(::GetImageSizeUC)
+    factoryOf(::GetImageScaleUC)
+    factoryOf(::GetImageScaleUC)
     factoryOf(::GetImagesOnMeteredUC)
     factoryOf(::GetInitialMenzaUC)
     factoryOf(::GetPriceTypeUC)
     factoryOf(::GetSettingsEverOpenedUC)
     factoryOf(::OnSettingsOpenedUC)
     factoryOf(::SetDarkModeUC)
-    factoryOf(::SetImageSizeUC)
+    factoryOf(::SetImageScaleUC)
     factoryOf(::SetImagesOnMeteredUC)
     factoryOf(::SetInitialMenzaUC)
     factoryOf(::SetLatestMenzaUC)

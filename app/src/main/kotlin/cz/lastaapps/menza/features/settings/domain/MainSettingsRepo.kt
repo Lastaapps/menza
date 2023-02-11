@@ -20,9 +20,16 @@
 package cz.lastaapps.menza.features.settings.domain
 
 import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
+import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
+import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import kotlinx.coroutines.flow.Flow
 
 internal interface MainSettingsRepo {
+    suspend fun storeInitialMenzaMode(mode: InitialMenza)
+    fun getInitialMenzaMode(): Flow<InitialMenza>
+
     suspend fun storeLatestMenza(type: MenzaType)
     fun getLatestMenza(): Flow<MenzaType?>
 
@@ -31,4 +38,22 @@ internal interface MainSettingsRepo {
 
     suspend fun storeAppSetupFinished()
     fun isAppSetupFinished(): Flow<Boolean>
+
+    suspend fun storeSettingsEverOpened()
+    fun isSettingsEverOpened(): Flow<Boolean>
+
+    suspend fun setPriceType(type: PriceType)
+    fun getPriceType(): Flow<PriceType>
+
+    suspend fun setDarkMode(mode: DarkMode)
+    fun getDarkMode(): Flow<DarkMode>
+
+    suspend fun setAppTheme(theme: AppThemeType)
+    fun getAppTheme(): Flow<AppThemeType?>
+
+    suspend fun setImageScale(scale: Float)
+    fun getImageScale(): Flow<Float>
+
+    suspend fun setImagesOnMetered(enabled: Boolean)
+    fun getImagesOnMetered(): Flow<Boolean>
 }

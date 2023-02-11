@@ -31,8 +31,10 @@ import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
+import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 @OptIn(
     ExperimentalSettingsApi::class,
@@ -48,6 +50,9 @@ internal value class InitialSettings(val settings: FlowSettings) {
 }
 
 internal interface InitMenzaDataSource {
+    suspend fun storeInitialMenzaMode(mode: InitialMenza)
+    fun getInitialMenzaMode(): Flow<InitialMenza>
+
     suspend fun storeLatestMenza(type: MenzaType)
     fun getLatestMenza(): Flow<MenzaType?>
 
@@ -60,6 +65,8 @@ internal class InitMenzaDataSourceImpl(
     initialSettings: InitialSettings,
 ) : InitMenzaDataSource {
     companion object {
+        private const val initialModeKey = "initial_mode"
+
         private const val latestPrefix = "latest_"
         private const val preferredPrefix = "preferred_"
         private const val menzaNameKey = "menza_name"
@@ -81,6 +88,19 @@ internal class InitMenzaDataSourceImpl(
     }
 
     private val settings = initialSettings.settings
+
+    override suspend fun storeInitialMenzaMode(mode: InitialMenza) =
+        settings.putInt(initialModeKey, mode.id)
+
+    override fun getInitialMenzaMode(): Flow<InitialMenza> =
+        settings.getIntFlow(initialModeKey, 0)
+            .map {
+                when (it) {
+                    1 -> InitialMenza.Remember
+                    2 -> InitialMenza.Specific
+                    else -> InitialMenza.Ask
+                }
+            }
 
     override suspend fun storeLatestMenza(type: MenzaType) = storeMenza(latestPrefix, type)
     override fun getLatestMenza(): Flow<MenzaType?> = getMenza(latestPrefix)

@@ -23,12 +23,23 @@ import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSource
 import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
+import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
+import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
+import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import kotlinx.coroutines.flow.Flow
 
 internal class MainSettingsRepoImpl(
     private val initial: InitMenzaDataSource,
     private val general: GeneralDataSource,
 ) : MainSettingsRepo {
+    override suspend fun storeInitialMenzaMode(mode: InitialMenza) =
+        initial.storeInitialMenzaMode(mode)
+
+    override fun getInitialMenzaMode(): Flow<InitialMenza> =
+        initial.getInitialMenzaMode()
+
+
     override suspend fun storeLatestMenza(type: MenzaType) =
         initial.storeLatestMenza(type)
 
@@ -46,4 +57,40 @@ internal class MainSettingsRepoImpl(
 
     override fun isAppSetupFinished(): Flow<Boolean> =
         general.isAppSetupFinished()
+
+    override suspend fun storeSettingsEverOpened() =
+        general.storeSettingsEverOpened()
+
+    override fun isSettingsEverOpened(): Flow<Boolean> =
+        general.isSettingsEverOpened()
+
+    override suspend fun setPriceType(type: PriceType) =
+        general.setPriceType(type)
+
+    override fun getPriceType(): Flow<PriceType> =
+        general.getPriceType()
+
+    override suspend fun setDarkMode(mode: DarkMode) =
+        general.setDarkMode(mode)
+
+    override fun getDarkMode(): Flow<DarkMode> =
+        general.getDarkMode()
+
+    override suspend fun setAppTheme(theme: AppThemeType) =
+        general.setAppTheme(theme)
+
+    override fun getAppTheme(): Flow<AppThemeType?> =
+        general.getAppTheme()
+
+    override suspend fun setImageScale(scale: Float) =
+        general.setImageScale(scale)
+
+    override fun getImageScale(): Flow<Float> =
+        general.getImageScale()
+
+    override suspend fun setImagesOnMetered(enabled: Boolean) =
+        general.setImagesOnMetered(enabled)
+
+    override fun getImagesOnMetered(): Flow<Boolean> =
+        general.getImagesOnMetered()
 }
