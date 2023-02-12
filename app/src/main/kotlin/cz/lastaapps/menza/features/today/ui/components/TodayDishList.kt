@@ -60,7 +60,6 @@ import cz.lastaapps.menza.features.today.ui.util.getName
 import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
-import cz.lastaapps.menza.ui.dests.panels.Panels
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 import kotlinx.collections.immutable.ImmutableList
 
@@ -111,7 +110,7 @@ fun TodayDishList(
         }
 
         // TODO move
-        Panels(Modifier.fillMaxWidth())
+//        Panels(Modifier.fillMaxWidth())
     }
 }
 

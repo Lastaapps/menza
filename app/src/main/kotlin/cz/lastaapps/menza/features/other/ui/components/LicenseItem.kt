@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,38 +17,48 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.others.license
+package cz.lastaapps.menza.features.other.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.entity.Library
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LicenseItem(library: Library, modifier: Modifier = Modifier) {
     ElevatedCard(
         shape = MaterialTheme.shapes.medium,
         modifier = modifier,
     ) {
-        Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(Modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                LicenseName(library.name, Modifier.weight(1f))
-                LicenseVersion(library.artifactVersion)
+        Column(
+            modifier = Modifier.padding(MenzaPadding.Small),
+            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small)) {
+                LicenseName(
+                    name = library.name,
+                    modifier = Modifier.weight(1f),
+                )
+                LicenseVersion(
+                    version = library.artifactVersion,
+                )
             }
             library.developers.forEach { developer ->
-                LicenseDeveloper(developer.name)
+                LicenseDeveloper(
+                    developer = developer.name,
+                )
             }
-            library.licenses.map { it.name }.forEach {
-                LicenseLicense(it)
+            library.licenses.map { it.name }.forEach { license ->
+                LicenseLicense(
+                    license = license,
+                )
             }
         }
     }

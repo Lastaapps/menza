@@ -17,45 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.main.ui.navigation
+package cz.lastaapps.menza.features.other.domain.usecase
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import android.content.Context
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.util.withContext
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
 
-sealed interface MainNavType : Parcelable {
-    companion object {
-        val allMainTypes = listOf(
-            Today,
-            Week,
-            Info,
-            Settings,
-            Osturak,
-            PrivacyPolicy,
-            LicenseNotices,
-        )
+internal class GetLibrariesUC internal constructor(
+    context: UCContext,
+    private val androidContext: Context,
+) : UseCase(context) {
+    suspend operator fun invoke() = launch {
+        Libs.Builder().withContext(androidContext).build()
     }
-
-    @Parcelize
-    object Today : MainNavType
-
-    @Parcelize
-    object Week : MainNavType
-
-    @Parcelize
-    object Info : MainNavType
-
-    @Parcelize
-    object Settings : MainNavType
-
-    @Parcelize
-    object Osturak : MainNavType
-
-    @Parcelize
-    object PrivacyPolicy : MainNavType
-
-    @Parcelize
-    object LicenseNotices : MainNavType
-
-    @Parcelize
-    object DrawerContent : MainNavType
 }

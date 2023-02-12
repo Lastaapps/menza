@@ -29,16 +29,17 @@ import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 
 @Composable
-fun TwoPaneRouter(
+fun TwoPaneLayout(
     showDetail: Boolean,
     listNode: @Composable () -> Unit,
     detailNode: @Composable () -> Unit,
     emptyNode: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    widthClass: WindowWidthSizeClass = LocalWindowWidth.current,
 ) {
-    when (LocalWindowWidth.current) {
+    when (widthClass) {
         WindowWidthSizeClass.Compact ->
-            TwoPaneRouterCompact(
+            TwoPaneLayoutCompact(
                 showDetail = showDetail,
                 listNode = listNode,
                 detailNode = detailNode,
@@ -46,7 +47,7 @@ fun TwoPaneRouter(
             )
 
         WindowWidthSizeClass.Medium ->
-            TwoPaneRouterMedium(
+            TwoPaneLayoutMedium(
                 showDetail = showDetail,
                 listNode = listNode,
                 detailNode = detailNode,
@@ -54,7 +55,7 @@ fun TwoPaneRouter(
             )
 
         WindowWidthSizeClass.Expanded ->
-            TwoPaneRouterExpanded(
+            TwoPaneLayoutExpanded(
                 showDetail = showDetail,
                 listNode = listNode,
                 detailNode = detailNode,
@@ -65,7 +66,7 @@ fun TwoPaneRouter(
 }
 
 @Composable
-private fun TwoPaneRouterCompact(
+private fun TwoPaneLayoutCompact(
     showDetail: Boolean,
     listNode: @Composable () -> Unit,
     detailNode: @Composable () -> Unit,
@@ -84,12 +85,12 @@ private fun TwoPaneRouterCompact(
 }
 
 @Composable
-private fun TwoPaneRouterMedium(
+private fun TwoPaneLayoutMedium(
     showDetail: Boolean,
     listNode: @Composable () -> Unit,
     detailNode: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-) = TwoPaneRouterCompact(
+) = TwoPaneLayoutCompact(
     showDetail = showDetail,
     listNode = listNode,
     detailNode = detailNode,
@@ -97,7 +98,7 @@ private fun TwoPaneRouterMedium(
 )
 
 @Composable
-private fun TwoPaneRouterExpanded(
+private fun TwoPaneLayoutExpanded(
     showDetail: Boolean,
     listNode: @Composable () -> Unit,
     detailNode: @Composable () -> Unit,

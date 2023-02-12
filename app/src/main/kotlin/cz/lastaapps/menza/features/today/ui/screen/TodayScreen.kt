@@ -32,7 +32,7 @@ import cz.lastaapps.menza.features.today.ui.components.NoDishSelected
 import cz.lastaapps.menza.features.today.ui.components.TodayInfo
 import cz.lastaapps.menza.features.today.ui.vm.TodayState
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
-import cz.lastaapps.menza.ui.components.layout.TwoPaneRouter
+import cz.lastaapps.menza.ui.components.layout.TwoPaneLayout
 import cz.lastaapps.menza.ui.root.BackArrow
 import org.koin.androidx.compose.koinViewModel
 
@@ -102,7 +102,7 @@ private fun TodayContent(
         onOsturak = onOsturak,
         modifier = modifier,
     ) {
-        TwoPaneRouter(
+        TwoPaneLayout(
             showDetail = state.hasDish,
             listNode = dishList,
             detailNode = dishDetail,

@@ -30,6 +30,8 @@ import cz.lastaapps.menza.features.starting.di.startingModule
 import cz.lastaapps.menza.features.today.di.todayModule
 import cz.lastaapps.menza.features.week.di.weekModule
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDataStore
+import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val appModule = module {
@@ -47,4 +49,5 @@ val appModule = module {
     )
 
     single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
+    viewModelOf(::SettingsViewModel)
 }

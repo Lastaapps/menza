@@ -17,45 +17,26 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.main.ui.navigation
+package cz.lastaapps.menza.features.other.ui.node
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.features.other.ui.screen.LicenseScreen
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 
-sealed interface MainNavType : Parcelable {
-    companion object {
-        val allMainTypes = listOf(
-            Today,
-            Week,
-            Info,
-            Settings,
-            Osturak,
-            PrivacyPolicy,
-            LicenseNotices,
+class LicenseNode(
+    buildContext: BuildContext,
+) : Node(buildContext) {
+    @Composable
+    override fun View(modifier: Modifier) {
+        LicenseScreen(
+            modifier = modifier
+                .padding(MenzaPadding.More.Screen)
+                .fillMaxSize()
         )
     }
-
-    @Parcelize
-    object Today : MainNavType
-
-    @Parcelize
-    object Week : MainNavType
-
-    @Parcelize
-    object Info : MainNavType
-
-    @Parcelize
-    object Settings : MainNavType
-
-    @Parcelize
-    object Osturak : MainNavType
-
-    @Parcelize
-    object PrivacyPolicy : MainNavType
-
-    @Parcelize
-    object LicenseNotices : MainNavType
-
-    @Parcelize
-    object DrawerContent : MainNavType
 }

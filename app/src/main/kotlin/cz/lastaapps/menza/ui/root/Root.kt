@@ -38,7 +38,6 @@ import cz.lastaapps.menza.features.starting.ui.vm.PrivacyViewModel
 import cz.lastaapps.menza.navigation.Dest.R
 import cz.lastaapps.menza.ui.dests.info.InfoLayout
 import cz.lastaapps.menza.ui.dests.info.InfoViewModel
-import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
@@ -125,19 +124,8 @@ private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsVie
                     composable(
                         R.today,
                     ) {
-//                        TodayDest(
-//                            navController = navHostState,
-//                            menzaId = menzaId,
-//                            todayViewModel = koinActivityViewModel<TodayViewModel>(),
-//                            settingsViewModel = settingsViewModel,
-//                        )
                     }
                     composable(R.week) {
-//                        WeekLayout(
-//                            navController = navHostState,
-//                            menzaId = menzaId,
-//                            weekViewModel = koinActivityViewModel<WeekViewModel>(),
-//                        )
                     }
                     composable(R.info) {
                         InfoLayout(
@@ -155,12 +143,8 @@ private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsVie
                         )
                     }
                     composable(R.license) {
-                        LicenseLayout()
                     }
                     composable(R.osturak) {
-//                        OsturakLayout(
-//                            navController = navHostState
-//                        )
                     }
                     dialog(R.privacyPolicy) {
                         PrivacyDialogContent(showAccept = false, onAccept = {})

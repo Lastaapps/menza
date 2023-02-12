@@ -44,11 +44,13 @@ import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.activate
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.DrawerContent
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.LicenseNotices
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.Osturak
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.Today
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.Week
 import cz.lastaapps.menza.features.main.ui.node.DrawerNode
 import cz.lastaapps.menza.features.main.ui.vm.MainViewModel
+import cz.lastaapps.menza.features.other.ui.node.LicenseNode
 import cz.lastaapps.menza.features.other.ui.node.OsturakNode
 import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
 import cz.lastaapps.menza.features.week.ui.node.WeekNode
@@ -84,6 +86,7 @@ class MainNode(
             )
 
             Osturak -> OsturakNode(buildContext)
+            LicenseNotices -> LicenseNode(buildContext)
 
             else ->
                 node(buildContext) {

@@ -32,5 +32,6 @@ object MenzaPadding {
 
     object More {
         val Screen = MidSmall
+        val ScrollBottomSpace = 64.dp
     }
 }

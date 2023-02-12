@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,17 +17,21 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.others.license
+package cz.lastaapps.menza.features.other.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,16 +44,17 @@ import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.entity.License
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 import org.lighthousegames.logging.logging
 
+
 @Composable
-fun LibraryDetailWrapper(library: Library?, modifier: Modifier = Modifier) {
-    if (library == null) {
-        Box(modifier, contentAlignment = Alignment.Center) {
-            Text(stringResource(R.string.license_none_selected), textAlign = TextAlign.Center)
-        }
-    } else {
-        LibraryDetail(library, modifier)
+fun NoLibrarySelected(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(stringResource(R.string.license_none_selected), textAlign = TextAlign.Center)
     }
 }
 
@@ -111,7 +116,6 @@ fun LibraryDetail(library: Library, modifier: Modifier = Modifier) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LicenseDetail(
     license: License,
@@ -123,7 +127,10 @@ private fun LicenseDetail(
         shape = MaterialTheme.shapes.medium,
         modifier = modifier,
     ) {
-        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(
+            modifier = Modifier.padding(MenzaPadding.MidSmall),
+            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+        ) {
             Text(license.name, style = titleStyle)
 
             license.year?.takeIf { it.isNotBlank() }?.let { Text(it, style = bodyStyle) }

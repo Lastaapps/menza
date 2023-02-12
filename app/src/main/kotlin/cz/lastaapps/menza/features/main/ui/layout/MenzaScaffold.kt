@@ -174,8 +174,19 @@ private fun AppLayoutMedium(
                 drawerState = drawerState,
                 modifier = Modifier.fillMaxSize(),
                 drawerContent = drawerContent,
-                content = content,
-            )
+            ) {
+                BoxWithConstraints(
+                    Modifier.fillMaxSize()
+                ) {
+                    val totalWidthAvailable = maxWidth
+                    val startWidth = totalWidthAvailable * 0.5f
+                    val endWidth = totalWidthAvailable * 0.5f
+
+                    CompositionLocalProvider(
+                        LocalSplitPosition provides Triple(startWidth, 0.dp, endWidth)
+                    ) { content() }
+                }
+            }
         }
     }
 }

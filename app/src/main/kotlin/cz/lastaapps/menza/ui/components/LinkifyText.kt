@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,7 @@
 
 @file:Suppress("SpellCheckingInspection")
 
-package cz.lastaapps.menza.ui.dests.others.license
+package cz.lastaapps.menza.ui.components
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material3.LocalContentColor
@@ -35,10 +35,10 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
+import java.util.regex.Pattern
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
-import java.util.regex.Pattern
 
 // https://stackoverflow.com/questions/66130513/linkify-with-compose-text
 @Composable

@@ -19,8 +19,13 @@
 
 package cz.lastaapps.menza.features.other.di
 
+import cz.lastaapps.menza.features.other.domain.usecase.GetLibrariesUC
+import cz.lastaapps.menza.features.other.ui.vm.LicenseViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val otherModule = module {
-
+    viewModelOf(::LicenseViewModel)
+    factoryOf(::GetLibrariesUC)
 }
