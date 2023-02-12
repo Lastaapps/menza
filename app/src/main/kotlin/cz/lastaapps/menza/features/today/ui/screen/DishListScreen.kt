@@ -21,6 +21,8 @@ package cz.lastaapps.menza.features.today.ui.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -32,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.lastaapps.api.core.domain.model.common.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
-import cz.lastaapps.menza.features.main.ui.components.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.today.ui.components.TodayDishList
 import cz.lastaapps.menza.features.today.ui.vm.DishListState
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
@@ -41,10 +42,11 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun DishListScreen(
-    onOsturak: () -> Unit,
+    onDishSelected: (Dish) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DishListViewModel = koinViewModel(),
     hostState: SnackbarHostState = remember { SnackbarHostState() },
+    scrollState: LazyListState = rememberLazyListState(),
 ) {
     DishListEffects(viewModel, hostState)
 
@@ -55,8 +57,8 @@ internal fun DishListScreen(
         hostState = hostState,
         onRefresh = viewModel::reload,
         onNoItems = viewModel::openWebMenu,
-        onOsturak = onOsturak,
-        onDishSelected = {},
+        onDishSelected = onDishSelected,
+        scrollState = scrollState,
     )
 }
 
@@ -76,36 +78,29 @@ private fun DishListContent(
     hostState: SnackbarHostState,
     onRefresh: () -> Unit,
     onNoItems: () -> Unit,
-    onOsturak: () -> Unit,
     onDishSelected: (Dish) -> Unit,
+    scrollState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState) },
         modifier = modifier,
     ) { padding ->
-        val childMod = Modifier
-            .padding(padding)
-            .fillMaxSize()
-
-        WrapMenzaNotSelected(
-            menza = state.selectedMenza,
-            onOsturak = onOsturak,
-            childModifier = childMod,
-        ) {
-            TodayDishList(
-                isLoading = state.isLoading,
-                onRefresh = onRefresh,
-                data = state.items,
-                onNoItems = onNoItems,
-                onDishSelected = onDishSelected,
-                priceType = state.priceType,
-                downloadOnMetered = state.downloadOnMetered,
-                showCzech = state.showCzech,
-                imageScale = state.imageScale,
-                isOnMetered = state.isOnMetered,
-                modifier = childMod,
-            )
-        }
+        TodayDishList(
+            isLoading = state.isLoading,
+            onRefresh = onRefresh,
+            data = state.items,
+            onNoItems = onNoItems,
+            onDishSelected = onDishSelected,
+            priceType = state.priceType,
+            downloadOnMetered = state.downloadOnMetered,
+            showCzech = state.showCzech,
+            imageScale = state.imageScale,
+            isOnMetered = state.isOnMetered,
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize(),
+            scroll = scrollState,
+        )
     }
 }

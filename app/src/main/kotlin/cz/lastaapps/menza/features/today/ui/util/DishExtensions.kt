@@ -19,8 +19,11 @@
 
 package cz.lastaapps.menza.features.today.ui.util
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringArrayResource
 import cz.lastaapps.api.core.domain.model.common.Dish
 import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Discounted
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Normal
@@ -42,3 +45,11 @@ fun Dish.getName(showCzech: ShowCzech): String =
 
 fun Dish.getAmount(showCzech: ShowCzech): String? =
     amountEn.takeUnless { showCzech.czech } ?: amountCs
+
+@Composable
+fun allergenForId(id: Int): Pair<String, String>? {
+    val labels = stringArrayResource(R.array.allergens_title)
+    val descriptions = stringArrayResource(R.array.allergens_descriptions)
+    if (id - 1 !in labels.indices) return null
+    return labels[id - 1] to descriptions[id - 1]
+}

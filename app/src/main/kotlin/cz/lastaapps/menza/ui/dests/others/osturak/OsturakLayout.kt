@@ -32,7 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import cz.lastaapps.menza.features.main.ui.layout.SplitLayout
+import cz.lastaapps.menza.ui.components.layout.SplitLayout
 import cz.lastaapps.menza.ui.root.BackArrow
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
 

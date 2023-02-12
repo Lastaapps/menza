@@ -17,29 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.today.ui.node
+package cz.lastaapps.menza.features.today.ui.components
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import cz.lastaapps.menza.features.today.ui.screen.DishListScreen
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import androidx.compose.ui.res.stringResource
+import cz.lastaapps.menza.R.string
 
-internal class DishListNode(
-    buildContext: BuildContext,
-    private val onDetail: () -> Unit,
-    private val onOsturak: () -> Unit,
-) : Node(buildContext) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        DishListScreen(
-            modifier = modifier
-                .padding(MenzaPadding.More.Screen)
-                .fillMaxSize(),
-            onOsturak = onOsturak,
-        )
+@Composable
+fun NoDishSelected(modifier: Modifier = Modifier) {
+    Box(modifier, contentAlignment = Alignment.Center) {
+        Text(stringResource(string.today_no_dish))
     }
 }

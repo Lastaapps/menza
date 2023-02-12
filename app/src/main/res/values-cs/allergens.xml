@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~
+  ~     This file is part of Menza.
+  ~
+  ~     Menza is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Menza is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <array name="allergens_title">
+        <item>Obiloviny obsahující lepek</item>
+        <item>Korýši</item>
+        <item>Vejce</item>
+        <item>Ryby</item>
+        <item>Jádra podzemnice olejné (arašídy)</item>
+        <item>Sójové boby</item>
+        <item>Mléko</item>
+        <item>Skořápkové plody</item>
+        <item>Celer</item>
+        <item>Hořčice</item>
+        <item>Sezamová semena</item>
+        <item>Oxid siřičitý a siřičitany</item>
+        <item>Vlčí bob (lupina)</item>
+        <item>Měkkýši</item>
+    </array>
+    <array name="allergens_descriptions">
+        <item>pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z
+            nich
+        </item>
+        <item>a výrobky z nich</item>
+        <item>a výrobky z nich</item>
+        <item>a výrobky z nich</item>
+        <item>a výrobky z nich</item>
+        <item>a výrobky z nich</item>
+        <item>a výrobky z něj</item>
+        <item>mandle, lískové ořechy, vlašské ořechy, kešu ořechy, pekanové ořechy, para ořechy,
+            pistácie, makadamie a výrobky z nich
+        </item>
+        <item>a výrobky z něj</item>
+        <item>a výrobky z ní</item>
+        <item>a výrobky z nich</item>
+        <item>v koncentracích vyšších než 10 mg/kg nebo 10 mg/l, vyjádřeno jako celkový SO2</item>
+        <item>a výrobky z něj</item>
+        <item>a výrobky z nich</item>
+    </array>
+</resources>

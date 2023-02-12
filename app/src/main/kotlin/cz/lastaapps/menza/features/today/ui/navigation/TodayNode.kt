@@ -19,78 +19,27 @@
 
 package cz.lastaapps.menza.features.today.ui.navigation
 
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
-import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.push
-import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
-import cz.lastaapps.menza.features.main.ui.layout.SplitLayout
-import cz.lastaapps.menza.features.today.ui.navigation.TodayNavType.DishDetail
-import cz.lastaapps.menza.features.today.ui.navigation.TodayNavType.DishList
-import cz.lastaapps.menza.features.today.ui.navigation.TodayNavType.NoDishSelected
-import cz.lastaapps.menza.features.today.ui.node.DishDetailNode
-import cz.lastaapps.menza.features.today.ui.node.DishListNode
-import cz.lastaapps.menza.features.today.ui.node.NoDishSelectedNode
-import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
+import cz.lastaapps.menza.features.today.ui.screen.TodayScreen
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 
 class TodayNode(
     buildContext: BuildContext,
     private val onOsturak: () -> Unit,
-    private val backStack: BackStack<TodayNavType> = BackStack<TodayNavType>(
-        initialElement = TodayNavType.DishList,
-        savedStateMap = buildContext.savedStateMap,
-    ),
-) : ParentNode<TodayNavType>(backStack, buildContext) {
-    override fun resolve(navTarget: TodayNavType, buildContext: BuildContext): Node =
-        when (navTarget) {
-            DishList -> DishListNode(
-                buildContext,
-                onDetail = {
-                    backStack.push(TodayNavType.DishDetail(0))
-                },
-                onOsturak = onOsturak,
-            )
-
-            is DishDetail -> DishDetailNode(buildContext)
-            NoDishSelected -> NoDishSelectedNode(buildContext)
-        }
+) : Node(buildContext) {
 
     @Composable
     override fun View(modifier: Modifier) {
-        when (LocalWindowWidth.current) {
-            WindowWidthSizeClass.Compact,
-            WindowWidthSizeClass.Medium,
-            -> {
-                Children(
-                    navModel = backStack,
-                    transitionHandler = rememberBackstackFader(),
-                )
-            }
-
-            WindowWidthSizeClass.Expanded,
-            -> {
-                SplitLayout(
-                    panel1 = {
-                        PermanentChild(navTarget = DishList)
-                    },
-                    panel2 = {
-                        val elements by backStack.elements.collectAsState()
-
-                        if (elements.size <= 1) {
-                            PermanentChild(navTarget = NoDishSelected)
-                        } else {
-                            Children(navModel = backStack)
-                        }
-                    }
-                )
-            }
-        }
+        TodayScreen(
+            onOsturak = onOsturak,
+            modifier = Modifier
+                .padding(MenzaPadding.More.Screen)
+                .fillMaxSize(),
+        )
     }
 }

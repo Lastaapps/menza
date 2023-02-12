@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~
+  ~     This file is part of Menza.
+  ~
+  ~     Menza is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Menza is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <array name="allergens_title">
+        <item>Cereals containing gluten</item>
+        <item>Crustaceans</item>
+        <item>Egg</item>
+        <item>Fish</item>
+        <item>Peanut</item>
+        <item>Soybeans</item>
+        <item>Milk</item>
+        <item>Nuts</item>
+        <item>Celery</item>
+        <item>Mustard</item>
+        <item>Sesame seeds</item>
+        <item>Sulphur dioxide and sulfites</item>
+        <item>Lupin</item>
+        <item>Molluscs</item>
+    </array>
+    <array name="allergens_descriptions">
+        <item>wheat, rye, barley, oats and their hybridised strains and products thereof</item>
+        <item>and products thereof</item>
+        <item>and products thereof</item>
+        <item>and products thereof</item>
+        <item>and products thereof</item>
+        <item>and products thereof</item>
+        <item>and products thereof (including lactose)</item>
+        <item>almond, hazelnut, walnut, cashew, pecan nut, Brazil nut, pistachio nut and Macadamia
+            nut (Queensland nut) and products thereof
+        </item>
+        <item>and products thereof</item>
+        <item>and products thereof</item>
+        <item>and products thereof</item>
+        <item>at concentrations of more than 10mg/kg or 10mg/L in terms of the total SO2 which are
+            to be calculated for products as proposed ready for consumption or as reconstituted
+            according to the instructions of the manufacturers
+        </item>
+        <item>and products thereof</item>
+        <item>and products thereof (for example clams, oysters, scallops, snails and squid)</item>
+    </array>
+</resources>

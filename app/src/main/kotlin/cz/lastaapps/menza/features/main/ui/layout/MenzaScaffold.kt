@@ -323,23 +323,3 @@ private fun AppLayoutExpandedFold(
         }
     }
 }
-
-@Composable
-fun SplitLayout(
-    panel1: @Composable () -> Unit,
-    panel2: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(modifier) {
-        val size = LocalSplitPosition.current
-        Box(
-            Modifier.width(size.first)
-        ) { panel1() }
-
-        Spacer(Modifier.width(size.second))
-
-        Box(
-            Modifier.width(size.third)
-        ) { panel2() }
-    }
-}

@@ -40,7 +40,6 @@ fun WrapMenzaNotSelected(
     menza: Menza?,
     onOsturak: () -> Unit,
     modifier: Modifier = Modifier,
-    childModifier: Modifier = Modifier.fillMaxSize(),
     content: @Composable () -> Unit,
 ) {
     Crossfade(
@@ -50,7 +49,7 @@ fun WrapMenzaNotSelected(
         if (isNotSelected) {
             MenzaNotSelected(
                 onOsturak = onOsturak,
-                modifier = childModifier,
+                modifier = Modifier.fillMaxSize(),
             )
         } else {
             content()

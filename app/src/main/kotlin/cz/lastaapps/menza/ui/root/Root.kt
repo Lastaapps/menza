@@ -42,8 +42,6 @@ import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
 import cz.lastaapps.menza.ui.dests.others.osturak.OsturakLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.dests.today.TodayDest
-import cz.lastaapps.menza.ui.dests.today.TodayViewModel
 import cz.lastaapps.menza.ui.dests.week.WeekLayout
 import cz.lastaapps.menza.ui.dests.week.WeekViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
@@ -130,12 +128,12 @@ private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsVie
                     composable(
                         R.today,
                     ) {
-                        TodayDest(
-                            navController = navHostState,
-                            menzaId = menzaId,
-                            todayViewModel = koinActivityViewModel<TodayViewModel>(),
-                            settingsViewModel = settingsViewModel,
-                        )
+//                        TodayDest(
+//                            navController = navHostState,
+//                            menzaId = menzaId,
+//                            todayViewModel = koinActivityViewModel<TodayViewModel>(),
+//                            settingsViewModel = settingsViewModel,
+//                        )
                     }
                     composable(R.week) {
                         WeekLayout(

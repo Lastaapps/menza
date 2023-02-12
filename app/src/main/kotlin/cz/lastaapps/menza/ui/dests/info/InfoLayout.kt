@@ -27,7 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.features.main.ui.layout.SplitLayout
+import cz.lastaapps.menza.ui.components.layout.SplitLayout
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
 
 @Composable

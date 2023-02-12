@@ -17,24 +17,32 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.today.ui.node
+package cz.lastaapps.menza.ui.components.layout
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.ui.root.locals.LocalSplitPosition
 
-internal class NoDishSelectedNode(
-    buildContext: BuildContext,
-) : Node(buildContext) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            Text("No dish selected")
-        }
+@Composable
+fun SplitLayout(
+    panel1: @Composable () -> Unit,
+    panel2: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(modifier) {
+        val size = LocalSplitPosition.current
+        Box(
+            Modifier.width(size.first)
+        ) { panel1() }
+
+        Spacer(Modifier.width(size.second))
+
+        Box(
+            Modifier.width(size.third)
+        ) { panel2() }
     }
 }

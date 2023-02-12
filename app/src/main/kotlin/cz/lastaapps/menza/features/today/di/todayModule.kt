@@ -20,9 +20,11 @@
 package cz.lastaapps.menza.features.today.di
 
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
+import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val todayModule = module {
     viewModelOf(::DishListViewModel)
+    viewModelOf(::TodayViewModel)
 }

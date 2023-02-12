@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.today
+package cz.lastaapps.menza.features.today.ui.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
@@ -38,7 +38,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,55 +54,72 @@ import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
-import cz.lastaapps.entity.allergens.Allergen
-import cz.lastaapps.entity.allergens.AllergenId
-import cz.lastaapps.entity.day.Dish
-import cz.lastaapps.entity.day.IssueLocation
+import cz.lastaapps.api.core.domain.model.common.Dish
+import cz.lastaapps.api.core.domain.model.common.ServingPlace
 import cz.lastaapps.menza.R
-import kotlinx.collections.immutable.ImmutableList
+import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
+import cz.lastaapps.menza.features.today.ui.util.allergenForId
+import cz.lastaapps.menza.features.today.ui.util.getAmount
+import cz.lastaapps.menza.features.today.ui.util.getName
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 import kotlin.math.max
-
-@Composable
-fun NoDishSelected(modifier: Modifier = Modifier) {
-    Box(modifier, contentAlignment = Alignment.Center) {
-        Text(stringResource(R.string.today_no_dish))
-    }
-}
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun TodayInfo(
     dish: Dish,
-    todayViewModel: TodayViewModel,
+    showCzech: ShowCzech,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        DishImage(dish = dish, Modifier.fillMaxWidth())
+        DishImage(
+            dish = dish,
+            modifier = Modifier.fillMaxWidth(),
+        )
 
-        Header(dish = dish)
-        PriceView(dish = dish, Modifier.fillMaxWidth())
-        IssueLocationList(list = dish.issuePlaces)
-        AllergenList(dish = dish, todayViewModel = todayViewModel)
+        Header(
+            dish = dish,
+            showCzech = showCzech,
+        )
+        PriceView(
+            dish = dish,
+            showCzech = showCzech,
+        )
+        IssueLocationList(
+            list = dish.servingPlaces,
+        )
+        AllergenList(
+            allergens = dish.allergens,
+        )
     }
 }
 
 @Composable
-private fun Header(dish: Dish, modifier: Modifier = Modifier) {
+private fun Header(
+    dish: Dish,
+    showCzech: ShowCzech,
+    modifier: Modifier = Modifier,
+) {
     Text(
-        text = dish.name,
+        text = dish.getName(showCzech),
         style = MaterialTheme.typography.headlineMedium,
         modifier = modifier,
     )
 }
 
 @Composable
-private fun PriceView(dish: Dish, modifier: Modifier = Modifier) {
+private fun PriceView(
+    dish: Dish,
+    showCzech: ShowCzech,
+    modifier: Modifier = Modifier,
+) {
     Row(modifier) {
-        Text(text = dish.amount?.amount ?: "")
+        Text(text = dish.getAmount(showCzech) ?: "")
         Text(
-            text = "${dish.priceStudent?.price ?: "???"} / ${dish.priceNormal?.price ?: "???"} Kč",
+            text = "${dish.priceDiscount ?: "∅"} / ${dish.priceNormal ?: "∅"} Kč",
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f),
         )
@@ -112,10 +128,11 @@ private fun PriceView(dish: Dish, modifier: Modifier = Modifier) {
 
 @Composable
 private fun IssueLocationList(
-    list: ImmutableList<IssueLocation>,
+    list: ImmutableList<ServingPlace>,
     modifier: Modifier = Modifier,
 ) {
     if (list.isEmpty()) return
+
     Column(modifier) {
         Row {
             Text(
@@ -137,74 +154,90 @@ private fun IssueLocationList(
 
 @Composable
 private fun AllergenList(
-    dish: Dish,
-    todayViewModel: TodayViewModel,
+    allergens: ImmutableList<Int>?,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        val context = LocalContext.current
-        val data by remember(context) {
-            // used in case server fucks up and returns allergens like 79 or 1011 (',' forgotten)
-            val unknownAllergen = Allergen(
-                AllergenId(Int.MAX_VALUE),
-                context.getString(R.string.today_info_unknown_allergen_title),
-                context.getString(R.string.today_info_unknown_allergen_description),
-            )
-            todayViewModel.getAllergenForIds(dish.allergens, unknownAllergen)
-        }.collectAsState(emptyList())
 
         Text(
             stringResource(R.string.today_info_allergens_title),
             style = MaterialTheme.typography.titleLarge
         )
 
-        if (data.isEmpty()) {
+        if (allergens == null) {
+            Text(stringResource(R.string.today_info_allergens_unknown))
+            return@Column
+        }
+        if (allergens.isEmpty()) {
             Text(stringResource(R.string.today_info_allergens_none))
-        } else {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                data.forEach {
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Surface(
-                                color = MaterialTheme.colorScheme.tertiary,
-                                shape = CircleShape,
-                            ) {
-                                /*val density = LocalDensity.current
-                                val minSize = remember(density) {
-                                    with(density) { 24.dp.roundToPx() }
-                                }*/
-                                Layout(
-                                    content = {
-                                        Text(
-                                            "${it.id.id}",
-                                            style = MaterialTheme.typography.titleMedium,
-                                            modifier = Modifier.padding(
-                                                start = 6.dp, end = 6.dp,
-                                                top = 2.dp, bottom = 2.dp
-                                            ),
-                                        )
-                                    }
-                                ) { measurable, constrains ->
-                                    val placeable = measurable[0].measure(constrains)
-                                    //val h = max(placeable.height, minSize)
-                                    val h = placeable.height
-                                    val w = max(placeable.width, h)
-                                    layout(w, h) {
-                                        placeable.place(
-                                            (w - placeable.width) / 2,
-                                            (h - placeable.height) / 2,
-                                        )
-                                    }
-                                }
-                            }
-                            Text(it.name, style = MaterialTheme.typography.titleMedium)
-                        }
-                        Text(it.description)
-                    }
-                }
+            return@Column
+        }
+
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            allergens.forEach {
+                AllergenRow(id = it)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AllergenRow(id: Int, modifier: Modifier = Modifier) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+        modifier = modifier,
+    ) {
+        val info = allergenForId(id = id)
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            AllergenIdBadge(id = id)
+            Text(
+                text = info?.first ?: stringResource(R.string.today_info_unknown_allergen_title),
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+
+        Text(
+            text = info?.second ?: stringResource(R.string.today_info_unknown_allergen_description),
+        )
+    }
+}
+
+@Composable
+private fun AllergenIdBadge(id: Int, modifier: Modifier = Modifier) {
+    Surface(
+        color = MaterialTheme.colorScheme.tertiary,
+        shape = CircleShape,
+        modifier = modifier,
+    ) {
+        /*val density = LocalDensity.current
+        val minSize = remember(density) {
+            with(density) { 24.dp.roundToPx() }
+        }*/
+        Layout(
+            content = {
+                Text(
+                    id.toString(),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(
+                        start = 6.dp, end = 6.dp,
+                        top = 2.dp, bottom = 2.dp
+                    ),
+                )
+            }
+        ) { measurable, constrains ->
+            val placeable = measurable[0].measure(constrains)
+            //val h = max(placeable.height, minSize)
+            val h = placeable.height
+            val w = max(placeable.width, h)
+            layout(w, h) {
+                placeable.place(
+                    (w - placeable.width) / 2,
+                    (h - placeable.height) / 2,
+                )
             }
         }
     }
@@ -212,23 +245,27 @@ private fun AllergenList(
 
 @Composable
 private fun DishImage(dish: Dish, modifier: Modifier = Modifier) {
-    Box(modifier.animateContentSize()) {
+    Surface(
+        modifier = modifier.animateContentSize(),
+        shape = MaterialTheme.shapes.medium,
+    ) {
 
-        if (dish.imageUrl != null) {
+        if (dish.photoLink != null) {
 
             //temporary solution for refreshing
             var retryHash by remember { mutableStateOf(0) }
 
             val imageRequest = with(ImageRequest.Builder(LocalContext.current)) {
-                data(dish.imageUrl)
-                diskCacheKey(dish.imageUrl)
-                memoryCacheKey(dish.imageUrl)
+                data(dish.photoLink)
+                diskCacheKey(dish.photoLink)
+                memoryCacheKey(dish.photoLink)
                 crossfade(true)
                 setParameter("retry_hash", retryHash)
             }.build()
 
             SubcomposeAsyncImage(
-                imageRequest, dish.name,
+                imageRequest,
+                contentDescription = null,
                 loading = {
                     Box(
                         Modifier

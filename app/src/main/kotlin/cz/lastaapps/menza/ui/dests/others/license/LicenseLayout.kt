@@ -38,7 +38,7 @@ import androidx.compose.ui.window.Dialog
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.util.withContext
-import cz.lastaapps.menza.features.main.ui.layout.SplitLayout
+import cz.lastaapps.menza.ui.components.layout.SplitLayout
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
