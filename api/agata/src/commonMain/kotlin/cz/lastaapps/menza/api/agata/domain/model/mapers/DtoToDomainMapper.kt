@@ -25,8 +25,7 @@ import cz.lastaapps.api.core.domain.model.common.WeekDishCategory
 import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDishDto
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
+import kotlinx.datetime.LocalDate
 
 internal fun List<WeekDishDto>.toDomain() =
     groupBy { it.date }
@@ -35,7 +34,7 @@ internal fun List<WeekDishDto>.toDomain() =
         .map { (_, values) ->
             val value = values.first()
             WeekDayDish(
-                date = Json.decodeFromString(value.date),
+                date = value.date.parseDate(),
                 categories = values.toCategory()
             )
         }
@@ -53,6 +52,12 @@ private fun List<WeekDishDto>.toCategory() =
             )
         }
         .toImmutableList()
+
+private val dateRegex = """(\d{4})-(\d+)-(\d+)""".toRegex()
+private fun String.parseDate(): LocalDate =
+    dateRegex.find(this)!!.destructured.let { (year, month, day) ->
+        LocalDate(year.toInt(), month.toInt(), day.toInt())
+    }
 
 
 private fun WeekDishDto.toDomain() =

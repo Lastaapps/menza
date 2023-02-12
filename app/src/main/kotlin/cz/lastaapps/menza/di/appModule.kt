@@ -29,6 +29,7 @@ import cz.lastaapps.menza.features.root.ui.RootViewModel
 import cz.lastaapps.menza.features.settings.di.settingsModule
 import cz.lastaapps.menza.features.starting.di.startingModule
 import cz.lastaapps.menza.features.today.di.todayModule
+import cz.lastaapps.menza.features.week.di.weekModule
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDataStore
 import cz.lastaapps.menza.ui.layout.menza.MenzaOrderDataStore
 import cz.lastaapps.scraping.scrapingModule
@@ -51,6 +52,7 @@ val appModule = module {
         mainModule,
         startingModule,
         todayModule,
+        weekModule,
     )
 
     single<MenzaOrderDataStore> { MenzaOrderDataStore(get()) }

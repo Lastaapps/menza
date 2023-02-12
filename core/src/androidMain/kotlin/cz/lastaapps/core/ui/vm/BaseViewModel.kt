@@ -25,7 +25,6 @@ import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @JvmInline
@@ -42,7 +41,4 @@ abstract class BaseViewModel(private val context: VMContext) : ViewModel() {
     protected fun <T> Flow<T>.launchInVM() {
         viewModelScope.launch(context.context) { collect() }
     }
-
-    fun <T> Flow<T>.launchOnEach(action: suspend CoroutineScope.(T) -> Unit): Flow<T> =
-        onEach { value -> launch { action(value) } }
 }

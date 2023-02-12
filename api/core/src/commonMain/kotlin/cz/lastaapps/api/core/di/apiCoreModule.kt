@@ -31,6 +31,10 @@ import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -47,14 +51,19 @@ val apiCoreModule = module {
     // Once global
     singleOf(::MenzaScopeStore)
 
+    val scopeStoreMutex = Mutex()
     factory { (menza: MenzaType) ->
-        val store = get<MenzaScopeStore>()
-        store.getOrPut(menza) {
-            when (menza) {
-                Strahov -> createScope<Strahov>()
-                is Subsystem -> createScope<Subsystem>()
-                FEL -> createScope<FEL>()
-                FS -> createScope<FS>()
+        runBlocking(Dispatchers.Default) {
+            scopeStoreMutex.withLock {
+                val store = get<MenzaScopeStore>()
+                store.getOrPut(menza) {
+                    when (menza) {
+                        Strahov -> createScope<Strahov>()
+                        is Subsystem -> createScope<Subsystem>()
+                        FEL -> createScope<FEL>()
+                        FS -> createScope<FS>()
+                    }
+                }
             }
         }
     }
@@ -82,7 +91,4 @@ private value class MenzaTypeScope(val scope: Scope)
 private inline fun <reified T : MenzaType> Scope.createScope() =
     MenzaTypeScope(getKoin().createScope<T>())
 
-// Is not atomic, won't break hopefully
-// I have had PA1, it will break, but I won't fix this
-// Fuck me
 private class MenzaScopeStore : MutableMap<MenzaType, MenzaTypeScope> by HashMap()

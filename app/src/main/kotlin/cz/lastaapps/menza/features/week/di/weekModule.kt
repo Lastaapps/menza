@@ -17,20 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.main.domain.usecase
+package cz.lastaapps.menza.features.week.di
 
-import cz.lastaapps.api.core.domain.model.common.Menza
-import cz.lastaapps.api.core.domain.repo.WeekDishRepo
-import cz.lastaapps.core.domain.UCContext
-import cz.lastaapps.core.domain.UseCase
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
-import org.koin.core.parameter.parametersOf
+import cz.lastaapps.menza.features.week.ui.vm.WeekViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.dsl.module
 
-class SyncWeekDishListUC(
-    context: UCContext,
-) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(menza: Menza, isForced: Boolean = false) = launch {
-        get<WeekDishRepo> { parametersOf(menza.type) }.sync(isForced = isForced)
-    }
+val weekModule = module {
+    viewModelOf(::WeekViewModel)
 }

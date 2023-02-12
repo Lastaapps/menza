@@ -17,47 +17,33 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.today.ui.vm
+package cz.lastaapps.menza.features.week.ui.vm
 
 import androidx.compose.runtime.Composable
 import arrow.core.Either.Left
 import arrow.core.Either.Right
-import cz.lastaapps.api.core.domain.model.common.DishCategory
 import cz.lastaapps.api.core.domain.model.common.Menza
-import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
+import cz.lastaapps.api.core.domain.model.common.WeekDayDish
+import cz.lastaapps.api.main.domain.usecase.GetWeekDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
-import cz.lastaapps.api.main.domain.usecase.SyncTodayDishListUC
+import cz.lastaapps.api.main.domain.usecase.SyncWeekDishListUC
 import cz.lastaapps.core.domain.error.MenzaError
-import cz.lastaapps.core.domain.usecase.IsOnMeteredUC
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
-import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
-import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onEach
 
-internal class DishListViewModel(
+internal class WeekViewModel(
     context: VMContext,
     private val getSelectedMenza: GetSelectedMenzaUC,
-    private val getTodayDishList: GetTodayDishListUC,
-    private val syncTodayDishList: SyncTodayDishListUC,
-    private val getPriceType: GetPriceTypeUC,
-    private val getImagesOnMetered: GetImagesOnMeteredUC,
-    private val getImageScale: GetImageScaleUC,
-    private val getShowCzech: GetShowCzechUC,
-    private val isOnMetered: IsOnMeteredUC,
+    private val getWeekDish: GetWeekDishListUC,
+    private val syncWeekDish: SyncWeekDishListUC,
     private val openMenuLink: OpenMenuUC,
-) : StateViewModel<DishListState>(DishListState(), context), Appearing, ErrorHolder {
+) : StateViewModel<WeekState>(WeekState(), context), Appearing, ErrorHolder {
     override fun onAppeared() = launch {
         launch {
             getSelectedMenza().collectLatest {
@@ -69,32 +55,12 @@ internal class DishListViewModel(
                 }
                 if (it != null) {
                     load(it, false)
-                    getTodayDishList(it).collectLatest { items ->
+                    getWeekDish(it).collectLatest { items ->
                         updateState { copy(items = items) }
                     }
                 }
             }
         }
-
-        getPriceType().onEach {
-            updateState { copy(priceType = it) }
-        }.launchInVM()
-
-        getImagesOnMetered().onEach {
-            updateState { copy(downloadOnMetered = it) }
-        }.launchInVM()
-
-        getImageScale().onEach {
-            updateState { copy(imageScale = it) }
-        }.launchInVM()
-
-        getShowCzech().onEach {
-            updateState { copy(showCzech = it) }
-        }.launchInVM()
-
-        isOnMetered().onEach {
-            updateState { copy(isOnMetered = it) }
-        }.launchInVM()
     }
 
     fun reload() {
@@ -108,7 +74,7 @@ internal class DishListViewModel(
 
     private fun load(menza: Menza, isForced: Boolean) = launch {
         updateState { copy(isLoading = true) }
-        when (val res = syncTodayDishList(menza, isForced = isForced)) {
+        when (val res = syncWeekDish(menza, isForced = isForced)) {
             is Left -> updateState { copy(error = res.value) }
             is Right -> {}
         }
@@ -120,14 +86,9 @@ internal class DishListViewModel(
     override fun dismissError() = updateState { copy(error = null) }
 }
 
-internal data class DishListState(
+internal data class WeekState(
+    val selectedMenza: Menza? = null,
     val isLoading: Boolean = false,
     val error: MenzaError? = null,
-    val selectedMenza: Menza? = null,
-    val items: ImmutableList<DishCategory> = persistentListOf(),
-    val priceType: PriceType = Unset,
-    val downloadOnMetered: Boolean = false,
-    val showCzech: ShowCzech = ShowCzech(true),
-    val imageScale: Float = 1f,
-    val isOnMetered: Boolean = false,
+    val items: ImmutableList<WeekDayDish> = persistentListOf(),
 )

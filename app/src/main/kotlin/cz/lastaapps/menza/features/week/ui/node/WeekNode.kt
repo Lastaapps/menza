@@ -17,20 +17,29 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.main.domain.usecase
+package cz.lastaapps.menza.features.week.ui.node
 
-import cz.lastaapps.api.core.domain.model.common.Menza
-import cz.lastaapps.api.core.domain.repo.WeekDishRepo
-import cz.lastaapps.core.domain.UCContext
-import cz.lastaapps.core.domain.UseCase
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
-import org.koin.core.parameter.parametersOf
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.features.week.ui.screen.WeekScreen
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 
-class SyncWeekDishListUC(
-    context: UCContext,
-) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(menza: Menza, isForced: Boolean = false) = launch {
-        get<WeekDishRepo> { parametersOf(menza.type) }.sync(isForced = isForced)
+class WeekNode(
+    buildContext: BuildContext,
+    private val onOsturak: () -> Unit,
+) : Node(buildContext) {
+
+    @Composable
+    override fun View(modifier: Modifier) {
+        WeekScreen(
+            onOsturak = onOsturak,
+            modifier = modifier
+                .padding(MenzaPadding.More.Screen)
+                .fillMaxSize(),
+        )
     }
 }

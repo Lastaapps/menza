@@ -23,7 +23,6 @@ import cz.lastaapps.menza.ui.dests.info.InfoViewModel
 import cz.lastaapps.menza.ui.dests.others.crashes.CrashesViewModel
 import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewViewModel
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.dests.today.AllergenViewModel
 import cz.lastaapps.menza.ui.dests.today.TodayViewModel
 import cz.lastaapps.menza.ui.dests.week.WeekViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
@@ -43,7 +42,6 @@ internal val legacyModule = module {
     viewModel<MenzaViewModel> { MenzaViewModel(get(), get(), get()) }
     viewModel<WhatsNewViewModel> { WhatsNewViewModel(get(), get()) }
     viewModel<CrashesViewModel> { CrashesViewModel(get()) }
-    viewModel<AllergenViewModel> { AllergenViewModel(get()) }
     viewModel<TodayViewModel> { TodayViewModel(get(), get()) }
     viewModel<WeekViewModel> { WeekViewModel(get()) }
     viewModel<RootViewModel> { RootViewModel(get()) }

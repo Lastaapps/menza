@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.today.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -27,8 +26,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
@@ -62,10 +59,10 @@ import cz.lastaapps.menza.features.today.ui.util.getAmount
 import cz.lastaapps.menza.features.today.ui.util.getName
 import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
+import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.dests.panels.Panels
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -168,29 +165,6 @@ private fun DishContent(
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
-            }
-        }
-    }
-}
-
-@Composable
-private fun NoItems(modifier: Modifier, onNoItems: () -> Unit) {
-    Column(
-        modifier = modifier.verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
-    ) {
-        Text(stringResource(R.string.today_list_none))
-
-        // show web button after 3 seconds
-        var visible by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            delay(3000)
-            visible = true
-        }
-        AnimatedVisibility(visible) {
-            TextButton(onClick = onNoItems) {
-                Text(stringResource(R.string.today_list_web))
             }
         }
     }

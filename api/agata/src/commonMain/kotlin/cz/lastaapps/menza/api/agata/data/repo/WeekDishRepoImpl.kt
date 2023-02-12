@@ -22,6 +22,7 @@ package cz.lastaapps.menza.api.agata.data.repo
 import arrow.core.recover
 import arrow.core.right
 import arrow.core.rightIor
+import arrow.fx.coroutines.parMap
 import cz.lastaapps.api.core.domain.model.common.WeekDayDish
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
@@ -34,9 +35,7 @@ import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.domain.error.ApiErrorLogic.WeekNotAvailable
 import cz.lastaapps.menza.api.agata.api.DishApi
-import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDto
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
-import java.time.DayOfWeek.FRIDAY
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -44,15 +43,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 internal class WeekDishRepoImpl(
     private val subsystemId: Int,
     private val dishApi: DishApi,
     private val processor: SyncProcessor,
-    private val clock: Clock,
     private val checker: ValidityChecker,
 ) : WeekDishRepo {
 
@@ -61,23 +56,31 @@ internal class WeekDishRepoImpl(
 
     private val weekDishList = MutableStateFlow<ImmutableList<WeekDayDish>>(persistentListOf())
 
-    override fun getData(): Flow<ImmutableList<WeekDayDish>> = weekDishList
-        .combine(isValidFlow) { data, validity ->
+    override fun getData(): Flow<ImmutableList<WeekDayDish>> =
+        combine(
+            weekDishList,
+            isValidFlow,
+        ) { data, validity ->
             data.takeIf { validity } ?: persistentListOf()
         }
 
-    private fun List<WeekDto>.selectCurrent(timeZone: TimeZone = TimeZone.currentSystemDefault()): WeekDto? {
-        if (isEmpty()) return null
-        if (size == 1 && first().id == 0) return null
-        val now = clock.now().toLocalDateTime(timeZone).date
-        return if (now.dayOfWeek <= FRIDAY) first() else last()
-    }
+//    private fun List<WeekDto>.selectCurrent(timeZone: TimeZone = TimeZone.currentSystemDefault()): WeekDto? {
+//        if (isEmpty()) return null
+//        if (size == 1 && first().id == 0) return null
+//        val now = clock.now().toLocalDateTime(timeZone).date
+//        return if (now.dayOfWeek <= FRIDAY) first() else last()
+//    }
 
     private val syncJob = SyncJobNoCache(
         fetchApi = {
             val weeks = dishApi.getWeeks(subsystemId).bind()
-            val week = weeks?.selectCurrent() ?: raise(WeekNotAvailable)
-            dishApi.getWeekDishList(week.id).bind().orEmpty()
+                ?: raise(WeekNotAvailable)
+
+            weeks
+                .sortedBy { it.id }
+                .parMap { week ->
+                    dishApi.getWeekDishList(week.id).bind().orEmpty()
+                }.flatten()
         },
         convert = { data -> data.toDomain().rightIor() },
         store = { data ->
@@ -85,12 +88,16 @@ internal class WeekDishRepoImpl(
         }
     )
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome =
-        checker.withCheckSince(validityKey, isForced, 1.days) {
-            processor.runSync(syncJob, isForced = isForced).recover {
+    private var hasSynced = false
+    override suspend fun sync(isForced: Boolean): SyncOutcome {
+        val myForced = isForced || !hasSynced
+        println("FINDME sync ${this@WeekDishRepoImpl.hashCode()}")
+        return checker.withCheckSince(validityKey, myForced, 1.days) {
+            processor.runSync(syncJob, isForced = myForced).recover {
                 if (it is WeekNotAvailable) Unavailable else raise(it)
             }
-        }
+        }.onRight { hasSynced = true }
+    }
 }
 
 internal object WeekRepoStrahovImpl : WeekDishRepo {
