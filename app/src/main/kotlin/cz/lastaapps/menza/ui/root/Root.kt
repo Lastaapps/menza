@@ -39,11 +39,8 @@ import cz.lastaapps.menza.navigation.Dest.R
 import cz.lastaapps.menza.ui.dests.info.InfoLayout
 import cz.lastaapps.menza.ui.dests.info.InfoViewModel
 import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
-import cz.lastaapps.menza.ui.dests.others.osturak.OsturakLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import cz.lastaapps.menza.ui.dests.week.WeekLayout
-import cz.lastaapps.menza.ui.dests.week.WeekViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.locals.*
 import cz.lastaapps.menza.ui.theme.AppTheme
@@ -136,11 +133,11 @@ private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsVie
 //                        )
                     }
                     composable(R.week) {
-                        WeekLayout(
-                            navController = navHostState,
-                            menzaId = menzaId,
-                            weekViewModel = koinActivityViewModel<WeekViewModel>(),
-                        )
+//                        WeekLayout(
+//                            navController = navHostState,
+//                            menzaId = menzaId,
+//                            weekViewModel = koinActivityViewModel<WeekViewModel>(),
+//                        )
                     }
                     composable(R.info) {
                         InfoLayout(
@@ -161,9 +158,9 @@ private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsVie
                         LicenseLayout()
                     }
                     composable(R.osturak) {
-                        OsturakLayout(
-                            navController = navHostState
-                        )
+//                        OsturakLayout(
+//                            navController = navHostState
+//                        )
                     }
                     dialog(R.privacyPolicy) {
                         PrivacyDialogContent(showAccept = false, onAccept = {})

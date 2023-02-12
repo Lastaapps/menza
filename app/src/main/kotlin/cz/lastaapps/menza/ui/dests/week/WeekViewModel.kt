@@ -25,7 +25,6 @@ import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.menza.compareToLocal
-import cz.lastaapps.menza.di.WeekRepoFactory
 import cz.lastaapps.storage.repo.MenzaScrapingError
 import cz.lastaapps.storage.repo.WeekRepo
 import java.util.Locale
@@ -39,7 +38,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
 class WeekViewModel constructor(
-    private val weekRepoFactory: WeekRepoFactory,
+//    private val weekRepoFactory: WeekRepoFactory,
 ) : ViewModel() {
 
     private val repos = HashMap<MenzaId, WeekRepo>()
@@ -79,7 +78,8 @@ class WeekViewModel constructor(
     }
 
     private fun HashMap<MenzaId, WeekRepo>.getOrCreate(menzaId: MenzaId) = getOrPut(menzaId) {
-        weekRepoFactory.create(menzaId)
+//        weekRepoFactory.create(menzaId)
+        Unit as WeekRepo
     }
 
     private fun Collection<WeekDish>.toDayDishList(locale: Locale): ImmutableList<DayDishList> {

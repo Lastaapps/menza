@@ -17,82 +17,97 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.others.osturak
+package cz.lastaapps.menza.ui.components.layout
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import cz.lastaapps.menza.ui.components.layout.SplitLayout
-import cz.lastaapps.menza.ui.root.BackArrow
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 
 @Composable
-fun OsturakLayout(
-    navController: NavController,
+fun AboveOrSideBySideLayout(
+    topLeft: @Composable () -> Unit,
+    bottomRight: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     when (LocalWindowWidth.current) {
         WindowWidthSizeClass.Compact -> {
-            OsturakLayoutCompact(
-                navController = navController,
+            AboveOrSideBySideCompact(
+                topLeft = topLeft,
+                bottomRight = bottomRight,
+                modifier = modifier,
             )
         }
 
         WindowWidthSizeClass.Medium -> {
-            OsturakLayoutMedium(
-                navController = navController,
+            AboveOrSideBySideMedium(
+                topLeft = topLeft,
+                bottomRight = bottomRight,
+                modifier = modifier,
             )
         }
 
         WindowWidthSizeClass.Expanded -> {
-            OsturakLayoutExpanded()
+            AboveOrSideBySideExpanded(
+                topLeft = topLeft,
+                bottomRight = bottomRight,
+                modifier = modifier,
+            )
         }
     }
 }
 
 @Composable
-fun OsturakLayoutCompact(navController: NavController) {
-    BackArrow {
-        navController.navigateUp()
-    }
-
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            OsturakText()
-            OsturakImages(Modifier.fillMaxWidth())
-        }
+private fun AboveOrSideBySideCompact(
+    topLeft: @Composable () -> Unit,
+    bottomRight: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxSize(),
+    ) {
+        topLeft()
+        bottomRight()
     }
 }
 
 @Composable
-fun OsturakLayoutMedium(
-    navController: NavController
-) = OsturakLayoutCompact(
-    navController = navController,
+private fun AboveOrSideBySideMedium(
+    topLeft: @Composable () -> Unit,
+    bottomRight: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+) = AboveOrSideBySideCompact(
+    topLeft = topLeft,
+    bottomRight = bottomRight,
+    modifier = modifier,
 )
 
 @Composable
-fun OsturakLayoutExpanded() {
+private fun AboveOrSideBySideExpanded(
+    topLeft: @Composable () -> Unit,
+    bottomRight: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     SplitLayout(
+        modifier = modifier,
         panel1 = {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
                 contentAlignment = Alignment.Center
-            ) { OsturakText() }
+            ) { topLeft() }
         },
         panel2 = {
             Box(
@@ -100,6 +115,7 @@ fun OsturakLayoutExpanded() {
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
                 contentAlignment = Alignment.Center
-            ) { OsturakImages() }
-        })
+            ) { bottomRight() }
+        },
+    )
 }

@@ -27,7 +27,6 @@ import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.compareToLocal
-import cz.lastaapps.menza.di.TodayRepoFactory
 import cz.lastaapps.storage.repo.AllergenRepo
 import cz.lastaapps.storage.repo.MenzaScrapingError
 import cz.lastaapps.storage.repo.TodayRepo
@@ -46,7 +45,7 @@ import kotlinx.coroutines.launch
 typealias DishTypeList = Pair<CourseType, ImmutableList<Dish>>
 
 class TodayViewModel constructor(
-    private val todayRepoFactory: TodayRepoFactory,
+//    private val todayRepoFactory: TodayRepoFactory,
     private val allergenRepo: AllergenRepo,
 ) : ViewModel() {
 
@@ -121,7 +120,8 @@ class TodayViewModel constructor(
     }
 
     private fun HashMap<MenzaId, TodayRepo>.getOrCreate(menzaId: MenzaId) = getOrPut(menzaId) {
-        todayRepoFactory.create(menzaId)
+//        todayRepoFactory.create(menzaId)
+        Unit as TodayRepo
     }
 
     private fun Collection<Dish>.toDishTypeList(): ImmutableList<DishTypeList> {
