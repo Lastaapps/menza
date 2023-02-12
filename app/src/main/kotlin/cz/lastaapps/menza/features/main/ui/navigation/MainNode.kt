@@ -44,8 +44,11 @@ import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.activate
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.DrawerContent
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.Today
 import cz.lastaapps.menza.features.main.ui.node.DrawerNode
 import cz.lastaapps.menza.features.main.ui.vm.MainViewModel
+import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
+import cz.lastaapps.menza.ui.util.activateType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -66,6 +69,11 @@ class MainNode(
     override fun resolve(navTarget: MainNavType, buildContext: BuildContext): Node =
         when (navTarget) {
             DrawerContent -> DrawerNode(buildContext, ::currentDrawerState)
+            Today -> TodayNode(
+                buildContext,
+                onOsturak = { spotlight.activateType(MainNavType.Osturak) },
+            )
+
             else ->
                 node(buildContext) {
                     Text(text = navTarget.toString())

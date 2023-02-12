@@ -19,9 +19,11 @@
 
 package cz.lastaapps.menza.features.main.ui.components
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -30,13 +32,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.navigation.Dest
+
+@Composable
+fun WrapMenzaNotSelected(
+    menza: Menza?,
+    onOsturak: () -> Unit,
+    modifier: Modifier = Modifier,
+    childModifier: Modifier = Modifier.fillMaxSize(),
+    content: @Composable () -> Unit,
+) {
+    Crossfade(
+        targetState = menza == null,
+        modifier = modifier,
+    ) { isNotSelected ->
+        if (isNotSelected) {
+            MenzaNotSelected(
+                onOsturak = onOsturak,
+                modifier = childModifier,
+            )
+        } else {
+            content()
+        }
+    }
+}
 
 @Composable
 fun MenzaNotSelected(
-    navController: NavController,
+    onOsturak: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier, contentAlignment = Alignment.Center) {
@@ -55,7 +79,7 @@ fun MenzaNotSelected(
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
-            TextButton(onClick = { navController.navigate(Dest.R.osturak) }) {
+            TextButton(onClick = onOsturak) {
                 Text(stringResource(R.string.menza_none_osturak))
             }
         }

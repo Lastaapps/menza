@@ -63,7 +63,10 @@ private object LongListAdapter : ColumnAdapter<List<Long>, String> {
     private const val delimiter = ";"
 
     override fun decode(databaseValue: String): List<Long> =
-        databaseValue.split(delimiter).map { it.toLong() }
+        databaseValue
+            .split(delimiter)
+            .filter { it.isNotEmpty() }
+            .map { item -> item.toLong() }
 
     override fun encode(value: List<Long>): String =
         value.joinToString(separator = delimiter)
@@ -86,13 +89,14 @@ private object LocalTimeAdapter : ColumnAdapter<LocalTime, Long> {
 }
 
 private object LatLongAdapter : ColumnAdapter<LatLong, String> {
-    private const val delimitter = ';'
+    private const val delimiter = ';'
     override fun decode(databaseValue: String): LatLong =
         databaseValue
-            .split(delimitter)
+            .split(delimiter)
+            .filter { it.isNotEmpty() }
             .map { it.toFloat() }
             .let { (lat, long) -> LatLong(lat = lat, long = long) }
 
     override fun encode(value: LatLong): String =
-        "${value.lat}$delimitter${value.long}"
+        "${value.lat}$delimiter${value.long}"
 }

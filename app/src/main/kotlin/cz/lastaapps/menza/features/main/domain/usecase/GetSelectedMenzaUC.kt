@@ -30,7 +30,7 @@ class GetSelectedMenzaUC internal constructor(
     private val repo: SelectedMenzaRepo,
     private val getMenzaList: GetMenzaListUC,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
+    suspend operator fun invoke() =
         combine(
             repo.getSelectedMenza(),
             getMenzaList()
@@ -41,5 +41,4 @@ class GetSelectedMenzaUC internal constructor(
                 all.firstOrNull { it.type == selected }
             }
         }
-    }
 }

@@ -27,11 +27,14 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 internal class MainSettingsRepoImpl(
     private val initial: InitMenzaDataSource,
     private val general: GeneralDataSource,
+    private val defaults: DefaultsProvider,
 ) : MainSettingsRepo {
     override suspend fun storeInitialMenzaMode(mode: InitialMenza) =
         initial.storeInitialMenzaMode(mode)
@@ -93,4 +96,11 @@ internal class MainSettingsRepoImpl(
 
     override fun getImagesOnMetered(): Flow<Boolean> =
         general.getImagesOnMetered()
+
+    override suspend fun setShowCzech(mode: ShowCzech) =
+        general.setShowCzech(mode)
+
+    override fun getShowCzech(): Flow<ShowCzech> =
+        general.getShowCzech().map { it ?: defaults.defaultShowCzech() }
+
 }

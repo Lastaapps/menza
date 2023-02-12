@@ -40,7 +40,6 @@ internal class DownloadViewModel constructor(
     private val downloadData: DownloadInitDataUC,
     context: VMContext,
 ) : StateViewModel<DownloadDataState>(DownloadDataState(), context), ErrorHolder, Appearing {
-
     companion object {
         private val log = logging()
     }

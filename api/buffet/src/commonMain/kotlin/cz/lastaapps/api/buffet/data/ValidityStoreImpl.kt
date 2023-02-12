@@ -24,7 +24,7 @@ import com.russhwolf.settings.Settings
 import com.russhwolf.settings.serialization.decodeValue
 import com.russhwolf.settings.serialization.encodeValue
 import cz.lastaapps.api.buffet.domain.ValidityStore
-import cz.lastaapps.core.util.CET
+import cz.lastaapps.core.util.extensions.CET
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone

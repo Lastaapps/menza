@@ -20,13 +20,13 @@
 package cz.lastaapps.menza.api.agata.api
 
 import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.util.catchingNetwork
+import cz.lastaapps.core.util.extensions.catchingNetwork
 import cz.lastaapps.menza.api.agata.data.AgataClient
-import cz.lastaapps.menza.api.agata.domain.model.Func
 import cz.lastaapps.menza.api.agata.domain.model.Func.Dish
 import cz.lastaapps.menza.api.agata.domain.model.Func.DishHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.Pictogram
 import cz.lastaapps.menza.api.agata.domain.model.Func.PictogramHash
+import cz.lastaapps.menza.api.agata.domain.model.Func.Strahov
 import cz.lastaapps.menza.api.agata.domain.model.Func.StrahovHash
 import cz.lastaapps.menza.api.agata.domain.model.Func.Week
 import cz.lastaapps.menza.api.agata.domain.model.Func.WeekDays
@@ -84,7 +84,7 @@ internal class DishApiImpl(
         }
 
     override suspend fun getStrahov(): Outcome<List<StrahovDto>?> = catchingNetwork {
-        client.getFun(Func.Strahov).body()
+        client.getFun(Strahov).body()
     }
 
     override suspend fun getStrahovHash(): Outcome<String> = catchingNetwork {

@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.util
+package cz.lastaapps.core.util.extensions
 
 import arrow.core.Either
 import cz.lastaapps.core.domain.Outcome

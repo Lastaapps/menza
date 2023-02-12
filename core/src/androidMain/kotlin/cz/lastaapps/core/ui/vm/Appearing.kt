@@ -21,15 +21,37 @@ package cz.lastaapps.core.ui.vm
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 
 interface Appearing {
     fun onAppeared()
 }
 
-@Suppress("NOTHING_TO_INLINE")
 @Composable
 fun HandleAppear(appearing: Appearing) {
+    val key = remember(appearing) {
+        buildString {
+            append(Appearing::class.qualifiedName)
+            append('_')
+            append(appearing::class.simpleName)
+            append('_')
+            append(appearing.hashCode().toString())
+        }
+    }
+
+    var shown by rememberSaveable(
+        appearing.hashCode(),
+        key = key,
+    ) { mutableStateOf(false) }
+
     LaunchedEffect(appearing) {
-        appearing.onAppeared()
+        if (!shown) {
+            shown = true
+            appearing.onAppeared()
+        }
     }
 }

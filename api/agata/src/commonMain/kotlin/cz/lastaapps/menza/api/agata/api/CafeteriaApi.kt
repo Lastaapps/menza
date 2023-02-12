@@ -20,9 +20,14 @@
 package cz.lastaapps.menza.api.agata.api
 
 import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.util.catchingNetwork
+import cz.lastaapps.core.util.extensions.catchingNetwork
 import cz.lastaapps.menza.api.agata.data.AgataClient
-import cz.lastaapps.menza.api.agata.domain.model.Func
+import cz.lastaapps.menza.api.agata.domain.model.Func.ServingPaces
+import cz.lastaapps.menza.api.agata.domain.model.Func.ServingPacesHash
+import cz.lastaapps.menza.api.agata.domain.model.Func.Subsystem
+import cz.lastaapps.menza.api.agata.domain.model.Func.SubsystemHash
+import cz.lastaapps.menza.api.agata.domain.model.Func.Types
+import cz.lastaapps.menza.api.agata.domain.model.Func.TypesHash
 import cz.lastaapps.menza.api.agata.domain.model.dto.DishTypeDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.ServingPlaceDto
 import cz.lastaapps.menza.api.agata.domain.model.dto.SubsystemDto
@@ -47,28 +52,28 @@ internal class CafeteriaApiImpl(
     private val client = agataClient.client
 
     override suspend fun getSubsystems(): Outcome<List<SubsystemDto>?> = catchingNetwork {
-        client.getFun(Func.Subsystem, secondId = 1).body()
+        client.getFun(Subsystem, secondId = 1).body()
     }
 
     override suspend fun getSubsystemsHash(): Outcome<String> = catchingNetwork {
-        client.getFun(Func.SubsystemHash, secondId = 1).body()
+        client.getFun(SubsystemHash, secondId = 1).body()
     }
 
     override suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlaceDto>?> =
         catchingNetwork {
-            client.getFun(Func.ServingPaces, subsystemId = subsystemId).body()
+            client.getFun(ServingPaces, subsystemId = subsystemId).body()
         }
 
     override suspend fun getServingPlacesHash(subsystemId: Int): Outcome<String> = catchingNetwork {
-        client.getFun(Func.ServingPacesHash, subsystemId = subsystemId).body()
+        client.getFun(ServingPacesHash, subsystemId = subsystemId).body()
     }
 
     override suspend fun getDishTypes(subsystemId: Int): Outcome<List<DishTypeDto>?> =
         catchingNetwork {
-            client.getFun(Func.Types, subsystemId = subsystemId).body()
+            client.getFun(Types, subsystemId = subsystemId).body()
         }
 
     override suspend fun getDishTypesHash(subsystemId: Int): Outcome<String> = catchingNetwork {
-        client.getFun(Func.TypesHash, subsystemId = subsystemId).body()
+        client.getFun(TypesHash, subsystemId = subsystemId).body()
     }
 }

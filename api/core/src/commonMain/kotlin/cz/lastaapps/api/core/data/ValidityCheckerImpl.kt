@@ -24,11 +24,11 @@ import com.russhwolf.settings.ObservableSettings
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.isUpdatedSince
-import cz.lastaapps.core.util.CET
-import cz.lastaapps.core.util.atMidnight
-import cz.lastaapps.core.util.deserializeValueOrNullFlow
-import cz.lastaapps.core.util.findMonday
-import cz.lastaapps.core.util.serializeValue
+import cz.lastaapps.core.util.extensions.CET
+import cz.lastaapps.core.util.extensions.atMidnight
+import cz.lastaapps.core.util.extensions.deserializeValueOrNullFlow
+import cz.lastaapps.core.util.extensions.findMonday
+import cz.lastaapps.core.util.extensions.serializeValue
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.flow.Flow

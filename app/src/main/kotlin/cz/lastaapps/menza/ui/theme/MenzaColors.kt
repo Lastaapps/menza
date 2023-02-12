@@ -45,7 +45,7 @@ private val menzaColors = persistentListOf(
 )
 
 fun colorForMenza(menza: Menza): ImmutableList<Color> {
-    val hash = menza.type.hashCode()
+    val hash = menza.name.hashCode()
     return menzaColors[abs(hash % menzaColors.size)]
         .let { persistentListOf(it.first, it.second) }
 }

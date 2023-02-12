@@ -30,7 +30,7 @@ import arrow.core.rightIor
 import cz.lastaapps.api.buffet.domain.model.dto.WebContentDto
 import cz.lastaapps.core.domain.OutcomeIor
 import cz.lastaapps.core.domain.outcome
-import cz.lastaapps.core.util.catchingNetwork
+import cz.lastaapps.core.util.extensions.catchingNetwork
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText

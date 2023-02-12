@@ -19,8 +19,8 @@
 
 package cz.lastaapps.api.core.domain.validity
 
-import cz.lastaapps.core.util.CET
-import cz.lastaapps.core.util.atMidnight
+import cz.lastaapps.core.util.extensions.CET
+import cz.lastaapps.core.util.extensions.atMidnight
 import kotlin.time.Duration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant

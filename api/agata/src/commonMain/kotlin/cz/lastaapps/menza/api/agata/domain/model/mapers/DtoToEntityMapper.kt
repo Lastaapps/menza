@@ -72,7 +72,7 @@ internal fun DishDto.toEntity(beConfig: AgataBEConfig) =
         priceDiscount = priceDiscount.toDouble(),
         allergens = allergens,
         photoLink = photoLink?.let {
-            beConfig.photoLinkForName(subsystemId, it)
+            beConfig.photoLinkForAgataSubsystem(subsystemId, it)
         },
         pictogram = pictogram,
         isActive = isActive,
@@ -187,8 +187,8 @@ internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
     StrahovEntiy(
         id = id.toLong(),
         groupId = groupId.toLong(),
-        groupNameCs = groupNameCs,
-        groupNameEn = groupNameEn,
+        groupNameCs = groupNameCs.myCapitalize(),
+        groupNameEn = groupNameEn.myCapitalize(),
         groupOrder = groupOrder.toLong(),
         itemOrder = order.toLong(),
         amountCs = amountCs,
@@ -199,6 +199,16 @@ internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
         priceStudent = priceStudent.toDouble(),
         allergens = allergens,
         photoLink = photoLink?.let {
-            beConfig.photoLinkForName(null, it)
+            beConfig.photoLinkForStrahov(it)
         },
     )
+
+// Strahov uses ALL CAPS and it looks just horrible
+private fun String.myCapitalize() =
+    mapIndexed { index, c ->
+        if (index == 0) {
+            c.uppercaseChar()
+        } else {
+            c.lowercaseChar()
+        }
+    }.joinToString(separator = "")

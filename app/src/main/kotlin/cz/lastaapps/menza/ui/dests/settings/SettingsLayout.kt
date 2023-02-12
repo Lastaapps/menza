@@ -28,7 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import cz.lastaapps.menza.features.main.ui.layout.UseSplitLayout
+import cz.lastaapps.menza.features.main.ui.layout.SplitLayout
 import cz.lastaapps.menza.ui.dests.others.AboutUi
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import cz.lastaapps.menza.ui.root.BackArrow
@@ -125,7 +125,7 @@ fun SettingsLayoutExpanded(
     settingsViewModel: SettingsViewModel,
     viewModel: SettingsViewModel,
 ) {
-    UseSplitLayout(
+    SplitLayout(
         panel1 = {
             SettingsUI(
                 navController = navController,

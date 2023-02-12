@@ -45,7 +45,6 @@ import cz.lastaapps.entity.common.CourseType
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.main.ui.components.MenzaNotSelected
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
@@ -65,7 +64,7 @@ fun WeekDishList(
     viewModel: WeekViewModel,
 ) {
     if (menzaId == null) {
-        MenzaNotSelected(navController, modifier)
+//        MenzaNotSelected(navController, modifier)
     } else {
 
         //show error snackBars

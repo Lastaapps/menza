@@ -19,6 +19,8 @@
 
 package cz.lastaapps.menza.features.settings.di
 
+import cz.lastaapps.menza.features.settings.data.DefaultsProvider
+import cz.lastaapps.menza.features.settings.data.DefaultsProviderImpl
 import cz.lastaapps.menza.features.settings.data.MainSettingsRepoImpl
 import cz.lastaapps.menza.features.settings.data.OrderRepoImpl
 import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSource
@@ -36,10 +38,12 @@ import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
+import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
 import cz.lastaapps.menza.features.settings.domain.usecase.OnSettingsOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetShowCzechUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetInitialMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetLatestMenzaUC
@@ -71,28 +75,35 @@ val settingsModule = module {
     single { GeneralSettings.create(get()) }
     factoryOf(::GeneralDataSourceImpl) bind GeneralDataSource::class
     singleOf(::MainSettingsRepoImpl) bind MainSettingsRepo::class
+    factoryOf(::DefaultsProviderImpl) bind DefaultsProvider::class
 
     viewModelOf(::AppThemeViewModel)
 
+    // Theme
     factoryOf(::GetAppThemeUC)
     factoryOf(::GetThemeListUC)
     factoryOf(::SetAppThemeUC)
     factoryOf(::IsDynamicThemeSupportedUC)
     factoryOf(::GetDarkModeUC)
-    factoryOf(::GetImageScaleUC)
-    factoryOf(::GetImageScaleUC)
-    factoryOf(::GetImagesOnMeteredUC)
-    factoryOf(::GetInitialMenzaUC)
-    factoryOf(::GetPriceTypeUC)
-    factoryOf(::GetSettingsEverOpenedUC)
-    factoryOf(::OnSettingsOpenedUC)
     factoryOf(::SetDarkModeUC)
-    factoryOf(::SetImageScaleUC)
-    factoryOf(::SetImagesOnMeteredUC)
+
+    // Initial
+    factoryOf(::GetInitialMenzaUC)
     factoryOf(::SetInitialMenzaUC)
     factoryOf(::SetLatestMenzaUC)
     factoryOf(::SetPreferredMenzaUC)
+
+    // Others
+    factoryOf(::GetImageScaleUC)
+    factoryOf(::GetImagesOnMeteredUC)
+    factoryOf(::GetPriceTypeUC)
+    factoryOf(::GetSettingsEverOpenedUC)
+    factoryOf(::GetShowCzechUC)
+    factoryOf(::OnSettingsOpenedUC)
+    factoryOf(::SetImageScaleUC)
+    factoryOf(::SetImagesOnMeteredUC)
     factoryOf(::SetPriceTypeUC)
+    factoryOf(::SetShowCzechUC)
 
     // Menza order
     viewModelOf(::ReorderMenzaViewModel)

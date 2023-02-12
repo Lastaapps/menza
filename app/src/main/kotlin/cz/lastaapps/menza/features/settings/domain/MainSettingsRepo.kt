@@ -24,6 +24,7 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import kotlinx.coroutines.flow.Flow
 
 internal interface MainSettingsRepo {
@@ -56,4 +57,7 @@ internal interface MainSettingsRepo {
 
     suspend fun setImagesOnMetered(enabled: Boolean)
     fun getImagesOnMetered(): Flow<Boolean>
+
+    suspend fun setShowCzech(mode: ShowCzech)
+    fun getShowCzech(): Flow<ShowCzech>
 }

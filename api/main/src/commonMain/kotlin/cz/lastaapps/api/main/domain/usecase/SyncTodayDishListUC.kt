@@ -30,7 +30,7 @@ import org.koin.core.parameter.parametersOf
 class SyncTodayDishListUC(
     context: UCContext,
 ) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(menza: Menza) = launch {
-        get<TodayDishRepo> { parametersOf(menza.type) }.sync()
+    suspend operator fun invoke(menza: Menza, isForced: Boolean) = launch {
+        get<TodayDishRepo> { parametersOf(menza.type) }.sync(isForced = isForced)
     }
 }

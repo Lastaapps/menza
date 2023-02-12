@@ -28,6 +28,7 @@ import com.russhwolf.settings.datastore.DataStoreSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -63,6 +64,9 @@ internal interface GeneralDataSource {
 
     suspend fun setImagesOnMetered(enabled: Boolean)
     fun getImagesOnMetered(): Flow<Boolean>
+
+    suspend fun setShowCzech(mode: ShowCzech)
+    fun getShowCzech(): Flow<ShowCzech?>
 }
 
 @OptIn(ExperimentalSettingsApi::class)
@@ -79,6 +83,7 @@ internal class GeneralDataSourceImpl(
         private const val appThemeKey = "app_theme"
         private const val imageScaleKey = "image_scale"
         private const val imagesOnMeteredKey = "images_on_metered"
+        private const val showCzechKey = "show_czech"
     }
 
     override suspend fun storeAppSetupFinished() =
@@ -132,4 +137,12 @@ internal class GeneralDataSourceImpl(
 
     override fun getImagesOnMetered(): Flow<Boolean> =
         settings.getBooleanFlow(imagesOnMeteredKey, true)
+
+    override suspend fun setShowCzech(mode: ShowCzech) =
+        settings.putBoolean(showCzechKey, mode.czech)
+
+    override fun getShowCzech(): Flow<ShowCzech?> =
+        settings.getBooleanOrNullFlow(showCzechKey)
+            .map { it?.let(::ShowCzech) }
+
 }

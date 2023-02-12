@@ -42,8 +42,8 @@ import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.domain.OutcomeIor
-import cz.lastaapps.core.util.CET
-import cz.lastaapps.core.util.findDayOfWeek
+import cz.lastaapps.core.util.extensions.CET
+import cz.lastaapps.core.util.extensions.findDayOfWeek
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow

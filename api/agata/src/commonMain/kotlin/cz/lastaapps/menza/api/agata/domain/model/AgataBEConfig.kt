@@ -28,11 +28,14 @@ internal data class AgataBEConfig(
     val apiKey: String,
 ) {
     @Suppress("SpellCheckingInspection")
-    fun photoLinkForName(subsytemId: Int?, name: String) =
-        "${protocol.name}://$host" +
-                "/jidelnicky/showfotoG.php?" +
-                (subsytemId?.let { "clPodsystem=$subsytemId&" } ?: "") +
-                "xFile=$name"
+    fun photoLinkForAgataSubsystem(subsystemId: Int, name: String) =
+        // Use showfoto for bigger, but faster responses
+        "${protocol.name}://$host/jidelnicky/showfotoG.php?clPodsystem=$subsystemId&xFile=$name"
+
+    @Suppress("SpellCheckingInspection")
+    fun photoLinkForStrahov(name: String) =
+        // Use showfotoM for bigger, but faster responses
+        "${protocol.name}://$host/jidelnicky/showfotoMG.php?xFile=$name"
 
     companion object {
         @Suppress("SpellCheckingInspection")

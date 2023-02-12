@@ -32,7 +32,7 @@ data class Dish(
     val amountCs: String?,
     val amountEn: String?,
     val nameEn: String?,
-    val nameCs: String?,
+    val nameCs: String,
     val priceDiscount: Float?,
     val priceNormal: Float?,
     // empty - no allergens

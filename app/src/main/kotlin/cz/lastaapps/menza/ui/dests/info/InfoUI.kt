@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.main.ui.components.MenzaNotSelected
 import cz.lastaapps.menza.ui.CollectErrors
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 
@@ -58,7 +57,7 @@ fun InfoAllTogether(
 ) {
     InfoRefresh(viewModel, snackbarHost) {
         if (menzaId == null) {
-            MenzaNotSelected(navController, modifier)
+//            MenzaNotSelected(navController, modifier)
         } else {
 
             val location by viewModel.getLocation(menzaId).collectAsState(initial = null)
@@ -95,7 +94,7 @@ fun InfoPrimary(
 ) {
     InfoRefresh(viewModel, snackbarHost, modifier) {
         if (menzaId == null) {
-            MenzaNotSelected(navController, modifier)
+//            MenzaNotSelected(navController, modifier)
         } else {
 
             val location by viewModel.getLocation(menzaId).collectAsState(initial = null)

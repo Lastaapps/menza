@@ -21,9 +21,11 @@ package cz.lastaapps.core.di
 
 import cz.lastaapps.core.data.httpClient
 import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.usecase.IsOnMeteredUC
 import kotlinx.coroutines.Dispatchers
 import kotlinx.datetime.Clock
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -35,4 +37,6 @@ val coreModule = module {
     single { Clock.System } bind Clock::class
     single { UCContext(Dispatchers.Default) }
     single { httpClient }
+
+    factoryOf(::IsOnMeteredUC)
 }

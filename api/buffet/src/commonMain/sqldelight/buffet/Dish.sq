@@ -9,8 +9,9 @@ CREATE TABLE DishEntity (
     name TEXT NOT NULL,
     price INTEGER NOT NULL,
     ingredients TEXT AS List<String> NOT NULL,
-    itemOrder INTEGER NOT NULL,
-    PRIMARY KEY (buffet, dayOfWeek, type)
+    itemOrder INTEGER NOT NULL
+    -- Primary key is not used as they can put really anything there and I don't want to crash because of it
+    -- PRIMARY KEY (buffet, dayOfWeek, type)
 );
 
 getForBuffet:

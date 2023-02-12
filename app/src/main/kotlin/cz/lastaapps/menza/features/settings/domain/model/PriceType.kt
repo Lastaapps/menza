@@ -19,18 +19,8 @@
 
 package cz.lastaapps.menza.features.settings.domain.model
 
-import cz.lastaapps.entity.common.Price
-import cz.lastaapps.entity.day.Dish
-
 sealed class PriceType(val id: Int) {
     object Unset : PriceType(-1)
     object Discounted : PriceType(0)
     object Normal : PriceType(1)
-}
-
-fun Dish.getPrice(type: PriceType): Price? {
-    return when (type) {
-        PriceType.Discounted -> this.priceStudent
-        else -> this.priceNormal
-    }
 }

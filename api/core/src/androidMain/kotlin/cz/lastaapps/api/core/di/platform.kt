@@ -22,7 +22,7 @@ package cz.lastaapps.api.core.di
 import android.content.Context
 import com.russhwolf.settings.SharedPreferencesSettings
 import cz.lastaapps.api.core.data.ValiditySettings
-import cz.lastaapps.core.util.StateFlowSettings
+import cz.lastaapps.core.util.datastructures.StateFlowSettings
 import org.koin.core.module.Module
 import org.koin.core.scope.Scope
 import org.koin.dsl.module

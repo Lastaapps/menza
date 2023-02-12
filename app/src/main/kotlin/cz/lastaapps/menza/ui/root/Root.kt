@@ -36,7 +36,6 @@ import cz.lastaapps.menza.features.starting.ui.screen.PrivacyDialogContent
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
 import cz.lastaapps.menza.features.starting.ui.vm.PrivacyViewModel
 import cz.lastaapps.menza.navigation.Dest.R
-import cz.lastaapps.menza.ui.WithConnectivity
 import cz.lastaapps.menza.ui.dests.info.InfoLayout
 import cz.lastaapps.menza.ui.dests.info.InfoViewModel
 import cz.lastaapps.menza.ui.dests.others.license.LicenseLayout
@@ -89,9 +88,7 @@ fun ApplyLocalProviders(
     CompositionLocalProvider(LocalActivityViewModelOwner provides viewModelStoreOwner) {
         WithLocalWindowSizes(activity) {
             WithFoldingFeature(activity) {
-                WithConnectivity {
-                    content()
-                }
+                content()
             }
         }
     }

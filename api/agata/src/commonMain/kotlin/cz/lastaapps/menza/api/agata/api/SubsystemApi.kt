@@ -20,7 +20,7 @@
 package cz.lastaapps.menza.api.agata.api
 
 import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.util.catchingNetwork
+import cz.lastaapps.core.util.extensions.catchingNetwork
 import cz.lastaapps.menza.api.agata.data.AgataClient
 import cz.lastaapps.menza.api.agata.domain.model.Func.Address
 import cz.lastaapps.menza.api.agata.domain.model.Func.AddressHash

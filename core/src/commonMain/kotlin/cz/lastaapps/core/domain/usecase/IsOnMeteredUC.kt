@@ -17,10 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.util
+package cz.lastaapps.core.domain.usecase
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun String.takeIfNotEmpty() = takeIf { it.isNotEmpty() }
+import cz.lastaapps.core.data.IsOnMeteredNetworkProvider
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun String.takeIfNotBlack() = takeIf { it.isNotBlank() }
+class IsOnMeteredUC internal constructor(
+    context: UCContext,
+    private val provider: IsOnMeteredNetworkProvider,
+) : UseCase(context) {
+    suspend operator fun invoke() = launch {
+        provider.isOnMeteredNetwork()
+    }
+}

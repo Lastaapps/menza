@@ -325,7 +325,7 @@ private fun AppLayoutExpandedFold(
 }
 
 @Composable
-fun UseSplitLayout(
+fun SplitLayout(
     panel1: @Composable () -> Unit,
     panel2: @Composable () -> Unit,
     modifier: Modifier = Modifier,

@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import cz.lastaapps.entity.day.Dish
 import cz.lastaapps.entity.menza.MenzaId
-import cz.lastaapps.menza.features.main.ui.layout.UseSplitLayout
+import cz.lastaapps.menza.features.main.ui.layout.SplitLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.root.BackArrow
 import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
@@ -104,13 +104,13 @@ fun TodayDestCompact(
     val scroll = rememberLazyListState()
     Crossfade(targetState = selectedDish) { currentSelectedDish ->
         if (currentSelectedDish == null) {
-            TodayDishList(
-                navController = navController,
-                menzaId = menzaId, onDishSelected = onDishSelected,
-                viewModel = viewModel, settingsViewModel = settingsViewModel,
-                modifier = Modifier.fillMaxSize(),
-                scroll = scroll,
-            )
+//            TodayDishList(
+//                navController = navController,
+//                menzaId = menzaId, onDishSelected = onDishSelected,
+//                viewModel = viewModel, settingsViewModel = settingsViewModel,
+//                modifier = Modifier.fillMaxSize(),
+//                scroll = scroll,
+//            )
         } else {
             TodayInfo(dish = currentSelectedDish, viewModel, Modifier.fillMaxSize())
         }
@@ -131,14 +131,14 @@ fun TodayDestMedium(
     }
     Crossfade(targetState = selectedDish) { currentSelectedDish ->
         if (currentSelectedDish == null) {
-            TodayDishList(
-                navController = navController,
-                menzaId = menzaId,
-                onDishSelected = onDishSelected,
-                viewModel = viewModel,
-                settingsViewModel = settingsViewModel,
-                modifier = Modifier.fillMaxSize(),
-            )
+//            TodayDishList(
+//                navController = navController,
+//                menzaId = menzaId,
+//                onDishSelected = onDishSelected,
+//                viewModel = viewModel,
+//                settingsViewModel = settingsViewModel,
+//                modifier = Modifier.fillMaxSize(),
+//            )
         } else {
             TodayInfo(dish = currentSelectedDish, viewModel, Modifier.fillMaxSize())
         }
@@ -154,15 +154,15 @@ fun TodayDestExpanded(
     onDishSelected: (Dish?) -> Unit,
     settingsViewModel: SettingsViewModel,
 ) {
-    UseSplitLayout(panel1 = {
-        TodayDishList(
-            navController = navController,
-            menzaId = menzaId,
-            onDishSelected = onDishSelected,
-            viewModel = viewModel,
-            settingsViewModel = settingsViewModel,
-            modifier = Modifier.fillMaxSize(),
-        )
+    SplitLayout(panel1 = {
+//        TodayDishList(
+//            navController = navController,
+//            menzaId = menzaId,
+//            onDishSelected = onDishSelected,
+//            viewModel = viewModel,
+//            settingsViewModel = settingsViewModel,
+//            modifier = Modifier.fillMaxSize(),
+//        )
     },
         panel2 = {
             Crossfade(targetState = selectedDish) { currentSelectedDish ->

@@ -33,7 +33,6 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.spotlight.Spotlight
 import com.bumble.appyx.navmodel.spotlight.activeIndex
-import com.bumble.appyx.navmodel.spotlight.operation.activate
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightFader
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.navigation.MainNode
@@ -41,6 +40,8 @@ import cz.lastaapps.menza.features.root.ui.RootNavType.Loading
 import cz.lastaapps.menza.features.root.ui.RootNavType.Main
 import cz.lastaapps.menza.features.root.ui.RootNavType.SetupFlow
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingNode
+import cz.lastaapps.menza.ui.util.activateType
+import cz.lastaapps.menza.ui.util.indexOfType
 import org.koin.androidx.compose.koinViewModel
 
 internal class RootNode(
@@ -58,13 +59,10 @@ internal class RootNode(
     override fun resolve(navTarget: RootNavType, buildContext: BuildContext): Node {
         return when (navTarget) {
             Loading -> node(buildContext) {} // Splash screen will be shown
-            SetupFlow -> StartingNode(buildContext, { spotlight.activate(indexOfType(Main)) })
+            SetupFlow -> StartingNode(buildContext, { spotlight.activateType(Main) })
             Main -> MainNode(buildContext)
         }
     }
-
-    private fun indexOfType(type: RootNavType) =
-        RootNavType.types.indexOf(type)
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -76,7 +74,7 @@ internal class RootNode(
         LaunchedEffect(state.isReady, state.isSetUp) {
             if (state.isReady) {
                 (if (state.isSetUp) Main else SetupFlow)
-                    .let { spotlight.activate(indexOfType(it)) }
+                    .let { spotlight.activateType(it) }
             }
         }
 
@@ -86,7 +84,7 @@ internal class RootNode(
             Children(
                 navModel = spotlight,
                 modifier = modifier.onPlaced {
-                    if (indexOfType(Loading) != activeIndex) {
+                    if (spotlight.indexOfType(Loading) != activeIndex) {
                         onDecided()
                     }
                 },
