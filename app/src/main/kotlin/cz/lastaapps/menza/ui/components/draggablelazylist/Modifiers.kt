@@ -35,7 +35,7 @@ fun Modifier.makeDraggableList(
     detectDragGesturesAfterLongPress(
         onDrag = { change, offset ->
             change.consume()
-            dragDropListState.onDrag(offset)
+            dragDropListState.onDrag(offset, scope)
 
             if (dragDropListState.overscrollJob?.isActive == true)
                 return@detectDragGesturesAfterLongPress

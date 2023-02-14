@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.features.main.ui.screen
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.res.painterResource
@@ -151,6 +153,8 @@ internal fun MenzaItem(
     onClick: (Menza) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val openedAlpha by animateFloatAsState(if (menza.isOpened) 1f else .5f)
+
     NavigationDrawerItem(
         icon = { MenzaLetter(menza) },
         label = { Text(menza.name) },
@@ -165,6 +169,6 @@ internal fun MenzaItem(
                 addOval(Rect(size.height, 0f, 0f, size.height))
             }
         },
-        modifier = modifier,
+        modifier = modifier.alpha(openedAlpha),
     )
 }

@@ -41,6 +41,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -138,6 +139,10 @@ private fun ReorderMenzaContent(
                 style = MaterialTheme.typography.headlineSmall,
             )
 
+            LaunchedEffect(localList.value) {
+                println("Swapping done: ${localList.value.map { it.first.type to it.second }}")
+            }
+
             DraggableLazyColumn(
                 state = draggableState,
                 reverseLayout = !state.fromTop,
@@ -146,11 +151,17 @@ private fun ReorderMenzaContent(
             ) {
                 itemsIndexed(
                     items = localList.value,
-                    key = { _, it -> it.first.type.id },
+                    key = { index, it ->
+                        it.first.type.id
+                    },
                 ) { index, (menza, order) ->
 
-                    val itemModifier = if (draggableState.currentIndexOfDraggedItem != index)
-                        Modifier.animateItemPlacement() else Modifier
+                    val itemModifier =
+                        if (draggableState.currentIndexOfDraggedItem != index) {
+                            Modifier.animateItemPlacement()
+                        } else {
+                            Modifier
+                        }
 
                     MenzaItem(
                         menza = menza,

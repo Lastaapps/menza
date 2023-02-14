@@ -28,7 +28,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @Composable
 fun rememberDraggableLazyListState(
@@ -58,9 +60,8 @@ class DraggableLazyListState(
     var initiallyDraggedElement by mutableStateOf<LazyListItemInfo?>(null)
 
     var currentIndexOfDraggedItem by mutableStateOf<Int?>(null)
-    var lastIndexOfDraggedItem by mutableStateOf<Int?>(null)
 
-    val initialOffsets: Pair<Int, Int>?
+    private val initialOffsets: Pair<Int, Int>?
         get() = initiallyDraggedElement?.let { Pair(it.offset, it.offsetEnd) }
 
     val elementDisplacement: Float?
@@ -86,7 +87,6 @@ class DraggableLazyListState(
             .firstOrNull { item -> relativeYOffset.toInt() in item.offset..(item.offset + item.size) }
             ?.also {
                 currentIndexOfDraggedItem = it.index
-                lastIndexOfDraggedItem = currentIndexOfDraggedItem
                 initiallyDraggedElement = it
             }
     }
@@ -103,7 +103,7 @@ class DraggableLazyListState(
         onMoveFinished()
     }
 
-    fun onDrag(offset: Offset) {
+    fun onDrag(offset: Offset, scope: CoroutineScope) {
         draggedDistance += offset.y * if (reverse) -1 else 1
 
         initialOffsets?.let { (topOffset, bottomOffset) ->
@@ -126,28 +126,47 @@ class DraggableLazyListState(
                                 current,
                                 item.index
                             )
+
+                            // Issue only when keys are used
+                            // LazyList tries to keep the top item at the top
+                            // so if we move the item down the list can track it's key
+                            // and move accordingly keeping it at the top
+                            // so the list starts scrolling down
+                            // this still introduces small junk but it's negligible
+                            with(lazyListState) {
+                                if (current == firstVisibleItemIndex || item.index == firstVisibleItemIndex) {
+                                    scope.launch {
+                                        scrollToItem(
+                                            firstVisibleItemIndex, firstVisibleItemScrollOffset,
+                                        )
+                                    }
+                                }
+                            }
                         }
                         currentIndexOfDraggedItem = item.index
-                        lastIndexOfDraggedItem = currentIndexOfDraggedItem
                     }
             }
         }
     }
 
-    fun checkForOverScroll(): Float {
-        return initiallyDraggedElement?.let {
+    fun checkForOverScroll(): Float =
+        initiallyDraggedElement?.let { it ->
             val startOffset = it.offset + draggedDistance
             val endOffset = it.offsetEnd + draggedDistance
 
             val betterScrollRation = .05f
-            val total = with(lazyListState.layoutInfo) { viewportEndOffset - viewportStartOffset }
+            val total =
+                with(lazyListState.layoutInfo) { viewportEndOffset - viewportStartOffset }
             val scrollOffset = betterScrollRation * total
 
             return@let when {
                 draggedDistance > 0 -> (endOffset - lazyListState.layoutInfo.viewportEndOffset + scrollOffset).takeIf { diff -> diff > 0 }
                 draggedDistance < 0 -> (startOffset - lazyListState.layoutInfo.viewportStartOffset - scrollOffset).takeIf { diff -> diff < 0 }
                 else -> null
+            }.also {
+                if (it != null) {
+                    println("Scrolling: $it")
+                }
             }
         } ?: 0f
-    }
 }

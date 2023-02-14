@@ -29,13 +29,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 
 internal class OrderRepoImpl(
     private val source: OrderDataSource,
 ) : OrderRepo {
 
-    override suspend fun initFromIfNeeded(list: List<Pair<MenzaType, Boolean>>) {
+    private val lock = Mutex()
+
+    override suspend fun initFromIfNeeded(list: List<Pair<MenzaType, Boolean>>) = lock.withLock {
         var (newVisible, newHidden) = getHighestKeys()
         list.forEach { (menza, important) ->
             source.getMenzaOrder(toKey(menza)) ?: run {
@@ -50,7 +55,7 @@ internal class OrderRepoImpl(
         }
     }
 
-    override suspend fun toggleVisible(menza: MenzaType) {
+    override suspend fun toggleVisible(menza: MenzaType) = lock.withLock {
         val (newVisible, newHidden) = getHighestKeys()
         val current = source.getMenzaOrder(toKey(menza)) ?: return
 
@@ -63,14 +68,14 @@ internal class OrderRepoImpl(
         }
     }
 
-    override suspend fun switch(m1: MenzaType, m2: MenzaType) {
+    override suspend fun switch(m1: MenzaType, m2: MenzaType) = lock.withLock {
         val o1 = source.getMenzaOrder(toKey(m1)) ?: return
         val o2 = source.getMenzaOrder(toKey(m2)) ?: return
         source.putMenzaOrder(toKey(m1), o2)
         source.putMenzaOrder(toKey(m2), o1)
     }
 
-    override suspend fun updateOrder(list: List<Pair<MenzaType, Boolean>>) {
+    override suspend fun updateOrder(list: List<Pair<MenzaType, Boolean>>) = lock.withLock {
         list.forEachIndexed { index, (menza, visible) ->
             source.putMenzaOrder(toKey(menza), MenzaOrder(index, visible))
         }
@@ -84,6 +89,7 @@ internal class OrderRepoImpl(
             .fold(persistentListFlow<MenzaOrder>()) { acu, item ->
                 combine(acu, item) { a, i -> a.add(i) }
             }
+            .onEach { lock.withLock {} }
             .mapLatest { data ->
                 data.zip(list) { o, m -> m to o }
             }.map { data ->
