@@ -31,10 +31,8 @@ import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.atomicfu.locks.reentrantLock
+import kotlinx.atomicfu.locks.withLock
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -52,21 +50,22 @@ val apiCoreModule = module {
     // Once global
     singleOf(::MenzaScopeStore)
 
-    val scopeStoreMutex = Mutex()
     val scopeLog = logging("MenzaKoinScope")
-    factory { (menza: MenzaType) ->
-        runBlocking(Dispatchers.Default) {
-            scopeStoreMutex.withLock {
-                val store = get<MenzaScopeStore>()
-                store.getOrPut(menza) {
-                    scopeLog.i { "Creating scope for $menza" }
+    val scopeLock = reentrantLock()
 
-                    when (menza) {
-                        Strahov -> createScope<Strahov>()
-                        is Subsystem -> createScope<Subsystem>()
-                        FEL -> createScope<FEL>()
-                        FS -> createScope<FS>()
-                    }
+    factory { (menza: MenzaType) ->
+        scopeLock.withLock {
+            scopeLog.v { "Obtaining scope for $menza" }
+
+            val store = get<MenzaScopeStore>()
+            store.getOrPut(menza) {
+                scopeLog.d { "Creating scope for $menza" }
+
+                when (menza) {
+                    Strahov -> createScope<Strahov>()
+                    is Subsystem -> createScope<Subsystem>()
+                    FEL -> createScope<FEL>()
+                    FS -> createScope<FS>()
                 }
             }
         }

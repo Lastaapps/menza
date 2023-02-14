@@ -27,31 +27,43 @@ import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.starting.domain.model.DownloadProgress
 import kotlinx.coroutines.flow.flow
+import org.lighthousegames.logging.logging
 
 internal class DownloadInitDataUC(
     context: UCContext,
     private val syncMenzaListUC: SyncMenzaListUC,
     private val syncInfoUC: SyncAllInfoUC,
 ) : UseCase(context) {
+
+    companion object {
+        private val log = logging()
+    }
+
     suspend operator fun invoke() = launch {
         flow {
             emit(DownloadProgress.INIT.right())
 
             emit(DownloadProgress.MENZA_LIST.right())
-            syncMenzaListUC.invoke(isForced = true)
+            log.i { "Starting menza download" }
+
+            syncMenzaListUC(isForced = true)
                 .onLeft {
                     emit(it.left())
                     return@flow
                 }
 
             emit(DownloadProgress.INFO.right())
-            syncInfoUC.invoke(isForced = true)
+            log.i { "Starting info download" }
+
+            syncInfoUC(isForced = true)
                 .let { resPair ->
                     resPair.first.firstOrNull()?.let { error ->
+                        log.i { "Emitting info error: $error" }
                         emit(error.left())
                     }
                 }
 
+            log.i { "Done" }
             emit(DownloadProgress.DONE.right())
         }
     }

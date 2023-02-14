@@ -33,6 +33,7 @@ kotlin = "1.8.10"
 kotlin-api = "1.8"
 kotlin-coroutines = "1.6.4"
 kotlin-language = "1.8"
+kotlin-atomicfu = "0.19.0"
 ktor = "2.2.3"
 logback = "1.4.5"
 russhwolf-settings = "1.0.0"
@@ -192,6 +193,7 @@ kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common" }
 kotlin-test-core = { module = "org.jetbrains.kotlin:kotlin-test" }
 kotlin-test-jUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit" }
 kotlin-test-jUnit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlin-atomicfu" }
 kotlinx-collection = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
 kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
@@ -251,6 +253,7 @@ java-kotlin = { id = "kotlin" }
 java-library = { id = "java-library" }
 kapt = "org.jetbrains.kotlin:kotlin-kapt"
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-atomicfu = { id = "org.jetbrains.kotlin.plugin.atomicfu", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

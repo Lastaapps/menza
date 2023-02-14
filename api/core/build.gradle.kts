@@ -19,6 +19,7 @@
 
 plugins {
     alias(libs.plugins.lastaapps.kmp.library)
+    alias(libs.plugins.kotlin.atomicfu)
 }
 
 android {
@@ -28,7 +29,7 @@ android {
 dependencies {
     commonMainImplementation(projects.core)
 
+    commonMainImplementation(libs.kotlinx.atomicfu)
     commonMainImplementation(libs.sqldelight.runtime)
-
     commonMainImplementation(libs.bundles.russhwolf.settings)
 }

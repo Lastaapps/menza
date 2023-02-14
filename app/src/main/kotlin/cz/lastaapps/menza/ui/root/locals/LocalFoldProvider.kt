@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,19 +20,24 @@
 package cz.lastaapps.menza.ui.root.locals
 
 import android.app.Activity
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import org.lighthousegames.logging.logging
 
 val LocalFoldProvider = compositionLocalOf<FoldingClass> { FoldingClass.Unknown }
 
+private val foldingLog = logging(FoldingClass::class.simpleName)
 sealed class FoldingClass private constructor() {
     class Supported(val foldingFeature: FoldingFeature) : FoldingClass()
     object NotSupported : FoldingClass()
     object Unknown : FoldingClass()
     companion object {
-        val log = logging()
     }
 }
 
@@ -60,10 +65,10 @@ private fun rememberFoldingFeature(activity: Activity): FoldingClass {
         ?.let { it as FoldingFeature }
 
     return if (feature != null) {
-        FoldingClass.log.i { "Folding supported: $feature" }
+        foldingLog.i { "Folding supported: $feature" }
         FoldingClass.Supported(feature)
     } else {
-        FoldingClass.log.i { "Folding not supported" }
+        foldingLog.i { "Folding not supported" }
         FoldingClass.NotSupported
     }
 }
