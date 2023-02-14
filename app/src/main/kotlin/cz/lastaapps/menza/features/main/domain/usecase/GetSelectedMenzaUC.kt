@@ -24,6 +24,7 @@ import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.main.domain.SelectedMenzaRepo
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 class GetSelectedMenzaUC internal constructor(
     context: UCContext,
@@ -40,5 +41,5 @@ class GetSelectedMenzaUC internal constructor(
             } else {
                 all.firstOrNull { it.type == selected }
             }
-        }
+        }.distinctUntilChanged()
 }

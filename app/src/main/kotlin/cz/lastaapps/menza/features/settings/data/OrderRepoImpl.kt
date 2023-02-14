@@ -25,11 +25,10 @@ import cz.lastaapps.menza.features.settings.data.datasource.OrderDataSource
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
 import cz.lastaapps.menza.features.settings.domain.model.MenzaOrder
 import kotlin.math.max
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 
 
 internal class OrderRepoImpl(
@@ -85,9 +84,7 @@ internal class OrderRepoImpl(
             .fold(persistentListFlow<MenzaOrder>()) { acu, item ->
                 combine(acu, item) { a, i -> a.add(i) }
             }
-            // TODO add better transaction processing
-            .debounce(42.milliseconds)
-            .map { data ->
+            .mapLatest { data ->
                 data.zip(list) { o, m -> m to o }
             }.map { data ->
                 data.sortedBy { it.second }

@@ -36,6 +36,8 @@ internal class RootViewModel(
     private val getAppTheme: GetAppThemeUC,
     private val getDarkMode: GetDarkModeUC,
 ) : StateViewModel<RootState>(RootState(), context), Appearing {
+    override var hasAppeared: Boolean = false
+
     override fun onAppeared() = launch {
         val isSetUp = isAppSetUp()
         val appTheme = getAppTheme().first()

@@ -17,28 +17,8 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.ui.vm
+package cz.lastaapps.core.domain.error
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import org.lighthousegames.logging.logging
-
-interface Appearing {
-    var hasAppeared: Boolean
-
-    fun doAppear() {
-        if (hasAppeared) return
-        hasAppeared = true
-        logging(this::class.simpleName).i { "Appearing" }
-        onAppeared()
-    }
-
-    fun onAppeared()
-}
-
-@Composable
-fun HandleAppear(appearing: Appearing) {
-    LaunchedEffect(appearing) {
-        appearing.doAppear()
-    }
+sealed interface CommonError : MenzaError.Runtime {
+    data class WorkTimeout(override val throwable: Throwable) : CommonError
 }

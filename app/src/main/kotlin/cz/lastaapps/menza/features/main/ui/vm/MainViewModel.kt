@@ -32,6 +32,8 @@ internal class MainViewModel(
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getSettingsOpened: GetSettingsEverOpenedUC,
 ) : StateViewModel<MainState>(MainState(), context), Appearing {
+    override var hasAppeared: Boolean = false
+
     override fun onAppeared() {
         launch {
             getSelectedMenza().collectLatest {

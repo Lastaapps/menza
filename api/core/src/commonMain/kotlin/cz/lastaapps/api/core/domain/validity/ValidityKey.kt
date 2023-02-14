@@ -27,7 +27,7 @@ value class ValidityKey private constructor(val name: String) {
         fun agataInfo(subsystemId: Int) = ValidityKey("agata_info_$subsystemId")
         fun agataWeek(subsystemId: Int) = ValidityKey("agata_week_$subsystemId")
         fun agataMenza() = ValidityKey("agata_menza")
-        fun strahovToday() = ValidityKey("strahov_today")
+        fun strahov() = ValidityKey("strahov")
         fun buffetDish() = ValidityKey("buffet_dish")
     }
 }

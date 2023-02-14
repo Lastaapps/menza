@@ -19,6 +19,7 @@
 
 package cz.lastaapps.core.domain.error
 
+import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
 import cz.lastaapps.core.domain.error.NetworkError.ConnectionClosed
 import cz.lastaapps.core.domain.error.NetworkError.NoInternet
 import cz.lastaapps.core.domain.error.NetworkError.SerializationError
@@ -30,6 +31,7 @@ val MenzaError.shouldBeReported: Boolean
 
         is MenzaError.Unknown -> true
         is NetworkError -> shouldBeReported
+        is CommonError -> shouldBeReported
         is ParsingError -> true
     }
 
@@ -42,4 +44,9 @@ val NetworkError.shouldBeReported: Boolean
 
         is SerializationError,
         -> true
+    }
+
+val CommonError.shouldBeReported: Boolean
+    get() = when (this) {
+        is WorkTimeout -> false
     }

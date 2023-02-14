@@ -20,6 +20,7 @@
 package cz.lastaapps.core.data
 
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
@@ -37,6 +38,12 @@ internal val httpClient = HttpClient() {
             ignoreUnknownKeys = true
             explicitNulls = true
         })
+    }
+
+    install(HttpTimeout) {
+        connectTimeoutMillis = 3_000
+        socketTimeoutMillis = 5_000
+        requestTimeoutMillis = 5_000
     }
 
     install(Logging) {

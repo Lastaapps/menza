@@ -27,7 +27,7 @@ import arrow.core.Tuple4
 import arrow.core.rightIor
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
+import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.common.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
@@ -53,8 +53,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import org.lighthousegames.logging.logging
 
 internal class TodayDishSubsystemRepoImpl(
     private val subsystemId: Int,
@@ -67,8 +72,12 @@ internal class TodayDishSubsystemRepoImpl(
     hashStore: HashStore,
 ) : TodayDishRepo {
 
+    private val log = logging(this::class.simpleName + "($subsystemId)")
+
     private val validityKey = ValidityKey.agataToday(subsystemId)
     private val isValidFlow = checker.isFromToday(validityKey)
+        .distinctUntilChanged()
+        .onEach { log.i { "Validity changed to $it" } }
 
     override fun getData(): Flow<ImmutableList<DishCategory>> = channelFlow {
         // Get dish list
@@ -79,6 +88,7 @@ internal class TodayDishSubsystemRepoImpl(
                 data.takeIf { validity }.orEmpty()
             }
             .collectLatest { dtoList ->
+                log.i { "Starting flow combining" }
 
                 // Finds flows that corresponds to each dish item
                 val withInfo = dtoList.asSequence().map { entity ->
@@ -86,23 +96,23 @@ internal class TodayDishSubsystemRepoImpl(
                         entity,
 
                         // get dish type
-                        db.dishTypeQueries.getByDishId(entity.id).asFlow().mapToOneNotNull(),
+                        db.dishTypeQueries.getByDishId(entity.typeId).asFlow().mapToOne(),
 
-                        // get dish piktogram
+                        // get dish pictogram
                         db.pictogramQueries.getByIds(entity.pictogram).asFlow().mapToList(),
 
                         // Get dish serving places
-                        db.servingPlaceQueries.getByIds(entity.servingPlaces).asFlow()
-                            .mapToList(),
+                        db.servingPlaceQueries.getByIds(entity.servingPlaces).asFlow().mapToList(),
                     )
                 }
 
                 // Combine flows together
-                val combined = withInfo.map { (entity, typeFlow, pictogramFlow, servingFlow) ->
-                    combine(typeFlow, pictogramFlow, servingFlow) { type, pictogram, serving ->
-                        Tuple4(entity, type, pictogram, serving)
+                val combinedFlowList =
+                    withInfo.map { (entity, typeFlow, pictogramFlow, servingFlow) ->
+                        combine(typeFlow, pictogramFlow, servingFlow) { type, pictogram, serving ->
+                            Tuple4(entity, type, pictogram, serving)
+                        }
                     }
-                }
 
                 // for an empty list an empty list will be returned
                 val baseCase =
@@ -110,11 +120,12 @@ internal class TodayDishSubsystemRepoImpl(
                         emit(persistentListOf())
                     }
 
-                val withInfoResolved =
-                    combined.fold(baseCase) { acu, dataFlow ->
-                        // joins all the flow into one huge + adding all the previous ones
-                        acu.combine(dataFlow) { list, data -> list.add(data) }
+                val withInfoResolved = combinedFlowList.fold(baseCase) { acu, dataFlow ->
+                    // joins all the flow into one huge + adding all the previous ones
+                    combine(acu, dataFlow) { list, data ->
+                        list.add(data)
                     }
+                }
 
                 val mapped = withInfoResolved.map { list ->
                     list.map { (dish, type, pictogram, servingPlaces) ->
@@ -129,9 +140,17 @@ internal class TodayDishSubsystemRepoImpl(
                 }
 
                 mapped.collectLatest {
+                    log.i {
+                        val dishCount = it.sumOf { it.dishList.size }
+                        "Collected ${it.size} categories and $dishCount dishes"
+                    }
                     send(it)
                 }
             }
+    }.onStart {
+        log.i { "Starting collection" }
+    }.onCompletion {
+        log.i { "Completed collection" }
     }
 
     private val dishListJob = SyncJobHash(
@@ -145,6 +164,7 @@ internal class TodayDishSubsystemRepoImpl(
             data.forEach {
                 db.dishQueries.insert(it)
             }
+            log.d { "Stored dish list" }
         }
     )
 
@@ -159,6 +179,7 @@ internal class TodayDishSubsystemRepoImpl(
             data.forEach {
                 db.dishTypeQueries.insert(it)
             }
+            log.d { "Stored dish type" }
         },
     )
 
@@ -173,6 +194,7 @@ internal class TodayDishSubsystemRepoImpl(
             data.forEach {
                 db.pictogramQueries.insert(it)
             }
+            log.d { "Stored pictograms" }
         }
     )
 
@@ -187,13 +209,16 @@ internal class TodayDishSubsystemRepoImpl(
             data.forEach {
                 db.servingPlaceQueries.insert(it)
             }
+            log.d { "Stored serving places" }
         }
     )
 
     private val jobs = listOf(dishListJob, dishTypeJob, pictogramJob, servingPlacesJob)
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome =
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
         checker.withCheckRecent(validityKey, isForced) {
             processor.runSync(jobs, db, isForced = isForced)
         }
+    }
 }

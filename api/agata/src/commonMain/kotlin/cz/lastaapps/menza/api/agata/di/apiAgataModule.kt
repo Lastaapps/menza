@@ -84,7 +84,6 @@ val apiAgataModule = module {
             InfoRepoImpl(menza.subsystemId, get(), get(), get(), get(), get())
         },
         weekRepo = { menza ->
-            println("FINDME creating instance of repository")
             WeekDishRepoImpl(menza.subsystemId, get(), get(), get())
         },
     )

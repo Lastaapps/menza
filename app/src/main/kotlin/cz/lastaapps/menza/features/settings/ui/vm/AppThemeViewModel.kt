@@ -41,6 +41,8 @@ internal class AppThemeViewModel(
     private val setAppTheme: SetAppThemeUC,
     private val setDarkMode: SetDarkModeUC,
 ) : StateViewModel<AppThemeState>(AppThemeState(), context), Appearing {
+    override var hasAppeared: Boolean = false
+
     override fun onAppeared() = launch {
         launch {
             getAppTheme().collectLatest { theme ->

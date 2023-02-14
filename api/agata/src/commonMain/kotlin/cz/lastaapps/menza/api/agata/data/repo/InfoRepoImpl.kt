@@ -43,8 +43,10 @@ import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
 import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import org.lighthousegames.logging.logging
 
 internal class InfoRepoImpl(
     private val subsystemId: Int,
@@ -55,7 +57,7 @@ internal class InfoRepoImpl(
     hashStore: HashStore,
 ) : InfoRepo {
 
-    private val hasBeenSynced = MutableStateFlow(false)
+    private val log = logging(this::class.simpleName + "($subsystemId)")
 
     override fun getData(): Flow<Info> =
         combine6(
@@ -68,6 +70,8 @@ internal class InfoRepoImpl(
         ) { info, news, contacts, openTimes, links, address ->
             info.toDomain(news, contacts, openTimes, links, address)
         }
+            .onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
 
     private val jobs = listOf(
         // Info
@@ -82,6 +86,7 @@ internal class InfoRepoImpl(
                 data.forEach {
                     db.infoQueries.insert(it)
                 }
+                log.d { "Info stored" }
             },
         ),
         // News
@@ -96,6 +101,7 @@ internal class InfoRepoImpl(
                 data?.let {
                     db.newsQueries.insert(data)
                 }
+                log.d { "News stored" }
             },
         ),
         // Contacts
@@ -110,6 +116,7 @@ internal class InfoRepoImpl(
                 data.forEach {
                     db.contactQueries.insert(it)
                 }
+                log.d { "Contacts stored" }
             },
         ),
         // OpenTimes
@@ -124,6 +131,7 @@ internal class InfoRepoImpl(
                 data.forEach {
                     db.openTimeQueries.insert(it)
                 }
+                log.d { "Open times stored" }
             },
         ),
         // Links
@@ -138,6 +146,7 @@ internal class InfoRepoImpl(
                 data.forEach {
                     db.linkQueries.insert(it)
                 }
+                log.d { "Links stored" }
             },
         ),
         // Address
@@ -152,21 +161,28 @@ internal class InfoRepoImpl(
                 data.forEach {
                     db.addressQueries.insert(it)
                 }
+                log.d { "Address stored" }
             },
         ),
     )
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome {
-        val localForce = isForced || !hasBeenSynced.value
-        return checker.withCheckSince(ValidityKey.agataInfo(subsystemId), localForce, 7.days) {
-            processor.runSync(jobs, db, localForce)
-        }.onRight {
-            hasBeenSynced.value = true
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
+        checker.withCheckSince(ValidityKey.agataInfo(subsystemId), isForced, 7.days) {
+            processor.runSync(jobs, db, isForced)
         }
     }
 }
 
 internal object InfoStrahovRepoImpl : InfoRepo {
+    private val log = logging()
+
     override fun getData(): Flow<Info> = flow { emit(Info.empty) }
-    override suspend fun sync(isForced: Boolean): SyncOutcome = SyncResult.Unavailable.right()
+        .onStart { log.i { "Starting collection" } }
+        .onCompletion { log.i { "Completed collection" } }
+
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
+        SyncResult.Unavailable.right()
+    }
 }

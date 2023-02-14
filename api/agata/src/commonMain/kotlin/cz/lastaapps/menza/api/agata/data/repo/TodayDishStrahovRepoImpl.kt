@@ -42,6 +42,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import org.lighthousegames.logging.logging
 
 internal class TodayDishStrahovRepoImpl(
     private val dishApi: DishApi,
@@ -52,8 +56,13 @@ internal class TodayDishStrahovRepoImpl(
     hashStore: HashStore,
 ) : TodayDishRepo {
 
-    private val validityKey = ValidityKey.strahovToday()
-    private val isValidFlow = checker.isFromToday(validityKey)
+    companion object {
+        private val log = logging()
+    }
+
+    private val validityKey = ValidityKey.strahov()
+    private val isValidFlow = checker.isThisWeek(validityKey)
+        .onEach { log.i { "Validity changed to $it" } }
 
     override fun getData(): Flow<ImmutableList<DishCategory>> =
         db.strahovQueries
@@ -64,6 +73,8 @@ internal class TodayDishStrahovRepoImpl(
                 data.takeIf { validity }.orEmpty()
             }
             .map { it.toDomain() }
+            .onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
 
     private val job = SyncJobHash(
         hashStore = hashStore,
@@ -76,11 +87,14 @@ internal class TodayDishStrahovRepoImpl(
             data.forEach {
                 db.strahovQueries.insert(it)
             }
+            log.d { "Data stored" }
         }
     )
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome =
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
         checker.withCheckRecent(validityKey, isForced) {
             processor.runSync(job, isForced = isForced)
         }
+    }
 }

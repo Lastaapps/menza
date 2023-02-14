@@ -42,6 +42,7 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import org.lighthousegames.logging.logging
 
 internal expect val platform: Module
 
@@ -52,11 +53,14 @@ val apiCoreModule = module {
     singleOf(::MenzaScopeStore)
 
     val scopeStoreMutex = Mutex()
+    val scopeLog = logging("MenzaKoinScope")
     factory { (menza: MenzaType) ->
         runBlocking(Dispatchers.Default) {
             scopeStoreMutex.withLock {
                 val store = get<MenzaScopeStore>()
                 store.getOrPut(menza) {
+                    scopeLog.i { "Creating scope for $menza" }
+
                     when (menza) {
                         Strahov -> createScope<Strahov>()
                         is Subsystem -> createScope<Subsystem>()

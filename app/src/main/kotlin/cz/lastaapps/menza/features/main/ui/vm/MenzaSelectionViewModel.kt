@@ -38,6 +38,8 @@ internal class MenzaSelectionViewModel(
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val selectMenza: SelectMenzaUC,
 ) : StateViewModel<MenzaSelectionState>(MenzaSelectionState(), context), Appearing {
+    override var hasAppeared: Boolean = false
+
     override fun onAppeared() = launch {
         launch {
             getSelectedMenza().collectLatest {

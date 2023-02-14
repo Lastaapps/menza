@@ -29,11 +29,14 @@ import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.common.LatLong
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
+import org.lighthousegames.logging.logging
 
 @JvmInline
 internal value class AgataDatabaseSqlDriver(val sqlDriver: SqlDriver)
 
 internal object AgataDatabaseFactory {
+
+    private val log = logging()
 
     fun createDatabase(
         driver: AgataDatabaseSqlDriver,
@@ -56,7 +59,7 @@ internal object AgataDatabaseFactory {
         StrahovEntiyAdapter = StrahovEntiy.Adapter(
             allergensAdapter = LongListAdapter,
         ),
-    )
+    ).also { log.i { "Database created/loaded" } }
 }
 
 private object LongListAdapter : ColumnAdapter<List<Long>, String> {

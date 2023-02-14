@@ -33,33 +33,49 @@ import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.outcome
+import cz.lastaapps.core.util.extensions.withTimeoutOutcome
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.persistentListOf
+import org.lighthousegames.logging.logging
 
 
 internal class SyncProcessorImpl : SyncProcessor {
+
+    companion object {
+        private val log = logging()
+
+        private val jobTimeout = 8.seconds
+    }
 
     override suspend fun runSync(
         list: Iterable<SyncJob<*, *>>,
         scope: List<(() -> Unit) -> Unit>,
         isForced: Boolean,
     ): SyncOutcome = outcome {
-        list
+        list.also { log.i { "Preparing run conditions" } }
+
             // Fetches hash codes from a remote source
             .parMap { job ->
-                job.shouldRun(this@outcome, isForced).map { job to it }
+                withTimeoutOutcome(jobTimeout) {
+                    job.shouldRun(this@outcome, isForced).map { job to it }
+                }.bind()
             }
 
             // remove skipped jobs
             .filterIsInstance<Some<Pair<SyncJob<*, *>, suspend () -> Unit>>>()
             .map { it.value }
 
+            .also { log.i { "Executing" } }
             // Fetch data from api and convert then
             .parMap { (job, hash) ->
-                val storeAction = job.processFetchAndConvert().bind()
-                Pair(storeAction, hash)
+                withTimeoutOutcome(jobTimeout) {
+                    val storeAction = job.processFetchAndConvert().bind()
+                    Pair(storeAction, hash)
+                }.bind()
             }
 
             // Store data
+            .also { log.i { "Storing data" } }
             .also { results ->
 
                 // store data in a single transaction
@@ -90,6 +106,8 @@ internal class SyncProcessorImpl : SyncProcessor {
                 } ?: SyncResult.Updated
             }
     }
+        .onRight { log.i { "Succeed to process data: $it" } }
+        .onLeft { log.i { "Failed to process data ${it::class.simpleName}" } }
 
     // used to simply generics resolution
     private suspend fun <T, R> SyncJob<T, R>.processFetchAndConvert(): Outcome<IorNel<MenzaError, () -> Unit>> =

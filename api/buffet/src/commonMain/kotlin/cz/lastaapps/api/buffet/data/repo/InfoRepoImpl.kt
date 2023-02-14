@@ -34,12 +34,17 @@ import cz.lastaapps.api.core.domain.sync.SyncResult
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
+import org.lighthousegames.logging.logging
 
 internal class InfoRepoImpl(
     private val type: BuffetType,
 ) : InfoRepo {
+    private val log = logging(this::class.simpleName + "($type)")
+
     override fun getData(): Flow<Info> = flow {
         // I don't wanna parse this shit, really
         emit(
@@ -59,6 +64,8 @@ internal class InfoRepoImpl(
             )
         )
     }
+        .onStart { log.i { "Starting collection" } }
+        .onCompletion { log.i { "Completed collection" } }
 
     @Suppress("SpellCheckingInspection")
     private fun openTime(type: BuffetType) = persistentListOf(
@@ -114,5 +121,8 @@ internal class InfoRepoImpl(
             ),
         )
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = SyncResult.Skipped.right()
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
+        SyncResult.Skipped.right()
+    }
 }

@@ -43,6 +43,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import org.lighthousegames.logging.logging
 
 internal class WeekDishRepoImpl(
     private val subsystemId: Int,
@@ -51,8 +55,11 @@ internal class WeekDishRepoImpl(
     private val checker: ValidityChecker,
 ) : WeekDishRepo {
 
+    private val log = logging(this::class.simpleName + "($subsystemId)")
+
     private val validityKey = ValidityKey.agataWeek(subsystemId)
     private val isValidFlow = checker.isThisWeek(validityKey)
+        .onEach { log.i { "Validity changed to $it" } }
 
     private val weekDishList = MutableStateFlow<ImmutableList<WeekDayDish>>(persistentListOf())
 
@@ -63,6 +70,8 @@ internal class WeekDishRepoImpl(
         ) { data, validity ->
             data.takeIf { validity } ?: persistentListOf()
         }
+            .onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
 
 //    private fun List<WeekDto>.selectCurrent(timeZone: TimeZone = TimeZone.currentSystemDefault()): WeekDto? {
 //        if (isEmpty()) return null
@@ -89,10 +98,11 @@ internal class WeekDishRepoImpl(
     )
 
     private var hasSynced = false
-    override suspend fun sync(isForced: Boolean): SyncOutcome {
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced, h: $hasSynced)" }
+
         val myForced = isForced || !hasSynced
-        println("FINDME sync ${this@WeekDishRepoImpl.hashCode()}")
-        return checker.withCheckSince(validityKey, myForced, 1.days) {
+        checker.withCheckSince(validityKey, myForced, 1.days) {
             processor.runSync(syncJob, isForced = myForced).recover {
                 if (it is WeekNotAvailable) Unavailable else raise(it)
             }
@@ -101,6 +111,15 @@ internal class WeekDishRepoImpl(
 }
 
 internal object WeekRepoStrahovImpl : WeekDishRepo {
-    override fun getData(): Flow<ImmutableList<WeekDayDish>> = flow { emit(persistentListOf()) }
-    override suspend fun sync(isForced: Boolean): SyncOutcome = Unavailable.right()
+    private val log = logging()
+
+    override fun getData(): Flow<ImmutableList<WeekDayDish>> =
+        flow { emit(persistentListOf<WeekDayDish>()) }
+            .onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
+
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
+        Unavailable.right()
+    }
 }

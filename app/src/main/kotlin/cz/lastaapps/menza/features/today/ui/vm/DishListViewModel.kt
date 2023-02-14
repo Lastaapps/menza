@@ -43,8 +43,12 @@ import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import org.lighthousegames.logging.logging
 
 internal class DishListViewModel(
     context: VMContext,
@@ -58,19 +62,32 @@ internal class DishListViewModel(
     private val isOnMetered: IsOnMeteredUC,
     private val openMenuLink: OpenMenuUC,
 ) : StateViewModel<DishListState>(DishListState(), context), Appearing, ErrorHolder {
+    override var hasAppeared: Boolean = false
+
+    companion object {
+        private val log = logging()
+    }
+
     override fun onAppeared() = launch {
         launch {
             getSelectedMenza().collectLatest {
+                log.i { "Registered a new: $it" }
+
                 updateState {
                     copy(
                         selectedMenza = it,
                         items = persistentListOf(),
                     )
                 }
+                syncJob?.cancel()
                 if (it != null) {
-                    load(it, false)
-                    getTodayDishList(it).collectLatest { items ->
-                        updateState { copy(items = items) }
+                    coroutineScope {
+                        this.launch {
+                            load(it, false)
+                        }
+                        getTodayDishList(it).collectLatest { items ->
+                            updateState { copy(items = items) }
+                        }
                     }
                 }
             }
@@ -97,22 +114,27 @@ internal class DishListViewModel(
         }.launchInVM()
     }
 
+    private var syncJob: Job? = null
     fun reload() {
         if (lastState().isLoading) return
-        load(lastState().selectedMenza ?: return, true)
+        syncJob = launchJob {
+            lastState().selectedMenza?.let {
+                load(it, true)
+            }
+        }
     }
 
     fun openWebMenu() = launch {
         lastState().selectedMenza?.let { openMenuLink(it) }
     }
 
-    private fun load(menza: Menza, isForced: Boolean) = launch {
-        updateState { copy(isLoading = true) }
-        when (val res = syncTodayDishList(menza, isForced = isForced)) {
-            is Left -> updateState { copy(error = res.value) }
-            is Right -> {}
+    private suspend fun load(menza: Menza, isForced: Boolean) {
+        withLoading({ copy(isLoading = it) }) {
+            when (val res = syncTodayDishList(menza, isForced = isForced)) {
+                is Left -> updateState { copy(error = res.value) }
+                is Right -> {}
+            }
         }
-        updateState { copy(isLoading = false) }
     }
 
     @Composable

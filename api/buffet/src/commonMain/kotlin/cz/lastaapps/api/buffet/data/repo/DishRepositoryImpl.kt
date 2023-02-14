@@ -49,6 +49,9 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDateTime
@@ -56,6 +59,7 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import org.lighthousegames.logging.logging
 
 internal class DishLogicImpl(
     private val api: BuffetApi,
@@ -64,6 +68,9 @@ internal class DishLogicImpl(
     private val clock: Clock,
     private val checker: ValidityChecker,
 ) {
+    companion object {
+        private val log = logging()
+    }
 
     private val validFrom = clock.now()
         .toLocalDateTime(TimeZone.CET).date
@@ -73,6 +80,7 @@ internal class DishLogicImpl(
 
     private val validityKey = ValidityKey.buffetDish()
     private val hasValidData = checker.isUpdatedSince(validityKey, validFrom)
+        .onEach { log.i { "Validity changed to $it" } }
 
     fun getDataToday(type: BuffetType): Flow<ImmutableList<DishCategory>> =
         db.dishQueries.getForBuffetAndDayOfWeek(
@@ -97,6 +105,7 @@ internal class DishLogicImpl(
             }
             .map { it.toDomainWeek(clock) }
 
+
     private val job = object : SyncJob<OutcomeIor<WebContentDto>, List<DishEntity>>(
         shouldRun = { Some {} },
         fetchApi = {
@@ -110,6 +119,7 @@ internal class DishLogicImpl(
             data.forEach {
                 db.dishQueries.insert(it)
             }
+            log.d { "Data stored" }
         },
     ) {}
 
@@ -124,14 +134,29 @@ internal class WeekDishRepository(
     private val type: BuffetType,
     private val logic: DishLogicImpl,
 ) : WeekDishRepo {
+    private val log = logging(this::class.simpleName + "($type)")
     override fun getData(): Flow<ImmutableList<WeekDayDish>> = logic.getDataWeek(type)
-    override suspend fun sync(isForced: Boolean): SyncOutcome = logic.sync(isForced)
+        .onStart { log.i { "Starting collection" } }
+        .onCompletion { log.i { "Completed collection" } }
+
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
+        logic.sync(isForced)
+    }
 }
 
 internal class TodayDishRepository(
     private val type: BuffetType,
     private val logic: DishLogicImpl,
 ) : TodayDishRepo {
+    private val log = logging(this::class.simpleName + "($type)")
+
     override fun getData(): Flow<ImmutableList<DishCategory>> = logic.getDataToday(type)
-    override suspend fun sync(isForced: Boolean): SyncOutcome = logic.sync(isForced)
+        .onStart { log.i { "Starting collection" } }
+        .onCompletion { log.i { "Completed collection" } }
+
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
+        logic.sync(isForced)
+    }
 }

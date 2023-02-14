@@ -21,6 +21,8 @@ package cz.lastaapps.core.ui.vm
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import arrow.fx.coroutines.resource
+import arrow.fx.coroutines.use
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -39,4 +41,12 @@ abstract class StateViewModel<State : Any>(
     val flowState
         @Composable
         get() = myState.collectAsStateWithLifecycle()
+
+    suspend fun <R> withLoading(
+        loading: State.(isLoading: Boolean) -> State,
+        block: suspend () -> R,
+    ) = resource(
+        acquire = { updateState { loading(true) } },
+        release = { _, _ -> updateState { loading(false) } },
+    ).use { block() }
 }

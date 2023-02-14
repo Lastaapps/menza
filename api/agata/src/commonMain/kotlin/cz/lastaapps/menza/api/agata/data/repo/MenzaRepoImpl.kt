@@ -45,8 +45,13 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import org.lighthousegames.logging.logging
 
 internal class MenzaSubsystemRepoImpl(
     private val api: CafeteriaApi,
@@ -55,17 +60,28 @@ internal class MenzaSubsystemRepoImpl(
     private val checker: ValidityChecker,
     hashStore: HashStore,
 ) : MenzaRepo {
+
+    companion object {
+        private val log = logging()
+    }
+
     override val isReady: Flow<Boolean> =
         db.subsystemQueries.getAll()
             .asFlow()
             .mapToList()
             .map { it.isNotEmpty() }
+            .distinctUntilChanged()
+            .onEach { log.i { "Is ready: $it" } }
 
     override fun getData(): Flow<ImmutableList<Menza>> =
         db.subsystemQueries.getAll()
             .asFlow()
             .mapToList()
             .map { it.toDomain() }
+            .distinctUntilChanged()
+            .onEach { log.i { "Menza produced: ${it.size}" } }
+            .onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
 
     private val subsystemJob =
         SyncJobHash(
@@ -85,20 +101,24 @@ internal class MenzaSubsystemRepoImpl(
                 result.forEach { dto ->
                     db.subsystemQueries.insert(dto)
                 }
+                log.d { "Stored menza list" }
             },
         )
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome =
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
         checker.withCheckSince(ValidityKey.agataMenza(), isForced, 7.days) {
             processor.runSync(subsystemJob, db, isForced)
         }
+    }
 }
 
 internal object MenzaStrahovRepoImpl : MenzaRepo {
+    private val log = logging()
+
     override val isReady: Flow<Boolean> = MutableStateFlow(true)
 
     override fun getData(): Flow<ImmutableList<Menza>> = flow {
-        @Suppress("SpellCheckingInspection")
         persistentListOf(
             Menza(
                 type = Strahov,
@@ -109,6 +129,11 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
             )
         ).let { emit(it) }
     }
+        .onStart { log.i { "Starting collection" } }
+        .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = SyncResult.Skipped.right()
+    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+        log.i { "Starting sync (f: $isForced)" }
+        SyncResult.Skipped.right()
+    }
 }

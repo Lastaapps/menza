@@ -27,6 +27,8 @@ import cz.lastaapps.core.domain.AppText.Resource
 import cz.lastaapps.core.domain.AppText.Rich
 import cz.lastaapps.core.domain.error.ApiErrorLogic
 import cz.lastaapps.core.domain.error.ApiErrorLogic.WeekNotAvailable
+import cz.lastaapps.core.domain.error.CommonError
+import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.MenzaError.Unknown
 import cz.lastaapps.core.domain.error.NetworkError
@@ -54,6 +56,7 @@ val MenzaError.text: AppText
         is NetworkError -> text
         is ParsingError -> text
         is ApiErrorLogic -> text
+        is CommonError -> text
         is Unknown -> F(
             R.string.error_unknown,
             throwable.localizedMessage ?: "null",
@@ -79,4 +82,9 @@ val ParsingError.text: AppText
 val ApiErrorLogic.text: AppText
     get() = when (this) {
         WeekNotAvailable -> E(R.string.error_api_week_not_available)
+    }
+
+val CommonError.text: AppText
+    get() = when (this) {
+        is WorkTimeout -> E(R.string.error_network_timeout)
     }

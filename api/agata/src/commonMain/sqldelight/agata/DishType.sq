@@ -8,7 +8,7 @@ CREATE TABLE DishTypeEntity(
 );
 
 getByDishId:
-    SELECT * FROM DishTypeEntity WHERE id = :dishId;
+    SELECT * FROM DishTypeEntity WHERE id = :dishTypeId;
 
 insert:
     INSERT INTO DishTypeEntity

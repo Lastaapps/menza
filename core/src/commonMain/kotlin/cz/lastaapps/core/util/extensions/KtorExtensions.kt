@@ -28,7 +28,7 @@ import org.lighthousegames.logging.logging
 suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
     Either.catch { block() }.mapLeft {
         logging("catchingNetwork").e(it) { "Failed network call" }
-        it.printStackTrace()
+
         when (it::class.simpleName) {
             "TimeoutException",
             -> NetworkError.Timeout

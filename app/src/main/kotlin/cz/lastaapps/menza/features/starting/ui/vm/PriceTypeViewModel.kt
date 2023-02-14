@@ -32,6 +32,8 @@ internal class PriceTypeViewModel internal constructor(
     private val getPriceType: GetPriceTypeUC,
     private val setPriceType: SetPriceTypeUC,
 ) : StateViewModel<PriceTypeState>(PriceTypeState(), context), Appearing {
+    override var hasAppeared: Boolean = false
+
     override fun onAppeared() = launch {
         getPriceType()
             .first()

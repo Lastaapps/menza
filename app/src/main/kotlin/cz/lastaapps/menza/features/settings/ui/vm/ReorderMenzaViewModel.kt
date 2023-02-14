@@ -40,6 +40,8 @@ internal class ReorderMenzaViewModel(
     private val isMenzaOrderFromTop: IsMenzaOrderFromTopUC,
     private val setMenzaOrderFromTop: SetMenzaOrderFromTopUC,
 ) : StateViewModel<ReorderMenzaState>(ReorderMenzaState(), context), Appearing {
+    override var hasAppeared: Boolean = false
+
     override fun onAppeared() = launch {
         launch {
             getOrderedMenzaList().collect {

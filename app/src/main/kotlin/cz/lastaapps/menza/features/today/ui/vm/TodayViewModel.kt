@@ -34,6 +34,7 @@ internal class TodayViewModel(
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getShowCzech: GetShowCzechUC,
 ) : StateViewModel<TodayState>(TodayState(), context), Appearing {
+    override var hasAppeared: Boolean = false
 
     override fun onAppeared() = launch {
         getSelectedMenza().onEach {
