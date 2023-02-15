@@ -60,4 +60,7 @@ internal interface MainSettingsRepo {
 
     suspend fun setShowCzech(mode: ShowCzech)
     fun getShowCzech(): Flow<ShowCzech>
+
+    suspend fun setCompactTodayView(isCompact: Boolean)
+    fun isCompactTodayView(): Flow<Boolean>
 }

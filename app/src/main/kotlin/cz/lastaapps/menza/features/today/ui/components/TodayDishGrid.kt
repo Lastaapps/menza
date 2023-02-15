@@ -19,18 +19,17 @@
 
 package cz.lastaapps.menza.features.today.ui.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -41,7 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
@@ -61,7 +59,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TodayDishList(
+fun TodayDishGrid(
     isLoading: Boolean,
     onRefresh: () -> Unit,
     data: ImmutableList<DishCategory>,
@@ -70,11 +68,10 @@ fun TodayDishList(
     priceType: PriceType,
     downloadOnMetered: Boolean,
     showCzech: ShowCzech,
-    imageScale: Float,
     isOnMetered: Boolean,
     gridSwitch: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    scroll: LazyListState = rememberLazyListState(),
+    scrollGrid: LazyGridState = rememberLazyGridState(),
     pullState: PullRefreshState = rememberPullRefreshState(
         refreshing = isLoading, onRefresh = onRefresh,
     ),
@@ -94,9 +91,8 @@ fun TodayDishList(
                     priceType = priceType,
                     downloadOnMetered = downloadOnMetered,
                     showCzech = showCzech,
-                    imageScale = imageScale,
                     isOnMetered = isOnMetered,
-                    scroll = scroll,
+                    scroll = scrollGrid,
                     gridSwitch = gridSwitch,
                     modifier = Modifier
                         .padding(top = MenzaPadding.Smaller) // so text is not cut off
@@ -112,7 +108,6 @@ fun TodayDishList(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DishContent(
     data: ImmutableList<DishCategory>,
@@ -121,9 +116,8 @@ private fun DishContent(
     priceType: PriceType,
     downloadOnMetered: Boolean,
     showCzech: ShowCzech,
-    imageScale: Float,
     isOnMetered: Boolean,
-    scroll: LazyListState,
+    scroll: LazyGridState,
     gridSwitch: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -136,13 +130,17 @@ private fun DishContent(
 
     Column(modifier, verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium)) {
         // showing items
-        LazyColumn(
+        LazyVerticalGrid(
+            // wait for nonaligned grid
+//            columns = GridCells.Adaptive(156.dp),
+            columns = GridCells.Fixed(1),
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(MenzaPadding.MidSmall),
+            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.MidSmall),
             state = scroll,
         ) {
             data.forEach { category ->
-                stickyHeader {
+                item {
                     Surface(Modifier.fillMaxWidth()) {
                         DishHeader(
                             courseType = category,
@@ -158,7 +156,6 @@ private fun DishContent(
                         priceType = priceType,
                         downloadOnMetered = downloadOnMetered,
                         showCzech = showCzech,
-                        imageScale = imageScale,
                         isOnMetered = isOnMetered,
                         modifier = Modifier.fillMaxWidth(),
                     )
@@ -179,7 +176,6 @@ private fun DishItem(
     priceType: PriceType,
     downloadOnMetered: Boolean,
     showCzech: ShowCzech,
-    imageScale: Float,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -190,21 +186,38 @@ private fun DishItem(
         shape = MaterialTheme.shapes.large,
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
-        Row(
-            Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        Column(
+            Modifier.padding(MenzaPadding.MidSmall),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
         ) {
 
-            DishImageWithBadge(
-                dish = dish,
-                priceType = priceType,
-                downloadOnMetered = downloadOnMetered,
-                imageScale = imageScale,
-                isOnMetered = isOnMetered,
-            )
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                DishNameRow(dish, showCzech)
+            if (dish.photoLink != null) {
+                DishImageWithBadge(
+                    dish = dish,
+                    priceType = priceType,
+                    downloadOnMetered = downloadOnMetered,
+                    isOnMetered = isOnMetered,
+                )
+            }
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+                ) {
+                    DishNameRow(
+                        dish = dish,
+                        showCzech = showCzech,
+                        modifier = modifier.weight(1f),
+                    )
+                    if (dish.photoLink == null) {
+                        DishBadge(dish = dish, priceType = priceType)
+                    }
+                }
+
                 DishInfoRow(dish, showCzech)
             }
         }
@@ -216,7 +229,6 @@ private fun DishImageWithBadge(
     dish: Dish,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    imageScale: Float,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -224,7 +236,6 @@ private fun DishImageWithBadge(
         DishImage(
             dish = dish,
             downloadOnMetered = downloadOnMetered,
-            imageScale = imageScale,
             isOnMetered = isOnMetered,
             modifier = Modifier
                 .align(Alignment.Center)
@@ -246,14 +257,14 @@ private fun DishImageWithBadge(
 private fun DishImage(
     dish: Dish,
     downloadOnMetered: Boolean,
-    imageScale: Float,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier) {
-        val size = (96 * imageScale).dp
-        val imageModifier = Modifier.size(size)
-
+        val imageModifier = Modifier
+            .fillMaxWidth()
+//            .aspectRatio(16f / 9f)
+            .aspectRatio(4f / 3f)
 
         if (dish.photoLink != null) {
 
@@ -274,7 +285,6 @@ private fun DishImage(
                 else
                     data("https://userisonmeterednetwork.localhost/")
                 //data(null) - cache is not working
-                with(LocalDensity.current) { size(size.roundToPx()) }
                 build()
             }
 
@@ -316,14 +326,6 @@ private fun DishImage(
                                 )
                         }
                     },
-                )
-            }
-
-        } else {
-            Box(imageModifier, contentAlignment = Alignment.Center) {
-                Icon(
-                    Icons.Default.Restaurant,
-                    contentDescription = null,
                 )
             }
         }

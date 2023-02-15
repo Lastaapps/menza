@@ -39,7 +39,9 @@ import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
+import cz.lastaapps.menza.features.settings.domain.usecase.IsCompactViewUC
 import cz.lastaapps.menza.features.settings.domain.usecase.OnSettingsOpenedUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetCompactUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
@@ -104,6 +106,8 @@ val settingsModule = module {
     factoryOf(::SetImagesOnMeteredUC)
     factoryOf(::SetPriceTypeUC)
     factoryOf(::SetShowCzechUC)
+    factoryOf(::IsCompactViewUC)
+    factoryOf(::SetCompactUC)
 
     // Menza order
     viewModelOf(::ReorderMenzaViewModel)

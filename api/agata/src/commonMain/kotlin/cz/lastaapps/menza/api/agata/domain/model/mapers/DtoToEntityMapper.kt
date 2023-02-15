@@ -81,8 +81,8 @@ internal fun DishDto.toEntity(beConfig: AgataBEConfig) =
 private val invalidCharacters = arrayOf('(', ')', '[', ']', '\\', '/', '|', '.', '-', '_')
 private fun String.trimDishName() = this
     .trim()
-    .dropWhile { it == ',' }
-    .dropLastWhile { it == ',' }
+//    .dropWhile { it == ',' }
+//    .dropLastWhile { it == ',' }
     .map { if (it in invalidCharacters) ' ' else it }
     .joinToString(separator = "")
     .replace("""\s*,\s*""".toRegex(), ", ")

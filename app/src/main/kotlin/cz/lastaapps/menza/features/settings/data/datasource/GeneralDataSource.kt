@@ -67,6 +67,9 @@ internal interface GeneralDataSource {
 
     suspend fun setShowCzech(mode: ShowCzech)
     fun getShowCzech(): Flow<ShowCzech?>
+
+    suspend fun setCompactTodayView(isCompact: Boolean)
+    fun isCompactTodayView(): Flow<Boolean?>
 }
 
 @OptIn(ExperimentalSettingsApi::class)
@@ -84,6 +87,7 @@ internal class GeneralDataSourceImpl(
         private const val imageScaleKey = "image_scale"
         private const val imagesOnMeteredKey = "images_on_metered"
         private const val showCzechKey = "show_czech"
+        private const val compactTodayView = "compact_today_view"
     }
 
     override suspend fun storeAppSetupFinished() =
@@ -144,5 +148,11 @@ internal class GeneralDataSourceImpl(
     override fun getShowCzech(): Flow<ShowCzech?> =
         settings.getBooleanOrNullFlow(showCzechKey)
             .map { it?.let(::ShowCzech) }
+
+    override suspend fun setCompactTodayView(isCompact: Boolean) =
+        settings.putBoolean(compactTodayView, isCompact)
+
+    override fun isCompactTodayView(): Flow<Boolean?> =
+        settings.getBooleanOrNullFlow(compactTodayView)
 
 }

@@ -60,7 +60,7 @@ internal fun DishEntity.toDomain(
     Dish(
         amountCs = dish.amount,
         amountEn = null,
-        nameCs = dish.fullNameSmart(),
+        nameCs = dish.fullName(),
         nameEn = null,
         priceDiscountFloat = dish.priceDiscount?.toFloat(),
         priceNormalFloat = dish.priceNormal?.toFloat(),

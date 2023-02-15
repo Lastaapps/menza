@@ -41,6 +41,8 @@ import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
+import cz.lastaapps.menza.features.settings.domain.usecase.IsCompactViewUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetCompactUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
@@ -59,6 +61,8 @@ internal class DishListViewModel(
     private val getImagesOnMetered: GetImagesOnMeteredUC,
     private val getImageScale: GetImageScaleUC,
     private val getShowCzech: GetShowCzechUC,
+    private val isCompact: IsCompactViewUC,
+    private val setCompact: SetCompactUC,
     private val isOnMetered: IsOnMeteredUC,
     private val openMenuLink: OpenMenuUC,
 ) : StateViewModel<DishListState>(DishListState(), context), Appearing, ErrorHolder {
@@ -109,6 +113,10 @@ internal class DishListViewModel(
             updateState { copy(showCzech = it) }
         }.launchInVM()
 
+        isCompact().onEach {
+            updateState { copy(isCompact = it) }
+        }.launchInVM()
+
         isOnMetered().onEach {
             updateState { copy(isOnMetered = it) }
         }.launchInVM()
@@ -128,6 +136,10 @@ internal class DishListViewModel(
         lastState().selectedMenza?.let { openMenuLink(it) }
     }
 
+    fun setCompactView(isCompact: Boolean) = launch {
+        setCompact(isCompact)
+    }
+
     private suspend fun load(menza: Menza, isForced: Boolean) {
         withLoading({ copy(isLoading = it) }) {
             when (val res = syncTodayDishList(menza, isForced = isForced)) {
@@ -144,6 +156,7 @@ internal class DishListViewModel(
 
 internal data class DishListState(
     val isLoading: Boolean = false,
+    val isCompact: Boolean = true,
     val error: MenzaError? = null,
     val selectedMenza: Menza? = null,
     val items: ImmutableList<DishCategory> = persistentListOf(),

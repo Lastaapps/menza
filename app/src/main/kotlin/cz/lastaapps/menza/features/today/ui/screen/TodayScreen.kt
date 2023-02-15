@@ -84,7 +84,6 @@ private fun TodayContent(
     val dishDetail: @Composable () -> Unit = {
         Crossfade(targetState = state.selectedDish) { currentDish ->
             currentDish?.let {
-//                Text(currentDish.nameCs)
                 TodayInfo(
                     dish = currentDish,
                     showCzech = state.showCzech,

@@ -201,6 +201,8 @@
     <string name="today_list_web">Check website</string>
     <string name="today_list_image_load_failed">Failed to load the image</string>
     <string name="today_list_image_metered">The image not downloaded, metered network</string>
+    <string name="today_list_compact_compact">Compact</string>
+    <string name="today_list_compact_grid">Large</string>
 
     <string name="week_list_none">No data available</string>
     <string name="week_list_web">Check website</string>

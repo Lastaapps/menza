@@ -20,8 +20,11 @@
 package cz.lastaapps.menza.features.today.ui.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +37,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.lastaapps.api.core.domain.model.common.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
+import cz.lastaapps.menza.features.today.ui.components.CompactViewSwitch
+import cz.lastaapps.menza.features.today.ui.components.TodayDishGrid
 import cz.lastaapps.menza.features.today.ui.components.TodayDishList
 import cz.lastaapps.menza.features.today.ui.vm.DishListState
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
@@ -47,6 +52,7 @@ internal fun DishListScreen(
     viewModel: DishListViewModel = koinViewModel(),
     hostState: SnackbarHostState = remember { SnackbarHostState() },
     scrollState: LazyListState = rememberLazyListState(),
+    scrollGridState: LazyGridState = rememberLazyGridState(),
 ) {
     DishListEffects(viewModel, hostState)
 
@@ -57,8 +63,10 @@ internal fun DishListScreen(
         hostState = hostState,
         onRefresh = viewModel::reload,
         onNoItems = viewModel::openWebMenu,
+        onCompactView = viewModel::setCompactView,
         onDishSelected = onDishSelected,
-        scrollState = scrollState,
+        scrollListState = scrollState,
+        scrollGridState = scrollGridState,
     )
 }
 
@@ -78,29 +86,60 @@ private fun DishListContent(
     hostState: SnackbarHostState,
     onRefresh: () -> Unit,
     onNoItems: () -> Unit,
+    onCompactView: (isCompact: Boolean) -> Unit,
     onDishSelected: (Dish) -> Unit,
-    scrollState: LazyListState,
+    scrollListState: LazyListState,
+    scrollGridState: LazyGridState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState) },
         modifier = modifier,
     ) { padding ->
-        TodayDishList(
-            isLoading = state.isLoading,
-            onRefresh = onRefresh,
-            data = state.items,
-            onNoItems = onNoItems,
-            onDishSelected = onDishSelected,
-            priceType = state.priceType,
-            downloadOnMetered = state.downloadOnMetered,
-            showCzech = state.showCzech,
-            imageScale = state.imageScale,
-            isOnMetered = state.isOnMetered,
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
-            scroll = scrollState,
-        )
+
+        val gridSwitch: @Composable () -> Unit = {
+            CompactViewSwitch(
+                isCompact = state.isCompact,
+                onCompactChange = onCompactView,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+
+        if (state.isCompact) {
+            TodayDishList(
+                isLoading = state.isLoading,
+                onRefresh = onRefresh,
+                data = state.items,
+                onNoItems = onNoItems,
+                onDishSelected = onDishSelected,
+                priceType = state.priceType,
+                downloadOnMetered = state.downloadOnMetered,
+                showCzech = state.showCzech,
+                imageScale = state.imageScale,
+                isOnMetered = state.isOnMetered,
+                gridSwitch = gridSwitch,
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize(),
+                scroll = scrollListState,
+            )
+        } else {
+            TodayDishGrid(
+                isLoading = state.isLoading,
+                onRefresh = onRefresh,
+                data = state.items,
+                onNoItems = onNoItems,
+                onDishSelected = onDishSelected,
+                priceType = state.priceType,
+                downloadOnMetered = state.downloadOnMetered,
+                showCzech = state.showCzech,
+                isOnMetered = state.isOnMetered,
+                gridSwitch = gridSwitch,
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize(),
+                scrollGrid = scrollGridState,
+            )
+        }
     }
 }

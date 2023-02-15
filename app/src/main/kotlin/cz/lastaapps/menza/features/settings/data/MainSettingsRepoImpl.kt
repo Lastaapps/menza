@@ -103,4 +103,11 @@ internal class MainSettingsRepoImpl(
     override fun getShowCzech(): Flow<ShowCzech> =
         general.getShowCzech().map { it ?: defaults.defaultShowCzech() }
 
+    override suspend fun setCompactTodayView(isCompact: Boolean) =
+        general.setCompactTodayView(isCompact)
+
+    override fun isCompactTodayView(): Flow<Boolean> =
+        general.isCompactTodayView()
+            .map { it ?: true }
+
 }
