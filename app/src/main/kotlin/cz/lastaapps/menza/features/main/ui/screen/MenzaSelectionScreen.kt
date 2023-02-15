@@ -19,8 +19,10 @@
 
 package cz.lastaapps.menza.features.main.ui.screen
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,6 +59,7 @@ import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionState
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionViewModel
 import cz.lastaapps.menza.ui.components.MenzaLetter
 import cz.lastaapps.menza.ui.theme.MenzaPadding
+import kotlinx.collections.immutable.ImmutableList
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -95,20 +98,53 @@ private fun MenzaSelectionListContent(
     modifier: Modifier = Modifier,
     lazyState: LazyListState = rememberLazyListState(),
 ) {
+    val animateFrom = if (state.fromTop) {
+        Alignment.TopCenter
+    } else {
+        Alignment.BottomCenter
+    }
+    Box(
+        modifier = modifier,
+        contentAlignment = animateFrom,
+    ) {
+        MenzaList(
+            fromTop = state.fromTop,
+            selectedMenza = state.selectedMenza,
+            menzaList = state.menzaList,
+            onMenzaSelected = onMenzaSelected,
+            onEdit = onEdit,
+            lazyState = lazyState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateContentSize(),
+        )
+    }
+}
+
+@Composable
+private fun MenzaList(
+    fromTop: Boolean,
+    selectedMenza: Menza?,
+    menzaList: ImmutableList<Menza>,
+    onMenzaSelected: (Menza) -> Unit,
+    onEdit: () -> Unit,
+    lazyState: LazyListState,
+    modifier: Modifier = Modifier,
+) {
     LazyColumn(
         state = lazyState,
-        reverseLayout = !state.fromTop,
+        reverseLayout = !fromTop,
         verticalArrangement = Arrangement.spacedBy(
             MenzaPadding.Medium,
-            if (state.fromTop) Alignment.Top else Alignment.Bottom,
+            if (fromTop) Alignment.Top else Alignment.Bottom,
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
-        items(state.menzaList) { menza ->
+        items(menzaList) { menza ->
             MenzaItem(
                 menza = menza,
-                selected = state.selectedMenza == menza,
+                selected = selectedMenza == menza,
                 onClick = onMenzaSelected,
                 modifier = Modifier.fillMaxWidth()
             )

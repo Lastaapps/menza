@@ -19,9 +19,11 @@
 
 package cz.lastaapps.menza.features.settings.ui.screens
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,7 +43,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -139,37 +140,40 @@ private fun ReorderMenzaContent(
                 style = MaterialTheme.typography.headlineSmall,
             )
 
-            LaunchedEffect(localList.value) {
-                println("Swapping done: ${localList.value.map { it.first.type to it.second }}")
+            val animateFrom = if (state.fromTop) {
+                Alignment.TopEnd
+            } else {
+                Alignment.BottomStart
             }
-
-            DraggableLazyColumn(
-                state = draggableState,
-                reverseLayout = !state.fromTop,
-                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+            Box(
                 modifier = Modifier.weight(1f),
+                contentAlignment = animateFrom
             ) {
-                itemsIndexed(
-                    items = localList.value,
-                    key = { index, it ->
-                        it.first.type.id
-                    },
-                ) { index, (menza, order) ->
+                DraggableLazyColumn(
+                    state = draggableState,
+                    reverseLayout = !state.fromTop,
+                    verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+                    modifier = Modifier.animateContentSize(),
+                ) {
+                    itemsIndexed(
+                        items = localList.value,
+                        key = { _, it -> it.first.type.id },
+                    ) { index, (menza, order) ->
+                        val itemModifier =
+                            if (draggableState.currentIndexOfDraggedItem != index) {
+                                Modifier.animateItemPlacement()
+                            } else {
+                                Modifier
+                            }
 
-                    val itemModifier =
-                        if (draggableState.currentIndexOfDraggedItem != index) {
-                            Modifier.animateItemPlacement()
-                        } else {
-                            Modifier
-                        }
-
-                    MenzaItem(
-                        menza = menza,
-                        visible = order.visible,
-                        onVisibilityClick = { onVisibilityClick(menza) },
-                        modifier = itemModifier
-                            .makeDraggableItem(draggableState, index),
-                    )
+                        MenzaItem(
+                            menza = menza,
+                            visible = order.visible,
+                            onVisibilityClick = { onVisibilityClick(menza) },
+                            modifier = itemModifier
+                                .makeDraggableItem(draggableState, index),
+                        )
+                    }
                 }
             }
 
