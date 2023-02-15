@@ -65,9 +65,9 @@ internal fun DishDto.toEntity(beConfig: AgataBEConfig) =
         typeId = typeId.toLong(),
         servingPlaces = servingPlaceList,
         amount = amount,
-        name = name,
-        sideDishA = sideDishA,
-        sideDishB = sideDishB,
+        name = name.trimDishName(),
+        sideDishA = sideDishA?.trimDishName(),
+        sideDishB = sideDishB?.trimDishName(),
         priceNormal = priceNormal.toDouble(),
         priceDiscount = priceDiscount.toDouble(),
         allergens = allergens,
@@ -77,6 +77,16 @@ internal fun DishDto.toEntity(beConfig: AgataBEConfig) =
         pictogram = pictogram,
         isActive = isActive,
     )
+
+private val invalidCharacters = arrayOf('(', ')', '[', ']', '\\', '/', '|', '.', '-', '_')
+private fun String.trimDishName() = this
+    .trim()
+    .dropWhile { it == ',' }
+    .dropLastWhile { it == ',' }
+    .map { if (it in invalidCharacters) ' ' else it }
+    .joinToString(separator = "")
+    .replace("""\s*,\s*""".toRegex(), ", ")
+    .replace("""\s+""".toRegex(), " ")
 
 internal fun DishTypeDto.toEntity() =
     DishTypeEntity(

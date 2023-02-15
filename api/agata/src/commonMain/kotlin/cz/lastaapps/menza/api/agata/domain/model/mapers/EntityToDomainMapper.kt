@@ -60,7 +60,7 @@ internal fun DishEntity.toDomain(
     Dish(
         amountCs = dish.amount,
         amountEn = null,
-        nameCs = dish.fullName(),
+        nameCs = dish.fullNameSmart(),
         nameEn = null,
         priceDiscountFloat = dish.priceDiscount?.toFloat(),
         priceNormalFloat = dish.priceNormal?.toFloat(),
@@ -77,7 +77,24 @@ internal fun DishEntity.toDomain(
     )
 }
 
+@Suppress("unused")
 private fun DishEntity.fullName() =
+    buildString {
+        append(name)
+        if (sideDishA != null || sideDishB != null) {
+            append(" ")
+
+            sideDishA?.let { append(it) }
+
+            if (sideDishA != null && sideDishB != null)
+                append(" ")
+
+            sideDishB?.let { append(it) }
+        }
+    }
+
+@Suppress("unused")
+private fun DishEntity.fullNameSmart() =
     buildString {
         append(name)
         if (sideDishA != null || sideDishB != null) {

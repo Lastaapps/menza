@@ -94,6 +94,9 @@ fun TodayInfo(
         AllergenList(
             allergens = dish.allergens,
         )
+        Ingredients(
+            ingredients = dish.ingredients,
+        )
     }
 }
 
@@ -164,19 +167,19 @@ private fun AllergenList(
             style = MaterialTheme.typography.titleLarge
         )
 
-        if (allergens == null) {
-            Text(stringResource(R.string.today_info_allergens_unknown))
-            return@Column
-        }
-        if (allergens.isEmpty()) {
-            Text(stringResource(R.string.today_info_allergens_none))
-            return@Column
-        }
+        when {
+            allergens == null ->
+                Text(stringResource(R.string.today_info_allergens_unknown))
 
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            allergens.forEach {
-                AllergenRow(id = it)
-            }
+            allergens.isEmpty() ->
+                Text(stringResource(R.string.today_info_allergens_none))
+
+            else ->
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    allergens.forEach {
+                        AllergenRow(id = it)
+                    }
+                }
         }
     }
 }
@@ -239,6 +242,27 @@ private fun AllergenIdBadge(id: Int, modifier: Modifier = Modifier) {
                     (h - placeable.height) / 2,
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun Ingredients(
+    ingredients: ImmutableList<String>,
+    modifier: Modifier = Modifier,
+) {
+    if (ingredients.isEmpty()) return
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+    ) {
+        Text(
+            text = stringResource(R.string.today_info_ingredients_title),
+            style = MaterialTheme.typography.titleLarge,
+        )
+        ingredients.forEach { ingredient ->
+            Text(text = ingredient)
         }
     }
 }

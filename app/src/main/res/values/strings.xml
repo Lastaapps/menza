@@ -193,6 +193,7 @@
     <string name="today_info_allergens_title">Allergens</string>
     <string name="today_info_allergens_none">Dish without any allergens</string>
     <string name="today_info_allergens_unknown">Dish allergens aren\'t known</string>
+    <string name="today_info_ingredients_title">Ingredients</string>
     <string name="today_info_image_load_failed">Failed to load the image</string>
     <string name="today_info_unknown_allergen_title">Unknown allergen</string>
     <string name="today_info_unknown_allergen_description">Server returned invalid data</string>
