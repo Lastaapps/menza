@@ -42,7 +42,8 @@ internal fun MainScreen(
     settingsEverOpened: Boolean,
     hostState: SnackbarHostState,
     selectedMenza: Menza?,
-    onNavItem: (MainNavType) -> Unit,
+    onNavItemTopBar: (MainNavType) -> Unit,
+    onNavItemRoot: (MainNavType) -> Unit,
     drawerContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
@@ -59,20 +60,20 @@ internal fun MainScreen(
                 state = topBarState,
                 drawerState = drawerState,
                 menza = selectedMenza,
-                onAction = { onNavItem(it.toMainNavType()) },
+                onAction = { onNavItemTopBar(it.toMainNavType()) },
             )
         },
         bottomBar = {
             MenzaNavigationBar(
                 selectedItem = navItem,
-                onNavItem = { onNavItem(it.toMainNavType()) },
+                onNavItem = { onNavItemRoot(it.toMainNavType()) },
                 settingsEverOpened = settingsEverOpened,
             )
         },
         rail = {
             MenzaRail(
                 selectedItem = navItem,
-                onNavItem = { onNavItem(it.toMainNavType()) },
+                onNavItem = { onNavItemRoot(it.toMainNavType()) },
                 settingsEverOpened = settingsEverOpened,
             )
         },
@@ -85,24 +86,24 @@ internal fun MainScreen(
 
 private fun MainNavType.toNavItem(): NavItem? =
     when (this) {
-        MainNavType.Today -> NavItem.Today
-        MainNavType.Week -> NavItem.Week
-        MainNavType.Info -> NavItem.Info
-        MainNavType.Settings -> NavItem.Settings
+        MainNavType.TodayNav -> NavItem.Today
+        MainNavType.WeekNav -> NavItem.Week
+        MainNavType.InfoNav -> NavItem.Info
+        MainNavType.SettingsNav -> NavItem.Settings
         else -> null
     }
 
 private fun NavItem.toMainNavType(): MainNavType =
     when (this) {
-        NavItem.Today -> MainNavType.Today
-        NavItem.Week -> MainNavType.Week
-        NavItem.Info -> MainNavType.Info
-        NavItem.Settings -> MainNavType.Settings
+        NavItem.Today -> MainNavType.TodayNav
+        NavItem.Week -> MainNavType.WeekNav
+        NavItem.Info -> MainNavType.InfoNav
+        NavItem.Settings -> MainNavType.SettingsNav
     }
 
 private fun TopBarNavTarget.toMainNavType(): MainNavType =
     when (this) {
-        TopBarNavTarget.PrivacyPolicy -> MainNavType.PrivacyPolicy
-        TopBarNavTarget.LicenseNotices -> MainNavType.LicenseNotices
-        TopBarNavTarget.Osturak -> MainNavType.Osturak
+        TopBarNavTarget.PrivacyPolicy -> MainNavType.PrivacyPolicyNav
+        TopBarNavTarget.LicenseNotices -> MainNavType.LicenseNoticesNav
+        TopBarNavTarget.Osturak -> MainNavType.OsturakNav
     }

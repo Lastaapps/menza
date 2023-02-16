@@ -25,36 +25,36 @@ import kotlinx.parcelize.Parcelize
 sealed interface MainNavType : Parcelable {
     companion object {
         val allMainTypes = listOf(
-            Today,
-            Week,
-            Info,
-            Settings,
-            Osturak,
-            PrivacyPolicy,
-            LicenseNotices,
+            TodayNav,
+            WeekNav,
+            InfoNav,
+            SettingsNav,
+            OsturakNav,
+            PrivacyPolicyNav,
+            LicenseNoticesNav,
         )
     }
 
     @Parcelize
-    object Today : MainNavType
+    object TodayNav : MainNavType
 
     @Parcelize
-    object Week : MainNavType
+    object WeekNav : MainNavType
 
     @Parcelize
-    object Info : MainNavType
+    object InfoNav : MainNavType
 
     @Parcelize
-    object Settings : MainNavType
+    object SettingsNav : MainNavType
 
     @Parcelize
-    object Osturak : MainNavType
+    object OsturakNav : MainNavType
 
     @Parcelize
-    object PrivacyPolicy : MainNavType
+    object PrivacyPolicyNav : MainNavType
 
     @Parcelize
-    object LicenseNotices : MainNavType
+    object LicenseNoticesNav : MainNavType
 
     @Parcelize
     object DrawerContent : MainNavType

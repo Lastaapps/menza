@@ -31,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumble.appyx.core.composable.Children
@@ -39,34 +38,35 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
-import com.bumble.appyx.navmodel.spotlight.Spotlight
-import com.bumble.appyx.navmodel.spotlight.activeIndex
-import com.bumble.appyx.navmodel.spotlight.operation.activate
+import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.newRoot
+import com.bumble.appyx.navmodel.backstack.operation.push
 import cz.lastaapps.core.ui.vm.HandleAppear
+import cz.lastaapps.menza.features.info.ui.node.InfoNode
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.DrawerContent
-import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.LicenseNotices
-import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.Osturak
-import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.Today
-import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.Week
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.InfoNav
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.LicenseNoticesNav
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.OsturakNav
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.PrivacyPolicyNav
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.SettingsNav
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.TodayNav
+import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.WeekNav
 import cz.lastaapps.menza.features.main.ui.node.DrawerNode
 import cz.lastaapps.menza.features.main.ui.vm.MainViewModel
 import cz.lastaapps.menza.features.other.ui.node.LicenseNode
 import cz.lastaapps.menza.features.other.ui.node.OsturakNode
+import cz.lastaapps.menza.features.settings.ui.navigation.SettingsNode
 import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
 import cz.lastaapps.menza.features.week.ui.node.WeekNode
-import cz.lastaapps.menza.ui.util.activateType
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 class MainNode(
     buildContext: BuildContext,
-    private val spotlight: Spotlight<MainNavType> = Spotlight(
-        items = MainNavType.allMainTypes,
-        // backPressHandler = TODO(),
+    private val backStack: BackStack<MainNavType> = BackStack(
+        initialElement = TodayNav,
         savedStateMap = buildContext.savedStateMap,
     ),
-) : ParentNode<MainNavType>(spotlight, buildContext) {
+) : ParentNode<MainNavType>(backStack, buildContext) {
 
     @OptIn(ExperimentalMaterial3Api::class)
     private var currentDrawerState: DrawerState? = null
@@ -75,20 +75,21 @@ class MainNode(
     override fun resolve(navTarget: MainNavType, buildContext: BuildContext): Node =
         when (navTarget) {
             DrawerContent -> DrawerNode(buildContext, ::currentDrawerState)
-            Today -> TodayNode(
+            TodayNav -> TodayNode(
                 buildContext,
-                onOsturak = { spotlight.activateType(Osturak) },
+                onOsturak = { backStack.push(OsturakNav) },
             )
 
-            Week -> WeekNode(
+            WeekNav -> WeekNode(
                 buildContext,
-                onOsturak = { spotlight.activateType(Osturak) },
+                onOsturak = { backStack.push(OsturakNav) },
             )
 
-            Osturak -> OsturakNode(buildContext)
-            LicenseNotices -> LicenseNode(buildContext)
-
-            else ->
+            InfoNav -> InfoNode(buildContext)
+            SettingsNav -> SettingsNode(buildContext)
+            OsturakNav -> OsturakNode(buildContext)
+            LicenseNoticesNav -> LicenseNode(buildContext)
+            PrivacyPolicyNav ->
                 node(buildContext) {
                     Text(text = navTarget.toString())
                 }
@@ -109,30 +110,23 @@ class MainNode(
         }
 
         val hostState = remember { SnackbarHostState() }
-        val scope = rememberCoroutineScope()
 
-        val currentIndex by spotlight.activeIndex().collectAsStateWithLifecycle(0)
-        val elements by spotlight.elements.collectAsStateWithLifecycle()
+        val elements by backStack.elements.collectAsStateWithLifecycle()
 
         MainScreen(
-            currentDest = elements[currentIndex].key.navTarget,
+            currentDest = elements.last().key.navTarget,
             drawerState = drawerState,
             settingsEverOpened = state.settingsViewed,
             hostState = hostState,
             selectedMenza = state.selectedMenza,
-            onNavItem = {
-                scope.launch {
-                    val elemList = spotlight.elements.first()
-                        .map { it.key.navTarget }
-                    spotlight.activate(elemList.indexOf(it))
-                }
-            },
+            onNavItemTopBar = { backStack.push(it) },
+            onNavItemRoot = { backStack.newRoot(it) },
             drawerContent = {
                 PermanentChild(navTarget = DrawerContent)
             },
             content = {
                 Children(
-                    navModel = spotlight,
+                    navModel = backStack,
                     modifier = Modifier.fillMaxSize(),
                 )
             },

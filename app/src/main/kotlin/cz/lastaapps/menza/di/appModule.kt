@@ -22,6 +22,7 @@ package cz.lastaapps.menza.di
 import cz.lastaapps.api.main.di.apiModule
 import cz.lastaapps.core.di.coreModule
 import cz.lastaapps.crash.crashModule
+import cz.lastaapps.menza.features.info.di.infoModule
 import cz.lastaapps.menza.features.main.di.mainModule
 import cz.lastaapps.menza.features.other.di.otherModule
 import cz.lastaapps.menza.features.root.di.rootModule
@@ -46,6 +47,7 @@ val appModule = module {
         todayModule,
         weekModule,
         otherModule,
+        infoModule,
     )
 
     single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
