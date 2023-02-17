@@ -19,13 +19,14 @@
 
 package cz.lastaapps.menza.features.today.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
@@ -34,6 +35,7 @@ import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -54,10 +56,11 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
+import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun TodayDishGrid(
     isLoading: Boolean,
@@ -71,10 +74,11 @@ fun TodayDishGrid(
     isOnMetered: Boolean,
     gridSwitch: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    scrollGrid: LazyGridState = rememberLazyGridState(),
+    scrollGrid: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     pullState: PullRefreshState = rememberPullRefreshState(
         refreshing = isLoading, onRefresh = onRefresh,
     ),
+    widthSize: WindowWidthSizeClass = LocalWindowWidth.current,
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Box(
@@ -94,6 +98,7 @@ fun TodayDishGrid(
                     isOnMetered = isOnMetered,
                     scroll = scrollGrid,
                     gridSwitch = gridSwitch,
+                    widthSize = widthSize,
                     modifier = Modifier
                         .padding(top = MenzaPadding.Smaller) // so text is not cut off
                         .fillMaxSize(),
@@ -108,6 +113,7 @@ fun TodayDishGrid(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DishContent(
     data: ImmutableList<DishCategory>,
@@ -117,48 +123,52 @@ private fun DishContent(
     downloadOnMetered: Boolean,
     showCzech: ShowCzech,
     isOnMetered: Boolean,
-    scroll: LazyGridState,
+    scroll: LazyStaggeredGridState,
     gridSwitch: @Composable () -> Unit,
+    widthSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
 ) {
-
-    //no data handling
     if (data.isEmpty()) {
         NoItems(modifier, onNoItems)
         return
     }
 
     Column(modifier, verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium)) {
-        // showing items
-        LazyVerticalGrid(
-            // wait for nonaligned grid
-//            columns = GridCells.Adaptive(156.dp),
-            columns = GridCells.Fixed(1),
+        val columns =
+            if (widthSize == WindowWidthSizeClass.Compact) {
+                StaggeredGridCells.Fixed(1)
+            } else {
+                StaggeredGridCells.Adaptive(172.dp)
+            }
+
+        LazyVerticalStaggeredGrid(
+            columns = columns,
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(MenzaPadding.MidSmall),
             horizontalArrangement = Arrangement.spacedBy(MenzaPadding.MidSmall),
             state = scroll,
         ) {
             data.forEach { category ->
-                item {
-                    Surface(Modifier.fillMaxWidth()) {
-                        DishHeader(
-                            courseType = category,
+                itemsIndexed(category.dishList) { index, dish ->
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                    ) {
+                        if (index == 0) {
+                            DishHeader(
+                                courseType = category,
+                                showCzech = showCzech,
+                            )
+                        }
+                        DishItem(
+                            dish = dish,
+                            onDishSelected = onDishSelected,
+                            priceType = priceType,
+                            downloadOnMetered = downloadOnMetered,
                             showCzech = showCzech,
-                            modifier = Modifier.padding(bottom = MenzaPadding.Smaller),
+                            isOnMetered = isOnMetered,
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
-                }
-                items(category.dishList) { dish ->
-                    DishItem(
-                        dish = dish,
-                        onDishSelected = onDishSelected,
-                        priceType = priceType,
-                        downloadOnMetered = downloadOnMetered,
-                        showCzech = showCzech,
-                        isOnMetered = isOnMetered,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
                 }
             }
 

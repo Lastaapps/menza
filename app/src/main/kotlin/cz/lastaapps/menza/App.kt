@@ -41,7 +41,7 @@ class App : Application(), ImageLoaderFactory {
                 logger(DebugLogger())
             diskCache {
                 with(DiskCache.Builder()) {
-                    maxSizeBytes(1024 * 1024 * 32) // 32 MB
+                    maxSizeBytes(1024 * 1024 * 64) // 64 MB
                         .directory(cacheDir.resolve("dish_image_cache"))
                     build()
                 }

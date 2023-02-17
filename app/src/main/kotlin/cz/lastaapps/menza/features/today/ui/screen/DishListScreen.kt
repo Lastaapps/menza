@@ -19,13 +19,14 @@
 
 package cz.lastaapps.menza.features.today.ui.screen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -45,6 +46,7 @@ import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.ui.HandleError
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun DishListScreen(
     onDishSelected: (Dish) -> Unit,
@@ -52,7 +54,7 @@ internal fun DishListScreen(
     viewModel: DishListViewModel = koinViewModel(),
     hostState: SnackbarHostState = remember { SnackbarHostState() },
     scrollState: LazyListState = rememberLazyListState(),
-    scrollGridState: LazyGridState = rememberLazyGridState(),
+    scrollGridState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
 ) {
     DishListEffects(viewModel, hostState)
 
@@ -79,7 +81,10 @@ private fun DishListEffects(
     HandleError(viewModel, hostState)
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 private fun DishListContent(
     state: DishListState,
@@ -89,7 +94,7 @@ private fun DishListContent(
     onCompactView: (isCompact: Boolean) -> Unit,
     onDishSelected: (Dish) -> Unit,
     scrollListState: LazyListState,
-    scrollGridState: LazyGridState,
+    scrollGridState: LazyStaggeredGridState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(

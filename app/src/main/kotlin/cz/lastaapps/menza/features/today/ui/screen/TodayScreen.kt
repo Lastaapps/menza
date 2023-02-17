@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.today.ui.screen
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -65,6 +66,7 @@ private fun TodayEffects(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TodayContent(
     state: TodayState,
