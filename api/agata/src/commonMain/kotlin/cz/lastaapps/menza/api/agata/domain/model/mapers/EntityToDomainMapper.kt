@@ -32,14 +32,20 @@ import agata.ServingPlaceEntity
 import agata.StrahovEntiy
 import agata.SubsystemEntity
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
+import cz.lastaapps.api.core.domain.model.common.Address
 import cz.lastaapps.api.core.domain.model.common.Contact
 import cz.lastaapps.api.core.domain.model.common.Dish
 import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.api.core.domain.model.common.Email
 import cz.lastaapps.api.core.domain.model.common.Info
 import cz.lastaapps.api.core.domain.model.common.Link
+import cz.lastaapps.api.core.domain.model.common.LocationName
 import cz.lastaapps.api.core.domain.model.common.Menza
-import cz.lastaapps.api.core.domain.model.common.OpeningTime
+import cz.lastaapps.api.core.domain.model.common.Message
+import cz.lastaapps.api.core.domain.model.common.PhoneNumber
+import cz.lastaapps.api.core.domain.model.common.PlaceOpeningInfo
 import cz.lastaapps.api.core.domain.model.common.PlaceOpeningTime
+import cz.lastaapps.api.core.domain.model.common.PlaceOpeningType
 import cz.lastaapps.api.core.domain.model.common.ServingPlace
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -124,49 +130,53 @@ internal fun InfoEntity?.toDomain(
     contacts: List<ContactEntity>,
     openingTimes: List<OpenTimeEntity>,
     links: List<LinkEntity>,
-    address: AddressEntity?,
+    address: AddressEntity,
 ) = Info(
-    header = news?.text,
-    footer = this?.footer,
+    header = news?.text?.let(::Message),
+    footer = this?.footer?.let(::Message),
     contacts = contacts.map { it.toDomain() }.toImmutableList(),
     openingTimes = openingTimes.toDomain().toImmutableList(),
     links = links.map { it.toDomain() }.toImmutableList(),
-    gps = address?.gps,
-    address = address?.address,
+    address = Address(
+        location = address.address.let(::LocationName),
+        gps = address.gps,
+    )
 )
 
 private fun ContactEntity.toDomain() =
     Contact(
         role = role,
         name = name,
-        phone = phone,
-        email = email,
+        phone = phone?.let(::PhoneNumber),
+        email = email?.let(::Email),
     )
 
-private fun List<OpenTimeEntity>.toDomain() =
-    groupBy { it.servingPlaceId }
-        .entries
-        .sortedBy { it.value.first().servingPlaceOrder }
-        .map { (_, values) ->
-            values.first().let { value ->
-                PlaceOpeningTime(
-                    placeName = value.servingPlaceName,
-                    placeAbbrev = value.servingPlaceAbbrev,
-                    description = value.description,
-                    times = values
-                        .sortedBy { it.itemOrder }
-                        .map { it.toDomain() }
-                        .toImmutableList(),
-                )
-            }
-        }
-
-private fun OpenTimeEntity.toDomain() =
-    OpeningTime(
-        from = (dayFrom ?: DayOfWeek.MONDAY) to timeFrom,
-        to = (dayTo ?: DayOfWeek.FRIDAY) to timeTo,
-    )
-
+fun List<OpenTimeEntity>.toDomain() = this
+    .groupBy { it.servingPlaceId }.entries
+    .map { (_, entities1) ->
+        val one = entities1.first()
+        PlaceOpeningInfo(
+            name = one.servingPlaceName,
+            abbrev = one.servingPlaceAbbrev,
+            types = entities1
+                .groupBy { it.description }.entries
+                .map { (description, entities2) ->
+                    PlaceOpeningType(
+                        description = description,
+                        times = entities2.map {
+                            PlaceOpeningTime(
+                                startDay = it.dayFrom ?: DayOfWeek.MONDAY,
+                                endDay = it.dayTo ?: it.dayFrom ?: DayOfWeek.MONDAY,
+                                startTime = it.timeFrom,
+                                endTime = it.timeTo,
+                            )
+                        }
+                            .sortedBy { it.startDay }
+                            .toImmutableList()
+                    )
+                }.toImmutableList()
+        )
+    }
 
 private fun LinkEntity.toDomain() =
     Link(

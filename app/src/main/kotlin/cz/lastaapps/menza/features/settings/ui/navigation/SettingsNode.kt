@@ -25,8 +25,8 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 
 class SettingsNode(
-    context: BuildContext,
-) : Node(context) {
+    buildContext: BuildContext,
+) : Node(buildContext) {
     @Composable
     override fun View(modifier: Modifier) {
 

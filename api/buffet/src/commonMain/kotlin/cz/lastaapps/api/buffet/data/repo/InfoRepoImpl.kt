@@ -23,11 +23,16 @@ import arrow.core.right
 import cz.lastaapps.api.buffet.domain.model.BuffetType
 import cz.lastaapps.api.buffet.domain.model.BuffetType.FEL
 import cz.lastaapps.api.buffet.domain.model.BuffetType.FS
+import cz.lastaapps.api.core.domain.model.common.Address
 import cz.lastaapps.api.core.domain.model.common.Contact
+import cz.lastaapps.api.core.domain.model.common.Email
 import cz.lastaapps.api.core.domain.model.common.Info
 import cz.lastaapps.api.core.domain.model.common.Link
-import cz.lastaapps.api.core.domain.model.common.OpeningTime
+import cz.lastaapps.api.core.domain.model.common.LocationName
+import cz.lastaapps.api.core.domain.model.common.PhoneNumber
+import cz.lastaapps.api.core.domain.model.common.PlaceOpeningInfo
 import cz.lastaapps.api.core.domain.model.common.PlaceOpeningTime
+import cz.lastaapps.api.core.domain.model.common.PlaceOpeningType
 import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
@@ -59,8 +64,10 @@ internal class InfoRepoImpl(
                         description = "Web",
                     ),
                 ),
-                gps = null,
-                address = address(type),
+                address = Address(
+                    location = address(type),
+                    gps = null,
+                )
             )
         )
     }
@@ -69,7 +76,7 @@ internal class InfoRepoImpl(
 
     @Suppress("SpellCheckingInspection")
     private fun openTime(type: BuffetType) = persistentListOf(
-        PlaceOpeningTime(
+        PlaceOpeningInfo(
             when (type) {
                 FS -> "FS Bufet"
                 FEL -> "FEL Bufet"
@@ -78,17 +85,25 @@ internal class InfoRepoImpl(
                 FS -> "FS"
                 FEL -> "FEL"
             },
-            null,
             persistentListOf(
-                OpeningTime(
-                    from = DayOfWeek.MONDAY to LocalTime(7, 45),
-                    to = DayOfWeek.THURSDAY to LocalTime(16, 45),
-                ),
-                OpeningTime(
-                    from = DayOfWeek.FRIDAY to LocalTime(7, 45),
-                    to = DayOfWeek.FRIDAY to LocalTime(14, 0),
-                ),
-            )
+                PlaceOpeningType(
+                    description = null,
+                    times = persistentListOf(
+                        PlaceOpeningTime(
+                            startDay = DayOfWeek.MONDAY,
+                            endDay = DayOfWeek.THURSDAY,
+                            startTime = LocalTime(7, 45),
+                            endTime = LocalTime(16, 45),
+                        ),
+                        PlaceOpeningTime(
+                            startDay = DayOfWeek.FRIDAY,
+                            endDay = DayOfWeek.FRIDAY,
+                            startTime = LocalTime(7, 45),
+                            endTime = LocalTime(14, 0),
+                        ),
+                    ),
+                )
+            ),
         )
     )
 
@@ -96,7 +111,7 @@ internal class InfoRepoImpl(
     private fun address(type: BuffetType) = when (type) {
         FS -> "1. partro, Technická 1902/4, 160 00 Praha 6"
         FEL -> "1. partro, Technická 1902/2, 160 00 Praha 6"
-    }
+    }.let(::LocationName)
 
     @Suppress("SpellCheckingInspection")
     private val commonContacts =
@@ -104,20 +119,20 @@ internal class InfoRepoImpl(
             Contact(
                 role = "Provoz",
                 name = null,
-                phone = "+420 224 352 064",
+                phone = "+420 224 352 064".let(::PhoneNumber),
                 email = null,
             ),
             Contact(
                 role = "jednatel",
                 name = "Ing. Michal Janča",
-                phone = "+420 602 447 080",
+                phone = "+420 602 447 080".let(::PhoneNumber),
                 email = null,
             ),
             Contact(
                 role = null,
                 name = null,
                 phone = null,
-                email = "studentcatering@seznam.cz",
+                email = "studentcatering@seznam.cz".let(::Email),
             ),
         )
 

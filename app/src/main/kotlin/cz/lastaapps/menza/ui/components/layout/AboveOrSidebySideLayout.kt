@@ -20,9 +20,11 @@
 package cz.lastaapps.menza.ui.components.layout
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -34,15 +36,19 @@ import cz.lastaapps.menza.ui.theme.MenzaPadding
 
 @Composable
 fun AboveOrSideBySideLayout(
-    topLeft: @Composable () -> Unit,
-    bottomRight: @Composable () -> Unit,
+    topLeft: @Composable ColumnScope.() -> Unit,
+    bottomRight: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
+    verticalSpacer: @Composable ColumnScope.() -> Unit = {
+        Spacer(Modifier.height(MenzaPadding.Small))
+    },
 ) {
     when (LocalWindowWidth.current) {
         WindowWidthSizeClass.Compact -> {
             AboveOrSideBySideCompact(
                 topLeft = topLeft,
                 bottomRight = bottomRight,
+                verticalSpacer = verticalSpacer,
                 modifier = modifier,
             )
         }
@@ -51,6 +57,7 @@ fun AboveOrSideBySideLayout(
             AboveOrSideBySideMedium(
                 topLeft = topLeft,
                 bottomRight = bottomRight,
+                verticalSpacer = verticalSpacer,
                 modifier = modifier,
             )
         }
@@ -67,8 +74,9 @@ fun AboveOrSideBySideLayout(
 
 @Composable
 private fun AboveOrSideBySideCompact(
-    topLeft: @Composable () -> Unit,
-    bottomRight: @Composable () -> Unit,
+    topLeft: @Composable ColumnScope.() -> Unit,
+    bottomRight: @Composable ColumnScope.() -> Unit,
+    verticalSpacer: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -78,43 +86,48 @@ private fun AboveOrSideBySideCompact(
             .fillMaxSize(),
     ) {
         topLeft()
+        verticalSpacer()
         bottomRight()
     }
 }
 
 @Composable
 private fun AboveOrSideBySideMedium(
-    topLeft: @Composable () -> Unit,
-    bottomRight: @Composable () -> Unit,
+    topLeft: @Composable ColumnScope.() -> Unit,
+    bottomRight: @Composable ColumnScope.() -> Unit,
+    verticalSpacer: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) = AboveOrSideBySideCompact(
     topLeft = topLeft,
     bottomRight = bottomRight,
+    verticalSpacer = verticalSpacer,
     modifier = modifier,
 )
 
 @Composable
 private fun AboveOrSideBySideExpanded(
-    topLeft: @Composable () -> Unit,
-    bottomRight: @Composable () -> Unit,
+    topLeft: @Composable ColumnScope.() -> Unit,
+    bottomRight: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SplitLayout(
         modifier = modifier,
         panel1 = {
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
-                contentAlignment = Alignment.Center
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) { topLeft() }
         },
         panel2 = {
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
-                contentAlignment = Alignment.Center
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) { bottomRight() }
         },
     )

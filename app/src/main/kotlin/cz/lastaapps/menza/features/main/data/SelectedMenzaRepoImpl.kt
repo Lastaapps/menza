@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 internal class SelectedMenzaRepoImpl(
     private val getInitialMenza: GetInitialMenzaUC,
@@ -36,14 +38,15 @@ internal class SelectedMenzaRepoImpl(
     private var isReady = false
     private val selected = MutableStateFlow<MenzaType?>(null)
 
-    override suspend fun getSelectedMenza(): Flow<MenzaType?> {
+    private val creationLock = Mutex()
+    override suspend fun getSelectedMenza(): Flow<MenzaType?> = creationLock.withLock {
         if (isReady) {
             isReady = true
             getInitialMenza().first().let { initial ->
                 selected.update { initial }
             }
         }
-        return selected
+        selected
     }
 
     override suspend fun selectMenza(menza: MenzaType?) {

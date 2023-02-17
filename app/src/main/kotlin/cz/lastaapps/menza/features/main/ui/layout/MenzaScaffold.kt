@@ -30,6 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import cz.lastaapps.menza.ui.root.locals.FoldingClass
 import cz.lastaapps.menza.ui.root.locals.LocalFoldProvider
 import cz.lastaapps.menza.ui.root.locals.LocalSplitPosition
@@ -178,12 +179,13 @@ private fun AppLayoutMedium(
                 BoxWithConstraints(
                     Modifier.fillMaxSize()
                 ) {
-                    val totalWidthAvailable = maxWidth
+                    val padding = MenzaPadding.More.Screen
+                    val totalWidthAvailable = maxWidth - padding
                     val startWidth = totalWidthAvailable * 0.5f
                     val endWidth = totalWidthAvailable * 0.5f
 
                     CompositionLocalProvider(
-                        LocalSplitPosition provides Triple(startWidth, 0.dp, endWidth)
+                        LocalSplitPosition provides Triple(startWidth, padding, endWidth)
                     ) { content() }
                 }
             }
@@ -263,12 +265,13 @@ private fun AppLayoutExpandedNoFold(
                 BoxWithConstraints(
                     Modifier.fillMaxSize()
                 ) {
-                    val totalWidthAvailable = maxWidth
+                    val padding = MenzaPadding.More.Screen
+                    val totalWidthAvailable = maxWidth - padding
                     val startWidth = totalWidthAvailable * 0.5f
                     val endWidth = totalWidthAvailable * 0.5f
 
                     CompositionLocalProvider(
-                        LocalSplitPosition provides Triple(startWidth, 0.dp, endWidth)
+                        LocalSplitPosition provides Triple(startWidth, padding, endWidth)
                     ) { content() }
                 }
             }
@@ -312,7 +315,9 @@ private fun AppLayoutExpandedFold(
             val weightStart = 0.5f
             val weightEnd = 0.5f
             val spacesWidth = remember(density, foldingFeature) {
+                @Suppress("ComplexRedundantLet")
                 with(density) { foldingFeature.foldingFeature.bounds.width().toDp() }
+                    .let { max(it, MenzaPadding.More.Screen) }
             }
 
             MenzaDismissibleDrawer(

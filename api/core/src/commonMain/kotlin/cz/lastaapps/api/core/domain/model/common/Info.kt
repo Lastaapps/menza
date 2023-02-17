@@ -25,13 +25,12 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 
 data class Info(
-    val header: String?,
-    val footer: String?,
+    val header: Message?,
+    val footer: Message?,
     val contacts: ImmutableList<Contact>,
-    val openingTimes: ImmutableList<PlaceOpeningTime>,
+    val openingTimes: ImmutableList<PlaceOpeningInfo>,
     val links: ImmutableList<Link>,
-    val gps: LatLong?,
-    val address: String?,
+    val address: Address?,
 ) {
     companion object {
         val empty: Info
@@ -40,7 +39,7 @@ data class Info(
                 persistentListOf(),
                 persistentListOf(),
                 persistentListOf(),
-                null, null,
+                null,
             )
     }
 }
@@ -48,8 +47,8 @@ data class Info(
 data class Contact(
     val role: String?,
     val name: String?,
-    val phone: String?,
-    val email: String?,
+    val phone: PhoneNumber?,
+    val email: Email?,
 )
 
 data class Link(
@@ -57,16 +56,39 @@ data class Link(
     val description: String,
 )
 
-data class PlaceOpeningTime(
-    val placeName: String,
-    val placeAbbrev: String,
-    val description: String?,
-    val times: ImmutableList<OpeningTime>,
+data class PlaceOpeningInfo(
+    val name: String,
+    val abbrev: String,
+    val types: ImmutableList<PlaceOpeningType>,
 )
 
-data class OpeningTime(
-    val from: Pair<DayOfWeek, LocalTime>,
-    val to: Pair<DayOfWeek, LocalTime>,
+data class PlaceOpeningType(
+    val description: String?,
+    val times: ImmutableList<PlaceOpeningTime>,
 )
+
+data class PlaceOpeningTime(
+    val startDay: DayOfWeek,
+    val endDay: DayOfWeek,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
+)
+
+data class Address(
+    val location: LocationName,
+    val gps: LatLong?,
+)
+
+@JvmInline
+value class Message(val text: String)
+
+@JvmInline
+value class LocationName(val name: String)
+
+@JvmInline
+value class Email(val mail: String)
+
+@JvmInline
+value class PhoneNumber(val number: String)
 
 data class LatLong(val lat: Float, val long: Float)

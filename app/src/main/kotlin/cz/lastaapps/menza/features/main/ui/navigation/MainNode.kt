@@ -71,21 +71,28 @@ class MainNode(
     @OptIn(ExperimentalMaterial3Api::class)
     private var currentDrawerState: DrawerState? = null
 
+    private val onOsturak = { backStack.push(OsturakNav) }
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun resolve(navTarget: MainNavType, buildContext: BuildContext): Node =
         when (navTarget) {
             DrawerContent -> DrawerNode(buildContext, ::currentDrawerState)
+
             TodayNav -> TodayNode(
-                buildContext,
-                onOsturak = { backStack.push(OsturakNav) },
+                buildContext = buildContext,
+                onOsturak = onOsturak,
             )
 
             WeekNav -> WeekNode(
-                buildContext,
-                onOsturak = { backStack.push(OsturakNav) },
+                buildContext = buildContext,
+                onOsturak = onOsturak,
             )
 
-            InfoNav -> InfoNode(buildContext)
+            InfoNav -> InfoNode(
+                buildContext = buildContext,
+                onOsturak = onOsturak,
+            )
+
             SettingsNav -> SettingsNode(buildContext)
             OsturakNav -> OsturakNode(buildContext)
             LicenseNoticesNav -> LicenseNode(buildContext)

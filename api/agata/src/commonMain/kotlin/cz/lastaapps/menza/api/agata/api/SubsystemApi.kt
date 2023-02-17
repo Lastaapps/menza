@@ -79,7 +79,7 @@ internal class SubsystemApiImpl(
     }
 
     override suspend fun getNews(subsystemId: Int): Outcome<NewsDto?> = catchingNetwork {
-        client.getFun(News, subsystemId = subsystemId).body<String?>()?.let { NewsDto(it) }
+        client.getFun(News, subsystemId = subsystemId).body()
     }
 
     override suspend fun getNewsHash(subsystemId: Int): Outcome<String> = catchingNetwork {

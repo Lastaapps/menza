@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~
+  ~     This file is part of Menza.
+  ~
+  ~     Menza is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Menza is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="error_unknown">Nečekaná chyba: %s 🥸</string>
+    <string name="error_network_connection_closed">Spojení ukončeno 🗡️</string>
+    <string name="error_network_no_internet">Internet nedorazil 🙎‍♀️</string>
+    <string name="error_network_timeout">Limit spojení vypršel 🌧️</string>
+    <string name="error_network_serialization">Menza API poslala neplatná data 💀</string>
+    <string name="error_parsing_date_range">Nepodařilo se ověřit časový rozsah ⌛</string>
+    <string name="error_parsing_day">Některé dny se nepodařilo načíst ⏰</string>
+    <string name="error_parsing_dish">Některá jídla nebyla správně načtena 🍲</string>
+    <string name="error_parsing_menu">Co si na webu zase vymýšlí? Chyba při načítání jídelníčku. 💀</string>
+    <string name="error_api_week_not_available">Tato menza takhle dopředu neplánuje, není podporováno. 🤷</string>
+    <string name="error_info_contacts_no_app_dial">Není nainstalovaná aplikace kontakty</string>
+    <string name="error_info_contacts_no_app_email">Není nainstalován emailový klient</string>
+    <string name="error_info_contacts_no_app_contact">Není nainstalována aplikace kontakty</string>
+    <string name="error_info_location_no_app">Nejsou nainstalované mapy</string>
+</resources>

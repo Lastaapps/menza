@@ -28,6 +28,10 @@ import cz.lastaapps.core.domain.AppText.Rich
 import cz.lastaapps.core.domain.error.ApiErrorLogic
 import cz.lastaapps.core.domain.error.ApiErrorLogic.WeekNotAvailable
 import cz.lastaapps.core.domain.error.CommonError
+import cz.lastaapps.core.domain.error.CommonError.CannotAddContact
+import cz.lastaapps.core.domain.error.CommonError.CannotMakePhoneCall
+import cz.lastaapps.core.domain.error.CommonError.CannotOpenMap
+import cz.lastaapps.core.domain.error.CommonError.CannotSendEmail
 import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.MenzaError.Unknown
@@ -87,4 +91,8 @@ val ApiErrorLogic.text: AppText
 val CommonError.text: AppText
     get() = when (this) {
         is WorkTimeout -> E(R.string.error_network_timeout)
+        CannotAddContact -> E(R.string.error_info_contacts_no_app_contact)
+        CannotMakePhoneCall -> E(R.string.error_info_contacts_no_app_dial)
+        CannotSendEmail -> E(R.string.error_info_contacts_no_app_email)
+        CannotOpenMap -> E(R.string.error_info_location_no_app)
     }

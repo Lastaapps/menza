@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import cz.lastaapps.menza.ui.root.locals.LocalSplitPosition
 
 @Composable
@@ -32,9 +33,9 @@ fun SplitLayout(
     panel1: @Composable () -> Unit,
     panel2: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    size: Triple<Dp, Dp, Dp> = LocalSplitPosition.current,
 ) {
     Row(modifier) {
-        val size = LocalSplitPosition.current
         Box(
             Modifier.width(size.first)
         ) { panel1() }

@@ -19,8 +19,10 @@
 
 package cz.lastaapps.menza.features.info.di
 
+import cz.lastaapps.menza.features.info.ui.vm.InfoViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val infoModule = module {
-
+    viewModelOf(::InfoViewModel)
 }

@@ -26,24 +26,16 @@
     <string name="init_title">Stahování dat</string>
     <string name="init_error">Vyskytla se chyba. Zkusit znovu?</string>
     <string name="info_contacts_title">Kontakty</string>
-    <string name="info_contacts_dial_no_app">Není nainstalovaná aplikace kontakty</string>
-    <string name="info_contacts_email_no_app">Není nainstalován emailový klient</string>
-    <string name="info_contacts_contact_no_app">Není nainstalována aplikace kontakty</string>
     <string name="info_contacts_dial_choose_app">Vyberte aplikaci pro hovor</string>
     <string name="info_contacts_email_choose_app">Vyberte emailového klienta</string>
     <string name="info_contacts_contact_choose_app">Vyberte kam uložit kontakt</string>
     <string name="info_contacts_contact_button_add">Přidat kontakt</string>
     <string name="info_location_title">Adresa</string>
-    <string name="info_location_no_app">Nejsou nainstalované mapy</string>
+    <string name="info_location_open_app">Zobrazit na mapě</string>
     <string name="info_location_choose_app">Vyberte mapovací aplikaci</string>
     <string name="info_message_title">Oznámení</string>
     <string name="info_opening_hours_title">Otevírací hodiny</string>
-    <string name="info_new_be_warning_title">Chybí kontakty?</string>
-    <string name="info_new_be_warning_description">
-        Je mi líto, ale kvůli změnám webu Agáty nelze kontakty v tuto chvíli načíst.
-        Po zkouškovém to opravím, do té doby nebudu mít nejspíše čas.
-        Vždy se můžete podívat na web.
-    </string>
+    <string name="info_links_title">Odkazy</string>
     <string name="privacy_title">Zásady ochrany osobních údajů</string>
     <string name="privacy_text">
         Tato aplikace neshromažďuje žádná (osobní) data.

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.info
+package cz.lastaapps.menza.features.info.ui.components
 
 import android.content.Context
 import android.content.Intent
@@ -26,46 +26,103 @@ import android.provider.ContactsContract
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.entity.info.Contact
-import cz.lastaapps.entity.info.Email
-import cz.lastaapps.entity.info.PhoneNumber
+import cz.lastaapps.api.core.domain.model.common.Contact
+import cz.lastaapps.api.core.domain.model.common.Email
+import cz.lastaapps.api.core.domain.model.common.PhoneNumber
+import cz.lastaapps.core.domain.error.CommonError
+import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.root.locals.LocalSnackbarProvider
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.launch
 
 @Composable
 fun ContactList(
-    contact: ImmutableList<Contact>,
+    contactList: ImmutableList<Contact>,
+    onError: (MenzaError) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (contact.isNotEmpty()) {
-        Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    val context = LocalContext.current
+    ContactList(
+        contactList = contactList,
+        modifier = modifier,
+        onMakePhoneCall = { contact ->
+            contact.phone?.let {
+                makePhoneCall(context, it) {
+                    onError(CommonError.CannotMakePhoneCall)
+                }
+            }
+        },
+        onSendEmail = { contact ->
+            contact.email?.let {
+                sendEmail(context, it) {
+                    onError(CommonError.CannotSendEmail)
+                }
+            }
+        },
+        onAddContact = { contact ->
+            addContact(context, contact) {
+                onError(CommonError.CannotAddContact)
+            }
+        },
+    )
+}
+
+@Composable
+private fun ContactList(
+    contactList: ImmutableList<Contact>,
+    onMakePhoneCall: (Contact) -> Unit,
+    onSendEmail: (Contact) -> Unit,
+    onAddContact: (Contact) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    if (contactList.isNotEmpty()) {
+        Column(
+            modifier = modifier.width(IntrinsicSize.Max),
+            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Text(
                 stringResource(R.string.info_contacts_title),
                 style = MaterialTheme.typography.titleLarge
             )
-            contact.forEach {
-                ContactUI(contact = it, Modifier.fillMaxWidth())
+            contactList.forEach {
+                ContactItem(
+                    contact = it,
+                    modifier = Modifier.fillMaxWidth(),
+                    onMakePhoneCall = onMakePhoneCall,
+                    onSendEmail = onSendEmail,
+                    onAddContact = onAddContact,
+                )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactUI(
+private fun ContactItem(
     contact: Contact,
+    onMakePhoneCall: (Contact) -> Unit,
+    onSendEmail: (Contact) -> Unit,
+    onAddContact: (Contact) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (contact.name == null && contact.role == null)
@@ -77,45 +134,43 @@ fun ContactUI(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
     ) {
-        val context = LocalContext.current
-        val snackbar = LocalSnackbarProvider.current
-        val scope = rememberCoroutineScope()
+        Column(
+            modifier = Modifier.padding(MenzaPadding.MidSmall),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            contact.name?.let { name ->
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
 
-        Column(Modifier.padding(12.dp)) {
-            contact.name?.let {
-                Text(text = it.name, style = MaterialTheme.typography.titleMedium)
+            contact.role?.let { role ->
+                Text(
+                    text = role,
+                    style = MaterialTheme.typography.titleMedium
+                )
             }
-            contact.role?.let {
-                Text(text = it.role, style = MaterialTheme.typography.titleMedium)
-            }
-            contact.phoneNumber?.let {
-                val errorMessage = stringResource(R.string.info_contacts_dial_no_app)
+
+            contact.phone?.let {
                 OutlinedButton(
-                    onClick = {
-                        makePhoneCall(context, it) {
-                            scope.launch { snackbar.showSnackbar(errorMessage) }
-                        }
-                    },
+                    onClick = { onMakePhoneCall(contact) },
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
                     border = BorderStroke(1.dp, LocalContentColor.current),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = it.phone,
+                        text = it.number,
                         style = LocalTextStyle.current.copy(
                             textDecoration = TextDecoration.Underline
                         ),
                     )
                 }
             }
+
             contact.email?.let {
-                val errorMessage = stringResource(R.string.info_contacts_email_no_app)
                 OutlinedButton(
-                    onClick = {
-                        sendEmail(context, it) {
-                            scope.launch { snackbar.showSnackbar(errorMessage) }
-                        }
-                    },
+                    onClick = { onSendEmail(contact) },
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
                     border = BorderStroke(1.dp, LocalContentColor.current),
                     modifier = Modifier.fillMaxWidth(),
@@ -128,14 +183,10 @@ fun ContactUI(
                     )
                 }
             }
-            if ((contact.phoneNumber ?: contact.email) != null) {
-                val errorMessage = stringResource(R.string.info_contacts_contact_no_app)
+
+            if ((contact.phone ?: contact.email) != null) {
                 OutlinedButton(
-                    onClick = {
-                        addContact(context, contact) {
-                            scope.launch { snackbar.showSnackbar(errorMessage) }
-                        }
-                    },
+                    onClick = { onAddContact(contact) },
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
                     border = BorderStroke(1.dp, LocalContentColor.current),
                     modifier = Modifier.fillMaxWidth(),
@@ -149,7 +200,7 @@ fun ContactUI(
 
 private fun makePhoneCall(context: Context, phoneNumber: PhoneNumber, onError: () -> Unit) {
     val intent = Intent(Intent.ACTION_DIAL)
-    intent.data = Uri.parse("tel:${Uri.encode(phoneNumber.phone)}")
+    intent.data = Uri.parse("tel:${Uri.encode(phoneNumber.number)}")
     try {
         context.startActivity(
             Intent.createChooser(
@@ -184,14 +235,14 @@ private fun addContact(context: Context, contact: Contact, onError: () -> Unit) 
     val intent = Intent(Intent.ACTION_INSERT).apply {
         type = ContactsContract.Contacts.CONTENT_TYPE
 
-        val name = contact.name?.name ?: contact.role?.role!!
+        val name = contact.name ?: contact.role ?: return
         putExtra(ContactsContract.Intents.Insert.NAME, name)
 
         contact.role?.let {
-            putExtra(ContactsContract.Intents.Insert.JOB_TITLE, it.role)
+            putExtra(ContactsContract.Intents.Insert.JOB_TITLE, it)
         }
-        contact.phoneNumber?.let {
-            putExtra(ContactsContract.Intents.Insert.PHONE, it.phone)
+        contact.phone?.let {
+            putExtra(ContactsContract.Intents.Insert.PHONE, it.number)
         }
         contact.email?.let {
             putExtra(ContactsContract.Intents.Insert.EMAIL, it.mail)

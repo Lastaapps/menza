@@ -36,8 +36,6 @@ import cz.lastaapps.menza.features.starting.ui.screen.PrivacyDialogContent
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
 import cz.lastaapps.menza.features.starting.ui.vm.PrivacyViewModel
 import cz.lastaapps.menza.navigation.Dest.R
-import cz.lastaapps.menza.ui.dests.info.InfoLayout
-import cz.lastaapps.menza.ui.dests.info.InfoViewModel
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
@@ -128,12 +126,6 @@ private fun AppContent(viewModel: MenzaViewModel, settingsViewModel: SettingsVie
                     composable(R.week) {
                     }
                     composable(R.info) {
-                        InfoLayout(
-                            navController = navHostState,
-                            snackbarHostState = snackbarHostState,
-                            menzaId = menzaId,
-                            infoViewModel = koinActivityViewModel<InfoViewModel>(),
-                        )
                     }
                     composable(R.settings) {
                         SettingsLayout(

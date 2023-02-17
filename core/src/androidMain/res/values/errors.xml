@@ -18,14 +18,18 @@
   -->
 
 <resources>
-    <string name="error_unknown">Unknown error: %s</string>
-    <string name="error_network_connection_closed">Connection closed</string>
-    <string name="error_network_no_internet">No internet</string>
-    <string name="error_network_timeout">Timeout</string>
-    <string name="error_network_serialization">Failed to process API content</string>
-    <string name="error_parsing_date_range">Failed to parse valid dates</string>
-    <string name="error_parsing_day">Failed to parse some day dishes</string>
-    <string name="error_parsing_dish">Failed to parse a dish</string>
-    <string name="error_parsing_menu">Failed to parse menu</string>
-    <string name="error_api_week_not_available">Week menu not supported</string>
+    <string name="error_unknown">Unknown error: %s 🥸</string>
+    <string name="error_network_connection_closed">Connection closed 🗡️</string>
+    <string name="error_network_no_internet">No internet 🙎‍♀️</string>
+    <string name="error_network_timeout">Timeout 🌧️</string>
+    <string name="error_network_serialization">Failed to process API content 💀</string>
+    <string name="error_parsing_date_range">Failed to parse valid dates ⌛</string>
+    <string name="error_parsing_day">Failed to parse some day dishes ⏰</string>
+    <string name="error_parsing_dish">Failed to parse a dish 🍲</string>
+    <string name="error_parsing_menu">What are they doing on the web? Failed to parse the menu 💀</string>
+    <string name="error_api_week_not_available">Week menu not supported 🤷</string>
+    <string name="error_info_contacts_no_app_dial">No dial app installed</string>
+    <string name="error_info_contacts_no_app_email">No email app installed</string>
+    <string name="error_info_contacts_no_app_contact">No contacts app installed</string>
+    <string name="error_info_location_no_app">No map app installed</string>
 </resources>

@@ -29,26 +29,16 @@
     <string name="init_error">An error occurred. Retry now?</string>
 
     <string name="info_contacts_title">Contacts</string>
-    <string name="info_contacts_dial_no_app">No dial app installed</string>
-    <string name="info_contacts_email_no_app">No email app installed</string>
-    <string name="info_contacts_contact_no_app">No contacts app installed</string>
     <string name="info_contacts_dial_choose_app">Choose phone app</string>
     <string name="info_contacts_email_choose_app">Choose email app</string>
     <string name="info_contacts_contact_choose_app">Choose contacts app</string>
     <string name="info_contacts_contact_button_add">Add contact</string>
     <string name="info_location_title">Address</string>
-    <string name="info_location_no_app">No map app installed</string>
+    <string name="info_location_open_app">Show on map</string>
     <string name="info_location_choose_app">Choose map app</string>
     <string name="info_message_title">Announcements</string>
     <string name="info_opening_hours_title">Opening hours</string>
-    <string name="info_new_be_warning_title">Contacts missing?</string>
-    <string name="info_new_be_warning_description">
-        The contacts section may be missing.
-        It is caused by Agata using a new website and
-        me not adapting to it yet.
-        After the examination period it will get fixed.
-        Just have a look at the website.
-    </string>
+    <string name="info_links_title">Links</string>
 
     <string name="privacy_title">Privacy Policy</string>
     <string name="privacy_text">

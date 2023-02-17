@@ -17,13 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.info
+package cz.lastaapps.menza.features.info.ui.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cz.lastaapps.entity.index
 import cz.lastaapps.entity.info.Contact
-import cz.lastaapps.entity.info.OpeningHours
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.MenzaLocation
 import cz.lastaapps.entity.menza.Message
@@ -103,51 +101,51 @@ class InfoViewModel constructor(
         return locationRepo.getMenzaLocation(menzaId).map { it.toImmutableList() }
     }
 
-    fun getOpeningHours(menzaId: MenzaId): Flow<ImmutableList<OpeningLocation>> {
-        return openingHoursRepo.getForMenza(menzaId).map { input ->
-            val places = mutableMapOf<String, MutableList<OpeningHours>>()
-            input.forEach {
-                places.getOrPut(it.locationName) { mutableListOf() }.add(it)
-            }
-            val combined = places.entries.map { entry ->
-
-                entry.key to entry.value.sortedWith { e1, e2 ->
-                    e1.comment?.compareTo(e2.comment ?: "").takeIf { it != 0 }
-                        ?: e1.dayOfWeek.index.compareTo(e2.dayOfWeek.index)
-                }.let { list ->
-                    if (list.isEmpty()) return@let emptyList()
-                    val sameGroups = mutableListOf(mutableListOf(0))
-
-                    for (i in 0 until list.size - 1) {
-                        val cur = list[i]
-                        val next = list[i + 1]
-                        val areAfter = next.dayOfWeek.index - cur.dayOfWeek.index == 1
-                        val times = cur.open == next.open && cur.close == next.close
-                        val comment = cur.comment == next.comment
-
-                        if (areAfter && times && comment) {
-                            sameGroups.last().add(i + 1)
-                        } else {
-                            sameGroups.add(mutableListOf(i + 1))
-                        }
-                    }
-
-                    sameGroups.map { group ->
-                        val start = list[group.first()]
-                        val end = list[group.last()]
-                        OpeningInterval(
-                            start.dayOfWeek,
-                            end.dayOfWeek,
-                            start.open,
-                            start.close,
-                            start.comment
-                        )
-                    }
-                }
-            }
-            combined.map { pair ->
-                OpeningLocation(pair.first, pair.second.toImmutableList())
-            }
-        }.map { it.toImmutableList() }
-    }
+//    fun getOpeningHours(menzaId: MenzaId): Flow<ImmutableList<OpeningLocation>> {
+//        return openingHoursRepo.getForMenza(menzaId).map { input ->
+//            val places = mutableMapOf<String, MutableList<OpeningHours>>()
+//            input.forEach {
+//                places.getOrPut(it.locationName) { mutableListOf() }.add(it)
+//            }
+//            val combined = places.entries.map { entry ->
+//
+//                entry.key to entry.value.sortedWith { e1, e2 ->
+//                    e1.comment?.compareTo(e2.comment ?: "").takeIf { it != 0 }
+//                        ?: e1.dayOfWeek.index.compareTo(e2.dayOfWeek.index)
+//                }.let { list ->
+//                    if (list.isEmpty()) return@let emptyList()
+//                    val sameGroups = mutableListOf(mutableListOf(0))
+//
+//                    for (i in 0 until list.size - 1) {
+//                        val cur = list[i]
+//                        val next = list[i + 1]
+//                        val areAfter = next.dayOfWeek.index - cur.dayOfWeek.index == 1
+//                        val times = cur.open == next.open && cur.close == next.close
+//                        val comment = cur.comment == next.comment
+//
+//                        if (areAfter && times && comment) {
+//                            sameGroups.last().add(i + 1)
+//                        } else {
+//                            sameGroups.add(mutableListOf(i + 1))
+//                        }
+//                    }
+//
+//                    sameGroups.map { group ->
+//                        val start = list[group.first()]
+//                        val end = list[group.last()]
+//                        OpeningInterval(
+//                            start.dayOfWeek,
+//                            end.dayOfWeek,
+//                            start.open,
+//                            start.close,
+//                            start.comment
+//                        )
+//                    }
+//                }
+//            }
+//            combined.map { pair ->
+//                OpeningLocation(pair.first, pair.second.toImmutableList())
+//            }
+//        }.map { it.toImmutableList() }
+//    }
 }

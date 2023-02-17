@@ -172,7 +172,7 @@ private fun String.toLocalTime() =
 internal fun LinkDto.toEntity() =
     LinkEntity(
         id = id.toLong(),
-        subsystemId = id.toLong(),
+        subsystemId = subsystemId.toLong(),
         link = link,
         description = description,
     )

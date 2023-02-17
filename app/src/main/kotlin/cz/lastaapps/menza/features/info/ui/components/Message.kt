@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,48 +17,63 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.info
+package cz.lastaapps.menza.features.info.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.entity.menza.Message
+import cz.lastaapps.api.core.domain.model.common.Message
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun MessageList(
+internal fun MessageList(
     messages: ImmutableList<Message>,
     modifier: Modifier = Modifier,
 ) {
     if (messages.isNotEmpty()) {
-        Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Text(
                 stringResource(R.string.info_message_title),
                 style = MaterialTheme.typography.titleLarge
             )
-            messages.forEach {
-                Message(it, Modifier.fillMaxWidth())
+            messages.forEach { message ->
+                Message(message = message)
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Message(message: Message, modifier: Modifier = Modifier) {
+private fun Message(message: Message, modifier: Modifier = Modifier) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
         modifier = modifier,
     ) {
-        Text(message.message, modifier = Modifier.padding(12.dp))
+        Text(
+            text = message.text,
+            modifier = Modifier
+                .padding(MenzaPadding.MidSmall)
+                .sizeIn(maxWidth = 256.dp),
+            textAlign = TextAlign.Center,
+        )
     }
 }

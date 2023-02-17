@@ -19,5 +19,25 @@
 
 package cz.lastaapps.menza.api.agata.domain.model.dto
 
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+
 @JvmInline
+@Serializable(with = NewsDtoSerializer::class)
 value class NewsDto(val html: String)
+
+private object NewsDtoSerializer : KSerializer<NewsDto> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("news_dto", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): NewsDto =
+        NewsDto(decoder.decodeString())
+
+    override fun serialize(encoder: Encoder, value: NewsDto) =
+        encoder.encodeString(value.html)
+}

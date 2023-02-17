@@ -23,6 +23,7 @@ import arrow.core.right
 import arrow.core.rightIor
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.common.Info
@@ -66,7 +67,7 @@ internal class InfoRepoImpl(
             db.contactQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(),
             db.openTimeQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(),
             db.linkQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(),
-            db.addressQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToOneOrNull(),
+            db.addressQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToOne(),
         ) { info, news, contacts, openTimes, links, address ->
             info.toDomain(news, contacts, openTimes, links, address)
         }
