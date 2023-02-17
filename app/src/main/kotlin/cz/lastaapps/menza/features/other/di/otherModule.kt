@@ -21,11 +21,17 @@ package cz.lastaapps.menza.features.other.di
 
 import cz.lastaapps.menza.features.other.domain.usecase.GetLibrariesUC
 import cz.lastaapps.menza.features.other.ui.vm.LicenseViewModel
+import cz.lastaapps.menza.features.other.ui.vm.PrivacyViewModel
+import cz.lastaapps.menza.features.starting.data.PrivacyStore
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val otherModule = module {
     viewModelOf(::LicenseViewModel)
     factoryOf(::GetLibrariesUC)
+
+    viewModelOf(::PrivacyViewModel)
+    singleOf(::PrivacyStore)
 }

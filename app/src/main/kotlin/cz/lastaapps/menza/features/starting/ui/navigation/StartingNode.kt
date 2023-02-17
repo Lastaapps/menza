@@ -36,12 +36,12 @@ import com.bumble.appyx.navmodel.spotlight.operation.next
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightSlider
 import cz.lastaapps.menza.features.settings.ui.nodes.ChooseAppThemeNode
 import cz.lastaapps.menza.features.settings.ui.nodes.ReorderMenzaNode
-import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.AllSet
-import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.ChoosePrice
-import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.ChooseTheme
-import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.DownloadData
-import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.OrderMenzaList
-import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.PolicyBackground
+import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.AllSetNav
+import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.ChoosePriceNav
+import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.ChooseThemeNav
+import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.DownloadDataNav
+import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.OrderMenzaListNav
+import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.PolicyBackgroundNav
 import cz.lastaapps.menza.features.starting.ui.node.AllSetNode
 import cz.lastaapps.menza.features.starting.ui.node.DownloadNode
 import cz.lastaapps.menza.features.starting.ui.node.PriceTypeNode
@@ -64,12 +64,12 @@ class StartingNode(
     override fun resolve(navTarget: StartingNavType, buildContext: BuildContext): Node {
         val onNext = { spotlight.next() }
         return when (navTarget) {
-            PolicyBackground -> node(buildContext) {}
-            DownloadData -> DownloadNode(buildContext, onNext)
-            ChooseTheme -> ChooseAppThemeNode(buildContext, onNext)
-            ChoosePrice -> PriceTypeNode(buildContext, onNext)
-            OrderMenzaList -> ReorderMenzaNode(buildContext, onNext)
-            AllSet -> AllSetNode(buildContext, onDone)
+            PolicyBackgroundNav -> node(buildContext) {}
+            DownloadDataNav -> DownloadNode(buildContext, onNext)
+            ChooseThemeNav -> ChooseAppThemeNode(buildContext, onNext)
+            ChoosePriceNav -> PriceTypeNode(buildContext, onNext)
+            OrderMenzaListNav -> ReorderMenzaNode(buildContext, onNext)
+            AllSetNav -> AllSetNode(buildContext, onDone)
         }
     }
 

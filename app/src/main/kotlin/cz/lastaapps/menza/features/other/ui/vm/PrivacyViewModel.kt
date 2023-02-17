@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.starting.ui.vm
+package cz.lastaapps.menza.features.other.ui.vm
 
 import androidx.lifecycle.viewModelScope
 import cz.lastaapps.core.ui.vm.BaseViewModel

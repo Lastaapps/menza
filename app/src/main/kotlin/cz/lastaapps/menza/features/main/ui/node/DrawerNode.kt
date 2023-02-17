@@ -31,12 +31,12 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
-import cz.lastaapps.menza.features.main.ui.node.DrawerNavType.EDIT
-import cz.lastaapps.menza.features.main.ui.node.DrawerNavType.MENZA_LIST
+import cz.lastaapps.menza.features.main.ui.node.DrawerNavType.EDIT_NAV
+import cz.lastaapps.menza.features.main.ui.node.DrawerNavType.MENZA_LIST_NAV
 import cz.lastaapps.menza.features.settings.ui.nodes.ReorderMenzaNode
 
 internal enum class DrawerNavType {
-    MENZA_LIST, EDIT,
+    MENZA_LIST_NAV, EDIT_NAV,
     ;
 }
 
@@ -45,20 +45,20 @@ internal class DrawerNode constructor(
     buildContext: BuildContext,
     private val drawableStateProvider: () -> DrawerState?,
     private val backstack: BackStack<DrawerNavType> = BackStack(
-        initialElement = MENZA_LIST,
+        initialElement = MENZA_LIST_NAV,
         savedStateMap = buildContext.savedStateMap,
     ),
 ) : ParentNode<DrawerNavType>(backstack, buildContext) {
 
     override fun resolve(navTarget: DrawerNavType, buildContext: BuildContext): Node =
         when (navTarget) {
-            MENZA_LIST -> MenzaSelectionNode(
+            MENZA_LIST_NAV -> MenzaSelectionNode(
                 buildContext,
-                onEdit = { backstack.push(EDIT) },
+                onEdit = { backstack.push(EDIT_NAV) },
                 updateDrawer = drawableStateProvider,
             )
 
-            EDIT -> ReorderMenzaNode(buildContext, backstack::pop)
+            EDIT_NAV -> ReorderMenzaNode(buildContext, backstack::pop)
         }
 
     @Composable

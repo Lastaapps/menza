@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cz.lastaapps.common.Communication
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.starting.ui.vm.PrivacyViewModel
+import cz.lastaapps.menza.features.other.ui.vm.PrivacyViewModel
 import org.koin.androidx.compose.koinViewModel
 
 

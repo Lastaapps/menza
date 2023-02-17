@@ -17,22 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.root.ui
+package cz.lastaapps.menza.features.other.ui.node
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.compose.foundation.layout.Box
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.features.starting.ui.screen.PrivacyDialog
 
-internal sealed class RootNavType : Parcelable {
-    companion object {
-        val types = listOf(LoadingNav, SetupFlowNav, MainNav)
+class PrivacyNode(
+    buildContext: BuildContext,
+    private val onDismiss: () -> Unit,
+) : Node(buildContext) {
+    @Composable
+    override fun View(modifier: Modifier) {
+        Box(modifier)
+
+        PrivacyDialog(onDismissRequest = onDismiss, showAccept = false, onAccept = onDismiss)
     }
-
-    @Parcelize
-    object LoadingNav : RootNavType()
-
-    @Parcelize
-    object SetupFlowNav : RootNavType()
-
-    @Parcelize
-    object MainNav : RootNavType()
 }

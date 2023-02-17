@@ -25,7 +25,6 @@ import androidx.compose.material3.DrawerValue.Closed
 import androidx.compose.material3.DrawerValue.Open
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,9 +36,9 @@ import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
-import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.info.ui.node.InfoNode
@@ -55,6 +54,7 @@ import cz.lastaapps.menza.features.main.ui.node.DrawerNode
 import cz.lastaapps.menza.features.main.ui.vm.MainViewModel
 import cz.lastaapps.menza.features.other.ui.node.LicenseNode
 import cz.lastaapps.menza.features.other.ui.node.OsturakNode
+import cz.lastaapps.menza.features.other.ui.node.PrivacyNode
 import cz.lastaapps.menza.features.settings.ui.navigation.SettingsNode
 import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
 import cz.lastaapps.menza.features.week.ui.node.WeekNode
@@ -94,12 +94,15 @@ class MainNode(
             )
 
             SettingsNav -> SettingsNode(buildContext)
+
             OsturakNav -> OsturakNode(buildContext)
+
             LicenseNoticesNav -> LicenseNode(buildContext)
-            PrivacyPolicyNav ->
-                node(buildContext) {
-                    Text(text = navTarget.toString())
-                }
+
+            PrivacyPolicyNav -> PrivacyNode(
+                buildContext,
+                onDismiss = { backStack.pop() },
+            )
         }
 
     @OptIn(ExperimentalMaterial3Api::class)

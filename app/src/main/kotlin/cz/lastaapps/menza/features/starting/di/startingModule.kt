@@ -19,26 +19,20 @@
 
 package cz.lastaapps.menza.features.starting.di
 
-import cz.lastaapps.menza.features.starting.data.PrivacyStore
 import cz.lastaapps.menza.features.starting.domain.usecase.CheckDataDownloadNeededUC
 import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
 import cz.lastaapps.menza.features.starting.ui.vm.AllSetViewModel
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
 import cz.lastaapps.menza.features.starting.ui.vm.PriceTypeViewModel
-import cz.lastaapps.menza.features.starting.ui.vm.PrivacyViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val startingModule = module {
 
     viewModelOf(::DownloadViewModel)
-    viewModelOf(::PrivacyViewModel)
     viewModelOf(::AllSetViewModel)
     viewModelOf(::PriceTypeViewModel)
-
-    singleOf(::PrivacyStore)
 
     factoryOf(::CheckDataDownloadNeededUC)
     factoryOf(::DownloadInitDataUC)

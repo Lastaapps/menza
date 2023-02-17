@@ -32,9 +32,9 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.menza.features.other.ui.vm.PrivacyViewModel
 import cz.lastaapps.menza.features.starting.ui.screen.PrivacyDialogContent
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
-import cz.lastaapps.menza.features.starting.ui.vm.PrivacyViewModel
 import cz.lastaapps.menza.navigation.Dest.R
 import cz.lastaapps.menza.ui.dests.settings.SettingsLayout
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel

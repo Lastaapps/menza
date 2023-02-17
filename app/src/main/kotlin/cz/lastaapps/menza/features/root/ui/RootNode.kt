@@ -36,9 +36,9 @@ import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightFader
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.navigation.MainNode
-import cz.lastaapps.menza.features.root.ui.RootNavType.Loading
-import cz.lastaapps.menza.features.root.ui.RootNavType.Main
-import cz.lastaapps.menza.features.root.ui.RootNavType.SetupFlow
+import cz.lastaapps.menza.features.root.ui.RootNavType.LoadingNav
+import cz.lastaapps.menza.features.root.ui.RootNavType.MainNav
+import cz.lastaapps.menza.features.root.ui.RootNavType.SetupFlowNav
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingNode
 import cz.lastaapps.menza.ui.util.activateType
 import cz.lastaapps.menza.ui.util.indexOfType
@@ -58,9 +58,9 @@ internal class RootNode(
 ) {
     override fun resolve(navTarget: RootNavType, buildContext: BuildContext): Node {
         return when (navTarget) {
-            Loading -> node(buildContext) {} // Splash screen will be shown
-            SetupFlow -> StartingNode(buildContext, { spotlight.activateType(Main) })
-            Main -> MainNode(buildContext)
+            LoadingNav -> node(buildContext) {} // Splash screen will be shown
+            SetupFlowNav -> StartingNode(buildContext, { spotlight.activateType(MainNav) })
+            MainNav -> MainNode(buildContext)
         }
     }
 
@@ -73,7 +73,7 @@ internal class RootNode(
 
         LaunchedEffect(state.isReady, state.isSetUp) {
             if (state.isReady) {
-                (if (state.isSetUp) Main else SetupFlow)
+                (if (state.isSetUp) MainNav else SetupFlowNav)
                     .let { spotlight.activateType(it) }
             }
         }
@@ -84,7 +84,7 @@ internal class RootNode(
             Children(
                 navModel = spotlight,
                 modifier = modifier.onPlaced {
-                    if (spotlight.indexOfType(Loading) != activeIndex) {
+                    if (spotlight.indexOfType(LoadingNav) != activeIndex) {
                         onDecided()
                     }
                 },
