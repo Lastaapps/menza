@@ -1,7 +1,7 @@
 [versions]
 aboutLibraries = "10.5.2"
 accompanist = "0.28.0"
-android-gradle = "8.0.0-beta02"
+android-gradle = "8.1.0-alpha06"
 androidx-activity = "1.7.0-beta01"
 androidx-appsearch = "1.1.0-alpha01"
 androidx-camera = "1.1.0"
@@ -32,7 +32,7 @@ kotlin = "1.8.10"
 # @keep
 kotlin-api = "1.8"
 kotlin-coroutines = "1.6.4"
-kotlin-language = "1.8"
+kotlin-language = "1.9"
 kotlin-atomicfu = "0.19.0"
 ktor = "2.2.3"
 logback = "1.4.5"
