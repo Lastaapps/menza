@@ -71,12 +71,12 @@ internal class BuffetScraperImpl : BuffetScraper {
 
         // Matches days
         // name, content
-        private val daysRegex = """<h3>\s*<strong>([^3]*)</strong>\s*</h3>\s*((?>(?!<h3>).)+)"""
+        private val daysRegex = """<h\d>\s*([^3]*)\s*</h\d>\s*((?>(?!<h\d>).)+)"""
             .toRegex(regexOptions)
 
         // Matches dishes
         // type name price contains
-        private val dishesRegex = """<p>([^/]*):([^●]*)●\s*(\d+)[^(]*\(([^)]*)\)"""
+        private val dishesRegex = """([^/]*):([^●]*)●\s*(\d+)[^(]*\(([^)]*)\)"""
             .toRegex(regexOptions)
     }
 
@@ -201,8 +201,17 @@ internal class BuffetScraperImpl : BuffetScraper {
         return DayOfWeek.of(index + 1)
     }
 
-    private fun String.removeHtml() =
-        replace("""<[^>]*>""".toRegex(), "")
-            .replace("""\s\s+""".toRegex(), " ")
-            .trim()
+    private val toRemove = arrayOf(
+        """<[^>]*>""".toRegex() to "",
+        """^.*>""".toRegex() to "",
+        """<.*$""".toRegex() to "",
+        """\s\s+""".toRegex() to " ",
+    )
+
+    private fun String.removeHtml() = this
+        .let {
+            toRemove.fold(it) { acu, (regex, replacement) ->
+                acu.replace(regex, replacement)
+            }
+        }.trim()
 }

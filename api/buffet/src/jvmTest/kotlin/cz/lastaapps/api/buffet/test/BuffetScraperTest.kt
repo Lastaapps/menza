@@ -150,6 +150,48 @@ class BuffetScraperTest : StringSpec({
             )
         }
     }
+
+
+    "Scrape 2023-02-20" {
+        val log = logging("2023-02-20")
+        val html = loadPage("2023-02-20.html")
+        val scraper = scraper()
+        val date = scraper.matchValidity(html)
+        val content = scraper.matchContent(html)
+
+        log.i { date }
+        log.i { content }
+
+        dateRangeTest(
+            date,
+            LocalDate(2023, 2, 20),
+            LocalDate(2023, 2, 24),
+        )
+
+        val (fs, fel) = testDeconstruct(content)
+
+        commonTest(fs, listOf(3, 4, 3, 3, 2))
+        @Suppress("SpellCheckingInspection")
+        fs[4].dishList[1].run {
+            type shouldBe "Hlavní jídlo 1"
+            name shouldBe "Grilovaný vepřový kotlet po balkánsku, pikantní zelný salát, hranolky"
+            price shouldBe 128
+            ingredients shouldBe listOf(
+                "vepřové maso", "směs koření",
+            )
+        }
+
+        commonTest(fel, listOf(3, 4, 3, 3, 3))
+        @Suppress("SpellCheckingInspection")
+        fel[3].dishList[1].run { // is not in a <strong> tag
+            type shouldBe "Hlavní jídlo 1"
+            name shouldBe "Marinovaný kuřecí plátek s baby karotkou; vařené brambory / hranolky"
+            price shouldBe 119
+            ingredients shouldBe listOf(
+                "kuřecí maso", "marináda", "baby karotka"
+            )
+        }
+    }
 })
 
 private fun dateRangeTest(
