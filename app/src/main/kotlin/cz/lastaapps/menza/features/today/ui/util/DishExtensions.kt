@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringArrayResource
 import cz.lastaapps.api.core.domain.model.common.Dish
 import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.api.core.domain.model.common.WeekDish
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Discounted
@@ -32,9 +33,23 @@ import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 
 fun Dish.getPrice(type: PriceType) =
     when (type) {
-        Discounted -> priceDiscount ?: priceNormal
+        Discounted -> priceDiscounted ?: priceNormal
         Normal -> priceNormal
         Unset -> priceNormal
+    }?.formatPrice()
+
+fun WeekDish.getPrice(type: PriceType) =
+    when (type) {
+        Discounted -> priceDiscounted ?: priceNormal
+        Normal -> priceNormal
+        Unset -> priceNormal
+    }?.formatPrice()
+
+fun Float.formatPrice() =
+    if (this.mod(1f) == 0f) {
+        "%.0f".format(this)
+    } else {
+        "%.2f".format(this)
     }
 
 fun DishCategory.getName(showCzech: ShowCzech): String =

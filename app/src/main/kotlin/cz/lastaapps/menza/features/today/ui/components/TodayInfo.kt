@@ -59,6 +59,7 @@ import cz.lastaapps.api.core.domain.model.common.ServingPlace
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.features.today.ui.util.allergenForId
+import cz.lastaapps.menza.features.today.ui.util.formatPrice
 import cz.lastaapps.menza.features.today.ui.util.getAmount
 import cz.lastaapps.menza.features.today.ui.util.getName
 import cz.lastaapps.menza.ui.theme.MenzaPadding
@@ -121,8 +122,14 @@ private fun PriceView(
 ) {
     Row(modifier) {
         Text(text = dish.getAmount(showCzech) ?: "")
+        val priceText = buildString {
+            append(dish.priceDiscounted?.formatPrice() ?: "∅")
+            append(" / ")
+            append(dish.priceNormal?.formatPrice() ?: "∅")
+            append(" Kč")
+        }
         Text(
-            text = "${dish.priceDiscount ?: "∅"} / ${dish.priceNormal ?: "∅"} Kč",
+            text = priceText,
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f),
         )

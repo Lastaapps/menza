@@ -33,8 +33,8 @@ data class Dish(
     val amountEn: String?,
     val nameEn: String?,
     val nameCs: String,
-    val priceDiscountFloat: Float?,
-    val priceNormalFloat: Float?,
+    val priceDiscounted: Float?,
+    val priceNormal: Float?,
     // empty - no allergens
     // null  - unknown
     val allergens: ImmutableList<Int>?,
@@ -42,17 +42,7 @@ data class Dish(
     val pictogram: ImmutableList<String>,
     val servingPlaces: ImmutableList<ServingPlace>,
     val ingredients: ImmutableList<String>,
-) {
-    val priceDiscount = priceDiscountFloat?.formatPrice()
-    val priceNormal = priceNormalFloat?.formatPrice()
-
-    private fun Float.formatPrice() =
-        if (this.mod(1f) == 0f) {
-            "%.0f".format(this)
-        } else {
-            "%.2f".format(this)
-        }
-}
+)
 
 data class ServingPlace(
     val name: String,

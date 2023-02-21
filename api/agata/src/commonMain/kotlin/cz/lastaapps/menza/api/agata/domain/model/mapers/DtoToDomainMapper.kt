@@ -65,5 +65,6 @@ private fun WeekDishDto.toDomain() =
         name = name,
         amount = amount,
         priceNormal = null,
+        priceDiscounted = null,
         ingredients = persistentListOf(),
     )

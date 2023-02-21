@@ -88,6 +88,7 @@ private fun WeekContent(
             Crossfade(targetState = state.items) { items ->
                 WeekDishList(
                     data = items,
+                    priceType = state.priceType,
                     isLoading = state.isLoading,
                     onRefresh = onRefresh,
                     noItems = noItems,

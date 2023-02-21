@@ -249,11 +249,7 @@ private fun DishImageWithBadge(
             isOnMetered = isOnMetered,
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(
-                    top = MenzaPadding.Small,
-                    bottom = MenzaPadding.Small,
-                    end = MenzaPadding.Small,
-                )
+                .padding(MenzaPadding.Small)
         )
         DishBadge(
             dish = dish,

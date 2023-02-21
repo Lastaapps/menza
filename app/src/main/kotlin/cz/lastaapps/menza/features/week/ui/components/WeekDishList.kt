@@ -35,8 +35,11 @@ import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.common.WeekDayDish
 import cz.lastaapps.api.core.domain.model.common.WeekDish
 import cz.lastaapps.api.core.domain.model.common.WeekDishCategory
+import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import kotlinx.collections.immutable.ImmutableList
@@ -47,6 +50,7 @@ import kotlinx.datetime.toJavaLocalDate
 @Composable
 fun WeekDishList(
     data: ImmutableList<WeekDayDish>,
+    priceType: PriceType,
     isLoading: Boolean,
     onRefresh: () -> Unit,
     noItems: () -> Unit,
@@ -62,6 +66,7 @@ fun WeekDishList(
     ) {
         WeekDishContent(
             data = data,
+            priceType = priceType,
             noItems = noItems,
             modifier = Modifier.fillMaxSize(),
         )
@@ -74,6 +79,7 @@ fun WeekDishList(
 @Composable
 private fun WeekDishContent(
     data: ImmutableList<WeekDayDish>,
+    priceType: PriceType,
     noItems: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -96,14 +102,21 @@ private fun WeekDishContent(
             }
             categories.forEach { category ->
                 item { CourseHeader(courseType = category) }
-//                item { Spacer(Modifier.height(4.dp)) }
 
                 items(
                     category.dishList,
                     key = { "" + date + category.name + it.name }) { dish ->
-                    WeekDishItem(dish = dish, Modifier.fillMaxWidth())
+                    WeekDishItem(
+                        dish = dish,
+                        priceType = priceType,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
+
+                item { Spacer(Modifier.height(MenzaPadding.Tiny)) }
             }
+
+            item { Spacer(Modifier.height(MenzaPadding.MidSmall)) }
         }
     }
 }
@@ -144,6 +157,7 @@ private fun CourseHeader(
 @Composable
 private fun WeekDishItem(
     dish: WeekDish,
+    priceType: PriceType,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -158,7 +172,13 @@ private fun WeekDishItem(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(dish.amount ?: "", Modifier.width(48.dp))
+            Column(
+                modifier = Modifier.sizeIn(minWidth = 60.dp),
+                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            ) {
+                dish.amount?.let { Text(it) }
+                dish.getPrice(priceType)?.let { Text("$it Kč") }
+            }
             Text(dish.name, style = MaterialTheme.typography.titleMedium)
         }
     }

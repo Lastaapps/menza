@@ -33,11 +33,14 @@ import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
+import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.lighthousegames.logging.logging
 
@@ -47,6 +50,7 @@ internal class WeekViewModel(
     private val getWeekDish: GetWeekDishListUC,
     private val syncWeekDish: SyncWeekDishListUC,
     private val openMenuLink: OpenMenuUC,
+    private val getPriceType: GetPriceTypeUC,
 ) : StateViewModel<WeekState>(WeekState(), context), Appearing, ErrorHolder {
     override var hasAppeared: Boolean = false
 
@@ -78,6 +82,10 @@ internal class WeekViewModel(
                 }
             }
         }
+
+        getPriceType().onEach {
+            updateState { copy(priceType = it) }
+        }.launchInVM()
     }
 
     private var syncJob: Job? = null
@@ -110,6 +118,7 @@ internal class WeekViewModel(
 
 internal data class WeekState(
     val selectedMenza: Menza? = null,
+    val priceType: PriceType = PriceType.Unset,
     val isLoading: Boolean = false,
     val error: MenzaError? = null,
     val items: ImmutableList<WeekDayDish> = persistentListOf(),

@@ -36,5 +36,6 @@ data class WeekDish(
     val name: String,
     val amount: String?,
     val priceNormal: Float?,
+    val priceDiscounted: Float?,
     val ingredients: ImmutableList<String>,
 )
