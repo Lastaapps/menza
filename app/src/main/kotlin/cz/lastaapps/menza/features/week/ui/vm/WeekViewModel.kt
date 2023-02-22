@@ -24,8 +24,8 @@ import arrow.core.Either.Left
 import arrow.core.Either.Right
 import arrow.core.Option
 import arrow.core.toOption
-import cz.lastaapps.api.core.domain.model.common.Menza
-import cz.lastaapps.api.core.domain.model.common.WeekDayDish
+import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.main.domain.usecase.GetWeekDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
 import cz.lastaapps.api.main.domain.usecase.SyncWeekDishListUC

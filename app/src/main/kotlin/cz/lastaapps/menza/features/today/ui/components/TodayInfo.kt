@@ -38,8 +38,8 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.common.Dish
-import cz.lastaapps.api.core.domain.model.common.ServingPlace
+import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.ServingPlace
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.features.today.ui.util.allergenForId

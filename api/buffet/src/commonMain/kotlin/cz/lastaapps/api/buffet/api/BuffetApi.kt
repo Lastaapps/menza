@@ -27,7 +27,7 @@ import arrow.core.Some
 import arrow.core.leftIor
 import arrow.core.nel
 import arrow.core.rightIor
-import cz.lastaapps.api.buffet.domain.model.dto.WebContentDto
+import cz.lastaapps.api.buffet.data.model.WebContentDto
 import cz.lastaapps.core.domain.OutcomeIor
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.core.util.extensions.catchingNetwork

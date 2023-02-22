@@ -49,8 +49,8 @@ import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.placeholder
-import cz.lastaapps.api.core.domain.model.common.Dish
-import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech

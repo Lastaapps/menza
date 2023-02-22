@@ -29,7 +29,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
@@ -40,11 +40,11 @@ import cz.lastaapps.api.core.domain.validity.withCheckRecent
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
+import cz.lastaapps.menza.api.agata.data.mapers.toDomain
+import cz.lastaapps.menza.api.agata.data.mapers.toEntity
+import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
+import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import cz.lastaapps.menza.api.agata.domain.model.AgataBEConfig
-import cz.lastaapps.menza.api.agata.domain.model.HashType
-import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
-import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf

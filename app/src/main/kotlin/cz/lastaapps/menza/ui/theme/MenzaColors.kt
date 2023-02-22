@@ -20,7 +20,7 @@
 package cz.lastaapps.menza.ui.theme
 
 import androidx.compose.ui.graphics.Color
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Menza
 import kotlin.math.abs
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

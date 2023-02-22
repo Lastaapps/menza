@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.menza.R
 
 @Composable

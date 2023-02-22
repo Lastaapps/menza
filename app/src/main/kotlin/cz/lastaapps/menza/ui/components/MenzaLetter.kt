@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.menza.ui.theme.colorForMenza
 
 @Composable

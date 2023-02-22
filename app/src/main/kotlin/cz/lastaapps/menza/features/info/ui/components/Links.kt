@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.stringResource
-import cz.lastaapps.api.core.domain.model.common.Link
+import cz.lastaapps.api.core.domain.model.Link
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 import kotlinx.collections.immutable.ImmutableList

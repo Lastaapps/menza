@@ -32,9 +32,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.common.WeekDayDish
-import cz.lastaapps.api.core.domain.model.common.WeekDish
-import cz.lastaapps.api.core.domain.model.common.WeekDishCategory
+import cz.lastaapps.api.core.domain.model.WeekDayDish
+import cz.lastaapps.api.core.domain.model.WeekDish
+import cz.lastaapps.api.core.domain.model.WeekDishCategory
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned

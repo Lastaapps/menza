@@ -52,7 +52,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionState

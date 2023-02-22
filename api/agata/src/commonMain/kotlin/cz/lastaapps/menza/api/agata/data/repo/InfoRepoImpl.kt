@@ -26,7 +26,7 @@ import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.api.core.domain.model.common.Info
+import cz.lastaapps.api.core.domain.model.Info
 import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
@@ -38,10 +38,10 @@ import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.util.extensions.combine6
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
+import cz.lastaapps.menza.api.agata.data.mapers.toDomain
+import cz.lastaapps.menza.api.agata.data.mapers.toEntity
+import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import cz.lastaapps.menza.api.agata.domain.model.HashType
-import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
-import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

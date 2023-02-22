@@ -27,8 +27,8 @@ import arrow.core.Some
 import arrow.core.separateEither
 import arrow.core.some
 import arrow.core.toNonEmptyListOrNull
-import cz.lastaapps.api.buffet.domain.model.dto.DishDayDto
-import cz.lastaapps.api.buffet.domain.model.dto.DishDto
+import cz.lastaapps.api.buffet.data.model.DishDayDto
+import cz.lastaapps.api.buffet.data.model.DishDto
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.ParsingError

@@ -19,7 +19,7 @@
 
 package cz.lastaapps.menza.features.main.domain.usecase
 
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.main.domain.SelectedMenzaRepo

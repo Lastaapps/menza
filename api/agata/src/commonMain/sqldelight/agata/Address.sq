@@ -1,10 +1,12 @@
-import cz.lastaapps.api.core.domain.model.common.LatLong;
+import cz.lastaapps.api.core.domain.model.LatLong;
+
 
 CREATE TABLE AddressEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,
     address TEXT NOT NULL,
-    gps TEXT AS LatLong NOT NULL,
+    lat REAL NOT NULL,
+    long REAL NOT NULL,
     PRIMARY KEY (id)
 );
 

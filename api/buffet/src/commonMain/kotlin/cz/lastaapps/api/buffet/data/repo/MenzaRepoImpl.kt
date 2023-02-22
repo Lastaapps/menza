@@ -20,8 +20,9 @@
 package cz.lastaapps.api.buffet.data.repo
 
 import arrow.core.right
-import cz.lastaapps.api.core.domain.model.MenzaType
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
+import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
@@ -45,7 +46,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
         @Suppress("SpellCheckingInspection")
         persistentListOf(
             Menza(
-                type = MenzaType.Buffet.FS,
+                type = FS,
                 name = "Bufet FS",
                 isOpened = true,
                 supportsDaily = true,
@@ -73,7 +74,7 @@ internal object MenzaFELRepoImpl : MenzaRepo {
         @Suppress("SpellCheckingInspection")
         persistentListOf(
             Menza(
-                type = MenzaType.Buffet.FEL,
+                type = FEL,
                 name = "Bufet FEL",
                 isOpened = true,
                 supportsDaily = true,

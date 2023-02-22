@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.common.Message
+import cz.lastaapps.api.core.domain.model.Message
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 import kotlinx.collections.immutable.ImmutableList

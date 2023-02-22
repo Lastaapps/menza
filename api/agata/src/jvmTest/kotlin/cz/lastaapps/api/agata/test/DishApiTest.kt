@@ -23,11 +23,11 @@ import arrow.core.Either.Right
 import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import cz.lastaapps.menza.api.agata.api.DishApiImpl
 import cz.lastaapps.menza.api.agata.data.createAgataClient
-import cz.lastaapps.menza.api.agata.domain.model.dto.DishDto
-import cz.lastaapps.menza.api.agata.domain.model.dto.PictogramDto
-import cz.lastaapps.menza.api.agata.domain.model.dto.StrahovDto
-import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDishDto
-import cz.lastaapps.menza.api.agata.domain.model.dto.WeekDto
+import cz.lastaapps.menza.api.agata.data.model.dto.DishDto
+import cz.lastaapps.menza.api.agata.data.model.dto.PictogramDto
+import cz.lastaapps.menza.api.agata.data.model.dto.StrahovDto
+import cz.lastaapps.menza.api.agata.data.model.dto.WeekDishDto
+import cz.lastaapps.menza.api.agata.data.model.dto.WeekDto
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe

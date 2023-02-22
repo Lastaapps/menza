@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.LicenseNotices
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.Osturak

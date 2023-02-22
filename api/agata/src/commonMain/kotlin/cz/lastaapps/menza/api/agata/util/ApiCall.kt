@@ -19,7 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.util
 
-import cz.lastaapps.menza.api.agata.domain.model.Func
+import cz.lastaapps.menza.api.agata.data.model.Func
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter

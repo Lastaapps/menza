@@ -19,7 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.data
 
-import cz.lastaapps.menza.api.agata.domain.model.AgataBEConfig
+import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation

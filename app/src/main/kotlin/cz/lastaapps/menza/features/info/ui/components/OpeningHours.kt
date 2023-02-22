@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import cz.lastaapps.api.core.domain.model.common.PlaceOpeningInfo
+import cz.lastaapps.api.core.domain.model.PlaceOpeningInfo
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 import java.time.format.DateTimeFormatter

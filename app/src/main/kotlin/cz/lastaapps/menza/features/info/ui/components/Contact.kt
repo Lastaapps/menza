@@ -44,9 +44,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import cz.lastaapps.api.core.domain.model.common.Contact
-import cz.lastaapps.api.core.domain.model.common.Email
-import cz.lastaapps.api.core.domain.model.common.PhoneNumber
+import cz.lastaapps.api.core.domain.model.Contact
+import cz.lastaapps.api.core.domain.model.Email
+import cz.lastaapps.api.core.domain.model.PhoneNumber
 import cz.lastaapps.core.domain.error.CommonError
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.menza.R

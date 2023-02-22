@@ -24,8 +24,8 @@ import arrow.core.rightIor
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import cz.lastaapps.api.agata.AgataDatabase
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
-import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
@@ -36,10 +36,10 @@ import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
+import cz.lastaapps.menza.api.agata.data.mapers.toDomain
+import cz.lastaapps.menza.api.agata.data.mapers.toEntity
+import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import cz.lastaapps.menza.api.agata.domain.model.HashType
-import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
-import cz.lastaapps.menza.api.agata.domain.model.mapers.toEntity
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

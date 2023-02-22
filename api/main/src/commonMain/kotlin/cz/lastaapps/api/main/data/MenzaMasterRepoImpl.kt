@@ -23,7 +23,7 @@ import arrow.core.Either
 import arrow.core.fold
 import arrow.core.right
 import arrow.fx.coroutines.parMap
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult

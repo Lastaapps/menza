@@ -23,7 +23,7 @@ import arrow.core.recover
 import arrow.core.right
 import arrow.core.rightIor
 import arrow.fx.coroutines.parMap
-import cz.lastaapps.api.core.domain.model.common.WeekDayDish
+import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
@@ -35,7 +35,7 @@ import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.domain.error.ApiErrorLogic.WeekNotAvailable
 import cz.lastaapps.menza.api.agata.api.DishApi
-import cz.lastaapps.menza.api.agata.domain.model.mapers.toDomain
+import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

@@ -31,6 +31,7 @@ import cz.lastaapps.menza.api.agata.api.SubsystemApiImpl
 import cz.lastaapps.menza.api.agata.data.AgataDatabaseFactory
 import cz.lastaapps.menza.api.agata.data.HashStoreImpl
 import cz.lastaapps.menza.api.agata.data.createAgataClient
+import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.repo.InfoRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.InfoStrahovRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.MenzaStrahovRepoImpl
@@ -40,7 +41,6 @@ import cz.lastaapps.menza.api.agata.data.repo.TodayDishSubsystemRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.WeekDishRepoImpl
 import cz.lastaapps.menza.api.agata.data.repo.WeekRepoStrahovImpl
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import cz.lastaapps.menza.api.agata.domain.model.AgataBEConfig
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf

@@ -28,8 +28,8 @@ import arrow.core.flatten
 import cz.lastaapps.api.buffet.api.BuffetApi
 import cz.lastaapps.api.buffet.api.BuffetApiImpl
 import cz.lastaapps.api.buffet.api.BuffetScraperImpl
-import cz.lastaapps.api.buffet.domain.model.dto.DishDayDto
-import cz.lastaapps.api.buffet.domain.model.dto.WebContentDto
+import cz.lastaapps.api.buffet.data.model.DishDayDto
+import cz.lastaapps.api.buffet.data.model.WebContentDto
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken

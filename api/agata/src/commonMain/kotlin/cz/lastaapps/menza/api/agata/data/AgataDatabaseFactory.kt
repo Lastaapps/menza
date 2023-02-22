@@ -19,14 +19,12 @@
 
 package cz.lastaapps.menza.api.agata.data
 
-import agata.AddressEntity
 import agata.DishEntity
 import agata.OpenTimeEntity
 import agata.StrahovEntiy
 import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.api.core.domain.model.common.LatLong
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 import org.lighthousegames.logging.logging
@@ -52,9 +50,6 @@ internal object AgataDatabaseFactory {
             dayToAdapter = DayOfWeekAdapter,
             timeFromAdapter = LocalTimeAdapter,
             timeToAdapter = LocalTimeAdapter,
-        ),
-        AddressEntityAdapter = AddressEntity.Adapter(
-            gpsAdapter = LatLongAdapter,
         ),
         StrahovEntiyAdapter = StrahovEntiy.Adapter(
             allergensAdapter = LongListAdapter,
@@ -89,17 +84,4 @@ private object LocalTimeAdapter : ColumnAdapter<LocalTime, Long> {
 
     override fun encode(value: LocalTime): Long =
         value.toSecondOfDay().toLong()
-}
-
-private object LatLongAdapter : ColumnAdapter<LatLong, String> {
-    private const val delimiter = ';'
-    override fun decode(databaseValue: String): LatLong =
-        databaseValue
-            .split(delimiter)
-            .filter { it.isNotEmpty() }
-            .map { it.toFloat() }
-            .let { (lat, long) -> LatLong(lat = lat, long = long) }
-
-    override fun encode(value: LatLong): String =
-        "${value.lat}$delimiter${value.long}"
 }

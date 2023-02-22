@@ -24,8 +24,8 @@ import arrow.core.Either.Left
 import arrow.core.Either.Right
 import arrow.core.Option
 import arrow.core.toOption
-import cz.lastaapps.api.core.domain.model.common.Info
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Info
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.SyncInfoUC
 import cz.lastaapps.core.domain.error.MenzaError

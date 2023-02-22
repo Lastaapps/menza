@@ -38,8 +38,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import cz.lastaapps.api.core.domain.model.common.Address
-import cz.lastaapps.api.core.domain.model.common.LatLong
+import cz.lastaapps.api.core.domain.model.Address
+import cz.lastaapps.api.core.domain.model.LatLong
 import cz.lastaapps.core.domain.error.CommonError
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.menza.R

@@ -29,8 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import cz.lastaapps.api.core.domain.model.common.Dish
-import cz.lastaapps.api.core.domain.model.common.DishCategory
+import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.features.today.ui.util.getAmount

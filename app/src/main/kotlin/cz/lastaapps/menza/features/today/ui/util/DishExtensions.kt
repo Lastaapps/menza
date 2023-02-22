@@ -21,9 +21,9 @@ package cz.lastaapps.menza.features.today.ui.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringArrayResource
-import cz.lastaapps.api.core.domain.model.common.Dish
-import cz.lastaapps.api.core.domain.model.common.DishCategory
-import cz.lastaapps.api.core.domain.model.common.WeekDish
+import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.api.core.domain.model.WeekDish
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Discounted

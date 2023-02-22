@@ -26,7 +26,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import cz.lastaapps.api.core.domain.model.common.Dish
+import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.components.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.today.ui.components.NoDishSelected

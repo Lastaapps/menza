@@ -26,7 +26,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.menza.features.main.ui.layout.MenzaNavigationBar
 import cz.lastaapps.menza.features.main.ui.layout.MenzaRail
 import cz.lastaapps.menza.features.main.ui.layout.MenzaScaffold

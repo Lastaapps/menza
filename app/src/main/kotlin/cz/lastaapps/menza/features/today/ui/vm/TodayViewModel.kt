@@ -21,8 +21,8 @@ package cz.lastaapps.menza.features.today.ui.vm
 
 import arrow.core.Option
 import arrow.core.toOption
-import cz.lastaapps.api.core.domain.model.common.Dish
-import cz.lastaapps.api.core.domain.model.common.Menza
+import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
