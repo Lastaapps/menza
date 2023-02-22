@@ -107,7 +107,7 @@ internal fun DishInfoRow(
             }
             dish.allergens?.let { allergens ->
                 Text(
-                    text = allergens.joinToString(separator = ","),
+                    text = allergens.joinToString(separator = ", "),
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.End,
                 )

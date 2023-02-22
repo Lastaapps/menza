@@ -22,6 +22,7 @@ package cz.lastaapps.menza.features.settings.domain
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
@@ -61,6 +62,6 @@ internal interface MainSettingsRepo {
     suspend fun setShowCzech(mode: ShowCzech)
     fun getShowCzech(): Flow<ShowCzech>
 
-    suspend fun setCompactTodayView(isCompact: Boolean)
-    fun isCompactTodayView(): Flow<Boolean>
+    suspend fun setCompactTodayView(mode: DishListMode)
+    fun isCompactTodayView(): Flow<DishListMode>
 }

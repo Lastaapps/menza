@@ -17,17 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase
+package cz.lastaapps.menza.features.settings.domain.model
 
-import cz.lastaapps.core.domain.UCContext
-import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
-
-class SetCompactUC internal constructor(
-    context: UCContext,
-    private val repo: MainSettingsRepo,
-) : UseCase(context) {
-    suspend operator fun invoke(isCompact: Boolean) = launch {
-        repo.setCompactTodayView(isCompact)
-    }
+enum class DishListMode(val id: Int) {
+    COMPACT(0),
+    GRID(1),
+    HORIZONTAL(2),
+    ;
 }

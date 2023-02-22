@@ -27,6 +27,7 @@ import com.russhwolf.settings.coroutines.FlowSettings
 import com.russhwolf.settings.datastore.DataStoreSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import kotlinx.coroutines.flow.Flow
@@ -68,8 +69,8 @@ internal interface GeneralDataSource {
     suspend fun setShowCzech(mode: ShowCzech)
     fun getShowCzech(): Flow<ShowCzech?>
 
-    suspend fun setCompactTodayView(isCompact: Boolean)
-    fun isCompactTodayView(): Flow<Boolean?>
+    suspend fun setCompactTodayView(mode: DishListMode)
+    fun isCompactTodayView(): Flow<DishListMode?>
 }
 
 @OptIn(ExperimentalSettingsApi::class)
@@ -149,10 +150,13 @@ internal class GeneralDataSourceImpl(
         settings.getBooleanOrNullFlow(showCzechKey)
             .map { it?.let(::ShowCzech) }
 
-    override suspend fun setCompactTodayView(isCompact: Boolean) =
-        settings.putBoolean(compactTodayView, isCompact)
+    override suspend fun setCompactTodayView(mode: DishListMode) =
+        settings.putInt(compactTodayView, mode.id)
 
-    override fun isCompactTodayView(): Flow<Boolean?> =
-        settings.getBooleanOrNullFlow(compactTodayView)
+    override fun isCompactTodayView(): Flow<DishListMode?> =
+        settings.getIntOrNullFlow(compactTodayView)
+            .map { id ->
+                DishListMode.values().firstOrNull() { it.id == id }
+            }
 
 }

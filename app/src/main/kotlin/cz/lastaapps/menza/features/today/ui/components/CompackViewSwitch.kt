@@ -21,38 +21,46 @@ package cz.lastaapps.menza.features.today.ui.components
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.ui.theme.MenzaPadding
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun CompactViewSwitch(
-    isCompact: Boolean,
-    onCompactChange: (isCompact: Boolean) -> Unit,
+    currentMode: DishListMode?,
+    onCompactChange: (mode: DishListMode) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    val buttons = remember {
+        persistentListOf(
+            DishListMode.COMPACT to R.string.today_list_mode_compact,
+            DishListMode.GRID to R.string.today_list_mode_grid,
+            DishListMode.HORIZONTAL to R.string.today_list_mode_horizontal,
+        )
+    }
+    LazyRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(
             MenzaPadding.Medium, Alignment.CenterHorizontally,
         ),
     ) {
-        CompactButton(
-            onClick = { onCompactChange(true) },
-            isEnabled = isCompact,
-        ) { Text(stringResource(R.string.today_list_compact_compact)) }
-
-        CompactButton(
-            onClick = { onCompactChange(false) },
-            isEnabled = !isCompact,
-        ) { Text(stringResource(R.string.today_list_compact_grid)) }
+        items(buttons) { (mode, resId) ->
+            CompactButton(
+                onClick = { onCompactChange(mode) },
+                isSelected = mode == currentMode,
+            ) { Text(stringResource(resId)) }
+        }
     }
 }
 
@@ -60,12 +68,12 @@ internal fun CompactViewSwitch(
 @Composable
 private fun CompactButton(
     onClick: () -> Unit,
-    isEnabled: Boolean,
+    isSelected: Boolean,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     Crossfade(
-        targetState = isEnabled,
+        targetState = isSelected,
         modifier = modifier,
     ) { enabled ->
         if (enabled) {

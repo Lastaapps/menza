@@ -36,15 +36,16 @@ import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
+import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
+import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
-import cz.lastaapps.menza.features.settings.domain.usecase.IsCompactViewUC
-import cz.lastaapps.menza.features.settings.domain.usecase.SetCompactUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
@@ -63,8 +64,8 @@ internal class DishListViewModel(
     private val getImagesOnMetered: GetImagesOnMeteredUC,
     private val getImageScale: GetImageScaleUC,
     private val getShowCzech: GetShowCzechUC,
-    private val isCompact: IsCompactViewUC,
-    private val setCompact: SetCompactUC,
+    private val getDishListMode: GetDishListModeUC,
+    private val setDishListMode: SetDishListModeUC,
     private val isOnMetered: IsOnMeteredUC,
     private val openMenuLink: OpenMenuUC,
 ) : StateViewModel<DishListState>(DishListState(), context), Appearing, ErrorHolder {
@@ -115,8 +116,8 @@ internal class DishListViewModel(
             updateState { copy(showCzech = it) }
         }.launchInVM()
 
-        isCompact().onEach {
-            updateState { copy(isCompact = it) }
+        getDishListMode().onEach {
+            updateState { copy(dishListMode = it) }
         }.launchInVM()
 
         isOnMetered().onEach {
@@ -138,8 +139,8 @@ internal class DishListViewModel(
         lastState().selectedMenza?.orNull()?.let { openMenuLink(it) }
     }
 
-    fun setCompactView(isCompact: Boolean) = launchVM {
-        setCompact(isCompact)
+    fun setCompactView(mode: DishListMode) = launchVM {
+        setDishListMode(mode)
     }
 
     private suspend fun load(menza: Menza, isForced: Boolean) {
@@ -158,7 +159,7 @@ internal class DishListViewModel(
 
 internal data class DishListState(
     val isLoading: Boolean = false,
-    val isCompact: Boolean = true,
+    val dishListMode: DishListMode? = null,
     val error: MenzaError? = null,
     val selectedMenza: Option<Menza>? = null,
     val items: ImmutableList<DishCategory> = persistentListOf(),

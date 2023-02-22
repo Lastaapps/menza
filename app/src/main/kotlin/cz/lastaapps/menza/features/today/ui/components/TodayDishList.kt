@@ -28,30 +28,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.fade
-import com.google.accompanist.placeholder.placeholder
 import cz.lastaapps.api.core.domain.model.common.Dish
 import cz.lastaapps.api.core.domain.model.common.DishCategory
-import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
@@ -79,36 +66,30 @@ fun TodayDishList(
         refreshing = isLoading, onRefresh = onRefresh,
     ),
 ) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .pullRefresh(pullState),
-        ) {
-            Surface(shape = MaterialTheme.shapes.large) {
-                DishContent(
-                    data = data,
-                    onDishSelected = onDishSelected,
-                    onNoItems = onNoItems,
-                    priceType = priceType,
-                    downloadOnMetered = downloadOnMetered,
-                    showCzech = showCzech,
-                    imageScale = imageScale,
-                    isOnMetered = isOnMetered,
-                    scroll = scroll,
-                    gridSwitch = gridSwitch,
-                    modifier = Modifier
-                        .padding(top = MenzaPadding.Smaller) // so text is not cut off
-                        .fillMaxSize(),
-                )
-            }
-
-            MaterialPullIndicatorAligned(isLoading, pullState)
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .pullRefresh(pullState),
+    ) {
+        Surface(shape = MaterialTheme.shapes.large) {
+            DishContent(
+                data = data,
+                onDishSelected = onDishSelected,
+                onNoItems = onNoItems,
+                priceType = priceType,
+                downloadOnMetered = downloadOnMetered,
+                showCzech = showCzech,
+                imageScale = imageScale,
+                isOnMetered = isOnMetered,
+                scroll = scroll,
+                gridSwitch = gridSwitch,
+                modifier = Modifier
+                    .padding(top = MenzaPadding.Smaller) // so text is not cut off
+                    .fillMaxSize(),
+            )
         }
 
-        // TODO move
-//        Panels(Modifier.fillMaxWidth())
+        MaterialPullIndicatorAligned(isLoading, pullState)
     }
 }
 
@@ -221,8 +202,8 @@ private fun DishImageWithBadge(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier) {
-        DishImage(
-            dish = dish,
+        DishImageWithPlaceholder(
+            photoLink = dish.photoLink,
             downloadOnMetered = downloadOnMetered,
             imageScale = imageScale,
             isOnMetered = isOnMetered,
@@ -243,8 +224,8 @@ private fun DishImageWithBadge(
 }
 
 @Composable
-private fun DishImage(
-    dish: Dish,
+private fun DishImageWithPlaceholder(
+    photoLink: String?,
     downloadOnMetered: Boolean,
     imageScale: Float,
     isOnMetered: Boolean,
@@ -255,69 +236,12 @@ private fun DishImage(
         val imageModifier = Modifier.size(size)
 
 
-        if (dish.photoLink != null) {
-
-            var retryHash by remember { mutableStateOf(0) }
-            var userAllowed by rememberSaveable(dish.photoLink) { mutableStateOf(false) }
-            val canDownload = remember(isOnMetered, userAllowed) {
-                downloadOnMetered || !isOnMetered || userAllowed
-            }
-
-            val imageRequest = with(ImageRequest.Builder(LocalContext.current)) {
-                diskCacheKey(dish.photoLink)
-                memoryCacheKey(dish.photoLink)
-                crossfade(true)
-                setParameter("retry_hash", retryHash)
-                // if user is not on a metered network, images are going to be loaded from cache
-                if (canDownload)
-                    data(dish.photoLink)
-                else
-                    data("https://userisonmeterednetwork.localhost/")
-                //data(null) - cache is not working
-                with(LocalDensity.current) { size(size.roundToPx()) }
-                build()
-            }
-
-            Surface(
-                shape = MaterialTheme.shapes.medium,
+        if (photoLink != null) {
+            DishImage(
+                photoLink = photoLink,
+                loadImmediately = downloadOnMetered || !isOnMetered,
                 modifier = imageModifier,
-            ) {
-                SubcomposeAsyncImage(
-                    imageRequest,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    loading = {
-                        Box(
-                            imageModifier
-                                .placeholder(
-                                    true, color = MaterialTheme.colorScheme.secondary,
-                                    shape = MaterialTheme.shapes.medium,
-                                    highlight = PlaceholderHighlight.fade(
-                                        highlightColor = MaterialTheme.colorScheme.primary,
-                                    )
-                                )
-                                .clickable { retryHash++ }
-                        )
-                    },
-                    error = {
-                        Box(
-                            imageModifier.clickable { retryHash++; userAllowed = true },
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            if (canDownload)
-                                Icon(
-                                    Icons.Default.Refresh,
-                                    stringResource(R.string.today_list_image_load_failed)
-                                )
-                            else
-                                Icon(
-                                    Icons.Default.Download,
-                                    stringResource(R.string.today_list_image_metered)
-                                )
-                        }
-                    },
-                )
-            }
+            )
 
         } else {
             Box(imageModifier, contentAlignment = Alignment.Center) {

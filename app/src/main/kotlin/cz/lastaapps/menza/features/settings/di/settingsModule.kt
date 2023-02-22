@@ -34,14 +34,14 @@ import cz.lastaapps.menza.features.settings.data.datasource.OrderDataSourceImpl
 import cz.lastaapps.menza.features.settings.data.datasource.OrderSettings
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
+import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
-import cz.lastaapps.menza.features.settings.domain.usecase.IsCompactViewUC
 import cz.lastaapps.menza.features.settings.domain.usecase.OnSettingsOpenedUC
-import cz.lastaapps.menza.features.settings.domain.usecase.SetCompactUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
@@ -106,8 +106,8 @@ val settingsModule = module {
     factoryOf(::SetImagesOnMeteredUC)
     factoryOf(::SetPriceTypeUC)
     factoryOf(::SetShowCzechUC)
-    factoryOf(::IsCompactViewUC)
-    factoryOf(::SetCompactUC)
+    factoryOf(::GetDishListModeUC)
+    factoryOf(::SetDishListModeUC)
 
     // Menza order
     viewModelOf(::ReorderMenzaViewModel)

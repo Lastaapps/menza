@@ -25,6 +25,7 @@ import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
@@ -103,11 +104,11 @@ internal class MainSettingsRepoImpl(
     override fun getShowCzech(): Flow<ShowCzech> =
         general.getShowCzech().map { it ?: defaults.defaultShowCzech() }
 
-    override suspend fun setCompactTodayView(isCompact: Boolean) =
-        general.setCompactTodayView(isCompact)
+    override suspend fun setCompactTodayView(mode: DishListMode) =
+        general.setCompactTodayView(mode)
 
-    override fun isCompactTodayView(): Flow<Boolean> =
+    override fun isCompactTodayView(): Flow<DishListMode> =
         general.isCompactTodayView()
-            .map { it ?: true }
+            .map { it ?: DishListMode.COMPACT }
 
 }
