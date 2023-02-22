@@ -34,7 +34,7 @@ internal class PriceTypeViewModel internal constructor(
 ) : StateViewModel<PriceTypeState>(PriceTypeState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launch {
+    override fun onAppeared() = launchVM {
         getPriceType()
             .first()
             .let { type ->
@@ -46,7 +46,7 @@ internal class PriceTypeViewModel internal constructor(
             }
     }
 
-    fun selectType(type: PriceType) = launch {
+    fun selectType(type: PriceType) = launchVM {
         setPriceType(type)
         updateState { copy(isSelected = true) }
     }

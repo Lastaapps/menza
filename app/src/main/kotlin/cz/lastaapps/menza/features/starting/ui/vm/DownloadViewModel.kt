@@ -46,7 +46,7 @@ internal class DownloadViewModel constructor(
         private val log = logging()
     }
 
-    override fun onAppeared() = launch {
+    override fun onAppeared() = launchVM {
         log.i { "Appeared" }
 
         when (checkDownloadNeeded()) {
@@ -55,6 +55,7 @@ internal class DownloadViewModel constructor(
                 updateState { copy(isReady = true) }
                 startDownload()
             }
+
             false -> {
                 log.i { "Already has data" }
                 updateState {
@@ -68,7 +69,7 @@ internal class DownloadViewModel constructor(
         }
     }
 
-    private fun startDownload() = launch {
+    private fun startDownload() = launchVM {
         updateState { copy(isLoading = true) }
 
         log.i { "Starting download" }
@@ -96,7 +97,7 @@ internal class DownloadViewModel constructor(
         }
     }
 
-    fun retry() = launch {
+    fun retry() = launchVM {
         log.i { "Retrying" }
         startDownload()
     }

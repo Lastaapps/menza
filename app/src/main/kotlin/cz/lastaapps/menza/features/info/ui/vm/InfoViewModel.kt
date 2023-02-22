@@ -22,6 +22,8 @@ package cz.lastaapps.menza.features.info.ui.vm
 import androidx.compose.runtime.Composable
 import arrow.core.Either.Left
 import arrow.core.Either.Right
+import arrow.core.Option
+import arrow.core.toOption
 import cz.lastaapps.api.core.domain.model.common.Info
 import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
@@ -50,14 +52,14 @@ internal class InfoViewModel(
         private val log = logging()
     }
 
-    override fun onAppeared() = launch {
-        launch {
+    override fun onAppeared() = launchVM {
+        launchVM {
             getSelectedMenza().collectLatest {
                 log.i { "Registered a new: $it" }
 
                 updateState {
                     copy(
-                        selectedMenza = it,
+                        selectedMenza = it.toOption(),
                         items = null,
                     )
                 }
@@ -80,7 +82,7 @@ internal class InfoViewModel(
     fun reload() {
         if (lastState().isLoading) return
         syncJob = launchJob {
-            lastState().selectedMenza?.let {
+            lastState().selectedMenza?.orNull()?.let {
                 load(it, true)
             }
         }
@@ -101,7 +103,7 @@ internal class InfoViewModel(
 }
 
 internal data class InfoState(
-    val selectedMenza: Menza? = null,
+    val selectedMenza: Option<Menza>? = null,
     val isLoading: Boolean = false,
     val items: Info? = null,
     val error: MenzaError? = null,

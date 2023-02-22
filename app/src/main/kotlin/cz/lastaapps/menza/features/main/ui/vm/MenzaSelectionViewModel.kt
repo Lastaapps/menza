@@ -40,25 +40,25 @@ internal class MenzaSelectionViewModel(
 ) : StateViewModel<MenzaSelectionState>(MenzaSelectionState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launch {
-        launch {
+    override fun onAppeared() = launchVM {
+        launchVM {
             getSelectedMenza().collectLatest {
                 updateState { copy(selectedMenza = it) }
             }
         }
-        launch {
+        launchVM {
             getMenzaList().collectLatest {
                 updateState { copy(menzaList = it) }
             }
         }
-        launch {
+        launchVM {
             isMenzaOrderFromTop().collectLatest {
                 updateState { copy(fromTop = it) }
             }
         }
     }
 
-    fun selectMenza(menza: Menza) = launch {
+    fun selectMenza(menza: Menza) = launchVM {
         selectMenza.invoke(menza)
     }
 }

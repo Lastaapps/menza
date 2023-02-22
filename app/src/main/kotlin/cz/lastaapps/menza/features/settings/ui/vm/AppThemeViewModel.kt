@@ -43,13 +43,13 @@ internal class AppThemeViewModel(
 ) : StateViewModel<AppThemeState>(AppThemeState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launch {
-        launch {
+    override fun onAppeared() = launchVM {
+        launchVM {
             getAppTheme().collectLatest { theme ->
                 updateState { copy(theme = theme) }
             }
         }
-        launch {
+        launchVM {
             getDarkMode().collectLatest { mode ->
                 updateState { copy(darkMode = mode) }
             }
@@ -59,8 +59,8 @@ internal class AppThemeViewModel(
         }
     }
 
-    fun setAppTheme(theme: AppThemeType) = launch { setAppTheme.invoke(theme) }
-    fun setDarkMode(mode: DarkMode) = launch { setDarkMode.invoke(mode) }
+    fun setAppTheme(theme: AppThemeType) = launchVM { setAppTheme.invoke(theme) }
+    fun setDarkMode(mode: DarkMode) = launchVM { setDarkMode.invoke(mode) }
 }
 
 internal data class AppThemeState(

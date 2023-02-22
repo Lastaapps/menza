@@ -42,7 +42,7 @@ internal class PrivacyViewModel(
     val shouldShow = store.approved.map { it == null }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    fun onApprove() = launch {
+    fun onApprove() = launchVM {
         log.i { "Setting approved" }
 
         store.setApproved(clock.now())

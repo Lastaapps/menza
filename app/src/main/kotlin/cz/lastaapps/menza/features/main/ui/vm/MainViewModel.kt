@@ -35,12 +35,12 @@ internal class MainViewModel(
     override var hasAppeared: Boolean = false
 
     override fun onAppeared() {
-        launch {
+        launchVM {
             getSelectedMenza().collectLatest {
                 updateState { copy(selectedMenza = it, isReady = true) }
             }
         }
-        launch {
+        launchVM {
             getSettingsOpened().collectLatest {
                 updateState { copy(settingsViewed = it) }
             }

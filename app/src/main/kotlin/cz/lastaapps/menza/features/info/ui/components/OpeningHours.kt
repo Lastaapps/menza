@@ -81,10 +81,7 @@ private fun OpeningHoursLocationUI(
         DateTimeFormatter.ofPattern(patter)
     }
 
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
+    ElevatedCard(
         modifier = modifier,
     ) {
         Column(

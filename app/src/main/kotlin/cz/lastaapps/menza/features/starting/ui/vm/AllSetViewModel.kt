@@ -27,7 +27,7 @@ class AllSetViewModel(
     context: VMContext,
     private val appSetupFinished: AppSetupFinishedUC,
 ) : BaseViewModel(context) {
-    fun onFinished() = launch {
+    fun onFinished() = launchVM {
         appSetupFinished()
     }
 }

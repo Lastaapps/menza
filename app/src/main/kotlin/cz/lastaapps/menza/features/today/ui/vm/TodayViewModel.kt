@@ -19,6 +19,8 @@
 
 package cz.lastaapps.menza.features.today.ui.vm
 
+import arrow.core.Option
+import arrow.core.toOption
 import cz.lastaapps.api.core.domain.model.common.Dish
 import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.core.ui.vm.Appearing
@@ -36,11 +38,11 @@ internal class TodayViewModel(
 ) : StateViewModel<TodayState>(TodayState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launch {
+    override fun onAppeared() = launchVM {
         getSelectedMenza().onEach {
             updateState {
                 copy(
-                    selectedMenza = it,
+                    selectedMenza = it.toOption(),
                     selectedDish = null,
                 )
             }
@@ -56,7 +58,7 @@ internal class TodayViewModel(
 }
 
 internal data class TodayState(
-    val selectedMenza: Menza? = null,
+    val selectedMenza: Option<Menza>? = null,
     val selectedDish: Dish? = null,
     val showCzech: ShowCzech = ShowCzech(true),
 ) {

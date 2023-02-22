@@ -32,12 +32,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.Some
 import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.menza.R
 
 @Composable
 fun WrapMenzaNotSelected(
-    menza: Menza?,
+    menza: Option<Menza>?,
     onOsturak: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
@@ -46,13 +49,17 @@ fun WrapMenzaNotSelected(
         targetState = menza,
         modifier = modifier,
     ) { current ->
-        if (current == null) {
-            MenzaNotSelected(
-                onOsturak = onOsturak,
-                modifier = Modifier.fillMaxSize(),
-            )
-        } else {
-            content()
+        when (current) {
+            None ->
+                MenzaNotSelected(
+                    onOsturak = onOsturak,
+                    modifier = Modifier.fillMaxSize(),
+                )
+
+            is Some ->
+                content()
+
+            null -> {}
         }
     }
 }

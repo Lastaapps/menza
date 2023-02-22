@@ -20,10 +20,12 @@
 package cz.lastaapps.menza.features.info.ui.screen
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -106,39 +108,70 @@ private fun InfoContent(
                 targetState = state.items,
             ) { items ->
                 if (items != null) {
-                    val itemSpacer: @Composable ColumnScope.() -> Unit = {
-                        Spacer(Modifier.height(MenzaPadding.Medium))
+                    val itemSpacer: LazyListScope.() -> Unit = {
+                        item { Spacer(Modifier.height(MenzaPadding.Medium)) }
                     }
-                    val contactAndMessage: @Composable ColumnScope.() -> Unit = {
-                        ContactList(
-                            contactList = items.contacts,
-                            onError = onError,
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                        )
+
+                    val contactAndMessage: LazyListScope.() -> Unit = {
+                        item {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                MessageList(
+                                    messages = listOfNotNull(
+                                        items.header, items.footer
+                                    ).toImmutableList(),
+                                )
+                            }
+                        }
                         itemSpacer()
-                        MessageList(
-                            messages = listOfNotNull(
-                                items.header, items.footer
-                            ).toImmutableList(),
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                        )
+                        item {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                OpeningHoursList(
+                                    data = items.openingTimes,
+                                )
+                            }
+                        }
                     }
-                    val openingAndAddress: @Composable ColumnScope.() -> Unit = {
-                        OpeningHoursList(
-                            data = items.openingTimes,
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                        )
+                    val openingAndAddress: LazyListScope.() -> Unit = {
+                        item {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                ContactList(
+                                    contactList = items.contacts,
+                                    onError = onError,
+                                )
+                            }
+                        }
                         itemSpacer()
-                        AddressList(
-                            locations = listOfNotNull(items.address).toImmutableList(),
-                            onError = onError,
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                        )
+                        item {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                AddressList(
+                                    locations = listOfNotNull(items.address).toImmutableList(),
+                                    onError = onError,
+                                )
+                            }
+                        }
                         itemSpacer()
-                        LinkList(
-                            links = items.links,
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                        )
+                        item {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                LinkList(
+                                    links = items.links,
+                                )
+                            }
+                        }
                     }
 
                     WrapRefresh(

@@ -34,7 +34,7 @@ internal class LicenseViewModel(
 ) : StateViewModel<LicenseState>(LicenseState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launch {
+    override fun onAppeared() = launchVM {
         val lib = getLibs()
 
         // to filter out wrongly named libraries

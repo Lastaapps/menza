@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 value class VMContext(val context: CoroutineContext)
 
 abstract class BaseViewModel(private val context: VMContext) : ViewModel() {
-    protected fun launch(block: suspend CoroutineScope.() -> Unit) {
+    protected fun launchVM(block: suspend CoroutineScope.() -> Unit) {
         launchJob(block)
     }
 

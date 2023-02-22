@@ -22,6 +22,8 @@ package cz.lastaapps.menza.features.today.ui.vm
 import androidx.compose.runtime.Composable
 import arrow.core.Either.Left
 import arrow.core.Either.Right
+import arrow.core.Option
+import arrow.core.toOption
 import cz.lastaapps.api.core.domain.model.common.DishCategory
 import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
@@ -72,14 +74,14 @@ internal class DishListViewModel(
         private val log = logging()
     }
 
-    override fun onAppeared() = launch {
-        launch {
+    override fun onAppeared() = launchVM {
+        launchVM {
             getSelectedMenza().collectLatest {
                 log.i { "Registered a new: $it" }
 
                 updateState {
                     copy(
-                        selectedMenza = it,
+                        selectedMenza = it.toOption(),
                         items = persistentListOf(),
                     )
                 }
@@ -126,17 +128,17 @@ internal class DishListViewModel(
     fun reload() {
         if (lastState().isLoading) return
         syncJob = launchJob {
-            lastState().selectedMenza?.let {
+            lastState().selectedMenza?.orNull()?.let {
                 load(it, true)
             }
         }
     }
 
-    fun openWebMenu() = launch {
-        lastState().selectedMenza?.let { openMenuLink(it) }
+    fun openWebMenu() = launchVM {
+        lastState().selectedMenza?.orNull()?.let { openMenuLink(it) }
     }
 
-    fun setCompactView(isCompact: Boolean) = launch {
+    fun setCompactView(isCompact: Boolean) = launchVM {
         setCompact(isCompact)
     }
 
@@ -158,7 +160,7 @@ internal data class DishListState(
     val isLoading: Boolean = false,
     val isCompact: Boolean = true,
     val error: MenzaError? = null,
-    val selectedMenza: Menza? = null,
+    val selectedMenza: Option<Menza>? = null,
     val items: ImmutableList<DishCategory> = persistentListOf(),
     val priceType: PriceType = Unset,
     val downloadOnMetered: Boolean = false,

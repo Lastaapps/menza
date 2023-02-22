@@ -38,7 +38,7 @@ internal class RootViewModel(
 ) : StateViewModel<RootState>(RootState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launch {
+    override fun onAppeared() = launchVM {
         val isSetUp = isAppSetUp()
         val appTheme = getAppTheme().first()
         val darkMode = getDarkMode().first()
@@ -52,12 +52,12 @@ internal class RootViewModel(
             )
         }
 
-        launch {
+        launchVM {
             getAppTheme().collectLatest {
                 updateState { copy(appTheme = it) }
             }
         }
-        launch {
+        launchVM {
             getDarkMode().collectLatest {
                 updateState { copy(darkMode = it) }
             }

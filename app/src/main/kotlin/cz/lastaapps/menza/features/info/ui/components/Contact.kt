@@ -23,18 +23,19 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.ContactsContract
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.Mail
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -43,8 +44,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.common.Contact
 import cz.lastaapps.api.core.domain.model.common.Email
 import cz.lastaapps.api.core.domain.model.common.PhoneNumber
@@ -128,11 +127,8 @@ private fun ContactItem(
     if (contact.name == null && contact.role == null)
         return
 
-    Card(
-        modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
+    ElevatedCard(
+        modifier = modifier,
     ) {
         Column(
             modifier = Modifier.padding(MenzaPadding.MidSmall),
@@ -141,57 +137,56 @@ private fun ContactItem(
             contact.name?.let { name ->
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
 
             contact.role?.let { role ->
                 Text(
                     text = role,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
 
             contact.phone?.let {
                 OutlinedButton(
                     onClick = { onMakePhoneCall(contact) },
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
-                    border = BorderStroke(1.dp, LocalContentColor.current),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(
-                        text = it.number,
-                        style = LocalTextStyle.current.copy(
-                            textDecoration = TextDecoration.Underline
-                        ),
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                    ) {
+                        Icon(Icons.Default.Call, null)
+                        Text(text = it.number)
+                    }
                 }
             }
 
             contact.email?.let {
                 OutlinedButton(
                     onClick = { onSendEmail(contact) },
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
-                    border = BorderStroke(1.dp, LocalContentColor.current),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(
-                        text = it.mail,
-                        style = LocalTextStyle.current.copy(
-                            textDecoration = TextDecoration.Underline
-                        ),
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                    ) {
+                        Icon(Icons.Default.Mail, null)
+                        Text(text = it.mail)
+                    }
                 }
             }
 
             if ((contact.phone ?: contact.email) != null) {
                 OutlinedButton(
                     onClick = { onAddContact(contact) },
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = LocalContentColor.current),
-                    border = BorderStroke(1.dp, LocalContentColor.current),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(stringResource(R.string.info_contacts_contact_button_add))
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                    ) {
+                        Icon(Icons.Default.Contacts, null)
+                        Text(text = stringResource(R.string.info_contacts_contact_button_add))
+                    }
                 }
             }
         }

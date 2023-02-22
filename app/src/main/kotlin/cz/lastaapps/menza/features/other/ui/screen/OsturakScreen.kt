@@ -40,10 +40,14 @@ private fun OsturakContent(
 ) {
     AboveOrSideBySideLayout(
         topLeft = {
-            OsturakText()
+            item {
+                OsturakText()
+            }
         },
         bottomRight = {
-            OsturakImages()
+            item {
+                OsturakImages()
+            }
         },
         modifier = modifier,
     )

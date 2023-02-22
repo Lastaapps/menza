@@ -42,28 +42,28 @@ internal class ReorderMenzaViewModel(
 ) : StateViewModel<ReorderMenzaState>(ReorderMenzaState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launch {
-        launch {
+    override fun onAppeared() = launchVM {
+        launchVM {
             getOrderedMenzaList().collect {
                 updateState { copy(menzaList = it) }
             }
         }
-        launch {
+        launchVM {
             isMenzaOrderFromTop().collect {
                 updateState { copy(fromTop = it) }
             }
         }
     }
 
-    fun toggleVisibility(menza: Menza) = launch {
+    fun toggleVisibility(menza: Menza) = launchVM {
         toggleVisibility.invoke(menza)
     }
 
-    fun saveOrder(items: List<Pair<Menza, MenzaOrder>>) = launch {
+    fun saveOrder(items: List<Pair<Menza, MenzaOrder>>) = launchVM {
         updateMenzaOrder(items.map { (menza, order) -> menza to order.visible })
     }
 
-    fun reverseOrder() = launch {
+    fun reverseOrder() = launchVM {
         setMenzaOrderFromTop(!lastState().fromTop)
     }
 }

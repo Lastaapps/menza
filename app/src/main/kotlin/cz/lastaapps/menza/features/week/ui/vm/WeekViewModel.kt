@@ -22,6 +22,8 @@ package cz.lastaapps.menza.features.week.ui.vm
 import androidx.compose.runtime.Composable
 import arrow.core.Either.Left
 import arrow.core.Either.Right
+import arrow.core.Option
+import arrow.core.toOption
 import cz.lastaapps.api.core.domain.model.common.Menza
 import cz.lastaapps.api.core.domain.model.common.WeekDayDish
 import cz.lastaapps.api.main.domain.usecase.GetWeekDishListUC
@@ -58,14 +60,14 @@ internal class WeekViewModel(
         private val log = logging()
     }
 
-    override fun onAppeared() = launch {
-        launch {
+    override fun onAppeared() = launchVM {
+        launchVM {
             getSelectedMenza().collectLatest {
                 log.i { "Registered a new: $it" }
 
                 updateState {
                     copy(
-                        selectedMenza = it,
+                        selectedMenza = it.toOption(),
                         items = persistentListOf(),
                     )
                 }
@@ -92,14 +94,14 @@ internal class WeekViewModel(
     fun reload() {
         if (lastState().isLoading) return
         syncJob = launchJob {
-            lastState().selectedMenza?.let {
+            lastState().selectedMenza?.orNull()?.let {
                 load(it, true)
             }
         }
     }
 
-    fun openWebMenu() = launch {
-        lastState().selectedMenza?.let { openMenuLink(it) }
+    fun openWebMenu() = launchVM {
+        lastState().selectedMenza?.orNull()?.let { openMenuLink(it) }
     }
 
     private suspend fun load(menza: Menza, isForced: Boolean) {
@@ -117,7 +119,7 @@ internal class WeekViewModel(
 }
 
 internal data class WeekState(
-    val selectedMenza: Menza? = null,
+    val selectedMenza: Option<Menza>? = null,
     val priceType: PriceType = PriceType.Unset,
     val isLoading: Boolean = false,
     val error: MenzaError? = null,

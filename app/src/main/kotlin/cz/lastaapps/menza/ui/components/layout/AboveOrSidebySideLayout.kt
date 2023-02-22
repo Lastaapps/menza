@@ -20,13 +20,11 @@
 package cz.lastaapps.menza.ui.components.layout
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,11 +34,11 @@ import cz.lastaapps.menza.ui.theme.MenzaPadding
 
 @Composable
 fun AboveOrSideBySideLayout(
-    topLeft: @Composable ColumnScope.() -> Unit,
-    bottomRight: @Composable ColumnScope.() -> Unit,
+    topLeft: LazyListScope.() -> Unit,
+    bottomRight: LazyListScope.() -> Unit,
     modifier: Modifier = Modifier,
-    verticalSpacer: @Composable ColumnScope.() -> Unit = {
-        Spacer(Modifier.height(MenzaPadding.Small))
+    verticalSpacer: LazyListScope.() -> Unit = {
+        item { Spacer(Modifier.height(MenzaPadding.Small)) }
     },
 ) {
     when (LocalWindowWidth.current) {
@@ -74,28 +72,29 @@ fun AboveOrSideBySideLayout(
 
 @Composable
 private fun AboveOrSideBySideCompact(
-    topLeft: @Composable ColumnScope.() -> Unit,
-    bottomRight: @Composable ColumnScope.() -> Unit,
-    verticalSpacer: @Composable ColumnScope.() -> Unit,
+    topLeft: LazyListScope.() -> Unit,
+    bottomRight: LazyListScope.() -> Unit,
+    verticalSpacer: LazyListScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    LazyColumn(
         verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         topLeft()
         verticalSpacer()
         bottomRight()
+        item {
+            Spacer(Modifier.height(MenzaPadding.More.ScrollBottomSpace))
+        }
     }
 }
 
 @Composable
 private fun AboveOrSideBySideMedium(
-    topLeft: @Composable ColumnScope.() -> Unit,
-    bottomRight: @Composable ColumnScope.() -> Unit,
-    verticalSpacer: @Composable ColumnScope.() -> Unit,
+    topLeft: LazyListScope.() -> Unit,
+    bottomRight: LazyListScope.() -> Unit,
+    verticalSpacer: LazyListScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) = AboveOrSideBySideCompact(
     topLeft = topLeft,
@@ -106,29 +105,31 @@ private fun AboveOrSideBySideMedium(
 
 @Composable
 private fun AboveOrSideBySideExpanded(
-    topLeft: @Composable ColumnScope.() -> Unit,
-    bottomRight: @Composable ColumnScope.() -> Unit,
+    topLeft: LazyListScope.() -> Unit,
+    bottomRight: LazyListScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SplitLayout(
         modifier = modifier,
         panel1 = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
-            ) { topLeft() }
+            ) {
+                topLeft()
+                item { Spacer(Modifier.height(MenzaPadding.More.ScrollBottomSpace)) }
+            }
         },
         panel2 = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
-            ) { bottomRight() }
+            ) {
+                bottomRight()
+                item { Spacer(Modifier.height(MenzaPadding.More.ScrollBottomSpace)) }
+            }
         },
     )
 }
