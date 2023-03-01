@@ -65,6 +65,7 @@ dependencies {
     implementation(projects.lastaapps.crash)
 
     implementation(libs.androidx.datastore)
+    implementation(libs.androidx.emoji2.bundled)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.vectorDrawables)

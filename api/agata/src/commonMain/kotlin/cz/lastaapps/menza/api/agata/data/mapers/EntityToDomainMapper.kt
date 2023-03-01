@@ -81,6 +81,7 @@ internal fun DishEntity.toDomain(
             )
         }.toImmutableList(),
         ingredients = persistentListOf(),
+        isActive = isActive,
     )
 }
 
@@ -218,4 +219,5 @@ private fun StrahovEntiy.toDomain() = Dish(
     pictogram = persistentListOf(),
     servingPlaces = persistentListOf(),
     ingredients = persistentListOf(),
+    isActive = true,
 )

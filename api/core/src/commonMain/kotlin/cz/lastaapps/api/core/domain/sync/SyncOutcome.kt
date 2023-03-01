@@ -20,16 +20,33 @@
 package cz.lastaapps.api.core.domain.sync
 
 import arrow.core.Nel
+import arrow.core.flatten
+import arrow.core.left
+import arrow.core.right
+import cz.lastaapps.api.core.domain.sync.SyncResult.Problem
+import cz.lastaapps.api.core.domain.sync.SyncResult.Skipped
+import cz.lastaapps.api.core.domain.sync.SyncResult.Unavailable
+import cz.lastaapps.api.core.domain.sync.SyncResult.Updated
 import cz.lastaapps.core.domain.Outcome
+import cz.lastaapps.core.domain.error.ApiError
 import cz.lastaapps.core.domain.error.MenzaError
 
 typealias SyncOutcome = Outcome<SyncResult>
 
-interface SyncResult {
-    object Updated : SyncResult
-    object Skipped : SyncResult
-    object Unavailable : SyncResult
+sealed interface SyncResult {
+    data object Updated : SyncResult
+    data object Skipped : SyncResult
+    data object Unavailable : SyncResult
 
     @JvmInline
     value class Problem(val errors: Nel<MenzaError>) : SyncResult
 }
+
+fun SyncOutcome.mapSync() = map {
+    when (it) {
+        is Problem -> ApiError.SyncError.Problem(it.errors).left()
+        Unavailable -> ApiError.SyncError.Unavailable.left()
+        Skipped -> it.right()
+        Updated -> it.right()
+    }
+}.flatten()

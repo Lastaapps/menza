@@ -20,9 +20,9 @@
 package cz.lastaapps.core.domain.error
 
 sealed interface NetworkError : MenzaError.Runtime {
-    object Timeout : NetworkError
-    object NoInternet : NetworkError
-    object ConnectionClosed : NetworkError
+    data object Timeout : NetworkError
+    data object NoInternet : NetworkError
+    data object ConnectionClosed : NetworkError
 
     data class SerializationError(override val throwable: Throwable) : NetworkError
 }

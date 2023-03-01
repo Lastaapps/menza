@@ -128,9 +128,10 @@ internal class TodayDishSubsystemRepoImpl(
                 }
 
                 val mapped = withInfoResolved.map { list ->
-                    list.map { (dish, type, pictogram, servingPlaces) ->
-                        type to dish.toDomain(pictogram, servingPlaces)
-                    }.groupBy { it.first }
+                    list
+                        .map { (dish, type, pictogram, servingPlaces) ->
+                            type to dish.toDomain(pictogram, servingPlaces)
+                        }.groupBy { it.first }
                         .entries
                         .sortedBy { (key, _) -> key.itemOrder }
                         .map { (type, dishList) ->

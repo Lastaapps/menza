@@ -28,6 +28,8 @@
     <string name="error_parsing_dish">Některá jídla nebyla správně načtena 🍲</string>
     <string name="error_parsing_menu">Co si na webu zase vymýšlí? Chyba při načítání jídelníčku. 💀</string>
     <string name="error_api_week_not_available">Tato menza takhle dopředu neplánuje, není podporováno. 🤷</string>
+    <string name="error_api_module_unawailable">Tato menza tento module bohužel nepodporuje 🤷</string>
+    <string name="error_api_incomplete_data">Nepodařilo se načíst všechna data 🤷</string>
     <string name="error_info_contacts_no_app_dial">Není nainstalovaná aplikace kontakty</string>
     <string name="error_info_contacts_no_app_email">Není nainstalován emailový klient</string>
     <string name="error_info_contacts_no_app_contact">Není nainstalována aplikace kontakty</string>

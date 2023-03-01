@@ -26,6 +26,7 @@ import arrow.core.Option
 import arrow.core.toOption
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.WeekDayDish
+import cz.lastaapps.api.core.domain.sync.mapSync
 import cz.lastaapps.api.main.domain.usecase.GetWeekDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
 import cz.lastaapps.api.main.domain.usecase.SyncWeekDishListUC
@@ -106,7 +107,7 @@ internal class WeekViewModel(
 
     private suspend fun load(menza: Menza, isForced: Boolean) {
         withLoading({ copy(isLoading = it) }) {
-            when (val res = syncWeekDish(menza, isForced = isForced)) {
+            when (val res = syncWeekDish(menza, isForced = isForced).mapSync()) {
                 is Left -> updateState { copy(error = res.value) }
                 is Right -> {}
             }

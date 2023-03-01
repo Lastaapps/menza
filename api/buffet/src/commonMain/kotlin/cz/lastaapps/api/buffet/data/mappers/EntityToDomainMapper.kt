@@ -25,6 +25,8 @@ import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.model.WeekDish
 import cz.lastaapps.api.core.domain.model.WeekDishCategory
+import cz.lastaapps.core.util.extensions.findDayOfWeek
+import java.time.DayOfWeek.SATURDAY
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Clock
@@ -58,6 +60,7 @@ internal fun List<DishEntity>.toDomainDays(): List<Pair<DayOfWeek, List<DishCate
                             pictogram = persistentListOf(),
                             servingPlaces = persistentListOf(),
                             ingredients = dish.ingredients.toImmutableList(),
+                            isActive = true,
                         ),
                     ),
                 )
@@ -71,10 +74,12 @@ internal fun List<DishEntity>.toDomainWeek(
     .entries
     .sortedBy { it.key }
     .map { (dayOfWeek, dayDishList) ->
-        val now = clock.now().toLocalDateTime(timeZone).date
-        //  - (now - monday) + dof
-        val offset = -(dayOfWeek.value - DayOfWeek.MONDAY.value) + now.dayOfWeek.value
-        val date = now.plus(offset, DateTimeUnit.DAY)
+        val monday = clock.now().toLocalDateTime(timeZone).date
+            .findDayOfWeek(SATURDAY)
+            .plus(2, DateTimeUnit.DAY)
+
+        val offset = dayOfWeek.value - DayOfWeek.MONDAY.value
+        val date = monday.plus(offset, DateTimeUnit.DAY)
 
         WeekDayDish(
             date = date,

@@ -26,6 +26,7 @@ import arrow.core.Option
 import arrow.core.toOption
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.sync.mapSync
 import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
 import cz.lastaapps.api.main.domain.usecase.SyncTodayDishListUC
@@ -145,7 +146,7 @@ internal class DishListViewModel(
 
     private suspend fun load(menza: Menza, isForced: Boolean) {
         withLoading({ copy(isLoading = it) }) {
-            when (val res = syncTodayDishList(menza, isForced = isForced)) {
+            when (val res = syncTodayDishList(menza, isForced = isForced).mapSync()) {
                 is Left -> updateState { copy(error = res.value) }
                 is Right -> {}
             }

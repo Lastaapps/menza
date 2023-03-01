@@ -33,7 +33,7 @@ import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
-import cz.lastaapps.core.domain.error.ApiErrorLogic.WeekNotAvailable
+import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import kotlin.time.Duration.Companion.days

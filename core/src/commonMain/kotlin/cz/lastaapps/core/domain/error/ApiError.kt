@@ -19,6 +19,18 @@
 
 package cz.lastaapps.core.domain.error
 
-sealed interface ApiErrorLogic : MenzaError.Logic {
-    object WeekNotAvailable : ApiErrorLogic
+import arrow.core.Nel
+
+// Used for display purposes only
+sealed interface ApiError : MenzaError.Logic {
+    data object WeekNotAvailable : ApiError
+
+    sealed interface SyncError : ApiError {
+
+        data object Unavailable : SyncError
+
+        @JvmInline
+        value class Problem(val errors: Nel<MenzaError>) : SyncError
+    }
 }
+

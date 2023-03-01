@@ -121,19 +121,19 @@ private fun WeekDishContent(
     }
 }
 
+private val dateHeaderFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
 @Composable
 private fun DayHeader(
     date: LocalDate,
     modifier: Modifier = Modifier,
 ) {
-    val format = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.tertiary,
         shape = CircleShape,
     ) {
         Text(
-            text = date.toJavaLocalDate().format(format),
+            text = date.toJavaLocalDate().format(dateHeaderFormat),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .padding(4.dp)

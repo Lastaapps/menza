@@ -26,6 +26,7 @@ import arrow.core.Option
 import arrow.core.toOption
 import cz.lastaapps.api.core.domain.model.Info
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.sync.mapSync
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.SyncInfoUC
 import cz.lastaapps.core.domain.error.MenzaError
@@ -90,7 +91,7 @@ internal class InfoViewModel(
 
     private suspend fun load(menza: Menza, isForced: Boolean) {
         withLoading({ copy(isLoading = it) }) {
-            when (val res = syncInfo(menza, isForced = isForced)) {
+            when (val res = syncInfo(menza, isForced = isForced).mapSync()) {
                 is Left -> updateState { copy(error = res.value) }
                 is Right -> {}
             }

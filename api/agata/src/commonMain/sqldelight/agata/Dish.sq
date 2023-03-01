@@ -15,7 +15,7 @@ CREATE TABLE DishEntity(
     allergens TEXT AS List<Long> NOT NULL,
     photoLink TEXT,
     pictogram TEXT AS List<Long> NOT NULL,
-    isActive INTEGER AS Boolean,
+    isActive INTEGER AS Boolean NOT NULL,
     PRIMARY KEY (id)
 );
 

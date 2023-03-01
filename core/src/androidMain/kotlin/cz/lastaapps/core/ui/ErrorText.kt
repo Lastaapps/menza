@@ -25,8 +25,11 @@ import cz.lastaapps.core.domain.AppText
 import cz.lastaapps.core.domain.AppText.Formatted
 import cz.lastaapps.core.domain.AppText.Resource
 import cz.lastaapps.core.domain.AppText.Rich
-import cz.lastaapps.core.domain.error.ApiErrorLogic
-import cz.lastaapps.core.domain.error.ApiErrorLogic.WeekNotAvailable
+import cz.lastaapps.core.domain.error.ApiError
+import cz.lastaapps.core.domain.error.ApiError.SyncError
+import cz.lastaapps.core.domain.error.ApiError.SyncError.Problem
+import cz.lastaapps.core.domain.error.ApiError.SyncError.Unavailable
+import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
 import cz.lastaapps.core.domain.error.CommonError
 import cz.lastaapps.core.domain.error.CommonError.CannotAddContact
 import cz.lastaapps.core.domain.error.CommonError.CannotMakePhoneCall
@@ -59,7 +62,7 @@ val MenzaError.text: AppText
     get() = when (this) {
         is NetworkError -> text
         is ParsingError -> text
-        is ApiErrorLogic -> text
+        is ApiError -> text
         is CommonError -> text
         is Unknown -> F(
             R.string.error_unknown,
@@ -83,9 +86,14 @@ val ParsingError.text: AppText
         MenuCannotBeParsed -> E(R.string.error_parsing_menu)
     }
 
-val ApiErrorLogic.text: AppText
+val ApiError.text: AppText
     get() = when (this) {
         WeekNotAvailable -> E(R.string.error_api_week_not_available)
+        is SyncError ->
+            when (this) {
+                is Problem -> E(R.string.error_api_incomplete_data)
+                Unavailable -> E(R.string.error_api_module_unawailable)
+            }
     }
 
 val CommonError.text: AppText

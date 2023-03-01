@@ -23,6 +23,8 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.map
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
@@ -31,6 +33,18 @@ class GetTodayDishListUC(
     context: UCContext,
 ) : UseCase(context), KoinComponent {
     suspend operator fun invoke(menza: Menza) = launch {
-        get<TodayDishRepo> { parametersOf(menza.type) }.getData()
+        get<TodayDishRepo> { parametersOf(menza.type) }
+            .getData()
+            .map {
+                it.map { category ->
+                    val newDishList = category.dishList.filter { dish -> dish.isActive }
+
+                    if (newDishList == category.dishList) {
+                        category
+                    } else {
+                        category.copy(dishList = newDishList.toImmutableList())
+                    }
+                }.toImmutableList()
+            }
     }
 }

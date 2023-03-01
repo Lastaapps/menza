@@ -36,8 +36,6 @@ import cz.lastaapps.menza.ui.dests.others.ReportDialog
 import cz.lastaapps.menza.ui.dests.others.sendReport
 
 
-// TODO move later in the core module
-// TODO test with new compose version if more errors can be shown in a row
 @Composable
 fun HandleError(holder: ErrorHolder, hostState: SnackbarHostState) =
     HandleError(
@@ -54,7 +52,6 @@ fun HandleError(error: MenzaError?, hostState: SnackbarHostState, onDismiss: () 
     val context = LocalContext.current
     LaunchedEffect(error, hostState, context) {
         error?.let {
-            onDismiss()
             if (it.shouldBeReported) {
                 val result = hostState.showSnackbar(
                     message = error.text(context),
@@ -69,6 +66,7 @@ fun HandleError(error: MenzaError?, hostState: SnackbarHostState, onDismiss: () 
             } else {
                 hostState.showSnackbar(message = error.text(context))
             }
+            onDismiss()
         }
     }
 

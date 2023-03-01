@@ -42,6 +42,7 @@ data class Dish(
     val pictogram: ImmutableList<String>,
     val servingPlaces: ImmutableList<ServingPlace>,
     val ingredients: ImmutableList<String>,
+    val isActive: Boolean,
 )
 
 data class ServingPlace(
