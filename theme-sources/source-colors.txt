@@ -1,0 +1,15 @@
+[Agata]
+#fcdea4
+#516347
+#6b5c41
+
+[CTU]
+#1364b3
+#eaab2e
+#1b507d
+
+[UwU]
+#e86c82
+#190f2a
+#e6e8be
+

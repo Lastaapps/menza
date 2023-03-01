@@ -37,8 +37,12 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.System
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.ui.theme.generated.AppTypography
-import cz.lastaapps.menza.ui.theme.generated.DarkThemeColors
-import cz.lastaapps.menza.ui.theme.generated.LightThemeColors
+import cz.lastaapps.menza.ui.theme.generated.agata.AgataDarkColors
+import cz.lastaapps.menza.ui.theme.generated.agata.AgataLightColors
+import cz.lastaapps.menza.ui.theme.generated.ctu.CtuDarkColors
+import cz.lastaapps.menza.ui.theme.generated.ctu.CtuLightColors
+import cz.lastaapps.menza.ui.theme.generated.uwu.UwuDarkColors
+import cz.lastaapps.menza.ui.theme.generated.uwu.UwuLightColors
 
 @Composable
 fun AppTheme(
@@ -57,19 +61,19 @@ fun AppTheme(
                 dynamicDarkColorScheme(LocalContext.current)
         Agata ->
             if (isLightMode)
-                LightThemeColors
+                AgataLightColors
             else
-                DarkThemeColors
+                AgataDarkColors
         CTU ->
             if (isLightMode)
-                DarkThemeColors
+                CtuLightColors
             else
-                LightThemeColors
+                CtuDarkColors
         Uwu ->
             if (isLightMode)
-                LightThemeColors
+                UwuLightColors
             else
-                DarkThemeColors
+                UwuDarkColors
     }.animated()
 
     if (colorSystemBars) {
