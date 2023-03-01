@@ -2,7 +2,10 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Lastaapps/menza)![F-Droid](https://img.shields.io/f-droid/v/cz.lastaapps.menza)
 
-This Android app shows dish menus for CTU cafeterias from the [agata.suz.cvut.cz](https://agata.suz.cvut.cz/) website in a much more pleasant and usable way for phones. It shows today's and this week's menu, opening hours, contacts, announcements and addresses for all canteens. It supports dark mode and Material You, including Android 12 dynamic theming.
+This Android app shows dish menus for CTU cafeterias from the [agata.suz.cvut.cz](https://agata.suz.cvut.cz/) 
+and [studentcatering.cz](http://studentcatering.cz/jidelni-listek/) websites
+in a much more pleasant and usable way for phones.
+It shows today's and this week's menu, opening hours, contacts, announcements and addresses for all canteens.
 
 Core parts are written in Kotlin Multiplatform, support for JVM target can be added right away. Other targets require more work (non-JVM web scraping library required), but it still may be manageable for somebody to port this codebase to native or js platforms.
 
@@ -13,13 +16,18 @@ Menza is the Czech word for school cafeteria.
 [<img alt='Now on Google Play' height="80px" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>](https://play.google.com/store/apps/details?id=cz.lastaapps.menza&utm_source=github)[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/cz.lastaapps.menza)
 
 
-## Technologies
+## Libraries
 
-- Jetpack libraries (Compose, ...)
+- AndroidX (Compose, ...)
+- ArrowKt
+- Appyx
 - SQLDelight
-- Skrape.it
+- Koin
 - Coil-kt
-- Kotlin Multiplatform
+- Ktor
+- And more
+
+The core of the all in written in Kotlin Multiplatform!
 
 
 
@@ -32,12 +40,15 @@ Menza is the Czech word for school cafeteria.
 ## User experience
 
 - Dark theme
-- Support for Android 12 Material You dynamic theming
+- Many themes along with support for Android 12 Material You dynamic theming
 - Images download switch on metered networks (~0.7 MB per image)
 - Image caching
 - No private data collection
 - Proper landscape mode and large screen device support
 
+## Future plans
+- [ ] Rating support
+- [ ] User account balance support
 
 
 ## Screenshots
@@ -50,25 +61,22 @@ Menza is the Czech word for school cafeteria.
 
 ## Structure
 
-- app - Android app code - UI, viewmodels, caching
-- entity - entities representing data accessible from web
-- scrapping - abstract and JMV/Android implementation for web scraping
-- storage.db - database for storing persistent entities - contact info, menza list, ...
-- storage.repo - repositories for common access to data from web or local database
+- app - Android app code - UI, ViewModels, caching, themes, ...
+- api - handles loading of data from Agata and Bufet
+- core - common mostly domain code
 
 
 
 #### Contributing
 
-I don't accept any code contributions till I have this project accepted as term paper hopefully in May 2022. So if you are interested, please wait a bit.
+Feel free to contribute, but ask me before so we don't do the same thing twice.
 
-#### Official API
+#### Data sources
 
-If you want to use the official API, see doc: https://agata.suz.cvut.cz/jidelnicky/soap4/api/client-popis.html
-To get support, try contacting Agata IT department: https://agata.suz.cvut.cz/jidelnicky/kontakty.php#section14
-(I haven't used the API because I hadn't known about it)
+Most of the data is obtained from the official Agata API, see the documentation [here](https://agata.suz.cvut.cz/jidelnicky/JAPIV2/JAPI-popis.html).
+To get your API key, please contact the IT center and don't steal mine, they will be more than happy to give you one.
 
-
+To get FS and FEL buffet data I do scrape their webpages/hardcode info.
 
 ## License
 
