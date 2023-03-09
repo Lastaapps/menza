@@ -138,7 +138,7 @@ private fun DishContent(
         LazyVerticalStaggeredGrid(
             columns = columns,
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.MidSmall),
+            verticalItemSpacing = MenzaPadding.MidSmall,
             horizontalArrangement = Arrangement.spacedBy(MenzaPadding.MidSmall),
             state = scroll,
         ) {

@@ -1,18 +1,18 @@
 [versions]
-aboutLibraries = "10.6.0"
-accompanist = "0.28.0"
-android-gradle = "8.1.0-alpha06"
-androidx-activity = "1.7.0-beta02"
+aboutLibraries = "10.6.1"
+accompanist = "0.29.2-rc"
+android-gradle = "8.1.0-alpha08"
+androidx-activity = "1.7.0-rc01"
 androidx-appsearch = "1.1.0-alpha02"
 androidx-camera = "1.2.1"
-androidx-compose = "1.4.0-beta02"
+androidx-compose = "1.4.0-rc01"
 # @keep
 androidx-compose-compiler = "1.4.3"
-androidx-compose-material = "1.3.1"
-androidx-compose-material3 = "1.0.1"
+androidx-compose-material = "1.4.0-rc01"
+androidx-compose-material3 = "1.1.0-alpha08"
 androidx-emoji2 = "1.3.0-beta02"
 androidx-hilt = "1.0.0"
-androidx-lifecycle = "2.6.0-rc01"
+androidx-lifecycle = "2.6.0"
 androidx-navigation = "2.5.3"
 androidx-room = "2.5.0"
 androidx-test = "1.5.0"
@@ -20,7 +20,7 @@ coil = "2.2.2"
 dagger = "2.44.2"
 detekt = "1.22.0"
 espresso = "3.5.1"
-firebase-bom = "31.2.2"
+firebase-bom = "31.2.3"
 google-ksp = "1.8.10-1.0.9"
 # @keep
 java-jvmTarget = "11"
@@ -34,13 +34,13 @@ kotlin-api = "1.8"
 kotlin-atomicfu = "0.20.0"
 kotlin-coroutines = "1.6.4"
 kotlin-language = "1.9"
-ktor = "2.2.3"
+ktor = "2.2.4"
 logback = "1.4.5"
 russhwolf-settings = "1.0.0"
 sdk-compile = "33"
 sdk-min = "21"
 sdk-target = "33"
-shadow = "7.1.2"
+shadow = "8.1.0"
 sqldelight = "1.5.5"
 
 [libraries]
@@ -84,14 +84,14 @@ androidx-compose-testJUnit4 = { module = "androidx.compose.ui:ui-test-junit4", v
 androidx-compose-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-compose" }
 androidx-compose-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-compose" }
 androidx-compose-toolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose" }
-androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose" }
+androidx-compose-ui = { module ="androidx.compose.ui:ui", version.ref = "androidx-compose" }
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 androidx-constraintlayout-views = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-core = "androidx.core:core-ktx:1.9.0"
 androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-documentFile = "androidx.documentfile:documentfile:1.0.1"
-androidx-emoji2-core = "androidx.emoji2:emoji2:1.3.0-beta03"
-androidx-emoji2-bundled = "androidx.emoji2:emoji2-bundled:1.3.0-beta03"
+androidx-emoji2-bundled = "androidx.emoji2:emoji2-bundled:1.3.0-rc01"
+androidx-emoji2-core = "androidx.emoji2:emoji2:1.3.0-rc01"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.5.5"
 androidx-hilt-common = { module = "androidx.hilt:hilt-common", version.ref = "androidx-hilt" }
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidx-hilt" }
@@ -104,12 +104,12 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewModel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-viewModel-savedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.0-rc01"
+androidx-lifecycle-viewModel-savedState = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "androidx-lifecycle" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidx-navigation" }
 androidx-preferences = "androidx.preference:preference-ktx:1.2.0"
-androidx-recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
+androidx-recyclerView = "androidx.recyclerview:recyclerview:1.3.0"
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
 androidx-room-test = { module = "androidx.room:room-testing", version.ref = "androidx-room" }
@@ -131,7 +131,7 @@ arrowkt-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
 arrowkt-fx-stm = { module = "io.arrow-kt:arrow-fx-stm" }
 coil-base = { module = "io.coil-kt:coil-base", version.ref = "coil" }
 coil-composeBase = { module = "io.coil-kt:coil-compose-base", version.ref = "coil" }
-coil-composeComplete = "io.coil-kt:coil-compose:2.2.2"
+coil-composeComplete = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coil" }
@@ -165,7 +165,7 @@ gradlePlugins-shadow = { module = "gradle.plugin.com.github.johnrengelman:shadow
 junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5-bom" }
 junit5-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 junit5-jupiter-runtime = { module = "org.junit.jupiter:junit-jupiter-engine" }
-kmLogging = "org.lighthousegames:logging:1.2.1"
+kmLogging = "org.lighthousegames:logging:1.3.0"
 koin-android-compose = "io.insert-koin:koin-androidx-compose:3.4.2"
 koin-android-core = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
@@ -195,7 +195,7 @@ kotlin-test-jUnit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlin-atomicfu" }
 kotlinx-collection = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
 kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
-kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
+kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
