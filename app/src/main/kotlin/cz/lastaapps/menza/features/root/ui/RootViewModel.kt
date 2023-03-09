@@ -22,6 +22,7 @@ package cz.lastaapps.menza.features.root.ui
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.root.domain.usecase.IsAppSetUpUC
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
@@ -39,7 +40,7 @@ internal class RootViewModel(
     override var hasAppeared: Boolean = false
 
     override fun onAppeared() = launchVM {
-        val isSetUp = isAppSetUp()
+        val isSetUp = isAppSetUp().first()
         val appTheme = getAppTheme().first()
         val darkMode = getDarkMode().first()
 
@@ -50,6 +51,12 @@ internal class RootViewModel(
                 darkMode = darkMode,
                 isReady = true,
             )
+        }
+
+        launchVM {
+            isAppSetUp().collectLatest {
+                updateState { copy(isSetUp = it) }
+            }
         }
 
         launchVM {
@@ -70,4 +77,4 @@ internal data class RootState(
     val isSetUp: Boolean = false,
     val appTheme: AppThemeType = AppThemeType.defaultTemp,
     val darkMode: DarkMode = DarkMode.System,
-)
+) : VMState

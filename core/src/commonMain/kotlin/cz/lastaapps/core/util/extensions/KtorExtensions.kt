@@ -46,6 +46,7 @@ suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
             -> NetworkError.NoInternet
 
             "JsonConvertException",
+            "JsonDecodingException",
             -> NetworkError.SerializationError(it)
 
             else -> MenzaError.Unknown(it)

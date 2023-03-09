@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -141,6 +142,16 @@ private fun MenzaList(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
+        item {
+            Text(
+                text = stringResource(R.string.app_name_long),
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .padding(vertical = MenzaPadding.Smaller)
+                    .padding(start = MenzaPadding.Medium),
+            )
+        }
+
         items(menzaList) { menza ->
             MenzaItem(
                 menza = menza,

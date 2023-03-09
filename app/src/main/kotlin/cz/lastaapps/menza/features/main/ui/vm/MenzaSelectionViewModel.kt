@@ -23,6 +23,7 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.main.domain.usecase.SelectMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.GetOrderedVisibleMenzaListUC
@@ -67,4 +68,4 @@ internal data class MenzaSelectionState(
     val selectedMenza: Menza? = null,
     val fromTop: Boolean = true,
     val menzaList: ImmutableList<Menza> = persistentListOf(),
-)
+) : VMState

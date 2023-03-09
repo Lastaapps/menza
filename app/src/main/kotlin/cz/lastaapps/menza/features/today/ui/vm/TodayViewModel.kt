@@ -26,6 +26,7 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
@@ -61,6 +62,6 @@ internal data class TodayState(
     val selectedMenza: Option<Menza>? = null,
     val selectedDish: Dish? = null,
     val showCzech: ShowCzech = ShowCzech(true),
-) {
+) : VMState {
     val hasDish: Boolean get() = selectedDish != null
 }

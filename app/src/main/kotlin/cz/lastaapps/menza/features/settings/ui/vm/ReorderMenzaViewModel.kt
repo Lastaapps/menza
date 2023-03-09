@@ -23,6 +23,7 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.settings.domain.model.MenzaOrder
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.GetOrderedMenzaListUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.IsMenzaOrderFromTopUC
@@ -71,4 +72,4 @@ internal class ReorderMenzaViewModel(
 internal data class ReorderMenzaState(
     val fromTop: Boolean = true,
     val menzaList: ImmutableList<Pair<Menza, MenzaOrder>> = persistentListOf(),
-)
+) : VMState

@@ -34,6 +34,7 @@ import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
@@ -108,4 +109,4 @@ internal data class InfoState(
     val isLoading: Boolean = false,
     val items: Info? = null,
     val error: MenzaError? = null,
-)
+) : VMState

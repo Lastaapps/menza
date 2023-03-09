@@ -22,6 +22,7 @@ package cz.lastaapps.menza.features.settings.ui.vm
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetAppThemeUC
@@ -67,4 +68,4 @@ internal data class AppThemeState(
     val theme: AppThemeType? = null,
     val darkMode: DarkMode? = null,
     val availableThemes: ImmutableList<AppThemeType> = persistentListOf(),
-)
+) : VMState

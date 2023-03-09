@@ -20,6 +20,7 @@
 package cz.lastaapps.core.ui.vm
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import arrow.fx.coroutines.resource
 import arrow.fx.coroutines.use
@@ -27,7 +28,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-abstract class StateViewModel<State : Any>(
+abstract class StateViewModel<State : VMState>(
     val init: State,
     context: VMContext,
 ) : BaseViewModel(context) {
@@ -50,3 +51,6 @@ abstract class StateViewModel<State : Any>(
         release = { _, _ -> updateState { loading(false) } },
     ).use { block() }
 }
+
+@Immutable
+interface VMState

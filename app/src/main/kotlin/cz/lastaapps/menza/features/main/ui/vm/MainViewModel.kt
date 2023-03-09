@@ -23,6 +23,7 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
 import kotlinx.coroutines.flow.collectLatest
@@ -52,4 +53,4 @@ internal data class MainState(
     val isReady: Boolean = false,
     val settingsViewed: Boolean = false,
     val selectedMenza: Menza? = null,
-)
+) : VMState

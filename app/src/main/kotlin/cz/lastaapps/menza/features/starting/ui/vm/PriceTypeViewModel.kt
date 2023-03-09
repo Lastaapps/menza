@@ -22,6 +22,7 @@ package cz.lastaapps.menza.features.starting.ui.vm
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
@@ -57,4 +58,4 @@ internal class PriceTypeViewModel internal constructor(
 internal data class PriceTypeState(
     val isReady: Boolean = false,
     val isSelected: Boolean = false,
-)
+) : VMState

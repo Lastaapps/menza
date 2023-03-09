@@ -36,6 +36,7 @@ import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
@@ -169,4 +170,4 @@ internal data class DishListState(
     val showCzech: ShowCzech = ShowCzech(true),
     val imageScale: Float = 1f,
     val isOnMetered: Boolean = false,
-)
+) : VMState

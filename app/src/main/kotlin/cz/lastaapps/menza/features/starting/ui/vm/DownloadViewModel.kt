@@ -27,6 +27,7 @@ import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.starting.domain.model.DownloadProgress
 import cz.lastaapps.menza.features.starting.domain.usecase.CheckDataDownloadNeededUC
 import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
@@ -115,4 +116,4 @@ internal data class DownloadDataState(
     val downloadProgress: DownloadProgress = DownloadProgress.INIT,
     val error: MenzaError? = null,
     val isDone: Boolean = false,
-)
+) : VMState

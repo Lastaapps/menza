@@ -22,13 +22,12 @@ package cz.lastaapps.menza.features.root.domain.usecase
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
-import kotlinx.coroutines.flow.first
 
 internal class IsAppSetUpUC(
     context: UCContext,
     private val settings: MainSettingsRepo,
 ) : UseCase(context) {
     suspend operator fun invoke() = launch {
-        settings.isAppSetupFinished().first()
+        settings.isAppSetupFinished()
     }
 }

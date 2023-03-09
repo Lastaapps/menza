@@ -36,7 +36,6 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.CTU
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.System
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
-import cz.lastaapps.menza.ui.theme.generated.AppTypography
 import cz.lastaapps.menza.ui.theme.generated.agata.AgataDarkColors
 import cz.lastaapps.menza.ui.theme.generated.agata.AgataLightColors
 import cz.lastaapps.menza.ui.theme.generated.ctu.CtuDarkColors
@@ -93,7 +92,7 @@ fun AppTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = AppTypography,
+        // typography = AppTypography,
         shapes = Shapes,
         content = content,
     )

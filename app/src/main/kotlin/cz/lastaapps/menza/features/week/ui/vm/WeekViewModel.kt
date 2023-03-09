@@ -35,6 +35,7 @@ import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
@@ -125,4 +126,4 @@ internal data class WeekState(
     val isLoading: Boolean = false,
     val error: MenzaError? = null,
     val items: ImmutableList<WeekDayDish> = persistentListOf(),
-)
+) : VMState

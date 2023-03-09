@@ -23,6 +23,7 @@ import com.mikepenz.aboutlibraries.entity.Library
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.other.domain.usecase.GetLibrariesUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -54,4 +55,4 @@ internal class LicenseViewModel(
 internal data class LicenseState(
     val libs: ImmutableList<Library> = persistentListOf(),
     val selectedLibrary: Library? = null,
-)
+) : VMState
