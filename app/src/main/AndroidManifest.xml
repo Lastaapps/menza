@@ -46,6 +46,7 @@
         android:supportsRtl="true"
         android:localeConfig="@xml/locales_config"
         android:theme="@style/AppTheme.Starting"
+        android:enableOnBackInvokedCallback="true"
         tools:targetApi="tiramisu">
         <activity
             android:name=".MainActivity"
