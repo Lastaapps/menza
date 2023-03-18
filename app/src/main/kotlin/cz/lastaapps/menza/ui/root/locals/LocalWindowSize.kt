@@ -22,6 +22,7 @@
 package cz.lastaapps.menza.ui.root.locals
 
 import android.app.Activity
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -29,12 +30,16 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+import org.lighthousegames.logging.logging
 
 val LocalWindowSize = compositionLocalOf { WindowSizeClass.calculateFromSize(DpSize.Zero) }
 val LocalWindowWidth = compositionLocalOf { WindowWidthSizeClass.Compact }
 val LocalWindowHeight = compositionLocalOf { WindowHeightSizeClass.Compact }
+val LocalMayBeFlipCover = compositionLocalOf { false }
 
 @Composable
 fun WithLocalWindowSizes(
@@ -42,9 +47,24 @@ fun WithLocalWindowSizes(
     content: @Composable () -> Unit,
 ) {
     val size = calculateWindowSizeClass(activity)
-    CompositionLocalProvider(
-        LocalWindowSize provides size,
-        LocalWindowWidth provides size.widthSizeClass,
-        LocalWindowHeight provides size.heightSizeClass,
-    ) { content() }
+    BoxWithConstraints {
+        val mayBeFlipCover =
+            (maxWidth == 512.dp && maxHeight == 260.dp) // same for Flip 3 and 4
+                    || (maxWidth == 512.dp && maxHeight == 245.dp) // when bottom bar is enabled
+
+        LaunchedEffect(size, mayBeFlipCover) {
+            logging("WindowSize").let { log ->
+                log.debug { "New window width class:  ${size.widthSizeClass}" }
+                log.debug { "New window height class: ${size.heightSizeClass}" }
+                log.debug { "New may be flip cover:   $mayBeFlipCover" }
+            }
+        }
+
+        CompositionLocalProvider(
+            LocalWindowSize provides size,
+            LocalWindowWidth provides size.widthSizeClass,
+            LocalWindowHeight provides size.heightSizeClass,
+            LocalMayBeFlipCover provides mayBeFlipCover,
+        ) { content() }
+    }
 }

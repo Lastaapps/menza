@@ -58,6 +58,7 @@ import cz.lastaapps.menza.features.other.ui.node.PrivacyNode
 import cz.lastaapps.menza.features.settings.ui.navigation.SettingsNode
 import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
 import cz.lastaapps.menza.features.week.ui.node.WeekNode
+import cz.lastaapps.menza.ui.root.locals.LocalMayBeFlipCover
 import org.koin.androidx.compose.koinViewModel
 
 class MainNode(
@@ -129,6 +130,7 @@ class MainNode(
             settingsEverOpened = state.settingsViewed,
             hostState = hostState,
             selectedMenza = state.selectedMenza,
+            isFlip = state.isFlip && LocalMayBeFlipCover.current,
             onNavItemTopBar = { backStack.push(it) },
             onNavItemRoot = { backStack.newRoot(it) },
             drawerContent = {

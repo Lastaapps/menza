@@ -50,6 +50,7 @@ fun MenzaScaffold(
     rail: @Composable () -> Unit,
     drawerContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
+    isFlip: Boolean,
     modifier: Modifier = Modifier,
     windowWidth: WindowWidthSizeClass = LocalWindowWidth.current,
     foldingFeature: FoldingClass = LocalFoldProvider.current,
@@ -63,6 +64,7 @@ fun MenzaScaffold(
                 bottomBar = bottomBar,
                 drawerContent = drawerContent,
                 content = content,
+                isFlip = isFlip,
                 modifier = modifier,
             )
 
@@ -100,6 +102,7 @@ private fun AppLayoutCompact(
     bottomBar: @Composable () -> Unit,
     drawerContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
+    isFlip: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val topBarState = remember {
@@ -120,23 +123,27 @@ private fun AppLayoutCompact(
         },
         modifier = modifier,
     ) {
-        Scaffold(
-            Modifier.fillMaxSize(),
-            topBar = { topBar(topBarState) },
-            bottomBar = bottomBar,
-            snackbarHost = snackbarHost,
-        ) { insets ->
-            Box(
-                Modifier
-                    .padding(insets)
-                    .fillMaxSize()
-            ) {
-                content()
-
-                BackHandler(drawerState.isOpen) {
-                    scope.launch { drawerState.close() }
+        if (!isFlip) {
+            Scaffold(
+                Modifier.fillMaxSize(),
+                topBar = { topBar(topBarState) },
+                bottomBar = bottomBar,
+                snackbarHost = snackbarHost,
+            ) { insets ->
+                Box(
+                    Modifier
+                        .padding(insets)
+                        .fillMaxSize()
+                ) {
+                    content()
                 }
             }
+        } else {
+            content()
+        }
+
+        BackHandler(drawerState.isOpen) {
+            scope.launch { drawerState.close() }
         }
     }
 }

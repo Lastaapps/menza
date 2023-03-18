@@ -42,6 +42,7 @@ internal fun MainScreen(
     settingsEverOpened: Boolean,
     hostState: SnackbarHostState,
     selectedMenza: Menza?,
+    isFlip: Boolean,
     onNavItemTopBar: (MainNavType) -> Unit,
     onNavItemRoot: (MainNavType) -> Unit,
     drawerContent: @Composable () -> Unit,
@@ -79,6 +80,7 @@ internal fun MainScreen(
         },
         drawerContent = drawerContent,
         content = content,
+        isFlip = isFlip,
         modifier = modifier,
     )
 }

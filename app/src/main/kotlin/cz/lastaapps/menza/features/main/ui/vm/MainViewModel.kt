@@ -25,6 +25,7 @@ import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
+import cz.lastaapps.menza.features.main.domain.usecase.IsFlipUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
 import kotlinx.coroutines.flow.collectLatest
 
@@ -32,6 +33,7 @@ internal class MainViewModel(
     context: VMContext,
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getSettingsOpened: GetSettingsEverOpenedUC,
+    private val isFlip: IsFlipUC,
 ) : StateViewModel<MainState>(MainState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
@@ -46,6 +48,7 @@ internal class MainViewModel(
                 updateState { copy(settingsViewed = it) }
             }
         }
+        updateState { copy(isFlip = isFlip()) }
     }
 }
 
@@ -53,4 +56,5 @@ internal data class MainState(
     val isReady: Boolean = false,
     val settingsViewed: Boolean = false,
     val selectedMenza: Menza? = null,
+    val isFlip: Boolean = false,
 ) : VMState
