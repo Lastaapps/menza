@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,12 +24,12 @@ import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.request.url
 
-internal const val backendUrl = "https://agata-new.suz.cvut.cz/jidelnicky/"
+internal const val backendUrlTest = "https://agata-new.suz.cvut.cz/jidelnicky/"
 internal const val backendUrlNormal = "https://agata.suz.cvut.cz/jidelnicky/"
 
 internal val agataClient = HttpClient() {
     install(DefaultRequest) {
-        url(backendUrl)
+        url(backendUrlNormal)
     }
 
     // delete after the migration to API
@@ -39,7 +39,7 @@ internal val agataClient = HttpClient() {
             retryOnTimeout = false,
         )
         modifyRequest {
-            it.url(backendUrlNormal)
+            it.url(backendUrlTest)
         }
     }
 }

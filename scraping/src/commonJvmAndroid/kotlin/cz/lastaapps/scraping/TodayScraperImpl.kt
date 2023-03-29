@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -73,14 +73,26 @@ object TodayScraperImpl : TodayScraper {
                 }
                 "td" -> {
                     try {
-                        val amount = children[1].ownText.removeSpaces().takeIf { it.isNotBlank() }
-                        val name = children[2].ownText.removeSpaces()
-                        val dishAllergens = children[3].parseAllergens()
-                        val dishAllergensPage = children[3].parseAllergensPage()
-                        val imgUrl = children[4].parseImage()
-                        val priceStudent = children[5].parseMoney()
-                        val priceNormal = children[6].parseMoney()
-                        val issuePlaces = children[7].parseIssuePlaces()
+                        var childIndex = 1
+                        val amount =
+                            children[childIndex++].ownText.removeSpaces().takeIf { it.isNotBlank() }
+                        val name = children[childIndex++].ownText.removeSpaces()
+                        var dishAllergens: ImmutableList<AllergenId>
+                        var dishAllergensPage: DishAllergensPage?
+                        try {
+                            // test page has allergens on a greater index (because of meat types)
+                            val id = childIndex++
+                            dishAllergens = children[id].parseAllergens()
+                            dishAllergensPage = children[id].parseAllergensPage()
+                        } catch (e: Exception) {
+                            val id = childIndex++
+                            dishAllergens = children[id].parseAllergens()
+                            dishAllergensPage = children[id].parseAllergensPage()
+                        }
+                        val imgUrl = children[childIndex++].parseImage()
+                        val priceStudent = children[childIndex++].parseMoney()
+                        val priceNormal = children[childIndex++].parseMoney()
+                        // val issuePlaces = children[7].parseIssuePlaces()
 
                         dishSet += Dish(
                             MenzaId(menzaId),
@@ -92,7 +104,7 @@ object TodayScraperImpl : TodayScraper {
                             imgUrl,
                             priceStudent?.let(::Price),
                             priceNormal?.let(::Price),
-                            issuePlaces,
+                            persistentListOf() // issuePlaces,
                         )
                     } catch (e: DishNameEmpty) {
                         e.printStackTrace()
@@ -128,7 +140,7 @@ object TodayScraperImpl : TodayScraper {
 
     private fun DocElement.parseImage(): String? =
         tryFindFirst("img") {
-            backendUrl + attribute("alt")
+            backendUrlTest + attribute("alt")
         }
 
     private val moneyRegex = """(\d+([,|.]\d{1,2})?)?""".toRegex()
