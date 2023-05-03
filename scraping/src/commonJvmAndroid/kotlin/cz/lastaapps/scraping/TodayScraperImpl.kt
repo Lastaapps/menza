@@ -139,8 +139,8 @@ object TodayScraperImpl : TodayScraper {
     }
 
     private fun DocElement.parseImage(): String? =
-        tryFindFirst("img") {
-            backendUrlTest + attribute("alt")
+        tryFindFirst("input") {
+            backendUrlNormal + attribute("value")
         }
 
     private val moneyRegex = """(\d+([,|.]\d{1,2})?)?""".toRegex()
