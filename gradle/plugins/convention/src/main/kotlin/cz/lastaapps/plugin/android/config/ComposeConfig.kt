@@ -30,7 +30,7 @@ import org.gradle.kotlin.dsl.dependencies
 
 
 internal fun Project.configureComposeCompiler(
-    commonExtension: CommonExtension<*, *, *, *>,
+    commonExtension: CommonExtension<*, *, *, *, *>,
 ) = with(commonExtension) {
     buildFeatures {
         compose = true
