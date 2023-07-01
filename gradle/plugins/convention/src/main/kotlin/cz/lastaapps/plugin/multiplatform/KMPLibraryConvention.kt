@@ -22,6 +22,7 @@ package cz.lastaapps.plugin.multiplatform
 import com.android.build.gradle.LibraryExtension
 import cz.lastaapps.extensions.alias
 import cz.lastaapps.extensions.commonImplementation
+import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.multiplatform
 import cz.lastaapps.extensions.pluginManager
@@ -177,7 +178,7 @@ class KMPLibraryConvention : BasePlugin({
         } catch (_: Exception) {
         }
 
-        commonImplementation(platform(libs.arrowkt.bom))
+        commonImplementation(project.dependencies.platform(libs.arrowkt.bom))
         commonImplementation(libs.arrowkt.core)
         commonImplementation(libs.arrowkt.fx.coroutines)
         commonImplementation(libs.arrowkt.fx.stm)

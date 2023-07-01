@@ -20,7 +20,6 @@
 package cz.lastaapps.api.main.data
 
 import arrow.core.Either
-import arrow.core.fold
 import arrow.core.right
 import arrow.fx.coroutines.parMap
 import cz.lastaapps.api.core.domain.model.Menza
@@ -28,8 +27,8 @@ import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.domain.error.MenzaError
-import cz.lastaapps.core.util.FlowListMonoid
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
@@ -54,7 +53,11 @@ internal class MenzaMasterRepoImpl(
             .map { repo ->
                 repo.getData().map { it.toPersistentList() }
             }
-            .fold(FlowListMonoid())
+            .fold(flow { emit(persistentListOf<Menza>()) }) { acu, list ->
+                acu.combine(list) { a, b ->
+                    a.addAll(b)
+                }
+            }
             .map { it.toImmutableList() }
 
     override suspend fun sync(isForced: Boolean): SyncOutcome =

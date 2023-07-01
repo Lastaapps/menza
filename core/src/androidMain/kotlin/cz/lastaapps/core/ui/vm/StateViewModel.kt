@@ -23,7 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import arrow.fx.coroutines.resource
-import arrow.fx.coroutines.use
+import arrow.fx.coroutines.resourceScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -49,7 +49,13 @@ abstract class StateViewModel<State : VMState>(
     ) = resource(
         acquire = { updateState { loading(true) } },
         release = { _, _ -> updateState { loading(false) } },
-    ).use { block() }
+    )//.use { block() }
+        .let {
+            resourceScope {
+                it.bind()
+                block()
+            }
+        }
 }
 
 @Immutable

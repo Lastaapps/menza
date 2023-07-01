@@ -20,13 +20,14 @@
 package cz.lastaapps.menza.features.settings.data
 
 import cz.lastaapps.api.core.domain.model.MenzaType
-import cz.lastaapps.core.util.persistentListFlow
 import cz.lastaapps.menza.features.settings.data.datasource.OrderDataSource
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
 import cz.lastaapps.menza.features.settings.domain.model.MenzaOrder
 import kotlin.math.max
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
@@ -86,7 +87,7 @@ internal class OrderRepoImpl(
             .map {
                 source.getMenzaOrderFlow(toKey(it))
             }
-            .fold(persistentListFlow<MenzaOrder>()) { acu, item ->
+            .fold(flow {emit(persistentListOf<MenzaOrder>())}) { acu, item ->
                 combine(acu, item) { a, i -> a.add(i) }
             }
             .onEach { lock.withLock {} }

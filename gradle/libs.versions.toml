@@ -125,7 +125,7 @@ androidx-tracing = "androidx.tracing:tracing-ktx:1.1.0"
 androidx-vectorDrawables = "androidx.vectordrawable:vectordrawable:1.1.0"
 androidx-windowManager = "androidx.window:window:1.0.0"
 androidx-work = "androidx.work:work-runtime-ktx:2.8.0"
-arrowkt-bom = "io.arrow-kt:arrow-stack:2.0.0-SNAPSHOT"
+arrowkt-bom = "io.arrow-kt:arrow-stack:1.2.0-RC"
 arrowkt-core = { module = "io.arrow-kt:arrow-core" }
 arrowkt-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
 arrowkt-fx-stm = { module = "io.arrow-kt:arrow-fx-stm" }

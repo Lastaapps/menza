@@ -30,20 +30,8 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        mavenCentral {
-            content {
-                excludeGroup("io.arrow-kt")
-            }
-        }
+        mavenCentral()
         google()
-        maven("https://oss.sonatype.org/content/repositories/snapshots") {
-            mavenContent {
-                snapshotsOnly()
-            }
-            content {
-                includeGroup("io.arrow-kt")
-            }
-        }
     }
 }
 
