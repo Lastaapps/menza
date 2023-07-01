@@ -71,5 +71,7 @@ internal class BuffetApiImpl(
         client
             .get("http://studentcatering.cz/jidelni-listek/")
             .bodyAsText()
+            .replace("&#8222;", "„")
+            .replace("&#8220;", "“")
 
 }
