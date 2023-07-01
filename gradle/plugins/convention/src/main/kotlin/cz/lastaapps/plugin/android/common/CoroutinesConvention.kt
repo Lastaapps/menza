@@ -30,7 +30,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 class CoroutinesConvention : BasePlugin({
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            @Suppress("SuspiciousCollectionReassignment")
             freeCompilerArgs += listOf(
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview"

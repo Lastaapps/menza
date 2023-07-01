@@ -45,19 +45,13 @@ class KotlinBaseConvention : BasePlugin({
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    android {
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
-        }
-    }
+    android { }
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             languageVersion = libs.versions.kotlin.language.get()
             apiVersion = libs.versions.kotlin.api.get()
 
-            @Suppress("SuspiciousCollectionReassignment")
             freeCompilerArgs += listOf(
                 "-opt-in=kotlin.ExperimentalStdlibApi",
                 "-opt-in=kotlin.time.ExperimentalTime",
