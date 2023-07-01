@@ -96,14 +96,14 @@ internal class WeekViewModel(
     fun reload() {
         if (lastState().isLoading) return
         syncJob = launchJob {
-            lastState().selectedMenza?.orNull()?.let {
+            lastState().selectedMenza?.getOrNull()?.let {
                 load(it, true)
             }
         }
     }
 
     fun openWebMenu() = launchVM {
-        lastState().selectedMenza?.orNull()?.let { openMenuLink(it) }
+        lastState().selectedMenza?.getOrNull()?.let { openMenuLink(it) }
     }
 
     private suspend fun load(menza: Menza, isForced: Boolean) {

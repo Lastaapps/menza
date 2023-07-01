@@ -84,7 +84,7 @@ internal class InfoViewModel(
     fun reload() {
         if (lastState().isLoading) return
         syncJob = launchJob {
-            lastState().selectedMenza?.orNull()?.let {
+            lastState().selectedMenza?.getOrNull()?.let {
                 load(it, true)
             }
         }

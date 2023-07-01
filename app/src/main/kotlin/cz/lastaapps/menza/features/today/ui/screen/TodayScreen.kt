@@ -22,7 +22,10 @@ package cz.lastaapps.menza.features.today.ui.screen
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -37,6 +40,7 @@ import cz.lastaapps.menza.ui.components.layout.TwoPaneLayout
 import cz.lastaapps.menza.ui.root.BackArrow
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun TodayScreen(
     onOsturak: () -> Unit,
@@ -73,13 +77,15 @@ private fun TodayContent(
     onDishSelected: (Dish) -> Unit,
     onOsturak: () -> Unit,
     modifier: Modifier = Modifier,
+    scrollState: LazyListState = rememberLazyListState(),
+    scrollGridState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
 ) {
-    val listLazyState = rememberLazyListState()
     val dishList: @Composable () -> Unit = {
         DishListScreen(
             onDishSelected = onDishSelected,
             modifier = Modifier.fillMaxSize(),
-            scrollState = listLazyState,
+            scrollState = scrollState,
+            scrollGridState = scrollGridState,
         )
     }
 

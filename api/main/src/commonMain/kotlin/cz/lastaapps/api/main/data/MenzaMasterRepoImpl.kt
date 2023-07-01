@@ -53,9 +53,9 @@ internal class MenzaMasterRepoImpl(
             .map { repo ->
                 repo.getData().map { it.toPersistentList() }
             }
-            .fold(flow { emit(persistentListOf<Menza>()) }) { acu, list ->
-                acu.combine(list) { a, b ->
-                    a.addAll(b)
+            .fold(flow { emit(persistentListOf<Menza>()) }) { acu, item ->
+                acu.combine(item) { acuList, b ->
+                    acuList.addAll(b)
                 }
             }
             .map { it.toImmutableList() }

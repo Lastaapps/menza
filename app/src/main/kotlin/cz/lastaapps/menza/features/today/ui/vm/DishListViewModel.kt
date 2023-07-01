@@ -131,14 +131,14 @@ internal class DishListViewModel(
     fun reload() {
         if (lastState().isLoading) return
         syncJob = launchJob {
-            lastState().selectedMenza?.orNull()?.let {
+            lastState().selectedMenza?.getOrNull()?.let {
                 load(it, true)
             }
         }
     }
 
     fun openWebMenu() = launchVM {
-        lastState().selectedMenza?.orNull()?.let { openMenuLink(it) }
+        lastState().selectedMenza?.getOrNull()?.let { openMenuLink(it) }
     }
 
     fun setCompactView(mode: DishListMode) = launchVM {
