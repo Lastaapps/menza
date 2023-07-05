@@ -19,20 +19,37 @@
 
 package cz.lastaapps.menza.features.settings.ui.components
 
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import androidx.compose.ui.window.Dialog
+import com.bumble.appyx.core.collections.ImmutableList
+import cz.lastaapps.menza.ui.util.WrapClick
 
-internal object SettingsTokens {
-    val titleStyle: TextStyle
-        @Composable
-        get() = MaterialTheme.typography.titleLarge
-    val subtitleStyle: TextStyle
-        @Composable
-        get() = MaterialTheme.typography.bodyMedium
+@Composable
+internal fun <T> ChooseFromDialog(
+    title: String,
+    items: ImmutableList<T>,
+    onItemSelected: (T) -> Unit,
+    onDismiss: () -> Unit,
+    toString: (T) -> String = { it.toString() },
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineSmall,
+        )
 
-    val itemPadding: Dp
-        get() = MenzaPadding.MidSmall
+        LazyColumn {
+            items(items) { item ->
+                WrapClick(
+                    onClick = { onItemSelected(item) },
+                ) {
+                    Text(text = toString(item))
+                }
+            }
+        }
+    }
 }
