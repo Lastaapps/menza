@@ -35,6 +35,7 @@ import cz.lastaapps.menza.features.settings.data.datasource.OrderSettings
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleRangeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
@@ -103,6 +104,7 @@ val settingsModule = module {
     factoryOf(::GetShowCzechUC)
     factoryOf(::OnSettingsOpenedUC)
     factoryOf(::SetImageScaleUC)
+    factoryOf(::GetImageScaleRangeUC)
     factoryOf(::SetImagesOnMeteredUC)
     factoryOf(::SetPriceTypeUC)
     factoryOf(::SetShowCzechUC)

@@ -17,13 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase
+package cz.lastaapps.menza.features.settings.ui.components
 
-import cz.lastaapps.core.domain.UCContext
-import cz.lastaapps.core.domain.UseCase
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.TextStyle
 
-class GetImageScaleRangeUC internal constructor(
-    context: UCContext,
-) : UseCase(context) {
-    operator fun invoke() = .5f..3f
+internal object SettingsTokens {
+    val titleStyle: TextStyle
+        @Composable
+        get() = MaterialTheme.typography.titleLarge
+    val subtitleStyle: TextStyle
+        @Composable
+        get() = MaterialTheme.typography.bodyMedium
 }

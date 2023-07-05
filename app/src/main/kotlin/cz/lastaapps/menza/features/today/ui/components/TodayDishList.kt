@@ -21,7 +21,14 @@ package cz.lastaapps.menza.features.today.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -32,8 +39,13 @@ import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -60,6 +72,7 @@ fun TodayDishList(
     imageScale: Float,
     isOnMetered: Boolean,
     gridSwitch: @Composable () -> Unit,
+    imageSizeSetting: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     scroll: LazyListState = rememberLazyListState(),
     pullState: PullRefreshState = rememberPullRefreshState(
@@ -83,6 +96,7 @@ fun TodayDishList(
                 isOnMetered = isOnMetered,
                 scroll = scroll,
                 gridSwitch = gridSwitch,
+                imageSizeSetting = imageSizeSetting,
                 modifier = Modifier
                     .padding(top = MenzaPadding.Smaller) // so text is not cut off
                     .fillMaxSize(),
@@ -106,6 +120,7 @@ private fun DishContent(
     isOnMetered: Boolean,
     scroll: LazyListState,
     gridSwitch: @Composable () -> Unit,
+    imageSizeSetting: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -149,6 +164,13 @@ private fun DishContent(
             item {
                 gridSwitch()
             }
+            item {
+                OutlinedCard(modifier = Modifier.padding(horizontal = MenzaPadding.MidSmall)) {
+                    Box(modifier = Modifier.padding(MenzaPadding.Medium)) {
+                        imageSizeSetting()
+                    }
+                }
+            }
         }
     }
 }
@@ -172,9 +194,9 @@ private fun DishItem(
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
         Row(
-            Modifier.padding(12.dp),
+            Modifier.padding(MenzaPadding.MidSmall),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
         ) {
 
             DishImageWithBadge(
@@ -184,7 +206,7 @@ private fun DishItem(
                 imageScale = imageScale,
                 isOnMetered = isOnMetered,
             )
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small)) {
                 DishNameRow(dish, showCzech)
                 DishInfoRow(dish, showCzech)
             }

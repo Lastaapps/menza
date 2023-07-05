@@ -19,10 +19,11 @@
 
 package cz.lastaapps.menza.features.settings.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,38 +33,55 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
+import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlin.math.roundToInt
 
 private const val imageSizeMin = .5f
 private const val imageSizeMax = 3f
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ImageSizeSetting(settingsViewModel: SettingsViewModel, modifier: Modifier = Modifier) {
-    val savedProgress = 1f //by settingsViewModel.sett.imageSize.collectAsState(0f)
-    var progress by remember(savedProgress) { mutableStateOf(savedProgress) }
+internal fun ImageSizeSetting(
+    progress: Float,
+    onProgressChanged: (Float) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var uiProgress by remember(progress) { mutableStateOf(progress) }
 
-    Column(modifier) {
-        Text(stringResource(R.string.settings_image_size_title))
+    Column(modifier = modifier) {
         Row(
-            Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
         ) {
-            Slider(
-                value = progress,
-                onValueChange = { progress = it },
-                onValueChangeFinished = { settingsViewModel.setImageSize(progress) },
-                valueRange = imageSizeMin..imageSizeMax,
-                steps = (10 * (imageSizeMax - imageSizeMin)).toInt() + -1,
+            SettingsTitle(
+                stringResource(R.string.settings_image_size_title),
                 modifier = Modifier.weight(1f),
             )
-
-            val width = with(LocalDensity.current) { 48.sp.toDp() }
-            Text(text = "${(progress * 100).roundToInt()}%", Modifier.width(width))
+            Text(
+                text = "${(uiProgress * 100).roundToInt()}%",
+                style = SettingsTokens.subtitleStyle,
+            )
         }
+        Slider(
+            value = uiProgress,
+            onValueChange = { uiProgress = it },
+            onValueChangeFinished = { onProgressChanged(uiProgress) },
+            valueRange = imageSizeMin..imageSizeMax,
+            steps = (10 * (imageSizeMax - imageSizeMin)).toInt() + -1,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
+}
+
+@Preview
+@Composable
+private fun ImageSizeSettingPreview() = PreviewWrapper {
+    ImageSizeSetting(progress = imageSizeMin, onProgressChanged = {})
+    ImageSizeSetting(progress = imageSizeMin.plus(imageSizeMax) / 2, onProgressChanged = {})
+    ImageSizeSetting(progress = imageSizeMax, onProgressChanged = {})
 }

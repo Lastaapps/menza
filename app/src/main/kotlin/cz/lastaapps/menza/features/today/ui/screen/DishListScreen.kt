@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -42,6 +41,7 @@ import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.COMPACT
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.GRID
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.HORIZONTAL
+import cz.lastaapps.menza.features.settings.ui.components.ImageSizeSetting
 import cz.lastaapps.menza.features.today.ui.components.CompactViewSwitch
 import cz.lastaapps.menza.features.today.ui.components.TodayDishGrid
 import cz.lastaapps.menza.features.today.ui.components.TodayDishHorizontal
@@ -71,6 +71,7 @@ internal fun DishListScreen(
         onRefresh = viewModel::reload,
         onNoItems = viewModel::openWebMenu,
         onViewMode = viewModel::setCompactView,
+        onImageScale = viewModel::setImageScale,
         onDishSelected = onDishSelected,
         scrollListState = scrollState,
         scrollGridState = scrollGridState,
@@ -86,10 +87,7 @@ private fun DishListEffects(
     HandleError(viewModel, hostState)
 }
 
-@OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
-    ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun DishListContent(
     state: DishListState,
@@ -97,6 +95,7 @@ private fun DishListContent(
     onRefresh: () -> Unit,
     onNoItems: () -> Unit,
     onViewMode: (mode: DishListMode) -> Unit,
+    onImageScale: (Float) -> Unit,
     onDishSelected: (Dish) -> Unit,
     scrollListState: LazyListState,
     scrollGridState: LazyStaggeredGridState,
@@ -111,6 +110,13 @@ private fun DishListContent(
             CompactViewSwitch(
                 currentMode = state.dishListMode,
                 onCompactChange = onViewMode,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+        val imageSizeSetting: @Composable () -> Unit = {
+            ImageSizeSetting(
+                progress = state.imageScale,
+                onProgressChanged = onImageScale,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -129,6 +135,7 @@ private fun DishListContent(
                     imageScale = state.imageScale,
                     isOnMetered = state.isOnMetered,
                     gridSwitch = gridSwitch,
+                    imageSizeSetting = imageSizeSetting,
                     modifier = Modifier
                         .padding(padding)
                         .fillMaxSize(),

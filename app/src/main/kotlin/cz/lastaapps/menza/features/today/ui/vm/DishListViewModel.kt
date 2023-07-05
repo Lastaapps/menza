@@ -48,6 +48,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
@@ -59,17 +60,18 @@ import org.lighthousegames.logging.logging
 
 internal class DishListViewModel(
     context: VMContext,
-    private val getSelectedMenza: GetSelectedMenzaUC,
-    private val getTodayDishList: GetTodayDishListUC,
-    private val syncTodayDishList: SyncTodayDishListUC,
-    private val getPriceType: GetPriceTypeUC,
-    private val getImagesOnMetered: GetImagesOnMeteredUC,
-    private val getImageScale: GetImageScaleUC,
-    private val getShowCzech: GetShowCzechUC,
-    private val getDishListMode: GetDishListModeUC,
-    private val setDishListMode: SetDishListModeUC,
-    private val isOnMetered: IsOnMeteredUC,
-    private val openMenuLink: OpenMenuUC,
+    private val getSelectedMenzaUC: GetSelectedMenzaUC,
+    private val getTodayDishListUC: GetTodayDishListUC,
+    private val syncTodayDishListUC: SyncTodayDishListUC,
+    private val getPriceTypeUC: GetPriceTypeUC,
+    private val getImagesOnMeteredUC: GetImagesOnMeteredUC,
+    private val getImageScaleUC: GetImageScaleUC,
+    private val setImageScaleUC: SetImageScaleUC,
+    private val getShowCzechUC: GetShowCzechUC,
+    private val getDishListModeUC: GetDishListModeUC,
+    private val setDishListModeUC: SetDishListModeUC,
+    private val isOnMeteredUC: IsOnMeteredUC,
+    private val openMenuLinkUC: OpenMenuUC,
 ) : StateViewModel<DishListState>(DishListState(), context), Appearing, ErrorHolder {
     override var hasAppeared: Boolean = false
 
@@ -79,7 +81,7 @@ internal class DishListViewModel(
 
     override fun onAppeared() = launchVM {
         launchVM {
-            getSelectedMenza().collectLatest {
+            getSelectedMenzaUC().collectLatest {
                 log.i { "Registered a new: $it" }
 
                 updateState {
@@ -94,7 +96,7 @@ internal class DishListViewModel(
                         this.launch {
                             load(it, false)
                         }
-                        getTodayDishList(it).collectLatest { items ->
+                        getTodayDishListUC(it).collectLatest { items ->
                             updateState { copy(items = items) }
                         }
                     }
@@ -102,27 +104,27 @@ internal class DishListViewModel(
             }
         }
 
-        getPriceType().onEach {
+        getPriceTypeUC().onEach {
             updateState { copy(priceType = it) }
         }.launchInVM()
 
-        getImagesOnMetered().onEach {
+        getImagesOnMeteredUC().onEach {
             updateState { copy(downloadOnMetered = it) }
         }.launchInVM()
 
-        getImageScale().onEach {
+        getImageScaleUC().onEach {
             updateState { copy(imageScale = it) }
         }.launchInVM()
 
-        getShowCzech().onEach {
+        getShowCzechUC().onEach {
             updateState { copy(showCzech = it) }
         }.launchInVM()
 
-        getDishListMode().onEach {
+        getDishListModeUC().onEach {
             updateState { copy(dishListMode = it) }
         }.launchInVM()
 
-        isOnMetered().onEach {
+        isOnMeteredUC().onEach {
             updateState { copy(isOnMetered = it) }
         }.launchInVM()
     }
@@ -138,16 +140,20 @@ internal class DishListViewModel(
     }
 
     fun openWebMenu() = launchVM {
-        lastState().selectedMenza?.getOrNull()?.let { openMenuLink(it) }
+        lastState().selectedMenza?.getOrNull()?.let { openMenuLinkUC(it) }
     }
 
     fun setCompactView(mode: DishListMode) = launchVM {
-        setDishListMode(mode)
+        setDishListModeUC(mode)
+    }
+
+    fun setImageScale(scale: Float) = launchVM {
+        setImageScaleUC(scale)
     }
 
     private suspend fun load(menza: Menza, isForced: Boolean) {
         withLoading({ copy(isLoading = it) }) {
-            when (val res = syncTodayDishList(menza, isForced = isForced).mapSync()) {
+            when (val res = syncTodayDishListUC(menza, isForced = isForced).mapSync()) {
                 is Left -> updateState { copy(error = res.value) }
                 is Right -> {}
             }

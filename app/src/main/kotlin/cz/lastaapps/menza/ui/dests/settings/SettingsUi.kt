@@ -64,7 +64,6 @@ import androidx.navigation.NavController
 import com.google.android.material.color.DynamicColors
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.ui.components.FullReloadDialog
-import cz.lastaapps.menza.features.settings.ui.components.ImageSizeSetting
 import cz.lastaapps.menza.features.settings.ui.components.InitMenzaUI
 import cz.lastaapps.menza.navigation.Dest
 import cz.lastaapps.menza.ui.dests.others.AboutUi
@@ -122,7 +121,7 @@ fun SettingsUI(
 
                 Switches(viewModel, Modifier.fillMaxWidth())
 
-                ImageSizeSetting(settingsViewModel)
+                // ImageSizeSetting(settingsViewModel)
 
                 InitMenzaUI(
                     menzaViewModel = menzaViewModel,
