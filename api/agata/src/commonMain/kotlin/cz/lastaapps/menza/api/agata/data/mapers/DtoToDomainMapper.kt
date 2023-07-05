@@ -47,7 +47,7 @@ private fun List<WeekDishDto>.toCategory() =
         .map { (_, values) ->
             val value = values.first()
             WeekDishCategory(
-                name = value.typeName,
+                name = value.typeName.trim(),
                 dishList = values.map { it.toDomain() }.toImmutableList(),
             )
         }
@@ -62,8 +62,8 @@ private fun String.parseDate(): LocalDate =
 
 private fun WeekDishDto.toDomain() =
     WeekDish(
-        name = name,
-        amount = amount,
+        name = name.trim(),
+        amount = amount?.trim(),
         priceNormal = null,
         priceDiscounted = null,
         ingredients = persistentListOf(),

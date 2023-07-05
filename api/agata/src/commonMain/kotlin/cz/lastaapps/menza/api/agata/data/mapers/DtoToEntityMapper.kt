@@ -51,7 +51,7 @@ import kotlinx.datetime.LocalTime
 internal fun SubsystemDto.toEntity() =
     SubsystemEntity(
         id = id.toLong(),
-        name = name,
+        name = name.trim(),
         opened = opened,
         supportsDaily = supportsDaily,
         supportsWeekly = supportsWeekly,
@@ -64,7 +64,7 @@ internal fun DishDto.toEntity(beConfig: AgataBEConfig) =
         subsystemId = subsystemId.toLong(),
         typeId = typeId.toLong(),
         servingPlaces = servingPlaceList,
-        amount = amount,
+        amount = amount?.trim(),
         name = name.trimDishName(),
         sideDishA = sideDishA?.trimDishName(),
         sideDishB = sideDishB?.trimDishName(),
@@ -100,16 +100,16 @@ internal fun DishTypeDto.toEntity() =
 internal fun PictogramDto.toEntity() =
     PictogramEntity(
         id = id.toLong(),
-        name = name,
+        name = name.trim(),
     )
 
 internal fun ServingPlaceDto.toEntity() =
     ServingPlaceEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
-        name = name,
-        description = description,
-        abbrev = abbrev,
+        name = name.trim(),
+        description = description.trim(),
+        abbrev = abbrev.trim(),
     )
 
 internal fun InfoDto.toEntity() =
@@ -136,10 +136,10 @@ internal fun ContactDto.toEntity() =
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
         itemOrder = order.toLong(),
-        role = role,
-        name = name,
-        phone = phone,
-        email = email,
+        role = role?.trim(),
+        name = name?.trim(),
+        phone = phone?.trim(),
+        email = email?.trim(),
     )
 
 internal fun OpenTimeDto.toEntity() =
@@ -147,10 +147,10 @@ internal fun OpenTimeDto.toEntity() =
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
         servingPlaceId = servingPlaceId.toLong(),
-        servingPlaceName = servingPlaceName,
-        servingPlaceAbbrev = servingPlaceAbbrev,
+        servingPlaceName = servingPlaceName.trim(),
+        servingPlaceAbbrev = servingPlaceAbbrev.trim(),
         servingPlaceOrder = servingPlaceOrder.toLong(),
-        description = description,
+        description = description?.trim(),
         itemOrder = order.toLong(),
         dayFrom = dayFrom?.toDayOfWeek(),
         dayTo = (dayTo ?: dayFrom)?.toDayOfWeek(),
@@ -174,7 +174,7 @@ internal fun LinkDto.toEntity() =
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
         link = link,
-        description = description,
+        description = description.trim(),
     )
 
 internal fun AddressDto.toEntity() = run {
@@ -182,7 +182,7 @@ internal fun AddressDto.toEntity() = run {
     AddressEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
-        address = address,
+        address = address.trim(),
         lat = parsed.lat.toDouble(),
         long = parsed.long.toDouble(),
     )
@@ -204,10 +204,10 @@ internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
         groupNameEn = groupNameEn.myCapitalize(),
         groupOrder = groupOrder.toLong(),
         itemOrder = order.toLong(),
-        amountCs = amountCs,
-        amountEn = amountEn,
-        nameCs = nameCs,
-        nameEn = nameEn,
+        amountCs = amountCs?.trim(),
+        amountEn = amountEn?.trim(),
+        nameCs = nameCs.trim(),
+        nameEn = nameEn.trim(),
         priceNormal = price.toDouble(),
         priceStudent = priceStudent.toDouble(),
         allergens = allergens,

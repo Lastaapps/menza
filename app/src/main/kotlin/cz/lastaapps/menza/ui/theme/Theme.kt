@@ -22,11 +22,13 @@ package cz.lastaapps.menza.ui.theme
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -94,8 +96,11 @@ fun AppTheme(
         colorScheme = colorScheme,
         // typography = AppTypography,
         shapes = Shapes,
-        content = content,
-    )
+    ) {
+        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyMedium) {
+            content()
+        }
+    }
 }
 
 private val Shapes = Shapes(
