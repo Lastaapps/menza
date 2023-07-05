@@ -47,7 +47,9 @@ import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetShowCzechUC
+import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaModeUI
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaUC
+import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetPreferredMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetInitialMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetLatestMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetPreferredMenzaUC
@@ -65,6 +67,8 @@ import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetAppThemeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetDarkModeUC
 import cz.lastaapps.menza.features.settings.ui.vm.AppThemeViewModel
 import cz.lastaapps.menza.features.settings.ui.vm.ReorderMenzaViewModel
+import cz.lastaapps.menza.features.settings.ui.vm.SettingsViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -81,6 +85,15 @@ val settingsModule = module {
     factoryOf(::DefaultsProviderImpl) bind DefaultsProvider::class
 
     viewModelOf(::AppThemeViewModel)
+    viewModel {
+        // @formatter:off
+        SettingsViewModel(
+            get(), get(), get(), get(), get(),
+            get(), get(), get(), get(), get(),
+            get(), get(), get(),
+        )
+        // @formatter:on
+    }
 
     // Theme
     factoryOf(::GetAppThemeUC)
@@ -91,10 +104,12 @@ val settingsModule = module {
     factoryOf(::SetDarkModeUC)
 
     // Initial
+    factoryOf(::GetInitialMenzaModeUI)
     factoryOf(::GetInitialMenzaUC)
     factoryOf(::SetInitialMenzaUC)
     factoryOf(::SetLatestMenzaUC)
     factoryOf(::SetPreferredMenzaUC)
+    factoryOf(::GetPreferredMenzaUC)
 
     // Others
     factoryOf(::GetImageScaleUC)

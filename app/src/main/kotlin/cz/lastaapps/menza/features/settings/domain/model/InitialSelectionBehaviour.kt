@@ -17,18 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase.initialmenza
+package cz.lastaapps.menza.features.settings.domain.model
 
-import cz.lastaapps.core.domain.UCContext
-import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
-import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
+import kotlinx.collections.immutable.persistentListOf
 
-internal class SetInitialMenzaUC internal constructor(
-    context: UCContext,
-    private val repo: MainSettingsRepo,
-) : UseCase(context) {
-    suspend operator fun invoke(mode: InitialSelectionBehaviour) = launch {
-        repo.storeInitialMenzaMode(mode)
+
+internal sealed class InitialSelectionBehaviour private constructor(val id: Int) {
+    data object Ask : InitialSelectionBehaviour(0)
+    data object Remember : InitialSelectionBehaviour(1)
+    data object Specific : InitialSelectionBehaviour(2)
+
+    companion object {
+        val entries by lazy { persistentListOf(Ask, Remember, Specific) }
     }
 }

@@ -22,6 +22,7 @@ package cz.lastaapps.menza.ui.theme
 import androidx.compose.ui.unit.dp
 
 object MenzaPadding {
+    val None = 0.dp
     val Tiny = 2.dp
     val Smaller = 4.dp
     val Small = 8.dp
@@ -32,6 +33,7 @@ object MenzaPadding {
 
     object More {
         val Screen = MidSmall
+        val Dialog = Medium
         val ScrollBottomSpace = 64.dp
     }
 }

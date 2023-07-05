@@ -75,6 +75,7 @@
     <string name="whats_new_item_label">Version %s</string>
 
     <string name="report_title">How do you want to report the error?</string>
+    <string name="report_matrix">Matrix</string>
     <string name="report_telegram">Telegram</string>
     <string name="report_github">GitHub Issue</string>
     <string name="report_facebook">Facebook Messenger</string>
@@ -102,12 +103,13 @@
     <string name="crash_status_reported">Reported, thanks</string>
 
     <string name="settings_title">Settings</string>
-    <string name="settings_switch_system_theme">Use system dynamic theme</string>
-    <string name="settings_switch_price">Show discounted student prices</string>
-    <string name="settings_switch_metered">Download images on metered networks (~0.7 MB each)</string>
+    <string name="settings_switch_price">Discounted prices</string>
+    <string name="settings_switch_metered_title">Images on metered</string>
+    <string name="settings_switch_metered_subtitle">Each image takes ~0.7 MB</string>
     <string name="settings_image_size_title">Image scaling</string>
     <string name="settings_button_privacy_policy">Privacy policy</string>
-    <string name="settings_button_about">About</string>
+    <string name="settings_about_title">About</string>
+    <string name="settings_about_subtitle">Ošťurák, source-code, contact, …</string>
     <string name="settings_button_rate">Rate us!</string>
     <string name="settings_button_share">Share</string>
     <string name="settings_button_share_text">
@@ -116,13 +118,13 @@
     </string>
     <string name="settings_button_reload">Full cache refresh</string>
     <string name="settings_button_report">Report an error</string>
-    <string name="settings_button_crashes">Show app crashes</string>
+    <string name="settings_button_crashes">App crashes</string>
+    <string name="settings_init_menza_title">Menza at startup</string>
     <string name="settings_init_menza_ask">Always ask</string>
-    <string name="settings_init_menza_remember">Remember latest</string>
-    <string name="settings_init_menza_specific">Choose one</string>
-    <string name="settings_init_menza_behaviour">Selected menza at startup behaviour</string>
+    <string name="settings_init_menza_remember">Remember latest menza</string>
+    <string name="settings_init_menza_specific">Let me choose</string>
     <string name="settings_init_menza_select_title">Menza to open</string>
-    <string name="settings_init_menza_select_placeholder">Select a menza</string>
+    <string name="settings_init_menza_select_placeholder">None yet</string>
     <string name="settings_reload_title">Full data reload</string>
     <string name="settings_reload_text">
         This operation clears local data like menza\'s name, location, contacts, etc.
@@ -133,7 +135,7 @@
         You can open it right away.
     </string>
     <string name="settings_reload_cancel">Cancel</string>
-    <string name="settings_reload_ok">Close app and reload</string>
+    <string name="settings_reload_ok">Execute order 66 💀</string>
     <string name="settings_theme_title">Choose app theme</string>
     <string name="settings_theme_dark_title">Dark mode</string>
     <string name="settings_theme_dark_light">Light</string>

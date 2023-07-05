@@ -50,10 +50,11 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 sealed class ReportMode {
-    object Telegram : ReportMode()
-    object GitHub : ReportMode()
-    object Facebook : ReportMode()
-    object Email : ReportMode()
+    data object Matrix : ReportMode()
+    data object Telegram : ReportMode()
+    data object GitHub : ReportMode()
+    data object Facebook : ReportMode()
+    data object Email : ReportMode()
 }
 
 @Composable
@@ -88,6 +89,22 @@ fun ReportDialog(
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center,
                 )
+                Button(
+                    onClick = { onModeSelected(ReportMode.Matrix) },
+                    Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(
+                            painterResource(R.drawable.ic_matrix),
+                            null,
+                            Modifier.size(24.dp)
+                        )
+                        Text(stringResource(cz.lastaapps.menza.R.string.report_matrix))
+                    }
+                }
                 Button(
                     onClick = { onModeSelected(ReportMode.Telegram) },
                     Modifier.fillMaxWidth()
@@ -196,6 +213,7 @@ private fun doSend(context: Context, mode: ReportMode, text: String) {
     copyToClipboard(context, text)
 
     when (mode) {
+        ReportMode.Matrix -> sendMatrix(context, text)
         ReportMode.Telegram -> sendTelegram(context, text)
         ReportMode.GitHub -> sendGitHub(context, text)
         ReportMode.Facebook -> sendFacebook(context, text)
@@ -224,6 +242,18 @@ private fun copyToClipboard(context: Context, text: String) {
     )
     clipboard.setPrimaryClip(clip)
     Toast.makeText(context, cz.lastaapps.menza.R.string.report_clipboard, Toast.LENGTH_LONG).show()
+}
+
+private fun sendMatrix(context: Context, @Suppress("UNUSED_PARAMETER") text: String) {
+    val intent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://matrix.to/#/#lastaapps_menza:matrix.org"),
+    )
+    try {
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }
 
 private fun sendTelegram(context: Context, text: String) {

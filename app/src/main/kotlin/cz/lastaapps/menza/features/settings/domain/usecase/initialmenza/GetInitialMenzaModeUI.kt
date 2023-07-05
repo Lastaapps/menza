@@ -22,13 +22,10 @@ package cz.lastaapps.menza.features.settings.domain.usecase.initialmenza
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
-import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 
-internal class SetInitialMenzaUC internal constructor(
+internal class GetInitialMenzaModeUI internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(mode: InitialSelectionBehaviour) = launch {
-        repo.storeInitialMenzaMode(mode)
-    }
+    operator fun invoke() = repo.getInitialMenzaMode()
 }

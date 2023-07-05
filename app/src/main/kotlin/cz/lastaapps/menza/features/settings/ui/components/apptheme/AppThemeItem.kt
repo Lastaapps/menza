@@ -42,16 +42,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
-import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
-import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.CTU
-import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.System
-import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.ui.util.name
 import cz.lastaapps.menza.ui.theme.AppTheme
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 
@@ -96,17 +91,6 @@ internal fun AppThemeItem(
 }
 
 @Composable
-private fun AppThemeType.name() =
-    stringResource(
-        when (this) {
-            System -> R.string.settings_theme_app_system
-            Agata -> R.string.settings_theme_app_agata
-            CTU -> R.string.settings_theme_app_ctu
-            Uwu -> R.string.settings_theme_app_uwu
-        }
-    )
-
-@Composable
 private fun ColorPreview(modifier: Modifier = Modifier) {
     val primaryColor = MaterialTheme.colorScheme.primary
     val borderColor = MaterialTheme.colorScheme.inversePrimary
@@ -132,7 +116,7 @@ private object AppThemeItem {
 private fun ThemeItemPreview() {
     Column(verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium)) {
         var selected by remember { mutableStateOf(1) }
-        AppThemeType.values().forEachIndexed { index, theme ->
+        AppThemeType.entries.forEachIndexed { index, theme ->
             AppThemeItem(theme, DarkMode.Light, selected != index, { selected = index })
         }
     }

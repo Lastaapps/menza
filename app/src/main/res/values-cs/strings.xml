@@ -65,6 +65,7 @@
     <string name="whats_new_subtitle">Současná verze: %s</string>
     <string name="whats_new_item_label">Verze %s</string>
     <string name="report_title">Jakým způsobem chcete nahlásit chybu?</string>
+    <string name="report_matrix">Matrix</string>
     <string name="report_telegram">Telegram</string>
     <string name="report_github">GitHub Issue</string>
     <string name="report_facebook">Facebook Messenger</string>
@@ -90,12 +91,13 @@
     <string name="crash_status_dismissed">Skryto</string>
     <string name="crash_status_reported">Nahlášeno, děkujeme</string>
     <string name="settings_title">Nastavení</string>
-    <string name="settings_switch_system_theme">Použít systémový dynamický vzhled</string>
-    <string name="settings_switch_price">Zobrazit zlevněné studentské ceny</string>
-    <string name="settings_switch_metered">Stahovat obrázky na sítích s měřeným objemem dat (každý ~0.7 MB)</string>
+    <string name="settings_switch_price">Dotované ceny</string>
+    <string name="settings_switch_metered_title">Obrázky na datech</string>
+    <string name="settings_switch_metered_subtitle">Každý obrázek spotřebuje ~0.7 MB</string>
     <string name="settings_image_size_title">Škálování obrázků</string>
     <string name="settings_button_privacy_policy">Zásady ochrany osobních údajů</string>
-    <string name="settings_button_about">O aplikaci</string>
+    <string name="settings_about_title">O aplikaci</string>
+    <string name="settings_about_subtitle">Ošťurák, zdroják, kontakty, …</string>
     <string name="settings_button_rate">Ohodnoťte nás!</string>
     <string name="settings_button_share">Sdílet</string>
     <string name="settings_button_share_text">
@@ -105,12 +107,12 @@
     <string name="settings_button_reload">Kompletní přenačtení dat</string>
     <string name="settings_button_report">Nahlásit chybu</string>
     <string name="settings_button_crashes">Zobrazit pády aplikace</string>
+    <string name="settings_init_menza_title">Menza po spuštění</string>
     <string name="settings_init_menza_ask">Vždy se zeptat</string>
-    <string name="settings_init_menza_remember">Zapamatovat si poslední</string>
-    <string name="settings_init_menza_specific">Vybrat jednu</string>
-    <string name="settings_init_menza_behaviour">Vybraná menza po spuštění aplikace</string>
+    <string name="settings_init_menza_remember">Pamatovat si poslední</string>
+    <string name="settings_init_menza_specific">Vyberu si sám</string>
     <string name="settings_init_menza_select_title">Menza k otevření</string>
-    <string name="settings_init_menza_select_placeholder">Vyberte menzu</string>
+    <string name="settings_init_menza_select_placeholder">Zatím prázdno</string>
     <string name="settings_reload_title">Kompletní přenačtení dat</string>
     <string name="settings_reload_text">
         Tato operace smaže data typu jména, adresy, kontaky a podobně menz.
@@ -120,7 +122,7 @@
         Doporučejeme data stáhnout rovnou - hned znovu otevřít aplikaci.
     </string>
     <string name="settings_reload_cancel">Zrušit</string>
-    <string name="settings_reload_ok">Zavřít aplikaci a znovunačíst</string>
+    <string name="settings_reload_ok">Provést rozkaz 66 💀</string>
     <string name="settings_theme_title">Vzhled aplikace</string>
     <string name="settings_theme_dark_title">Tmavý režim</string>
     <string name="settings_theme_dark_light">Světlý</string>

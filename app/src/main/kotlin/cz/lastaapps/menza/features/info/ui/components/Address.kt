@@ -132,7 +132,7 @@ private fun openMap(context: Context, location: LatLong, onError: () -> Unit) {
     val intent = with(location) {
         Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("geo:$long,$lat?g=$long,$lat&z=19")
+            Uri.parse("geo:$lat,$long?g=$lat,$long&z=19")
         )
     }
     try {

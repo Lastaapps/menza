@@ -23,14 +23,14 @@ import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
-import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
+import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import kotlinx.coroutines.flow.Flow
 
 internal interface MainSettingsRepo {
-    suspend fun storeInitialMenzaMode(mode: InitialMenza)
-    fun getInitialMenzaMode(): Flow<InitialMenza>
+    suspend fun storeInitialMenzaMode(mode: InitialSelectionBehaviour)
+    fun getInitialMenzaMode(): Flow<InitialSelectionBehaviour>
 
     suspend fun storeLatestMenza(type: MenzaType)
     fun getLatestMenza(): Flow<MenzaType?>

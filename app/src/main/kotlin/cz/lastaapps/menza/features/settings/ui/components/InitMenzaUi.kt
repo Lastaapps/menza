@@ -21,9 +21,19 @@ package cz.lastaapps.menza.features.settings.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import cz.lastaapps.entity.menza.Menza
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
+import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
 import cz.lastaapps.menza.ui.layout.menza.MenzaViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -82,16 +92,16 @@ fun InitMenzaUI(
 private fun InitMenzaRow(
     expanded: Boolean,
     onExpanded: (Boolean) -> Unit,
-    mode: InitialMenza,
-    onMode: (InitialMenza) -> Unit,
+    mode: InitialSelectionBehaviour,
+    onMode: (InitialSelectionBehaviour) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val options = remember(context) {
         persistentListOf(
-            InitialMenza.Ask to context.getString(R.string.settings_init_menza_ask),
-            InitialMenza.Remember to context.getString(R.string.settings_init_menza_remember),
-            InitialMenza.Specific to context.getString(R.string.settings_init_menza_specific),
+            InitialSelectionBehaviour.Ask to context.getString(R.string.settings_init_menza_ask),
+            InitialSelectionBehaviour.Remember to context.getString(R.string.settings_init_menza_remember),
+            InitialSelectionBehaviour.Specific to context.getString(R.string.settings_init_menza_specific),
         )
     }
 
@@ -103,7 +113,7 @@ private fun InitMenzaRow(
             readOnly = true,
             value = options.first { it.first == mode }.second,
             onValueChange = { },
-            label = { Text(stringResource(R.string.settings_init_menza_behaviour)) },
+            label = { Text(stringResource(R.string.settings_init_menza_title)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
             modifier = modifier.menuAnchor(),

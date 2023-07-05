@@ -22,51 +22,43 @@ package cz.lastaapps.menza.features.settings.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.ui.components.MenzaDialog
 
 @Composable
 fun FullReloadDialog(
-    shown: Boolean,
     onDismissRequest: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
-    if (shown)
-        Dialog(onDismissRequest = onDismissRequest) {
-            Surface(shape = MaterialTheme.shapes.extraLarge) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        stringResource(R.string.settings_reload_title),
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                    Text(stringResource(R.string.settings_reload_text))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        TextButton(onClick = onDismissRequest) {
-                            Text(stringResource(R.string.settings_reload_cancel))
-                        }
-                        Button(onClick = {
-                            onConfirm()
-                            onDismissRequest()
-                        }) {
-                            Text(stringResource(R.string.settings_reload_ok))
-                        }
-                    }
+    MenzaDialog(onDismissRequest = onDismissRequest) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                stringResource(R.string.settings_reload_title),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(stringResource(R.string.settings_reload_text))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextButton(onClick = onDismissRequest) {
+                    Text(stringResource(R.string.settings_reload_cancel))
+                }
+                Button(onClick = {
+                    onConfirm()
+                    onDismissRequest()
+                }) {
+                    Text(stringResource(R.string.settings_reload_ok))
                 }
             }
         }
+    }
 }

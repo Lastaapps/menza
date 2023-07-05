@@ -29,6 +29,6 @@ class SetPreferredMenzaUC internal constructor(
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
     suspend operator fun invoke(menza: MenzaType) = launch {
-        repo.storeLatestMenza(menza)
+        repo.storePreferredMenza(menza)
     }
 }

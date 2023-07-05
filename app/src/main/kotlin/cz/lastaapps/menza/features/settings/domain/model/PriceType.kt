@@ -20,7 +20,13 @@
 package cz.lastaapps.menza.features.settings.domain.model
 
 sealed class PriceType(val id: Int) {
-    object Unset : PriceType(-1)
-    object Discounted : PriceType(0)
-    object Normal : PriceType(1)
+    data object Unset : PriceType(-1)
+    data object Discounted : PriceType(0)
+    data object Normal : PriceType(1)
+
+    fun other() = when (this) {
+        Discounted -> Normal
+        Normal -> Discounted
+        Unset -> Discounted
+    }
 }

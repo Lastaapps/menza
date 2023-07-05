@@ -22,6 +22,7 @@ package cz.lastaapps.menza.features.settings.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
@@ -84,7 +85,7 @@ private fun SettingsLabels(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
     ) {
         SettingsTitle(text = title)
         SettingsSubTitle(text = subtitle)
@@ -99,9 +100,14 @@ private fun SettingsItemPreview() = PreviewWrapper {
         subtitle = "This is a description, idk what more to add...",
         onClick = {},
     )
+    SettingsItem(
+        title = "Title title",
+        subtitle = "This is a description, idk what more to add let's make it even longer so we can wrap.",
+        onClick = {},
+    )
     SettingsSwitch(
         title = "Title title",
-        subtitle = "This is a description, idk what more to add...",
+        subtitle = "Turn me on, baby",
         isChecked = true,
         onChecked = {},
     )

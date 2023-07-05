@@ -26,9 +26,13 @@ import coil.annotation.ExperimentalCoilApi
 import coil.imageLoader
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
-import cz.lastaapps.menza.features.settings.domain.model.InitialMenza
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.storage.repo.*
+import cz.lastaapps.storage.repo.AllergenRepo
+import cz.lastaapps.storage.repo.ContactsRepo
+import cz.lastaapps.storage.repo.LocationRepo
+import cz.lastaapps.storage.repo.MenzaRepo
+import cz.lastaapps.storage.repo.MessagesRepo
+import cz.lastaapps.storage.repo.OpeningHoursRepo
 import kotlin.system.exitProcess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,12 +69,6 @@ class SettingsViewModel constructor(
     fun setPriceType(type: PriceType) {
         viewModelScope.launch {
 //            sett.setPriceType(type)
-        }
-    }
-
-    fun setInitMenza(mode: InitialMenza) {
-        viewModelScope.launch {
-//            sett.setInitialMenza(mode)
         }
     }
 

@@ -22,9 +22,9 @@ package cz.lastaapps.menza.features.settings.domain.usecase.initialmenza
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
-import cz.lastaapps.menza.features.settings.domain.model.InitialMenza.Ask
-import cz.lastaapps.menza.features.settings.domain.model.InitialMenza.Remember
-import cz.lastaapps.menza.features.settings.domain.model.InitialMenza.Specific
+import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour.Ask
+import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour.Remember
+import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour.Specific
 import kotlinx.coroutines.flow.combine
 
 class GetInitialMenzaUC internal constructor(

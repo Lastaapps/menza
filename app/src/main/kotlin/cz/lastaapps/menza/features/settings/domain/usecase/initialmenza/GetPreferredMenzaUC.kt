@@ -17,11 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.model
+package cz.lastaapps.menza.features.settings.domain.usecase.initialmenza
 
+import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
+import kotlinx.coroutines.flow.combine
 
-sealed class InitialMenza private constructor(val id: Int) {
-    object Ask : InitialMenza(0)
-    object Remember : InitialMenza(1)
-    object Specific : InitialMenza(2)
+internal class GetPreferredMenzaUC internal constructor(
+    context: UCContext,
+    private val getMenzaListUC: GetMenzaListUC,
+    private val repo: MainSettingsRepo,
+) : UseCase(context) {
+    suspend operator fun invoke() = launch {
+        combine(
+            getMenzaListUC(),
+            repo.getPreferredMenza()
+        ) { list, preferred ->
+            list.firstOrNull { it.type == preferred }
+        }
+    }
 }
