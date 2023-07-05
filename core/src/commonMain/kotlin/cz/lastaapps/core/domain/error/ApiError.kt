@@ -29,6 +29,8 @@ sealed interface ApiError : MenzaError.Logic {
 
         data object Unavailable : SyncError
 
+        data object Closed : SyncError
+
         @JvmInline
         value class Problem(val errors: Nel<MenzaError>) : SyncError
     }

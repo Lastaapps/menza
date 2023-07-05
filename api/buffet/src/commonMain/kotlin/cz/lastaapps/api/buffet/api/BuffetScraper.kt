@@ -30,6 +30,7 @@ import arrow.core.toNonEmptyListOrNull
 import cz.lastaapps.api.buffet.data.model.DishDayDto
 import cz.lastaapps.api.buffet.data.model.DishDto
 import cz.lastaapps.core.domain.Outcome
+import cz.lastaapps.core.domain.error.ApiError.SyncError
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.ParsingError
 import kotlinx.collections.immutable.toPersistentList
@@ -99,8 +100,13 @@ internal class BuffetScraperImpl : BuffetScraper {
                     )
                 }
         }.mapLeft {
-            log.e(it) { "Parsing date range failed" }
-            ParsingError.Buffet.DateRangeCannotBeParsed
+            if (this@matchDate.contains("zavřeno", ignoreCase = true)) {
+                log.e(it) { "Buffet is closed" }
+                SyncError.Closed
+            } else {
+                log.e(it) { "Parsing date range failed" }
+                ParsingError.Buffet.DateRangeCannotBeParsed
+            }
         }
 
     private fun String.matchMainPart(): Outcome<ParsingRes<Pair<List<DishDayDto>, List<DishDayDto>>>> =

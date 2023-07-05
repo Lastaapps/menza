@@ -28,7 +28,8 @@ import cz.lastaapps.api.core.domain.sync.SyncResult.Skipped
 import cz.lastaapps.api.core.domain.sync.SyncResult.Unavailable
 import cz.lastaapps.api.core.domain.sync.SyncResult.Updated
 import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.domain.error.ApiError
+import cz.lastaapps.core.domain.error.ApiError.SyncError
+import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
 import cz.lastaapps.core.domain.error.MenzaError
 
 typealias SyncOutcome = Outcome<SyncResult>
@@ -44,8 +45,15 @@ sealed interface SyncResult {
 
 fun SyncOutcome.mapSync() = map {
     when (it) {
-        is Problem -> ApiError.SyncError.Problem(it.errors).left()
-        Unavailable -> ApiError.SyncError.Unavailable.left()
+        is Problem -> {
+            when (it.errors.first()) {
+                is SyncError.Closed -> SyncError.Closed
+                is WeekNotAvailable -> WeekNotAvailable
+                else -> SyncError.Problem(it.errors)
+            }.left()
+        }
+
+        Unavailable -> SyncError.Unavailable.left()
         Skipped -> it.right()
         Updated -> it.right()
     }

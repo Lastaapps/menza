@@ -69,7 +69,7 @@ internal class BuffetApiImpl(
 
     private suspend fun getPageText() =
         client
-            .get("http://studentcatering.cz/jidelni-listek/")
+            .get("https://studentcatering.cz/jidelni-listek/")
             .bodyAsText()
             .replace("&#8222;", "„")
             .replace("&#8220;", "“")

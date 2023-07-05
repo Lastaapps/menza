@@ -30,6 +30,7 @@
     <string name="error_api_week_not_available">Week menu not supported 🤷</string>
     <string name="error_api_module_unawailable">This menza does not support this module 🤷</string>
     <string name="error_api_incomplete_data">Data may be incomplete 🤷</string>
+    <string name="error_api_menza_cloned">Menza closed today 💔</string>
     <string name="error_info_contacts_no_app_dial">No dial app installed</string>
     <string name="error_info_contacts_no_app_email">No email app installed</string>
     <string name="error_info_contacts_no_app_contact">No contacts app installed</string>

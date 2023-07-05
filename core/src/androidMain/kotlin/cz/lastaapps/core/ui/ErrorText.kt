@@ -21,12 +21,14 @@ package cz.lastaapps.core.ui
 
 import androidx.annotation.StringRes
 import cz.lastaapps.core.R
+import cz.lastaapps.core.R.string
 import cz.lastaapps.core.domain.AppText
 import cz.lastaapps.core.domain.AppText.Formatted
 import cz.lastaapps.core.domain.AppText.Resource
 import cz.lastaapps.core.domain.AppText.Rich
 import cz.lastaapps.core.domain.error.ApiError
 import cz.lastaapps.core.domain.error.ApiError.SyncError
+import cz.lastaapps.core.domain.error.ApiError.SyncError.Closed
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Problem
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Unavailable
 import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
@@ -91,8 +93,9 @@ val ApiError.text: AppText
         WeekNotAvailable -> E(R.string.error_api_week_not_available)
         is SyncError ->
             when (this) {
-                is Problem -> E(R.string.error_api_incomplete_data)
-                Unavailable -> E(R.string.error_api_module_unawailable)
+                is Problem -> E(string.error_api_incomplete_data)
+                Unavailable -> E(string.error_api_module_unawailable)
+                Closed -> E(R.string.error_api_menza_cloned)
             }
     }
 

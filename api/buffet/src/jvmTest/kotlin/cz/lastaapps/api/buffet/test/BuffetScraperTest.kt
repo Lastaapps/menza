@@ -25,12 +25,14 @@ import arrow.core.Nel
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.flatten
+import arrow.core.left
 import cz.lastaapps.api.buffet.api.BuffetApi
 import cz.lastaapps.api.buffet.api.BuffetApiImpl
 import cz.lastaapps.api.buffet.api.BuffetScraperImpl
 import cz.lastaapps.api.buffet.data.model.DishDayDto
 import cz.lastaapps.api.buffet.data.model.WebContentDto
 import cz.lastaapps.core.domain.Outcome
+import cz.lastaapps.core.domain.error.ApiError.SyncError
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import io.kotest.core.spec.style.StringSpec
@@ -233,6 +235,16 @@ class BuffetScraperTest : StringSpec({
                 "mleté maso", "směs koření", "trojobal"
             )
         }
+    }
+
+    "Scrape summer" {
+        val log = logging("summer")
+        val html = loadPage("summer.html")
+        val scraper = scraper()
+        val date = scraper.matchValidity(html)
+
+        log.i { "Got $date" }
+        date shouldBe SyncError.Closed.left()
     }
 })
 
