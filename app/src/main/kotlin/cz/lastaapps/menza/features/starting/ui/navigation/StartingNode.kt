@@ -34,7 +34,8 @@ import com.bumble.appyx.navmodel.spotlight.Spotlight
 import com.bumble.appyx.navmodel.spotlight.activeIndex
 import com.bumble.appyx.navmodel.spotlight.operation.next
 import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightSlider
-import cz.lastaapps.menza.features.settings.ui.nodes.ChooseAppThemeNode
+import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialogDest
+import cz.lastaapps.menza.features.settings.ui.nodes.AppThemeNode
 import cz.lastaapps.menza.features.settings.ui.nodes.ReorderMenzaNode
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.AllSetNav
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.ChoosePriceNav
@@ -45,7 +46,6 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.Policy
 import cz.lastaapps.menza.features.starting.ui.node.AllSetNode
 import cz.lastaapps.menza.features.starting.ui.node.DownloadNode
 import cz.lastaapps.menza.features.starting.ui.node.PriceTypeNode
-import cz.lastaapps.menza.features.starting.ui.screen.PrivacyDialogDest
 import kotlinx.coroutines.flow.first
 
 class StartingNode(
@@ -66,7 +66,7 @@ class StartingNode(
         return when (navTarget) {
             PolicyBackgroundNav -> node(buildContext) {}
             DownloadDataNav -> DownloadNode(buildContext, onNext)
-            ChooseThemeNav -> ChooseAppThemeNode(buildContext, onNext)
+            ChooseThemeNav -> AppThemeNode(buildContext, onNext)
             ChoosePriceNav -> PriceTypeNode(buildContext, onNext)
             OrderMenzaListNav -> ReorderMenzaNode(buildContext, onNext)
             AllSetNav -> AllSetNode(buildContext, onDone)

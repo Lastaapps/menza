@@ -17,23 +17,27 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.other.ui.node
+package cz.lastaapps.menza.features.other.util
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialog
+import android.content.Context
+import android.os.Build
+import android.os.LocaleList
+import androidx.annotation.RequiresApi
+import java.util.Locale
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentListOf
 
-class PrivacyNode(
-    buildContext: BuildContext,
-    private val onDismiss: () -> Unit,
-) : Node(buildContext) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        Box(modifier)
+@Suppress("DEPRECATION")
+fun Context.getLocales(): ImmutableList<Locale> {
+    val config = resources.configuration
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        config.locales.toList()
+    } else persistentListOf(config.locale)
+}
 
-        PrivacyDialog(onDismissRequest = onDismiss, showAccept = false, onAccept = onDismiss)
-    }
+@RequiresApi(Build.VERSION_CODES.N)
+private fun LocaleList.toList(): ImmutableList<Locale> = persistentListOf<Locale>().mutate { list ->
+    for (i in 0 until size())
+        list += get(i)
 }

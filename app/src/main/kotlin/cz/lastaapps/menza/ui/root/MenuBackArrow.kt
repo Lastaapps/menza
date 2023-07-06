@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,7 +23,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateListOf
-import cz.lastaapps.menza.ui.root.locals.LocalMenuBackArrow
+import cz.lastaapps.menza.ui.locals.LocalMenuBackArrow
 
 class MenuBackArrow {
     private val actions = mutableStateListOf<() -> Unit>()

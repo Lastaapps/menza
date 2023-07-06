@@ -48,7 +48,7 @@ import cz.lastaapps.menza.features.today.ui.components.TodayDishHorizontal
 import cz.lastaapps.menza.features.today.ui.components.TodayDishList
 import cz.lastaapps.menza.features.today.ui.vm.DishListState
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
-import cz.lastaapps.menza.ui.HandleError
+import cz.lastaapps.menza.ui.util.HandleError
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)

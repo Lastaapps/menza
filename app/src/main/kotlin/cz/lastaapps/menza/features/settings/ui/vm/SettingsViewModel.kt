@@ -107,6 +107,24 @@ internal class SettingsViewModel(
         setPreferredMenzaUC(menza.type)
     }
 
+    fun fullAppReload() {
+        TODO("Implement me!!!")
+//        listOf(
+//            allergenRepo,
+//            locationRepo,
+//            messagesRepo,
+//            menzaRepo,
+//            contactsRepo,
+//            openingHoursRepo
+//        ).forEach {
+//            it.clearData()
+//        }
+//        app.imageLoader.diskCache?.clear()
+//
+//        withContext(Dispatchers.Main) {
+//            exitProcess(0)
+//        }
+    }
 }
 
 internal data class SettingsState(

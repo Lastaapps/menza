@@ -57,7 +57,6 @@ class App : Application(), ImageLoaderFactory {
                 with(OkHttpClient.Builder()) {
                     connectTimeout(5, TimeUnit.SECONDS)
                     //readTimeout(10, TimeUnit.SECONDS)
-                    addNetworkInterceptor(CacheHeaderInterceptor)
                     retryOnConnectionFailure(false)
                     build()
                 }

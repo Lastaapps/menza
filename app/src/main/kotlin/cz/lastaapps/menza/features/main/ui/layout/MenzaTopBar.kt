@@ -21,15 +21,32 @@ package cz.lastaapps.menza.features.main.ui.layout
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.*
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -44,9 +61,9 @@ import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.LicenseNotices
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.Osturak
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.PrivacyPolicy
 import cz.lastaapps.menza.ui.components.AppIcon
+import cz.lastaapps.menza.ui.locals.LocalMenuBackArrow
+import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.root.MenuBackArrow
-import cz.lastaapps.menza.ui.root.locals.LocalMenuBackArrow
-import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 import kotlinx.coroutines.launch
 

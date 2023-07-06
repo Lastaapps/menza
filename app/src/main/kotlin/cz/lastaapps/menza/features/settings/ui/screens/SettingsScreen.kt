@@ -28,8 +28,9 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -40,7 +41,6 @@ import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -62,6 +62,8 @@ import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.R.string
+import cz.lastaapps.menza.features.other.ui.dialog.ReportDialog
+import cz.lastaapps.menza.features.other.ui.dialog.sendReport
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
@@ -70,11 +72,8 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.ui.components.FullReloadDialog
 import cz.lastaapps.menza.features.settings.ui.components.SettingsItem
 import cz.lastaapps.menza.features.settings.ui.components.SettingsSwitch
-import cz.lastaapps.menza.features.settings.ui.components.SettingsTokens
 import cz.lastaapps.menza.features.settings.ui.util.name
 import cz.lastaapps.menza.ui.components.ChooseFromDialog
-import cz.lastaapps.menza.ui.dests.others.ReportDialog
-import cz.lastaapps.menza.ui.dests.others.sendReport
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlinx.collections.immutable.ImmutableList
@@ -107,11 +106,11 @@ internal fun SettingsScreen(
         verticalArrangement = Arrangement.spacedBy(MenzaPadding.None),
     ) {
 
-        Text(
-            text = stringResource(id = R.string.settings_title),
-            style = MaterialTheme.typography.displaySmall,
-            modifier = Modifier.padding(horizontal = SettingsTokens.itemPadding),
-        )
+//        Text(
+//            text = stringResource(id = R.string.settings_title),
+//            style = MaterialTheme.typography.displaySmall,
+//            modifier = Modifier.padding(horizontal = SettingsTokens.itemPadding),
+//        )
 
         // App theme
         SettingsItem(
@@ -157,6 +156,8 @@ internal fun SettingsScreen(
                 onClick = onAboutClicked,
             )
         }
+
+        Spacer(Modifier.height(MenzaPadding.Medium))
 
         Buttons(
             onPrivacyPolicy = onPrivacyPolicy,

@@ -17,23 +17,21 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.other.ui.node
+package cz.lastaapps.menza.ui.locals
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialog
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 
-class PrivacyNode(
-    buildContext: BuildContext,
-    private val onDismiss: () -> Unit,
-) : Node(buildContext) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        Box(modifier)
+val LocalSnackbarProvider = compositionLocalOf { SnackbarHostState() }
 
-        PrivacyDialog(onDismissRequest = onDismiss, showAccept = false, onAccept = onDismiss)
+@Composable
+fun WithSnackbarProvider(
+    snackbarHostState: SnackbarHostState,
+    content: @Composable () -> Unit,
+) {
+    CompositionLocalProvider(LocalSnackbarProvider provides snackbarHostState) {
+        content()
     }
 }

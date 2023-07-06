@@ -17,23 +17,29 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.other.ui.node
+package cz.lastaapps.menza.features.settings.ui.nodes
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialog
+import cz.lastaapps.menza.features.settings.ui.screens.AppThemeScreen
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 
-class PrivacyNode(
+internal class AppThemeNode(
     buildContext: BuildContext,
-    private val onDismiss: () -> Unit,
+    private val onDone: () -> Unit,
 ) : Node(buildContext) {
+
     @Composable
     override fun View(modifier: Modifier) {
-        Box(modifier)
-
-        PrivacyDialog(onDismissRequest = onDismiss, showAccept = false, onAccept = onDismiss)
+        AppThemeScreen(
+            onDone = onDone,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(MenzaPadding.More.Screen),
+        )
     }
 }

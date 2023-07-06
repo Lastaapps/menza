@@ -25,7 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import cz.lastaapps.menza.ui.root.locals.LocalWindowWidth
+import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 
 @Composable

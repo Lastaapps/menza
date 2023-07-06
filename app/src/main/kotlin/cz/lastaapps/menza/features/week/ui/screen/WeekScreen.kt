@@ -35,7 +35,7 @@ import cz.lastaapps.menza.features.main.ui.components.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.week.ui.components.WeekDishList
 import cz.lastaapps.menza.features.week.ui.vm.WeekState
 import cz.lastaapps.menza.features.week.ui.vm.WeekViewModel
-import cz.lastaapps.menza.ui.HandleError
+import cz.lastaapps.menza.ui.util.HandleError
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

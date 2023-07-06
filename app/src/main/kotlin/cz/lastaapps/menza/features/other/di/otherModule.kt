@@ -19,9 +19,12 @@
 
 package cz.lastaapps.menza.features.other.di
 
+import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
 import cz.lastaapps.menza.features.other.domain.usecase.GetLibrariesUC
+import cz.lastaapps.menza.features.other.ui.vm.CrashesViewModel
 import cz.lastaapps.menza.features.other.ui.vm.LicenseViewModel
 import cz.lastaapps.menza.features.other.ui.vm.PrivacyViewModel
+import cz.lastaapps.menza.features.other.ui.vm.WhatsNewViewModel
 import cz.lastaapps.menza.features.starting.data.PrivacyStore
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
@@ -34,4 +37,9 @@ val otherModule = module {
 
     viewModelOf(::PrivacyViewModel)
     singleOf(::PrivacyStore)
+
+    viewModelOf(::CrashesViewModel)
+
+    viewModelOf(::WhatsNewViewModel)
+    singleOf(::WhatsNewDataStore)
 }

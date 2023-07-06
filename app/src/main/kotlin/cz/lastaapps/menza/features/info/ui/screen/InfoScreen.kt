@@ -47,10 +47,10 @@ import cz.lastaapps.menza.features.info.ui.components.OpeningHoursList
 import cz.lastaapps.menza.features.info.ui.vm.InfoState
 import cz.lastaapps.menza.features.info.ui.vm.InfoViewModel
 import cz.lastaapps.menza.features.main.ui.components.WrapMenzaNotSelected
-import cz.lastaapps.menza.ui.HandleError
 import cz.lastaapps.menza.ui.components.WrapRefresh
 import cz.lastaapps.menza.ui.components.layout.AboveOrSideBySideLayout
 import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.util.HandleError
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.androidx.compose.koinViewModel
 

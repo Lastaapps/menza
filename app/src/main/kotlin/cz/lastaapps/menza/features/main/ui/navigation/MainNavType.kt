@@ -36,26 +36,26 @@ sealed interface MainNavType : Parcelable {
     }
 
     @Parcelize
-    object TodayNav : MainNavType
+    data object TodayNav : MainNavType
 
     @Parcelize
-    object WeekNav : MainNavType
+    data object WeekNav : MainNavType
 
     @Parcelize
-    object InfoNav : MainNavType
+    data object InfoNav : MainNavType
 
     @Parcelize
-    object SettingsNav : MainNavType
+    data object SettingsNav : MainNavType
 
     @Parcelize
-    object OsturakNav : MainNavType
+    data object OsturakNav : MainNavType
 
     @Parcelize
-    object PrivacyPolicyNav : MainNavType
+    data object PrivacyPolicyNav : MainNavType
 
     @Parcelize
-    object LicenseNoticesNav : MainNavType
+    data object LicenseNoticesNav : MainNavType
 
     @Parcelize
-    object DrawerContent : MainNavType
+    data object DrawerContent : MainNavType
 }

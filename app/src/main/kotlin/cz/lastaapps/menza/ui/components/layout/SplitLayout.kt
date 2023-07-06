@@ -26,7 +26,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import cz.lastaapps.menza.ui.root.locals.LocalSplitPosition
+import cz.lastaapps.menza.ui.locals.LocalSplitPosition
 
 @Composable
 fun SplitLayout(

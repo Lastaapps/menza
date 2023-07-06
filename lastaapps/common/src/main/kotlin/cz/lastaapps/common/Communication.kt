@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,6 +32,7 @@ object Communication {
 
     private const val facebookUrl = "https://www.facebook.com/lastaapps/"
     private const val githubUrl = "https://github.com/lastaapps/"
+    private const val matrixUrl = "https://matrix.to/#/#lastaapps_menza:matrix.org"
     private const val telegramUrl = "https://t.me/lasta_apps"
     private const val playStoreUrl = "https://play.google.com/store/apps/developer?id=Lasta+apps"
 
@@ -70,6 +71,8 @@ object Communication {
 
     fun openProjectsCommits(context: Context, name: String) =
         openUrl(context, "$githubUrl$name/commits/")
+
+    fun openMatrix(context: Context) = openUrl(context, matrixUrl)
 
     fun openTelegram(context: Context) = openUrl(context, telegramUrl)
 

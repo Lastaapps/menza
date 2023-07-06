@@ -17,23 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.other.ui.node
+package cz.lastaapps.menza.ui.locals
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialog
+import androidx.compose.runtime.compositionLocalOf
+import cz.lastaapps.menza.ui.root.MenuBackArrow
 
-class PrivacyNode(
-    buildContext: BuildContext,
-    private val onDismiss: () -> Unit,
-) : Node(buildContext) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        Box(modifier)
-
-        PrivacyDialog(onDismissRequest = onDismiss, showAccept = false, onAccept = onDismiss)
-    }
-}
+// left panel, spacer, right panel
+val LocalMenuBackArrow = compositionLocalOf { MenuBackArrow() }

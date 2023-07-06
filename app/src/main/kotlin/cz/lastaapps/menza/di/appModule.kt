@@ -24,15 +24,13 @@ import cz.lastaapps.core.di.coreModule
 import cz.lastaapps.crash.crashModule
 import cz.lastaapps.menza.features.info.di.infoModule
 import cz.lastaapps.menza.features.main.di.mainModule
+import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
 import cz.lastaapps.menza.features.other.di.otherModule
 import cz.lastaapps.menza.features.root.di.rootModule
 import cz.lastaapps.menza.features.settings.di.settingsModule
 import cz.lastaapps.menza.features.starting.di.startingModule
 import cz.lastaapps.menza.features.today.di.todayModule
 import cz.lastaapps.menza.features.week.di.weekModule
-import cz.lastaapps.menza.ui.dests.others.whatsnew.WhatsNewDataStore
-import cz.lastaapps.menza.ui.dests.settings.SettingsViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val appModule = module {
@@ -51,5 +49,4 @@ val appModule = module {
     )
 
     single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
-    viewModelOf(::SettingsViewModel)
 }

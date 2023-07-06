@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -28,6 +28,7 @@
     <string name="content_description_github">El perfil de Github del desarrollador</string>
     <string name="content_description_play_store">The contact to the app\'s developer using Telegram</string>
     <string name="content_description_telegram">El contacto con el desarrollador de la aplicación que usa Telegram</string>
+    <string name="content_description_matrix">Grupo de Matrix</string>
     <string name="content_description_github_project">El repositorio de Github del código fuente del proyecto</string>
 
     <string name="review_dialog_title">Revisar</string>

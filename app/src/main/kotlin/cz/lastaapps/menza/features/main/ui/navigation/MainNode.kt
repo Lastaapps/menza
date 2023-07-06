@@ -40,6 +40,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.info.ui.node.InfoNode
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.DrawerContent
@@ -55,10 +56,10 @@ import cz.lastaapps.menza.features.main.ui.vm.MainViewModel
 import cz.lastaapps.menza.features.other.ui.node.LicenseNode
 import cz.lastaapps.menza.features.other.ui.node.OsturakNode
 import cz.lastaapps.menza.features.other.ui.node.PrivacyNode
-import cz.lastaapps.menza.features.settings.ui.navigation.SettingsNode
+import cz.lastaapps.menza.features.settings.ui.navigation.SettingsHubNode
 import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
 import cz.lastaapps.menza.features.week.ui.node.WeekNode
-import cz.lastaapps.menza.ui.root.locals.LocalMayBeFlipCover
+import cz.lastaapps.menza.ui.locals.LocalMayBeFlipCover
 import org.koin.androidx.compose.koinViewModel
 
 class MainNode(
@@ -94,7 +95,7 @@ class MainNode(
                 onOsturak = onOsturak,
             )
 
-            SettingsNav -> SettingsNode(buildContext)
+            SettingsNav -> SettingsHubNode(buildContext)
 
             OsturakNav -> OsturakNode(buildContext)
 
@@ -106,7 +107,6 @@ class MainNode(
             )
         }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun View(modifier: Modifier) {
         val mainViewModel: MainViewModel = koinViewModel()
@@ -140,6 +140,7 @@ class MainNode(
                 Children(
                     navModel = backStack,
                     modifier = Modifier.fillMaxSize(),
+                    transitionHandler = rememberBackstackFader(),
                 )
             },
             modifier = Modifier.fillMaxSize(),
