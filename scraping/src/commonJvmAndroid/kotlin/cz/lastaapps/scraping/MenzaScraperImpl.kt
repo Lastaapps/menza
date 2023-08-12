@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,7 +34,7 @@ object MenzaScraperImpl : MenzaScraper {
     private val closeImages = arrayOf("img/Zavreno.png", "img/ZavrenoX1.png")
 
     override suspend fun createRequest() =
-        agataClient.get("index.php")
+        agataClient.get("index.php?lang=cs")
 
     /**
      * Accepts all the results

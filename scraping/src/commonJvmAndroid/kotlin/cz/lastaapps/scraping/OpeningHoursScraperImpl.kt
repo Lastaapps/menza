@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,11 +27,12 @@ import io.ktor.client.request.get
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import kotlinx.datetime.LocalTime
+import java.time.DayOfWeek
 
 object OpeningHoursScraperImpl : OpeningHoursScraper {
 
     override suspend fun createRequest() =
-        agataClient.get("oteviraci-doby.php")
+        agataClient.get("oteviraci-doby.php?lang=cs")
 
     override fun scrape(html: String): Set<OpeningHours> {
         return htmlDocument(html) { parseHtml() }
@@ -58,13 +59,14 @@ object OpeningHoursScraperImpl : OpeningHoursScraper {
 
 
                         val days = TimeUtils.getDaysOfWeek()
-                        val startIndex = days.indexOf(startDay)
+                        val startIndex = days.indexOf(startDay ?: DayOfWeek.MONDAY)
                         val endIndex =
-                            if (endDay != null)
+                            if (endDay != null) {
                                 endDay.toCzechDayShortcutToDayOfWeek()
                                     ?.let { days.indexOf(it) } ?: error("Invalid day abbrev")
-                            else
-                                startIndex
+                            } else {
+                                days.indexOf(startDay ?: DayOfWeek.FRIDAY)
+                            }
 
                         for (day in days.subList(startIndex, endIndex + 1)) {
                             set += OpeningHours(

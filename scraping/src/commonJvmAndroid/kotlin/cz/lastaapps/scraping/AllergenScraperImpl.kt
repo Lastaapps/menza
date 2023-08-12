@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,7 +22,7 @@ package cz.lastaapps.scraping
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.day.DishAllergensPage
-import io.ktor.client.request.*
+import io.ktor.client.request.get
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import it.skrape.selects.html5.img
@@ -31,10 +31,10 @@ import it.skrape.selects.html5.td
 object AllergenScraperImpl : AllergenScraper {
 
     override suspend fun createRequestForAll() =
-        agataClient.get("alergenyall.php")
+        agataClient.get("alergenyall.php?lang=cs")
 
     override suspend fun createRequestForDish(dishId: DishAllergensPage) =
-        agataClient.get("alergeny.php?alergen=${dishId.pageId}")
+        agataClient.get("alergeny.php?lang=cs&alergen=${dishId.pageId}")
 
     override fun scrape(html: String): Set<Allergen> {
         return htmlDocument(html) { parseHtml() }

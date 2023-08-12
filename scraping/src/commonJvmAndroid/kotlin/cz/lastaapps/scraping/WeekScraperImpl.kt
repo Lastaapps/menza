@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -40,7 +40,7 @@ object WeekScraperImpl : WeekScraper {
 
     override suspend fun createRequest(
         menzaId: MenzaId, @Suppress("UNUSED_PARAMETER") weekNumber: WeekNumber
-    ) = agataClient.get("indexTyden.php?clPodsystem=${menzaId.id}")
+    ) = agataClient.get("indexTyden.php?lang=cs&clPodsystem=${menzaId.id}")
 
     @Throws(WeekNotAvailable::class)
     override fun scrape(html: String): Set<WeekDish> {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,7 +30,7 @@ object MessagesScraperImpl : MessagesScraper {
     private val log = logging()
 
     override suspend fun createRequest() =
-        agataClient.get("index.php")
+        agataClient.get("index.php?lang=cs")
 
     /**
      * Accepts any url /jidelnicky/index.php???

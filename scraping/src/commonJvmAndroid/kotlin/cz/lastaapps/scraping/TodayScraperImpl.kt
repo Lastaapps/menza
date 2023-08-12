@@ -44,7 +44,7 @@ object TodayScraperImpl : TodayScraper {
     private val log = logging()
 
     override suspend fun createRequest(menzaId: MenzaId) =
-        agataClient.get("index.php?clPodsystem=${menzaId.id}")
+        agataClient.get("index.php?lang=cs&clPodsystem=${menzaId.id}")
 
     override fun scrape(html: String): Set<Dish> {
         return htmlDocument(html) { parseHtml() }

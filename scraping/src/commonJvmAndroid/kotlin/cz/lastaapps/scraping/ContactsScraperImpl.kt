@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,7 +36,7 @@ import it.skrape.selects.html5.td
 object ContactsScraperImpl : ContactsScraper {
 
     override suspend fun createRequest() =
-        agataClient.get("kontakty.php")
+        agataClient.get("kontakty.php?lang=cs")
 
     override fun scrape(html: String): Set<Contact> {
         return htmlDocument(html) { parseHtml() }
