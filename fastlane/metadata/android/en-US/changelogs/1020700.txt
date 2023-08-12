@@ -1,0 +1,2 @@
+Use Czech when scraping the web.
+Fixed opening hours without the day of week.

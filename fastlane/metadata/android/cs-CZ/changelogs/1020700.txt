@@ -1,0 +1,2 @@
+Scrapování webu v češtině.
+Oprava otevíracích dob bez dnů v týdnu.
