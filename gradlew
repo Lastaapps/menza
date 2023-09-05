@@ -1,19 +1,22 @@
 #!/bin/sh
 
 #
-# Copyright © 2015-2021 the original authors.
+#    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#     This file is part of Menza.
 #
-#      https://www.apache.org/licenses/LICENSE-2.0
+#     Menza is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#     Menza is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
 #
 
 ##############################################################################
@@ -83,10 +86,8 @@ done
 # This is normally unused
 # shellcheck disable=SC2034
 APP_BASE_NAME=${0##*/}
-APP_HOME=$( cd "${APP_HOME:-./}" && pwd -P ) || exit
-
-# Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
+# Discard cd standard output in case $CDPATH is set (https://github.com/gradle/gradle/issues/25036)
+APP_HOME=$( cd "${APP_HOME:-./}" > /dev/null && pwd -P ) || exit
 
 # Use the maximum available, or set MAX_FD != -1 to use that value.
 MAX_FD=maximum
@@ -133,10 +134,13 @@ location of your Java installation."
     fi
 else
     JAVACMD=java
-    which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+    if ! command -v java >/dev/null 2>&1
+    then
+        die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
 
 Please set the JAVA_HOME variable in your environment to match the
 location of your Java installation."
+    fi
 fi
 
 # Increase the maximum file descriptors if we can.
@@ -196,6 +200,10 @@ if "$cygwin" || "$msys" ; then
         set -- "$@" "$arg"      # push replacement arg
     done
 fi
+
+
+# Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
 
 # Collect all arguments for the java command;
 #   * $DEFAULT_JVM_OPTS, $JAVA_OPTS, and $GRADLE_OPTS can contain fragments of

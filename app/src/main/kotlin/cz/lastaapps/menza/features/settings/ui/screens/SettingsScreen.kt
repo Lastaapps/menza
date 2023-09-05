@@ -240,7 +240,7 @@ private fun Buttons(
             MenzaPadding.Small,
             Alignment.CenterHorizontally,
         ),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalArrangement = Arrangement.Center,
     ) {
 
         val shareText = stringResource(R.string.settings_button_share_text)

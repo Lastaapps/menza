@@ -44,6 +44,11 @@ android {
             exclude(group = "commons-logging", module = "commons-logging")
         }
     }
+
+    // Remove some conflict between atomic-fu and datetime
+    packaging {
+        resources.pickFirsts.add("META-INF/versions/9/previous-compilation-data.bin")
+    }
 }
 
 dependencies {

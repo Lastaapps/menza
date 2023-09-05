@@ -22,7 +22,6 @@ package cz.lastaapps.plugin.multiplatform
 import com.android.build.gradle.LibraryExtension
 import cz.lastaapps.extensions.alias
 import cz.lastaapps.extensions.commonImplementation
-import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.multiplatform
 import cz.lastaapps.extensions.pluginManager
@@ -34,7 +33,11 @@ import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
 import cz.lastaapps.plugin.common.JavaConvention
 import org.gradle.api.tasks.testing.Test
-import org.gradle.kotlin.dsl.*
+import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("unused")
@@ -97,7 +100,7 @@ class KMPLibraryConvention : BasePlugin({
             compilations.all { }
         }
 
-        android {
+        androidTarget {
             compilations.all {
                 kotlinOptions { }
             }

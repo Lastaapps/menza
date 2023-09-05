@@ -1,45 +1,44 @@
 [versions]
-aboutLibraries = "10.6.1"
-accompanist = "0.30.0"
-android-gradle = "8.2.0-alpha10"
+aboutLibraries = "10.8.3"
+accompanist = "0.32.0"
+android-gradle = "8.2.0-beta01"
 androidx-activity = "1.7.2"
 androidx-appsearch = "1.1.0"
 androidx-camera = "1.2.3"
-androidx-compose = "1.4.3"
+androidx-compose = "1.5.0"
 # @keep
-androidx-compose-compiler = "1.4.8"
-androidx-compose-material = "1.4.3"
+androidx-compose-compiler = "1.5.3"
+androidx-compose-material = "1.5.0"
 androidx-compose-material3 = "1.1.1"
-androidx-emoji2 = "1.3.0-beta02"
 androidx-hilt = "1.0.0"
 androidx-lifecycle = "2.6.1"
-androidx-navigation = "2.6.0"
+androidx-navigation = "2.7.1"
 androidx-room = "2.5.2"
 androidx-test = "1.5.0"
 coil = "2.3.0"
 dagger = "2.44.2"
 detekt = "1.22.0"
 espresso = "3.5.1"
-firebase-bom = "32.1.1"
-google-ksp = "1.8.22-1.0.11"
+firebase-bom = "32.2.3"
+google-ksp = "1.9.10-1.0.13"
 # @keep
 java-jvmTarget = "11"
-junit5-bom = "5.9.2"
-koin = "3.4.0"
+junit5-bom = "5.9.3"
+koin = "3.4.3"
 koin-annotations = "1.0.3"
-kotest = "5.5.5"
-kotlin = "1.8.22"
+kotest = "5.6.2"
+kotlin = "1.9.10"
 # @keep
-kotlin-api = "1.8"
-kotlin-atomicfu = "0.20.2"
-kotlin-coroutines = "1.7.1"
+kotlin-api = "1.9"
+kotlin-atomicfu = "0.22.0"
+kotlin-coroutines = "1.7.3"
 kotlin-language = "1.9"
-ktor = "2.2.4"
+ktor = "2.3.4"
 logback = "1.4.5"
 russhwolf-settings = "1.0.0"
-sdk-compile = "33"
+sdk-compile = "34"
 sdk-min = "21"
-sdk-target = "33"
+sdk-target = "34"
 shadow = "8.1.0"
 sqldelight = "1.5.5"
 
@@ -58,7 +57,7 @@ android-desugaring = "com.android.tools:desugar_jdk_libs:2.0.3"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-core = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-annotation = "androidx.annotation:annotation:1.6.0"
-androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha02"
+androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha03"
 androidx-appsearch-compiler = { module = "androidx.appsearch:appsearch-compiler", version.ref = "androidx-appsearch" }
 androidx-appsearch-core = { module = "androidx.appsearch:appsearch", version.ref = "androidx-appsearch" }
 androidx-appsearch-local = { module = "androidx.appsearch:appsearch-local-storage", version.ref = "androidx-appsearch" }
@@ -84,15 +83,15 @@ androidx-compose-testJUnit4 = { module = "androidx.compose.ui:ui-test-junit4", v
 androidx-compose-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-compose" }
 androidx-compose-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-compose" }
 androidx-compose-toolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose" }
-androidx-compose-ui = { module ="androidx.compose.ui:ui", version.ref = "androidx-compose" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose" }
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 androidx-constraintlayout-views = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-core = "androidx.core:core-ktx:1.10.1"
 androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-documentFile = "androidx.documentfile:documentfile:1.0.1"
-androidx-emoji2-bundled = "androidx.emoji2:emoji2-bundled:1.4.0-beta05"
-androidx-emoji2-core = "androidx.emoji2:emoji2:1.4.0-beta05"
-androidx-fragment = "androidx.fragment:fragment-ktx:1.6.0"
+androidx-emoji2-bundled = "androidx.emoji2:emoji2-bundled:1.4.0"
+androidx-emoji2-core = "androidx.emoji2:emoji2:1.4.0"
+androidx-fragment = "androidx.fragment:fragment-ktx:1.6.1"
 androidx-hilt-common = { module = "androidx.hilt:hilt-common", version.ref = "androidx-hilt" }
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidx-hilt" }
 androidx-hilt-navigation = { module = "androidx.hilt:hilt-navigation", version.ref = "androidx-hilt" }
@@ -108,8 +107,8 @@ androidx-lifecycle-viewModel-savedState = { module = "androidx.lifecycle:lifecyc
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidx-navigation" }
-androidx-preferences = "androidx.preference:preference-ktx:1.2.0"
-androidx-recyclerView = "androidx.recyclerview:recyclerview:1.3.0"
+androidx-preferences = "androidx.preference:preference-ktx:1.2.1"
+androidx-recyclerView = "androidx.recyclerview:recyclerview:1.3.1"
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
 androidx-room-test = { module = "androidx.room:room-testing", version.ref = "androidx-room" }
@@ -155,7 +154,7 @@ firebase-database = { module = "com.google.firebase:firebase-database-ktx" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 fluidLocale = "io.fluidsonic.locale:fluid-locale:0.12.0"
 google-material = "com.google.android.material:material:1.9.0"
-google-mlkitBarcode = "com.google.mlkit:barcode-scanning:17.1.0"
+google-mlkitBarcode = "com.google.mlkit:barcode-scanning:17.2.0"
 google-playServices = "com.google.android.play:core-ktx:1.8.1"
 google-playServicesLocation = "com.google.android.gms:play-services-location:21.0.1"
 gradlePlugins-android = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
@@ -166,7 +165,7 @@ junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5-bom" }
 junit5-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 junit5-jupiter-runtime = { module = "org.junit.jupiter:junit-jupiter-engine" }
 kmLogging = "org.lighthousegames:logging:1.3.0"
-koin-android-compose = "io.insert-koin:koin-androidx-compose:3.4.3"
+koin-android-compose = "io.insert-koin:koin-androidx-compose:3.4.6"
 koin-android-core = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 koin-android-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
@@ -194,8 +193,8 @@ kotlin-test-jUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit" }
 kotlin-test-jUnit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlin-atomicfu" }
 kotlinx-collection = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
-kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
-kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
+kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.1"
+kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
@@ -286,7 +285,7 @@ android-library = { id = "com.android.library", version.ref = "android-gradle" }
 benNamesVersions = "com.github.ben-manes.versions:0.46.0"
 daggerHilt = { id = "dagger.hilt.android.plugin", version.ref = "dagger" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-firebase-crashlytics = "com.google.firebase.crashlytics:2.8.1"
+firebase-crashlytics = "com.google.firebase.crashlytics:2.9.9"
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 java-kotlin = { id = "kotlin" }
 java-library = { id = "java-library" }
@@ -304,7 +303,7 @@ lastaapps-android-library-core = "android-library-convention:none"
 lastaapps-jvm-app = "jvm-app-convention:none"
 lastaapps-kmp-library = "kmp-library-convention:none"
 lastaapps-kmp-sqldelight = "kmp-sqldelight-convention:none"
-playServices = "com.google.gms.google-services:1.0.0"
+playServices = "com.google.gms.google-services:4.3.15"
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
 versionCatalogUpdate = "nl.littlerobots.version-catalog-update:0.7.0"
