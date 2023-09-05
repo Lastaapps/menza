@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -98,9 +98,13 @@ public abstract class DomTreeElement : CssSelectable() {
     }
 
     override fun makeDefault(cssSelector: String): DocElement {
-        return if (relaxed) makeDefaultElement(cssSelector) else throw ElementNotFoundException(
-            cssSelector
-        )
+        return if (relaxed) {
+            makeDefaultElement(cssSelector)
+        } else {
+            throw ElementNotFoundException(
+                cssSelector,
+            )
+        }
     }
 
     override fun applySelector(rawCssSelector: String): List<DocElement> {
@@ -111,9 +115,13 @@ public abstract class DomTreeElement : CssSelectable() {
         val queried = element.children().select(rawCssSelector).map { DocElement(it, relaxed) }
         val selected = queried.takeIf { it.isNotEmpty() }
 
-        return if (relaxed) selected.orEmpty() else selected ?: throw ElementNotFoundException(
-            rawCssSelector
-        )
+        return if (relaxed) {
+            selected.orEmpty()
+        } else {
+            selected ?: throw ElementNotFoundException(
+                rawCssSelector,
+            )
+        }
     }
 
     override fun toString(): String = element.toString()

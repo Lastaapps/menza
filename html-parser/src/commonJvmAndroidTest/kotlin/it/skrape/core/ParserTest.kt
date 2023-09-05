@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,6 +21,9 @@ package it.skrape.core
 
 import it.skrape.selects.eachText
 import it.skrape.selects.html5.button
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
 import strikt.api.expect
@@ -29,9 +32,7 @@ import strikt.api.expectThrows
 import strikt.assertions.containsExactly
 import strikt.assertions.hasEntry
 import strikt.assertions.isEqualTo
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
+import sun.jvm.hotspot.utilities.Assert.that
 
 class ParserTest {
 
@@ -83,7 +84,6 @@ class ParserTest {
                 that(findFirst(".dynamic").text).isEqualTo("I have been dynamically added via Javascript")
             }
         }
-
     }
 
     @Test
@@ -108,7 +108,6 @@ class ParserTest {
                 that(findFirst("p").text).isEqualTo("dynamically added")
             }
         }
-
     }
 
     @Test
@@ -125,7 +124,6 @@ class ParserTest {
                 }
             }
         }
-
     }
 
     @Test
@@ -134,7 +132,6 @@ class ParserTest {
         val parsedFile = htmlDocument(fileToParse)
         expectThat(parsedFile.titleText).isEqualTo("i'm the title")
     }
-
 
     @Test
     fun `can read html from file and invoke document lambda`() {
@@ -180,7 +177,6 @@ class ParserTest {
         expectThat(parsedFile.titleText).isEqualTo("i'm the title")
     }
 
-
     @Test
     fun `can read html from input stream and invoke document lambda`() {
         val fileToParse = FileInputStream(File("src/test/resources/__files/example.html"))
@@ -206,12 +202,12 @@ class ParserTest {
 
     @Test
     fun `will convert 'key only'-attributes to have empty string value`() {
-        @Language("HTML") val markup = "<button disabled>submit</button>"
+        @Language("HTML")
+        val markup = "<button disabled>submit</button>"
 
         with(htmlDocument(html = markup)) {
             expectThat(button { findFirst { attributes } }).hasEntry("disabled", "")
         }
-
     }
 
     private fun getMarkupFromFile(file: String) = javaClass.getResource("/__files/$file").readText()

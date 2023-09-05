@@ -49,7 +49,7 @@ abstract class StateViewModel<State : VMState>(
     ) = resource(
         acquire = { updateState { loading(true) } },
         release = { _, _ -> updateState { loading(false) } },
-    )//.use { block() }
+    ) // .use { block() }
         .let {
             resourceScope {
                 it.bind()

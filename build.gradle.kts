@@ -18,6 +18,7 @@
  */
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
     alias(libs.plugins.kotlin.android) apply false
@@ -36,6 +37,7 @@ plugins {
 
     alias(libs.plugins.benNamesVersions)
     alias(libs.plugins.versionCatalogUpdate)
+    alias(libs.plugins.ktlint)
 }
 
 tasks.register("clean", Delete::class) {
@@ -65,4 +67,13 @@ fun isNonStable(version: String): Boolean {
     val regex = """^[0-9,.v-]+(-r)?$""".toRegex()
     val isStable = stableKeyword || regex.matches(version)
     return isStable.not()
+}
+
+extensions.configure<KtlintExtension> {
+    val dir = "${layout.buildDirectory.get().asFile.absolutePath}/generated/"
+    filter {
+        exclude {
+            it.file.path.startsWith(dir)
+        }
+    }
 }

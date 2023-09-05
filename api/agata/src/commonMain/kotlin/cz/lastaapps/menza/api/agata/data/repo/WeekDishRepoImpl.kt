@@ -94,7 +94,7 @@ internal class WeekDishRepoImpl(
         convert = { data -> data.toDomain().rightIor() },
         store = { data ->
             weekDishList.value = data
-        }
+        },
     )
 
     private var hasSynced = false

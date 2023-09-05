@@ -17,10 +17,24 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.scraping
+package cz.lastaapps.api.buffet.di
 
-import io.ktor.client.statement.HttpResponse
+import android.content.Context
+import com.russhwolf.settings.SharedPreferencesSettings
+import cz.lastaapps.api.buffet.data.ValiditySettings
+import cz.lastaapps.api.buffet.data.createBuffetDBDriver
+import org.koin.core.module.Module
+import org.koin.core.scope.Scope
+import org.koin.dsl.module
 
-interface ScraperRequest<T : Any?> : ScraperBase<T> {
-    suspend fun createRequest(): HttpResponse
+internal actual val platform: Module = module {
+    factory { createBuffetDBDriver() }
+    factory { createValiditySettings() }
 }
+
+private fun Scope.createValiditySettings() =
+    ValiditySettings(
+        SharedPreferencesSettings(
+            get<Context>().getSharedPreferences("validity", Context.MODE_PRIVATE),
+        ),
+    )

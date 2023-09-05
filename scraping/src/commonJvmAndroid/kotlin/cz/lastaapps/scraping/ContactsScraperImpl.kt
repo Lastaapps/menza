@@ -49,12 +49,10 @@ object ContactsScraperImpl : ContactsScraper {
 
         findFirst("#otdoby") {
             tryFindAllAndCycle("section") {
-
                 val menzaId = id.removePrefix("section").takeIf { it.isNotBlank() }?.toInt()
                     ?: error("Invalid menza id")
 
                 tryFindAllAndCycle("tbody tr") {
-
                     td {
                         val role = findByIndex(0) {
                             text.takeIf { it.removeSpaces().isNotBlank() }?.let { Role(it) }
@@ -69,8 +67,9 @@ object ContactsScraperImpl : ContactsScraper {
                             parseEmail()?.let { Email(it) }
                         }
 
-                        if (role != null || name != null || phoneNumber != null || email != null)
+                        if (role != null || name != null || phoneNumber != null || email != null) {
                             set += Contact(MenzaId(menzaId), name, role, phoneNumber, email)
+                        }
                     }
                 }
             }
@@ -90,11 +89,13 @@ object ContactsScraperImpl : ContactsScraper {
 
                 number = number.removePrefix("tel:")
 
-                if (!number.startsWith("+"))
+                if (!number.startsWith("+")) {
                     number = "+420$number"
+                }
 
-                if (!phoneNumberRegex.matches(number))
+                if (!phoneNumberRegex.matches(number)) {
                     error("Invalid phone number")
+                }
 
                 number
             }

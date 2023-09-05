@@ -22,7 +22,6 @@ package cz.lastaapps.core.ui.vm
 import androidx.compose.runtime.Composable
 import cz.lastaapps.core.domain.error.MenzaError
 
-
 interface ErrorHolder {
     @Composable
     fun getError(): MenzaError?

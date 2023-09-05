@@ -17,22 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.di
+package cz.lastaapps.storage.db
 
-import com.russhwolf.settings.PreferencesSettings
-import cz.lastaapps.api.core.data.ValiditySettings
-import cz.lastaapps.core.util.datastructures.StateFlowSettings
-import java.util.prefs.Preferences
-import org.koin.core.module.Module
-import org.koin.dsl.module
+import com.squareup.sqldelight.db.SqlDriver
+import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import cz.lastaapps.menza.db.MenzaDatabase
 
-internal actual val platform: Module = module {
-    single { createValiditySettings() }
+actual class MemoryMenzaDriverFactory : MenzaDriverFactory {
+    actual override fun createDriver(): SqlDriver {
+        val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        MenzaDatabase.Schema.create(driver)
+        return driver
+    }
 }
-
-private fun createValiditySettings() =
-    ValiditySettings(
-        StateFlowSettings(
-            PreferencesSettings(Preferences.systemRoot())
-        )
-    )

@@ -88,7 +88,7 @@ internal class TodayDishStrahovRepoImpl(
                 db.strahovQueries.insert(it)
             }
             log.d { "Data stored" }
-        }
+        },
     )
 
     override suspend fun sync(isForced: Boolean): SyncOutcome = run {

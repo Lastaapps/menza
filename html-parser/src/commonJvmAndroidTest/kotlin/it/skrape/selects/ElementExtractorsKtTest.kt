@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,7 +20,7 @@
 package it.skrape.selects
 
 import aValidDocument
-import it.skrape.selects.html5.*
+import java.awt.SystemColor.text
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.containsExactly
@@ -182,7 +182,7 @@ class ElementExtractorsKtTest {
             findBySelectorMatching(someRegex) {
                 expectThat(map { it.toCssSelector }).containsExactly(
                     "html > body > header > nav > ol.ordered-navigation",
-                    "html > body > header > nav > ul.unordered-navigation"
+                    "html > body > header > nav > ul.unordered-navigation",
                 )
             }
         }
@@ -196,7 +196,7 @@ class ElementExtractorsKtTest {
             someRegex {
                 expectThat(map { it.toCssSelector }).containsExactly(
                     "html > body > header > nav > ol.ordered-navigation",
-                    "html > body > header > nav > ul.unordered-navigation"
+                    "html > body > header > nav > ul.unordered-navigation",
                 )
             }
         }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,6 +23,6 @@ import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.menza.Message
 import kotlinx.coroutines.flow.Flow
 
-interface MessagesRepo  :GeneralStorageRepo<Message> {
+interface MessagesRepo : GeneralStorageRepo<Message> {
     fun getMessage(menzaId: MenzaId): Flow<List<Message>>
 }

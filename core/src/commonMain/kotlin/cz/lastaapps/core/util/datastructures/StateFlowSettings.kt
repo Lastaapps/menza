@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
-
 class StateFlowSettings(
     private val settings: Settings,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
@@ -116,7 +115,6 @@ class StateFlowSettings(
     ): SettingsListener =
         handleNull(key, callback)
 
-
     private inline fun <reified T : Any> handleDefault(
         key: String,
         defaultValue: T,
@@ -125,7 +123,9 @@ class StateFlowSettings(
         map.update {
             if (!map.value.containsKey(key)) {
                 it.put(key, settings.get<T>(key))
-            } else it
+            } else {
+                it
+            }
         }
         val job = map
             .map { m -> m[key] as T? ?: defaultValue }
@@ -142,7 +142,9 @@ class StateFlowSettings(
         map.update {
             if (!map.value.containsKey(key)) {
                 it.put(key, settings.get<T>(key))
-            } else it
+            } else {
+                it
+            }
         }
         val job = map
             .map { m -> m[key] as T? }

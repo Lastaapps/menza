@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,7 +25,12 @@ import aValidMarkupWithPictures
 import io.mockk.every
 import io.mockk.mockk
 import it.skrape.core.htmlDocument
-import it.skrape.selects.html5.*
+import it.skrape.selects.html5.a
+import it.skrape.selects.html5.b
+import it.skrape.selects.html5.div
+import it.skrape.selects.html5.img
+import it.skrape.selects.html5.link
+import javax.management.Query.div
 import org.intellij.lang.annotations.Language
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -33,7 +38,6 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.api.expectThrows
-import strikt.assertions.*
 
 class DocElementKtTest {
 
@@ -80,7 +84,7 @@ class DocElementKtTest {
         val someElements = listOf(aValidElement, aValidElement)
         expectThat(someElements.eachText).containsExactly(
             "divs text headline paragraph foo bar fizz buzz",
-            "divs text headline paragraph foo bar fizz buzz"
+            "divs text headline paragraph foo bar fizz buzz",
         )
     }
 
@@ -96,7 +100,7 @@ class DocElementKtTest {
             divs text 
             <h2 class="welcome" disabled>headline</h2> 
             <p class="fancy">paragraph <span>foo <b>bar</b></span> <span>fizz <b id="xxx">buzz</b></span> </p>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -109,7 +113,7 @@ class DocElementKtTest {
              <h2 class="welcome" disabled>headline</h2> 
              <p class="fancy">paragraph <span>foo <b>bar</b></span> <span>fizz <b id="xxx">buzz</b></span> </p>
             </div>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -221,12 +225,14 @@ class DocElementKtTest {
 
     @Test
     fun `can get ownCssSelector`() {
-        val elementWithId = DocElement(anElement.apply {
-            attr("id", "bazinga")
-            attr("key-only-attr", "")
-        })
+        val elementWithId = DocElement(
+            anElement.apply {
+                attr("id", "bazinga")
+                attr("key-only-attr", "")
+            },
+        )
         expectThat(elementWithId.ownCssSelector).isEqualTo(
-            "div#bazinga.clazz.klass['key-only-attr'][foo='bar'][fizz='buzz'][data-foo='foobar']"
+            "div#bazinga.clazz.klass['key-only-attr'][foo='bar'][fizz='buzz'][data-foo='foobar']",
         )
     }
 
@@ -275,22 +281,28 @@ class DocElementKtTest {
                 "class" to "clazz klass",
                 "foo" to "bar",
                 "fizz" to "buzz",
-                "data-foo" to "foobar"
-            )
+                "data-foo" to "foobar",
+            ),
         )
     }
 
     @Test
     fun `can get all attribute keys of an element`() {
         expectThat(aValidElement.attributeKeys).containsExactly(
-            "class", "foo", "fizz", "data-foo"
+            "class",
+            "foo",
+            "fizz",
+            "data-foo",
         )
     }
 
     @Test
     fun `can get all attribute values of an element`() {
         expectThat(aValidElement.attributeValues).containsExactly(
-            "clazz klass", "bar", "buzz", "foobar"
+            "clazz klass",
+            "bar",
+            "buzz",
+            "foobar",
         )
     }
 
@@ -302,15 +314,15 @@ class DocElementKtTest {
                 "class" to "clazz klass",
                 "foo" to "bar",
                 "fizz" to "buzz",
-                "data-foo" to "foobar"
-            )
+                "data-foo" to "foobar",
+            ),
         )
     }
 
     @Test
     fun `can get all data attributes of an elements`() {
         expectThat(aValidElement.dataAttributes).isEqualTo(
-            mapOf("data-foo" to "foobar")
+            mapOf("data-foo" to "foobar"),
         )
     }
 
@@ -318,7 +330,7 @@ class DocElementKtTest {
     fun `can get all data attributes from a list of elements`() {
         val someElements = listOf(aValidElement, aValidElement)
         expectThat(someElements.eachDataAttribute).isEqualTo(
-            mapOf("data-foo" to "foobar")
+            mapOf("data-foo" to "foobar"),
         )
     }
 
@@ -347,7 +359,6 @@ class DocElementKtTest {
             <div class="my-class"><h1 class="welcome">first headline</h1></div>
             <div class="my-class"><h1 class="welcome">second headline</h1></div>
         """.trimIndent()
-
 
         val text = htmlDocument(markup) {
             div {
@@ -434,7 +445,7 @@ class DocElementKtTest {
              <h2 class="welcome" disabled>headline</h2> 
              <p class="fancy">paragraph <span>foo <b>bar</b></span> <span>fizz <b id="xxx">buzz</b></span> </p>
             </div>
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -458,7 +469,6 @@ class DocElementKtTest {
 
     @Test
     fun `can conveniently get all links as map of text and href from list of DocElement`() {
-
         val links = aValidDocument(aValidMarkupWithLinks) {
             a {
                 findAll {
@@ -473,15 +483,14 @@ class DocElementKtTest {
                 "relative link" to "/relative",
                 "modal" to "#modal",
                 "nested link" to "http://nested.link",
-                "i'm an anchor" to "http://some.link"
-            )
+                "i'm an anchor" to "http://some.link",
+            ),
         )
     }
 
     @Test
     @Disabled("TODO: make eachLink also filter child notes")
     fun `can conveniently get all links as map of text and href from list of DocElement and its children`() {
-
         val links = aValidDocument(aValidMarkupWithLinks) {
             div {
                 findAll {
@@ -497,10 +506,9 @@ class DocElementKtTest {
                 "fizzbuzz" to "http://fizz.buzz",
                 "schnitzel" to "http://schnitzel.de",
                 "nested link" to "http://nested.link",
-                "i'm an anchor" to "http://some.link"
-            )
+                "i'm an anchor" to "http://some.link",
+            ),
         )
-
     }
 
     @Test
@@ -514,7 +522,6 @@ class DocElementKtTest {
         }
 
         expectThat(links).isEqualTo(mapOf("foobar" to "http://foo.bar"))
-
     }
 
     @Test
@@ -530,10 +537,9 @@ class DocElementKtTest {
                 "relative link" to "/relative",
                 "modal" to "#modal",
                 "nested link" to "http://nested.link",
-                "i'm an anchor" to "http://some.link"
-            )
+                "i'm an anchor" to "http://some.link",
+            ),
         )
-
     }
 
     @Test
@@ -553,8 +559,8 @@ class DocElementKtTest {
                 "foobar" to "http://foo.bar",
                 "" to "http://fizz.buzz",
                 "yummi" to "http://schnitzel.de",
-                "nested" to "http://nested.image"
-            )
+                "nested" to "http://nested.image",
+            ),
         )
     }
 
@@ -567,7 +573,7 @@ class DocElementKtTest {
                 "/relative",
                 "#modal",
                 "http://nested.link",
-                "http://some.link"
+                "http://some.link",
             )
             a {
                 findAll {
@@ -576,7 +582,7 @@ class DocElementKtTest {
                         "/relative",
                         "#modal",
                         "http://nested.link",
-                        "http://some.link"
+                        "http://some.link",
                     )
                 }
             }
@@ -591,7 +597,7 @@ class DocElementKtTest {
                 "http://foo.bar",
                 "http://fizz.buzz",
                 "http://schnitzel.de",
-                "http://nested.image"
+                "http://nested.image",
             )
             img {
                 findAll {
@@ -599,7 +605,7 @@ class DocElementKtTest {
                         "http://foo.bar",
                         "http://fizz.buzz",
                         "http://schnitzel.de",
-                        "http://nested.image"
+                        "http://nested.image",
                     )
                 }
             }
@@ -610,12 +616,12 @@ class DocElementKtTest {
     fun `can conveniently get all custom attributes`() {
         aValidDocument(aValidMarkupWithPictures) {
             expectThat(eachAttribute("rel")).containsExactly(
-                "shortcut icon"
+                "shortcut icon",
             )
             link {
                 findAll {
                     expectThat(eachAttribute("rel")).containsExactly(
-                        "shortcut icon"
+                        "shortcut icon",
                     )
                 }
             }
@@ -629,7 +635,6 @@ class DocElementKtTest {
 
     @Test
     fun `can conveniently get all images as map of alt-text and src from list of DocElement`() {
-
         val pictures = aValidDocument(aValidMarkupWithPictures) {
             img {
                 findAll {
@@ -643,15 +648,14 @@ class DocElementKtTest {
                 "foobar" to "http://foo.bar",
                 "" to "http://fizz.buzz",
                 "yummi" to "http://schnitzel.de",
-                "nested" to "http://nested.image"
-            )
+                "nested" to "http://nested.image",
+            ),
         )
     }
 
     @Test
     @Disabled("TODO: make eachImage also filter child notes")
     fun `can conveniently get all images as map of alt-text and src from list of DocElement and its children`() {
-
         val pictures = aValidDocument(aValidMarkupWithPictures) {
             div {
                 findAll {
@@ -665,10 +669,9 @@ class DocElementKtTest {
                 "foobar" to "http://foo.bar",
                 "" to "http://fizz.buzz",
                 "yummi" to "http://schnitzel.de",
-                "nested" to "http://nested.image"
-            )
+                "nested" to "http://nested.image",
+            ),
         )
-
     }
 
     @Test
@@ -682,7 +685,6 @@ class DocElementKtTest {
         }
 
         expectThat(pictures).isEqualTo(mapOf("foobar" to "http://foo.bar"))
-
     }
 
     @Test
@@ -696,10 +698,9 @@ class DocElementKtTest {
                 "foobar" to "http://foo.bar",
                 "" to "http://fizz.buzz",
                 "yummi" to "http://schnitzel.de",
-                "nested" to "http://nested.image"
-            )
+                "nested" to "http://nested.image",
+            ),
         )
-
     }
 
     @Test

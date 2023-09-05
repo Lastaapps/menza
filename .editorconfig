@@ -1,0 +1,16 @@
+root = true
+
+[*]
+
+[*.{kt,kts}]
+ktlint_code_style = official
+
+# Indentation
+indent_size = 4
+indent_style = space
+
+# Trailing Comma
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+trailing-comma-on-call-site = true
+trailing-comma-on-declaration-site = true

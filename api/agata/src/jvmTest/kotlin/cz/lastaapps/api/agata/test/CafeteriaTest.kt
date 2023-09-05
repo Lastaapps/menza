@@ -33,36 +33,40 @@ import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
 import org.lighthousegames.logging.KmLogging
 
-class CafeteriaTest : StringSpec({
+class CafeteriaTest : StringSpec(
+    {
 
-    KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
+        KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
 
-    fun client() = createAgataClient(HttpClient() {
-        install(Logging) {
-            level = BODY
+        fun client() = createAgataClient(
+            HttpClient() {
+                install(Logging) {
+                    level = BODY
+                }
+            },
+        )
+
+        fun api() = CafeteriaApiImpl(client())
+
+        val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
+
+        "getSubsystems" {
+            val res = api().getSubsystems()
+            res.shouldBeInstanceOf<Right<List<SubsystemDto>>>()
         }
-    })
 
-    fun api() = CafeteriaApiImpl(client())
-
-    val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
-
-    "getSubsystems" {
-        val res = api().getSubsystems()
-        res.shouldBeInstanceOf<Right<List<SubsystemDto>>>()
-    }
-
-    "getServingPlaces" {
-        ids.forEach { subsystemId ->
-            val res = api().getServingPlaces(subsystemId)
-            res.shouldBeInstanceOf<Right<List<ServingPlaceDto>>>()
+        "getServingPlaces" {
+            ids.forEach { subsystemId ->
+                val res = api().getServingPlaces(subsystemId)
+                res.shouldBeInstanceOf<Right<List<ServingPlaceDto>>>()
+            }
         }
-    }
 
-    "getDishTypes" {
-        ids.forEach { subsystemId ->
-            val res = api().getDishTypes(subsystemId)
-            res.shouldBeInstanceOf<Right<List<DishTypeDto>?>>()
+        "getDishTypes" {
+            ids.forEach { subsystemId ->
+                val res = api().getDishTypes(subsystemId)
+                res.shouldBeInstanceOf<Right<List<DishTypeDto>?>>()
+            }
         }
-    }
-})
+    },
+)

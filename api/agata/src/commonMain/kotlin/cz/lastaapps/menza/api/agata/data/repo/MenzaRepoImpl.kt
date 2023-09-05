@@ -126,7 +126,7 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = false,
-            )
+            ),
         ).let { emit(it) }
     }
         .onStart { log.i { "Starting collection" } }

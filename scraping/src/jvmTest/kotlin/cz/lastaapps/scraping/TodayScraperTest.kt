@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,9 +28,13 @@ import cz.lastaapps.entity.day.DishAllergensPage
 import cz.lastaapps.entity.day.IssueLocation
 import cz.lastaapps.entity.menza.MenzaId
 import io.kotest.assertions.throwables.shouldThrowAny
-import io.kotest.matchers.collections.*
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -41,7 +45,6 @@ class TodayScraperTest {
 
     @Test
     fun scrapeTodayOnline() = runTest {
-
         val id = 1
         val result = TodayScraperImpl.createRequest(MenzaId(id)).bodyAsText()
         val dishSet = TodayScraperImpl.scrape(result)
@@ -404,7 +407,7 @@ class TodayScraperTest {
             it.menzaId.id shouldBe 4
         }
         dishSet.map { it.courseType.type } shouldContainAll
-                listOf("Polévky", "Hlavní jídla", "Bezmasá jídla")
+            listOf("Polévky", "Hlavní jídla", "Bezmasá jídla")
 
         dishSet shouldContain Dish(
             MenzaId(4),
@@ -416,7 +419,7 @@ class TodayScraperTest {
             "showfoto.php?clPodsystem=4&xFile=IMG-2022-01-06-100010746.JPG",
             Price(79),
             Price(101),
-            listOf(IssueLocation(21, 1, "J", "Jídelna")).toImmutableList()
+            listOf(IssueLocation(21, 1, "J", "Jídelna")).toImmutableList(),
         )
     }
 

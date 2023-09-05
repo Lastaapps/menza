@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,7 +21,12 @@ package cz.lastaapps.storage.db
 
 import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.menza.db.MenzaDatabase
-import menza.*
+import menza.AllergenEntity
+import menza.ContactEntity
+import menza.LocationEntity
+import menza.MenzaEntity
+import menza.MessageEntity
+import menza.OpeningHoursEntity
 
 interface MenzaDriverFactory {
     fun createDriver(): SqlDriver
@@ -32,13 +37,12 @@ expect class MenzaDriverFactoryFactoryImpl : MenzaDriverFactory {
 }
 
 fun createMenzaDatabase(driverFactory: MenzaDriverFactory): MenzaDatabase {
-
     val driver = driverFactory.createDriver()
 
     return MenzaDatabase(
         driver,
         allergenEntityAdapter = AllergenEntity.Adapter(
-            idAdapter = ColumnConvertors.allergenId
+            idAdapter = ColumnConvertors.allergenId,
         ),
         menzaEntityAdapter = MenzaEntity.Adapter(
             idAdapter = ColumnConvertors.menzaId,

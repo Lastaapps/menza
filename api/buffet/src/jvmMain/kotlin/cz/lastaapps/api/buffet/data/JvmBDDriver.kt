@@ -21,6 +21,4 @@ package cz.lastaapps.api.buffet.data
 
 internal const val DB_NAME = "buffet_api.db"
 
-internal fun createBuffetDBDriver(
-
-): BuffetDatabaseSqlDriver = TODO("Implement JVM driver")
+internal fun createBuffetDBDriver(): BuffetDatabaseSqlDriver = TODO("Implement JVM driver")

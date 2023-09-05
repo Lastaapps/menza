@@ -48,4 +48,3 @@ kotlin {
 android {
     namespace = "it.skrape"
 }
-

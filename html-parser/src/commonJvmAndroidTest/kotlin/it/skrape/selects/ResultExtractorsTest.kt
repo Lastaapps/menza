@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -39,7 +39,6 @@ class ResultExtractorsTest {
 
     @Test
     fun `will throw custom exception if element could not be found via element function`() {
-
         expectThrows<ElementNotFoundException> {
             htmlDocument(htmlSnippet) {
                 findAll(".nonExistent")
@@ -49,7 +48,6 @@ class ResultExtractorsTest {
 
     @Test
     fun `can pick elements via select functions`() {
-
         htmlDocument(htmlSnippet) {
             p {
                 findFirst {

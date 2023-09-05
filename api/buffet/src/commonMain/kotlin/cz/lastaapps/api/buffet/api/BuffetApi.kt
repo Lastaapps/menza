@@ -73,5 +73,4 @@ internal class BuffetApiImpl(
             .bodyAsText()
             .replace("&#8222;", "„")
             .replace("&#8220;", "“")
-
 }

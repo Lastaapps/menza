@@ -58,13 +58,13 @@ val apiBuffetModule = module {
         menzaRepo = { MenzaFSRepoImpl },
         dishRepo = { TodayDishRepository(it.toType(), get()) },
         infoRepo = { InfoRepoImpl(it.toType()) },
-        weekRepo = { WeekDishRepository(it.toType(), get()) }
+        weekRepo = { WeekDishRepository(it.toType(), get()) },
     )
     // FEL
     registerMenzaType<MenzaType.Buffet.FEL>(
         menzaRepo = { MenzaFELRepoImpl },
         dishRepo = { TodayDishRepository(it.toType(), get()) },
         infoRepo = { InfoRepoImpl(it.toType()) },
-        weekRepo = { WeekDishRepository(it.toType(), get()) }
+        weekRepo = { WeekDishRepository(it.toType(), get()) },
     )
 }

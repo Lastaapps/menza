@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,7 @@ import kotlin.math.pow
  */
 @JvmInline
 value class AllergenList internal constructor(
-    val allergens: Int
+    val allergens: Int,
 ) {
 
     companion object {
@@ -47,8 +47,9 @@ value class AllergenList internal constructor(
             var output = 0
 
             for (i in 0 until range) {
-                if (list.contains(AllergenId(i + 1)))
+                if (list.contains(AllergenId(i + 1))) {
                     output += 2.0.pow(i).toInt()
+                }
             }
             return AllergenList(output)
         }
@@ -57,8 +58,9 @@ value class AllergenList internal constructor(
             var output = 0
 
             for (i in 0 until range) {
-                if (array[i])
+                if (array[i]) {
                     output += 2.0.pow(i).toInt()
+                }
             }
             return AllergenList(output)
         }

@@ -53,8 +53,9 @@ class WeekRepoImpl(
 
     override suspend fun getData(): Set<WeekDish>? =
         withContext(dispatcher) {
-            if (mRequestInProgress.value)
+            if (mRequestInProgress.value) {
                 return@withContext null
+            }
 
             mRequestInProgress.value = true
 

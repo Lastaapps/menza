@@ -24,7 +24,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
-interface GeneralStorageRepo <R:Any> {
+interface GeneralStorageRepo<R : Any> {
 
     val errors: Channel<MenzaScrapingError>
     val requestInProgress: StateFlow<Boolean>

@@ -62,7 +62,6 @@ internal sealed interface SubsystemApi {
 
     suspend fun getLink(subsystemId: Int): Outcome<List<LinkDto>?>
     suspend fun getLinkHash(subsystemId: Int): Outcome<String>
-
 }
 
 internal class SubsystemApiImpl(
@@ -118,5 +117,4 @@ internal class SubsystemApiImpl(
     override suspend fun getLinkHash(subsystemId: Int): Outcome<String> = catchingNetwork {
         client.getFun(LinkHash, subsystemId = subsystemId).body()
     }
-
 }

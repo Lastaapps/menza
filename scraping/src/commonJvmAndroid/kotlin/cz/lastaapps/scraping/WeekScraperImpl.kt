@@ -26,7 +26,7 @@ import cz.lastaapps.entity.exceptions.WeekNotAvailable
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.entity.week.WeekDish
 import cz.lastaapps.entity.week.WeekNumber
-import io.ktor.client.request.*
+import io.ktor.client.request.get
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import kotlinx.datetime.LocalDate
@@ -39,7 +39,8 @@ object WeekScraperImpl : WeekScraper {
     private val dateRegex = """([0-9]{1,2}).\s*([0-9]{1,2}).\s*([0-9]{4})""".toRegex()
 
     override suspend fun createRequest(
-        menzaId: MenzaId, @Suppress("UNUSED_PARAMETER") weekNumber: WeekNumber
+        menzaId: MenzaId,
+        weekNumber: WeekNumber,
     ) = agataClient.get("indexTyden.php?lang=cs&clPodsystem=${menzaId.id}")
 
     @Throws(WeekNotAvailable::class)
@@ -62,7 +63,6 @@ object WeekScraperImpl : WeekScraper {
         } ?: error("Menza id not found")
 
         findAll("#jidelnicek tbody tr") {
-
             var currentDate: LocalDate? = null
             var currentOrder = 0
             val currentDateOrders = HashMap<String, Int>()
@@ -76,7 +76,9 @@ object WeekScraperImpl : WeekScraper {
                                 val values = dateRegex.find(it)?.destructured!!
                                 val (day, month, year) = values
                                 currentDate = LocalDate(
-                                    year.toInt(), month.toInt(), day.toInt()
+                                    year.toInt(),
+                                    month.toInt(),
+                                    day.toInt(),
                                 )
                             }.getOrElse { log.e(it) { "Failed to parse date" } }
                         } ?: log.e { "Failed to parse date - empty" }
@@ -111,7 +113,7 @@ object WeekScraperImpl : WeekScraper {
         return set
     }
 
-    //TODO add more celebrations
+    // TODO add more celebrations
     private val invalidDishNames = arrayOf("štědrýden", "zavřeno")
 
     /**

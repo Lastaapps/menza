@@ -21,6 +21,4 @@ package cz.lastaapps.menza.api.agata.data
 
 internal const val DB_NAME = "agata_api.db"
 
-internal fun createAgataDBDriver(
-
-): AgataDatabaseSqlDriver = TODO("Implement JVM driver")
+internal fun createAgataDBDriver(): AgataDatabaseSqlDriver = TODO("Implement JVM driver")

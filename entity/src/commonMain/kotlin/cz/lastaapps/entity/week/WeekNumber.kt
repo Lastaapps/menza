@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,11 @@
 
 package cz.lastaapps.entity.week
 
-import kotlinx.datetime.*
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * Represents week number used in fetching a week menu
@@ -32,7 +36,7 @@ value class WeekNumber private constructor(val week: Int) {
     }
 
     companion object {
-        //TODO week number not working
+        // TODO week number not working
         fun of(date: LocalDate): WeekNumber {
             val epochStart = Instant.fromEpochMilliseconds(0L)
             val days = epochStart.toLocalDateTime(TimeZone.UTC).date.daysUntil(date) - 4

@@ -70,7 +70,6 @@ class AllergenRepoImpl(
     private val mRequestInProgress = MutableStateFlow(false)
 
     override fun getData(scope: CoroutineScope): Flow<List<Allergen>> {
-
         log.i { "Getting data" }
         scope.launch(dispatcher) {
             val hasData = hasData()
@@ -93,8 +92,9 @@ class AllergenRepoImpl(
     }
 
     private suspend fun refreshInternal(): Boolean? = withContext(dispatcher) {
-        if (mRequestInProgress.value)
+        if (mRequestInProgress.value) {
             return@withContext null
+        }
 
         mRequestInProgress.value = true
 

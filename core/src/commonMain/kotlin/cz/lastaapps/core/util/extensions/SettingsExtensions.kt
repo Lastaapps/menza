@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
-
 inline fun <reified T> Settings.serializeValue(
     serializer: KSerializer<T>,
     key: String,

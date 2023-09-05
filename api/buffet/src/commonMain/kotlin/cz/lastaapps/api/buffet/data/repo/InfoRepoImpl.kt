@@ -67,8 +67,8 @@ internal class InfoRepoImpl(
                 address = Address(
                     location = address(type),
                     gps = null,
-                )
-            )
+                ),
+            ),
         )
     }
         .onStart { log.i { "Starting collection" } }
@@ -102,9 +102,9 @@ internal class InfoRepoImpl(
                             endTime = LocalTime(14, 0),
                         ),
                     ),
-                )
+                ),
             ),
-        )
+        ),
     )
 
     @Suppress("SpellCheckingInspection")

@@ -35,21 +35,25 @@ internal value class AgataClient(val client: HttpClient)
 internal fun createAgataClient(
     httpClient: HttpClient,
     beConfig: AgataBEConfig,
-) = AgataClient(httpClient.config {
-    install(DefaultRequest) {
-        url {
-            protocol = beConfig.protocol
-            host = beConfig.host
-            path(beConfig.apiPath)
-            parameters.append("api", beConfig.apiKey)
+) = AgataClient(
+    httpClient.config {
+        install(DefaultRequest) {
+            url {
+                protocol = beConfig.protocol
+                host = beConfig.host
+                path(beConfig.apiPath)
+                parameters.append("api", beConfig.apiKey)
+            }
         }
-    }
 
-    install(ContentNegotiation) {
-        json(Json {
-            encodeDefaults = true
-            ignoreUnknownKeys = true
-            explicitNulls = true
-        })
-    }
-})
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    encodeDefaults = true
+                    ignoreUnknownKeys = true
+                    explicitNulls = true
+                },
+            )
+        }
+    },
+)

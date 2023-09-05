@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,6 @@
 
 package cz.lastaapps.entity.allergens
 
-
 /**
  * Holds info about one type of allergen
  * https://agata.suz.cvut.cz/jidelnicky/alergenyall.php
@@ -27,7 +26,7 @@ package cz.lastaapps.entity.allergens
 data class Allergen(
     val id: AllergenId,
     val name: String,
-    val description: String
+    val description: String,
 ) : Comparable<Allergen> {
 
     init {

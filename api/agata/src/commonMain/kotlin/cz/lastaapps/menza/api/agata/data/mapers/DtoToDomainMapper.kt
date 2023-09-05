@@ -35,7 +35,7 @@ internal fun List<WeekDishDto>.toDomain() =
             val value = values.first()
             WeekDayDish(
                 date = value.date.parseDate(),
-                categories = values.toCategory()
+                categories = values.toCategory(),
             )
         }
         .toImmutableList()
@@ -58,7 +58,6 @@ private fun String.parseDate(): LocalDate =
     dateRegex.find(this)!!.destructured.let { (year, month, day) ->
         LocalDate(year.toInt(), month.toInt(), day.toInt())
     }
-
 
 private fun WeekDishDto.toDomain() =
     WeekDish(

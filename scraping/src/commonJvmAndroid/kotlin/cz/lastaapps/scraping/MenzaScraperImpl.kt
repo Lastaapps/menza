@@ -44,12 +44,10 @@ object MenzaScraperImpl : MenzaScraper {
     }
 
     private fun Doc.parseHtml(): Set<Menza> {
-
         val set = mutableSetOf<Menza>()
 
         findFirst("body div div div div") {
             tryFindAllAndCycle("a") {
-
                 val name = ownText.removeSpaces()
                 val id = id.removePrefix("podS").toInt()
 

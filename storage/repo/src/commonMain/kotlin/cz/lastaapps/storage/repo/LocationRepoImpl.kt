@@ -67,7 +67,6 @@ class LocationRepoImpl(
     private val mRequestInProgress = MutableStateFlow(false)
 
     override fun getData(scope: CoroutineScope): Flow<List<MenzaLocation>> {
-
         log.i { "Getting data" }
         scope.launch(dispatcher) {
             val hasData = hasData()
@@ -90,8 +89,9 @@ class LocationRepoImpl(
     }
 
     private suspend fun refreshInternal(): Boolean? = withContext(dispatcher) {
-        if (mRequestInProgress.value)
+        if (mRequestInProgress.value) {
             return@withContext null
+        }
 
         mRequestInProgress.value = true
 

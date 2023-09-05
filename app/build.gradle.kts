@@ -30,7 +30,7 @@ android {
     defaultConfig {
         applicationId = "cz.lastaapps.menza"
 
-        //have to be specified explicitly for FDroid to work
+        // have to be specified explicitly for FDroid to work
         versionCode = 1020700 // 1x major . 2x minor . 2x path . 2x build diff
         versionName = "1.2.7"
 
@@ -40,7 +40,7 @@ android {
 
     configurations {
         all {
-            //exclude(group = "org.apache.httpcomponents", module = "httpclient")
+            // exclude(group = "org.apache.httpcomponents", module = "httpclient")
             exclude(group = "commons-logging", module = "commons-logging")
         }
     }

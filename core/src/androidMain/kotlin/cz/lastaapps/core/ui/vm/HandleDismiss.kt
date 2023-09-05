@@ -24,7 +24,6 @@ import androidx.compose.runtime.LaunchedEffect
 import kotlin.reflect.KFunction1
 import kotlin.reflect.KProperty1
 
-
 @Suppress("NOTHING_TO_INLINE")
 @Composable
 inline fun <State : Any, VM : StateViewModel<State>> HandleDismiss(

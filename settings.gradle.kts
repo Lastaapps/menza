@@ -37,7 +37,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Menza"
 
-includeBuild("appyx")  {
+includeBuild("appyx") {
     dependencySubstitution {
         substitute(module("lib.stolen:appyx")).using(project(":libraries:core"))
     }

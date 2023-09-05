@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,7 +32,7 @@ public class CssSelector(
     public var withAttributeKeys: List<String>? = null,
     public var withAttribute: Pair<String, String>? = null,
     public var withAttributes: List<Pair<String, String>>? = null,
-    public val doc: CssSelectable = Doc(Document(""))
+    public val doc: CssSelectable = Doc(Document("")),
 ) : CssSelectable() {
     override val toCssSelector: String
         get() = ("${doc.toCssSelector} $this").trim()

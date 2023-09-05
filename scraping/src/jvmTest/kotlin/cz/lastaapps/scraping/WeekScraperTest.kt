@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -33,22 +33,21 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
+import java.time.Month
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.todayAt
+import kotlinx.datetime.todayIn
 import org.junit.jupiter.api.Test
-import java.time.Month
 
 @ExperimentalCoroutinesApi
 class WeekScraperTest {
 
     @Test
     fun scrapeWeekOnline() = runTest {
-
-        val date = Clock.System.todayAt(CET)
+        val date = Clock.System.todayIn(CET)
         val weekNumber = WeekNumber.of(date)
         println("Loading for $date, weekNumber is ${weekNumber.week}")
 
@@ -1041,7 +1040,6 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
 
     @Test
     fun malformedWeekNotSupported() = runTest {
-
         val noMessage =
             """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">

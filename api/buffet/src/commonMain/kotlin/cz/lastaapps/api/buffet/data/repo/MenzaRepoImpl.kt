@@ -51,7 +51,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = true,
-            )
+            ),
         ).let { emit(it) }
     }
         .onEach { log.i { "Menza produced: ${it.size}" } }
@@ -79,7 +79,7 @@ internal object MenzaFELRepoImpl : MenzaRepo {
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = true,
-            )
+            ),
         ).let { emit(it) }
     }
         .onEach { log.i { "Menza produced: ${it.size}" } }

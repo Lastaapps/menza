@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,6 +22,8 @@ package it.skrape.selects.html5
 import a3TimesNestedTag
 import it.skrape.core.htmlDocument
 import it.skrape.selects.text
+import java.awt.SystemColor.text
+import jdk.internal.org.jline.keymap.KeyMap.del
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo

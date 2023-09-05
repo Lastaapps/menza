@@ -26,7 +26,6 @@ import cz.lastaapps.api.buffet.BuffetDatabase
 import cz.lastaapps.api.buffet.domain.model.BuffetType
 import kotlinx.datetime.DayOfWeek
 
-
 @JvmInline
 internal value class BuffetDatabaseSqlDriver(val sqlDriver: SqlDriver)
 

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,7 @@ import org.jsoup.nodes.Element
 @SkrapeItDsl
 public class DocElement internal constructor(
     override val element: Element,
-    override val relaxed: Boolean
+    override val relaxed: Boolean,
 ) : DomTreeElement() {
     public constructor(element: Element) : this(element, false)
 
@@ -198,7 +198,7 @@ public class DocElement internal constructor(
                 .filterNot { it.key == "class" }
                 .filterNot { it.value.isBlank() }
                 .toList(),
-            withAttributeKeys = attributes.filterValues { it.isBlank() }.map { it.key }.orNull()
+            withAttributeKeys = attributes.filterValues { it.isBlank() }.map { it.key }.orNull(),
         ).toString()
     }
 }

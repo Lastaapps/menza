@@ -94,8 +94,9 @@ private fun DishEntity.fullName() =
 
             sideDishA?.let { append(it) }
 
-            if (sideDishA != null && sideDishB != null)
+            if (sideDishA != null && sideDishB != null) {
                 append(" ")
+            }
 
             sideDishB?.let { append(it) }
         }
@@ -110,8 +111,9 @@ private fun DishEntity.fullNameSmart() =
 
             sideDishA?.let { append(it) }
 
-            if (sideDishA != null && sideDishB != null)
+            if (sideDishA != null && sideDishB != null) {
                 append(" / ")
+            }
 
             sideDishB?.let { append(it) }
 
@@ -145,7 +147,7 @@ internal fun InfoEntity?.toDomain(
             lat = address.lat.toFloat(),
             long = address.long.toFloat(),
         ),
-    )
+    ),
 )
 
 private fun ContactEntity.toDomain() =
@@ -177,9 +179,9 @@ fun List<OpenTimeEntity>.toDomain() = this
                             )
                         }
                             .sortedBy { it.startDay }
-                            .toImmutableList()
+                            .toImmutableList(),
                     )
-                }.toImmutableList()
+                }.toImmutableList(),
         )
     }
 

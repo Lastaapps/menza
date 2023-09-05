@@ -26,8 +26,8 @@ import cz.lastaapps.entity.toCzechDayShortcutToDayOfWeek
 import io.ktor.client.request.get
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
-import kotlinx.datetime.LocalTime
 import java.time.DayOfWeek
+import kotlinx.datetime.LocalTime
 
 object OpeningHoursScraperImpl : OpeningHoursScraper {
 
@@ -43,11 +43,9 @@ object OpeningHoursScraperImpl : OpeningHoursScraper {
 
         findFirst("#otdoby") {
             findAllAndCycle("section") {
-
                 val id = id.removePrefix("section").toInt()
 
                 tryFindAllAndCycle("table") {
-
                     val name = findFirst("thead tr th") { ownText }
 
                     tryFindAllAndCycle("tbody tr") {
@@ -56,7 +54,6 @@ object OpeningHoursScraperImpl : OpeningHoursScraper {
                         val startTime = children[3].ownText.parseTime()!!
                         val endTime = children[5].ownText.parseTime()!!
                         val type = children[6].ownText.removeSpaces().takeIf { it.isNotBlank() }
-
 
                         val days = TimeUtils.getDaysOfWeek()
                         val startIndex = days.indexOf(startDay ?: DayOfWeek.MONDAY)
@@ -73,7 +70,8 @@ object OpeningHoursScraperImpl : OpeningHoursScraper {
                                 MenzaId(id),
                                 name,
                                 day,
-                                startTime, endTime,
+                                startTime,
+                                endTime,
                                 type,
                             )
                         }
@@ -88,7 +86,6 @@ object OpeningHoursScraperImpl : OpeningHoursScraper {
     private val timeRegex = "^([0-9]{1,2}):([0-9]{1,2})$".toRegex()
 
     private fun String.parseTime(): LocalTime? {
-
         val (sHours, sMinutes) = timeRegex.find(this)?.destructured ?: return null
 
         val hours = sHours.toIntOrNull() ?: return null

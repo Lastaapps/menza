@@ -77,7 +77,13 @@ val apiAgataModule = module {
         dishRepo = { menza ->
             TodayDishSubsystemRepoImpl(
                 menza.subsystemId,
-                get(), get(), get(), get(), get(), get(), get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
             )
         },
         infoRepo = { menza ->

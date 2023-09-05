@@ -38,7 +38,6 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.persistentListOf
 import org.lighthousegames.logging.logging
 
-
 internal class SyncProcessorImpl : SyncProcessor {
 
     companion object {
@@ -53,18 +52,15 @@ internal class SyncProcessorImpl : SyncProcessor {
         isForced: Boolean,
     ): SyncOutcome = outcome {
         list.also { log.i { "Preparing run conditions" } }
-
             // Fetches hash codes from a remote source
             .parMap { job ->
                 withTimeoutOutcome(jobTimeout) {
                     job.shouldRun(this@outcome, isForced).map { job to it }
                 }.bind()
             }
-
             // remove skipped jobs
             .filterIsInstance<Some<Pair<SyncJob<*, *>, suspend () -> Unit>>>()
             .map { it.value }
-
             .also { log.i { "Executing" } }
             // Fetch data from api and convert then
             .parMap { (job, hash) ->
@@ -73,14 +69,13 @@ internal class SyncProcessorImpl : SyncProcessor {
                     Pair(storeAction, hash)
                 }.bind()
             }
-
             // Store data
             .also { log.i { "Storing data" } }
             .also { results ->
 
                 // store data in a single transaction
                 scope.foldRight(
-                    { results.forEach { (action, _) -> action.map { it() } } }
+                    { results.forEach { (action, _) -> action.map { it() } } },
                 ) { func, acu ->
                     { func(acu) }
                 }.invoke()
@@ -88,7 +83,6 @@ internal class SyncProcessorImpl : SyncProcessor {
                 // store new hash codes
                 results.forEach { (_, hash) -> hash() }
             }
-
             // collect noncritical errors
             .map(Pair<IorNel<MenzaError, *>, *>::first)
             .foldRight(persistentListOf<MenzaError>()) { item, acu ->
@@ -98,7 +92,7 @@ internal class SyncProcessorImpl : SyncProcessor {
                         is Both -> item.leftValue
                         is Left -> item.value
                         is Right -> emptyList()
-                    }
+                    },
                 )
             }.let {
                 it.toNonEmptyListOrNull()?.let { nel ->

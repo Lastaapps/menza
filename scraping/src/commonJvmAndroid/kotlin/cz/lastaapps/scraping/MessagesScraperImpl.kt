@@ -40,7 +40,6 @@ object MessagesScraperImpl : MessagesScraper {
     }
 
     private fun Doc.parseHtml(): Set<Message> {
-
         val menzas = MenzaScraperImpl.scrape(html).map {
             it.name to it.menzaId
         }.toMap()

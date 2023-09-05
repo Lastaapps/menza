@@ -33,11 +33,13 @@ import org.lighthousegames.logging.logging
 @OptIn(ExperimentalSerializationApi::class)
 internal val httpClient = HttpClient() {
     install(ContentNegotiation) {
-        json(Json {
-            encodeDefaults = true
-            ignoreUnknownKeys = true
-            explicitNulls = true
-        })
+        json(
+            Json {
+                encodeDefaults = true
+                ignoreUnknownKeys = true
+                explicitNulls = true
+            },
+        )
     }
 
     install(HttpTimeout) {

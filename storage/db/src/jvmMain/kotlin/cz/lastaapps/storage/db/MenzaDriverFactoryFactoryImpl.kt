@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,8 +26,8 @@ import cz.lastaapps.menza.db.MenzaDatabase
 actual class MenzaDriverFactoryFactoryImpl : MenzaDriverFactory {
     @Suppress("UNREACHABLE_CODE")
     actual override fun createDriver(): SqlDriver {
-        //TODO use real driver
-        //https://github.com/molikuner/sqldelight-simple-jvm-driver
+        // TODO use real driver
+        // https://github.com/molikuner/sqldelight-simple-jvm-driver
         error("Implement real driver first")
         val driver: SqlDriver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         MenzaDatabase.Schema.create(driver)

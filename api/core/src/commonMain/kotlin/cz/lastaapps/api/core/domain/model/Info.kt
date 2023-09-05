@@ -35,7 +35,8 @@ data class Info(
     companion object {
         val empty: Info
             get() = Info(
-                null, null,
+                null,
+                null,
                 persistentListOf(),
                 persistentListOf(),
                 persistentListOf(),

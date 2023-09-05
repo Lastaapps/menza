@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -39,7 +39,6 @@ class ContactsScraperTest {
 
     @Test
     fun scrapContactsOnline() = runTest {
-
         val result = ContactsScraperImpl.createRequest().bodyAsText()
         val contacts = ContactsScraperImpl.scrape(result)
 
@@ -461,7 +460,7 @@ class ContactsScraperTest {
 
         val contacts = ContactsScraperImpl.scrape(toTest)
 
-        //contacts.forEach { println(it) }
+        // contacts.forEach { println(it) }
 
         contacts shouldHaveSize 12
         contacts shouldContain Contact(

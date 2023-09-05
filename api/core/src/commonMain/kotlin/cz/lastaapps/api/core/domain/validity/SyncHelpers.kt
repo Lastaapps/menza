@@ -26,7 +26,6 @@ import kotlin.time.Duration
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Instant
 
-
 suspend inline fun ValidityChecker.withCheckRecent(
     key: ValidityKey,
     forced: Boolean,

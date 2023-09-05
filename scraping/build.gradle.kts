@@ -50,4 +50,3 @@ dependencies {
     commonMainImplementation(projects.entity)
     commonMainImplementation(projects.htmlParser)
 }
-

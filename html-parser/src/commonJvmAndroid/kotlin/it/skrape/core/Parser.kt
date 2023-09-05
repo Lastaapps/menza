@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,16 +21,17 @@ package it.skrape.core
 
 import it.skrape.SkrapeItDsl
 import it.skrape.selects.Doc
-import org.intellij.lang.annotations.Language
-import org.jsoup.nodes.Document
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
+import org.intellij.lang.annotations.Language
+import org.jsoup.nodes.Document
 import org.jsoup.parser.Parser.parse as jSoupParser
 
 internal class Parser(
-    var html: String, val baseUri: String,
+    var html: String,
+    val baseUri: String,
 ) {
 
     fun parse(): Doc {
@@ -55,7 +56,7 @@ public fun <T> htmlDocument(
     charset: Charset = Charsets.UTF_8,
     jsExecution: Boolean = false,
     baseUri: String = "",
-    init: Doc.() -> T
+    init: Doc.() -> T,
 ): T = htmlDocument(html, charset, jsExecution, baseUri).init()
 
 /**
@@ -70,7 +71,7 @@ public fun <T> htmlDocument(
     charset: Charset = Charsets.UTF_8,
     jsExecution: Boolean = false,
     baseUri: String = "",
-    init: Doc.() -> T
+    init: Doc.() -> T,
 ): T = htmlDocument(file, charset, jsExecution, baseUri).init()
 
 /**
@@ -85,7 +86,7 @@ public fun <T> htmlDocument(
     charset: Charset = Charsets.UTF_8,
     jsExecution: Boolean = false,
     baseUri: String = "",
-    init: Doc.() -> T
+    init: Doc.() -> T,
 ): T = htmlDocument(bytes, charset, jsExecution, baseUri).init()
 
 @SkrapeItDsl
@@ -93,24 +94,24 @@ public fun htmlDocument(
     @Language("HTML") html: String,
     charset: Charset = Charsets.UTF_8,
     jsExecution: Boolean = false,
-    baseUri: String = ""
+    baseUri: String = "",
 ): Doc = Parser(html, baseUri).parse()
 
 public fun htmlDocument(
     file: File,
     charset: Charset = Charsets.UTF_8,
     jsExecution: Boolean = false,
-    baseUri: String = ""
+    baseUri: String = "",
 ): Doc = htmlDocument(file.readText(charset), charset, jsExecution, baseUri)
 
 public fun htmlDocument(
     bytes: InputStream,
     charset: Charset = Charsets.UTF_8,
     jsExecution: Boolean = false,
-    baseUri: String = ""
+    baseUri: String = "",
 ): Doc = htmlDocument(
     bytes.bufferedReader().use(BufferedReader::readText),
     charset,
     jsExecution,
-    baseUri
+    baseUri,
 )

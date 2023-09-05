@@ -19,23 +19,20 @@
 
 package cz.lastaapps.api.core.di
 
-import android.content.Context
-import com.russhwolf.settings.SharedPreferencesSettings
+import com.russhwolf.settings.PreferencesSettings
 import cz.lastaapps.api.core.data.ValiditySettings
 import cz.lastaapps.core.util.datastructures.StateFlowSettings
+import java.util.prefs.Preferences
 import org.koin.core.module.Module
-import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
 internal actual val platform: Module = module {
     single { createValiditySettings() }
 }
 
-private fun Scope.createValiditySettings() =
+private fun createValiditySettings() =
     ValiditySettings(
-        SharedPreferencesSettings(
-            get<Context>().getSharedPreferences("validity", Context.MODE_PRIVATE)
-        ).let {
-            StateFlowSettings(it)
-        }
+        StateFlowSettings(
+            PreferencesSettings(Preferences.systemRoot()),
+        ),
     )

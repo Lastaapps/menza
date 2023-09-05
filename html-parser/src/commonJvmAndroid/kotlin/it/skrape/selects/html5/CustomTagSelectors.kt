@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -35,6 +35,6 @@ import it.skrape.selects.CssSelector
 public fun <T> CssSelectable.customTag(
     tag: String,
     cssSelector: String = "",
-    init: CssSelector.() -> T
+    init: CssSelector.() -> T,
 ): T =
     selection("$tag$cssSelector", init)

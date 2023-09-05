@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -46,11 +46,9 @@ object LocationScraperImpl : LocationScraper {
 
         findFirst("#otdoby") {
             tryFindAllAndCycle("section") {
-
                 val menzaId =
                     id.removePrefix("section").takeIf { it.removeSpaces().isNotBlank() }?.toInt()
                         ?: error("Invalid menza id")
-
 
                 val address = h3 {
                     small {
@@ -69,7 +67,6 @@ object LocationScraperImpl : LocationScraper {
 
         return set
     }
-
 
     private val locationRegex = "q=(\\d+.\\d+),\\s*(\\d+.\\d+)&".toRegex()
 

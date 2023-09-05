@@ -51,8 +51,9 @@ class TodayRepoImpl(
 
     override suspend fun getData(): Set<Dish>? =
         withContext(dispatcher) {
-            if (mRequestInProgress.value)
+            if (mRequestInProgress.value) {
                 return@withContext null
+            }
 
             mRequestInProgress.value = true
 

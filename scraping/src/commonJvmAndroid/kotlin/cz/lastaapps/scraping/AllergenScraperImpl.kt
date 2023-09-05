@@ -45,7 +45,6 @@ object AllergenScraperImpl : AllergenScraper {
 
         findFirst("#otdoby tbody") {
             tryFindAllAndCycle("tr") {
-
                 if (attributes["style"]?.contains("none") == true) {
                     return@tryFindAllAndCycle
                 }

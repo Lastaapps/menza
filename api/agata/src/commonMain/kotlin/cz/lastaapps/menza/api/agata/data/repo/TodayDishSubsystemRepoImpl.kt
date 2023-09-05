@@ -166,7 +166,7 @@ internal class TodayDishSubsystemRepoImpl(
                 db.dishQueries.insert(it)
             }
             log.d { "Stored dish list" }
-        }
+        },
     )
 
     private val dishTypeJob = SyncJobHash(
@@ -196,7 +196,7 @@ internal class TodayDishSubsystemRepoImpl(
                 db.pictogramQueries.insert(it)
             }
             log.d { "Stored pictograms" }
-        }
+        },
     )
 
     private val servingPlacesJob = SyncJobHash(
@@ -211,7 +211,7 @@ internal class TodayDishSubsystemRepoImpl(
                 db.servingPlaceQueries.insert(it)
             }
             log.d { "Stored serving places" }
-        }
+        },
     )
 
     private val jobs = listOf(dishListJob, dishTypeJob, pictogramJob, servingPlacesJob)

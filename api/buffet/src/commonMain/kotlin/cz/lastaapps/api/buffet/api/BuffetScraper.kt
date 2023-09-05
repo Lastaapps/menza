@@ -158,7 +158,7 @@ internal class BuffetScraperImpl : BuffetScraper {
                 val valid = dishData.map { it.second }.toList()
 
                 val errors = dishData.fold(
-                    (dayErrors as Sequence<MenzaError>).toPersistentList()
+                    (dayErrors as Sequence<MenzaError>).toPersistentList(),
                 ) { acu, (errors, _) ->
                     when (errors) {
                         None -> acu
@@ -198,7 +198,13 @@ internal class BuffetScraperImpl : BuffetScraper {
             }
 
     private val daysOfWeek = listOf(
-        "pondělí", "úterý", "středa", "čtvrtek", "pátek", "sobota", "neděle",
+        "pondělí",
+        "úterý",
+        "středa",
+        "čtvrtek",
+        "pátek",
+        "sobota",
+        "neděle",
     )
 
     private fun String.toDayOfWeek(): DayOfWeek {

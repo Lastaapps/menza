@@ -21,7 +21,6 @@ package cz.lastaapps.api.core.domain.sync
 
 import com.squareup.sqldelight.Transacter
 
-
 interface SyncProcessor {
     suspend fun runSync(
         list: Iterable<SyncJob<*, *>>,

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -53,7 +53,8 @@ class DocTest {
               | <body>
               |  <p>Hello <b> there </b> now! </p> 
               | </body>
-              |</html>""".trimMargin()
+              |</html>
+            """.trimMargin(),
         )
     }
 
@@ -65,7 +66,8 @@ class DocTest {
               | <body>
               |  <p>Hello <b> there </b> now! </p> 
               | </body>
-              |</html>""".trimMargin()
+              |</html>
+            """.trimMargin(),
         )
     }
 

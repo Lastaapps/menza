@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,14 +19,12 @@
 
 package cz.lastaapps.entity
 
-
 import kotlin.test.Test
 
 class LocalTimeTest {
 
     @Test
     fun localTime() {
-
         val data = listOf(
             LocalTime(0, 0, 0),
             LocalTime(1, 0, 0),
@@ -40,6 +38,5 @@ class LocalTimeTest {
             println("$it - $transformed")
             assert(it == transformed)
         }
-
     }
 }

@@ -32,12 +32,12 @@ import io.ktor.client.request.get
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import it.skrape.selects.DocElement
+import kotlin.math.roundToInt
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.lighthousegames.logging.logging
-import kotlin.math.roundToInt
 
 object TodayScraperImpl : TodayScraper {
 
@@ -51,7 +51,6 @@ object TodayScraperImpl : TodayScraper {
     }
 
     private fun Doc.parseHtml(): Set<Dish> {
-
         val dishSet = mutableSetOf<Dish>()
         var currentType: String? = null
         var webOrder = 0
@@ -62,7 +61,6 @@ object TodayScraperImpl : TodayScraper {
         } ?: error("Menza id not found")
 
         tryFindAllAndCycle("#jidelnicek table tbody tr") {
-
             when (children.firstOrNull()?.tagName) {
                 "th" -> {
                     val newType = children.first().ownText.removeSpaces()
@@ -104,7 +102,7 @@ object TodayScraperImpl : TodayScraper {
                             imgUrl,
                             priceStudent?.let(::Price),
                             priceNormal?.let(::Price),
-                            persistentListOf() // issuePlaces,
+                            persistentListOf(), // issuePlaces,
                         )
                     } catch (e: DishNameEmpty) {
                         e.printStackTrace()
@@ -114,8 +112,9 @@ object TodayScraperImpl : TodayScraper {
                 else -> error("No <tr> children")
             }
         }
-        if (errorOccurred && dishSet.isEmpty())
+        if (errorOccurred && dishSet.isEmpty()) {
             error("Failed to parse dish list - invalid server data")
+        }
         return dishSet
     }
 

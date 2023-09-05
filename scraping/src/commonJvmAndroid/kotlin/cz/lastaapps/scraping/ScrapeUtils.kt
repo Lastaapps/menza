@@ -1,5 +1,5 @@
 /*
- *    Copyright 2021, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,21 +27,21 @@ import kotlinx.datetime.TimeZone
 internal fun <T> CssSelectable.tryFindByIndex(
     index: Int,
     cssSelector: String = "",
-    init: DocElement.() -> T
+    init: DocElement.() -> T,
 ): T? {
     try {
-        //tests if the element exists
+        // tests if the element exists
         findByIndex(index, cssSelector)
     } catch (e: ElementNotFoundException) {
         return null
     }
-    //is placed outside of the try-catch, so Errors in the init block aren't caught
+    // is placed outside of the try-catch, so Errors in the init block aren't caught
     return findByIndex(index, cssSelector, init)
 }
 
 internal fun <T> CssSelectable.tryFindFirst(
     cssSelector: String = "",
-    init: DocElement.() -> T
+    init: DocElement.() -> T,
 ): T? {
     try {
         findFirst(cssSelector)
@@ -53,7 +53,7 @@ internal fun <T> CssSelectable.tryFindFirst(
 
 internal fun <T> CssSelectable.tryFindAll(
     cssSelector: String = "",
-    init: List<DocElement>.() -> T
+    init: List<DocElement>.() -> T,
 ): T? {
     try {
         findFirst(cssSelector)
@@ -65,7 +65,7 @@ internal fun <T> CssSelectable.tryFindAll(
 
 internal fun <T> CssSelectable.tryFindAllAndCycle(
     cssSelector: String = "",
-    init: DocElement.() -> T
+    init: DocElement.() -> T,
 ) {
     try {
         findFirst(cssSelector)
@@ -77,7 +77,7 @@ internal fun <T> CssSelectable.tryFindAllAndCycle(
 
 internal fun <T> CssSelectable.findAllAndCycle(
     cssSelector: String = "",
-    init: DocElement.() -> T
+    init: DocElement.() -> T,
 ) {
     findAll(cssSelector) {
         forEach {

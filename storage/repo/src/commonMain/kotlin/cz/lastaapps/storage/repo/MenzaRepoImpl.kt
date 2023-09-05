@@ -62,7 +62,6 @@ class MenzaRepoImpl(
     private val mRequestInProgress = MutableStateFlow(false)
 
     override fun getData(scope: CoroutineScope): Flow<List<Menza>> {
-
         log.i { "Getting data" }
         scope.launch(dispatcher) {
             val hasData = hasData()
@@ -77,7 +76,7 @@ class MenzaRepoImpl(
             .asFlow().mapToList(scope.coroutineContext)
     }
 
-    override fun refreshData() : Flow<Boolean?> {
+    override fun refreshData(): Flow<Boolean?> {
         return flow {
             log.i { "Requesting data refresh" }
             emit(refreshInternal())
@@ -85,8 +84,9 @@ class MenzaRepoImpl(
     }
 
     private suspend fun refreshInternal(): Boolean? = withContext(dispatcher) {
-        if (mRequestInProgress.value)
+        if (mRequestInProgress.value) {
             return@withContext null
+        }
 
         mRequestInProgress.value = true
 

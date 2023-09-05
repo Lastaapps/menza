@@ -68,7 +68,6 @@ class MessagesRepoImpl(
     private val mRequestInProgress = MutableStateFlow(false)
 
     override fun getData(scope: CoroutineScope): Flow<List<Message>> {
-
         log.i { "Getting data" }
         scope.launch(dispatcher) {
             val hasData = hasData()
@@ -89,8 +88,9 @@ class MessagesRepoImpl(
     }
 
     private suspend fun refreshInternal(): Boolean? = withContext(dispatcher) {
-        if (mRequestInProgress.value)
+        if (mRequestInProgress.value) {
             return@withContext null
+        }
 
         mRequestInProgress.value = true
 

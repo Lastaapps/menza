@@ -105,7 +105,6 @@ internal class DishLogicImpl(
             }
             .map { it.toDomainWeek(clock) }
 
-
     private val job = object : SyncJob<OutcomeIor<WebContentDto>, List<DishEntity>>(
         shouldRun = { Some {} },
         fetchApi = {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,11 +20,11 @@
 package cz.lastaapps.entity.week
 
 import io.kotest.matchers.shouldBe
+import kotlin.test.Test
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.plus
-import kotlin.test.Test
 
 class WeekNumberKtTest {
 

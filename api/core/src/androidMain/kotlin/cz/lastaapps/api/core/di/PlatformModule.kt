@@ -17,24 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.buffet.di
+package cz.lastaapps.api.core.di
 
 import android.content.Context
 import com.russhwolf.settings.SharedPreferencesSettings
-import cz.lastaapps.api.buffet.data.ValiditySettings
-import cz.lastaapps.api.buffet.data.createBuffetDBDriver
+import cz.lastaapps.api.core.data.ValiditySettings
+import cz.lastaapps.core.util.datastructures.StateFlowSettings
 import org.koin.core.module.Module
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
 internal actual val platform: Module = module {
-    factory { createBuffetDBDriver() }
-    factory { createValiditySettings() }
+    single { createValiditySettings() }
 }
 
 private fun Scope.createValiditySettings() =
     ValiditySettings(
         SharedPreferencesSettings(
-            get<Context>().getSharedPreferences("validity", Context.MODE_PRIVATE)
-        )
+            get<Context>().getSharedPreferences("validity", Context.MODE_PRIVATE),
+        ).let {
+            StateFlowSettings(it)
+        },
     )

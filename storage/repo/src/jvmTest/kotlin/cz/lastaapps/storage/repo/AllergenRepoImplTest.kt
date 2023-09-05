@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,6 +24,7 @@ import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.menza.db.MenzaDatabase
 import cz.lastaapps.storage.MemoryMenzaDriverFactory
 import cz.lastaapps.storage.createMenzaDatabase
+import cz.lastaapps.storage.db.MemoryMenzaDriverFactory
 import cz.lastaapps.storage.repo.scrapers.AllergenScraperMock
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi

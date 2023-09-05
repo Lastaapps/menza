@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DayOfWeek
@@ -38,7 +38,6 @@ class OpeningHoursScraperTest {
 
     @Test
     fun scrapOpeningHoursOnline() = runTest {
-
         val result = OpeningHoursScraperImpl.createRequest().bodyAsText()
         val hours = OpeningHoursScraperImpl.scrape(result)
 
@@ -56,8 +55,11 @@ class OpeningHoursScraperTest {
         val canteenCloseEvening = LocalTime(20, 0, 0)
 
         for (day in listOf(
-            DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
-            DayOfWeek.THURSDAY, DayOfWeek.FRIDAY,
+            DayOfWeek.MONDAY,
+            DayOfWeek.TUESDAY,
+            DayOfWeek.WEDNESDAY,
+            DayOfWeek.THURSDAY,
+            DayOfWeek.FRIDAY,
         )) {
             val found = strahov.find { it.dayOfWeek == day }
             found.shouldNotBeNull()

@@ -35,4 +35,3 @@ sealed interface ApiError : MenzaError.Logic {
         value class Problem(val errors: Nel<MenzaError>) : SyncError
     }
 }
-

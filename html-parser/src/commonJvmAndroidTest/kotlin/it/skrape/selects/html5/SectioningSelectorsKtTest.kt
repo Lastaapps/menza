@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,6 +23,8 @@ import a3TimesNestedTag
 import aValidDocument
 import it.skrape.core.htmlDocument
 import it.skrape.selects.text
+import javax.management.Query.div
+import kotlin.text.Typography.section
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -43,7 +45,6 @@ class SectioningSelectorsKtTest {
 
     @Test
     fun `can parse div-tag`() {
-
         htmlDocument(a3TimesNestedTag("div")) {
             div {
                 findAll {

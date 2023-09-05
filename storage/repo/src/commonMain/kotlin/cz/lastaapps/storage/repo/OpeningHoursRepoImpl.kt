@@ -68,7 +68,6 @@ class OpeningHoursRepoImpl(
     private val mRequestInProgress = MutableStateFlow(false)
 
     override fun getData(scope: CoroutineScope): Flow<List<OpeningHours>> {
-
         log.i { "Getting data" }
         scope.launch(dispatcher) {
             val hasData = hasData()
@@ -90,9 +89,10 @@ class OpeningHoursRepoImpl(
         }.flowOn(dispatcher)
     }
 
-    private suspend fun refreshInternal(): Boolean? = withContext(dispatcher){
-        if (mRequestInProgress.value)
+    private suspend fun refreshInternal(): Boolean? = withContext(dispatcher) {
+        if (mRequestInProgress.value) {
             return@withContext null
+        }
 
         mRequestInProgress.value = true
 
@@ -119,8 +119,12 @@ class OpeningHoursRepoImpl(
             queries.delete()
             data.forEach {
                 queries.insert(
-                    it.menzaId, it.locationName, it.dayOfWeek,
-                    it.open, it.close, it.comment
+                    it.menzaId,
+                    it.locationName,
+                    it.dayOfWeek,
+                    it.open,
+                    it.close,
+                    it.comment,
                 )
             }
         }

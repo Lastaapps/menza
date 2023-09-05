@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,7 +28,7 @@ class CssSelectorTest {
     @Test
     fun `can calculate selector from raw css selector param`() {
         val cssSelector = CssSelector(
-            rawCssSelector = "#foo.bar"
+            rawCssSelector = "#foo.bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("#foo.bar")
     }
@@ -36,7 +36,7 @@ class CssSelectorTest {
     @Test
     fun `can calculate selector from raw css selector param with spaces`() {
         val cssSelector = CssSelector(
-            rawCssSelector = "div #foo.bar"
+            rawCssSelector = "div #foo.bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("div #foo.bar")
     }
@@ -44,7 +44,7 @@ class CssSelectorTest {
     @Test
     fun `can calculate class selector from element`() {
         val cssSelector = CssSelector(
-            withClass = "foo"
+            withClass = "foo",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo(".foo")
     }
@@ -52,7 +52,7 @@ class CssSelectorTest {
     @Test
     fun `can calculate list of classes selector from element`() {
         val cssSelector = CssSelector(
-            withClass = "foo" and "bar"
+            withClass = "foo" and "bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo(".foo.bar")
     }
@@ -60,7 +60,7 @@ class CssSelectorTest {
     @Test
     fun `whitespaces in class names will be kicked`() {
         val cssSelector = CssSelector(
-            withClass = "   foobar " and " foo " and " bar "
+            withClass = "   foobar " and " foo " and " bar ",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo(".foobar.foo.bar")
     }
@@ -72,7 +72,7 @@ class CssSelectorTest {
             withClass = "   foobar " and " foo " and " bar ",
             withAttribute = "   foooo " to "  bar   ",
             withAttributes = "fizz" to "buzz" and Pair("skrape", "it"),
-            withAttributeKeys = listOf("key1", "key2")
+            withAttributeKeys = listOf("key1", "key2"),
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("div.foo span.foobar.foo.bar['key1']['key2'][foooo='  bar   '][fizz='buzz'][skrape='it']")
     }
@@ -80,7 +80,7 @@ class CssSelectorTest {
     @Test
     fun `can calculate id selector from element`() {
         val cssSelector = CssSelector(
-            withId = "foo"
+            withId = "foo",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("#foo")
     }
@@ -88,7 +88,7 @@ class CssSelectorTest {
     @Test
     fun `whitespaces in id will be kicked`() {
         val cssSelector = CssSelector(
-            withId = " f o o  "
+            withId = " f o o  ",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("#foo")
     }
@@ -96,7 +96,7 @@ class CssSelectorTest {
     @Test
     fun `can calculate attributeKey selector from element`() {
         val cssSelector = CssSelector(
-            withAttributeKey = "foo"
+            withAttributeKey = "foo",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("[foo]")
     }
@@ -104,7 +104,7 @@ class CssSelectorTest {
     @Test
     fun `whitespaces in attributeKey will be kicked`() {
         val cssSelector = CssSelector(
-            withAttributeKey = " f o o  "
+            withAttributeKey = " f o o  ",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("[foo]")
     }
@@ -112,7 +112,7 @@ class CssSelectorTest {
     @Test
     fun `can calculate attribute selector from element`() {
         val cssSelector = CssSelector(
-            withAttribute = "foo" to "bar"
+            withAttribute = "foo" to "bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("[foo='bar']")
     }
@@ -120,7 +120,7 @@ class CssSelectorTest {
     @Test
     fun `can calculate attribute selector with attribute value containing whitespaces`() {
         val cssSelector = CssSelector(
-            withAttribute = "foo" to " bar foobar  "
+            withAttribute = "foo" to " bar foobar  ",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("[foo=' bar foobar  ']")
     }
@@ -128,7 +128,7 @@ class CssSelectorTest {
     @Test
     fun `whitespaces in attribute key will be kicked`() {
         val cssSelector = CssSelector(
-            withAttribute = "   f o o  " to "bar"
+            withAttribute = "   f o o  " to "bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("[foo='bar']")
     }
@@ -137,7 +137,7 @@ class CssSelectorTest {
     fun `can calculate combination of id and class selector from element`() {
         val cssSelector = CssSelector(
             withClass = "bar",
-            withId = "foo"
+            withId = "foo",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("#foo.bar")
     }
@@ -146,7 +146,7 @@ class CssSelectorTest {
     fun `can calculate combination of id and attributeKey selector from element`() {
         val cssSelector = CssSelector(
             withAttributeKey = "bar",
-            withId = "foo"
+            withId = "foo",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("#foo[bar]")
     }
@@ -155,7 +155,7 @@ class CssSelectorTest {
     fun `can calculate combination of id and attribute selector from element`() {
         val cssSelector = CssSelector(
             withAttribute = "foo" to "bar",
-            withId = "foobar"
+            withId = "foobar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("#foobar[foo='bar']")
     }
@@ -164,7 +164,7 @@ class CssSelectorTest {
     fun `can calculate combination of attribute and class selector from element`() {
         val cssSelector = CssSelector(
             withClass = "foobar",
-            withAttribute = "foo" to "bar"
+            withAttribute = "foo" to "bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo(".foobar[foo='bar']")
     }
@@ -173,7 +173,7 @@ class CssSelectorTest {
     fun `can calculate combination of attribute and attributeKey selector from element`() {
         val cssSelector = CssSelector(
             withAttributeKey = "foobar",
-            withAttribute = "foo" to "bar"
+            withAttribute = "foo" to "bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("[foobar][foo='bar']")
     }
@@ -183,7 +183,7 @@ class CssSelectorTest {
         val cssSelector = CssSelector(
             withId = "foobar",
             withAttributeKey = "foo",
-            withClass = "bar"
+            withClass = "bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("#foobar.bar[foo]")
     }
@@ -193,7 +193,7 @@ class CssSelectorTest {
         val cssSelector = CssSelector(
             withId = "fb",
             withAttributeKey = "foobar",
-            withAttribute = "foo" to "bar"
+            withAttribute = "foo" to "bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("#fb[foobar][foo='bar']")
     }
@@ -203,7 +203,7 @@ class CssSelectorTest {
         val cssSelector = CssSelector(
             withId = "fb",
             withClass = "foobar",
-            withAttribute = "foo" to "bar"
+            withAttribute = "foo" to "bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("#fb.foobar[foo='bar']")
     }
@@ -212,7 +212,7 @@ class CssSelectorTest {
     fun `can calculate combination of attributeKey and class selector from element`() {
         val cssSelector = CssSelector(
             withAttributeKey = "foo",
-            withClass = "bar"
+            withClass = "bar",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo(".bar[foo]")
     }
@@ -224,7 +224,7 @@ class CssSelectorTest {
             withClass = "bar",
             withId = "foo",
             withAttributeKey = "foobar",
-            withAttribute = "fizz" to "buzz"
+            withAttribute = "fizz" to "buzz",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("div span a#foo.bar[foobar][fizz='buzz']")
     }
@@ -233,7 +233,7 @@ class CssSelectorTest {
     fun `parameter selector will be merged with element selector`() {
         val cssSelector = CssSelector(
             withClass = "bar",
-            rawCssSelector = "foo"
+            rawCssSelector = "foo",
         ).toCssSelector
         expectThat(cssSelector).isEqualTo("foo.bar")
     }
@@ -246,7 +246,7 @@ class CssSelectorTest {
                 withClass = "bar",
                 withId = "foo",
                 withAttributeKey = "foobar",
-                withAttribute = "fizz" to "buzz"
+                withAttribute = "fizz" to "buzz",
             )
         }"
         expectThat(cssSelector).isEqualTo("div span a#foo.bar[foobar][fizz='buzz']")

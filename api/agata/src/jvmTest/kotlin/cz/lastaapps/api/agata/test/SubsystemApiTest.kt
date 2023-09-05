@@ -36,55 +36,59 @@ import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
 import org.lighthousegames.logging.KmLogging
 
-class SubsystemApiTest : StringSpec({
+class SubsystemApiTest : StringSpec(
+    {
 
-    KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
+        KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
 
-    fun client() = createAgataClient(HttpClient() {
-        install(Logging) {
-            level = BODY
+        fun client() = createAgataClient(
+            HttpClient() {
+                install(Logging) {
+                    level = BODY
+                }
+            },
+        )
+
+        fun api() = SubsystemApiImpl(client())
+
+        val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
+
+        "getInfo" {
+            ids.forEach { subsystemId ->
+                val res = api().getInfo(subsystemId)
+                res.shouldBeInstanceOf<Right<List<InfoDto>>>()
+            }
         }
-    })
 
-    fun api() = SubsystemApiImpl(client())
-
-    val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
-
-    "getInfo" {
-        ids.forEach { subsystemId ->
-            val res = api().getInfo(subsystemId)
-            res.shouldBeInstanceOf<Right<List<InfoDto>>>()
+        "getNews" {
+            ids.forEach { subsystemId ->
+                val res = api().getNews(subsystemId)
+                res.shouldBeInstanceOf<Right<NewsDto>>()
+            }
         }
-    }
 
-    "getNews" {
-        ids.forEach { subsystemId ->
-            val res = api().getNews(subsystemId)
-            res.shouldBeInstanceOf<Right<NewsDto>>()
+        "getOpeningTimes" {
+            ids.forEach { subsystemId ->
+                val res = api().getOpeningTimes(subsystemId)
+                res.shouldBeInstanceOf<Right<List<OpenTimeDto>>>()
+            }
         }
-    }
 
-    "getOpeningTimes" {
-        ids.forEach { subsystemId ->
-            val res = api().getOpeningTimes(subsystemId)
-            res.shouldBeInstanceOf<Right<List<OpenTimeDto>>>()
+        "getContacts" {
+            val res = api().getContacts()
+            res.shouldBeInstanceOf<Right<List<ContactDto>>>()
         }
-    }
 
-    "getContacts" {
-        val res = api().getContacts()
-        res.shouldBeInstanceOf<Right<List<ContactDto>>>()
-    }
-
-    "getAddress" {
-        val res = api().getAddress()
-        res.shouldBeInstanceOf<Right<List<AddressDto>>>()
-    }
-
-    "getLink" {
-        ids.forEach { subsystemId ->
-            val res = api().getLink(subsystemId)
-            res.shouldBeInstanceOf<Right<List<LinkDto>>>()
+        "getAddress" {
+            val res = api().getAddress()
+            res.shouldBeInstanceOf<Right<List<AddressDto>>>()
         }
-    }
-})
+
+        "getLink" {
+            ids.forEach { subsystemId ->
+                val res = api().getLink(subsystemId)
+                res.shouldBeInstanceOf<Right<List<LinkDto>>>()
+            }
+        }
+    },
+)

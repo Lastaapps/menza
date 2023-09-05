@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,7 +25,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -35,17 +35,15 @@ class LocationScraperTest {
 
     @Test
     fun locationOnline() = runTest {
-
         val result = ContactsScraperImpl.createRequest().bodyAsText()
         val locations = LocationScraperImpl.scrape(result)
 
-        //locations.forEach { println(it) }
+        // locations.forEach { println(it) }
 
         locations.shouldNotBeEmpty()
         locations.map { it.address.stringForm } shouldContain "Jezdecká 1920, 160 17 Praha 6"
         locations.map { it.coordinates } shouldContain Coordinates("50.100882", "14.386966")
     }
-
 
     @Test
     fun scrapeLocations() = runTest {
@@ -445,12 +443,11 @@ class LocationScraperTest {
 
         val locations = LocationScraperImpl.scrape(toTest)
 
-        //locations.forEach { println(it) }
+        // locations.forEach { println(it) }
 
         locations shouldHaveSize 11
         locations.map { it.address.stringForm } shouldContain "Jezdecká 1920, 160 17 Praha 6"
         locations.map { it.coordinates } shouldContain Coordinates("50.100882", "14.386966")
-
     }
 
     @Test

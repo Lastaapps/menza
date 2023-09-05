@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,14 +21,33 @@ package cz.lastaapps.storage.repo
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
-import cz.lastaapps.entity.info.*
-import cz.lastaapps.entity.menza.*
+import cz.lastaapps.entity.info.Contact
+import cz.lastaapps.entity.info.Email
+import cz.lastaapps.entity.info.Name
+import cz.lastaapps.entity.info.OpeningHours
+import cz.lastaapps.entity.info.PhoneNumber
+import cz.lastaapps.entity.info.Role
+import cz.lastaapps.entity.menza.Address
+import cz.lastaapps.entity.menza.Coordinates
+import cz.lastaapps.entity.menza.Menza
+import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.entity.menza.MenzaLocation
+import cz.lastaapps.entity.menza.Message
+import cz.lastaapps.entity.menza.Opened.OPENED
 import cz.lastaapps.menza.db.MenzaDatabase
-import cz.lastaapps.storage.repo.scrapers.*
+import cz.lastaapps.storage.db.MemoryMenzaDriverFactory
+import cz.lastaapps.storage.db.createMenzaDatabase
+import cz.lastaapps.storage.repo.scrapers.AllergenScraperMock
+import cz.lastaapps.storage.repo.scrapers.ContactsScraperMock
+import cz.lastaapps.storage.repo.scrapers.LocationScraperMock
+import cz.lastaapps.storage.repo.scrapers.MenzaScraperMock
+import cz.lastaapps.storage.repo.scrapers.MessagesScraperMock
+import cz.lastaapps.storage.repo.scrapers.OpeningHoursMock
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import java.time.DayOfWeek.MONDAY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -40,7 +59,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.lighthousegames.logging.logging
-import java.time.DayOfWeek
 
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -58,39 +76,51 @@ class GeneralStorageRepoTest {
         val repos = listOf(
             AllergenRepoImpl(db, AllergenScraperMock(setOf(Allergen(AllergenId(1), "1", "one")))),
             ContactsRepoImpl(
-                db, ContactsScraperMock(
+                db,
+                ContactsScraperMock(
                     setOf(
                         Contact(
-                            MenzaId(1), Name("name"), Role("role"),
-                            PhoneNumber("123456789"), Email("hans@example.com")
-                        )
-                    )
-                )
+                            MenzaId(1),
+                            Name("name"),
+                            Role("role"),
+                            PhoneNumber("123456789"),
+                            Email("hans@example.com"),
+                        ),
+                    ),
+                ),
             ),
             LocationRepoImpl(
-                db, LocationScraperMock(
+                db,
+                LocationScraperMock(
                     setOf(
                         MenzaLocation(
-                            MenzaId(1), Address(("abc")), Coordinates("50", "15")
-                        )
-                    )
-                )
+                            MenzaId(1),
+                            Address(("abc")),
+                            Coordinates("50", "15"),
+                        ),
+                    ),
+                ),
             ),
-            MenzaRepoImpl(db, MenzaScraperMock(setOf(Menza(MenzaId(1), "Menza", Opened.OPENED)))),
+            MenzaRepoImpl(db, MenzaScraperMock(setOf(Menza(MenzaId(1), "Menza", OPENED)))),
             MessagesRepoImpl(db, MessagesScraperMock(setOf(Message(MenzaId(1), "text")))),
             OpeningHoursRepoImpl(
-                db, OpeningHoursMock(
+                db,
+                OpeningHoursMock(
                     setOf(
                         OpeningHours(
-                            MenzaId(1), "name", DayOfWeek.MONDAY,
-                            LocalTime(0, 0, 0), LocalTime(0, 0, 0), "comment"
-                        )
-                    )
-                )
+                            MenzaId(1),
+                            "name",
+                            MONDAY,
+                            LocalTime(0, 0, 0),
+                            LocalTime(0, 0, 0),
+                            "comment",
+                        ),
+                    ),
+                ),
             ),
         )
 
-        //non TestScore required, so delay() aren't skipped
+        // non TestScore required, so delay() aren't skipped
         withContext(Dispatchers.Default) {
             repos.forEach { repo ->
                 logging().i { "Testing ${repo::class.simpleName}" }

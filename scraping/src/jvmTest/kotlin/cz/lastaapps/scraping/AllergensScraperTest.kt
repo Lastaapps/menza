@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,7 @@ import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -36,16 +36,15 @@ class AllergensScraperTest {
 
     @Test
     fun scrapeAllAllergensOnline() = runTest {
-
         val result = AllergenScraperImpl.createRequestForAll().bodyAsText()
         val allergens = AllergenScraperImpl.scrape(result)
 
-        //allergens.forEach { println(it) }
+        // allergens.forEach { println(it) }
 
         allergens shouldContain Allergen(
             AllergenId(1),
             "Obiloviny obsahující lepek",
-            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
+            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich",
         )
 
         allergens shouldHaveSize 14
@@ -53,27 +52,26 @@ class AllergensScraperTest {
 
     @Test
     fun scrapeFoodAllergensOnline() = runTest {
-
         val result =
             AllergenScraperImpl.createRequestForDish(DishAllergensPage(336173)).bodyAsText()
         val allergens = AllergenScraperImpl.scrape(result)
 
-        //allergens.forEach { println(it) }
+        // allergens.forEach { println(it) }
 
         allergens shouldContain Allergen(
             AllergenId(1),
             "Obiloviny obsahující lepek",
-            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
+            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich",
         )
         allergens shouldContain Allergen(
             AllergenId(3),
             "Vejce",
-            "a výrobky z nich"
+            "a výrobky z nich",
         )
         allergens shouldContain Allergen(
             AllergenId(7),
             "Mléko",
-            "a výrobky z něj"
+            "a výrobky z něj",
         )
 
         allergens shouldHaveSize 3
@@ -175,7 +173,7 @@ class AllergensScraperTest {
         allergens shouldContain Allergen(
             AllergenId(1),
             "Obiloviny obsahující lepek",
-            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
+            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich",
         )
 
         allergens shouldHaveSize 14
@@ -279,17 +277,17 @@ class AllergensScraperTest {
         allergens shouldContain Allergen(
             AllergenId(1),
             "Obiloviny obsahující lepek",
-            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich"
+            "pšenice, žito, ječmen, oves, špalda, kamut nebo jejich hybridní odrůdy a výrobky z nich",
         )
         allergens shouldContain Allergen(
             AllergenId(3),
             "Vejce",
-            "a výrobky z nich"
+            "a výrobky z nich",
         )
         allergens shouldContain Allergen(
             AllergenId(7),
             "Mléko",
-            "a výrobky z něj"
+            "a výrobky z něj",
         )
 
         allergens shouldHaveSize 3
@@ -388,5 +386,4 @@ class AllergensScraperTest {
         shouldThrowAny { AllergenScraperImpl.scrape(justOneItem) }
         AllergenScraperImpl.scrape(noItems).shouldBeEmpty()
     }
-
 }

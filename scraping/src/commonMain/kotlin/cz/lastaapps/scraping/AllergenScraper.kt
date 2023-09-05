@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,7 +21,7 @@ package cz.lastaapps.scraping
 
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.day.DishAllergensPage
-import io.ktor.client.statement.*
+import io.ktor.client.statement.HttpResponse
 
 interface AllergenScraper : ScraperBase<Allergen> {
     suspend fun createRequestForAll(): HttpResponse

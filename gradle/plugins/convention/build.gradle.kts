@@ -42,6 +42,7 @@ dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
     compileOnly(libs.gradlePlugins.kotlin)
     compileOnly(libs.gradlePlugins.android)
+    compileOnly(libs.gradlePlugins.ktlint)
     implementation(libs.gradlePlugins.detekt)
 }
 

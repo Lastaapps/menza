@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
-import io.ktor.client.statement.*
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -36,7 +36,6 @@ class MessagesScraperTest {
 
     @Test
     fun testMessagesOnline() = runTest {
-
         val result = MessagesScraperImpl.createRequest().bodyAsText()
         val messages = MessagesScraperImpl.scrape(result)
 
@@ -45,7 +44,6 @@ class MessagesScraperTest {
 
     @Test
     fun testHoliday() = runTest {
-
         val toTest = """
 <div id="aktuality" class="aktuality" style="display:block; max-width:800px; padding-left:10px;">
    <div class="row-fluid">
@@ -215,7 +213,8 @@ Jídelna 11:00 - 14:30
 21.12.2021 RESTAURACE ZAVŘENO
 22.12. - 31.12.2021 ZAVŘENO
 Zákaz vstupu osob bez Certifikátu o očkování nebo prodělaném onemocnění covid - 19
-Možnost namátkové kontroly. Nevztahuje se na studenty a zaměstnance ČVUT""".trimIndent()
+Možnost namátkové kontroly. Nevztahuje se na studenty a zaměstnance ČVUT
+        """.trimIndent()
     }
 
     @Test
@@ -293,5 +292,4 @@ Možnost namátkové kontroly. Nevztahuje se na studenty a zaměstnance ČVUT"""
         shouldThrowAny { MessagesScraperImpl.scrape(noMenzaIdAttribute) }
         shouldThrowAny { MessagesScraperImpl.scrape(malformedId) }
     }
-
 }
