@@ -17,21 +17,30 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.di
+package cz.lastaapps.menza.features.panels.whatsnew.di
 
-import cz.lastaapps.core.data.AppInfoProvider
-import cz.lastaapps.core.data.AssetsProvider
-import cz.lastaapps.core.data.JvmAppInfoProvider
-import cz.lastaapps.core.data.JvmAssetsProvider
-import cz.lastaapps.core.data.createSettings
-import org.koin.core.module.Module
+import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
+import cz.lastaapps.menza.features.panels.whatsnew.domain.LoadWhatsNewUC
+import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel
+import java.util.Locale
+import kotlinx.collections.immutable.ImmutableList
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.bind
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-internal actual val platform: Module = module {
-    single { createSettings() }
+val whatsNewModule = module {
+    single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
+    viewModel { (list: ImmutableList<Locale>) ->
+        WhatsNewViewModel(
+            list,
+            get(),
+            get(),
+            get(),
+            get(),
+        )
+    }
+    singleOf(::WhatsNewDataStore)
 
-    factoryOf(::JvmAppInfoProvider) bind AppInfoProvider::class
-    factoryOf(::JvmAssetsProvider) bind AssetsProvider::class
+    factoryOf(::LoadWhatsNewUC)
 }

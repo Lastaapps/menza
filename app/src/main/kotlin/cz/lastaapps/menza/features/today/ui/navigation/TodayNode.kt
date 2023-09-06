@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import cz.lastaapps.menza.features.panels.Panels
 import cz.lastaapps.menza.features.today.ui.screen.TodayScreen
 import cz.lastaapps.menza.ui.theme.MenzaPadding
 
@@ -35,8 +36,13 @@ class TodayNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        val panels: @Composable (Modifier) -> Unit = {
+            Panels(modifier = it)
+        }
+
         TodayScreen(
             onOsturak = onOsturak,
+            panels = panels,
             modifier = Modifier
                 .padding(MenzaPadding.More.Screen)
                 .fillMaxSize(),

@@ -35,32 +35,33 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
-import cz.lastaapps.menza.features.other.ui.vm.WhatsNewViewModel
-import cz.lastaapps.menza.features.other.util.getLocales
+import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel
 
 @Composable
-fun WhatsNewDialog(
+internal fun WhatsNewDialog(
     viewModel: WhatsNewViewModel,
     onDismissRequest: () -> Unit,
 ) {
+    HandleAppear(appearing = viewModel)
+
     Dialog(onDismissRequest) {
         val source = remember { MutableInteractionSource() }
         Box(
             Modifier
                 .fillMaxSize(.9f)
                 .clickable(source, null, onClick = onDismissRequest),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.animateContentSize()) {
                 WhatsNewHistory(viewModel, Modifier.padding(16.dp))
@@ -70,29 +71,23 @@ fun WhatsNewDialog(
 }
 
 @Composable
-fun WhatsNewHistory(whatsNewViewModel: WhatsNewViewModel, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    val itemsState = remember(context.resources.configuration) {
-        val locales = context.getLocales()
-        whatsNewViewModel.getDataForLocales(locales)
-    }.collectAsState(initial = null)
-    val items = itemsState.value
+internal fun WhatsNewHistory(whatsNewViewModel: WhatsNewViewModel, modifier: Modifier = Modifier) {
+    val state by whatsNewViewModel.flowState
+    val items = state.news
 
-    if (items != null) {
-        Column(modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(
-                stringResource(R.string.whats_new_title),
-                style = MaterialTheme.typography.headlineMedium
-            )
-            Text(stringResource(R.string.whats_new_subtitle, BuildConfig.VERSION_CODE))
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            stringResource(R.string.whats_new_title),
+            style = MaterialTheme.typography.headlineMedium,
+        )
+        Text(stringResource(R.string.whats_new_subtitle, BuildConfig.VERSION_CODE))
 
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-            ) {
-                items(items) {
-                    HistoryItem(it, Modifier.fillMaxWidth())
-                }
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier,
+        ) {
+            items(items) {
+                HistoryItem(it, Modifier.fillMaxWidth())
             }
         }
     }
@@ -103,7 +98,7 @@ private fun HistoryItem(item: WhatsNewInfo, modifier: Modifier = Modifier) {
     Card(modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(12.dp),
         ) {
             Text(stringResource(R.string.whats_new_item_label, item.versionCode))
             Text(item.message)

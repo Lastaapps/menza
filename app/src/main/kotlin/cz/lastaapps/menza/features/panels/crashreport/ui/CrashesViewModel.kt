@@ -17,70 +17,80 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.other.ui.vm
+package cz.lastaapps.menza.features.panels.crashreport.ui
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOne
+import cz.lastaapps.core.ui.vm.StateViewModel
+import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.crash.CrashDatabase
 import cz.lastaapps.crash.entity.Crash
 import cz.lastaapps.crash.entity.ErrorSeverity
 import cz.lastaapps.crash.entity.ReportState
+import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel.State
 import java.time.ZonedDateTime
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class CrashesViewModel(
+internal class CrashesViewModel(
+    context: VMContext,
     private val database: CrashDatabase,
-) : ViewModel() {
+) : StateViewModel<State>(State(), context) {
 
-    val errors: StateFlow<ImmutableList<Pair<Long, Crash>>> get() = mErrors
-    private val mErrors = MutableStateFlow<ImmutableList<Pair<Long, Crash>>>(persistentListOf())
-
-    val unreported: StateFlow<ImmutableList<Pair<Long, Crash>>> get() = mUnreported
-    private val mUnreported = MutableStateFlow<ImmutableList<Pair<Long, Crash>>>(persistentListOf())
-
-    val hasErrors: StateFlow<Boolean> get() = mHasErrors
-    private val mHasErrors = MutableStateFlow(false)
-
-    val hasUnreported: StateFlow<Boolean> get() = mHasUnreported
-    private val mHasUnreported = MutableStateFlow(false)
-
-    fun makeReported(id: Long, state: ReportState = ReportState.REPORTED) {
+    fun makeReported(id: Long, state: ReportState) {
         viewModelScope.launch {
             database.crashQueries.updateReported(state, id)
         }
     }
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            database.crashQueries.getCrashes() { id: Long, date: ZonedDateTime, severity: ErrorSeverity, message: String?, trace: String, reported: ReportState ->
+        launchVM {
+            database.crashQueries.getCrashes { id: Long, date: ZonedDateTime, severity: ErrorSeverity, message: String?, trace: String, reported: ReportState ->
                 id to Crash(date, severity, message, trace, reported)
-            }.asFlow().mapToList(coroutineContext).collectLatest {
-                mErrors.emit(it.toImmutableList())
-                mHasErrors.emit(it.isNotEmpty())
             }
+                .asFlow()
+                .mapToList(coroutineContext)
+                .collectLatest {
+                    updateState {
+                        copy(
+                            errors = it.toImmutableList(),
+                            hasErrors = it.isNotEmpty(),
+                        )
+                    }
+                }
         }
-        viewModelScope.launch(Dispatchers.IO) {
+        launchVM {
             database.crashQueries.getUnreported { id: Long, date: ZonedDateTime, severity: ErrorSeverity, message: String?, trace: String, reported: ReportState ->
                 id to Crash(date, severity, message, trace, reported)
-            }.asFlow().mapToList(coroutineContext).collectLatest {
-                mUnreported.emit(it.toImmutableList())
             }
+                .asFlow()
+                .mapToList(coroutineContext)
+                .collectLatest {
+                    updateState {
+                        copy(unreported = it.toImmutableList())
+                    }
+                }
         }
-        viewModelScope.launch(Dispatchers.IO) {
+        launchVM {
             database.crashQueries.hasUnreported().asFlow().mapToOne(coroutineContext)
                 .collectLatest {
-                    mHasUnreported.emit(it > 0)
+                    updateState {
+                        copy(hasUnreported = it > 0)
+                    }
                 }
         }
     }
+
+    data class State(
+        val errors: ImmutableList<Pair<Long, Crash>> = persistentListOf(),
+        val unreported: ImmutableList<Pair<Long, Crash>> = persistentListOf(),
+        val hasErrors: Boolean = false,
+        val hasUnreported: Boolean = false,
+    ) : VMState
 }

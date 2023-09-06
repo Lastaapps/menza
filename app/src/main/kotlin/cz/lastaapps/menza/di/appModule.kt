@@ -20,17 +20,21 @@
 package cz.lastaapps.menza.di
 
 import cz.lastaapps.api.main.di.apiModule
+import cz.lastaapps.core.data.AppInfoProvider
 import cz.lastaapps.core.di.coreModule
 import cz.lastaapps.crash.crashModule
+import cz.lastaapps.menza.data.AndroidAppInfoProvider
 import cz.lastaapps.menza.features.info.di.infoModule
 import cz.lastaapps.menza.features.main.di.mainModule
-import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
 import cz.lastaapps.menza.features.other.di.otherModule
+import cz.lastaapps.menza.features.panels.di.panelsModule
 import cz.lastaapps.menza.features.root.di.rootModule
 import cz.lastaapps.menza.features.settings.di.settingsModule
 import cz.lastaapps.menza.features.starting.di.startingModule
 import cz.lastaapps.menza.features.today.di.todayModule
 import cz.lastaapps.menza.features.week.di.weekModule
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val appModule = module {
@@ -46,7 +50,8 @@ val appModule = module {
         weekModule,
         otherModule,
         infoModule,
+        panelsModule,
     )
 
-    single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
+    factoryOf(::AndroidAppInfoProvider) bind AppInfoProvider::class
 }

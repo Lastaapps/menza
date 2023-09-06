@@ -17,21 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.di
+package cz.lastaapps.core.data
 
-import cz.lastaapps.core.data.AppInfoProvider
-import cz.lastaapps.core.data.AssetsProvider
-import cz.lastaapps.core.data.JvmAppInfoProvider
-import cz.lastaapps.core.data.JvmAssetsProvider
-import cz.lastaapps.core.data.createSettings
-import org.koin.core.module.Module
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.bind
-import org.koin.dsl.module
+import android.app.Application
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
-internal actual val platform: Module = module {
-    single { createSettings() }
+internal class AndroidAssetsProvider(
+    private val app: Application,
+) : AssetsProvider {
 
-    factoryOf(::JvmAppInfoProvider) bind AppInfoProvider::class
-    factoryOf(::JvmAssetsProvider) bind AssetsProvider::class
+    private val assets get() = app.assets
+
+    override fun listDirectory(path: String): List<String> =
+        assets.list(path)?.toList() ?: emptyList()
+
+    override fun readFile(path: String): String =
+        BufferedReader(
+            InputStreamReader(assets.open(path)),
+        ).readText()
 }

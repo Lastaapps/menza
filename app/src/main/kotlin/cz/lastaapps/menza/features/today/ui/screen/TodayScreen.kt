@@ -20,8 +20,10 @@
 package cz.lastaapps.menza.features.today.ui.screen
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
@@ -38,12 +40,13 @@ import cz.lastaapps.menza.features.today.ui.vm.TodayState
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.ui.components.layout.TwoPaneLayout
 import cz.lastaapps.menza.ui.root.BackArrow
+import cz.lastaapps.menza.ui.theme.MenzaPadding
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun TodayScreen(
     onOsturak: () -> Unit,
+    panels: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TodayViewModel = koinViewModel(),
 ) {
@@ -54,6 +57,7 @@ internal fun TodayScreen(
         state = state,
         onOsturak = onOsturak,
         onDishSelected = viewModel::selectDish,
+        panels = panels,
         modifier = modifier,
     )
 }
@@ -70,12 +74,12 @@ private fun TodayEffects(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TodayContent(
     state: TodayState,
     onDishSelected: (Dish) -> Unit,
     onOsturak: () -> Unit,
+    panels: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
     scrollGridState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
@@ -90,7 +94,10 @@ private fun TodayContent(
     }
 
     val dishDetail: @Composable () -> Unit = {
-        Crossfade(targetState = state.selectedDish) { currentDish ->
+        Crossfade(
+            targetState = state.selectedDish,
+            label = "dish_detail",
+        ) { currentDish ->
             currentDish?.let {
                 TodayInfo(
                     dish = currentDish,
@@ -110,12 +117,22 @@ private fun TodayContent(
         onOsturak = onOsturak,
         modifier = modifier,
     ) {
-        TwoPaneLayout(
-            showDetail = state.hasDish,
-            listNode = dishList,
-            detailNode = dishDetail,
-            emptyNode = dishNone,
-            modifier = Modifier.fillMaxSize(),
-        )
+        Column {
+            TwoPaneLayout(
+                showDetail = state.hasDish,
+                listNode = dishList,
+                detailNode = dishDetail,
+                emptyNode = dishNone,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            )
+
+            panels(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = MenzaPadding.MidSmall),
+            )
+        }
     }
 }

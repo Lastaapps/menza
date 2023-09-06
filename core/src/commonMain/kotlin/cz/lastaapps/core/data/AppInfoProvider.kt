@@ -17,21 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.di
+package cz.lastaapps.core.data
 
-import cz.lastaapps.core.data.AppInfoProvider
-import cz.lastaapps.core.data.AssetsProvider
-import cz.lastaapps.core.data.JvmAppInfoProvider
-import cz.lastaapps.core.data.JvmAssetsProvider
-import cz.lastaapps.core.data.createSettings
-import org.koin.core.module.Module
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.bind
-import org.koin.dsl.module
-
-internal actual val platform: Module = module {
-    single { createSettings() }
-
-    factoryOf(::JvmAppInfoProvider) bind AppInfoProvider::class
-    factoryOf(::JvmAssetsProvider) bind AssetsProvider::class
+interface AppInfoProvider {
+    fun getAppName(): String
+    fun getAppVersion(): Int
+    fun isDebug(): Boolean
 }

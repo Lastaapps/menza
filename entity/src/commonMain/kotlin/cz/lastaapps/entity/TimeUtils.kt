@@ -19,8 +19,11 @@
 
 package cz.lastaapps.entity
 
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
 
 object TimeUtils {
     fun getDaysOfWeek() = daysOfWeekSorted

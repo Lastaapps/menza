@@ -32,7 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,12 +49,12 @@ import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.ui.dialog.ReportDialog
 import cz.lastaapps.menza.features.other.ui.dialog.sendReport
-import cz.lastaapps.menza.features.other.ui.vm.CrashesViewModel
+import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel
 import java.time.format.DateTimeFormatter
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun CrashesDialog(viewModel: CrashesViewModel, onDismissRequest: () -> Unit) {
+internal fun CrashesDialog(viewModel: CrashesViewModel, onDismissRequest: () -> Unit) {
     Dialog(onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.extraLarge) {
             CrashesList(viewModel, Modifier.padding(16.dp))
@@ -64,7 +63,7 @@ fun CrashesDialog(viewModel: CrashesViewModel, onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun CrashesList(
+internal fun CrashesList(
     viewModel: CrashesViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -77,7 +76,7 @@ fun CrashesList(
             ) { Text(stringResource(R.string.crash_do)) }
         }
 
-        val crashes = viewModel.errors.collectAsState().value
+        val crashes = viewModel.flowState.value.errors
         if (crashes.isEmpty()) {
             NoContent()
         } else {
@@ -89,10 +88,10 @@ fun CrashesList(
                 onDismissRequest = { selectedItem = null },
                 onModeSelected = { mode ->
                     selectedItem?.let { crash ->
-                        viewModel.makeReported(crash.first)
+                        viewModel.makeReported(crash.first, ReportState.REPORTED)
                         sendReport(context, mode, crash.second)
                     }
-                }
+                },
             )
 
             Content(crashes) {

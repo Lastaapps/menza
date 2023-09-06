@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.panels
+package cz.lastaapps.menza.features.panels.whatsnew.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,68 +26,68 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
-import cz.lastaapps.menza.features.other.ui.vm.WhatsNewViewModel
-import cz.lastaapps.menza.features.other.util.getLocales
-import kotlinx.coroutines.flow.map
+import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel
+import cz.lastaapps.menza.ui.util.PreviewWrapper
 
 @Composable
-fun whatsNewPanelState(
-    whatsNewViewModel: WhatsNewViewModel,
-): State<Boolean> {
-    return remember { whatsNewViewModel.shouldShow(BuildConfig.VERSION_CODE) }.collectAsState(
-        false
-    )
-}
-
-@Composable
-fun WhatsNewPanel(
+internal fun WhatsNewPanel(
     whatsNewViewModel: WhatsNewViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
+    val state by whatsNewViewModel.flowState
 
-    val item by remember(context.resources.configuration) {
-        val locales = context.getLocales()
-        whatsNewViewModel.getDataForLocales(locales).map { it.firstOrNull() }
-    }.collectAsState(null)
+    HandleAppear(appearing = whatsNewViewModel)
 
-    PanelContent(
-        item ?: return,
-        { whatsNewViewModel.dismissed(BuildConfig.VERSION_CODE) },
-        modifier
+    WhatsNewPanel(
+        state,
+        { whatsNewViewModel.onDismiss() },
+        modifier,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PanelContent(info: WhatsNewInfo, onDismiss: () -> Unit, modifier: Modifier = Modifier) {
+internal fun WhatsNewPanel(
+    state: WhatsNewViewModel.State,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    state.news.firstOrNull()?.let { info ->
+        PanelContent(
+            info,
+            onDismiss,
+            modifier,
+        )
+    }
+}
+
+@Composable
+private fun PanelContent(
+    info: WhatsNewInfo,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
             stringResource(R.string.panel_whats_new_title),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
         )
         Text("${BuildConfig.VERSION_NAME} - ${BuildConfig.VERSION_CODE}")
 
         ElevatedCard(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.tertiary
-            )
+            colors = CardDefaults.elevatedCardColors(),
         ) {
             Text(text = info.message, Modifier.padding(12.dp))
         }
@@ -103,4 +103,16 @@ private fun PanelContent(info: WhatsNewInfo, onDismiss: () -> Unit, modifier: Mo
             Text(stringResource(R.string.panel_whats_new_button))
         }
     }
+}
+
+@Preview
+@Composable
+private fun WhatsNewPanelPreview() = PreviewWrapper {
+    PanelContent(
+        info = WhatsNewInfo(
+            versionCode = 123456789L,
+            message = "There is a theory which states that if ever anyone discovers exactly what the Universe is for and why it is here, it will instantly disappear and be replaced by something even more bizarre and inexplicable. There is another theory which states that this has already happened.",
+        ),
+        onDismiss = {},
+    )
 }

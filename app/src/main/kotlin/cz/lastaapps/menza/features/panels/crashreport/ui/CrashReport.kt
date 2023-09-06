@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.panels
+package cz.lastaapps.menza.features.panels.crashreport.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,8 +30,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,16 +43,15 @@ import cz.lastaapps.crash.entity.ReportState
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.ui.dialog.ReportDialog
 import cz.lastaapps.menza.features.other.ui.dialog.sendReport
-import cz.lastaapps.menza.features.other.ui.vm.CrashesViewModel
+import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel.State
 
 @Composable
-fun crashReportState(crashesViewModel: CrashesViewModel): State<Boolean> {
-    return crashesViewModel.hasUnreported.collectAsState()
-}
-
-@Composable
-fun CrashReport(crashesViewModel: CrashesViewModel, modifier: Modifier = Modifier) {
-    val unreported = crashesViewModel.unreported.collectAsState().value.firstOrNull() ?: return
+internal fun CrashReport(
+    state: State,
+    makeReported: (id: Long, state: ReportState) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val unreported = state.unreported.firstOrNull() ?: return
 
     Column(
         modifier.verticalScroll(rememberScrollState()),
@@ -62,21 +59,21 @@ fun CrashReport(crashesViewModel: CrashesViewModel, modifier: Modifier = Modifie
     ) {
         Text(
             stringResource(R.string.panel_crash_title),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
         )
         Text(
             stringResource(
                 R.string.panel_crash_subtitle,
                 unreported.second.message ?: stringResource(R.string.panel_crash_unknown),
-            )
+            ),
         )
 
         Row(Modifier.align(Alignment.End), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             TextButton(
                 onClick = {
-                    crashesViewModel.makeReported(
+                    makeReported(
                         unreported.first,
-                        ReportState.DISMISSED
+                        ReportState.DISMISSED,
                     )
                 },
                 colors = ButtonDefaults.textButtonColors(
@@ -91,9 +88,10 @@ fun CrashReport(crashesViewModel: CrashesViewModel, modifier: Modifier = Modifie
                 reportShown,
                 onDismissRequest = { reportShown = false },
                 onModeSelected = { mode ->
-                    crashesViewModel.makeReported(unreported.first)
+                    makeReported(unreported.first, ReportState.REPORTED)
                     sendReport(context, mode, unreported.second)
-                })
+                },
+            )
 
             Button(
                 onClick = { reportShown = true },

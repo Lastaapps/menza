@@ -17,27 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.other.util
+package cz.lastaapps.core.data
 
-import android.content.Context
-import android.os.Build
-import android.os.LocaleList
-import androidx.annotation.RequiresApi
-import java.util.Locale
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.mutate
-import kotlinx.collections.immutable.persistentListOf
+internal class JvmAppInfoProvider : AppInfoProvider {
+    override fun getAppName(): String {
+        TODO("Not yet implemented")
+    }
 
-@Suppress("DEPRECATION")
-fun Context.getLocales(): ImmutableList<Locale> {
-    val config = resources.configuration
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        config.locales.toList()
-    } else persistentListOf(config.locale)
-}
+    override fun getAppVersion(): Int {
+        TODO("Not yet implemented")
+    }
 
-@RequiresApi(Build.VERSION_CODES.N)
-private fun LocaleList.toList(): ImmutableList<Locale> = persistentListOf<Locale>().mutate { list ->
-    for (i in 0 until size())
-        list += get(i)
+    override fun isDebug(): Boolean {
+        TODO("Not yet implemented")
+    }
 }

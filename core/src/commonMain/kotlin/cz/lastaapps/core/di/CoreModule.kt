@@ -19,6 +19,7 @@
 
 package cz.lastaapps.core.di
 
+import GetAppVersionUC
 import cz.lastaapps.core.data.httpClient
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.usecase.IsOnMeteredUC
@@ -38,5 +39,6 @@ val coreModule = module {
     single { UCContext(Dispatchers.Default) }
     single { httpClient }
 
+    factoryOf(::GetAppVersionUC)
     factoryOf(::IsOnMeteredUC)
 }

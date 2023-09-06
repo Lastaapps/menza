@@ -32,6 +32,7 @@ import agata.ServingPlaceEntity
 import agata.StrahovEntiy
 import agata.SubsystemEntity
 import cz.lastaapps.api.core.domain.model.LatLong
+import cz.lastaapps.core.util.extensions.takeIfNotBlack
 import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.model.dto.AddressDto
 import cz.lastaapps.menza.api.agata.data.model.dto.ContactDto
@@ -120,10 +121,12 @@ internal fun InfoDto.toEntity() =
     )
 
 internal fun NewsDto.toEntity(subsystemId: Int) =
-    NewsEntity(
-        subsystemId = subsystemId.toLong(),
-        text = html.removeHtml(),
-    )
+    html.removeHtml().takeIfNotBlack()?.let { text ->
+        NewsEntity(
+            subsystemId = subsystemId.toLong(),
+            text = text,
+        )
+    }
 
 private fun String.removeHtml() = this
     .replace("<br>", "\n")

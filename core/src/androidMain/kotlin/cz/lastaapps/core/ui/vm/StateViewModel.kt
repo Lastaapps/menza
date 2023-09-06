@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 abstract class StateViewModel<State : VMState>(
-    val init: State,
+    init: State,
     context: VMContext,
 ) : BaseViewModel(context) {
     private val myState = MutableStateFlow(init)

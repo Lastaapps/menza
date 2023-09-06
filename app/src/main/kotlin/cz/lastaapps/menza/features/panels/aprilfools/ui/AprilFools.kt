@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.panels
+package cz.lastaapps.menza.features.panels.aprilfools.ui
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +27,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
@@ -39,20 +43,20 @@ import java.time.LocalDate
 import java.time.Month
 
 @Composable
-fun aprilFoolsState(): State<Boolean> {
-    return remember {
-        mutableStateOf(
-            LocalDate.now().takeIf { it.dayOfMonth == 1 && it.month == Month.APRIL } != null
-        )
-    }
+internal fun shouldShowAprilFools(): Boolean = remember {
+    LocalDate.now().takeIf { it.dayOfMonth == 1 && it.month == Month.APRIL } != null
 }
 
 @Composable
-fun AprilFools(modifier: Modifier = Modifier) {
-    var progress by rememberSaveable { mutableStateOf(0) }
+internal fun AprilFools(modifier: Modifier = Modifier) {
+    var progress by rememberSaveable { mutableIntStateOf(0) }
     val array = stringArrayResource(R.array.panel_april_items)
 
-    Crossfade(progress, modifier) {
+    Crossfade(
+        progress,
+        modifier = modifier,
+        label = "april_fools",
+    ) {
         Column(
             Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
