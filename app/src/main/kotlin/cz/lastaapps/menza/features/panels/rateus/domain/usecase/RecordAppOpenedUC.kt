@@ -17,16 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.util.providers
+package cz.lastaapps.menza.features.panels.rateus.domain.usecase
 
-import cz.lastaapps.core.domain.Outcome
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.features.panels.rateus.data.RateUsRepository
 
-interface LinkOpener {
-    fun openLink(url: String): Outcome<Unit>
-    fun writeEmail(email: String): Outcome<Unit>
-    fun callPhoneNumber(number: String): Outcome<Unit>
-    fun openAddress(address: String): Outcome<Unit>
-    fun openGeo(lat: Float, long: Float): Outcome<Unit>
-    fun openTelegram(groupUrl: String): Outcome<Unit>
-    fun openFacebookPage(pageUrl: String): Outcome<Unit>
+
+internal class RecordAppOpenedUC(
+    context: UCContext,
+    private val repo: RateUsRepository,
+) : UseCase(context) {
+    suspend operator fun invoke() = launch { repo.appOpened() }
 }

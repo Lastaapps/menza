@@ -229,4 +229,11 @@
     <string name="button_continue">Pokračovat</string>
     <string name="button_done">Hotovo</string>
     <string name="button_edit">Upravit</string>
+
+    <string name="rate_us_title">Ohodnoťte nás!</string>
+    <string name="rate_us_description">Nechcete přece, abychom byli smutní?</string>
+    <string name="rate_us_button_play">Play Store 😎</string>
+    <string name="rate_us_button_github">GitHub star ⭐</string>
+    <string name="rate_us_button_later">Později…</string>
+    <string name="rate_us_button_dismiss">Nikdy!</string>
 </resources>

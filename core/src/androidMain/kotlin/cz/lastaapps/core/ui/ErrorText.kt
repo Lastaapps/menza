@@ -21,7 +21,6 @@ package cz.lastaapps.core.ui
 
 import androidx.annotation.StringRes
 import cz.lastaapps.core.R
-import cz.lastaapps.core.R.string
 import cz.lastaapps.core.domain.AppText
 import cz.lastaapps.core.domain.AppText.Formatted
 import cz.lastaapps.core.domain.AppText.Resource
@@ -33,10 +32,14 @@ import cz.lastaapps.core.domain.error.ApiError.SyncError.Problem
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Unavailable
 import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
 import cz.lastaapps.core.domain.error.CommonError
-import cz.lastaapps.core.domain.error.CommonError.CannotAddContact
-import cz.lastaapps.core.domain.error.CommonError.CannotMakePhoneCall
-import cz.lastaapps.core.domain.error.CommonError.CannotOpenMap
-import cz.lastaapps.core.domain.error.CommonError.CannotSendEmail
+import cz.lastaapps.core.domain.error.CommonError.AppNotFound
+import cz.lastaapps.core.domain.error.CommonError.AppNotFound.AddContact
+import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Email
+import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Facebook
+import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Link
+import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Map
+import cz.lastaapps.core.domain.error.CommonError.AppNotFound.PhoneCall
+import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Telegram
 import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
 import cz.lastaapps.core.domain.error.MenzaError
 import cz.lastaapps.core.domain.error.MenzaError.Unknown
@@ -93,8 +96,8 @@ val ApiError.text: AppText
         WeekNotAvailable -> E(R.string.error_api_week_not_available)
         is SyncError ->
             when (this) {
-                is Problem -> E(string.error_api_incomplete_data)
-                Unavailable -> E(string.error_api_module_unawailable)
+                is Problem -> E(R.string.error_api_incomplete_data)
+                Unavailable -> E(R.string.error_api_module_unavailable)
                 Closed -> E(R.string.error_api_menza_cloned)
             }
     }
@@ -102,8 +105,13 @@ val ApiError.text: AppText
 val CommonError.text: AppText
     get() = when (this) {
         is WorkTimeout -> E(R.string.error_network_timeout)
-        CannotAddContact -> E(R.string.error_info_contacts_no_app_contact)
-        CannotMakePhoneCall -> E(R.string.error_info_contacts_no_app_dial)
-        CannotSendEmail -> E(R.string.error_info_contacts_no_app_email)
-        CannotOpenMap -> E(R.string.error_info_location_no_app)
+        is AppNotFound -> when (this) {
+            AddContact -> E(R.string.error_no_app_contacts)
+            Email -> E(R.string.error_no_app_email)
+            Facebook -> E(R.string.error_no_app_facebook)
+            Link -> E(R.string.error_no_app_browser)
+            Map -> E(R.string.error_no_app_location)
+            PhoneCall -> E(R.string.error_no_app_dial)
+            Telegram -> E(R.string.error_no_app_telegram)
+        }
     }

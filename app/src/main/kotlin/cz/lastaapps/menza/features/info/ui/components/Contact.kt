@@ -66,20 +66,20 @@ fun ContactList(
         onMakePhoneCall = { contact ->
             contact.phone?.let {
                 makePhoneCall(context, it) {
-                    onError(CommonError.CannotMakePhoneCall)
+                    onError(CommonError.AppNotFound.PhoneCall)
                 }
             }
         },
         onSendEmail = { contact ->
             contact.email?.let {
                 sendEmail(context, it) {
-                    onError(CommonError.CannotSendEmail)
+                    onError(CommonError.AppNotFound.Email)
                 }
             }
         },
         onAddContact = { contact ->
             addContact(context, contact) {
-                onError(CommonError.CannotAddContact)
+                onError(CommonError.AppNotFound.AddContact)
             }
         },
     )

@@ -19,11 +19,13 @@
 
 package cz.lastaapps.menza.features.panels.di
 
+import cz.lastaapps.menza.features.panels.rateus.di.rateUsModule
 import cz.lastaapps.menza.features.panels.whatsnew.di.whatsNewModule
 import org.koin.dsl.module
 
 val panelsModule = module {
     includes(
         whatsNewModule,
+        rateUsModule,
     )
 }

@@ -23,6 +23,7 @@ import GetAppVersionUC
 import cz.lastaapps.core.data.httpClient
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.usecase.IsOnMeteredUC
+import cz.lastaapps.core.domain.usecase.OpenAppSocialUC
 import kotlinx.coroutines.Dispatchers
 import kotlinx.datetime.Clock
 import org.koin.core.module.Module
@@ -41,4 +42,5 @@ val coreModule = module {
 
     factoryOf(::GetAppVersionUC)
     factoryOf(::IsOnMeteredUC)
+    factoryOf(::OpenAppSocialUC)
 }

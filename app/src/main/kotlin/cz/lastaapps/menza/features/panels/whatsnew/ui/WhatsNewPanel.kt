@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
@@ -48,8 +47,6 @@ internal fun WhatsNewPanel(
     modifier: Modifier = Modifier,
 ) {
     val state by whatsNewViewModel.flowState
-
-    HandleAppear(appearing = whatsNewViewModel)
 
     WhatsNewPanel(
         state,

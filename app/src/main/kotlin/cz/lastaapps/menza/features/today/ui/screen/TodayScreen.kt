@@ -28,8 +28,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
@@ -81,6 +83,7 @@ private fun TodayContent(
     onOsturak: () -> Unit,
     panels: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
+    hostState: SnackbarHostState = remember { SnackbarHostState() },
     scrollState: LazyListState = rememberLazyListState(),
     scrollGridState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
 ) {
@@ -88,6 +91,7 @@ private fun TodayContent(
         DishListScreen(
             onDishSelected = onDishSelected,
             modifier = Modifier.fillMaxSize(),
+            hostState = hostState,
             scrollState = scrollState,
             scrollGridState = scrollGridState,
         )
@@ -131,7 +135,7 @@ private fun TodayContent(
             panels(
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = MenzaPadding.MidSmall),
+                    .padding(top = MenzaPadding.Medium),
             )
         }
     }

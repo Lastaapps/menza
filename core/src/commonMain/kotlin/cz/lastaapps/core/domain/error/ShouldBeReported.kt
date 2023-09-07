@@ -19,10 +19,7 @@
 
 package cz.lastaapps.core.domain.error
 
-import cz.lastaapps.core.domain.error.CommonError.CannotAddContact
-import cz.lastaapps.core.domain.error.CommonError.CannotMakePhoneCall
-import cz.lastaapps.core.domain.error.CommonError.CannotOpenMap
-import cz.lastaapps.core.domain.error.CommonError.CannotSendEmail
+import cz.lastaapps.core.domain.error.CommonError.AppNotFound
 import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
 import cz.lastaapps.core.domain.error.NetworkError.ConnectionClosed
 import cz.lastaapps.core.domain.error.NetworkError.NoInternet
@@ -53,9 +50,6 @@ val NetworkError.shouldBeReported: Boolean
 val CommonError.shouldBeReported: Boolean
     get() = when (this) {
         is WorkTimeout,
-        CannotAddContact,
-        CannotMakePhoneCall,
-        CannotSendEmail,
-        CannotOpenMap,
+        is AppNotFound,
         -> false
     }

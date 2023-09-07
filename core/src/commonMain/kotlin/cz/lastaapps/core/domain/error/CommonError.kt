@@ -21,8 +21,14 @@ package cz.lastaapps.core.domain.error
 
 sealed interface CommonError : MenzaError.Runtime {
     data class WorkTimeout(override val throwable: Throwable) : CommonError
-    data object CannotMakePhoneCall : CommonError
-    data object CannotSendEmail : CommonError
-    data object CannotAddContact : CommonError
-    data object CannotOpenMap : CommonError
+
+    sealed interface AppNotFound : CommonError {
+        data object PhoneCall : AppNotFound
+        data object Email : AppNotFound
+        data object AddContact : AppNotFound
+        data object Map : AppNotFound
+        data object Link : AppNotFound
+        data object Facebook : AppNotFound
+        data object Telegram : AppNotFound
+    }
 }

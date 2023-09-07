@@ -29,7 +29,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-val whatsNewModule = module {
+internal val whatsNewModule = module {
     single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
     viewModel { (list: ImmutableList<Locale>) ->
         WhatsNewViewModel(

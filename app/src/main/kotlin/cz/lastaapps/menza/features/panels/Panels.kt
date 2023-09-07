@@ -26,32 +26,44 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.panels.aprilfools.ui.AprilFools
 import cz.lastaapps.menza.features.panels.aprilfools.ui.shouldShowAprilFools
 import cz.lastaapps.menza.features.panels.crashreport.ui.CrashReport
 import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel
+import cz.lastaapps.menza.features.panels.rateus.ui.RateUsPanel
+import cz.lastaapps.menza.features.panels.rateus.ui.RateUsViewModel
 import cz.lastaapps.menza.features.panels.whatsnew.ui.WhatsNewPanel
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.koinWhatsNewViewModel
 import cz.lastaapps.menza.ui.locals.koinActivityViewModel
+import cz.lastaapps.menza.ui.util.HandleError
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun Panels(
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    crashesViewModel: CrashesViewModel = koinActivityViewModel<CrashesViewModel>(),
+    crashesViewModel: CrashesViewModel = koinActivityViewModel(),
     whatsNewViewModel: WhatsNewViewModel = koinWhatsNewViewModel(),
+    rateUsViewModel: RateUsViewModel = koinActivityViewModel(),
 ) {
+    HandleAppear(appearing = whatsNewViewModel)
+    HandleAppear(appearing = rateUsViewModel)
+    HandleError(holder = rateUsViewModel, hostState = hostState)
+
     Box(modifier.animateContentSize()) {
         val showCrash = crashesViewModel.flowState.value.hasUnreported
         val showWhatsNew = whatsNewViewModel.flowState.value.shouldShow
+        val showRateUs = rateUsViewModel.flowState.value.shouldShow
         val showAprils = shouldShowAprilFools()
 
-        val items = remember(showCrash, showWhatsNew, showAprils) {
+        val items = remember(showCrash, showWhatsNew, showRateUs, showAprils) {
             persistentListOf(
                 PanelItem(showCrash) {
                     CrashReport(
@@ -61,14 +73,13 @@ internal fun Panels(
                     )
                 },
                 PanelItem(showWhatsNew) { WhatsNewPanel(whatsNewViewModel, it) },
+                PanelItem(showRateUs) { RateUsPanel(rateUsViewModel, it) },
                 PanelItem(showAprils) { AprilFools(it) },
             )
         }
 
         Card(
-            colors = CardDefaults.cardColors(
-                // containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            ),
+            colors = CardDefaults.cardColors(),
             shape = MaterialTheme.shapes.large,
             modifier = Modifier.animateContentSize(),
         ) {

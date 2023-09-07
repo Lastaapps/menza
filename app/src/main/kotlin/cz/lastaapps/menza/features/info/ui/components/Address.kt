@@ -60,7 +60,7 @@ fun AddressList(
         openAddress = { location ->
             location.gps?.let {
                 openMap(context, it, onError = {
-                    onError(CommonError.CannotOpenMap)
+                    onError(CommonError.AppNotFound.Map)
                 })
             }
         },

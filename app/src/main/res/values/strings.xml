@@ -250,4 +250,11 @@
     <string name="button_continue">Continue</string>
     <string name="button_done">Done</string>
     <string name="button_edit">Edit</string>
+
+    <string name="rate_us_title">Rate us!</string>
+    <string name="rate_us_description">Or do you want to make us sad?</string>
+    <string name="rate_us_button_play">Play Store 😎</string>
+    <string name="rate_us_button_github">GitHub star ⭐</string>
+    <string name="rate_us_button_later">Later…</string>
+    <string name="rate_us_button_dismiss">Never!</string>
 </resources>

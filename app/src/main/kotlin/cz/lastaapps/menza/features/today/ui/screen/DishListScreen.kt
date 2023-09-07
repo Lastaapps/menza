@@ -51,7 +51,6 @@ import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.ui.util.HandleError
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun DishListScreen(
     onDishSelected: (Dish) -> Unit,

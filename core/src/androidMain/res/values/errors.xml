@@ -28,11 +28,14 @@
     <string name="error_parsing_dish">Failed to parse a dish 🍲</string>
     <string name="error_parsing_menu">What are they doing on the web? Failed to parse the menu 💀</string>
     <string name="error_api_week_not_available">Week menu not supported 🤷</string>
-    <string name="error_api_module_unawailable">This menza does not support this module 🤷</string>
+    <string name="error_api_module_unavailable">This menza does not support this module 🤷</string>
     <string name="error_api_incomplete_data">Data may be incomplete 🤷</string>
     <string name="error_api_menza_cloned">Menza closed today 💔</string>
-    <string name="error_info_contacts_no_app_dial">No dial app installed</string>
-    <string name="error_info_contacts_no_app_email">No email app installed</string>
-    <string name="error_info_contacts_no_app_contact">No contacts app installed</string>
-    <string name="error_info_location_no_app">No map app installed</string>
+    <string name="error_no_app_dial">No dial app installed</string>
+    <string name="error_no_app_email">No email app installed</string>
+    <string name="error_no_app_contacts">No contacts app installed</string>
+    <string name="error_no_app_location">No map app installed</string>
+    <string name="error_no_app_browser">No browser installed</string>
+    <string name="error_no_app_telegram">Telegram not installed</string>
+    <string name="error_no_app_facebook">Facebook not installed</string>
 </resources>
