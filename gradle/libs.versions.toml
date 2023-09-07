@@ -1,18 +1,18 @@
 [versions]
 aboutLibraries = "10.8.3"
 accompanist = "0.32.0"
-android-gradle = "8.2.0-beta01"
+android-gradle = "8.2.0-beta03"
 androidx-activity = "1.7.2"
 androidx-appsearch = "1.1.0"
 androidx-camera = "1.2.3"
-androidx-compose = "1.5.0"
+androidx-compose = "1.5.1"
 # @keep
 androidx-compose-compiler = "1.5.3"
-androidx-compose-material = "1.5.0"
+androidx-compose-material = "1.5.1"
 androidx-compose-material3 = "1.1.1"
 androidx-hilt = "1.0.0"
-androidx-lifecycle = "2.6.1"
-androidx-navigation = "2.7.1"
+androidx-lifecycle = "2.6.2"
+androidx-navigation = "2.7.2"
 androidx-room = "2.5.2"
 androidx-test = "1.5.0"
 coil = "2.3.0"
@@ -56,7 +56,7 @@ accompanist-systemUi = { module = "com.google.accompanist:accompanist-systemuico
 android-desugaring = "com.android.tools:desugar_jdk_libs:2.0.3"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-core = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
-androidx-annotation = "androidx.annotation:annotation:1.6.0"
+androidx-annotation = "androidx.annotation:annotation:1.7.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha03"
 androidx-appsearch-compiler = { module = "androidx.appsearch:appsearch-compiler", version.ref = "androidx-appsearch" }
 androidx-appsearch-core = { module = "androidx.appsearch:appsearch", version.ref = "androidx-appsearch" }
@@ -87,7 +87,7 @@ androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androi
 androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "androidx-compose" }
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 androidx-constraintlayout-views = "androidx.constraintlayout:constraintlayout:2.1.4"
-androidx-core = "androidx.core:core-ktx:1.10.1"
+androidx-core = "androidx.core:core-ktx:1.12.0"
 androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-documentFile = "androidx.documentfile:documentfile:1.0.1"
 androidx-emoji2-bundled = "androidx.emoji2:emoji2-bundled:1.4.0"
