@@ -42,9 +42,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest.Builder
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.fade
-import com.google.accompanist.placeholder.placeholder
+import cz.lastaapps.menza.ui.components.placeholders.PlaceholderHighlight
+import cz.lastaapps.menza.ui.components.placeholders.fade
+import cz.lastaapps.menza.ui.components.placeholders.placeholder
 import cz.lastaapps.menza.R.string
 
 
