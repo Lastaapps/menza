@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import cz.lastaapps.menza.features.other.ui.screen.OsturakScreen
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 class OsturakNode(
     buildContext: BuildContext,
@@ -35,7 +35,7 @@ class OsturakNode(
     override fun View(modifier: Modifier) {
         OsturakScreen(
             modifier
-                .padding(MenzaPadding.More.Screen)
+                .padding(Padding.More.Screen)
                 .fillMaxSize(),
         )
     }

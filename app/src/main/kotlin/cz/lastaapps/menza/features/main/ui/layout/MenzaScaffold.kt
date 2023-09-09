@@ -40,7 +40,7 @@ import cz.lastaapps.menza.ui.locals.FoldingClass
 import cz.lastaapps.menza.ui.locals.LocalFoldProvider
 import cz.lastaapps.menza.ui.locals.LocalSplitPosition
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.coroutines.launch
 
 private val railWidth = 80.dp
@@ -122,7 +122,7 @@ private fun AppLayoutCompact(
     MenzaModalDrawer(
         drawerState = drawerState,
         drawerContent = {
-            Box(Modifier.padding(vertical = MenzaPadding.Large)) {
+            Box(Modifier.padding(vertical = Padding.Large)) {
                 drawerContent()
             }
         },
@@ -191,7 +191,7 @@ private fun AppLayoutMedium(
                 BoxWithConstraints(
                     Modifier.fillMaxSize()
                 ) {
-                    val padding = MenzaPadding.More.Screen
+                    val padding = Padding.More.Screen
                     val totalWidthAvailable = maxWidth - padding
                     val startWidth = totalWidthAvailable * 0.5f
                     val endWidth = totalWidthAvailable * 0.5f
@@ -277,7 +277,7 @@ private fun AppLayoutExpandedNoFold(
                 BoxWithConstraints(
                     Modifier.fillMaxSize()
                 ) {
-                    val padding = MenzaPadding.More.Screen
+                    val padding = Padding.More.Screen
                     val totalWidthAvailable = maxWidth - padding
                     val startWidth = totalWidthAvailable * 0.5f
                     val endWidth = totalWidthAvailable * 0.5f
@@ -329,7 +329,7 @@ private fun AppLayoutExpandedFold(
             val spacesWidth = remember(density, foldingFeature) {
                 @Suppress("ComplexRedundantLet")
                 with(density) { foldingFeature.foldingFeature.bounds.width().toDp() }
-                    .let { max(it, MenzaPadding.More.Screen) }
+                    .let { max(it, Padding.More.Screen) }
             }
 
             MenzaDismissibleDrawer(

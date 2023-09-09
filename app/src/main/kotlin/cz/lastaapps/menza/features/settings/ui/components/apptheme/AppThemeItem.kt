@@ -48,7 +48,7 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.ui.util.name
 import cz.lastaapps.menza.ui.theme.AppTheme
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,13 +73,13 @@ internal fun AppThemeItem(
             Card(
                 onClick = onClick,
                 shape = MaterialTheme.shapes.large,
-                modifier = Modifier.padding(MenzaPadding.Small),
+                modifier = Modifier.padding(Padding.Small),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(MenzaPadding.MidLarge),
+                    horizontalArrangement = Arrangement.spacedBy(Padding.MidLarge),
                     modifier = Modifier
-                        .padding(MenzaPadding.Medium)
+                        .padding(Padding.Medium)
                         .fillMaxWidth(),
                 ) {
                     ColorPreview()
@@ -114,7 +114,7 @@ private object AppThemeItem {
 @Preview
 @Composable
 private fun ThemeItemPreview() {
-    Column(verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Padding.Medium)) {
         var selected by remember { mutableStateOf(1) }
         AppThemeType.entries.forEachIndexed { index, theme ->
             AppThemeItem(theme, DarkMode.Light, selected != index, { selected = index })

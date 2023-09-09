@@ -57,7 +57,7 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -143,10 +143,10 @@ private fun WeekDishContent(
                     )
                 }
 
-                item { Spacer(Modifier.height(MenzaPadding.Tiny)) }
+                item { Spacer(Modifier.height(Padding.Tiny)) }
             }
 
-            item { Spacer(Modifier.height(MenzaPadding.MidSmall)) }
+            item { Spacer(Modifier.height(Padding.MidSmall)) }
         }
     }
 }
@@ -201,8 +201,8 @@ private fun DayHeader(
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .padding(
-                    horizontal = MenzaPadding.MidLarge,
-                    vertical = MenzaPadding.Smaller,
+                    horizontal = Padding.MidLarge,
+                    vertical = Padding.Smaller,
                 ),
         )
     }
@@ -241,7 +241,7 @@ private fun WeekDishItem(
         ) {
             Column(
                 modifier = Modifier.sizeIn(minWidth = amountWidth),
-                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                verticalArrangement = Arrangement.spacedBy(Padding.Small),
             ) {
                 dish.amount?.let { Text(it) }
                 dish.getPrice(priceType)?.let { Text("$it Kč") }

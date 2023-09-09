@@ -30,7 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
 fun AboveOrSideBySideLayout(
@@ -38,7 +38,7 @@ fun AboveOrSideBySideLayout(
     bottomRight: LazyListScope.() -> Unit,
     modifier: Modifier = Modifier,
     verticalSpacer: LazyListScope.() -> Unit = {
-        item { Spacer(Modifier.height(MenzaPadding.Small)) }
+        item { Spacer(Modifier.height(Padding.Small)) }
     },
 ) {
     when (LocalWindowWidth.current) {
@@ -78,14 +78,14 @@ private fun AboveOrSideBySideCompact(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+        verticalArrangement = Arrangement.spacedBy(Padding.Medium),
         modifier = modifier.fillMaxSize(),
     ) {
         topLeft()
         verticalSpacer()
         bottomRight()
         item {
-            Spacer(Modifier.height(MenzaPadding.More.ScrollBottomSpace))
+            Spacer(Modifier.height(Padding.More.ScrollBottomSpace))
         }
     }
 }
@@ -118,7 +118,7 @@ private fun AboveOrSideBySideExpanded(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 topLeft()
-                item { Spacer(Modifier.height(MenzaPadding.More.ScrollBottomSpace)) }
+                item { Spacer(Modifier.height(Padding.More.ScrollBottomSpace)) }
             }
         },
         panel2 = {
@@ -128,7 +128,7 @@ private fun AboveOrSideBySideExpanded(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 bottomRight()
-                item { Spacer(Modifier.height(MenzaPadding.More.ScrollBottomSpace)) }
+                item { Spacer(Modifier.height(Padding.More.ScrollBottomSpace)) }
             }
         },
     )

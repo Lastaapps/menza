@@ -30,7 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.components.MenzaDialog
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
 fun FullReloadDialog(
@@ -40,7 +40,7 @@ fun FullReloadDialog(
     MenzaDialog(onDismissRequest = onDismissRequest) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
             Text(
                 stringResource(R.string.settings_reload_title),

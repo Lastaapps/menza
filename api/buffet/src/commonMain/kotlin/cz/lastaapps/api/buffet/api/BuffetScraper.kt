@@ -31,7 +31,7 @@ import cz.lastaapps.api.buffet.data.model.DishDayDto
 import cz.lastaapps.api.buffet.data.model.DishDto
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.ApiError.SyncError
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.ParsingError
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.datetime.DayOfWeek
@@ -43,7 +43,7 @@ internal interface BuffetScraper {
     fun matchContent(html: String): Outcome<ParsingRes<Pair<List<DishDayDto>, List<DishDayDto>>>>
 }
 
-private typealias ParsingRes<T> = Pair<Option<Nel<MenzaError>>, T>
+private typealias ParsingRes<T> = Pair<Option<Nel<DomainError>>, T>
 
 internal class BuffetScraperImpl : BuffetScraper {
 
@@ -158,7 +158,7 @@ internal class BuffetScraperImpl : BuffetScraper {
                 val valid = dishData.map { it.second }.toList()
 
                 val errors = dishData.fold(
-                    (dayErrors as Sequence<MenzaError>).toPersistentList(),
+                    (dayErrors as Sequence<DomainError>).toPersistentList(),
                 ) { acu, (errors, _) ->
                     when (errors) {
                         None -> acu

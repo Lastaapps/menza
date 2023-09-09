@@ -46,7 +46,7 @@ import cz.lastaapps.menza.features.today.ui.util.allergenForId
 import cz.lastaapps.menza.features.today.ui.util.formatPrice
 import cz.lastaapps.menza.features.today.ui.util.getAmount
 import cz.lastaapps.menza.features.today.ui.util.getName
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlin.math.max
 import kotlinx.collections.immutable.ImmutableList
 
@@ -177,13 +177,13 @@ private fun AllergenList(
 @Composable
 private fun AllergenRow(id: Int, modifier: Modifier = Modifier) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+        verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
         modifier = modifier,
     ) {
         val info = allergenForId(id = id)
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            horizontalArrangement = Arrangement.spacedBy(Padding.Small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AllergenIdBadge(id = id)
@@ -245,7 +245,7 @@ private fun Ingredients(
 
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+        verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
     ) {
         Text(
             text = stringResource(R.string.today_info_ingredients_title),

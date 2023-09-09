@@ -55,7 +55,7 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -98,7 +98,7 @@ fun TodayDishList(
                 gridSwitch = gridSwitch,
                 imageSizeSetting = imageSizeSetting,
                 modifier = Modifier
-                    .padding(top = MenzaPadding.Smaller) // so text is not cut off
+                    .padding(top = Padding.Smaller) // so text is not cut off
                     .fillMaxSize(),
             )
         }
@@ -130,11 +130,11 @@ private fun DishContent(
         return
     }
 
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium)) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(Padding.Medium)) {
         // showing items
         LazyColumn(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.MidSmall),
+            verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
             state = scroll,
         ) {
             data.forEach { category ->
@@ -143,7 +143,7 @@ private fun DishContent(
                         DishHeader(
                             courseType = category,
                             showCzech = showCzech,
-                            modifier = Modifier.padding(bottom = MenzaPadding.Smaller),
+                            modifier = Modifier.padding(bottom = Padding.Smaller),
                         )
                     }
                 }
@@ -165,8 +165,8 @@ private fun DishContent(
                 gridSwitch()
             }
             item {
-                OutlinedCard(modifier = Modifier.padding(horizontal = MenzaPadding.MidSmall)) {
-                    Box(modifier = Modifier.padding(MenzaPadding.Medium)) {
+                OutlinedCard(modifier = Modifier.padding(horizontal = Padding.MidSmall)) {
+                    Box(modifier = Modifier.padding(Padding.Medium)) {
                         imageSizeSetting()
                     }
                 }
@@ -194,9 +194,9 @@ private fun DishItem(
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
         Row(
-            Modifier.padding(MenzaPadding.MidSmall),
+            Modifier.padding(Padding.MidSmall),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            horizontalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
 
             DishImageWithBadge(
@@ -206,7 +206,7 @@ private fun DishItem(
                 imageScale = imageScale,
                 isOnMetered = isOnMetered,
             )
-            Column(verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
                 DishNameRow(dish, showCzech)
                 DishInfoRow(dish, showCzech)
             }
@@ -232,10 +232,10 @@ private fun DishImageWithBadge(
             modifier = Modifier
                 .align(Alignment.Center)
                 .padding(
-                    top = MenzaPadding.Small,
-                    bottom = MenzaPadding.Small,
-                    end = MenzaPadding.Small,
-                )
+                    top = Padding.Small,
+                    bottom = Padding.Small,
+                    end = Padding.Small,
+                ),
         )
         DishBadge(
             dish = dish,

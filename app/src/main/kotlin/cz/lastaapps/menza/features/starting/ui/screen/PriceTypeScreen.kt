@@ -47,7 +47,7 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType.Normal
 import cz.lastaapps.menza.features.starting.ui.vm.PriceTypeState
 import cz.lastaapps.menza.features.starting.ui.vm.PriceTypeViewModel
 import cz.lastaapps.menza.ui.theme.AppTheme
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -105,11 +105,11 @@ private fun PriceTypeContent(
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(MenzaPadding.Medium),
+                        .padding(Padding.Medium),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(
-                        MenzaPadding.Medium,
-                        Alignment.CenterVertically
+                        Padding.Medium,
+                        Alignment.CenterVertically,
                     ),
                 ) {
                     Text(
@@ -126,7 +126,7 @@ private fun PriceTypeContent(
 
                     Column(
                         modifier = Modifier.width(IntrinsicSize.Max),
-                        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                        verticalArrangement = Arrangement.spacedBy(Padding.Small),
                     ) {
                         Button(
                             onClick = onNormal,

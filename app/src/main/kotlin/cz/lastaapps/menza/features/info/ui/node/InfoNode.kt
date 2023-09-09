@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import cz.lastaapps.menza.features.info.ui.screen.InfoScreen
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 class InfoNode(
     buildContext: BuildContext,
@@ -39,7 +39,7 @@ class InfoNode(
             onOsturak = onOsturak,
             modifier = modifier
                 .fillMaxWidth()
-                .padding(MenzaPadding.More.Screen),
+                .padding(Padding.More.Screen),
         )
     }
 }

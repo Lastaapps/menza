@@ -37,7 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.info.ui.components.AddressList
 import cz.lastaapps.menza.features.info.ui.components.ContactList
@@ -49,7 +49,7 @@ import cz.lastaapps.menza.features.info.ui.vm.InfoViewModel
 import cz.lastaapps.menza.features.main.ui.components.WrapMenzaNotSelected
 import cz.lastaapps.menza.ui.components.WrapRefresh
 import cz.lastaapps.menza.ui.components.layout.AboveOrSideBySideLayout
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.HandleError
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.androidx.compose.koinViewModel
@@ -61,7 +61,7 @@ internal fun InfoScreen(
     viewModel: InfoViewModel = koinViewModel(),
     hostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
-    var error by remember { mutableStateOf<MenzaError?>(null) }
+    var error by remember { mutableStateOf<DomainError?>(null) }
     HandleError(error, hostState) { error = null }
 
     InfoEffects(viewModel, hostState)
@@ -92,7 +92,7 @@ private fun InfoContent(
     state: InfoState,
     onRefresh: () -> Unit,
     onOsturak: () -> Unit,
-    onError: (MenzaError) -> Unit,
+    onError: (DomainError) -> Unit,
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
@@ -109,7 +109,7 @@ private fun InfoContent(
             ) { items ->
                 if (items != null) {
                     val itemSpacer: LazyListScope.() -> Unit = {
-                        item { Spacer(Modifier.height(MenzaPadding.Medium)) }
+                        item { Spacer(Modifier.height(Padding.Medium)) }
                     }
 
                     val contactAndMessage: LazyListScope.() -> Unit = {

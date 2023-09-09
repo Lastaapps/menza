@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.starting.ui.vm.AllSetViewModel
 import cz.lastaapps.menza.ui.components.AppIcon
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -70,7 +70,7 @@ private fun AllSetContent(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(
-                MenzaPadding.Medium,
+                Padding.Medium,
                 Alignment.CenterVertically,
             ),
         ) {

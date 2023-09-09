@@ -30,7 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import cz.lastaapps.menza.ui.util.WrapClick
 import kotlinx.collections.immutable.ImmutableList
@@ -66,7 +66,7 @@ private fun <T> ChooseFromDialogContent(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+        verticalArrangement = Arrangement.spacedBy(Padding.Medium),
     ) {
         Text(
             text = title,

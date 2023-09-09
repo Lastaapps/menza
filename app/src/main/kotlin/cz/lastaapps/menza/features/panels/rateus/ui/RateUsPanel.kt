@@ -43,7 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import cz.lastaapps.menza.R.string
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 
 @Composable
@@ -87,12 +87,12 @@ private fun RateUsPanel(
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
         )
-        Spacer(modifier = Modifier.height(MenzaPadding.MidSmall))
+        Spacer(modifier = Modifier.height(Padding.MidSmall))
 
         Column(
             modifier = Modifier.width(IntrinsicSize.Max),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+            verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
         ) {
 
             if (!state.githubRated) {
@@ -126,17 +126,17 @@ private fun PlayButton(
         colors = colors,
         modifier = modifier,
     ) {
-        Spacer(modifier = Modifier.width(MenzaPadding.Medium))
+        Spacer(modifier = Modifier.width(Padding.Medium))
 
         Image(
             painter = painterResource(id = cz.lastaapps.common.R.drawable.ic_play_store),
             contentDescription = null,
         )
-        Spacer(modifier = Modifier.width(MenzaPadding.Small))
+        Spacer(modifier = Modifier.width(Padding.Small))
 
         Text(text = stringResource(id = string.rate_us_button_play))
 
-        Spacer(modifier = Modifier.width(MenzaPadding.Medium))
+        Spacer(modifier = Modifier.width(Padding.Medium))
     }
 }
 
@@ -154,17 +154,17 @@ private fun GithubButton(
         colors = colors,
         modifier = modifier,
     ) {
-        Spacer(modifier = Modifier.width(MenzaPadding.Medium))
+        Spacer(modifier = Modifier.width(Padding.Medium))
 
         Image(
             painter = painterResource(id = cz.lastaapps.common.R.drawable.ic_github),
             contentDescription = null,
         )
-        Spacer(modifier = Modifier.width(MenzaPadding.Small))
+        Spacer(modifier = Modifier.width(Padding.Small))
 
         Text(text = stringResource(id = string.rate_us_button_github))
 
-        Spacer(modifier = Modifier.width(MenzaPadding.Medium))
+        Spacer(modifier = Modifier.width(Padding.Medium))
     }
 }
 
@@ -176,7 +176,7 @@ private fun DismissOrLater(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+        horizontalArrangement = Arrangement.spacedBy(Padding.Small),
     ) {
         TextButton(
             onClick = onDismiss,

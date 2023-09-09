@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.entity.License
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import org.lighthousegames.logging.logging
 
 
@@ -128,8 +128,8 @@ private fun LicenseDetail(
         modifier = modifier,
     ) {
         Column(
-            modifier = Modifier.padding(MenzaPadding.MidSmall),
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            modifier = Modifier.padding(Padding.MidSmall),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
             Text(license.name, style = titleStyle)
 

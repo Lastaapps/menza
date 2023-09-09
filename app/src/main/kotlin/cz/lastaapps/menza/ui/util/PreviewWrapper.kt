@@ -30,8 +30,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.menza.ui.theme.AppTheme
-import cz.lastaapps.menza.ui.theme.MenzaPadding
-import cz.lastaapps.menza.ui.theme.MenzaPadding.More
+import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.theme.Padding.More
 
 
 @Composable
@@ -46,7 +46,7 @@ fun PreviewWrapper(
                 modifier = Modifier
                     .padding(More.Screen)
                     .width(300.dp),
-                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                verticalArrangement = Arrangement.spacedBy(Padding.Small),
                 content = content,
             )
         }

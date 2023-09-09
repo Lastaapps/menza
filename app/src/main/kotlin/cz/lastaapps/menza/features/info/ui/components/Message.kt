@@ -35,7 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Message
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -46,7 +46,7 @@ internal fun MessageList(
     if (messages.isNotEmpty()) {
         Column(
             modifier = modifier,
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -71,7 +71,7 @@ private fun Message(message: Message, modifier: Modifier = Modifier) {
         Text(
             text = message.text,
             modifier = Modifier
-                .padding(MenzaPadding.MidSmall)
+                .padding(Padding.MidSmall)
                 .sizeIn(maxWidth = 256.dp),
             textAlign = TextAlign.Center,
         )

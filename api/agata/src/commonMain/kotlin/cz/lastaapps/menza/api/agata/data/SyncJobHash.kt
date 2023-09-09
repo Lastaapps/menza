@@ -23,7 +23,7 @@ import arrow.core.IorNel
 import arrow.core.None
 import arrow.core.Some
 import cz.lastaapps.api.core.domain.sync.SyncJob
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.MenzaRaise
 import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.domain.HashStore
@@ -36,7 +36,7 @@ internal class SyncJobHash<T, R>(
     private val hashType: HashType,
     private val getHashCode: suspend MenzaRaise.() -> String,
     fetchApi: suspend MenzaRaise.() -> T,
-    convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
+    convert: suspend MenzaRaise.(T) -> IorNel<DomainError, R>,
     store: (R) -> Unit,
 ) : SyncJob<T, R>(
     { forced ->

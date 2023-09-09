@@ -41,8 +41,8 @@ import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Map
 import cz.lastaapps.core.domain.error.CommonError.AppNotFound.PhoneCall
 import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Telegram
 import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
-import cz.lastaapps.core.domain.error.MenzaError
-import cz.lastaapps.core.domain.error.MenzaError.Unknown
+import cz.lastaapps.core.domain.error.DomainError
+import cz.lastaapps.core.domain.error.DomainError.Unknown
 import cz.lastaapps.core.domain.error.NetworkError
 import cz.lastaapps.core.domain.error.NetworkError.ConnectionClosed
 import cz.lastaapps.core.domain.error.NetworkError.NoInternet
@@ -63,7 +63,7 @@ private inline fun E(@StringRes resId: Int) = Resource(resId)
 @Suppress("NOTHING_TO_INLINE", "FunctionName")
 private inline fun F(@StringRes resId: Int, vararg args: Any) = Formatted(resId, args)
 
-val MenzaError.text: AppText
+val DomainError.text: AppText
     get() = when (this) {
         is NetworkError -> text
         is ParsingError -> text

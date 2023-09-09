@@ -20,11 +20,11 @@
 package cz.lastaapps.core.ui.vm
 
 import androidx.compose.runtime.Composable
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 
 interface ErrorHolder {
     @Composable
-    fun getError(): MenzaError?
+    fun getError(): DomainError?
 
     fun dismissError()
 }

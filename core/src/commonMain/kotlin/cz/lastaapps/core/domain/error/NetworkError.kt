@@ -19,7 +19,7 @@
 
 package cz.lastaapps.core.domain.error
 
-sealed interface NetworkError : MenzaError.Runtime {
+sealed interface NetworkError : DomainError.Runtime {
     data object Timeout : NetworkError
     data object NoInternet : NetworkError
     data object ConnectionClosed : NetworkError

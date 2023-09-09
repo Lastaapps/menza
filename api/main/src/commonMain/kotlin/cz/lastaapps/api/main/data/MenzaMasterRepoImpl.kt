@@ -26,7 +26,7 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -64,7 +64,7 @@ internal class MenzaMasterRepoImpl(
         sources.parMap {
             it.sync()
         }.let { res ->
-            res.firstOrNull { it is Either.Left<MenzaError> }?.let { return it }
+            res.firstOrNull { it is Either.Left<DomainError> }?.let { return it }
             val updated = res.map { (it as Either.Right<SyncResult>).value }
             updated.firstOrNull { it is SyncResult.Problem }?.let { return it.right() }
             updated.firstOrNull { it is SyncResult.Updated }?.let { return it.right() }

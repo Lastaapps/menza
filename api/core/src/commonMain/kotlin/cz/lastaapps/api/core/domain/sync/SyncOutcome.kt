@@ -30,7 +30,7 @@ import cz.lastaapps.api.core.domain.sync.SyncResult.Updated
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.ApiError.SyncError
 import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 
 typealias SyncOutcome = Outcome<SyncResult>
 
@@ -40,7 +40,7 @@ sealed interface SyncResult {
     data object Unavailable : SyncResult
 
     @JvmInline
-    value class Problem(val errors: Nel<MenzaError>) : SyncResult
+    value class Problem(val errors: Nel<DomainError>) : SyncResult
 }
 
 fun SyncOutcome.mapSync() = map {

@@ -30,7 +30,7 @@ import cz.lastaapps.api.core.domain.sync.mapSync
 import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
 import cz.lastaapps.api.main.domain.usecase.SyncTodayDishListUC
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.usecase.IsOnMeteredUC
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
@@ -161,14 +161,14 @@ internal class DishListViewModel(
     }
 
     @Composable
-    override fun getError(): MenzaError? = flowState.value.error
+    override fun getError(): DomainError? = flowState.value.error
     override fun dismissError() = updateState { copy(error = null) }
 }
 
 internal data class DishListState(
     val isLoading: Boolean = false,
     val dishListMode: DishListMode? = null,
-    val error: MenzaError? = null,
+    val error: DomainError? = null,
     val selectedMenza: Option<Menza>? = null,
     val items: ImmutableList<DishCategory> = persistentListOf(),
     val priceType: PriceType = Unset,

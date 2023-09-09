@@ -28,7 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.shouldBeReported
 import cz.lastaapps.core.ui.text
 import cz.lastaapps.core.ui.vm.ErrorHolder
@@ -45,9 +45,9 @@ fun HandleError(holder: ErrorHolder, hostState: SnackbarHostState) =
     )
 
 @Composable
-fun HandleError(error: MenzaError?, hostState: SnackbarHostState, onDismiss: () -> Unit) {
+fun HandleError(error: DomainError?, hostState: SnackbarHostState, onDismiss: () -> Unit) {
 
-    var toReport by remember { mutableStateOf<MenzaError?>(null) }
+    var toReport by remember { mutableStateOf<DomainError?>(null) }
 
     val context = LocalContext.current
     LaunchedEffect(error, hostState, context) {

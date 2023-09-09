@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.root.BackArrow
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 
 @Composable
@@ -97,7 +97,7 @@ private fun TwoPaneDialogLayoutCompact(
                 shape = MaterialTheme.shapes.extraLarge,
                 modifier = Modifier.fillMaxSize(.95f),
             ) {
-                Box(modifier = Modifier.padding(MenzaPadding.Medium)) {
+                Box(modifier = Modifier.padding(Padding.Medium)) {
                     detailNode()
                 }
             }
@@ -138,7 +138,7 @@ private fun TwoPaneDialogLayoutExpanded(
     SplitLayout(
         panel1 = {
             Box(
-                modifier = Modifier.padding(end = MenzaPadding.More.Screen / 2),
+                modifier = Modifier.padding(end = Padding.More.Screen / 2),
             ) {
                 listNode()
             }
@@ -146,7 +146,7 @@ private fun TwoPaneDialogLayoutExpanded(
         panel2 = {
             Crossfade(
                 targetState = showDetail,
-                modifier = Modifier.padding(start = MenzaPadding.More.Screen / 2),
+                modifier = Modifier.padding(start = Padding.More.Screen / 2),
             ) { currentShowDetail ->
                 if (currentShowDetail) {
                     detailNode()

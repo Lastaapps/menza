@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -52,7 +52,7 @@ internal fun CompactViewSwitch(
     LazyRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(
-            MenzaPadding.Medium, Alignment.CenterHorizontally,
+            Padding.Medium, Alignment.CenterHorizontally,
         ),
     ) {
         items(buttons) { (mode, resId) ->

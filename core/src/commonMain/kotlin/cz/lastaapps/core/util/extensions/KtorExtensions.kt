@@ -21,7 +21,7 @@ package cz.lastaapps.core.util.extensions
 
 import arrow.core.Either
 import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.NetworkError
 import org.lighthousegames.logging.logging
 
@@ -49,6 +49,6 @@ suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
             "JsonDecodingException",
             -> NetworkError.SerializationError(it)
 
-            else -> MenzaError.Unknown(it)
+            else -> DomainError.Unknown(it)
         }
     }

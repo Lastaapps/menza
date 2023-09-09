@@ -32,7 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import cz.lastaapps.menza.ui.theme.MenzaPadding.More
+import cz.lastaapps.menza.ui.theme.Padding.More
 
 @Composable
 fun MenzaDialog(

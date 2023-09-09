@@ -31,7 +31,7 @@ import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.core.util.extensions.withTimeoutOutcome
 import kotlin.time.Duration.Companion.seconds
@@ -84,8 +84,8 @@ internal class SyncProcessorImpl : SyncProcessor {
                 results.forEach { (_, hash) -> hash() }
             }
             // collect noncritical errors
-            .map(Pair<IorNel<MenzaError, *>, *>::first)
-            .foldRight(persistentListOf<MenzaError>()) { item, acu ->
+            .map(Pair<IorNel<DomainError, *>, *>::first)
+            .foldRight(persistentListOf<DomainError>()) { item, acu ->
                 acu.addAll(
                     // defeated male leaves
                     when (item) {
@@ -104,7 +104,7 @@ internal class SyncProcessorImpl : SyncProcessor {
         .onLeft { log.i { "Failed to process data ${it::class.simpleName}" } }
 
     // used to simply generics resolution
-    private suspend fun <T, R> SyncJob<T, R>.processFetchAndConvert(): Outcome<IorNel<MenzaError, () -> Unit>> =
+    private suspend fun <T, R> SyncJob<T, R>.processFetchAndConvert(): Outcome<IorNel<DomainError, () -> Unit>> =
         outcome {
             val fetched = fetchApi()
 

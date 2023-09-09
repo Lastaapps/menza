@@ -64,7 +64,7 @@ import cz.lastaapps.menza.ui.components.AppIcon
 import cz.lastaapps.menza.ui.locals.LocalMenuBackArrow
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.root.MenuBackArrow
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.coroutines.launch
 
 
@@ -134,7 +134,7 @@ private fun TopBarScaffold(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(
-                    MenzaPadding.Medium,
+                    Padding.Medium,
                     Alignment.CenterHorizontally,
                 ),
             ) {

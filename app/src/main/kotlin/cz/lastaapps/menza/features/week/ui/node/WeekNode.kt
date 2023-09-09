@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import cz.lastaapps.menza.features.week.ui.screen.WeekScreen
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 class WeekNode(
     buildContext: BuildContext,
@@ -38,7 +38,7 @@ class WeekNode(
         WeekScreen(
             onOsturak = onOsturak,
             modifier = modifier
-                .padding(MenzaPadding.More.Screen)
+                .padding(Padding.More.Screen)
                 .fillMaxSize(),
         )
     }

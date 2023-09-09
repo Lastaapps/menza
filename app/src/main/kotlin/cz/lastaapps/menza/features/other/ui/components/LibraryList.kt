@@ -37,7 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.mikepenz.aboutlibraries.entity.Library
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 import org.lighthousegames.logging.logging
 
@@ -49,17 +49,17 @@ fun LibraryList(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+        verticalArrangement = Arrangement.spacedBy(Padding.Medium),
     ) {
         LazyColumn(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
             items(libraries, key = { it.artifactId }) { library ->
                 LicenseItem(library, Modifier.clickable { onLibrarySelected(library) })
             }
             item {
-                Spacer(modifier = Modifier.height(MenzaPadding.More.ScrollBottomSpace))
+                Spacer(modifier = Modifier.height(Padding.More.ScrollBottomSpace))
             }
         }
 

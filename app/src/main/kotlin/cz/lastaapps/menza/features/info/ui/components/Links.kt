@@ -35,7 +35,7 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.stringResource
 import cz.lastaapps.api.core.domain.model.Link
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -49,14 +49,14 @@ internal fun LinkList(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+        verticalArrangement = Arrangement.spacedBy(Padding.Small),
     ) {
         Text(
             text = stringResource(R.string.info_links_title),
             style = MaterialTheme.typography.titleLarge
         )
         Column(
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+            verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
             modifier = Modifier.width(IntrinsicSize.Max),
         ) {
             links.forEach { link ->

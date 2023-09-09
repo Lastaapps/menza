@@ -44,7 +44,7 @@ import cz.lastaapps.menza.features.settings.ui.screens.SettingsScreen
 import cz.lastaapps.menza.features.settings.ui.vm.SettingsViewModel
 import cz.lastaapps.menza.ui.components.layout.SplitLayout
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import org.koin.androidx.compose.koinViewModel
 
 internal class SettingsNode(
@@ -75,7 +75,7 @@ internal class SettingsNode(
             SettingsScreen(
                 modifier = modifier
                     .fillMaxSize()
-                    .padding(MenzaPadding.More.Screen),
+                    .padding(Padding.More.Screen),
                 appTheme = state.appTheme,
                 darkMode = state.darkMode,
                 onChooseTheme = onChooseTheme,
@@ -99,7 +99,7 @@ internal class SettingsNode(
             AboutScreen(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(MenzaPadding.More.Screen),
+                    .padding(Padding.More.Screen),
                 onOsturak = onOsturak,
                 onLicense = onLicense,
                 onShowWhatsNew = { showWhatsNew = true },

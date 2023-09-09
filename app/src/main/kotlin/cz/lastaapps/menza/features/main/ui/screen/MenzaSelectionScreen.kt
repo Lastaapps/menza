@@ -59,7 +59,7 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionState
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionViewModel
 import cz.lastaapps.menza.ui.components.MenzaLetter
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.androidx.compose.koinViewModel
 
@@ -136,7 +136,7 @@ private fun MenzaList(
         state = lazyState,
         reverseLayout = !fromTop,
         verticalArrangement = Arrangement.spacedBy(
-            MenzaPadding.Medium,
+            Padding.Medium,
             if (fromTop) Alignment.Top else Alignment.Bottom,
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -147,8 +147,8 @@ private fun MenzaList(
                 text = stringResource(R.string.app_name_long),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier
-                    .padding(vertical = MenzaPadding.Smaller)
-                    .padding(start = MenzaPadding.Medium),
+                    .padding(vertical = Padding.Smaller)
+                    .padding(start = Padding.Medium),
             )
         }
 
@@ -167,7 +167,7 @@ private fun MenzaList(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                    horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                 ) {
                     Icon(Icons.Default.Edit, null)
                     Text(stringResource(R.string.button_edit))

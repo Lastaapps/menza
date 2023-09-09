@@ -33,7 +33,7 @@ import cz.lastaapps.api.buffet.data.model.DishDayDto
 import cz.lastaapps.api.buffet.data.model.WebContentDto
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.ApiError.SyncError
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
@@ -277,8 +277,8 @@ private fun dateRangeTest(
     date.value.second shouldBe to
 }
 
-private fun testDeconstruct(content: Outcome<Pair<Option<Nel<MenzaError>>, Pair<List<DishDayDto>, List<DishDayDto>>>>): Pair<List<DishDayDto>, List<DishDayDto>> {
-    content.shouldBeInstanceOf<Right<Pair<Option<Nel<MenzaError>>, Pair<List<DishDayDto>, List<DishDayDto>>>>>()
+private fun testDeconstruct(content: Outcome<Pair<Option<Nel<DomainError>>, Pair<List<DishDayDto>, List<DishDayDto>>>>): Pair<List<DishDayDto>, List<DishDayDto>> {
+    content.shouldBeInstanceOf<Right<Pair<Option<Nel<DomainError>>, Pair<List<DishDayDto>, List<DishDayDto>>>>>()
     content.value.first shouldBe None
     val (fs, fel) = content.value.second
     return fs to fel

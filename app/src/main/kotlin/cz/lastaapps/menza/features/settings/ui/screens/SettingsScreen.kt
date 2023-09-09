@@ -74,7 +74,7 @@ import cz.lastaapps.menza.features.settings.ui.components.SettingsItem
 import cz.lastaapps.menza.features.settings.ui.components.SettingsSwitch
 import cz.lastaapps.menza.features.settings.ui.util.name
 import cz.lastaapps.menza.ui.components.ChooseFromDialog
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -103,7 +103,7 @@ internal fun SettingsScreen(
 ) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(MenzaPadding.None),
+        verticalArrangement = Arrangement.spacedBy(Padding.None),
     ) {
 
 //        Text(
@@ -157,7 +157,7 @@ internal fun SettingsScreen(
             )
         }
 
-        Spacer(Modifier.height(MenzaPadding.Medium))
+        Spacer(Modifier.height(Padding.Medium))
 
         Buttons(
             onPrivacyPolicy = onPrivacyPolicy,
@@ -237,7 +237,7 @@ private fun Buttons(
     FlowRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(
-            MenzaPadding.Small,
+            Padding.Small,
             Alignment.CenterHorizontally,
         ),
         verticalArrangement = Arrangement.Center,

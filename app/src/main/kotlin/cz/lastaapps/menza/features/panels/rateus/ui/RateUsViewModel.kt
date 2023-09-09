@@ -20,7 +20,7 @@
 package cz.lastaapps.menza.features.panels.rateus.ui
 
 import androidx.compose.runtime.Composable
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.model.AppSocial
 import cz.lastaapps.core.domain.usecase.OpenAppSocialUC
 import cz.lastaapps.core.ui.vm.Appearing
@@ -90,11 +90,11 @@ internal class RateUsViewModel(
         val shouldShow: Boolean = false,
         val playRated: Boolean = false,
         val githubRated: Boolean = false,
-        val error: MenzaError? = null,
+        val error: DomainError? = null,
     ) : VMState
 
     override fun dismissError() = updateState { copy(error = null) }
 
     @Composable
-    override fun getError(): MenzaError? = flowState.value.error
+    override fun getError(): DomainError? = flowState.value.error
 }

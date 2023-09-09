@@ -26,11 +26,11 @@ import cz.lastaapps.core.domain.error.NetworkError.NoInternet
 import cz.lastaapps.core.domain.error.NetworkError.SerializationError
 import cz.lastaapps.core.domain.error.NetworkError.Timeout
 
-val MenzaError.shouldBeReported: Boolean
+val DomainError.shouldBeReported: Boolean
     get() = when (this) {
-        is MenzaError.Logic -> false
+        is DomainError.Logic -> false
 
-        is MenzaError.Unknown -> true
+        is DomainError.Unknown -> true
         is NetworkError -> shouldBeReported
         is CommonError -> shouldBeReported
         is ParsingError -> true

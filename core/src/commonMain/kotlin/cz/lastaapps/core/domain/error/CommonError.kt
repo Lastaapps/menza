@@ -19,7 +19,7 @@
 
 package cz.lastaapps.core.domain.error
 
-sealed interface CommonError : MenzaError.Runtime {
+sealed interface CommonError : DomainError.Runtime {
     data class WorkTimeout(override val throwable: Throwable) : CommonError
 
     sealed interface AppNotFound : CommonError {

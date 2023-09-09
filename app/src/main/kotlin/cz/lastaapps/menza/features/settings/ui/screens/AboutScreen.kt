@@ -21,11 +21,33 @@ package cz.lastaapps.menza.features.settings.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.NewReleases
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +65,7 @@ import cz.lastaapps.common.R
 import cz.lastaapps.common.R.drawable
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R.string
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
 internal fun AboutScreen(
@@ -59,12 +81,12 @@ internal fun AboutScreen(
                 .verticalScroll(scrollState)
                 .width(IntrinsicSize.Max),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small)
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
 
             Surface(modifier = Modifier.fillMaxWidth()) {
                 Box(
-                    modifier = Modifier.padding(MenzaPadding.Medium),
+                    modifier = Modifier.padding(Padding.Medium),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -78,10 +100,10 @@ internal fun AboutScreen(
             ElevatedCard {
                 Column(
                     modifier = Modifier
-                        .padding(MenzaPadding.MidSmall)
+                        .padding(Padding.MidSmall)
                         .align(Alignment.CenterHorizontally),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                    verticalArrangement = Arrangement.spacedBy(Padding.Small),
                 ) {
                     DataSource(modifier = Modifier.fillMaxWidth())
                 }

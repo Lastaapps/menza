@@ -30,7 +30,7 @@ import cz.lastaapps.api.core.domain.sync.mapSync
 import cz.lastaapps.api.main.domain.usecase.GetWeekDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
 import cz.lastaapps.api.main.domain.usecase.SyncWeekDishListUC
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
@@ -116,7 +116,7 @@ internal class WeekViewModel(
     }
 
     @Composable
-    override fun getError(): MenzaError? = flowState.value.error
+    override fun getError(): DomainError? = flowState.value.error
     override fun dismissError() = updateState { copy(error = null) }
 }
 
@@ -124,6 +124,6 @@ internal data class WeekState(
     val selectedMenza: Option<Menza>? = null,
     val priceType: PriceType = PriceType.Unset,
     val isLoading: Boolean = false,
-    val error: MenzaError? = null,
+    val error: DomainError? = null,
     val items: ImmutableList<WeekDayDish> = persistentListOf(),
 ) : VMState

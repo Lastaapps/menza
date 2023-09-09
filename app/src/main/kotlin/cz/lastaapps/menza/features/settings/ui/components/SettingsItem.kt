@@ -29,7 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import cz.lastaapps.menza.ui.util.WrapClick
 
@@ -60,7 +60,7 @@ internal fun SettingsSwitch(
 ) {
     Row(
         modifier = modifier.padding(SettingsTokens.itemPadding),
-        horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+        horizontalArrangement = Arrangement.spacedBy(Padding.Medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SettingsLabels(

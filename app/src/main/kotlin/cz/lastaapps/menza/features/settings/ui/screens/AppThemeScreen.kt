@@ -45,7 +45,7 @@ import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.ui.components.apptheme.AppThemeItem
 import cz.lastaapps.menza.features.settings.ui.components.apptheme.DarkThemeChooser
 import cz.lastaapps.menza.features.settings.ui.vm.AppThemeViewModel
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.androidx.compose.koinViewModel
 
@@ -98,9 +98,9 @@ private fun AppThemeContent(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(
-            MenzaPadding.MidLarge,
-            Alignment.CenterVertically
-        )
+            Padding.MidLarge,
+            Alignment.CenterVertically,
+        ),
     ) {
 
         item {
@@ -113,7 +113,7 @@ private fun AppThemeContent(
 
         item {
             Column(
-                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                verticalArrangement = Arrangement.spacedBy(Padding.Small),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
@@ -130,7 +130,7 @@ private fun AppThemeContent(
 
         item {
             Column(
-                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                verticalArrangement = Arrangement.spacedBy(Padding.Small),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(

@@ -66,7 +66,7 @@ import cz.lastaapps.menza.ui.components.draggablelazylist.DraggableLazyColumn
 import cz.lastaapps.menza.ui.components.draggablelazylist.makeDraggableItem
 import cz.lastaapps.menza.ui.components.draggablelazylist.rememberDraggableLazyListState
 import cz.lastaapps.menza.ui.theme.AppTheme
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -130,9 +130,9 @@ private fun ReorderMenzaContent(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(MenzaPadding.MidLarge)
+                .padding(Padding.MidLarge)
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+            verticalArrangement = Arrangement.spacedBy(Padding.Medium),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -152,7 +152,7 @@ private fun ReorderMenzaContent(
                 DraggableLazyColumn(
                     state = draggableState,
                     reverseLayout = !state.fromTop,
-                    verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+                    verticalArrangement = Arrangement.spacedBy(Padding.Medium),
                     modifier = Modifier.animateContentSize(),
                 ) {
                     itemsIndexed(
@@ -208,11 +208,11 @@ private fun MenzaItem(
         modifier = modifier.alpha(alpha),
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            horizontalArrangement = Arrangement.spacedBy(Padding.Small),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(
-                horizontal = MenzaPadding.Medium,
-                vertical = MenzaPadding.Small,
+                horizontal = Padding.Medium,
+                vertical = Padding.Small,
             ),
         ) {
             MenzaLetter(menza)
@@ -245,7 +245,7 @@ private fun MenzaItem(
 private fun MenzaItemPreview() {
     AppTheme {
         Surface() {
-            Column(Modifier.padding(MenzaPadding.Large)) {
+            Column(Modifier.padding(Padding.Large)) {
                 MenzaItem(menza = Menza(
                     Strahov,
                     "Menza Strahov",

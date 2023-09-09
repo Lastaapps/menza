@@ -34,7 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,11 +55,11 @@ fun CheckboxWithText(
         modifier = modifier,
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            horizontalArrangement = Arrangement.spacedBy(Padding.Small),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(
-                horizontal = MenzaPadding.MidSmall,
-                vertical = MenzaPadding.Smaller,
+                horizontal = Padding.MidSmall,
+                vertical = Padding.Smaller,
             ),
         ) {
             Checkbox(

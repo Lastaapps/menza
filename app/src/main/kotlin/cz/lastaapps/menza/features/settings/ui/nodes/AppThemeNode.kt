@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import cz.lastaapps.menza.features.settings.ui.screens.AppThemeScreen
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 internal class AppThemeNode(
     buildContext: BuildContext,
@@ -39,7 +39,7 @@ internal class AppThemeNode(
             onDone = onDone,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(MenzaPadding.More.Screen),
+                .padding(Padding.More.Screen),
         )
     }
 }

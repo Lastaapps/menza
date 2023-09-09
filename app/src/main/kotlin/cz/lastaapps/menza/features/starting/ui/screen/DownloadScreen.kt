@@ -56,7 +56,7 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.starting.ui.util.text
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadDataState
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.HandleError
 import org.koin.androidx.compose.koinViewModel
 
@@ -116,14 +116,14 @@ private fun DownloadContent(
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(
-                    MenzaPadding.Medium,
+                    Padding.Medium,
                     Alignment.CenterVertically,
                 ),
                 modifier = Modifier
                     .sizeIn(maxWidth = DownloadUI.maxWidth)
                     .fillMaxWidth()
-                    .padding(MenzaPadding.Small)
-                    .animateContentSize()
+                    .padding(Padding.Small)
+                    .animateContentSize(),
             ) {
                 Text(
                     stringResource(R.string.init_title),
@@ -137,15 +137,15 @@ private fun DownloadContent(
                 ) { (isLoading, isReady) ->
                     when {
                         isLoading && isReady -> {
-                            Column(verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
                                 val animatedProgress by animateFloatAsState(
                                     targetValue = state.downloadProgress.progress,
                                     animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
                                 )
                                 Row(
-                                    horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                                    horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                                     verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier.fillMaxWidth(),
                                 ) {
                                     LinearProgressIndicator(
                                         animatedProgress,
@@ -163,7 +163,7 @@ private fun DownloadContent(
                         }
                         !isLoading && isReady -> {
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                                horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 IconButton(onClick = onRefresh) {

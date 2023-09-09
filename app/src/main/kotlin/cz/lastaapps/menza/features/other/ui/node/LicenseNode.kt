@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import cz.lastaapps.menza.features.other.ui.screen.LicenseScreen
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 class LicenseNode(
     buildContext: BuildContext,
@@ -35,8 +35,8 @@ class LicenseNode(
     override fun View(modifier: Modifier) {
         LicenseScreen(
             modifier = modifier
-                .padding(MenzaPadding.More.Screen)
-                .fillMaxSize()
+                .padding(Padding.More.Screen)
+                .fillMaxSize(),
         )
     }
 }

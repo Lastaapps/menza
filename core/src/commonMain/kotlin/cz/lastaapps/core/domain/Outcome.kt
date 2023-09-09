@@ -23,14 +23,14 @@ import arrow.core.Either
 import arrow.core.IorNel
 import arrow.core.raise.Raise
 import arrow.core.raise.either
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import kotlin.experimental.ExperimentalTypeInference
 
-typealias Outcome<A> = Either<MenzaError, A>
+typealias Outcome<A> = Either<DomainError, A>
 
 @OptIn(ExperimentalTypeInference::class)
 inline fun <A> outcome(
-    @BuilderInference block: Raise<MenzaError>.() -> A,
+    @BuilderInference block: Raise<DomainError>.() -> A,
 ): Outcome<A> = either(block)
 
-typealias OutcomeIor<A> = IorNel<MenzaError, A>
+typealias OutcomeIor<A> = IorNel<DomainError, A>

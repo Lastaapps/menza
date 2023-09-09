@@ -72,7 +72,7 @@ import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
@@ -113,7 +113,7 @@ fun TodayDishGrid(
                 gridSwitch = gridSwitch,
                 widthSize = widthSize,
                 modifier = Modifier
-                    .padding(top = MenzaPadding.Smaller) // so text is not cut off
+                    .padding(top = Padding.Smaller) // so text is not cut off
                     .fillMaxSize(),
             )
         }
@@ -142,7 +142,7 @@ private fun DishContent(
         return
     }
 
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium)) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(Padding.Medium)) {
         val columns =
             if (widthSize == WindowWidthSizeClass.Compact) {
                 StaggeredGridCells.Fixed(1)
@@ -153,14 +153,14 @@ private fun DishContent(
         LazyVerticalStaggeredGrid(
             columns = columns,
             modifier = Modifier.weight(1f),
-            verticalItemSpacing = MenzaPadding.MidSmall,
-            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.MidSmall),
+            verticalItemSpacing = Padding.MidSmall,
+            horizontalArrangement = Arrangement.spacedBy(Padding.MidSmall),
             state = scroll,
         ) {
             data.forEach { category ->
                 itemsIndexed(category.dishList) { index, dish ->
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                        verticalArrangement = Arrangement.spacedBy(Padding.Small),
                     ) {
                         if (index == 0) {
                             DishHeader(
@@ -206,9 +206,9 @@ private fun DishItem(
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
         Column(
-            Modifier.padding(MenzaPadding.MidSmall),
+            Modifier.padding(Padding.MidSmall),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
 
             if (dish.photoLink != null) {
@@ -221,11 +221,11 @@ private fun DishItem(
             }
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                verticalArrangement = Arrangement.spacedBy(Padding.Small),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+                    horizontalArrangement = Arrangement.spacedBy(Padding.Smaller),
                 ) {
                     DishNameRow(
                         dish = dish,
@@ -258,7 +258,7 @@ private fun DishImageWithBadge(
             isOnMetered = isOnMetered,
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(MenzaPadding.Small)
+                .padding(Padding.Small),
         )
         DishBadge(
             dish = dish,

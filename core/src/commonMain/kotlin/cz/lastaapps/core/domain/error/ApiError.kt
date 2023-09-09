@@ -22,7 +22,7 @@ package cz.lastaapps.core.domain.error
 import arrow.core.Nel
 
 // Used for display purposes only
-sealed interface ApiError : MenzaError.Logic {
+sealed interface ApiError : DomainError.Logic {
     data object WeekNotAvailable : ApiError
 
     sealed interface SyncError : ApiError {
@@ -32,6 +32,6 @@ sealed interface ApiError : MenzaError.Logic {
         data object Closed : SyncError
 
         @JvmInline
-        value class Problem(val errors: Nel<MenzaError>) : SyncError
+        value class Problem(val errors: Nel<DomainError>) : SyncError
     }
 }

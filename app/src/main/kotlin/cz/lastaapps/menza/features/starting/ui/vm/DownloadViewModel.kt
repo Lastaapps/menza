@@ -22,7 +22,7 @@ package cz.lastaapps.menza.features.starting.ui.vm
 import androidx.compose.runtime.Composable
 import arrow.core.Either.Left
 import arrow.core.Either.Right
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
@@ -106,7 +106,7 @@ internal class DownloadViewModel constructor(
     fun dismissDone() = updateState { copy(isDone = false) }
 
     @Composable
-    override fun getError(): MenzaError? = flowState.value.error
+    override fun getError(): DomainError? = flowState.value.error
     override fun dismissError() = updateState { log.i { "Clearing error" }; copy(error = null) }
 }
 
@@ -114,6 +114,6 @@ internal data class DownloadDataState(
     val isReady: Boolean = false,
     val isLoading: Boolean = false,
     val downloadProgress: DownloadProgress = DownloadProgress.INIT,
-    val error: MenzaError? = null,
+    val error: DomainError? = null,
     val isDone: Boolean = false,
 ) : VMState

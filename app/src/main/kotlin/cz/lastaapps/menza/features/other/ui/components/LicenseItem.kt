@@ -29,7 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mikepenz.aboutlibraries.entity.Library
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
 fun LicenseItem(library: Library, modifier: Modifier = Modifier) {
@@ -38,10 +38,10 @@ fun LicenseItem(library: Library, modifier: Modifier = Modifier) {
         modifier = modifier,
     ) {
         Column(
-            modifier = Modifier.padding(MenzaPadding.Small),
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            modifier = Modifier.padding(Padding.Small),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(Padding.Small)) {
                 LicenseName(
                     name = library.name,
                     modifier = Modifier.weight(1f),

@@ -36,7 +36,7 @@ import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.features.today.ui.util.getAmount
 import cz.lastaapps.menza.features.today.ui.util.getName
 import cz.lastaapps.menza.features.today.ui.util.getPrice
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 
 @Composable
@@ -68,9 +68,9 @@ internal fun DishBadge(
                 text = "$price Kč",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(
-                    vertical = MenzaPadding.Tiny,
-                    horizontal = MenzaPadding.Smaller,
-                )
+                    vertical = Padding.Tiny,
+                    horizontal = Padding.Smaller,
+                ),
             )
         }
     }
@@ -96,11 +96,11 @@ internal fun DishInfoRow(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+        verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
         modifier = modifier,
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            horizontalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
             dish.getAmount(showCzech)?.let { amount ->
                 Text(text = amount)

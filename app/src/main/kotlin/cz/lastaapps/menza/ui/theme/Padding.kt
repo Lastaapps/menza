@@ -21,7 +21,7 @@ package cz.lastaapps.menza.ui.theme
 
 import androidx.compose.ui.unit.dp
 
-object MenzaPadding {
+object Padding {
     val None = 0.dp
     val Tiny = 2.dp
     val Smaller = 4.dp

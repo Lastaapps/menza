@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import cz.lastaapps.menza.features.starting.ui.screen.DownloadScreen
-import cz.lastaapps.menza.ui.theme.MenzaPadding.More
+import cz.lastaapps.menza.ui.theme.Padding.More
 
 internal class DownloadNode(
     buildContext: BuildContext,

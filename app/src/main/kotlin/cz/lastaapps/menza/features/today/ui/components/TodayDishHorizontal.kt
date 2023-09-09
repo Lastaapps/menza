@@ -20,7 +20,14 @@
 package cz.lastaapps.menza.features.today.ui.components
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -30,8 +37,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,7 +52,7 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -80,7 +91,7 @@ fun TodayDishHorizontal(
                 scroll = scroll,
                 gridSwitch = gridSwitch,
                 modifier = Modifier
-                    .padding(top = MenzaPadding.Smaller) // so text is not cut off
+                    .padding(top = Padding.Smaller) // so text is not cut off
                     .fillMaxSize(),
             )
         }
@@ -109,11 +120,11 @@ private fun DishContent(
         return
     }
 
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(MenzaPadding.Medium)) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(Padding.Medium)) {
         // showing items
         LazyColumn(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.MidSmall),
+            verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
             state = scroll,
         ) {
             data.forEach { category ->
@@ -121,7 +132,7 @@ private fun DishContent(
                     DishHeader(
                         courseType = category,
                         showCzech = showCzech,
-                        modifier = Modifier.padding(bottom = MenzaPadding.Smaller),
+                        modifier = Modifier.padding(bottom = Padding.Smaller),
                     )
                 }
                 item {
@@ -141,7 +152,7 @@ private fun DishContent(
                         LazyRow(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(
-                                MenzaPadding.MidLarge,
+                                Padding.MidLarge,
                                 Alignment.CenterHorizontally,
                             ),
                             modifier = Modifier
@@ -191,9 +202,9 @@ private fun DishItem(
         modifier = modifier,
     ) {
         Column(
-            modifier = Modifier.padding(MenzaPadding.MidSmall),
+            modifier = Modifier.padding(Padding.MidSmall),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
 
             if (dish.photoLink != null) {
@@ -206,11 +217,11 @@ private fun DishItem(
             }
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                verticalArrangement = Arrangement.spacedBy(Padding.Small),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+                    horizontalArrangement = Arrangement.spacedBy(Padding.Smaller),
                 ) {
                     DishNameRow(
                         dish = dish,
@@ -246,7 +257,7 @@ private fun DishImageWithBadge(
                 loadImmediately = downloadOnMetered || !isOnMetered,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(MenzaPadding.Small)
+                    .padding(Padding.Small),
             )
         }
         DishBadge(

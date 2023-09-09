@@ -29,7 +29,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import cz.lastaapps.menza.features.panels.Panels
 import cz.lastaapps.menza.features.today.ui.screen.TodayScreen
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 class TodayNode(
     buildContext: BuildContext,
@@ -51,7 +51,7 @@ class TodayNode(
             onOsturak = onOsturak,
             panels = panels,
             modifier = Modifier
-                .padding(MenzaPadding.More.Screen)
+                .padding(Padding.More.Screen)
                 .fillMaxSize(),
         )
     }

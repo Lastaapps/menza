@@ -21,14 +21,14 @@ package cz.lastaapps.core.domain.error
 
 import arrow.core.raise.Raise
 
-sealed interface MenzaError {
+sealed interface DomainError {
     val throwable: Throwable?
         get() = null
 
-    sealed interface Runtime : MenzaError
-    sealed interface Logic : MenzaError
+    sealed interface Runtime : DomainError
+    sealed interface Logic : DomainError
 
     data class Unknown(override val throwable: Throwable) : Runtime
 }
 
-typealias MenzaRaise = Raise<MenzaError>
+typealias MenzaRaise = Raise<DomainError>

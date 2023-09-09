@@ -29,7 +29,7 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.sync.mapSync
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.SyncInfoUC
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
@@ -100,7 +100,7 @@ internal class InfoViewModel(
     }
 
     @Composable
-    override fun getError(): MenzaError? = flowState.value.error
+    override fun getError(): DomainError? = flowState.value.error
     override fun dismissError() = updateState { copy(error = null) }
 }
 
@@ -108,5 +108,5 @@ internal data class InfoState(
     val selectedMenza: Option<Menza>? = null,
     val isLoading: Boolean = false,
     val items: Info? = null,
-    val error: MenzaError? = null,
+    val error: DomainError? = null,
 ) : VMState

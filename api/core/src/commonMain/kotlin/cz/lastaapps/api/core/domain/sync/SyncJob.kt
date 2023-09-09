@@ -22,7 +22,7 @@ package cz.lastaapps.api.core.domain.sync
 import arrow.core.IorNel
 import arrow.core.Option
 import arrow.core.some
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.MenzaRaise
 
 abstract class SyncJob<T, R>(
@@ -30,7 +30,7 @@ abstract class SyncJob<T, R>(
     // None -> should be skipped
     val shouldRun: suspend MenzaRaise.(force: Boolean) -> Option<suspend () -> Unit>,
     val fetchApi: suspend MenzaRaise.() -> T,
-    val convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
+    val convert: suspend MenzaRaise.(T) -> IorNel<DomainError, R>,
     val store: (R) -> Unit,
 )
 
@@ -39,7 +39,7 @@ abstract class SyncJob<T, R>(
  */
 class SyncJobNoCache<T, R>(
     fetchApi: suspend MenzaRaise.() -> T,
-    convert: suspend MenzaRaise.(T) -> IorNel<MenzaError, R>,
+    convert: suspend MenzaRaise.(T) -> IorNel<DomainError, R>,
     store: (R) -> Unit,
 ) : SyncJob<T, R>(
     {

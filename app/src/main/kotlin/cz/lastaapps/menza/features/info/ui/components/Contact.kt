@@ -48,15 +48,15 @@ import cz.lastaapps.api.core.domain.model.Contact
 import cz.lastaapps.api.core.domain.model.Email
 import cz.lastaapps.api.core.domain.model.PhoneNumber
 import cz.lastaapps.core.domain.error.CommonError
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun ContactList(
     contactList: ImmutableList<Contact>,
-    onError: (MenzaError) -> Unit,
+    onError: (DomainError) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -96,7 +96,7 @@ private fun ContactList(
     if (contactList.isNotEmpty()) {
         Column(
             modifier = modifier.width(IntrinsicSize.Max),
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -131,7 +131,7 @@ private fun ContactItem(
         modifier = modifier,
     ) {
         Column(
-            modifier = Modifier.padding(MenzaPadding.MidSmall),
+            modifier = Modifier.padding(Padding.MidSmall),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             contact.name?.let { name ->
@@ -154,7 +154,7 @@ private fun ContactItem(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                        horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                     ) {
                         Icon(Icons.Default.Call, null)
                         Text(text = it.number)
@@ -168,7 +168,7 @@ private fun ContactItem(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                        horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                     ) {
                         Icon(Icons.Default.Mail, null)
                         Text(text = it.mail)
@@ -182,7 +182,7 @@ private fun ContactItem(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                        horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                     ) {
                         Icon(Icons.Default.Contacts, null)
                         Text(text = stringResource(R.string.info_contacts_contact_button_add))

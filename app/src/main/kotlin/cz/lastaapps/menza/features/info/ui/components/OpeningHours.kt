@@ -22,9 +22,20 @@ package cz.lastaapps.menza.features.info.ui.components
 import android.os.Build
 import android.text.format.DateFormat
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,10 +45,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cz.lastaapps.api.core.domain.model.PlaceOpeningInfo
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.datetime.toJavaLocalTime
 
@@ -49,7 +60,7 @@ fun OpeningHoursList(
     if (data.isNotEmpty()) {
         Column(
             modifier = modifier.width(IntrinsicSize.Max),
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -85,8 +96,8 @@ private fun OpeningHoursLocationUI(
         modifier = modifier,
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
-            modifier = Modifier.padding(MenzaPadding.MidSmall),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
+            modifier = Modifier.padding(Padding.MidSmall),
         ) {
             Text(
                 text = data.name,
@@ -98,7 +109,7 @@ private fun OpeningHoursLocationUI(
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())
                     .width(IntrinsicSize.Max),
-                verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small)
+                verticalArrangement = Arrangement.spacedBy(Padding.Small),
             ) {
                 data.types.forEachIndexed { typeIndex, type ->
                     if (typeIndex != 0) {
@@ -112,7 +123,7 @@ private fun OpeningHoursLocationUI(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Smaller),
+                            verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
                             modifier = Modifier.width(IntrinsicSize.Max),
                         ) {
                             type.times.forEach { time ->
@@ -130,7 +141,7 @@ private fun OpeningHoursLocationUI(
                                         Text(startDate)
                                     }
 
-                                    Spacer(Modifier.width(MenzaPadding.Medium))
+                                    Spacer(Modifier.width(Padding.Medium))
 
                                     val startTime =
                                         time.startTime.toJavaLocalTime().format(formatter)
@@ -141,7 +152,7 @@ private fun OpeningHoursLocationUI(
                         }
 
                         type.description?.let {
-                            Spacer(Modifier.width(MenzaPadding.Medium))
+                            Spacer(Modifier.width(Padding.Medium))
                             Text(text = it)
                         }
                     }

@@ -42,7 +42,7 @@ import cz.lastaapps.menza.features.today.ui.vm.TodayState
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.ui.components.layout.TwoPaneLayout
 import cz.lastaapps.menza.ui.root.BackArrow
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -135,7 +135,7 @@ private fun TodayContent(
             panels(
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = MenzaPadding.Medium),
+                    .padding(top = Padding.Medium),
             )
         }
     }

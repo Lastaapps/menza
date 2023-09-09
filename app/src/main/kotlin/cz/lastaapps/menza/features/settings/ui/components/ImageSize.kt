@@ -36,7 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlin.math.roundToInt
 
@@ -56,7 +56,7 @@ internal fun ImageSizeSetting(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Medium),
+            horizontalArrangement = Arrangement.spacedBy(Padding.Medium),
         ) {
             SettingsTitle(
                 stringResource(R.string.settings_image_size_title),

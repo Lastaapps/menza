@@ -41,16 +41,16 @@ import androidx.compose.ui.text.style.TextAlign
 import cz.lastaapps.api.core.domain.model.Address
 import cz.lastaapps.api.core.domain.model.LatLong
 import cz.lastaapps.core.domain.error.CommonError
-import cz.lastaapps.core.domain.error.MenzaError
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 
 @JvmName("AddressListImpl")
 @Composable
 fun AddressList(
     locations: ImmutableList<Address>,
-    onError: (MenzaError) -> Unit,
+    onError: (DomainError) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -77,7 +77,7 @@ private fun AddressList(
     if (locations.isNotEmpty()) {
         Column(
             modifier = modifier,
-            verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -102,7 +102,7 @@ private fun Address(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+        verticalArrangement = Arrangement.spacedBy(Padding.Small),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         SelectionContainer() {
@@ -117,7 +117,7 @@ private fun Address(
                 onClick = { openAddress(location) },
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(MenzaPadding.Small),
+                    horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(Icons.Default.Map, contentDescription = null)

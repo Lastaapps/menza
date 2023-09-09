@@ -23,7 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 internal object SettingsTokens {
     val titleStyle: TextStyle
@@ -34,5 +34,5 @@ internal object SettingsTokens {
         get() = MaterialTheme.typography.bodyMedium
 
     val itemPadding: Dp
-        get() = MenzaPadding.MidSmall
+        get() = Padding.MidSmall
 }

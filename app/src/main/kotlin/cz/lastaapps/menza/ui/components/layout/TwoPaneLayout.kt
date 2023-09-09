@@ -26,7 +26,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.theme.MenzaPadding
+import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
 fun TwoPaneLayout(
@@ -108,7 +108,7 @@ private fun TwoPaneLayoutExpanded(
     SplitLayout(
         panel1 = {
             Box(
-                modifier = Modifier.padding(end = MenzaPadding.More.Screen / 2),
+                modifier = Modifier.padding(end = Padding.More.Screen / 2),
             ) {
                 listNode()
             }
@@ -116,7 +116,7 @@ private fun TwoPaneLayoutExpanded(
         panel2 = {
             Crossfade(
                 targetState = showDetail,
-                modifier = Modifier.padding(start = MenzaPadding.More.Screen / 2),
+                modifier = Modifier.padding(start = Padding.More.Screen / 2),
             ) { currentShowDetail ->
                 if (currentShowDetail) {
                     detailNode()
