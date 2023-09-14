@@ -26,8 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.bumble.appyx.core.integration.NodeHost
-import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
+import com.bumble.appyx.navigation.integration.NodeComponentActivity
+import com.bumble.appyx.navigation.integration.NodeHost
+import com.bumble.appyx.navigation.platform.AndroidLifecycle
 import cz.lastaapps.menza.features.root.ui.RootNode
 import cz.lastaapps.menza.ui.locals.LocalActivityViewModelOwner
 import cz.lastaapps.menza.ui.locals.WithFoldingFeature
@@ -48,7 +49,8 @@ class MainActivity : NodeComponentActivity() {
         setContent {
             ApplyProviders {
                 NodeHost(
-                    integrationPoint = appyxIntegrationPoint,
+                    lifecycle = AndroidLifecycle(lifecycle),
+                    integrationPoint = appyxV2IntegrationPoint,
                     modifier = Modifier.fillMaxSize(),
                 ) { buildContext ->
                     RootNode(buildContext) { isReady = true }

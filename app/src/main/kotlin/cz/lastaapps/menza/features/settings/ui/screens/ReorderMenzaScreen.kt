@@ -95,7 +95,7 @@ private fun ReorderMenzaEffects(
     HandleAppear(viewModel)
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ReorderMenzaContent(
     state: ReorderMenzaState,
@@ -244,18 +244,24 @@ private fun MenzaItem(
 @Composable
 private fun MenzaItemPreview() {
     AppTheme {
-        Surface() {
+        Surface {
             Column(Modifier.padding(Padding.Large)) {
-                MenzaItem(menza = Menza(
-                    Strahov,
-                    "Menza Strahov",
-                    isOpened = true, supportsDaily = true, supportsWeekly = true,
-                ), visible = true, onVisibilityClick = {})
-                MenzaItem(menza = Menza(
-                    Strahov,
-                    "Restaurace Strahov",
-                    isOpened = true, supportsDaily = true, supportsWeekly = true,
-                ), visible = false, onVisibilityClick = {})
+                MenzaItem(
+                    menza = Menza(
+                        Strahov,
+                        "Menza Strahov",
+                        isOpened = true, supportsDaily = true, supportsWeekly = true,
+                    ),
+                    visible = true, onVisibilityClick = {},
+                )
+                MenzaItem(
+                    menza = Menza(
+                        Strahov,
+                        "Restaurace Strahov",
+                        isOpened = true, supportsDaily = true, supportsWeekly = true,
+                    ),
+                    visible = false, onVisibilityClick = {},
+                )
             }
         }
     }

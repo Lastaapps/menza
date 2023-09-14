@@ -64,7 +64,8 @@ internal fun AppThemeItem(
         theme = theme,
     ) {
         val scale by animateFloatAsState(
-            if (isSelected) 1f else AppThemeItem.unselectedScale
+            if (isSelected) 1f else AppThemeItem.unselectedScale,
+            label = "theme_card_scale",
         )
         Surface(
             shape = MaterialTheme.shapes.large,

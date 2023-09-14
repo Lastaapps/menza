@@ -28,11 +28,11 @@ internal sealed class RootNavType : Parcelable {
     }
 
     @Parcelize
-    object LoadingNav : RootNavType()
+    data object LoadingNav : RootNavType()
 
     @Parcelize
-    object SetupFlowNav : RootNavType()
+    data object SetupFlowNav : RootNavType()
 
     @Parcelize
-    object MainNav : RootNavType()
+    data object MainNav : RootNavType()
 }

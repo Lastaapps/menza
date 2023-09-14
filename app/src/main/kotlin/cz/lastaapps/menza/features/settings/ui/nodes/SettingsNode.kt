@@ -31,8 +31,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.navigation.modality.BuildContext
+import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.other.ui.components.CrashesDialog
 import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialog

@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import cz.lastaapps.menza.ui.theme.Padding
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CheckboxWithText(
     checked: Boolean,

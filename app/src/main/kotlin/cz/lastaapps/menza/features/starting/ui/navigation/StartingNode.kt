@@ -20,20 +20,18 @@
 package cz.lastaapps.menza.features.starting.ui.navigation
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.navigation.backpresshandlerstrategies.DontHandleBackPress
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
-import com.bumble.appyx.core.node.node
-import com.bumble.appyx.navmodel.spotlight.Spotlight
-import com.bumble.appyx.navmodel.spotlight.activeIndex
-import com.bumble.appyx.navmodel.spotlight.operation.next
-import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightSlider
+import com.bumble.appyx.components.spotlight.Spotlight
+import com.bumble.appyx.components.spotlight.SpotlightModel
+import com.bumble.appyx.components.spotlight.operation.next
+import com.bumble.appyx.components.spotlight.ui.slider.SpotlightSlider
+import com.bumble.appyx.navigation.composable.AppyxComponent
+import com.bumble.appyx.navigation.modality.BuildContext
+import com.bumble.appyx.navigation.node.Node
+import com.bumble.appyx.navigation.node.ParentNode
+import com.bumble.appyx.navigation.node.node
 import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialogDest
 import cz.lastaapps.menza.features.settings.ui.nodes.AppThemeNode
 import cz.lastaapps.menza.features.settings.ui.nodes.ReorderMenzaNode
@@ -46,24 +44,28 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.Policy
 import cz.lastaapps.menza.features.starting.ui.node.AllSetNode
 import cz.lastaapps.menza.features.starting.ui.node.DownloadNode
 import cz.lastaapps.menza.features.starting.ui.node.PriceTypeNode
+import cz.lastaapps.menza.ui.util.activeIndex
 import kotlinx.coroutines.flow.first
 
 class StartingNode(
     buildContext: BuildContext,
     private val onDone: () -> Unit,
-    private val spotlight: Spotlight<StartingNavType> = Spotlight<StartingNavType>(
+    private val spotlightModel: SpotlightModel<StartingNavType> = SpotlightModel(
         items = StartingNavType.allTypes,
         savedStateMap = buildContext.savedStateMap,
-        backPressHandler = DontHandleBackPress(),
+    ),
+    private val spotlight: Spotlight<StartingNavType> = Spotlight<StartingNavType>(
+        model = spotlightModel,
+        motionController = { SpotlightSlider(it) },
     ),
 ) : ParentNode<StartingNavType>(
+    appyxComponent = spotlight,
     buildContext = buildContext,
-    navModel = spotlight,
 ) {
 
-    override fun resolve(navTarget: StartingNavType, buildContext: BuildContext): Node {
+    override fun resolve(interactionTarget: StartingNavType, buildContext: BuildContext): Node {
         val onNext = { spotlight.next() }
-        return when (navTarget) {
+        return when (interactionTarget) {
             PolicyBackgroundNav -> node(buildContext) {}
             DownloadDataNav -> DownloadNode(buildContext, onNext)
             ChooseThemeNav -> AppThemeNode(buildContext, onNext)
@@ -73,23 +75,23 @@ class StartingNode(
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun View(modifier: Modifier) {
         Scaffold(
             modifier = modifier,
         ) {
-            Children(
+            AppyxComponent(
+                appyxComponent = spotlight,
                 modifier = Modifier.padding(it),
-                navModel = spotlight,
-                transitionHandler = rememberSpotlightSlider(),
             )
 
-            PrivacyDialogDest(onNotNeeded = {
-                if (spotlight.activeIndex().first() == 0) {
-                    spotlight.next()
-                }
-            })
+            PrivacyDialogDest(
+                onNotNeeded = {
+                    if (spotlightModel.activeIndex().first() == 0) {
+                        spotlight.next()
+                    }
+                },
+            )
         }
     }
 }

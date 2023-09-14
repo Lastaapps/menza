@@ -35,20 +35,20 @@ sealed interface StartingNavType : Parcelable {
     }
 
     @Parcelize
-    object PolicyBackgroundNav : StartingNavType
+    data object PolicyBackgroundNav : StartingNavType
 
     @Parcelize
-    object DownloadDataNav : StartingNavType
+    data object DownloadDataNav : StartingNavType
 
     @Parcelize
-    object ChoosePriceNav : StartingNavType
+    data object ChoosePriceNav : StartingNavType
 
     @Parcelize
-    object ChooseThemeNav : StartingNavType
+    data object ChooseThemeNav : StartingNavType
 
     @Parcelize
-    object OrderMenzaListNav : StartingNavType
+    data object OrderMenzaListNav : StartingNavType
 
     @Parcelize
-    object AllSetNav : StartingNavType
+    data object AllSetNav : StartingNavType
 }

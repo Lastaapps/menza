@@ -36,7 +36,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import org.lighthousegames.logging.logging
 
-internal class DownloadViewModel constructor(
+internal class DownloadViewModel(
     private val checkDownloadNeeded: CheckDataDownloadNeededUC,
     private val downloadData: DownloadInitDataUC,
     context: VMContext,

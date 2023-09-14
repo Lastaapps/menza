@@ -29,7 +29,7 @@ class GetThemeListUC internal constructor(
     private val isDynamicThemeSupported: IsDynamicThemeSupportedUC,
 ) : UseCase(context) {
     suspend operator fun invoke() = launch {
-        AppThemeType.values()
+        AppThemeType.entries
             .toMutableList()
             .also {
                 if (!isDynamicThemeSupported()) {

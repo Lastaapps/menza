@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import cz.lastaapps.menza.ui.theme.Padding
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MenzaModalDrawer(
     drawerState: DrawerState,
@@ -71,7 +70,6 @@ internal fun MenzaDismissibleDrawerWithRailLayout(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MenzaDismissibleDrawer(
     drawerState: DrawerState,
@@ -93,7 +91,6 @@ internal fun MenzaDismissibleDrawer(
 }
 
 @Suppress("unused")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MenzaPermanentDrawer(
     @Suppress("UNUSED_PARAMETER")

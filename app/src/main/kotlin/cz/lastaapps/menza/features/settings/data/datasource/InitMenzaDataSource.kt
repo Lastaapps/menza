@@ -120,7 +120,7 @@ internal class InitMenzaDataSourceImpl(
             settings.getStringOrNullFlow(prefix + menzaNameKey),
             settings.getIntOrNullFlow(prefix + menzaIdExtraKey)
         ) { name, id ->
-            val type = MenzaStoreType.values()
+            val type = MenzaStoreType.entries
                 .firstOrNull { it.name == name } ?: return@combine null
             when (type) {
                 MenzaStoreType.AgataStrahov -> Strahov

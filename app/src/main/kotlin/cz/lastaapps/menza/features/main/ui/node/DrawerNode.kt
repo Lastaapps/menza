@@ -20,17 +20,17 @@
 package cz.lastaapps.menza.features.main.ui.node
 
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
-import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.pop
-import com.bumble.appyx.navmodel.backstack.operation.push
-import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
+import com.bumble.appyx.components.backstack.BackStack
+import com.bumble.appyx.components.backstack.BackStackModel
+import com.bumble.appyx.components.backstack.operation.pop
+import com.bumble.appyx.components.backstack.operation.push
+import com.bumble.appyx.components.backstack.ui.fader.BackStackFader
+import com.bumble.appyx.navigation.composable.AppyxComponent
+import com.bumble.appyx.navigation.modality.BuildContext
+import com.bumble.appyx.navigation.node.Node
+import com.bumble.appyx.navigation.node.ParentNode
 import cz.lastaapps.menza.features.main.ui.node.DrawerNavType.EDIT_NAV
 import cz.lastaapps.menza.features.main.ui.node.DrawerNavType.MENZA_LIST_NAV
 import cz.lastaapps.menza.features.settings.ui.nodes.ReorderMenzaNode
@@ -40,18 +40,20 @@ internal enum class DrawerNavType {
     ;
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-internal class DrawerNode constructor(
+internal class DrawerNode(
     buildContext: BuildContext,
     private val drawableStateProvider: () -> DrawerState?,
     private val backstack: BackStack<DrawerNavType> = BackStack(
-        initialElement = MENZA_LIST_NAV,
-        savedStateMap = buildContext.savedStateMap,
+        model = BackStackModel(
+            initialTargets = listOf(MENZA_LIST_NAV),
+            savedStateMap = buildContext.savedStateMap,
+        ),
+        motionController = { BackStackFader(it) },
     ),
 ) : ParentNode<DrawerNavType>(backstack, buildContext) {
 
-    override fun resolve(navTarget: DrawerNavType, buildContext: BuildContext): Node =
-        when (navTarget) {
+    override fun resolve(interactionTarget: DrawerNavType, buildContext: BuildContext): Node =
+        when (interactionTarget) {
             MENZA_LIST_NAV -> MenzaSelectionNode(
                 buildContext,
                 onEdit = { backstack.push(EDIT_NAV) },
@@ -63,10 +65,9 @@ internal class DrawerNode constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
+        AppyxComponent(
+            appyxComponent = backstack,
             modifier = modifier,
-            navModel = backstack,
-            transitionHandler = rememberBackstackFader(),
         )
     }
 }

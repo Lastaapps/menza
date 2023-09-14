@@ -67,7 +67,6 @@ private fun WeekEffects(
     HandleError(viewModel, hostState)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WeekContent(
     state: WeekState,

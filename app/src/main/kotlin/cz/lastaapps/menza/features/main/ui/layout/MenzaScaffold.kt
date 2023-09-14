@@ -45,7 +45,6 @@ import kotlinx.coroutines.launch
 
 private val railWidth = 80.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenzaScaffold(
     drawerState: DrawerState,
@@ -98,7 +97,6 @@ fun MenzaScaffold(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppLayoutCompact(
     drawerState: DrawerState,
@@ -153,7 +151,6 @@ private fun AppLayoutCompact(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppLayoutMedium(
     drawerState: DrawerState,
@@ -205,7 +202,6 @@ private fun AppLayoutMedium(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppLayoutExpanded(
     drawerState: DrawerState,
@@ -240,7 +236,6 @@ private fun AppLayoutExpanded(
         )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppLayoutExpandedNoFold(
     drawerState: DrawerState,
@@ -291,7 +286,6 @@ private fun AppLayoutExpandedNoFold(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppLayoutExpandedFold(
     drawerState: DrawerState,

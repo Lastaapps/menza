@@ -105,7 +105,7 @@ private fun Address(
         verticalArrangement = Arrangement.spacedBy(Padding.Small),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        SelectionContainer() {
+        SelectionContainer {
             Text(
                 text = location.location.name.replace(", ", "\n"),
                 textAlign = TextAlign.Center,

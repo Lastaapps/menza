@@ -43,7 +43,6 @@ import kotlin.math.roundToInt
 private const val imageSizeMin = .5f
 private const val imageSizeMax = 3f
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ImageSizeSetting(
     progress: Float,

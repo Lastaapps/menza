@@ -86,7 +86,6 @@ private fun InfoEffects(
     HandleError(viewModel, hostState)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InfoContent(
     state: InfoState,

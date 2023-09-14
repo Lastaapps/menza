@@ -22,44 +22,57 @@ package cz.lastaapps.menza.features.root.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onPlaced
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bumble.appyx.core.composable.Children
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.navigation.backpresshandlerstrategies.DontHandleBackPress
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
-import com.bumble.appyx.core.node.node
-import com.bumble.appyx.navmodel.spotlight.Spotlight
-import com.bumble.appyx.navmodel.spotlight.activeIndex
-import com.bumble.appyx.navmodel.spotlight.transitionhandler.rememberSpotlightFader
+import com.bumble.appyx.components.spotlight.Spotlight
+import com.bumble.appyx.components.spotlight.SpotlightModel
+import com.bumble.appyx.components.spotlight.ui.fader.SpotlightFader
+import com.bumble.appyx.navigation.composable.AppyxComponent
+import com.bumble.appyx.navigation.modality.BuildContext
+import com.bumble.appyx.navigation.node.Node
+import com.bumble.appyx.navigation.node.ParentNode
+import com.bumble.appyx.navigation.node.node
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.navigation.MainNode
 import cz.lastaapps.menza.features.root.ui.RootNavType.LoadingNav
 import cz.lastaapps.menza.features.root.ui.RootNavType.MainNav
 import cz.lastaapps.menza.features.root.ui.RootNavType.SetupFlowNav
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingNode
-import cz.lastaapps.menza.ui.util.activateType
+import cz.lastaapps.menza.ui.util.activateItem
+import cz.lastaapps.menza.ui.util.activeIndex
 import cz.lastaapps.menza.ui.util.indexOfType
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 internal class RootNode(
     buildContext: BuildContext,
-    private val spotlight: Spotlight<RootNavType> = Spotlight(
+    private val spotlightModel: SpotlightModel<RootNavType> = SpotlightModel(
         RootNavType.types,
         savedStateMap = buildContext.savedStateMap,
-        backPressHandler = DontHandleBackPress(),
+    ),
+    private val spotlight: Spotlight<RootNavType> = Spotlight(
+        model = spotlightModel,
+        motionController = { SpotlightFader(it) },
     ),
     private val onDecided: () -> Unit,
 ) : ParentNode<RootNavType>(
     buildContext = buildContext,
-    navModel = spotlight,
+    appyxComponent = spotlight,
 ) {
-    override fun resolve(navTarget: RootNavType, buildContext: BuildContext): Node {
-        return when (navTarget) {
+    override fun resolve(interactionTarget: RootNavType, buildContext: BuildContext): Node {
+        return when (interactionTarget) {
             LoadingNav -> node(buildContext) {} // Splash screen will be shown
-            SetupFlowNav -> StartingNode(buildContext, { spotlight.activateType(MainNav) })
+            SetupFlowNav -> StartingNode(
+                buildContext,
+                {
+                    lifecycleScope.launch {
+                        spotlight.activateItem(spotlightModel, MainNav)
+                    }
+                },
+            )
+
             MainNav -> MainNode(buildContext)
         }
     }
@@ -74,21 +87,23 @@ internal class RootNode(
         LaunchedEffect(state.isReady, state.isSetUp) {
             if (state.isReady) {
                 (if (state.isSetUp) MainNav else SetupFlowNav)
-                    .let { spotlight.activateType(it) }
+                    .let { spotlight.activateItem(spotlightModel, it) }
             }
         }
 
         ApplyAppTheme(viewModel) {
-            val activeIndex by spotlight.activeIndex().collectAsStateWithLifecycle(-1)
+            val activeIndex by remember { spotlightModel.activeIndex() }
+                .collectAsStateWithLifecycle(-1)
+            val indexOfType by remember { spotlightModel.indexOfType(LoadingNav) }
+                .collectAsStateWithLifecycle(0)
 
-            Children(
-                navModel = spotlight,
+            AppyxComponent(
+                appyxComponent = spotlight,
                 modifier = modifier.onPlaced {
-                    if (spotlight.indexOfType(LoadingNav) != activeIndex) {
+                    if (indexOfType != activeIndex) {
                         onDecided()
                     }
                 },
-                transitionHandler = rememberSpotlightFader(),
             )
         }
     }

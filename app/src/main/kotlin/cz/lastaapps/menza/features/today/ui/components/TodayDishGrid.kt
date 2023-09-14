@@ -75,7 +75,7 @@ import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TodayDishGrid(
     isLoading: Boolean,
@@ -122,7 +122,6 @@ fun TodayDishGrid(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DishContent(
     data: ImmutableList<DishCategory>,

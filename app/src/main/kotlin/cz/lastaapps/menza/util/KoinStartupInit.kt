@@ -29,7 +29,6 @@ import org.koin.core.context.startKoin
 import org.lighthousegames.logging.logging
 
 @Keep
-@Suppress("unused")
 class KoinStartupInit : Initializer<Unit> {
     companion object {
         private val log = logging()

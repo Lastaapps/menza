@@ -61,7 +61,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.R.string
 import cz.lastaapps.menza.features.other.ui.dialog.ReportDialog
 import cz.lastaapps.menza.features.other.ui.dialog.sendReport
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
@@ -192,7 +191,7 @@ private fun ColumnScope.InitialBehaviourSelector(
             .toImmutableList()
 
         ChooseFromDialog(
-            title = stringResource(id = string.settings_init_menza_title),
+            title = stringResource(id = R.string.settings_init_menza_title),
             items = items,
             onItemSelected = { onInitialMenzaBehaviour(it.first) },
             onDismiss = { initDialogVisible = false },
@@ -215,7 +214,7 @@ private fun ColumnScope.InitialBehaviourSelector(
     if (selectDialogVisible) {
 
         ChooseFromDialog(
-            title = stringResource(id = string.settings_init_menza_title),
+            title = stringResource(id = R.string.settings_init_menza_title),
             items = menzaList,
             onItemSelected = { onSelectedMenza(it) },
             onDismiss = { selectDialogVisible = false },
@@ -253,15 +252,15 @@ private fun Buttons(
                 }
                 context.startActivity(Intent.createChooser(sendIntent, null))
             },
-        ) { IconAndText(Icons.Default.Share, string.settings_button_share) }
+        ) { IconAndText(Icons.Default.Share, R.string.settings_button_share) }
 
         OutlinedButton(
             onClick = { uriHandler.openUri("https://play.google.com/store/apps/details?id=cz.lastaapps.menza") },
-        ) { IconAndText(Icons.Default.Star, string.settings_button_rate) }
+        ) { IconAndText(Icons.Default.Star, R.string.settings_button_rate) }
 
         OutlinedButton(
             onClick = onPrivacyPolicy,
-        ) { IconAndText(Icons.Default.Security, string.settings_button_privacy_policy) }
+        ) { IconAndText(Icons.Default.Security, R.string.settings_button_privacy_policy) }
 
         ReportButton()
 
@@ -289,7 +288,7 @@ private fun FullDataReload(
     }
 
     OutlinedButton(onClick = { showFullReload = true }, modifier) {
-        IconAndText(Icons.Default.Refresh, string.settings_button_reload)
+        IconAndText(Icons.Default.Refresh, R.string.settings_button_reload)
     }
 }
 
@@ -298,7 +297,7 @@ private fun ReportButton(modifier: Modifier = Modifier) {
     var shown by rememberSaveable { mutableStateOf(false) }
 
     OutlinedButton(onClick = { shown = true }, modifier) {
-        IconAndText(Icons.Default.BugReport, string.settings_button_report)
+        IconAndText(Icons.Default.BugReport, R.string.settings_button_report)
     }
 
     val context = LocalContext.current
@@ -314,7 +313,7 @@ fun CrashesButton(
     modifier: Modifier = Modifier,
 ) {
     OutlinedButton(onClick = onCrashesDialog, modifier) {
-        IconAndText(Icons.Default.ReceiptLong, stringResource(string.settings_button_crashes))
+        IconAndText(Icons.Default.ReceiptLong, stringResource(R.string.settings_button_crashes))
     }
 }
 

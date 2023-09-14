@@ -38,10 +38,8 @@ val LocalFoldProvider = compositionLocalOf<FoldingClass> { Unknown }
 private val foldingLog = logging(FoldingClass::class.simpleName)
 sealed class FoldingClass private constructor() {
     class Supported(val foldingFeature: FoldingFeature) : FoldingClass()
-    object NotSupported : FoldingClass()
-    object Unknown : FoldingClass()
-    companion object {
-    }
+    data object NotSupported : FoldingClass()
+    data object Unknown : FoldingClass()
 }
 
 @Composable

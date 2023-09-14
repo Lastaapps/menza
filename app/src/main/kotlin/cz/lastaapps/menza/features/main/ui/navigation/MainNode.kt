@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue.Closed
 import androidx.compose.material3.DrawerValue.Open
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -32,15 +31,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bumble.appyx.core.composable.Children
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
-import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.newRoot
-import com.bumble.appyx.navmodel.backstack.operation.pop
-import com.bumble.appyx.navmodel.backstack.operation.push
-import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
+import com.bumble.appyx.components.backstack.BackStack
+import com.bumble.appyx.components.backstack.BackStackModel
+import com.bumble.appyx.components.backstack.operation.newRoot
+import com.bumble.appyx.components.backstack.operation.pop
+import com.bumble.appyx.components.backstack.operation.push
+import com.bumble.appyx.components.backstack.ui.fader.BackStackFader
+import com.bumble.appyx.components.backstack.ui.slider.BackStackSlider
+import com.bumble.appyx.interactions.core.model.transition.Operation
+import com.bumble.appyx.interactions.core.model.transition.TransitionModel.Output
+import com.bumble.appyx.navigation.composable.AppyxComponent
+import com.bumble.appyx.navigation.modality.BuildContext
+import com.bumble.appyx.navigation.node.Node
+import com.bumble.appyx.navigation.node.ParentNode
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.info.ui.node.InfoNode
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.DrawerContent
@@ -60,24 +63,26 @@ import cz.lastaapps.menza.features.settings.ui.navigation.SettingsHubNode
 import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
 import cz.lastaapps.menza.features.week.ui.node.WeekNode
 import cz.lastaapps.menza.ui.locals.LocalMayBeFlipCover
+import cz.lastaapps.menza.ui.util.active
 import org.koin.androidx.compose.koinViewModel
 
 class MainNode(
     buildContext: BuildContext,
     private val backStack: BackStack<MainNavType> = BackStack(
-        initialElement = TodayNav,
-        savedStateMap = buildContext.savedStateMap,
+        model = BackStackModel(
+            initialTargets = listOf(TodayNav),
+            savedStateMap = buildContext.savedStateMap,
+        ),
+        motionController = { BackStackFader(it) },
     ),
 ) : ParentNode<MainNavType>(backStack, buildContext) {
 
-    @OptIn(ExperimentalMaterial3Api::class)
     private var currentDrawerState: DrawerState? = null
 
     private val onOsturak = { backStack.push(OsturakNav) }
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    override fun resolve(navTarget: MainNavType, buildContext: BuildContext): Node =
-        when (navTarget) {
+    override fun resolve(interactionTarget: MainNavType, buildContext: BuildContext): Node =
+        when (interactionTarget) {
             DrawerContent -> DrawerNode(buildContext, ::currentDrawerState)
 
             TodayNav -> TodayNode(
@@ -122,25 +127,34 @@ class MainNode(
 
         val hostState = remember { SnackbarHostState() }
 
-        val elements by backStack.elements.collectAsStateWithLifecycle()
+        val active by remember(backStack) {
+            backStack.active()
+        }.collectAsStateWithLifecycle(initialValue = null)
 
         MainScreen(
-            currentDest = elements.last().key.navTarget,
+            currentDest = active,
             drawerState = drawerState,
             settingsEverOpened = state.settingsViewed,
             hostState = hostState,
             selectedMenza = state.selectedMenza,
             isFlip = state.isFlip && LocalMayBeFlipCover.current,
             onNavItemTopBar = { backStack.push(it) },
-            onNavItemRoot = { backStack.newRoot(it) },
+            onNavItemRoot = {
+                // TodayNav is always at the bottom
+                if (it == TodayNav) {
+                    backStack.newRoot(TodayNav)
+                } else {
+                    backStack.newRoot(TodayNav, mode = Operation.Mode.IMMEDIATE)
+                    backStack.push(it) // )
+                }
+            },
             drawerContent = {
-                PermanentChild(navTarget = DrawerContent)
+                PermanentChild(DrawerContent)
             },
             content = {
-                Children(
-                    navModel = backStack,
+                AppyxComponent(
+                    appyxComponent = backStack,
                     modifier = Modifier.fillMaxSize(),
-                    transitionHandler = rememberBackstackFader(),
                 )
             },
             modifier = Modifier.fillMaxSize(),

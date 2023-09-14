@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class InfoViewModel constructor(
+class InfoViewModel(
     private val messageRepo: MessagesRepo,
     private val contactsRepo: ContactsRepo,
     private val locationRepo: LocationRepo,

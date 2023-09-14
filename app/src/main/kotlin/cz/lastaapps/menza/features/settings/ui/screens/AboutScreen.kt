@@ -64,7 +64,6 @@ import cz.lastaapps.common.DeveloperInfo
 import cz.lastaapps.common.R
 import cz.lastaapps.common.R.drawable
 import cz.lastaapps.menza.BuildConfig
-import cz.lastaapps.menza.R.string
 import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
@@ -198,10 +197,10 @@ private fun WhatsNewButton(
             },
             text = {
                 Text(
-                    text = stringResource(id = string.about_whats_new),
-                    textAlign = TextAlign.Center
+                    text = stringResource(id = cz.lastaapps.menza.R.string.about_whats_new),
+                    textAlign = TextAlign.Center,
                 )
-            }
+            },
         )
     }
 }
@@ -215,14 +214,17 @@ private fun LicenseButton(
         modifier = modifier,
         onClick = onClick,
     ) {
-        IconAndText({
-            Icon(Icons.Default.Description, null)
-        }, {
-            Text(
-                text = stringResource(string.about_license_notices),
-                textAlign = TextAlign.Center
-            )
-        })
+        IconAndText(
+            {
+                Icon(Icons.Default.Description, null)
+            },
+            {
+                Text(
+                    text = stringResource(cz.lastaapps.menza.R.string.about_license_notices),
+                    textAlign = TextAlign.Center,
+                )
+            },
+        )
     }
 }
 
@@ -235,14 +237,17 @@ private fun OsturakButton(
         modifier = modifier,
         onClick = onClick,
     ) {
-        IconAndText({
-            Icon(Icons.Default.LocalFireDepartment, null)
-        }, {
-            Text(
-                text = stringResource(string.about_osturak),
-                textAlign = TextAlign.Center,
-            )
-        })
+        IconAndText(
+            {
+                Icon(Icons.Default.LocalFireDepartment, null)
+            },
+            {
+                Text(
+                    text = stringResource(cz.lastaapps.menza.R.string.about_osturak),
+                    textAlign = TextAlign.Center,
+                )
+            },
+        )
     }
 }
 

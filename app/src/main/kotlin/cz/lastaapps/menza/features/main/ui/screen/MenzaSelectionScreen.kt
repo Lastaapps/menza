@@ -192,7 +192,6 @@ private fun MenzaList(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MenzaItem(
     menza: Menza,

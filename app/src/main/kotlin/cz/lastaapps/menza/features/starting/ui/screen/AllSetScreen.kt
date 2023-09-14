@@ -55,7 +55,6 @@ internal fun AllSetScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AllSetContent(
     onDone: () -> Unit,

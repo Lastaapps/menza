@@ -17,6 +17,8 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:Suppress("KDocUnresolvedReference")
+
 package cz.lastaapps.menza.ui.components.placeholders
 
 import androidx.compose.animation.core.FiniteAnimationSpec

@@ -22,8 +22,8 @@ package cz.lastaapps.menza.features.other.ui.screen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cz.lastaapps.menza.ui.components.layout.AboveOrSideBySideLayout
-import cz.lastaapps.menza.ui.dests.others.osturak.OsturakImages
-import cz.lastaapps.menza.ui.dests.others.osturak.OsturakText
+import cz.lastaapps.menza.features.other.ui.components.OsturakImages
+import cz.lastaapps.menza.features.other.ui.components.OsturakText
 
 @Composable
 internal fun OsturakScreen(

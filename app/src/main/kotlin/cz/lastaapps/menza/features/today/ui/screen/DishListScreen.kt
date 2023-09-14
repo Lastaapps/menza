@@ -86,7 +86,7 @@ private fun DishListEffects(
     HandleError(viewModel, hostState)
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun DishListContent(
     state: DishListState,

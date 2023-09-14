@@ -25,8 +25,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.navigation.modality.BuildContext
+import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.panels.Panels
 import cz.lastaapps.menza.features.today.ui.screen.TodayScreen
 import cz.lastaapps.menza.ui.theme.Padding

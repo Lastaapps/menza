@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.dests.others.osturak
+package cz.lastaapps.menza.features.other.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image

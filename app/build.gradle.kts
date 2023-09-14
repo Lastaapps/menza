@@ -54,7 +54,13 @@ android {
 dependencies {
 
     // Just until they fix ViewModel stuff
-    implementation("lib.stolen:appyx")
+    //noinspection UseTomlInstead
+    run {
+        implementation("lib.stolen:appyx-interactions")
+        implementation("lib.stolen:appyx-components:backstack")
+        implementation("lib.stolen:appyx-components:spotlight")
+        implementation("lib.stolen:appyx-navigation")
+    }
 
     implementation(projects.api.main)
     implementation(projects.core)

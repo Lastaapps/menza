@@ -120,7 +120,7 @@ internal class GeneralDataSourceImpl(
 
     override fun getDarkMode(): Flow<DarkMode> =
         settings.getIntOrNullFlow(darkModeKey).map { id ->
-            DarkMode.values().firstOrNull { it.id == id } ?: DarkMode.System
+            DarkMode.entries.firstOrNull { it.id == id } ?: DarkMode.System
         }
 
     override suspend fun setAppTheme(theme: AppThemeType) =
@@ -128,7 +128,7 @@ internal class GeneralDataSourceImpl(
 
     override fun getAppTheme(): Flow<AppThemeType?> =
         settings.getIntOrNullFlow(appThemeKey).map { id ->
-            AppThemeType.values().firstOrNull { type -> type.id == id }
+            AppThemeType.entries.firstOrNull { type -> type.id == id }
         }
 
     override suspend fun setImageScale(scale: Float) =
@@ -156,7 +156,7 @@ internal class GeneralDataSourceImpl(
     override fun isCompactTodayView(): Flow<DishListMode?> =
         settings.getIntOrNullFlow(compactTodayView)
             .map { id ->
-                DishListMode.values().firstOrNull() { it.id == id }
+                DishListMode.entries.firstOrNull { it.id == id }
             }
 
 }

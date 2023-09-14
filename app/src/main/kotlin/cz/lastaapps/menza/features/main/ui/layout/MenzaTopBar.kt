@@ -75,7 +75,6 @@ data class TopBarState(
 )
 
 @Suppress("SameParameterValue")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenzaTopBar(
     state: TopBarState,
@@ -183,7 +182,6 @@ private fun TopBarScaffold(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LeadingIcon(
     state: TopBarState,

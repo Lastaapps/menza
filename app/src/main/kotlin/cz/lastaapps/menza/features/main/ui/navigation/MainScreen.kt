@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.features.main.ui.navigation
 
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -34,10 +33,9 @@ import cz.lastaapps.menza.features.main.ui.layout.MenzaTopBar
 import cz.lastaapps.menza.features.main.ui.layout.NavItem
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MainScreen(
-    currentDest: MainNavType,
+    currentDest: MainNavType?,
     drawerState: DrawerState,
     settingsEverOpened: Boolean,
     hostState: SnackbarHostState,
@@ -50,7 +48,7 @@ internal fun MainScreen(
     modifier: Modifier = Modifier,
 ) {
     val navItem = remember(currentDest) {
-        currentDest.toNavItem()
+        currentDest?.toNavItem()
     }
 
     MenzaScaffold(

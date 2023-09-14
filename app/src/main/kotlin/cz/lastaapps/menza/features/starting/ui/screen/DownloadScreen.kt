@@ -96,7 +96,6 @@ private fun DownloadEffects(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DownloadContent(
     state: DownloadDataState,

@@ -21,14 +21,15 @@ package cz.lastaapps.menza.features.settings.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
-import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.pop
-import com.bumble.appyx.navmodel.backstack.operation.push
-import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
+import com.bumble.appyx.components.backstack.BackStack
+import com.bumble.appyx.components.backstack.BackStackModel
+import com.bumble.appyx.components.backstack.operation.pop
+import com.bumble.appyx.components.backstack.operation.push
+import com.bumble.appyx.components.backstack.ui.fader.BackStackFader
+import com.bumble.appyx.navigation.composable.AppyxComponent
+import com.bumble.appyx.navigation.modality.BuildContext
+import com.bumble.appyx.navigation.node.Node
+import com.bumble.appyx.navigation.node.ParentNode
 import cz.lastaapps.menza.features.other.ui.node.LicenseNode
 import cz.lastaapps.menza.features.other.ui.node.OsturakNode
 import cz.lastaapps.menza.features.settings.ui.navigation.SettingsNavTarget.APP_THEME
@@ -41,12 +42,15 @@ import cz.lastaapps.menza.features.settings.ui.nodes.SettingsNode
 class SettingsHubNode internal constructor(
     buildContext: BuildContext,
     private val backstack: BackStack<SettingsNavTarget> = BackStack(
-        initialElement = SettingsNavTarget.SETTINGS,
-        savedStateMap = buildContext.savedStateMap,
+        model = BackStackModel(
+            initialTargets = listOf(SETTINGS),
+            savedStateMap = buildContext.savedStateMap,
+        ),
+        motionController = { BackStackFader(it) },
     ),
 ) : ParentNode<SettingsNavTarget>(backstack, buildContext) {
-    override fun resolve(navTarget: SettingsNavTarget, buildContext: BuildContext): Node =
-        when (navTarget) {
+    override fun resolve(interactionTarget: SettingsNavTarget, buildContext: BuildContext): Node =
+        when (interactionTarget) {
             SETTINGS -> SettingsNode(
                 onChooseTheme = { backstack.push(APP_THEME) },
                 onOsturak = { backstack.push(OSTURAK) },
@@ -70,10 +74,9 @@ class SettingsHubNode internal constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
+        AppyxComponent(
+            appyxComponent = backstack,
             modifier = modifier,
-            transitionHandler = rememberBackstackFader(),
         )
     }
 }

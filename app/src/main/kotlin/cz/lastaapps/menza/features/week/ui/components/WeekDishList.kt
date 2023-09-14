@@ -95,7 +95,7 @@ fun WeekDishList(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalTextApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun WeekDishContent(
     data: ImmutableList<WeekDayDish>,

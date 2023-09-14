@@ -83,7 +83,6 @@ private fun PriceTypeEffects(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PriceTypeContent(
     onNormal: () -> Unit,
@@ -151,7 +150,7 @@ private fun PriceTypeContent(
 @Preview
 @Composable
 private fun PriceTypePreview() {
-    AppTheme() {
+    AppTheme {
         PriceTypeContent(onNormal = {}, onDiscounted = {})
     }
 }

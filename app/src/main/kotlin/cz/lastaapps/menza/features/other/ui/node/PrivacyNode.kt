@@ -22,8 +22,8 @@ package cz.lastaapps.menza.features.other.ui.node
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.navigation.modality.BuildContext
+import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialog
 
 class PrivacyNode(

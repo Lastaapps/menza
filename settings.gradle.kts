@@ -39,7 +39,10 @@ rootProject.name = "Menza"
 
 includeBuild("appyx") {
     dependencySubstitution {
-        substitute(module("lib.stolen:appyx")).using(project(":libraries:core"))
+        substitute(module("lib.stolen:appyx-interactions")).using(project(":appyx-interactions:appyx-interactions"))
+        substitute(module("lib.stolen:appyx-components:backstack")).using(project(":appyx-components:stable:backstack:backstack"))
+        substitute(module("lib.stolen:appyx-components:spotlight")).using(project(":appyx-components:stable:spotlight:spotlight"))
+        substitute(module("lib.stolen:appyx-navigation")).using(project(":appyx-navigation:appyx-navigation"))
     }
 }
 

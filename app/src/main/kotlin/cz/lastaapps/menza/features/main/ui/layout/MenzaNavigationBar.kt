@@ -35,7 +35,7 @@ internal fun MenzaNavigationBar(
     modifier: Modifier = Modifier,
 ) {
     NavigationBar(modifier = modifier) {
-        NavItem.values().forEach { item ->
+        NavItem.entries.forEach { item ->
             val showBadge = item == NavItem.Settings && !settingsEverOpened
 
             NavigationBarItem(
