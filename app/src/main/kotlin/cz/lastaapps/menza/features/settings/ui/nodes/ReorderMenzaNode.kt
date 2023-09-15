@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.settings.ui.screens.ReorderMenzaScreen
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 class ReorderMenzaNode(
     buildContext: BuildContext,
@@ -34,6 +35,7 @@ class ReorderMenzaNode(
     override fun View(modifier: Modifier) {
         ReorderMenzaScreen(
             modifier = modifier.padding(),
+            viewModel = nodeViewModel(),
             onDone = onDone,
         )
     }

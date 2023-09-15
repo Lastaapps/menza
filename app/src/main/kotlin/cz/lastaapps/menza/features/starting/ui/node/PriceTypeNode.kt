@@ -27,6 +27,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.starting.ui.screen.PriceTypeScreen
 import cz.lastaapps.menza.ui.theme.Padding.More
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 class PriceTypeNode(
     buildContext: BuildContext,
@@ -36,6 +37,7 @@ class PriceTypeNode(
     override fun View(modifier: Modifier) {
         PriceTypeScreen(
             onDone = onNext,
+            viewModel = nodeViewModel(),
             modifier = modifier
                 .padding(More.Screen)
                 .fillMaxSize(),

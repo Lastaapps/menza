@@ -43,6 +43,7 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingNode
 import cz.lastaapps.menza.ui.util.activateItem
 import cz.lastaapps.menza.ui.util.activeIndex
 import cz.lastaapps.menza.ui.util.indexOfType
+import cz.lastaapps.menza.ui.util.nodeViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -79,7 +80,7 @@ internal class RootNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val viewModel: RootViewModel = koinViewModel()
+        val viewModel: RootViewModel = nodeViewModel()
 
         HandleAppear(viewModel)
         val state by viewModel.flowState

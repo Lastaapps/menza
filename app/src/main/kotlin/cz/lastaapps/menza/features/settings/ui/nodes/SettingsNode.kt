@@ -38,14 +38,14 @@ import cz.lastaapps.menza.features.other.ui.components.CrashesDialog
 import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialog
 import cz.lastaapps.menza.features.other.ui.dialog.WhatsNewDialog
 import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel
-import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.koinWhatsNewViewModel
+import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.whatsNewViewModel
 import cz.lastaapps.menza.features.settings.ui.screens.AboutScreen
 import cz.lastaapps.menza.features.settings.ui.screens.SettingsScreen
 import cz.lastaapps.menza.features.settings.ui.vm.SettingsViewModel
 import cz.lastaapps.menza.ui.components.layout.SplitLayout
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.Padding
-import org.koin.androidx.compose.koinViewModel
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 internal class SettingsNode(
     private val onChooseTheme: () -> Unit,
@@ -56,8 +56,8 @@ internal class SettingsNode(
     @Composable
     override fun View(modifier: Modifier) {
 
-        val viewModel: SettingsViewModel = koinViewModel()
-        val crashesViewModel: CrashesViewModel = koinViewModel()
+        val viewModel: SettingsViewModel = nodeViewModel()
+        val crashesViewModel: CrashesViewModel = nodeViewModel()
         val state by viewModel.flowState
 
         HandleAppear(appearing = viewModel)
@@ -142,7 +142,7 @@ internal class SettingsNode(
 
         if (showWhatsNew) {
             WhatsNewDialog(
-                viewModel = koinWhatsNewViewModel(),
+                viewModel = whatsNewViewModel(),
                 onDismissRequest = { showWhatsNew = false },
             )
         }

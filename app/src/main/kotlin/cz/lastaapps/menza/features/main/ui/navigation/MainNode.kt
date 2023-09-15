@@ -37,9 +37,7 @@ import com.bumble.appyx.components.backstack.operation.newRoot
 import com.bumble.appyx.components.backstack.operation.pop
 import com.bumble.appyx.components.backstack.operation.push
 import com.bumble.appyx.components.backstack.ui.fader.BackStackFader
-import com.bumble.appyx.components.backstack.ui.slider.BackStackSlider
 import com.bumble.appyx.interactions.core.model.transition.Operation
-import com.bumble.appyx.interactions.core.model.transition.TransitionModel.Output
 import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
@@ -64,6 +62,7 @@ import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
 import cz.lastaapps.menza.features.week.ui.node.WeekNode
 import cz.lastaapps.menza.ui.locals.LocalMayBeFlipCover
 import cz.lastaapps.menza.ui.util.active
+import cz.lastaapps.menza.ui.util.nodeViewModel
 import org.koin.androidx.compose.koinViewModel
 
 class MainNode(
@@ -114,7 +113,7 @@ class MainNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val mainViewModel: MainViewModel = koinViewModel()
+        val mainViewModel: MainViewModel = nodeViewModel()
         val state by mainViewModel.flowState
         HandleAppear(mainViewModel)
         if (!state.isReady) return

@@ -52,8 +52,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun AppThemeScreen(
     onDone: () -> Unit,
+    viewModel: AppThemeViewModel,
     modifier: Modifier = Modifier,
-    viewModel: AppThemeViewModel = koinViewModel(),
 ) {
     val state by viewModel.flowState
 

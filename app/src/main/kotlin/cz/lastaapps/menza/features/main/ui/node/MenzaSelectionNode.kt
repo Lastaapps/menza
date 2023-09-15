@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.main.ui.screen.MenzaSelectionScreen
+import cz.lastaapps.menza.ui.util.nodeViewModel
 import kotlinx.coroutines.launch
 
 class MenzaSelectionNode(
@@ -53,6 +54,7 @@ class MenzaSelectionNode(
                     }.let { drawerState.animateTo(it, spring()) }
                 }
             },
+            viewModel = nodeViewModel(),
             modifier = modifier.fillMaxSize(),
         )
     }

@@ -41,8 +41,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun WeekScreen(
     onOsturak: () -> Unit,
+    viewModel: WeekViewModel,
     modifier: Modifier = Modifier,
-    viewModel: WeekViewModel = koinViewModel(),
     hostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     WeekEffects(viewModel, hostState)

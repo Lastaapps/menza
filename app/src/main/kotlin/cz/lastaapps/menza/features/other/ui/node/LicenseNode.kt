@@ -27,6 +27,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.other.ui.screen.LicenseScreen
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 class LicenseNode(
     buildContext: BuildContext,
@@ -34,6 +35,7 @@ class LicenseNode(
     @Composable
     override fun View(modifier: Modifier) {
         LicenseScreen(
+            viewModel = nodeViewModel(),
             modifier = modifier
                 .padding(Padding.More.Screen)
                 .fillMaxSize(),

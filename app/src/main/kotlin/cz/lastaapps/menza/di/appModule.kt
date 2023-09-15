@@ -33,6 +33,8 @@ import cz.lastaapps.menza.features.settings.di.settingsModule
 import cz.lastaapps.menza.features.starting.di.startingModule
 import cz.lastaapps.menza.features.today.di.todayModule
 import cz.lastaapps.menza.features.week.di.weekModule
+import cz.lastaapps.menza.ui.util.NodeViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -54,4 +56,5 @@ val appModule = module {
     )
 
     factoryOf(::AndroidAppInfoProvider) bind AppInfoProvider::class
+    viewModelOf(::NodeViewModel)
 }

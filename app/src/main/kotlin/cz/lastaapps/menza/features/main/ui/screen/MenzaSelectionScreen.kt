@@ -67,8 +67,8 @@ import org.koin.androidx.compose.koinViewModel
 internal fun MenzaSelectionScreen(
     onEdit: () -> Unit,
     onMenzaSelected: () -> Unit,
+    viewModel: MenzaSelectionViewModel,
     modifier: Modifier = Modifier,
-    viewModel: MenzaSelectionViewModel = koinViewModel(),
 ) {
     MenzaSelectionListEffects(viewModel)
 

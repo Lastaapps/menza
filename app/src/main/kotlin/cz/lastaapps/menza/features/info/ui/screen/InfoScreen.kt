@@ -56,9 +56,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun InfoScreen(
+    viewModel: InfoViewModel,
     onOsturak: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: InfoViewModel = koinViewModel(),
     hostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     var error by remember { mutableStateOf<DomainError?>(null) }

@@ -43,8 +43,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun AllSetScreen(
     onDone: () -> Unit,
+    viewModel: AllSetViewModel,
     modifier: Modifier = Modifier,
-    viewModel: AllSetViewModel = koinViewModel(),
 ) {
     AllSetContent(
         onDone = {

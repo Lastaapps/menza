@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.core.os.ConfigurationCompat
+import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
@@ -32,6 +33,7 @@ import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
 import cz.lastaapps.menza.features.panels.whatsnew.domain.LoadWhatsNewUC
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel.State
+import cz.lastaapps.menza.ui.util.nodeViewModel
 import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -78,7 +80,7 @@ internal class WhatsNewViewModel(
 }
 
 @Composable
-internal fun koinWhatsNewViewModel(): WhatsNewViewModel {
+internal fun Node.whatsNewViewModel(): WhatsNewViewModel {
     val config = LocalConfiguration.current
 
     val locales: ImmutableList<Locale> = remember(config) {
@@ -88,7 +90,7 @@ internal fun koinWhatsNewViewModel(): WhatsNewViewModel {
             .toImmutableList()
     }
 
-    return koinViewModel<WhatsNewViewModel> {
+    return nodeViewModel<WhatsNewViewModel> {
         parametersOf(locales)
     }
 }

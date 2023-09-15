@@ -63,8 +63,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun DownloadScreen(
     onDone: () -> Unit,
+    viewModel: DownloadViewModel,
     modifier: Modifier = Modifier,
-    viewModel: DownloadViewModel = koinViewModel(),
     hostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     DownloadEffects(viewModel, hostState, onDone)

@@ -40,7 +40,7 @@ import cz.lastaapps.menza.features.panels.rateus.ui.RateUsPanel
 import cz.lastaapps.menza.features.panels.rateus.ui.RateUsViewModel
 import cz.lastaapps.menza.features.panels.whatsnew.ui.WhatsNewPanel
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel
-import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.koinWhatsNewViewModel
+import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.whatsNewViewModel
 import cz.lastaapps.menza.ui.locals.koinActivityViewModel
 import cz.lastaapps.menza.ui.util.HandleError
 import kotlinx.collections.immutable.persistentListOf
@@ -48,10 +48,10 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun Panels(
     hostState: SnackbarHostState,
+    crashesViewModel: CrashesViewModel,
+    whatsNewViewModel: WhatsNewViewModel,
+    rateUsViewModel: RateUsViewModel,
     modifier: Modifier = Modifier,
-    crashesViewModel: CrashesViewModel = koinActivityViewModel(),
-    whatsNewViewModel: WhatsNewViewModel = koinWhatsNewViewModel(),
-    rateUsViewModel: RateUsViewModel = koinActivityViewModel(),
 ) {
     HandleAppear(appearing = whatsNewViewModel)
     HandleAppear(appearing = rateUsViewModel)

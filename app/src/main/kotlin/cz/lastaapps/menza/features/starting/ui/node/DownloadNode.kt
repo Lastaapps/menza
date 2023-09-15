@@ -27,6 +27,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.starting.ui.screen.DownloadScreen
 import cz.lastaapps.menza.ui.theme.Padding.More
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 internal class DownloadNode(
     buildContext: BuildContext,
@@ -40,6 +41,7 @@ internal class DownloadNode(
             modifier = modifier
                 .fillMaxSize()
                 .padding(More.Screen),
+            viewModel = nodeViewModel(),
             onDone = onNext,
         )
     }

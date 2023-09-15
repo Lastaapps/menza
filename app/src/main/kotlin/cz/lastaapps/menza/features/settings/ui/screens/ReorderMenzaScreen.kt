@@ -72,8 +72,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun ReorderMenzaScreen(
     onDone: () -> Unit,
+    viewModel: ReorderMenzaViewModel,
     modifier: Modifier = Modifier,
-    viewModel: ReorderMenzaViewModel = koinViewModel(),
 ) {
     ReorderMenzaEffects(viewModel)
 

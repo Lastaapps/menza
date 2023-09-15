@@ -27,6 +27,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.settings.ui.screens.AppThemeScreen
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 internal class AppThemeNode(
     buildContext: BuildContext,
@@ -37,6 +38,7 @@ internal class AppThemeNode(
     override fun View(modifier: Modifier) {
         AppThemeScreen(
             onDone = onDone,
+            viewModel = nodeViewModel(),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(Padding.More.Screen),

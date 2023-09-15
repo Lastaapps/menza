@@ -53,8 +53,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun PriceTypeScreen(
     onDone: () -> Unit,
+    viewModel: PriceTypeViewModel,
     modifier: Modifier = Modifier,
-    viewModel: PriceTypeViewModel = koinViewModel(),
 ) {
     PriceTypeEffects(
         viewModel,

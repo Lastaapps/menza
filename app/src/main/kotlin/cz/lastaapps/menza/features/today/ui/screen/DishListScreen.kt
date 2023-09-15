@@ -54,8 +54,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun DishListScreen(
     onDishSelected: (Dish) -> Unit,
+    viewModel: DishListViewModel,
     modifier: Modifier = Modifier,
-    viewModel: DishListViewModel = koinViewModel(),
     hostState: SnackbarHostState = remember { SnackbarHostState() },
     scrollState: LazyListState = rememberLazyListState(),
     scrollGridState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),

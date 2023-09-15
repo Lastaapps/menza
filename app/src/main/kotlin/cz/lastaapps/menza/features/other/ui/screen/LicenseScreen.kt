@@ -35,8 +35,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun LicenseScreen(
+    viewModel: LicenseViewModel,
     modifier: Modifier = Modifier,
-    viewModel: LicenseViewModel = koinViewModel(),
 ) {
     LicenseEffects(viewModel)
 

@@ -45,6 +45,7 @@ import cz.lastaapps.menza.features.starting.ui.node.AllSetNode
 import cz.lastaapps.menza.features.starting.ui.node.DownloadNode
 import cz.lastaapps.menza.features.starting.ui.node.PriceTypeNode
 import cz.lastaapps.menza.ui.util.activeIndex
+import cz.lastaapps.menza.ui.util.nodeViewModel
 import kotlinx.coroutines.flow.first
 
 class StartingNode(
@@ -91,6 +92,7 @@ class StartingNode(
                         spotlight.next()
                     }
                 },
+                viewModel = nodeViewModel(),
             )
         }
     }

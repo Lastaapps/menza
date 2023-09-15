@@ -25,8 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
+import cz.lastaapps.menza.features.main.ui.vm.MainViewModel
 import cz.lastaapps.menza.features.other.ui.screen.OsturakScreen
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 class OsturakNode(
     buildContext: BuildContext,

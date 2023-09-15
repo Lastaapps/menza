@@ -38,6 +38,7 @@ import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.components.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.today.ui.components.NoDishSelected
 import cz.lastaapps.menza.features.today.ui.components.TodayInfo
+import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.features.today.ui.vm.TodayState
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.ui.components.layout.TwoPaneLayout
@@ -49,8 +50,9 @@ import org.koin.androidx.compose.koinViewModel
 internal fun TodayScreen(
     onOsturak: () -> Unit,
     panels: @Composable (Modifier) -> Unit,
+    viewModel: TodayViewModel,
+    dishListViewModel: DishListViewModel,
     modifier: Modifier = Modifier,
-    viewModel: TodayViewModel = koinViewModel(),
 ) {
     TodayEffects(viewModel)
 
@@ -60,6 +62,7 @@ internal fun TodayScreen(
         onOsturak = onOsturak,
         onDishSelected = viewModel::selectDish,
         panels = panels,
+        dishListViewModel = dishListViewModel,
         modifier = modifier,
     )
 }
@@ -82,6 +85,7 @@ private fun TodayContent(
     onDishSelected: (Dish) -> Unit,
     onOsturak: () -> Unit,
     panels: @Composable (Modifier) -> Unit,
+    dishListViewModel: DishListViewModel,
     modifier: Modifier = Modifier,
     hostState: SnackbarHostState = remember { SnackbarHostState() },
     scrollState: LazyListState = rememberLazyListState(),
@@ -90,6 +94,7 @@ private fun TodayContent(
     val dishList: @Composable () -> Unit = {
         DishListScreen(
             onDishSelected = onDishSelected,
+            viewModel = dishListViewModel,
             modifier = Modifier.fillMaxSize(),
             hostState = hostState,
             scrollState = scrollState,

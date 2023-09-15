@@ -27,6 +27,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.info.ui.screen.InfoScreen
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 class InfoNode(
     buildContext: BuildContext,
@@ -36,6 +37,7 @@ class InfoNode(
     @Composable
     override fun View(modifier: Modifier) {
         InfoScreen(
+            viewModel = nodeViewModel(),
             onOsturak = onOsturak,
             modifier = modifier
                 .fillMaxWidth()

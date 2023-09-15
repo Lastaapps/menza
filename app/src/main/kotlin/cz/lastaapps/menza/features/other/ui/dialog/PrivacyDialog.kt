@@ -41,22 +41,21 @@ import androidx.compose.ui.window.Dialog
 import cz.lastaapps.common.Communication
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.ui.vm.PrivacyViewModel
-import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 internal fun PrivacyDialogDest(
     onNotNeeded: suspend () -> Unit,
-    privacyViewModel: PrivacyViewModel = koinViewModel(),
+    viewModel: PrivacyViewModel,
 ) {
-    val state by privacyViewModel.shouldShow.collectAsState()
+    val state by viewModel.shouldShow.collectAsState()
 
     when (state) {
         true ->
             PrivacyDialog(
                 onDismissRequest = {},
                 showAccept = true,
-                onAccept = privacyViewModel::onApprove,
+                onAccept = viewModel::onApprove,
             )
 
         false ->

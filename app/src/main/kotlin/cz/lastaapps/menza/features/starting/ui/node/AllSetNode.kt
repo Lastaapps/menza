@@ -27,6 +27,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.starting.ui.screen.AllSetScreen
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 internal class AllSetNode(
     buildContext: BuildContext,
@@ -36,6 +37,7 @@ internal class AllSetNode(
     override fun View(modifier: Modifier) {
         AllSetScreen(
             onDone = onDone,
+            viewModel = nodeViewModel(),
             modifier = modifier
                 .padding(Padding.More.Screen)
                 .fillMaxSize(),

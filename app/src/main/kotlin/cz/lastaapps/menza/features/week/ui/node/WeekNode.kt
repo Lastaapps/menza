@@ -27,6 +27,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.week.ui.screen.WeekScreen
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 class WeekNode(
     buildContext: BuildContext,
@@ -37,6 +38,7 @@ class WeekNode(
     override fun View(modifier: Modifier) {
         WeekScreen(
             onOsturak = onOsturak,
+            viewModel = nodeViewModel(),
             modifier = modifier
                 .padding(Padding.More.Screen)
                 .fillMaxSize(),

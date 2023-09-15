@@ -28,8 +28,11 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import cz.lastaapps.menza.features.panels.Panels
+import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.whatsNewViewModel
 import cz.lastaapps.menza.features.today.ui.screen.TodayScreen
+import cz.lastaapps.menza.ui.locals.koinActivityViewModel
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.nodeViewModel
 
 class TodayNode(
     buildContext: BuildContext,
@@ -44,12 +47,17 @@ class TodayNode(
             Panels(
                 modifier = it,
                 hostState = hostState,
+                crashesViewModel = koinActivityViewModel(),
+                whatsNewViewModel = whatsNewViewModel(),
+                rateUsViewModel = koinActivityViewModel(),
             )
         }
 
         TodayScreen(
             onOsturak = onOsturak,
             panels = panels,
+            viewModel = nodeViewModel(),
+            dishListViewModel = nodeViewModel(),
             modifier = Modifier
                 .padding(Padding.More.Screen)
                 .fillMaxSize(),
