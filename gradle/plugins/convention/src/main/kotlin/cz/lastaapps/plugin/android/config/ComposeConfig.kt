@@ -78,6 +78,11 @@ internal fun Project.configureComposeDependencies() {
         implementation(libs.androidx.navigation.ui)
         implementation(libs.androidx.navigation.compose)
 
+        implementation(libs.appyx.navigation)
+        implementation(libs.appyx.components.backstack)
+        implementation(libs.appyx.components.spotlight)
+        implementation(libs.appyx.interactions)
+
         implementation(libs.coil.composeComplete)
 
         implementation(libs.koin.android.navigation)
