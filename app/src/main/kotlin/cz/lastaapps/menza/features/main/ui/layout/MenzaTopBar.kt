@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
@@ -199,7 +200,7 @@ private fun LeadingIcon(
     val rotation by animateFloatAsState(if (!isRotated) 0f else 90f)
 
     val leadingIcon = when {
-        showBackArrow -> Icons.Default.ArrowBack
+        showBackArrow -> Icons.AutoMirrored.Default.ArrowBack
         state.enableHamburger -> Icons.Default.Menu
         else -> null
     }
