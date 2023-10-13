@@ -1,6 +1,5 @@
 package cz.lastaapps.menza.ui.components
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -51,7 +50,7 @@ import kotlinx.coroutines.launch
 fun AgataWalletButton() {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val buttonText = remember { mutableStateOf(context.resources.getString(R.string.wallet_update_error)) }
+    val buttonText = remember { mutableStateOf(context.resources.getString(R.string.wallet_login)) }
     val loading = remember { mutableStateOf(false) }
     val error = remember { mutableStateOf(false) }
 
@@ -89,7 +88,6 @@ fun AgataWalletButton() {
                 val balance = agataWallet.getBalance(saved.first, saved.second)
                 setBalanceText(balance)
                 AgataWalletCredentials.cacheBalance(context, balance)
-                Log.d("DDDD", "updated")
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(context, "${context.resources.getString(R.string.wallet_update_error)}: $e", Toast.LENGTH_LONG).show()
