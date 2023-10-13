@@ -236,4 +236,13 @@
     <string name="rate_us_button_github">GitHub star ⭐</string>
     <string name="rate_us_button_later">Později…</string>
     <string name="rate_us_button_dismiss">Nikdy!</string>
+
+    <string name="wallet_login">Klikni aby se prihlasit :3</string>
+    <string name="wallet_update_error">Neco se nam pokakalo :((</string>
+    <string name="wallet_login_title">Prihlaseni do Agaty</string>
+    <string name="wallet_login_subtitle">Pouzij svoje CVUT credentials</string>
+    <string name="wallet_login_username">Uzivatelske jmeno</string>
+    <string name="wallet_login_password">velmi tajne heslo</string>
+    <string name="wallet_login_cancel">:(</string>
+    <string name="wallet_login_save">:)</string>
 </resources>
