@@ -36,7 +36,6 @@ import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -67,7 +66,6 @@ import cz.lastaapps.menza.ui.components.draggablelazylist.makeDraggableItem
 import cz.lastaapps.menza.ui.components.draggablelazylist.rememberDraggableLazyListState
 import cz.lastaapps.menza.ui.theme.AppTheme
 import cz.lastaapps.menza.ui.theme.Padding
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun ReorderMenzaScreen(
@@ -147,7 +145,7 @@ private fun ReorderMenzaContent(
             }
             Box(
                 modifier = Modifier.weight(1f),
-                contentAlignment = animateFrom
+                contentAlignment = animateFrom,
             ) {
                 DraggableLazyColumn(
                     state = draggableState,
@@ -250,7 +248,10 @@ private fun MenzaItemPreview() {
                     menza = Menza(
                         Strahov,
                         "Menza Strahov",
-                        isOpened = true, supportsDaily = true, supportsWeekly = true,
+                        isOpened = true,
+                        supportsDaily = true,
+                        supportsWeekly = true,
+                        isExperimental = false,
                     ),
                     visible = true, onVisibilityClick = {},
                 )
@@ -258,7 +259,10 @@ private fun MenzaItemPreview() {
                     menza = Menza(
                         Strahov,
                         "Restaurace Strahov",
-                        isOpened = true, supportsDaily = true, supportsWeekly = true,
+                        isOpened = true,
+                        supportsDaily = true,
+                        supportsWeekly = true,
+                        isExperimental = false,
                     ),
                     visible = false, onVisibilityClick = {},
                 )

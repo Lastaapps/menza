@@ -43,7 +43,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -71,8 +70,8 @@ fun TodayDishList(
     showCzech: ShowCzech,
     imageScale: Float,
     isOnMetered: Boolean,
-    gridSwitch: @Composable () -> Unit,
-    imageSizeSetting: @Composable () -> Unit,
+    header: @Composable () -> Unit,
+    footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     scroll: LazyListState = rememberLazyListState(),
     pullState: PullRefreshState = rememberPullRefreshState(
@@ -95,8 +94,8 @@ fun TodayDishList(
                 imageScale = imageScale,
                 isOnMetered = isOnMetered,
                 scroll = scroll,
-                gridSwitch = gridSwitch,
-                imageSizeSetting = imageSizeSetting,
+                header = header,
+                footer = footer,
                 modifier = Modifier
                     .padding(top = Padding.Smaller) // so text is not cut off
                     .fillMaxSize(),
@@ -119,8 +118,8 @@ private fun DishContent(
     imageScale: Float,
     isOnMetered: Boolean,
     scroll: LazyListState,
-    gridSwitch: @Composable () -> Unit,
-    imageSizeSetting: @Composable () -> Unit,
+    header: @Composable () -> Unit,
+    footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -137,6 +136,10 @@ private fun DishContent(
             verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
             state = scroll,
         ) {
+            item {
+                header()
+            }
+
             data.forEach { category ->
                 stickyHeader {
                     Surface(Modifier.fillMaxWidth()) {
@@ -162,14 +165,7 @@ private fun DishContent(
             }
 
             item {
-                gridSwitch()
-            }
-            item {
-                OutlinedCard(modifier = Modifier.padding(horizontal = Padding.MidSmall)) {
-                    Box(modifier = Modifier.padding(Padding.Medium)) {
-                        imageSizeSetting()
-                    }
-                }
+                footer()
             }
         }
     }

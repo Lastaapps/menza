@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.today.ui.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -61,9 +60,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import cz.lastaapps.menza.ui.components.placeholders.PlaceholderHighlight
-import cz.lastaapps.menza.ui.components.placeholders.fade
-import cz.lastaapps.menza.ui.components.placeholders.placeholder
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.menza.R
@@ -71,6 +67,9 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
+import cz.lastaapps.menza.ui.components.placeholders.PlaceholderHighlight
+import cz.lastaapps.menza.ui.components.placeholders.fade
+import cz.lastaapps.menza.ui.components.placeholders.placeholder
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
@@ -87,7 +86,8 @@ fun TodayDishGrid(
     downloadOnMetered: Boolean,
     showCzech: ShowCzech,
     isOnMetered: Boolean,
-    gridSwitch: @Composable () -> Unit,
+    header: @Composable () -> Unit,
+    footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     scrollGrid: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     pullState: PullRefreshState = rememberPullRefreshState(
@@ -110,7 +110,8 @@ fun TodayDishGrid(
                 showCzech = showCzech,
                 isOnMetered = isOnMetered,
                 scroll = scrollGrid,
-                gridSwitch = gridSwitch,
+                header = header,
+                footer = footer,
                 widthSize = widthSize,
                 modifier = Modifier
                     .padding(top = Padding.Smaller) // so text is not cut off
@@ -132,7 +133,8 @@ private fun DishContent(
     showCzech: ShowCzech,
     isOnMetered: Boolean,
     scroll: LazyStaggeredGridState,
-    gridSwitch: @Composable () -> Unit,
+    header: @Composable () -> Unit,
+    footer: @Composable () -> Unit,
     widthSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
 ) {
@@ -156,10 +158,14 @@ private fun DishContent(
             horizontalArrangement = Arrangement.spacedBy(Padding.MidSmall),
             state = scroll,
         ) {
+            item {
+                header()
+            }
+
             data.forEach { category ->
                 itemsIndexed(category.dishList) { index, dish ->
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(Padding.Small),
+                        verticalArrangement = Arrangement.spacedBy(Padding.Medium),
                     ) {
                         if (index == 0) {
                             DishHeader(
@@ -181,7 +187,7 @@ private fun DishContent(
             }
 
             item {
-                gridSwitch()
+                footer()
             }
         }
     }
@@ -318,9 +324,9 @@ private fun DishImage(
                                     shape = MaterialTheme.shapes.medium,
                                     highlight = PlaceholderHighlight.fade(
                                         highlightColor = MaterialTheme.colorScheme.primary,
-                                    )
+                                    ),
                                 )
-                                .clickable { retryHash++ }
+                                .clickable { retryHash++ },
                         )
                     },
                     error = {
@@ -331,12 +337,12 @@ private fun DishImage(
                             if (canDownload)
                                 Icon(
                                     Icons.Default.Refresh,
-                                    stringResource(R.string.today_list_image_load_failed)
+                                    stringResource(R.string.today_list_image_load_failed),
                                 )
                             else
                                 Icon(
                                     Icons.Default.Download,
-                                    stringResource(R.string.today_list_image_metered)
+                                    stringResource(R.string.today_list_image_metered),
                                 )
                         }
                     },

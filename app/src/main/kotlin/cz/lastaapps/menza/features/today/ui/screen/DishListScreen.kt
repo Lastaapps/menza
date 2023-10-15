@@ -19,7 +19,9 @@
 
 package cz.lastaapps.menza.features.today.ui.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,6 +30,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -43,13 +46,14 @@ import cz.lastaapps.menza.features.settings.domain.model.DishListMode.GRID
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.HORIZONTAL
 import cz.lastaapps.menza.features.settings.ui.components.ImageSizeSetting
 import cz.lastaapps.menza.features.today.ui.components.CompactViewSwitch
+import cz.lastaapps.menza.features.today.ui.components.Experimental
 import cz.lastaapps.menza.features.today.ui.components.TodayDishGrid
 import cz.lastaapps.menza.features.today.ui.components.TodayDishHorizontal
 import cz.lastaapps.menza.features.today.ui.components.TodayDishList
 import cz.lastaapps.menza.features.today.ui.vm.DishListState
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
+import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.HandleError
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun DishListScreen(
@@ -105,79 +109,106 @@ private fun DishListContent(
         modifier = modifier,
     ) { padding ->
 
-        val gridSwitch: @Composable () -> Unit = {
-            CompactViewSwitch(
-                currentMode = state.dishListMode,
-                onCompactChange = onViewMode,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
-        val imageSizeSetting: @Composable () -> Unit = {
-            ImageSizeSetting(
-                progress = state.imageScale,
-                onProgressChanged = onImageScale,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
-
-        when (state.dishListMode) {
-            COMPACT ->
-                TodayDishList(
-                    isLoading = state.isLoading,
-                    onRefresh = onRefresh,
-                    data = state.items,
-                    onNoItems = onNoItems,
-                    onDishSelected = onDishSelected,
-                    priceType = state.priceType,
-                    downloadOnMetered = state.downloadOnMetered,
-                    showCzech = state.showCzech,
-                    imageScale = state.imageScale,
-                    isOnMetered = state.isOnMetered,
-                    gridSwitch = gridSwitch,
-                    imageSizeSetting = imageSizeSetting,
-                    modifier = Modifier
-                        .padding(padding)
-                        .fillMaxSize(),
-                    scroll = scrollListState,
+        Column {
+            val gridSwitch: @Composable () -> Unit = {
+                CompactViewSwitch(
+                    currentMode = state.dishListMode,
+                    onCompactChange = onViewMode,
+                    modifier = Modifier.fillMaxWidth(),
                 )
-
-            GRID ->
-                TodayDishGrid(
-                    isLoading = state.isLoading,
-                    onRefresh = onRefresh,
-                    data = state.items,
-                    onNoItems = onNoItems,
-                    onDishSelected = onDishSelected,
-                    priceType = state.priceType,
-                    downloadOnMetered = state.downloadOnMetered,
-                    showCzech = state.showCzech,
-                    isOnMetered = state.isOnMetered,
-                    gridSwitch = gridSwitch,
-                    modifier = Modifier
-                        .padding(padding)
-                        .fillMaxSize(),
-                    scrollGrid = scrollGridState,
+            }
+            val imageSizeSetting: @Composable () -> Unit = {
+                ImageSizeSetting(
+                    progress = state.imageScale,
+                    onProgressChanged = onImageScale,
+                    modifier = Modifier.fillMaxWidth(),
                 )
+            }
 
-            HORIZONTAL ->
-                TodayDishHorizontal(
-                    isLoading = state.isLoading,
-                    onRefresh = onRefresh,
-                    data = state.items,
-                    onNoItems = onNoItems,
-                    onDishSelected = onDishSelected,
-                    priceType = state.priceType,
-                    downloadOnMetered = state.downloadOnMetered,
-                    showCzech = state.showCzech,
-                    isOnMetered = state.isOnMetered,
-                    gridSwitch = gridSwitch,
-                    modifier = Modifier
-                        .padding(padding)
-                        .fillMaxSize(),
-                    scroll = scrollListState,
-                )
+            val header: @Composable () -> Unit = {
+                if (state.showExperimentalWarning) {
+                    Experimental(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = Padding.Small),
+                    )
+                }
+            }
 
-            null -> {}
+            when (state.dishListMode) {
+                COMPACT ->
+                    TodayDishList(
+                        isLoading = state.isLoading,
+                        onRefresh = onRefresh,
+                        data = state.items,
+                        onNoItems = onNoItems,
+                        onDishSelected = onDishSelected,
+                        priceType = state.priceType,
+                        downloadOnMetered = state.downloadOnMetered,
+                        showCzech = state.showCzech,
+                        imageScale = state.imageScale,
+                        isOnMetered = state.isOnMetered,
+                        header = header,
+                        footer = {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                gridSwitch()
+
+                                OutlinedCard(modifier = Modifier.padding(horizontal = Padding.MidSmall)) {
+                                    Box(modifier = Modifier.padding(Padding.Medium)) {
+                                        imageSizeSetting()
+                                    }
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(padding)
+                            .fillMaxSize(),
+                        scroll = scrollListState,
+                    )
+
+                GRID ->
+                    TodayDishGrid(
+                        isLoading = state.isLoading,
+                        onRefresh = onRefresh,
+                        data = state.items,
+                        onNoItems = onNoItems,
+                        onDishSelected = onDishSelected,
+                        priceType = state.priceType,
+                        downloadOnMetered = state.downloadOnMetered,
+                        showCzech = state.showCzech,
+                        isOnMetered = state.isOnMetered,
+                        header = header,
+                        footer = gridSwitch,
+                        modifier = Modifier
+                            .padding(padding)
+                            .fillMaxSize(),
+                        scrollGrid = scrollGridState,
+                    )
+
+                HORIZONTAL ->
+                    TodayDishHorizontal(
+                        isLoading = state.isLoading,
+                        onRefresh = onRefresh,
+                        data = state.items,
+                        onNoItems = onNoItems,
+                        onDishSelected = onDishSelected,
+                        priceType = state.priceType,
+                        downloadOnMetered = state.downloadOnMetered,
+                        showCzech = state.showCzech,
+                        isOnMetered = state.isOnMetered,
+                        header = header,
+                        footer = gridSwitch,
+                        modifier = Modifier
+                            .padding(padding)
+                            .fillMaxSize(),
+                        scroll = scrollListState,
+                    )
+
+                null -> {}
+            }
         }
     }
 }
