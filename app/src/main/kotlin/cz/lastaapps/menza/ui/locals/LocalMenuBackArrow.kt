@@ -20,7 +20,7 @@
 package cz.lastaapps.menza.ui.locals
 
 import androidx.compose.runtime.compositionLocalOf
-import cz.lastaapps.menza.ui.root.MenuBackArrow
+import cz.lastaapps.menza.ui.components.MenuBackArrow
 
 // left panel, spacer, right panel
 val LocalMenuBackArrow = compositionLocalOf { MenuBackArrow() }

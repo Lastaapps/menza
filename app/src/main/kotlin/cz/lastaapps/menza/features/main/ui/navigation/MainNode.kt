@@ -38,7 +38,6 @@ import com.bumble.appyx.components.backstack.operation.pop
 import com.bumble.appyx.components.backstack.operation.push
 import com.bumble.appyx.components.backstack.ui.fader.BackStackFader
 import com.bumble.appyx.interactions.core.model.transition.Operation
-import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
@@ -61,9 +60,9 @@ import cz.lastaapps.menza.features.settings.ui.navigation.SettingsHubNode
 import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
 import cz.lastaapps.menza.features.week.ui.node.WeekNode
 import cz.lastaapps.menza.ui.locals.LocalMayBeFlipCover
+import cz.lastaapps.menza.ui.util.AppyxNoDragComponent
 import cz.lastaapps.menza.ui.util.active
 import cz.lastaapps.menza.ui.util.nodeViewModel
-import org.koin.androidx.compose.koinViewModel
 
 class MainNode(
     buildContext: BuildContext,
@@ -151,7 +150,7 @@ class MainNode(
                 PermanentChild(DrawerContent)
             },
             content = {
-                AppyxComponent(
+                AppyxNoDragComponent(
                     appyxComponent = backStack,
                     modifier = Modifier.fillMaxSize(),
                 )

@@ -27,7 +27,6 @@ import com.bumble.appyx.components.spotlight.Spotlight
 import com.bumble.appyx.components.spotlight.SpotlightModel
 import com.bumble.appyx.components.spotlight.operation.next
 import com.bumble.appyx.components.spotlight.ui.slider.SpotlightSlider
-import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
@@ -44,6 +43,7 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingNavType.Policy
 import cz.lastaapps.menza.features.starting.ui.node.AllSetNode
 import cz.lastaapps.menza.features.starting.ui.node.DownloadNode
 import cz.lastaapps.menza.features.starting.ui.node.PriceTypeNode
+import cz.lastaapps.menza.ui.util.AppyxNoDragComponent
 import cz.lastaapps.menza.ui.util.activeIndex
 import cz.lastaapps.menza.ui.util.nodeViewModel
 import kotlinx.coroutines.flow.first
@@ -81,7 +81,7 @@ class StartingNode(
         Scaffold(
             modifier = modifier,
         ) {
-            AppyxComponent(
+            AppyxNoDragComponent(
                 appyxComponent = spotlight,
                 modifier = Modifier.padding(it),
             )

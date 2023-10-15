@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -62,9 +61,9 @@ import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.LicenseNotices
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.Osturak
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.PrivacyPolicy
 import cz.lastaapps.menza.ui.components.AppIcon
+import cz.lastaapps.menza.ui.components.MenuBackArrow
 import cz.lastaapps.menza.ui.locals.LocalMenuBackArrow
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.root.MenuBackArrow
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.coroutines.launch
 
