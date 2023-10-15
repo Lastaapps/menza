@@ -20,6 +20,7 @@
 plugins {
     alias(libs.plugins.lastaapps.android.app.compose)
     alias(libs.plugins.aboutLibraries)
+    alias(libs.plugins.kotlin.atomicfu)
 }
 
 android {
@@ -75,6 +76,7 @@ dependencies {
     implementation(libs.bundles.sqldelight)
 
     implementation(libs.kotlinx.serializationJson)
+    implementation(libs.kotlinx.atomicfu)
 
     implementation(libs.bundles.russhwolf.settings)
 }

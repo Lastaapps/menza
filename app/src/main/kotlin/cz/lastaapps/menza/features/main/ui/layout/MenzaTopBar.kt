@@ -268,7 +268,15 @@ private fun TopBarPopup(
             {
                 uriHandler.openUri("http://studentcatering.cz/jidelni-listek/")
                 onDismissRequest()
-            })
+            },
+        )
+        DropdownMenuItem(
+            { Text(stringResource(R.string.ui_top_bar_action_web_vscht)) },
+            {
+                uriHandler.openUri("https://jidelnazikova.cz/jidelni-listek/")
+                onDismissRequest()
+            },
+        )
     }
 }
 

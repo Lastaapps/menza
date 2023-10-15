@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,10 +24,10 @@ package cz.lastaapps.entity.menza
  * agata.suz.cvut.cz/jidelnicky/oteviraci-doby.php
  */
 sealed class Opened private constructor(val id: Int) {
-    object OPENED : Opened(1)
-    object CLOSED : Opened(0)
-    object UNKNOWN : Opened(-1)
-    object EXPECTED : Opened(2)
+    data object OPENED : Opened(1)
+    data object CLOSED : Opened(0)
+    data object UNKNOWN : Opened(-1)
+    data object EXPECTED : Opened(2)
 
     companion object {
         val states by lazy { listOf(OPENED, CLOSED, UNKNOWN, EXPECTED) }

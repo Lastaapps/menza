@@ -202,7 +202,8 @@
     <string name="ui_top_bar_action_privacy">Ochrana soukromí</string>
     <string name="ui_top_bar_action_license">Použité knihovny</string>
     <string name="ui_top_bar_action_web_agata">We Agáty</string>
-    <string name="ui_top_bar_action_web_buffet">Webs bufetů</string>
+    <string name="ui_top_bar_action_web_buffet">Web bufetů</string>
+    <string name="ui_top_bar_action_web_vscht">Web Zíkova</string>
     <string name="menza_none_selected">Není vybrána žádná menza</string>
     <string name="menza_none_osturak">Seznamte se s ošťurákem</string>
     <string name="menza_none_swipe">Přejetím vyberete Menzu</string>

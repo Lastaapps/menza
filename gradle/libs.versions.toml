@@ -1,15 +1,15 @@
 [versions]
-aboutLibraries = "10.8.3"
+aboutLibraries = "10.9.0"
 accompanist = "0.32.0"
-android-gradle = "8.3.0-alpha05"
-androidx-activity = "1.8.0-rc01"
-androidx-compose = "1.6.0-alpha06"
+android-gradle = "8.3.0-alpha07"
+androidx-activity = "1.8.0"
+androidx-compose = "1.6.0-alpha07"
 # @keep
 androidx-compose-compiler = "1.5.3"
-androidx-compose-material = "1.6.0-alpha06"
+androidx-compose-material = "1.6.0-alpha07"
 androidx-compose-material3 = "1.1.2"
 androidx-lifecycle = "2.6.2"
-androidx-navigation = "2.7.3"
+androidx-navigation = "2.7.4"
 androidx-room = "2.5.2"
 androidx-test = "1.5.0"
 appyx = "2.0.0-alpha06"
@@ -56,7 +56,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-activity-core = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-annotation = "androidx.annotation:annotation:1.7.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha03"
-androidx-collection = "androidx.collection:collection:1.2.0"
+androidx-collection = "androidx.collection:collection:1.3.0"
 androidx-compose-animation = { module = "androidx.compose.animation:animation", version.ref = "androidx-compose" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose" }
@@ -140,7 +140,7 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx"
 firebase-database = { module = "com.google.firebase:firebase-database-ktx" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 fluidLocale = "io.fluidsonic.locale:fluid-locale:0.12.0"
-google-material = "com.google.android.material:material:1.9.0"
+google-material = "com.google.android.material:material:1.10.0"
 google-mlkitBarcode = "com.google.mlkit:barcode-scanning:17.2.0"
 google-playServices = "com.google.android.play:core-ktx:1.8.1"
 google-playServicesLocation = "com.google.android.gms:play-services-location:21.0.1"
@@ -294,4 +294,4 @@ lastaapps-kmp-sqldelight = "kmp-sqldelight-convention:none"
 playServices = "com.google.gms.google-services:4.4.0"
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
-versionCatalogUpdate = "nl.littlerobots.version-catalog-update:0.7.0"
+versionCatalogUpdate = "nl.littlerobots.version-catalog-update:0.8.0"
