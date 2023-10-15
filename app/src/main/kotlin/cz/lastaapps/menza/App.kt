@@ -37,8 +37,12 @@ class App : Application(), ImageLoaderFactory {
             memoryCachePolicy(CachePolicy.ENABLED)
             networkCachePolicy(CachePolicy.ENABLED)
             networkObserverEnabled(true)
-            if (BuildConfig.DEBUG)
+            respectCacheHeaders(false)
+
+            if (BuildConfig.DEBUG) {
                 logger(DebugLogger())
+            }
+
             diskCache {
                 with(DiskCache.Builder()) {
                     maxSizeBytes(1024 * 1024 * 64) // 64 MB
