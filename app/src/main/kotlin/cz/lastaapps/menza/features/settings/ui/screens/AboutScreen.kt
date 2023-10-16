@@ -49,6 +49,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -65,6 +66,7 @@ import cz.lastaapps.common.R
 import cz.lastaapps.common.R.drawable
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.ui.theme.Padding
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun AboutScreen(
@@ -132,6 +134,13 @@ internal fun AboutScreen(
             ElevatedCard(Modifier.fillMaxWidth()) {
                 Socials(Modifier.padding(12.dp))
             }
+            ElevatedCard {
+                Contributors(
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .align(Alignment.CenterHorizontally),
+                )
+            }
             Surface(Modifier.fillMaxWidth()) {
                 AppInfo(Modifier.padding(8.dp))
             }
@@ -168,17 +177,20 @@ private fun DatasourceButton(
 ) {
     OutlinedButton(
         modifier = modifier.fillMaxWidth(),
-        onClick = { uriHandler.openUri(url) }
+        onClick = { uriHandler.openUri(url) },
     ) {
-        IconAndText({
-            Icon(Icons.Default.Language, null)
-        }, {
-            Text(
-                text = title,
-                style = LocalTextStyle.current.copy(textDecoration = TextDecoration.Underline),
-                textAlign = TextAlign.Center,
-            )
-        })
+        IconAndText(
+            {
+                Icon(Icons.Default.Language, null)
+            },
+            {
+                Text(
+                    text = title,
+                    style = LocalTextStyle.current.copy(textDecoration = TextDecoration.Underline),
+                    textAlign = TextAlign.Center,
+                )
+            },
+        )
     }
 }
 
@@ -262,15 +274,15 @@ private fun ViewSource(modifier: Modifier = Modifier) {
             icon = {
                 Icon(
                     Icons.Default.Code,
-                    stringResource(R.string.content_description_github_project)
+                    stringResource(R.string.content_description_github_project),
                 )
             },
             text = {
                 Text(
                     text = stringResource(id = R.string.github_project),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
-            }
+            },
         )
     }
 }
@@ -284,10 +296,25 @@ private fun IconAndText(
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start)
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
     ) {
         icon()
         text()
+    }
+}
+
+@Composable
+private fun Contributor(
+    name: String,
+    url: String,
+    modifier: Modifier = Modifier,
+    uriHandler: UriHandler = LocalUriHandler.current,
+) {
+    OutlinedButton(
+        modifier = modifier,
+        onClick = { uriHandler.openUri(url) },
+    ) {
+        Text(text = name)
     }
 }
 
@@ -331,7 +358,7 @@ private fun Socials(modifier: Modifier = Modifier) {
                 IconButton(onClick = it.onClick) {
                     Image(
                         painterResource(id = it.drawableId),
-                        contentDescription = stringResource(id = it.contentDescriptionId)
+                        contentDescription = stringResource(id = it.contentDescriptionId),
                     )
                 }
             }
@@ -344,6 +371,35 @@ private data class SocialItem(
     @StringRes val contentDescriptionId: Int,
     val onClick: () -> Unit,
 )
+
+@Composable
+private fun Contributors(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            stringResource(cz.lastaapps.menza.R.string.about_contributors),
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+        )
+
+        remember {
+            persistentListOf(
+                "LastaApps" to "https://github.com/Lastaapps",
+                "Marekkon5" to "https://github.com/Marekkon5",
+            )
+        }.forEach { (user, url) ->
+            Contributor(
+                user, url,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
 
 @Composable
 private fun AppInfo(modifier: Modifier = Modifier) {
