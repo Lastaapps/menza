@@ -88,7 +88,8 @@ actual class AgataWallet {
 
         // Parse
         return html.findFirst("h4 span.badge").text.lowercase()
-            .replace("kč", "").replace(",", ".").trim().toFloat()
+            .replace("kč", "").replace(",", ".")
+            .replace(" ", "").trim().toFloat()
     }
 }
 
