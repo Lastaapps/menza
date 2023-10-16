@@ -49,3 +49,6 @@
 
 # @Serializable and @Polymorphic are used at runtime for polymorphic serialization.
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault
+
+# Idk, I hope it doesn't crash
+-dontwarn org.slf4j.impl.StaticLoggerBinder
