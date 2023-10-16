@@ -65,6 +65,7 @@
     <string name="about_title">Menza CTU</string>
     <string name="about_data_source">Data source</string>
     <string name="about_find_out_more">Find out more</string>
+    <string name="about_contributors">Contributors</string>
     <string name="about_whats_new">Updates history</string>
     <string name="about_license_notices">License notices</string>
     <string name="about_osturak">Info about Ošťurák</string>
@@ -196,6 +197,7 @@
     <string name="today_list_mode_compact">Compact</string>
     <string name="today_list_mode_grid">Large</string>
     <string name="today_list_mode_horizontal">Rows</string>
+    <string name="today_experimental_cafeteria">Experimental cafeteria - may not work properly. Please report issues in the settings.</string>
 
     <string name="week_list_none">No data available</string>
     <string name="week_list_web">Check website</string>
@@ -222,6 +224,7 @@
     <string name="ui_top_bar_action_osturak" translatable="false">Ošťurák</string>
     <string name="ui_top_bar_action_web_agata">Website Agáta</string>
     <string name="ui_top_bar_action_web_buffet">Website buffets</string>
+    <string name="ui_top_bar_action_web_vscht">Website Zíkova</string>
 
     <string name="menza_none_selected">No menza selected</string>
     <string name="menza_none_osturak">Find out about ošťurák</string>

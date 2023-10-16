@@ -27,13 +27,13 @@ import com.bumble.appyx.components.backstack.BackStackModel
 import com.bumble.appyx.components.backstack.operation.pop
 import com.bumble.appyx.components.backstack.operation.push
 import com.bumble.appyx.components.backstack.ui.fader.BackStackFader
-import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
 import cz.lastaapps.menza.features.main.ui.node.DrawerNavType.EDIT_NAV
 import cz.lastaapps.menza.features.main.ui.node.DrawerNavType.MENZA_LIST_NAV
 import cz.lastaapps.menza.features.settings.ui.nodes.ReorderMenzaNode
+import cz.lastaapps.menza.ui.util.AppyxNoDragComponent
 
 internal enum class DrawerNavType {
     MENZA_LIST_NAV, EDIT_NAV,
@@ -65,7 +65,7 @@ internal class DrawerNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        AppyxComponent(
+        AppyxNoDragComponent(
             appyxComponent = backstack,
             modifier = modifier,
         )

@@ -27,7 +27,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -61,9 +61,9 @@ import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.LicenseNotices
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.Osturak
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget.PrivacyPolicy
 import cz.lastaapps.menza.ui.components.AppIcon
+import cz.lastaapps.menza.ui.components.MenuBackArrow
 import cz.lastaapps.menza.ui.locals.LocalMenuBackArrow
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
-import cz.lastaapps.menza.ui.root.MenuBackArrow
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.coroutines.launch
 
@@ -199,7 +199,7 @@ private fun LeadingIcon(
     val rotation by animateFloatAsState(if (!isRotated) 0f else 90f)
 
     val leadingIcon = when {
-        showBackArrow -> Icons.Default.ArrowBack
+        showBackArrow -> Icons.AutoMirrored.Default.ArrowBack
         state.enableHamburger -> Icons.Default.Menu
         else -> null
     }
@@ -267,7 +267,15 @@ private fun TopBarPopup(
             {
                 uriHandler.openUri("http://studentcatering.cz/jidelni-listek/")
                 onDismissRequest()
-            })
+            },
+        )
+        DropdownMenuItem(
+            { Text(stringResource(R.string.ui_top_bar_action_web_vscht)) },
+            {
+                uriHandler.openUri("https://jidelnazikova.cz/jidelni-listek/")
+                onDismissRequest()
+            },
+        )
     }
 }
 

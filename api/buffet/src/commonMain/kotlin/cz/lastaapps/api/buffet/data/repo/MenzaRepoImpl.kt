@@ -51,6 +51,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = true,
+                isExperimental = true,
             ),
         ).let { emit(it) }
     }
@@ -79,6 +80,7 @@ internal object MenzaFELRepoImpl : MenzaRepo {
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = true,
+                isExperimental = true,
             ),
         ).let { emit(it) }
     }

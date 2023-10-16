@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Refresh
@@ -313,7 +314,10 @@ fun CrashesButton(
     modifier: Modifier = Modifier,
 ) {
     OutlinedButton(onClick = onCrashesDialog, modifier) {
-        IconAndText(Icons.Default.ReceiptLong, stringResource(R.string.settings_button_crashes))
+        IconAndText(
+            Icons.AutoMirrored.Default.ReceiptLong,
+            stringResource(R.string.settings_button_crashes),
+        )
     }
 }
 

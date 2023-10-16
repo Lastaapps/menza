@@ -35,13 +35,13 @@ import kotlinx.coroutines.flow.map
 
 
 // Spotlight
-@Suppress("UNCHECKED_CAST", "KotlinConstantConditions")
 fun <Interaction : Any> SpotlightModel<Interaction>.interactionState() =
     (this as TransitionModel<Interaction, SpotlightModel.State<Interaction>>).interactionState()
 
+@Suppress("RemoveExplicitTypeArguments")
 fun <Interaction : Any> SpotlightModel<Interaction>.items(): Flow<ImmutableList<Interaction>> =
-    interactionState().map {
-        it.availableElements()
+    interactionState().map { state ->
+        state.availableElements()
             .map<Element<Interaction>, Interaction> { it.interactionTarget }
             .toPersistentList()
     }
@@ -61,10 +61,10 @@ suspend fun <Interaction : Any> Spotlight<Interaction>.activateItem(
 }
 
 // BackStack
-@Suppress("UNCHECKED_CAST", "KotlinConstantConditions")
 fun <Interaction : Any> BackStack<Interaction>.interactionState(): Flow<BackStackModel.State<Interaction>> =
     (model as TransitionModel<Interaction, BackStackModel.State<Interaction>>).interactionState()
 
+@Suppress("RemoveExplicitTypeArguments")
 fun <Interaction : Any> BackStack<Interaction>.items(): Flow<ImmutableList<Interaction>> =
     interactionState().map {
         with(model) { it.availableElements() }

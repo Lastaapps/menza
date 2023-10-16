@@ -40,7 +40,7 @@ internal class SelectedMenzaRepoImpl(
 
     private val creationLock = Mutex()
     override suspend fun getSelectedMenza(): Flow<MenzaType?> = creationLock.withLock {
-        if (isReady) {
+        if (!isReady) {
             isReady = true
             getInitialMenza().first().let { initial ->
                 selected.update { initial }

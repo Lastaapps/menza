@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bumble.appyx.navigation.integration.NodeComponentActivity
 import com.bumble.appyx.navigation.integration.NodeHost
@@ -49,7 +50,7 @@ class MainActivity : NodeComponentActivity() {
         setContent {
             ApplyProviders {
                 NodeHost(
-                    lifecycle = AndroidLifecycle(lifecycle),
+                    lifecycle = AndroidLifecycle(LocalLifecycleOwner.current.lifecycle),
                     integrationPoint = appyxV2IntegrationPoint,
                     modifier = Modifier.fillMaxSize(),
                 ) { buildContext ->

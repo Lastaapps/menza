@@ -176,4 +176,7 @@ internal data class DishListState(
     val showCzech: ShowCzech = ShowCzech(true),
     val imageScale: Float = 1f,
     val isOnMetered: Boolean = false,
-) : VMState
+) : VMState {
+    val showExperimentalWarning: Boolean =
+        selectedMenza?.getOrNull()?.isExperimental ?: false
+}

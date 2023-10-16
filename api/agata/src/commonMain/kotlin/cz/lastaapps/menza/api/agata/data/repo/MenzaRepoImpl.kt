@@ -126,6 +126,7 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = false,
+                isExperimental = false,
             ),
         ).let { emit(it) }
     }

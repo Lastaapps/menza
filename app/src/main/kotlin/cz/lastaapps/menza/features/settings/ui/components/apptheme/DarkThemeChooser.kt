@@ -23,12 +23,21 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness3
 import androidx.compose.material.icons.filled.BrightnessMedium
 import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -53,7 +62,7 @@ internal fun DarkThemeChooser(
     val items = listOf(
         DarkThemeItem(R.string.settings_theme_dark_light, Icons.Default.WbSunny, DarkMode.Light),
         DarkThemeItem(
-            R.string.settings_theme_dark_system, Icons.Default.BrightnessMedium, DarkMode.System
+            R.string.settings_theme_dark_system, Icons.Default.BrightnessMedium, DarkMode.System,
         ),
         DarkThemeItem(R.string.settings_theme_dark_dark, Icons.Default.Brightness3, DarkMode.Dark),
     )
@@ -113,34 +122,44 @@ private fun DarkThemeItem(
     modifier: Modifier = Modifier,
     onItemSelected: () -> Unit,
 ) {
-    val color = if (isSelected)
+    val color = if (isSelected) {
         MaterialTheme.colorScheme.primary
-    else
+    } else {
         MaterialTheme.colorScheme.tertiary
+    }
 
     val interaction = remember { MutableInteractionSource() }
     val scale by animateFloatAsState(
-        if (isSelected) 1f else DarkThemeChooser.unselectedScale
+        if (isSelected) 1f else DarkThemeChooser.unselectedScale,
+        label = "scale",
     )
-    Card(
+
+    val colorContainer by animateColorAsState(color, label = "container_color")
+    val colorContent by animateColorAsState(contentColorFor(color), label = "content_color")
+
+    Surface(
         onClick = onItemSelected,
         interactionSource = interaction,
-        colors = CardDefaults.cardColors(
-            containerColor = animateColorAsState(color).value,
-        ),
+        shape = MaterialTheme.shapes.medium,
+        color = colorContainer,
         modifier = modifier.scale(scale),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-            modifier = Modifier
-                .padding(8.dp)
-                .align(Alignment.CenterHorizontally),
+            modifier = Modifier.padding(8.dp),
         ) {
             Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                Icon(item.icon, stringResource(item.title))
+                Icon(
+                    item.icon,
+                    stringResource(item.title),
+                    tint = colorContent,
+                )
             }
-            Text(stringResource(item.title))
+            Text(
+                stringResource(item.title),
+                color = colorContent,
+            )
         }
     }
 }

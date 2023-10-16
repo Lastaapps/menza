@@ -41,10 +41,9 @@ import cz.lastaapps.menza.features.today.ui.components.TodayInfo
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.features.today.ui.vm.TodayState
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
+import cz.lastaapps.menza.ui.components.BackArrow
 import cz.lastaapps.menza.ui.components.layout.TwoPaneLayout
-import cz.lastaapps.menza.ui.root.BackArrow
 import cz.lastaapps.menza.ui.theme.Padding
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun TodayScreen(

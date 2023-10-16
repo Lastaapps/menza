@@ -29,7 +29,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumble.appyx.components.spotlight.Spotlight
 import com.bumble.appyx.components.spotlight.SpotlightModel
 import com.bumble.appyx.components.spotlight.ui.fader.SpotlightFader
-import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
@@ -40,12 +39,12 @@ import cz.lastaapps.menza.features.root.ui.RootNavType.LoadingNav
 import cz.lastaapps.menza.features.root.ui.RootNavType.MainNav
 import cz.lastaapps.menza.features.root.ui.RootNavType.SetupFlowNav
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingNode
+import cz.lastaapps.menza.ui.util.AppyxNoDragComponent
 import cz.lastaapps.menza.ui.util.activateItem
 import cz.lastaapps.menza.ui.util.activeIndex
 import cz.lastaapps.menza.ui.util.indexOfType
 import cz.lastaapps.menza.ui.util.nodeViewModel
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 
 internal class RootNode(
     buildContext: BuildContext,
@@ -98,7 +97,7 @@ internal class RootNode(
             val indexOfType by remember { spotlightModel.indexOfType(LoadingNav) }
                 .collectAsStateWithLifecycle(0)
 
-            AppyxComponent(
+            AppyxNoDragComponent(
                 appyxComponent = spotlight,
                 modifier = modifier.onPlaced {
                     if (indexOfType != activeIndex) {

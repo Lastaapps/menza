@@ -31,7 +31,7 @@ sealed class MenzaScrapingError private constructor(
     val showMessage: Boolean,
     val throwable: Throwable?,
 ) {
-    object WeekNotSupported : MenzaScrapingError(false, false, null)
+    data object WeekNotSupported : MenzaScrapingError(false, false, null)
 
     class Timeout(throwable: Throwable) : MenzaScrapingError(false, false, throwable)
     class NoInternet(throwable: Throwable) : MenzaScrapingError(false, false, throwable)
@@ -44,9 +44,9 @@ sealed class MenzaScrapingError private constructor(
 fun Throwable.toMenzaError(): MenzaScrapingError {
     return when (this) {
         is UnresolvedAddressException -> MenzaScrapingError.NoInternet(this)
+        is ConnectTimeoutException -> MenzaScrapingError.Timeout(this)
         is ConnectException -> MenzaScrapingError.FailedToConnect(this)
         is SocketTimeoutException -> MenzaScrapingError.Timeout(this)
-        is ConnectTimeoutException -> MenzaScrapingError.Timeout(this)
         is SocketException -> MenzaScrapingError.FailedToConnect(this)
         is EOFException -> MenzaScrapingError.ConnectionClosed(this)
         else -> MenzaScrapingError.UnknownConnectionError(this)

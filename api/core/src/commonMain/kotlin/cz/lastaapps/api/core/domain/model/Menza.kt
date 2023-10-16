@@ -19,10 +19,11 @@
 
 package cz.lastaapps.api.core.domain.model
 
-data class Menza constructor(
+data class Menza(
     val type: MenzaType,
     val name: String,
     val isOpened: Boolean,
     val supportsDaily: Boolean,
     val supportsWeekly: Boolean,
+    val isExperimental: Boolean,
 )

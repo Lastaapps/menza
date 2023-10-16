@@ -26,7 +26,6 @@ import com.bumble.appyx.components.backstack.BackStackModel
 import com.bumble.appyx.components.backstack.operation.pop
 import com.bumble.appyx.components.backstack.operation.push
 import com.bumble.appyx.components.backstack.ui.fader.BackStackFader
-import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
@@ -38,6 +37,7 @@ import cz.lastaapps.menza.features.settings.ui.navigation.SettingsNavTarget.OSTU
 import cz.lastaapps.menza.features.settings.ui.navigation.SettingsNavTarget.SETTINGS
 import cz.lastaapps.menza.features.settings.ui.nodes.AppThemeNode
 import cz.lastaapps.menza.features.settings.ui.nodes.SettingsNode
+import cz.lastaapps.menza.ui.util.AppyxNoDragComponent
 
 class SettingsHubNode internal constructor(
     buildContext: BuildContext,
@@ -74,7 +74,7 @@ class SettingsHubNode internal constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        AppyxComponent(
+        AppyxNoDragComponent(
             appyxComponent = backstack,
             modifier = modifier,
         )

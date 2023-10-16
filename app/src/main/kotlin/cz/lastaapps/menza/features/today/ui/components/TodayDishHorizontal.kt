@@ -67,7 +67,8 @@ fun TodayDishHorizontal(
     downloadOnMetered: Boolean,
     showCzech: ShowCzech,
     isOnMetered: Boolean,
-    gridSwitch: @Composable () -> Unit,
+    header: @Composable () -> Unit,
+    footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     scroll: LazyListState = rememberLazyListState(),
     pullState: PullRefreshState = rememberPullRefreshState(
@@ -89,7 +90,8 @@ fun TodayDishHorizontal(
                 showCzech = showCzech,
                 isOnMetered = isOnMetered,
                 scroll = scroll,
-                gridSwitch = gridSwitch,
+                header = header,
+                footer = footer,
                 modifier = Modifier
                     .padding(top = Padding.Smaller) // so text is not cut off
                     .fillMaxSize(),
@@ -110,7 +112,8 @@ private fun DishContent(
     showCzech: ShowCzech,
     isOnMetered: Boolean,
     scroll: LazyListState,
-    gridSwitch: @Composable () -> Unit,
+    header: @Composable () -> Unit,
+    footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -127,6 +130,10 @@ private fun DishContent(
             verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
             state = scroll,
         ) {
+            item {
+                header()
+            }
+
             data.forEach { category ->
                 item {
                     DishHeader(
@@ -176,7 +183,7 @@ private fun DishContent(
             }
 
             item {
-                gridSwitch()
+                footer()
             }
         }
     }

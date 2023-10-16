@@ -39,17 +39,17 @@ sealed interface MenzaType {
             override val id: String = "agata_subsystem_$subsystemId"
         }
 
-        object Strahov : Agata {
+        data object Strahov : Agata {
             override val id: String = "agata_strahov"
         }
     }
 
     sealed interface Buffet : MenzaType {
-        object FS : Buffet {
+        data object FS : Buffet {
             override val id: String = "buffet_fs"
         }
 
-        object FEL : Buffet {
+        data object FEL : Buffet {
             override val id: String = "buffet_fel"
         }
     }
