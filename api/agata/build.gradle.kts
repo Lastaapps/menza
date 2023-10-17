@@ -35,6 +35,9 @@ dependencies {
     commonMainImplementation(libs.ktor.client.logging)
     commonMainImplementation(libs.ktor.client.serialization)
 
+    commonMainImplementation(projects.entity)
+    commonMainImplementation(projects.htmlParser)
+
     commonMainImplementation(libs.bundles.russhwolf.settings)
 }
 

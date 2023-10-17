@@ -2,6 +2,7 @@ package cz.lastaapps.menza.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
@@ -33,20 +34,18 @@ class AgataWalletCredentials {
 
         /// Save credentials to shared preferences
         fun saveCredentials(context: Context, username: String, password: String) {
-            val sharedPreferences = getSharedPreferences(context)
-            val editor = sharedPreferences.edit()
-            editor.putString("username", username)
-            editor.putString("password", password)
-            editor.apply()
+            getSharedPreferences(context).edit {
+                putString("username", username)
+                putString("password", password)
+            }
         }
 
         /// Add balance to cache
         fun cacheBalance(context: Context, balance: Float) {
-            getSharedPreferences(context)
-                .edit()
-                .putFloat("balance", balance)
-                .putLong("balanceAge", System.currentTimeMillis())
-                .apply()
+            getSharedPreferences(context).edit {
+                putFloat("balance", balance)
+                putLong("balanceAge", System.currentTimeMillis())
+            }
         }
 
         /// Get balance from cache

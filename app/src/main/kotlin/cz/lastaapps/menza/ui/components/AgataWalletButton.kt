@@ -42,7 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.util.AgataWalletCredentials
-import cz.lastaapps.scraping.AgataWallet
+import cz.lastaapps.menza.api.agata.api.AgataWallet
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -53,6 +54,7 @@ fun AgataWalletButton() {
     val buttonText = remember { mutableStateOf(context.resources.getString(R.string.wallet_login)) }
     val loading = remember { mutableStateOf(false) }
     val error = remember { mutableStateOf(false) }
+    val agataWallet = AgataWallet(HttpClient())
 
     // Preview
     if (LocalInspectionMode.current) {
@@ -83,16 +85,20 @@ fun AgataWalletButton() {
             // Fetch
             loading.value = true
             buttonText.value = ""
-            try {
-                val agataWallet = AgataWallet()
-                val balance = agataWallet.getBalance(saved.first, saved.second)
-                setBalanceText(balance)
-                AgataWalletCredentials.cacheBalance(context, balance)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(context, "${context.resources.getString(R.string.wallet_update_error)}: $e", Toast.LENGTH_LONG).show()
-                error.value = true
-            }
+
+            agataWallet.getBalance(saved.first, saved.second).fold(
+                // Error
+                {
+                    it.throwable?.printStackTrace()
+                    Toast.makeText(context, "${context.resources.getString(R.string.wallet_update_error)}: $it", Toast.LENGTH_LONG).show()
+                    error.value = true
+                },
+                // Success
+                {
+                    setBalanceText(it)
+                    AgataWalletCredentials.cacheBalance(context, it)
+                }
+            )
             loading.value = false
         }
     }

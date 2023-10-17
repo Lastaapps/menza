@@ -54,6 +54,7 @@ android {
 
 dependencies {
 
+    implementation(projects.api.agata)
     implementation(projects.api.main)
     implementation(projects.core)
     implementation(projects.entity)
@@ -80,4 +81,6 @@ dependencies {
     implementation(libs.kotlinx.atomicfu)
 
     implementation(libs.bundles.russhwolf.settings)
+
+    implementation(libs.ktor.client.core)
 }

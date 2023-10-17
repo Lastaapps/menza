@@ -1,37 +1,67 @@
-package cz.lastaapps.scraping
+/*
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *
+ *     This file is part of Menza.
+ *
+ *     Menza is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Menza is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
+package cz.lastaapps.menza.api.agata.api
+
+import cz.lastaapps.core.domain.Outcome
+import cz.lastaapps.core.util.extensions.catchingNetwork
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.BrowserUserAgent
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.Cookie
 import io.ktor.http.Parameters
 import it.skrape.core.htmlDocument
 import java.net.URLDecoder
 
-actual class AgataWallet {
-    private val client: HttpClient = HttpClient {
-        // Disable redirects, because when I was testing it with Python I got into loop sometimes
-        // Also it has to extract some cookies from some of the requests, so redirects manually handled
-        followRedirects = false
+actual class AgataWallet actual constructor(httpClient: HttpClient) {
 
-        defaultRequest {
-            header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36")
+    private val client: HttpClient
+
+    init {
+        client = httpClient.config {
+            // Disable redirects, because when I was testing it with Python I got into loop sometimes
+            // Also it has to extract some cookies from some of the requests, so redirects manually handled
+            followRedirects = false
+
+            BrowserUserAgent()
         }
     }
 
+    /// Get balance from Agata (wrapper with Outcome)
+    actual suspend fun getBalance(username: String, password: String): Outcome<Float> = catchingNetwork {
+        getBalanceRaw(username, password)
+    }
+
     /// Get balance from Agata
-    actual suspend fun getBalance(username: String, password: String): Float {
+    private suspend fun getBalanceRaw(username: String, password: String): Float {
         // Go to the auth provider
         var response = client.get("https://agata.suz.cvut.cz/secure/index.php")
         var url = response.headers["Location"]
         response = client.get(url!!)
 
         // Get new url params
-        var body = response.bodyAsText()
+        val body = response.bodyAsText()
         val returnUrl = Regex("var returnURL = \"(.+?)\"").find(body)?.groups?.get(1)?.value
         val otherParams = Regex("var otherParams = \"(.+?)\"").find(body)?.groups?.get(1)?.value
         url = "${returnUrl}&entityID=https://idp2.civ.cvut.cz/idp/shibboleth${otherParams}"
@@ -52,7 +82,7 @@ actual class AgataWallet {
                 append("j_password", password)
                 append("_eventId_proceed", "")
             }))
-            header("Cookie", "JSESSIONID=${jsessionid}")
+            Cookie("JSESSIONID", jsessionid)
             header("Referer", url)
             header("Content-Type", "application/x-www-form-urlencoded")
         }
@@ -82,14 +112,14 @@ actual class AgataWallet {
 
         // Get balance from Agata
         response = client.get("https://agata.suz.cvut.cz/secure/index.php") {
+            // The session cookie has variable name, so using raw headers here
             header("Cookie", sessionCookie)
         }
         html = htmlDocument(response.bodyAsText())
 
         // Parse
         return html.findFirst("h4 span.badge").text.lowercase()
-            .replace("kč", "").replace(",", ".")
-            .replace(" ", "").trim().toFloat()
+            .replace("kč", "").replace(",", ".").replace(" ", "").trim().toFloat()
     }
 }
 

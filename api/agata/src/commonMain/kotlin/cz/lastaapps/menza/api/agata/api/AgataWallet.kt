@@ -17,9 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.scraping
+package cz.lastaapps.menza.api.agata.api
 
+import cz.lastaapps.core.domain.Outcome
+import io.ktor.client.HttpClient
 
-expect class AgataWallet constructor() {
-    suspend fun getBalance(username: String, password: String): Float
+expect class AgataWallet(httpClient: HttpClient) {
+    suspend fun getBalance(username: String, password: String): Outcome<Float>
 }
