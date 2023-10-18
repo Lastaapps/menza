@@ -1,0 +1,33 @@
+name: Build Debug
+on: [push, pull_request]
+
+jobs:
+  build-debug:
+    name: Build Debug
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+
+    - name: Setup
+      run: |
+        chmod +x gradlew
+        ./gradlew wrapper --gradle-version 8.4
+
+    - name: Build
+      run: |
+        ./gradlew assembleDebug
+
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: menza-debug.apk
+        path: app/build/outputs/apk/debug/apk-debug.apk
