@@ -54,6 +54,7 @@ android {
 
 dependencies {
 
+    implementation(projects.api.agata)
     implementation(projects.api.main)
     implementation(projects.core)
     implementation(projects.entity)
@@ -65,6 +66,7 @@ dependencies {
 
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.emoji2.bundled)
+    implementation(libs.androidx.security)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.vectorDrawables)
@@ -79,4 +81,6 @@ dependencies {
     implementation(libs.kotlinx.atomicfu)
 
     implementation(libs.bundles.russhwolf.settings)
+
+    implementation(libs.ktor.client.core)
 }

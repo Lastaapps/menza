@@ -260,4 +260,15 @@
     <string name="rate_us_button_github">GitHub star ⭐</string>
     <string name="rate_us_button_later">Later…</string>
     <string name="rate_us_button_dismiss">Never!</string>
+
+    <string name="wallet_login">Click to login 🥺</string>
+    <string name="wallet_update_error">Failed to update balance 💀</string>
+    <string name="wallet_login_title">Login to Agata</string>
+    <string name="wallet_login_subtitle">Use your CTU username and password</string>
+    <string name="wallet_login_username">Username</string>
+    <string name="wallet_login_password">Password</string>
+    <string name="wallet_login_cancel">Cancel</string>
+    <string name="wallet_login_save">Save</string>
+
+
 </resources>

@@ -36,7 +36,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -58,10 +57,10 @@ import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionState
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionViewModel
+import cz.lastaapps.menza.ui.components.AgataWalletButton
 import cz.lastaapps.menza.ui.components.MenzaLetter
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun MenzaSelectionScreen(
@@ -150,6 +149,10 @@ private fun MenzaList(
                     .padding(vertical = Padding.Smaller)
                     .padding(start = Padding.Medium),
             )
+        }
+
+        item {
+            AgataWalletButton()
         }
 
         items(menzaList) { menza ->
