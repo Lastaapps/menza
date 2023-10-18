@@ -20,7 +20,7 @@ jobs:
     - name: Setup
       run: |
         chmod +x gradlew
-        ./gradlew wrapper --gradle-version 8.4
+        ./gradlew wrapper
 
     - name: Build
       run: |
