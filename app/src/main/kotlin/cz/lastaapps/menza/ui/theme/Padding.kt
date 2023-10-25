@@ -36,5 +36,6 @@ object Padding {
         val Dialog = Medium
         val ScrollBottomSpace = 64.dp
         val Icon = 24.dp
+        val MaxColumnWidth = (256 + 32).dp
     }
 }

@@ -22,7 +22,6 @@ package cz.lastaapps.menza.features.info.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Message
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.Padding
@@ -70,9 +68,7 @@ private fun Message(message: Message, modifier: Modifier = Modifier) {
     ) {
         Text(
             text = message.text,
-            modifier = Modifier
-                .padding(Padding.MidSmall)
-                .sizeIn(maxWidth = 256.dp),
+            modifier = Modifier.padding(Padding.MidSmall),
             textAlign = TextAlign.Center,
         )
     }

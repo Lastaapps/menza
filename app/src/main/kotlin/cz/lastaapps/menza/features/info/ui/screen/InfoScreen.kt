@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -52,7 +51,6 @@ import cz.lastaapps.menza.ui.components.layout.AboveOrSideBySideLayout
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.HandleError
 import kotlinx.collections.immutable.toImmutableList
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun InfoScreen(
@@ -105,19 +103,22 @@ private fun InfoContent(
         ) {
             Crossfade(
                 targetState = state.items,
+                label = "info",
             ) { items ->
                 if (items != null) {
                     val itemSpacer: LazyListScope.() -> Unit = {
                         item { Spacer(Modifier.height(Padding.Medium)) }
                     }
 
+                    // There is a bug that if an item is empty, the padding is still present
+                    // But I don't want to waste my time fixing this, so sorry
                     val contactAndMessage: LazyListScope.() -> Unit = {
                         item {
                             Box(
-                                modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 MessageList(
+                                    modifier = Modifier.fillMaxWidth(),
                                     messages = listOfNotNull(
                                         items.header, items.footer
                                     ).toImmutableList(),
@@ -127,10 +128,10 @@ private fun InfoContent(
                         itemSpacer()
                         item {
                             Box(
-                                modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 OpeningHoursList(
+                                    modifier = Modifier.fillMaxWidth(),
                                     data = items.openingTimes,
                                 )
                             }
@@ -139,10 +140,10 @@ private fun InfoContent(
                     val openingAndAddress: LazyListScope.() -> Unit = {
                         item {
                             Box(
-                                modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 ContactList(
+                                    modifier = Modifier.fillMaxWidth(),
                                     contactList = items.contacts,
                                     onError = onError,
                                 )
@@ -151,10 +152,10 @@ private fun InfoContent(
                         itemSpacer()
                         item {
                             Box(
-                                modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 AddressList(
+                                    modifier = Modifier.fillMaxWidth(),
                                     locations = listOfNotNull(items.address).toImmutableList(),
                                     onError = onError,
                                 )
@@ -163,10 +164,10 @@ private fun InfoContent(
                         itemSpacer()
                         item {
                             Box(
-                                modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 LinkList(
+                                    modifier = Modifier.fillMaxWidth(),
                                     links = items.links,
                                 )
                             }

@@ -20,9 +20,11 @@
 package cz.lastaapps.menza.ui.components.layout
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -77,9 +79,13 @@ private fun AboveOrSideBySideCompact(
     verticalSpacer: LazyListScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Box(
+        contentAlignment = Alignment.TopCenter,
+        modifier = modifier.fillMaxWidth(),
+    ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(Padding.Medium),
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.sizeIn(maxWidth = Padding.More.MaxColumnWidth),
     ) {
         topLeft()
         verticalSpacer()
@@ -87,6 +93,7 @@ private fun AboveOrSideBySideCompact(
         item {
             Spacer(Modifier.height(Padding.More.ScrollBottomSpace))
         }
+    }
     }
 }
 
@@ -112,23 +119,33 @@ private fun AboveOrSideBySideExpanded(
     SplitLayout(
         modifier = modifier,
         panel1 = {
+            Box(
+                contentAlignment = Alignment.TopCenter,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.sizeIn(maxWidth = Padding.More.MaxColumnWidth),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 topLeft()
                 item { Spacer(Modifier.height(Padding.More.ScrollBottomSpace)) }
             }
+            }
         },
         panel2 = {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Box(
+                contentAlignment = Alignment.TopCenter,
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                bottomRight()
-                item { Spacer(Modifier.height(Padding.More.ScrollBottomSpace)) }
+                LazyColumn(
+                    modifier = Modifier.sizeIn(maxWidth = Padding.More.MaxColumnWidth),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    bottomRight()
+                    item { Spacer(Modifier.height(Padding.More.ScrollBottomSpace)) }
+                }
             }
         },
     )
