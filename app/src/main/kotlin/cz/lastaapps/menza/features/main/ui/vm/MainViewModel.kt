@@ -20,10 +20,12 @@
 package cz.lastaapps.menza.features.main.ui.vm
 
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.main.domain.usecase.wallet.WalletRefreshUC
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
+import cz.lastaapps.menza.features.main.domain.usecase.CheckLowBalanceUC
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.main.domain.usecase.IsFlipUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
@@ -34,6 +36,8 @@ internal class MainViewModel(
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getSettingsOpened: GetSettingsEverOpenedUC,
     private val isFlip: IsFlipUC,
+    private val checkLowBalanceUC: CheckLowBalanceUC,
+    private val refreshWallet: WalletRefreshUC,
 ) : StateViewModel<MainState>(MainState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
@@ -49,7 +53,15 @@ internal class MainViewModel(
             }
         }
         updateState { copy(isFlip = isFlip()) }
+        launchVM {
+            refreshWallet(false)
+            checkLowBalanceUC().collectLatest {
+                updateState { copy(showLowBalance = true) }
+            }
+        }
     }
+
+    fun dismissLowBalance() = updateState { copy(showLowBalance = false) }
 }
 
 internal data class MainState(
@@ -57,4 +69,5 @@ internal data class MainState(
     val settingsViewed: Boolean = false,
     val selectedMenza: Menza? = null,
     val isFlip: Boolean = false,
+    val showLowBalance: Boolean = false,
 ) : VMState

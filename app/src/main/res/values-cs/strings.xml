@@ -254,4 +254,5 @@
     <string name="wallet_login_password_appeal">Jsi z VŠCHT nebo běžný občan? Kontaktuj vývojáře v nastavení a pomož přidat tvvoji metodu přihlášení!</string>
     <string name="wallet_login_cancel">Zrušit</string>
     <string name="wallet_login_save">Uložit</string>
+    <string name="wallet_low_balance">Dochází ti penízky! 🙉</string>
 </resources>

@@ -21,6 +21,7 @@ package cz.lastaapps.menza.features.main.di
 
 import cz.lastaapps.menza.features.main.data.SelectedMenzaRepoImpl
 import cz.lastaapps.menza.features.main.domain.SelectedMenzaRepo
+import cz.lastaapps.menza.features.main.domain.usecase.CheckLowBalanceUC
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.main.domain.usecase.IsFlipUC
 import cz.lastaapps.menza.features.main.domain.usecase.SelectMenzaUC
@@ -44,4 +45,5 @@ val mainModule = module {
     factoryOf(::GetSelectedMenzaUC)
     factoryOf(::SelectMenzaUC)
     factoryOf(::IsFlipUC)
+    factoryOf(::CheckLowBalanceUC)
 }

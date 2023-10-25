@@ -30,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumble.appyx.components.backstack.BackStack
 import com.bumble.appyx.components.backstack.BackStackModel
@@ -42,6 +43,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
 import cz.lastaapps.core.ui.vm.HandleAppear
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.info.ui.node.InfoNode
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.DrawerContent
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavType.InfoNav
@@ -124,6 +126,12 @@ class MainNode(
             currentDrawerState = drawerState
         }
 
+        HandleLowBalance(
+            lowBalance = state.showLowBalance,
+            hostState = snackbarHostState,
+            onDismiss = mainViewModel::dismissLowBalance,
+        )
+
         val active by remember(backStack) {
             backStack.active()
         }.collectAsStateWithLifecycle(initialValue = null)
@@ -156,5 +164,20 @@ class MainNode(
             },
             modifier = Modifier.fillMaxSize(),
         )
+    }
+}
+
+@Composable
+private fun HandleLowBalance(
+    lowBalance: Boolean,
+    hostState: SnackbarHostState,
+    onDismiss: () -> Unit,
+) {
+    val message = stringResource(id = R.string.wallet_low_balance)
+    LaunchedEffect(lowBalance) {
+        if (lowBalance) {
+            hostState.showSnackbar(message)
+            onDismiss()
+        }
     }
 }
