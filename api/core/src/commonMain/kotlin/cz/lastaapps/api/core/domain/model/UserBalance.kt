@@ -17,11 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.api.agata.api
+package cz.lastaapps.api.core.domain.model
 
-import cz.lastaapps.core.domain.Outcome
-import io.ktor.client.HttpClient
+data class UserBalance(
+    val username: String,
+    val balance: Float,
+)
 
-expect class AgataWallet(httpClient: HttpClient) {
-    suspend fun getBalance(username: String, password: String): Outcome<Float>
-}
+fun UserBalance.formattedBalance() = String.format("%.2f Kč", balance)

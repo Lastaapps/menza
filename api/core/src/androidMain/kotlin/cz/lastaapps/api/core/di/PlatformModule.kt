@@ -20,15 +20,27 @@
 package cz.lastaapps.api.core.di
 
 import android.content.Context
+import androidx.datastore.preferences.preferencesDataStore
+import com.russhwolf.settings.ExperimentalSettingsApi
+import com.russhwolf.settings.ExperimentalSettingsImplementation
 import com.russhwolf.settings.SharedPreferencesSettings
+import com.russhwolf.settings.datastore.DataStoreSettings
+import cz.lastaapps.api.core.data.AndroidWalletCredentialsProvider
+import cz.lastaapps.api.core.data.SimpleProperties
+import cz.lastaapps.api.core.data.SimplePropertiesImpl
 import cz.lastaapps.api.core.data.ValiditySettings
+import cz.lastaapps.api.core.data.WalletCredentialsProvider
 import cz.lastaapps.core.util.datastructures.StateFlowSettings
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.scope.Scope
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 internal actual val platform: Module = module {
     single { createValiditySettings() }
+    single { SimplePropertiesSettings.create(get()) } bind SimpleProperties::class
+    singleOf(::AndroidWalletCredentialsProvider) bind WalletCredentialsProvider::class
 }
 
 private fun Scope.createValiditySettings() =
@@ -39,3 +51,11 @@ private fun Scope.createValiditySettings() =
             StateFlowSettings(it)
         },
     )
+
+private object SimplePropertiesSettings {
+    private val Context.store by preferencesDataStore("simple_properties")
+
+    @OptIn(ExperimentalSettingsApi::class, ExperimentalSettingsImplementation::class)
+    fun create(context: Context): SimpleProperties =
+        SimplePropertiesImpl(DataStoreSettings(context.store))
+}

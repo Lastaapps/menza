@@ -240,12 +240,18 @@
     <string name="rate_us_button_later">Později…</string>
     <string name="rate_us_button_dismiss">Nikdy!</string>
 
-    <string name="wallet_login">Klikni aby se přihlásit :3</string>
+    <string name="wallet_description">Stav konta</string>
+    <string name="wallet_login">Přihlásit</string>
+    <string name="wallet_logged_in_as">Přihlášen jako: %s</string>
+    <string name="wallet_logout">Odhlásit</string>
     <string name="wallet_update_error">Něco se nám pokakalo 💩</string>
     <string name="wallet_login_title">Přihlášení do Agáty</string>
     <string name="wallet_login_subtitle">Použij svoje ČVUT údaje</string>
     <string name="wallet_login_username">Uživatelské jmeno</string>
     <string name="wallet_login_password">Velmi tajné heslo</string>
+    <string name="wallet_login_password_policy_hint">Uložení hesla</string>
+    <string name="wallet_login_password_policy">Heslo je uložené zašifrované, pouze na tomto zařízení a je použito pouze v rámci zabezpečené komunikace.</string>
+    <string name="wallet_login_password_appeal">Jsi z VŠCHT nebo běžný občan? Kontaktuj vývojáře v nastavení a pomož přidat tvvoji metodu přihlášení!</string>
     <string name="wallet_login_cancel">Zrušit</string>
     <string name="wallet_login_save">Uložit</string>
 </resources>

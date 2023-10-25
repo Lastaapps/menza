@@ -20,6 +20,7 @@
 package cz.lastaapps.core.domain.error
 
 import cz.lastaapps.core.domain.error.CommonError.AppNotFound
+import cz.lastaapps.core.domain.error.CommonError.NotLoggedIn
 import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
 import cz.lastaapps.core.domain.error.NetworkError.ConnectionClosed
 import cz.lastaapps.core.domain.error.NetworkError.NoInternet
@@ -28,6 +29,7 @@ import cz.lastaapps.core.domain.error.NetworkError.Timeout
 
 val DomainError.shouldBeReported: Boolean
     get() = when (this) {
+        is ApiError.WalletError.TotallyBroken -> true
         is DomainError.Logic -> false
 
         is DomainError.Unknown -> true
@@ -50,6 +52,7 @@ val NetworkError.shouldBeReported: Boolean
 val CommonError.shouldBeReported: Boolean
     get() = when (this) {
         is WorkTimeout,
+        NotLoggedIn,
         is AppNotFound,
         -> false
     }

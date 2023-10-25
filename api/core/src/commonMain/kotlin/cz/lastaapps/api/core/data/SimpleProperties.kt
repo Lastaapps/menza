@@ -17,19 +17,32 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.domain.validity
+package cz.lastaapps.api.core.data
 
+import com.russhwolf.settings.ExperimentalSettingsApi
+import com.russhwolf.settings.coroutines.FlowSettings
+import kotlinx.coroutines.flow.Flow
+
+interface SimpleProperties {
+    suspend fun setBalance(balance: Float?)
+
+    fun getBalance(): Flow<Float?>
+}
+
+@OptIn(ExperimentalSettingsApi::class)
 @JvmInline
-value class ValidityKey private constructor(val name: String) {
+internal value class SimplePropertiesImpl(
+    private val properties: FlowSettings,
+) : SimpleProperties {
+    override suspend fun setBalance(balance: Float?) {
+        balance?.let { properties.putFloat(KEY_BALANCE, balance) } ?: run {
+            properties.remove(KEY_BALANCE)
+        }
+    }
+
+    override fun getBalance(): Flow<Float?> = properties.getFloatOrNullFlow(KEY_BALANCE)
 
     companion object {
-        fun agataToday(subsystemId: Int) = ValidityKey("agata_today_$subsystemId")
-        fun agataInfo(subsystemId: Int) = ValidityKey("agata_info_$subsystemId")
-        fun agataWeek(subsystemId: Int) = ValidityKey("agata_week_$subsystemId")
-        fun agataMenza() = ValidityKey("agata_menza")
-        fun strahov() = ValidityKey("strahov")
-        fun buffetDish() = ValidityKey("buffet_dish")
-
-        fun agataCtuBalance() = ValidityKey("balance_agata_ctu")
+        private const val KEY_BALANCE = "balance"
     }
 }

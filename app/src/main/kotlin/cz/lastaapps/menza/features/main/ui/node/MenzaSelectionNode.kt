@@ -21,14 +21,22 @@ package cz.lastaapps.menza.features.main.ui.node
 
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue.Closed
 import androidx.compose.material3.DrawerValue.Open
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
+import cz.lastaapps.menza.features.main.ui.components.AgataWalletButton
+import cz.lastaapps.menza.features.main.ui.screen.AgataLoginDialog
 import cz.lastaapps.menza.features.main.ui.screen.MenzaSelectionScreen
 import cz.lastaapps.menza.ui.util.nodeViewModel
 import kotlinx.coroutines.launch
@@ -37,11 +45,29 @@ class MenzaSelectionNode(
     buildContext: BuildContext,
     private val onEdit: () -> Unit,
     private val updateDrawer: () -> DrawerState?,
+    private val snackbarHostState: SnackbarHostState,
 ) : Node(buildContext) {
 
     @Composable
     override fun View(modifier: Modifier) {
         val scope = rememberCoroutineScope()
+
+        var balanceLoginDialogShown by rememberSaveable { mutableStateOf(false) }
+
+        val accountBalance: @Composable () -> Unit = {
+            AgataWalletButton(
+                viewModel = nodeViewModel(),
+                snackbarHostState = snackbarHostState,
+                onShowLoginDialog = { balanceLoginDialogShown = true },
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+
+        if (balanceLoginDialogShown) {
+            AgataLoginDialog(viewModel = nodeViewModel()) {
+                balanceLoginDialogShown = false
+            }
+        }
 
         MenzaSelectionScreen(
             onEdit = onEdit,
@@ -55,6 +81,7 @@ class MenzaSelectionNode(
                 }
             },
             viewModel = nodeViewModel(),
+            accountBalance = accountBalance,
             modifier = modifier.fillMaxSize(),
         )
     }

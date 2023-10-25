@@ -23,6 +23,7 @@
     <string name="error_network_no_internet">No internet 🙎‍♀️</string>
     <string name="error_network_timeout">Timeout 🌧️</string>
     <string name="error_network_serialization">Failed to process API content 💀</string>
+    <string name="error_not_logged_in">You are not logged in 🧐</string>
     <string name="error_parsing_date_range">Failed to parse valid dates ⌛</string>
     <string name="error_parsing_day">Failed to parse some day dishes ⏰</string>
     <string name="error_parsing_dish">Failed to parse a dish 🍲</string>
@@ -38,4 +39,6 @@
     <string name="error_no_app_browser">No browser installed</string>
     <string name="error_no_app_telegram">Telegram not installed</string>
     <string name="error_no_app_facebook">Facebook not installed</string>
+    <string name="error_wallet_login_failed_critical">App login process does not work anymore. Contact the developer, please. 🙏</string>
+    <string name="error_wallet_login_failed_credentials">Invalid credentials 🤨</string>
 </resources>

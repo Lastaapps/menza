@@ -23,6 +23,7 @@
     <string name="error_network_no_internet">Internet nedorazil 🙎‍♀️</string>
     <string name="error_network_timeout">Limit spojení vypršel 🌧️</string>
     <string name="error_network_serialization">Menza API poslala neplatná data 💀</string>
+    <string name="error_not_logged_in">A co přihlášení? 🧐</string>
     <string name="error_parsing_date_range">Nepodařilo se ověřit časový rozsah ⌛</string>
     <string name="error_parsing_day">Některé dny se nepodařilo načíst ⏰</string>
     <string name="error_parsing_dish">Některá jídla nebyla správně načtena 🍲</string>
@@ -38,4 +39,6 @@
     <string name="error_no_app_browser">Nemáte nainstalován prohlížeč</string>
     <string name="error_no_app_telegram">Telegram není nainstalován</string>
     <string name="error_no_app_facebook">Facebook není nainstalován</string>
+    <string name="error_wallet_login_failed_critical">Přihlašení přestalo fungovat. Prosím, kontaktujte vývojáře. 🙏</string>
+    <string name="error_wallet_login_failed_credentials">Neplatné údaje 🤨</string>
 </resources>

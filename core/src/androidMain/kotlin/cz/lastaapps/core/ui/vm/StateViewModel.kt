@@ -43,9 +43,9 @@ abstract class StateViewModel<State : VMState>(
         @Composable
         get() = myState.collectAsStateWithLifecycle()
 
-    suspend fun <R> withLoading(
+    protected suspend fun <R> withLoading(
         loading: State.(isLoading: Boolean) -> State,
-        block: suspend () -> R,
+        block: suspend (State) -> R,
     ) = resource(
         acquire = { updateState { loading(true) } },
         release = { _, _ -> updateState { loading(false) } },
@@ -53,7 +53,7 @@ abstract class StateViewModel<State : VMState>(
         .let {
             resourceScope {
                 it.bind()
-                block()
+                block(lastState())
             }
         }
 }

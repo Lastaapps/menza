@@ -24,6 +24,8 @@ import cz.lastaapps.menza.features.main.domain.SelectedMenzaRepo
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.main.domain.usecase.IsFlipUC
 import cz.lastaapps.menza.features.main.domain.usecase.SelectMenzaUC
+import cz.lastaapps.menza.features.main.ui.vm.AgataWalletLoginViewModel
+import cz.lastaapps.menza.features.main.ui.vm.AgataWalletViewModel
 import cz.lastaapps.menza.features.main.ui.vm.MainViewModel
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -37,6 +39,8 @@ val mainModule = module {
     singleOf(::SelectedMenzaRepoImpl) bind SelectedMenzaRepo::class
     viewModelOf(::MenzaSelectionViewModel)
     viewModelOf(::MainViewModel)
+    viewModelOf(::AgataWalletLoginViewModel)
+    viewModelOf(::AgataWalletViewModel)
     factoryOf(::GetSelectedMenzaUC)
     factoryOf(::SelectMenzaUC)
     factoryOf(::IsFlipUC)

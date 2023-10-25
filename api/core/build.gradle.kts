@@ -32,4 +32,7 @@ dependencies {
     commonMainImplementation(libs.kotlinx.atomicfu)
     commonMainImplementation(libs.sqldelight.runtime)
     commonMainImplementation(libs.bundles.russhwolf.settings)
+
+    androidMainImplementation(libs.androidx.security)
+    androidMainImplementation(libs.androidx.datastore)
 }

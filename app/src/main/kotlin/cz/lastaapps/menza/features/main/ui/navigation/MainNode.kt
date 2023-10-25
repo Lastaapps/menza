@@ -76,12 +76,13 @@ class MainNode(
 ) : ParentNode<MainNavType>(backStack, buildContext) {
 
     private var currentDrawerState: DrawerState? = null
+    private val snackbarHostState = SnackbarHostState()
 
     private val onOsturak = { backStack.push(OsturakNav) }
 
     override fun resolve(interactionTarget: MainNavType, buildContext: BuildContext): Node =
         when (interactionTarget) {
-            DrawerContent -> DrawerNode(buildContext, ::currentDrawerState)
+            DrawerContent -> DrawerNode(buildContext, ::currentDrawerState, snackbarHostState)
 
             TodayNav -> TodayNode(
                 buildContext = buildContext,
@@ -123,8 +124,6 @@ class MainNode(
             currentDrawerState = drawerState
         }
 
-        val hostState = remember { SnackbarHostState() }
-
         val active by remember(backStack) {
             backStack.active()
         }.collectAsStateWithLifecycle(initialValue = null)
@@ -133,7 +132,7 @@ class MainNode(
             currentDest = active,
             drawerState = drawerState,
             settingsEverOpened = state.settingsViewed,
-            hostState = hostState,
+            hostState = snackbarHostState,
             selectedMenza = state.selectedMenza,
             isFlip = state.isFlip && LocalMayBeFlipCover.current,
             onNavItemTopBar = { backStack.push(it) },

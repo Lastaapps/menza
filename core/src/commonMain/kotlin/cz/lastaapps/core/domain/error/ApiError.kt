@@ -34,4 +34,9 @@ sealed interface ApiError : DomainError.Logic {
         @JvmInline
         value class Problem(val errors: Nel<DomainError>) : SyncError
     }
+
+    sealed interface WalletError : ApiError {
+        data object TotallyBroken : WalletError
+        data object InvalidCredentials : WalletError
+    }
 }

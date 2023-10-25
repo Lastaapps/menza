@@ -17,23 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.main.ui.layout
+package cz.lastaapps.api.core.data.model
 
-import androidx.annotation.StringRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.DinnerDining
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
-import cz.lastaapps.menza.R
+import androidx.annotation.Keep
+import cz.lastaapps.api.core.domain.model.BalanceAccountType
 
-internal enum class NavItem(
-    @StringRes val label: Int,
-    val icon: ImageVector,
-) {
-    Today(R.string.nav_today, Icons.Filled.DinnerDining),
-    Week(R.string.nav_week, Icons.AutoMirrored.Filled.MenuBook),
-    Info(R.string.nav_info, Icons.Filled.Info),
-    Settings(R.string.nav_settings, Icons.Filled.Settings),
+@Keep
+enum class BalanceAccountTypeSett {
+    CTU,
+}
+
+fun BalanceAccountTypeSett.toDomain() = when (this) {
+    BalanceAccountTypeSett.CTU -> BalanceAccountType.CTU
+}
+
+fun BalanceAccountType.toSett() = when (this) {
+    BalanceAccountType.CTU -> BalanceAccountTypeSett.CTU
 }

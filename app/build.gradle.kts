@@ -46,9 +46,13 @@ android {
         }
     }
 
-    // Remove some conflict between atomic-fu and datetime
     packaging {
+        // Remove some conflict between atomic-fu and datetime
         resources.pickFirsts.add("META-INF/versions/9/previous-compilation-data.bin")
+
+        // Remove some crap skrape-it dependencies
+        resources.pickFirsts.add("META-INF/DEPENDENCIES")
+        resources.pickFirsts.add("mozilla/public-suffix-list.txt")
     }
 }
 
@@ -66,7 +70,6 @@ dependencies {
 
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.emoji2.bundled)
-    implementation(libs.androidx.security)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.vectorDrawables)

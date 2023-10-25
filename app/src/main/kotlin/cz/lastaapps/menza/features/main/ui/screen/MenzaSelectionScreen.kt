@@ -57,7 +57,6 @@ import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionState
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionViewModel
-import cz.lastaapps.menza.ui.components.AgataWalletButton
 import cz.lastaapps.menza.ui.components.MenzaLetter
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
@@ -67,6 +66,7 @@ internal fun MenzaSelectionScreen(
     onEdit: () -> Unit,
     onMenzaSelected: () -> Unit,
     viewModel: MenzaSelectionViewModel,
+    accountBalance: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     MenzaSelectionListEffects(viewModel)
@@ -79,6 +79,7 @@ internal fun MenzaSelectionScreen(
             viewModel.selectMenza(it)
             onMenzaSelected()
         },
+        accountBalance = accountBalance,
         modifier = modifier,
     )
 }
@@ -95,6 +96,7 @@ private fun MenzaSelectionListContent(
     state: MenzaSelectionState,
     onEdit: () -> Unit,
     onMenzaSelected: (Menza) -> Unit,
+    accountBalance: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     lazyState: LazyListState = rememberLazyListState(),
 ) {
@@ -114,6 +116,7 @@ private fun MenzaSelectionListContent(
             onMenzaSelected = onMenzaSelected,
             onEdit = onEdit,
             lazyState = lazyState,
+            accountBalance = accountBalance,
             modifier = Modifier
                 .fillMaxWidth()
                 .animateContentSize(),
@@ -129,6 +132,7 @@ private fun MenzaList(
     onMenzaSelected: (Menza) -> Unit,
     onEdit: () -> Unit,
     lazyState: LazyListState,
+    accountBalance: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -152,7 +156,7 @@ private fun MenzaList(
         }
 
         item {
-            AgataWalletButton()
+            accountBalance()
         }
 
         items(menzaList) { menza ->

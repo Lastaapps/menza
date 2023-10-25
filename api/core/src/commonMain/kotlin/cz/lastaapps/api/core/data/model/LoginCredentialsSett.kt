@@ -17,23 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.main.ui.layout
+package cz.lastaapps.api.core.data.model
 
-import androidx.annotation.StringRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.DinnerDining
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
-import cz.lastaapps.menza.R
-
-internal enum class NavItem(
-    @StringRes val label: Int,
-    val icon: ImageVector,
-) {
-    Today(R.string.nav_today, Icons.Filled.DinnerDining),
-    Week(R.string.nav_week, Icons.AutoMirrored.Filled.MenuBook),
-    Info(R.string.nav_info, Icons.Filled.Info),
-    Settings(R.string.nav_settings, Icons.Filled.Settings),
-}
+data class LoginCredentialsSett(
+    val username: String,
+    val password: String,
+    val type: BalanceAccountTypeSett,
+)

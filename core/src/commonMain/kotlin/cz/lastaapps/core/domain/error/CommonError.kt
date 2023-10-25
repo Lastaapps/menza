@@ -22,6 +22,8 @@ package cz.lastaapps.core.domain.error
 sealed interface CommonError : DomainError.Runtime {
     data class WorkTimeout(override val throwable: Throwable) : CommonError
 
+    data object NotLoggedIn : CommonError
+
     sealed interface AppNotFound : CommonError {
         data object PhoneCall : AppNotFound
         data object Email : AppNotFound

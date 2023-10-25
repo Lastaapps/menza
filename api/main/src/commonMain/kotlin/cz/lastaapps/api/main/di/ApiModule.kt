@@ -24,6 +24,8 @@ import cz.lastaapps.api.core.di.apiCoreModule
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.main.data.MenzaMasterRepoImpl
+import cz.lastaapps.api.main.data.WalletMasterRepository
+import cz.lastaapps.api.main.data.WalletMasterRepositoryImpl
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
 import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
@@ -34,8 +36,13 @@ import cz.lastaapps.api.main.domain.usecase.SyncInfoUC
 import cz.lastaapps.api.main.domain.usecase.SyncMenzaListUC
 import cz.lastaapps.api.main.domain.usecase.SyncTodayDishListUC
 import cz.lastaapps.api.main.domain.usecase.SyncWeekDishListUC
+import cz.lastaapps.api.main.domain.usecase.wallet.WalletGetBalanceUC
+import cz.lastaapps.api.main.domain.usecase.wallet.WalletLoginUC
+import cz.lastaapps.api.main.domain.usecase.wallet.WalletLogoutUC
+import cz.lastaapps.api.main.domain.usecase.wallet.WalletRefreshUC
 import cz.lastaapps.menza.api.agata.di.apiAgataModule
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.bind
@@ -50,6 +57,7 @@ val apiModule = module {
 
     val rootName = named<MenzaMasterRepoImpl>()
     single(rootName) { MenzaMasterRepoImpl() } bind MenzaRepo::class
+    singleOf(::WalletMasterRepositoryImpl) bind WalletMasterRepository::class
 
     factory { GetMenzaListUC(get(), get(rootName)) }
     factory { SyncMenzaListUC(get(), get(rootName)) }
@@ -61,6 +69,10 @@ val apiModule = module {
     factoryOf(::GetWeekDishListUC)
     factoryOf(::SyncWeekDishListUC)
     factoryOf(::OpenMenuUC)
+    factoryOf(::WalletGetBalanceUC)
+    factoryOf(::WalletLoginUC)
+    factoryOf(::WalletLogoutUC)
+    factoryOf(::WalletRefreshUC)
 }
 
 private fun Scope.MenzaMasterRepoImpl() =

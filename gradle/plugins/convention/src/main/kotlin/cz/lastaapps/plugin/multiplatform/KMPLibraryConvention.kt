@@ -41,149 +41,153 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("unused")
-class KMPLibraryConvention : BasePlugin({
-    pluginManager {
-        alias(libs.plugins.kotlin.multiplatform)
-        alias(libs.plugins.kotlin.serialization)
-        alias(libs.plugins.android.library)
-    }
+class KMPLibraryConvention : BasePlugin(
+    {
+        pluginManager {
+            alias(libs.plugins.kotlin.multiplatform)
+            alias(libs.plugins.kotlin.serialization)
+            alias(libs.plugins.android.library)
+        }
 
-    apply<JavaConvention>()
-    apply<KotlinBaseConvention>()
-    apply<AndroidLibraryConvention>()
-    apply<DetektConvention>()
-    apply<ArrowKtConvention>()
+        apply<JavaConvention>()
+        apply<KotlinBaseConvention>()
+        apply<AndroidLibraryConvention>()
+        apply<DetektConvention>()
+        apply<ArrowKtConvention>()
 
-    extensions.configure<LibraryExtension> {
+        extensions.configure<LibraryExtension> {
 
-        sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+            sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
-        configureKotlinAndroid(this)
+            configureKotlinAndroid(this)
 //        configureComposeCompiler(this)
 
-        // KMP plugin is fucking broken
-        // https://issuetracker.google.com/issues/155536223#comment7
-        val composeCompilerDependency = libs.androidx.compose.compiler
-        dependencies {
-            val namePrefixAndroid = "kotlinCompilerPluginClasspathAndroid"
-            val namePrefixCommon = "kotlinCompilerPluginClasspathCommon"
-            configurations.configureEach {
-                if (name.startsWith(namePrefixAndroid) || name.startsWith(namePrefixCommon)) {
-                    add(name, composeCompilerDependency)
+            // KMP plugin is fucking broken
+            // https://issuetracker.google.com/issues/155536223#comment7
+            val composeCompilerDependency = libs.androidx.compose.compiler
+            dependencies {
+                val namePrefixAndroid = "kotlinCompilerPluginClasspathAndroid"
+                val namePrefixCommon = "kotlinCompilerPluginClasspathCommon"
+                configurations.configureEach {
+                    if (name.startsWith(namePrefixAndroid) || name.startsWith(namePrefixCommon)) {
+                        add(name, composeCompilerDependency)
+                    }
                 }
             }
         }
-    }
 
-    tasks.withType<Test> {
-        useJUnitPlatform()
-    }
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            languageVersion = libs.versions.kotlin.language.get()
-            apiVersion = libs.versions.kotlin.api.get()
+        tasks.withType<Test> {
+            useJUnitPlatform()
         }
-    }
-
-    multiplatform {
-
-        sourceSets.all {
-            languageSettings.apply {
-                optIn("kotlin.RequiresOptIn")
-                optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+        tasks.withType<KotlinCompile> {
+            kotlinOptions {
                 languageVersion = libs.versions.kotlin.language.get()
                 apiVersion = libs.versions.kotlin.api.get()
             }
         }
 
-        targets.all {
-            compilations.all { }
-        }
+        multiplatform {
 
-        androidTarget {
-            compilations.all {
-                kotlinOptions { }
+            sourceSets.all {
+                languageSettings.apply {
+                    optIn("kotlin.RequiresOptIn")
+                    optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                    languageVersion = libs.versions.kotlin.language.get()
+                    apiVersion = libs.versions.kotlin.api.get()
+                }
             }
-        }
-        jvm {
-            compilations.all {
-                kotlinOptions { }
-            }
-        }
 
-        sourceSets.apply {
-            getByName("commonMain") {
-                dependencies {
-                    implementation(project.dependencies.platform(libs.kotlin.bom))
-                    implementation(libs.kotlin.coroutines.common)
-                    implementation(libs.kotlinx.dateTime)
-                    implementation(libs.kotlinx.collection)
-                    implementation(libs.kotlinx.serializationJson)
-                    implementation(libs.koin.core)
+            targets.all {
+                compilations.all { }
+            }
+
+            androidTarget {
+                compilations.all {
+                    kotlinOptions { }
+                }
+            }
+            jvm {
+                compilations.all {
+                    kotlinOptions { }
+                }
+            }
+
+            sourceSets.apply {
+                getByName("commonMain") {
+                    dependencies {
+                        implementation(project.dependencies.platform(libs.kotlin.bom))
+                        implementation(libs.kotlin.coroutines.common)
+                        implementation(libs.kotlinx.dateTime)
+                        implementation(libs.kotlinx.collection)
+                        implementation(libs.kotlinx.serializationJson)
+                        implementation(libs.koin.core)
 //                    implementation(libs.koin.annotations)
-                    implementation(libs.kmLogging)
-                }
-            }
+                        implementation(libs.kmLogging)
 
-            getByName("commonTest") {
-                dependencies {
-                    implementation(libs.kotlin.test.annotation)
-                    implementation(libs.kotlin.test.common)
-                    implementation(libs.kotlin.test.core)
-                    implementation(libs.kotlin.test.jUnit5)
-                    implementation(libs.kotest.assertion)
-                    implementation(libs.kotlin.coroutines.test)
+                        implementation(libs.androidx.annotation)
+                    }
+                }
+
+                getByName("commonTest") {
+                    dependencies {
+                        implementation(libs.kotlin.test.annotation)
+                        implementation(libs.kotlin.test.common)
+                        implementation(libs.kotlin.test.core)
+                        implementation(libs.kotlin.test.jUnit5)
+                        implementation(libs.kotest.assertion)
+                        implementation(libs.kotlin.coroutines.test)
 //                    implementation(libs.koin.test.jUnit5)
+                    }
                 }
-            }
 
-            getByName("androidMain") {
-                dependencies {
-                     implementation(libs.koin.android.core)
+                getByName("androidMain") {
+                    dependencies {
+                        implementation(libs.koin.android.core)
+                    }
                 }
-            }
 
-            getByName("androidUnitTest") {
-                dependencies {
-                    implementation(libs.kotlin.coroutines.test)
-                    implementation(libs.kotest.jUnit5runner)
-                    implementation(project.dependencies.platform(libs.junit5.bom))
-                    implementation(libs.junit5.jupiter.api)
-                    implementation(libs.junit5.jupiter.runtime)
+                getByName("androidUnitTest") {
+                    dependencies {
+                        implementation(libs.kotlin.coroutines.test)
+                        implementation(libs.kotest.jUnit5runner)
+                        implementation(project.dependencies.platform(libs.junit5.bom))
+                        implementation(libs.junit5.jupiter.api)
+                        implementation(libs.junit5.jupiter.runtime)
+                    }
                 }
-            }
 
-            getByName("jvmMain") {
-                dependencies {
-                    implementation(libs.logback.core)
-                    implementation(libs.logback.classic)
-                    implementation(libs.slf4j)
+                getByName("jvmMain") {
+                    dependencies {
+                        implementation(libs.logback.core)
+                        implementation(libs.logback.classic)
+                        implementation(libs.slf4j)
+                    }
                 }
-            }
 
-            getByName("jvmTest") {
-                dependencies {
-                    implementation(libs.kotlin.coroutines.test)
-                    implementation(libs.kotest.jUnit5runner)
-                    implementation(project.dependencies.platform(libs.junit5.bom))
-                    implementation(libs.junit5.jupiter.api)
-                    implementation(libs.junit5.jupiter.runtime)
+                getByName("jvmTest") {
+                    dependencies {
+                        implementation(libs.kotlin.coroutines.test)
+                        implementation(libs.kotest.jUnit5runner)
+                        implementation(project.dependencies.platform(libs.junit5.bom))
+                        implementation(libs.junit5.jupiter.api)
+                        implementation(libs.junit5.jupiter.runtime)
+                    }
                 }
             }
         }
-    }
 
-    dependencies {
-        try {
-            add("kspCommonMainMetadata", libs.koin.annotations.compiler)
-            add("kspAndroid", libs.koin.annotations.compiler)
-            add("kspJvm", libs.koin.annotations.compiler)
-        } catch (_: Exception) {
+        dependencies {
+            try {
+                add("kspCommonMainMetadata", libs.koin.annotations.compiler)
+                add("kspAndroid", libs.koin.annotations.compiler)
+                add("kspJvm", libs.koin.annotations.compiler)
+            } catch (_: Exception) {
+            }
+
+            commonImplementation(project.dependencies.platform(libs.arrowkt.bom))
+            commonImplementation(libs.arrowkt.core)
+            commonImplementation(libs.arrowkt.fx.coroutines)
+            commonImplementation(libs.arrowkt.fx.stm)
         }
-
-        commonImplementation(project.dependencies.platform(libs.arrowkt.bom))
-        commonImplementation(libs.arrowkt.core)
-        commonImplementation(libs.arrowkt.fx.coroutines)
-        commonImplementation(libs.arrowkt.fx.stm)
-    }
-})
+    },
+)

@@ -30,13 +30,14 @@ dependencies {
     commonMainImplementation(projects.core)
     commonMainImplementation(projects.api.core)
 
+    // skrape-it
+    // androidMainImplementation(projects.htmlParser)
+    androidMainImplementation("it.skrape:skrapeit:1.2.2")
+
     commonMainImplementation(libs.ktor.client.core)
     commonMainImplementation(libs.ktor.client.contentNegotiation)
     commonMainImplementation(libs.ktor.client.logging)
     commonMainImplementation(libs.ktor.client.serialization)
-
-    commonMainImplementation(projects.entity)
-    commonMainImplementation(projects.htmlParser)
 
     commonMainImplementation(libs.bundles.russhwolf.settings)
 }

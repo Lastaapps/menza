@@ -30,6 +30,9 @@ import cz.lastaapps.core.domain.error.ApiError.SyncError
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Closed
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Problem
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Unavailable
+import cz.lastaapps.core.domain.error.ApiError.WalletError
+import cz.lastaapps.core.domain.error.ApiError.WalletError.InvalidCredentials
+import cz.lastaapps.core.domain.error.ApiError.WalletError.TotallyBroken
 import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
 import cz.lastaapps.core.domain.error.CommonError
 import cz.lastaapps.core.domain.error.CommonError.AppNotFound
@@ -40,6 +43,7 @@ import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Link
 import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Map
 import cz.lastaapps.core.domain.error.CommonError.AppNotFound.PhoneCall
 import cz.lastaapps.core.domain.error.CommonError.AppNotFound.Telegram
+import cz.lastaapps.core.domain.error.CommonError.NotLoggedIn
 import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.DomainError.Unknown
@@ -100,11 +104,18 @@ val ApiError.text: AppText
                 Unavailable -> E(R.string.error_api_module_unavailable)
                 Closed -> E(R.string.error_api_menza_cloned)
             }
+
+        is WalletError ->
+            when (this) {
+                TotallyBroken -> E(R.string.error_wallet_login_failed_critical)
+                InvalidCredentials -> E(R.string.error_wallet_login_failed_credentials)
+            }
     }
 
 val CommonError.text: AppText
     get() = when (this) {
         is WorkTimeout -> E(R.string.error_network_timeout)
+        is NotLoggedIn -> E(R.string.error_not_logged_in)
         is AppNotFound -> when (this) {
             AddContact -> E(R.string.error_no_app_contacts)
             Email -> E(R.string.error_no_app_email)

@@ -35,5 +35,6 @@ object Padding {
         val Screen = MidSmall
         val Dialog = Medium
         val ScrollBottomSpace = 64.dp
+        val Icon = 24.dp
     }
 }

@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.main.ui.node
 
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.components.backstack.BackStack
@@ -43,6 +44,7 @@ internal enum class DrawerNavType {
 internal class DrawerNode(
     buildContext: BuildContext,
     private val drawableStateProvider: () -> DrawerState?,
+    private val snackbarHostState: SnackbarHostState,
     private val backstack: BackStack<DrawerNavType> = BackStack(
         model = BackStackModel(
             initialTargets = listOf(MENZA_LIST_NAV),
@@ -58,6 +60,7 @@ internal class DrawerNode(
                 buildContext,
                 onEdit = { backstack.push(EDIT_NAV) },
                 updateDrawer = drawableStateProvider,
+                snackbarHostState = snackbarHostState,
             )
 
             EDIT_NAV -> ReorderMenzaNode(buildContext, backstack::pop)
