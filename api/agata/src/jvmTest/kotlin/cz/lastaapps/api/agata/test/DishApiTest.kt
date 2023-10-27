@@ -20,9 +20,9 @@
 package cz.lastaapps.api.agata.test
 
 import arrow.core.Either.Right
-import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import cz.lastaapps.menza.api.agata.api.DishApiImpl
 import cz.lastaapps.menza.api.agata.data.createAgataClient
+import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.model.dto.DishDto
 import cz.lastaapps.menza.api.agata.data.model.dto.PictogramDto
 import cz.lastaapps.menza.api.agata.data.model.dto.StrahovDto
@@ -35,12 +35,9 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
-import org.lighthousegames.logging.KmLogging
 
 class DishApiTest : StringSpec(
     {
-
-        KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
 
         fun client() = createAgataClient(
             HttpClient() {
@@ -48,6 +45,7 @@ class DishApiTest : StringSpec(
                     level = BODY
                 }
             },
+            AgataBEConfig.prod,
         )
 
         fun api() = DishApiImpl(client())

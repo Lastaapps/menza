@@ -20,9 +20,9 @@
 package cz.lastaapps.api.agata.test
 
 import arrow.core.Either.Right
-import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import cz.lastaapps.menza.api.agata.api.SubsystemApiImpl
 import cz.lastaapps.menza.api.agata.data.createAgataClient
+import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.model.dto.AddressDto
 import cz.lastaapps.menza.api.agata.data.model.dto.ContactDto
 import cz.lastaapps.menza.api.agata.data.model.dto.InfoDto
@@ -34,12 +34,9 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
-import org.lighthousegames.logging.KmLogging
 
 class SubsystemApiTest : StringSpec(
     {
-
-        KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
 
         fun client() = createAgataClient(
             HttpClient() {
@@ -47,6 +44,7 @@ class SubsystemApiTest : StringSpec(
                     level = BODY
                 }
             },
+            AgataBEConfig.prod,
         )
 
         fun api() = SubsystemApiImpl(client())

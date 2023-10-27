@@ -25,16 +25,16 @@ import agata.StrahovEntiy
 import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.api.agata.AgataDatabase
+import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
-import org.lighthousegames.logging.logging
 
 @JvmInline
 internal value class AgataDatabaseSqlDriver(val sqlDriver: SqlDriver)
 
 internal object AgataDatabaseFactory {
 
-    private val log = logging()
+    private val log = localLogger()
 
     fun createDatabase(
         driver: AgataDatabaseSqlDriver,

@@ -28,13 +28,13 @@ import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.starting.domain.model.DownloadProgress
 import cz.lastaapps.menza.features.starting.domain.usecase.CheckDataDownloadNeededUC
 import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import org.lighthousegames.logging.logging
 
 internal class DownloadViewModel(
     private val checkDownloadNeeded: CheckDataDownloadNeededUC,
@@ -44,7 +44,7 @@ internal class DownloadViewModel(
     override var hasAppeared: Boolean = false
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     override fun onAppeared() = launchVM {

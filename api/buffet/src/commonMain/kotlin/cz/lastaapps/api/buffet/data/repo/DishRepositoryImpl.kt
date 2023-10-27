@@ -21,6 +21,7 @@ package cz.lastaapps.api.buffet.data.repo
 
 import arrow.core.Some
 import buffet.DishEntity
+import co.touchlab.kermit.Logger
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import cz.lastaapps.api.buffet.BuffetDatabase
@@ -44,6 +45,7 @@ import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.domain.OutcomeIor
 import cz.lastaapps.core.util.extensions.CET
 import cz.lastaapps.core.util.extensions.findDayOfWeek
+import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -59,7 +61,7 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import org.lighthousegames.logging.logging
+
 
 internal class DishLogicImpl(
     private val api: BuffetApi,
@@ -69,7 +71,7 @@ internal class DishLogicImpl(
     private val checker: ValidityChecker,
 ) {
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     private val validFrom = clock.now()
@@ -133,7 +135,7 @@ internal class WeekDishRepository(
     private val type: BuffetType,
     private val logic: DishLogicImpl,
 ) : WeekDishRepo {
-    private val log = logging(this::class.simpleName + "($type)")
+    private val log = Logger.withTag(this::class.simpleName + "($type)")
     override fun getData(): Flow<ImmutableList<WeekDayDish>> = logic.getDataWeek(type)
         .onStart { log.i { "Starting collection" } }
         .onCompletion { log.i { "Completed collection" } }
@@ -148,7 +150,7 @@ internal class TodayDishRepository(
     private val type: BuffetType,
     private val logic: DishLogicImpl,
 ) : TodayDishRepo {
-    private val log = logging(this::class.simpleName + "($type)")
+    private val log = Logger.withTag(this::class.simpleName + "($type)")
 
     override fun getData(): Flow<ImmutableList<DishCategory>> = logic.getDataToday(type)
         .onStart { log.i { "Starting collection" } }

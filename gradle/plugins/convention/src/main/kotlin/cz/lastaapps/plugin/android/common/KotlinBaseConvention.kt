@@ -32,38 +32,40 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-class KotlinBaseConvention : BasePlugin({
+class KotlinBaseConvention : BasePlugin(
+    {
 
-    pluginManager {
-        alias(libs.plugins.kotlin.serialization)
-    }
-
-    apply<CoroutinesConvention>()
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    android { }
-
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            languageVersion = libs.versions.kotlin.language.get()
-            apiVersion = libs.versions.kotlin.api.get()
-
-            freeCompilerArgs += listOf(
-                "-opt-in=kotlin.ExperimentalStdlibApi",
-                "-opt-in=kotlin.time.ExperimentalTime",
-                "-Xcontext-receivers",
-            )
+        pluginManager {
+            alias(libs.plugins.kotlin.serialization)
         }
-    }
 
-    dependencies {
-        implementation(libs.kotlinx.dateTime)
-        implementation(libs.kotlinx.collection)
-        implementation(libs.kmLogging)
-        implementation(libs.fluidLocale)
-    }
-})
+        apply<CoroutinesConvention>()
+
+        java {
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
+        }
+
+        android { }
+
+        tasks.withType<KotlinCompile> {
+            kotlinOptions {
+                languageVersion = libs.versions.kotlin.language.get()
+                apiVersion = libs.versions.kotlin.api.get()
+
+                freeCompilerArgs += listOf(
+                    "-opt-in=kotlin.ExperimentalStdlibApi",
+                    "-opt-in=kotlin.time.ExperimentalTime",
+                    "-Xcontext-receivers",
+                )
+            }
+        }
+
+        dependencies {
+            implementation(libs.kotlinx.dateTime)
+            implementation(libs.kotlinx.collection)
+            implementation(libs.kermit)
+            implementation(libs.fluidLocale)
+        }
+    },
+)

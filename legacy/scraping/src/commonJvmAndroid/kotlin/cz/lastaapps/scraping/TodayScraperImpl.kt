@@ -37,11 +37,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import org.lighthousegames.logging.logging
 
 object TodayScraperImpl : TodayScraper {
 
-    private val log = logging()
+    private val log = Logger.withTag(this::class.simpleName!!)
 
     override suspend fun createRequest(menzaId: MenzaId) =
         agataClient.get("index.php?lang=cs&clPodsystem=${menzaId.id}")

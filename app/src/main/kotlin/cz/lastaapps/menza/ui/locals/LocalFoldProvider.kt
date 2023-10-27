@@ -28,14 +28,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
+import co.touchlab.kermit.Logger
 import cz.lastaapps.menza.ui.locals.FoldingClass.NotSupported
 import cz.lastaapps.menza.ui.locals.FoldingClass.Supported
 import cz.lastaapps.menza.ui.locals.FoldingClass.Unknown
-import org.lighthousegames.logging.logging
 
 val LocalFoldProvider = compositionLocalOf<FoldingClass> { Unknown }
 
-private val foldingLog = logging(FoldingClass::class.simpleName)
+private val foldingLog = Logger.withTag(FoldingClass::class.simpleName!!)
 sealed class FoldingClass private constructor() {
     class Supported(val foldingFeature: FoldingFeature) : FoldingClass()
     data object NotSupported : FoldingClass()

@@ -25,6 +25,7 @@ import agata.PictogramEntity
 import agata.ServingPlaceEntity
 import arrow.core.Tuple4
 import arrow.core.rightIor
+import co.touchlab.kermit.Logger
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOne
@@ -59,7 +60,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import org.lighthousegames.logging.logging
 
 internal class TodayDishSubsystemRepoImpl(
     private val subsystemId: Int,
@@ -72,7 +72,7 @@ internal class TodayDishSubsystemRepoImpl(
     hashStore: HashStore,
 ) : TodayDishRepo {
 
-    private val log = logging(this::class.simpleName + "($subsystemId)")
+    private val log = Logger.withTag(this::class.simpleName + "($subsystemId)")
 
     private val validityKey = ValidityKey.agataToday(subsystemId)
     private val isValidFlow = checker.isFromToday(validityKey)

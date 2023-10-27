@@ -20,7 +20,6 @@
 package cz.lastaapps.api.agata.test
 
 import arrow.core.Either.Right
-import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import cz.lastaapps.menza.api.agata.api.CafeteriaApiImpl
 import cz.lastaapps.menza.api.agata.data.createAgataClient
 import cz.lastaapps.menza.api.agata.data.model.dto.DishTypeDto
@@ -31,12 +30,9 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
-import org.lighthousegames.logging.KmLogging
 
 class CafeteriaTest : StringSpec(
     {
-
-        KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
 
         fun client() = createAgataClient(
             HttpClient() {

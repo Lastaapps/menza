@@ -22,15 +22,13 @@ package cz.lastaapps.menza.ui.util
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.NonRestartableComposable
-import androidx.compose.runtime.ExplicitGroupsComposable
-import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewModelScope
 import com.bumble.appyx.navigation.node.Node
-import cz.lastaapps.menza.features.today.ui.navigation.TodayNode
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.ui.locals.koinActivityViewModel
 import kotlin.reflect.KClass
 import kotlin.time.Duration.Companion.seconds
@@ -44,7 +42,6 @@ import org.koin.compose.LocalKoinScope
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
 import org.koin.core.scope.Scope
-import org.lighthousegames.logging.logging
 
 /**
  * Uses counted references to store viewModels and clear them when no longer used
@@ -141,7 +138,7 @@ class NodeViewModel : ViewModel() {
     }
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
         private val CLEANUP_DELAY = 8.seconds
     }
 }

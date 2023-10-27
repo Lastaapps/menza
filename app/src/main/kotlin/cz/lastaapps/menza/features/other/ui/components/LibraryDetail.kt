@@ -41,11 +41,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.entity.License
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.Padding
-import org.lighthousegames.logging.logging
 
 
 @Composable
@@ -152,7 +152,7 @@ private fun Uri(
         link, textDecoration = TextDecoration.Underline,
         style = style,
         modifier = modifier.clickable {
-            logging("UriComposable").i { "Opening $link" }
+            Logger.withTag("UriComposable").i { "Opening $link" }
             handler.openUri(link)
         },
     )

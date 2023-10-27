@@ -26,20 +26,20 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
 import androidx.core.content.ContextCompat.getSystemService
+import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import org.lighthousegames.logging.logging
 
 internal class IsOnMeteredNetworkProviderImpl(
     private val context: Context,
 ) : IsOnMeteredNetworkProvider {
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     override fun isOnMeteredNetwork(): Flow<Boolean> {

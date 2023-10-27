@@ -22,7 +22,7 @@ package cz.lastaapps.menza.features.main.domain.usecase
 import android.os.Build
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import org.lighthousegames.logging.logging
+import cz.lastaapps.core.util.extensions.localLogger
 
 /**
  * Checks if the device is Galaxy Flip 3 or 4
@@ -32,7 +32,7 @@ class IsFlipUC internal constructor(
 ) : UseCase(context) {
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     operator fun invoke() = run {

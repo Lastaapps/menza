@@ -34,8 +34,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import org.lighthousegames.logging.logging
+import co.touchlab.kermit.Logger
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 val LocalWindowSize = compositionLocalOf { WindowSizeClass.calculateFromSize(DpSize.Zero) }
 val LocalWindowWidth = compositionLocalOf { WindowWidthSizeClass.Compact }
 val LocalWindowHeight = compositionLocalOf { WindowHeightSizeClass.Compact }
@@ -53,10 +54,10 @@ fun WithLocalWindowSizes(
                     || (maxWidth == 512.dp && maxHeight == 245.dp) // when bottom bar is enabled
 
         LaunchedEffect(size, mayBeFlipCover) {
-            logging("WindowSize").let { log ->
-                log.debug { "New window width class:  ${size.widthSizeClass}" }
-                log.debug { "New window height class: ${size.heightSizeClass}" }
-                log.debug { "New may be flip cover:   $mayBeFlipCover" }
+            Logger.withTag("WindowSize").let { log ->
+                log.d { "New window width class:  ${size.widthSizeClass}" }
+                log.d { "New window height class: ${size.heightSizeClass}" }
+                log.d { "New may be flip cover:   $mayBeFlipCover" }
             }
         }
 

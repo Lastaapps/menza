@@ -19,7 +19,11 @@
 
 package cz.lastaapps.plugin.jvm
 
-import cz.lastaapps.extensions.*
+import cz.lastaapps.extensions.alias
+import cz.lastaapps.extensions.implementation
+import cz.lastaapps.extensions.libs
+import cz.lastaapps.extensions.pluginManager
+import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
@@ -33,53 +37,51 @@ import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("unused")
-class JvmAppConvention : BasePlugin({
-    pluginManager {
-        apply("org.gradle.application")
-        alias(libs.plugins.kotlin.jvm)
-        alias(libs.plugins.shadow)
-    }
-
-    apply<DetektConvention>()
-    apply<ArrowKtConvention>()
-
-    tasks.withType<Test> {
-        useJUnitPlatform()
-    }
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            languageVersion = libs.versions.kotlin.language.get()
-            apiVersion = libs.versions.kotlin.api.get()
+class JvmAppConvention : BasePlugin(
+    {
+        pluginManager {
+            apply("org.gradle.application")
+            alias(libs.plugins.kotlin.jvm)
+            alias(libs.plugins.shadow)
         }
-    }
 
-    (kotlinExtension as KotlinJvmProjectExtension).apply {
-        sourceSets.all {
-            languageSettings.apply {
-                optIn("kotlin.RequiresOptIn")
-                optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+        apply<DetektConvention>()
+        apply<ArrowKtConvention>()
+
+        tasks.withType<Test> {
+            useJUnitPlatform()
+        }
+        tasks.withType<KotlinCompile> {
+            kotlinOptions {
+                languageVersion = libs.versions.kotlin.language.get()
+                apiVersion = libs.versions.kotlin.api.get()
             }
         }
-    }
 
-    dependencies {
-        implementation(libs.kotlin.coroutines.common)
-        implementation(libs.kotlinx.dateTime)
-        implementation(libs.kotlinx.collection)
-        implementation(libs.koin.core)
-        implementation(libs.kmLogging)
-        implementation(libs.fluidLocale)
+        (kotlinExtension as KotlinJvmProjectExtension).apply {
+            sourceSets.all {
+                languageSettings.apply {
+                    optIn("kotlin.RequiresOptIn")
+                    optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                }
+            }
+        }
 
-        implementation(libs.logback.core)
-        implementation(libs.logback.classic)
-        implementation(libs.slf4j)
+        dependencies {
+            implementation(libs.kotlin.coroutines.common)
+            implementation(libs.kotlinx.dateTime)
+            implementation(libs.kotlinx.collection)
+            implementation(libs.koin.core)
+            implementation(libs.kermit)
+            implementation(libs.fluidLocale)
 
-        testImplementation(kotlin("test"))
-        testImplementation(libs.kotest.assertion)
-        testImplementation(libs.kotlin.coroutines.test)
-        testImplementation(libs.kotest.jUnit5runner)
-        testImplementation(project.dependencies.platform(libs.junit5.bom))
-        testImplementation(libs.junit5.jupiter.api)
-        testImplementation(libs.junit5.jupiter.runtime)
-    }
-})
+            testImplementation(kotlin("test"))
+            testImplementation(libs.kotest.assertion)
+            testImplementation(libs.kotlin.coroutines.test)
+            testImplementation(libs.kotest.jUnit5runner)
+            testImplementation(project.dependencies.platform(libs.junit5.bom))
+            testImplementation(libs.junit5.jupiter.api)
+            testImplementation(libs.junit5.jupiter.runtime)
+        }
+    },
+)

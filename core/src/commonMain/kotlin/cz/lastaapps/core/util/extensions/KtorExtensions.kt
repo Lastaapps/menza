@@ -20,14 +20,14 @@
 package cz.lastaapps.core.util.extensions
 
 import arrow.core.Either
+import co.touchlab.kermit.Logger
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.NetworkError
-import org.lighthousegames.logging.logging
 
 suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
     Either.catch { block() }.mapLeft {
-        logging("catchingNetwork").e(it) { "Failed network call" }
+        Logger.withTag("catchingNetwork").e(it) { "Failed network call" }
 
         when (it::class.simpleName) {
             "TimeoutException",

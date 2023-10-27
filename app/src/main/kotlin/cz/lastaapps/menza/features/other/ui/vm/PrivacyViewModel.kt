@@ -22,12 +22,12 @@ package cz.lastaapps.menza.features.other.ui.vm
 import androidx.lifecycle.viewModelScope
 import cz.lastaapps.core.ui.vm.BaseViewModel
 import cz.lastaapps.core.ui.vm.VMContext
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.starting.data.PrivacyStore
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.Clock
-import org.lighthousegames.logging.logging
 
 internal class PrivacyViewModel(
     private val store: PrivacyStore,
@@ -36,7 +36,7 @@ internal class PrivacyViewModel(
 ) : BaseViewModel(context) {
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     val shouldShow = store.approved.map { it == null }

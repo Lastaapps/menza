@@ -31,11 +31,11 @@ import cz.lastaapps.api.core.data.model.BalanceAccountTypeSett
 import cz.lastaapps.api.core.data.model.LoginCredentialsSett
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.CommonError.NotLoggedIn
+import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import org.lighthousegames.logging.logging
 
 /**
  * @author Marekkon5, rewriten by LastaApps (for better or worse)
@@ -59,7 +59,7 @@ internal class AndroidWalletCredentialsProvider(
             )
         }
 
-        private val log = logging()
+        private val log = localLogger()
     }
 
     private val notLoggedIn = NotLoggedIn.left()

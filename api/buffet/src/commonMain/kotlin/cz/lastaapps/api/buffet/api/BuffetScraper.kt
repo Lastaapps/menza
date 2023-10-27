@@ -33,10 +33,10 @@ import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.ApiError.SyncError
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.ParsingError
+import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
-import org.lighthousegames.logging.logging
 
 internal interface BuffetScraper {
     fun matchValidity(html: String): Outcome<Pair<LocalDate, LocalDate>>
@@ -49,7 +49,7 @@ internal class BuffetScraperImpl : BuffetScraper {
 
     companion object {
 
-        private val log = logging()
+        private val log = localLogger()
 
         private val regexOptions =
             setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE)

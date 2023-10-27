@@ -23,14 +23,14 @@ import android.content.Context
 import androidx.annotation.Keep
 import androidx.startup.AppInitializer
 import androidx.startup.Initializer
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.crash.StartInit
-import org.lighthousegames.logging.logging
 
 @Keep
 @Suppress("unused")
 internal class ReEnableCrashInit : Initializer<Unit> {
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     override fun create(context: Context) {

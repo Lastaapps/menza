@@ -22,16 +22,16 @@ package cz.lastaapps.menza.util
 import android.content.Context
 import androidx.annotation.Keep
 import androidx.startup.Initializer
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.lighthousegames.logging.logging
 
 @Keep
 class KoinStartupInit : Initializer<Unit> {
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     override fun create(context: Context) {

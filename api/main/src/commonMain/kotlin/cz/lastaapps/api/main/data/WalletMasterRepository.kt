@@ -43,6 +43,7 @@ import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckRecent
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.outcome
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.AgataCtuWalletApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +53,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.lighthousegames.logging.logging
+
 
 internal interface WalletMasterRepository : SyncSource<UserBalance?> {
     suspend fun login(username: String, password: String, type: BalanceAccountType): Outcome<Unit>
@@ -71,7 +72,7 @@ internal class WalletMasterRepositoryImpl(
     private val scope = CoroutineScope(Dispatchers.Default)
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     private fun selectApi(type: BalanceAccountType) = when (type) {

@@ -35,8 +35,8 @@ import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
+import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.coroutines.flow.mapLatest
-import org.lighthousegames.logging.logging
 
 internal class AgataWalletViewModel(
     vmContext: VMContext,
@@ -48,7 +48,7 @@ internal class AgataWalletViewModel(
     override var hasAppeared: Boolean = false
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     override fun onAppeared() = launchVM {

@@ -19,6 +19,7 @@
 
 package cz.lastaapps.api.core.di
 
+import co.touchlab.kermit.Logger
 import cz.lastaapps.api.core.data.SyncProcessorImpl
 import cz.lastaapps.api.core.data.ValidityCheckerImpl
 import cz.lastaapps.api.core.domain.model.MenzaType
@@ -40,7 +41,6 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import org.lighthousegames.logging.logging
 
 internal expect val platform: Module
 
@@ -50,7 +50,7 @@ val apiCoreModule = module {
     // Once global
     singleOf(::MenzaScopeStore)
 
-    val scopeLog = logging("MenzaKoinScope")
+    val scopeLog = Logger.withTag("MenzaKoinScope")
     val scopeLock = reentrantLock()
 
     factory { (menza: MenzaType) ->

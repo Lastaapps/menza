@@ -24,6 +24,7 @@ google-ksp = "1.9.10-1.0.13"
 # @keep
 java-jvmTarget = "11"
 junit5-bom = "5.9.3"
+kermit = "2.0.2"
 koin = "3.4.3"
 koin-annotations = "1.0.3"
 kotest = "5.6.2"
@@ -155,7 +156,7 @@ gradlePlugins-shadow = { module = "gradle.plugin.com.github.johnrengelman:shadow
 junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5-bom" }
 junit5-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 junit5-jupiter-runtime = { module = "org.junit.jupiter:junit-jupiter-engine" }
-kmLogging = "org.lighthousegames:logging:1.3.0"
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 koin-android-compose = "io.insert-koin:koin-androidx-compose:3.4.6"
 koin-android-core = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
@@ -213,15 +214,12 @@ ktor-server-partialContent = { module = "io.ktor:ktor-server-partial-content", v
 ktor-server-sesstions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktor" }
 ktor-server-statusPages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
 ktor-server-unofficial-apiKeyAuth = "dev.forst:ktor-api-key:2.1.0"
-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
-logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
 qrgen = "com.github.kenglxn.QRGen:android:2.6.0"
 robolectric = "org.robolectric:robolectric:4.8"
 russhwolf-settings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "russhwolf-settings" }
 russhwolf-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "russhwolf-settings" }
 russhwolf-settings-datastore = { module = "com.russhwolf:multiplatform-settings-datastore", version.ref = "russhwolf-settings" }
 russhwolf-settings-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "russhwolf-settings" }
-slf4j = "org.slf4j:slf4j-api:2.0.6"
 sqldelight-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqldelight-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }

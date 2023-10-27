@@ -23,6 +23,7 @@ import arrow.core.recover
 import arrow.core.right
 import arrow.core.rightIor
 import arrow.fx.coroutines.parMap
+import co.touchlab.kermit.Logger
 import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
@@ -34,6 +35,7 @@ import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import kotlin.time.Duration.Companion.days
@@ -46,7 +48,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import org.lighthousegames.logging.logging
+
 
 internal class WeekDishRepoImpl(
     private val subsystemId: Int,
@@ -55,7 +57,7 @@ internal class WeekDishRepoImpl(
     private val checker: ValidityChecker,
 ) : WeekDishRepo {
 
-    private val log = logging(this::class.simpleName + "($subsystemId)")
+    private val log = Logger.withTag(this::class.simpleName + "($subsystemId)")
 
     private val validityKey = ValidityKey.agataWeek(subsystemId)
     private val isValidFlow = checker.isThisWeek(validityKey)
@@ -111,7 +113,7 @@ internal class WeekDishRepoImpl(
 }
 
 internal object WeekRepoStrahovImpl : WeekDishRepo {
-    private val log = logging()
+    private val log = localLogger()
 
     override fun getData(): Flow<ImmutableList<WeekDayDish>> =
         flow { emit(persistentListOf<WeekDayDish>()) }

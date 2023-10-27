@@ -17,12 +17,9 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.util
+package cz.lastaapps.core.util.extensions
 
-import org.lighthousegames.logging.KmLogging
-import org.lighthousegames.logging.Slf4jLogFactory
+import co.touchlab.kermit.Logger
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken() {
-    setLogFactory(Slf4jLogFactory())
-}
+inline fun <reified T : Any> T.localLogger() =
+    Logger.withTag(this::class.simpleName!!.take(23))

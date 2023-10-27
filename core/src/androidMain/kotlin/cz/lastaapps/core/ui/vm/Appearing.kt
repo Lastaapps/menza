@@ -21,7 +21,7 @@ package cz.lastaapps.core.ui.vm
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import org.lighthousegames.logging.logging
+import cz.lastaapps.core.util.extensions.localLogger
 
 interface Appearing {
     var hasAppeared: Boolean
@@ -29,7 +29,7 @@ interface Appearing {
     fun doAppear() {
         if (hasAppeared) return
         hasAppeared = true
-        logging(this::class.simpleName).i { "Appearing" }
+        localLogger().i { "Appearing" }
         onAppeared()
     }
 

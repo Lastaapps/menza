@@ -26,6 +26,7 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.flatten
 import arrow.core.left
+import co.touchlab.kermit.Logger
 import cz.lastaapps.api.buffet.api.BuffetApi
 import cz.lastaapps.api.buffet.api.BuffetApiImpl
 import cz.lastaapps.api.buffet.api.BuffetScraperImpl
@@ -34,7 +35,6 @@ import cz.lastaapps.api.buffet.data.model.WebContentDto
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.ApiError.SyncError
 import cz.lastaapps.core.domain.error.DomainError
-import cz.lastaapps.core.util.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -42,14 +42,9 @@ import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.HttpClient
 import kotlinx.datetime.LocalDate
-import org.lighthousegames.logging.KmLogging
-import org.lighthousegames.logging.logging
 
 class BuffetScraperTest : StringSpec(
     {
-
-        KmLogging.doAFuckingSetupForTestBecauseThisShitIsNiceButBroken()
-
         fun loadPage(name: String): String =
             BuffetScraperTest::class.java.classLoader?.getResource(name)!!.readText()
 
@@ -57,13 +52,13 @@ class BuffetScraperTest : StringSpec(
         fun client() = HttpClient()
 
         "Scrape live" {
-            val log = logging("Live")
+            val log = Logger.withTag("Live")
             val api: BuffetApi = BuffetApiImpl(client(), scraper())
             val res = api.process()
             res.map {
                 log.i { "${it.from} ${it.to}" }
-                log.i { it.fs }
-                log.i { it.fel }
+                log.i { it.fs.toString() }
+                log.i { it.fel.toString() }
             }
             res.shouldBeInstanceOf<Ior.Right<WebContentDto>>()
             val value = res.value
@@ -73,14 +68,14 @@ class BuffetScraperTest : StringSpec(
         }
 
         "Scrape 2023-01-23" {
-            val log = logging("2023-01-23")
+            val log = Logger.withTag("2023-01-23")
             val html = loadPage("2023-01-23.html")
             val scraper = scraper()
             val date = scraper.matchValidity(html)
             val content = scraper.matchContent(html)
 
-            log.i { date }
-            log.i { content }
+            log.i { date.toString() }
+            log.i { content.toString() }
 
             dateRangeTest(
                 date,
@@ -120,14 +115,14 @@ class BuffetScraperTest : StringSpec(
         }
 
         "Scrape 2023-01-30" {
-            val log = logging("2023-01-30")
+            val log = Logger.withTag("2023-01-30")
             val html = loadPage("2023-01-30.html")
             val scraper = scraper()
             val date = scraper.matchValidity(html)
             val content = scraper.matchContent(html)
 
-            log.i { date }
-            log.i { content }
+            log.i { date.toString() }
+            log.i { content.toString() }
 
             dateRangeTest(
                 date,
@@ -167,14 +162,14 @@ class BuffetScraperTest : StringSpec(
         }
 
         "Scrape 2023-02-20" {
-            val log = logging("2023-02-20")
+            val log = Logger.withTag("2023-02-20")
             val html = loadPage("2023-02-20.html")
             val scraper = scraper()
             val date = scraper.matchValidity(html)
             val content = scraper.matchContent(html)
 
-            log.i { date }
-            log.i { content }
+            log.i { date.toString() }
+            log.i { content.toString() }
 
             dateRangeTest(
                 date,
@@ -211,14 +206,14 @@ class BuffetScraperTest : StringSpec(
         }
 
         "Scrape 2023-02-27" {
-            val log = logging("2023-02-27")
+            val log = Logger.withTag("2023-02-27")
             val html = loadPage("2023-02-27.html")
             val scraper = scraper()
             val date = scraper.matchValidity(html)
             val content = scraper.matchContent(html)
 
-            log.i { date }
-            log.i { content }
+            log.i { date.toString() }
+            log.i { content.toString() }
 
             dateRangeTest(
                 date,
@@ -256,7 +251,7 @@ class BuffetScraperTest : StringSpec(
         }
 
         "Scrape summer" {
-            val log = logging("summer")
+            val log = Logger.withTag("summer")
             val html = loadPage("summer.html")
             val scraper = scraper()
             val date = scraper.matchValidity(html)

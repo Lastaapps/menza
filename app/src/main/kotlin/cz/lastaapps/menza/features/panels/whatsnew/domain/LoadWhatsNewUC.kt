@@ -22,9 +22,9 @@ package cz.lastaapps.menza.features.panels.whatsnew.domain
 import cz.lastaapps.core.data.AssetsProvider
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
 import java.util.Locale
-import org.lighthousegames.logging.logging
 
 internal class LoadWhatsNewUC(
     context: UCContext,
@@ -32,7 +32,7 @@ internal class LoadWhatsNewUC(
 ) : UseCase(context) {
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
         private const val sourceDir = "changelogs"
     }
 

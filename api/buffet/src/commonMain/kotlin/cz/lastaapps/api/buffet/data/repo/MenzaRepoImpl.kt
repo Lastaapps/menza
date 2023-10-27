@@ -26,6 +26,7 @@ import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
+import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
@@ -34,10 +35,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import org.lighthousegames.logging.logging
+
 
 internal object MenzaFSRepoImpl : MenzaRepo {
-    private val log = logging()
+    private val log = localLogger()
 
     override val isReady: Flow<Boolean> = MutableStateFlow(true)
         .onEach { log.i { "Is ready: $it" } }
@@ -66,7 +67,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
 }
 
 internal object MenzaFELRepoImpl : MenzaRepo {
-    private val log = logging()
+    private val log = localLogger()
 
     override val isReady: Flow<Boolean> = MutableStateFlow(true)
         .onEach { log.i { "Is ready: $it" } }

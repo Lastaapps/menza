@@ -22,15 +22,15 @@ package cz.lastaapps.crash
 import android.content.Context
 import androidx.annotation.Keep
 import androidx.startup.Initializer
+import co.touchlab.kermit.Logger
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
-import org.lighthousegames.logging.logging
 
 @Keep
 class StartInit : Initializer<Unit>, KoinComponent {
 
     companion object {
-        private val log = logging()
+        private val log = Logger.withTag(this::class.simpleName!!)
     }
 
     override fun create(context: Context) {

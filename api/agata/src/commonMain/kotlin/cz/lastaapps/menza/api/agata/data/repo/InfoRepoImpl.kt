@@ -21,6 +21,7 @@ package cz.lastaapps.menza.api.agata.data.repo
 
 import arrow.core.right
 import arrow.core.rightIor
+import co.touchlab.kermit.Logger
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOne
@@ -36,6 +37,7 @@ import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.util.extensions.combine6
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
@@ -47,7 +49,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-import org.lighthousegames.logging.logging
+
 
 internal class InfoRepoImpl(
     private val subsystemId: Int,
@@ -58,7 +60,7 @@ internal class InfoRepoImpl(
     hashStore: HashStore,
 ) : InfoRepo {
 
-    private val log = logging(this::class.simpleName + "($subsystemId)")
+    private val log = Logger.withTag(this::class.simpleName + "($subsystemId)")
 
     override fun getData(): Flow<Info> =
         combine6(
@@ -176,7 +178,7 @@ internal class InfoRepoImpl(
 }
 
 internal object InfoStrahovRepoImpl : InfoRepo {
-    private val log = logging()
+    private val log = localLogger()
 
     override fun getData(): Flow<Info> = flow { emit(Info.empty) }
         .onStart { log.i { "Starting collection" } }

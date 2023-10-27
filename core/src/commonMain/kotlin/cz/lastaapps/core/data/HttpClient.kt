@@ -28,7 +28,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import org.lighthousegames.logging.logging
 
 @OptIn(ExperimentalSerializationApi::class)
 internal val httpClient = HttpClient() {
@@ -51,7 +50,7 @@ internal val httpClient = HttpClient() {
     install(Logging) {
         level = LogLevel.INFO
         logger = object : Logger {
-            private val log = logging("Ktor")
+            private val log = co.touchlab.kermit.Logger.withTag("Ktor")
             override fun log(message: String) {
                 log.i { message }
             }

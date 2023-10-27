@@ -25,9 +25,9 @@ import cz.lastaapps.api.main.domain.usecase.SyncAllInfoUC
 import cz.lastaapps.api.main.domain.usecase.SyncMenzaListUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.starting.domain.model.DownloadProgress
 import kotlinx.coroutines.flow.flow
-import org.lighthousegames.logging.logging
 
 internal class DownloadInitDataUC(
     context: UCContext,
@@ -36,7 +36,7 @@ internal class DownloadInitDataUC(
 ) : UseCase(context) {
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     suspend operator fun invoke() = launch {

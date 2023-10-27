@@ -33,15 +33,15 @@ import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.outcome
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.core.util.extensions.withTimeoutOutcome
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.persistentListOf
-import org.lighthousegames.logging.logging
 
 internal class SyncProcessorImpl : SyncProcessor {
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
 
         private val jobTimeout = 8.seconds
     }

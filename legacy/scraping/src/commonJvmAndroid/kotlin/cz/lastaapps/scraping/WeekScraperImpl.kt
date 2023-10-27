@@ -30,11 +30,10 @@ import io.ktor.client.request.get
 import it.skrape.core.htmlDocument
 import it.skrape.selects.Doc
 import kotlinx.datetime.LocalDate
-import org.lighthousegames.logging.logging
 
 object WeekScraperImpl : WeekScraper {
 
-    private val log = logging()
+    private val log = Logger.withTag(this::class.simpleName!!)
 
     private val dateRegex = """([0-9]{1,2}).\s*([0-9]{1,2}).\s*([0-9]{4})""".toRegex()
 

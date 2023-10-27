@@ -35,12 +35,12 @@ import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.lighthousegames.logging.logging
 
 internal class InfoViewModel(
     context: VMContext,
@@ -51,7 +51,7 @@ internal class InfoViewModel(
     override var hasAppeared: Boolean = false
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     override fun onAppeared() = launchVM {

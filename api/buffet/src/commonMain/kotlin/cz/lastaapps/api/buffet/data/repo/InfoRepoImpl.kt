@@ -20,6 +20,7 @@
 package cz.lastaapps.api.buffet.data.repo
 
 import arrow.core.right
+import co.touchlab.kermit.Logger
 import cz.lastaapps.api.buffet.domain.model.BuffetType
 import cz.lastaapps.api.buffet.domain.model.BuffetType.FEL
 import cz.lastaapps.api.buffet.domain.model.BuffetType.FS
@@ -43,12 +44,11 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
-import org.lighthousegames.logging.logging
 
 internal class InfoRepoImpl(
     private val type: BuffetType,
 ) : InfoRepo {
-    private val log = logging(this::class.simpleName + "($type)")
+    private val log = Logger.withTag(this::class.simpleName + "($type)")
 
     override fun getData(): Flow<Info> = flow {
         // I don't wanna parse this shit, really

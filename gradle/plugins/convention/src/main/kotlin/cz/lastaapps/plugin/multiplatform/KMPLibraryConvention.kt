@@ -122,7 +122,7 @@ class KMPLibraryConvention : BasePlugin(
                         implementation(libs.kotlinx.serializationJson)
                         implementation(libs.koin.core)
 //                    implementation(libs.koin.annotations)
-                        implementation(libs.kmLogging)
+                        implementation(libs.kermit)
 
                         implementation(libs.androidx.annotation)
                     }
@@ -157,11 +157,7 @@ class KMPLibraryConvention : BasePlugin(
                 }
 
                 getByName("jvmMain") {
-                    dependencies {
-                        implementation(libs.logback.core)
-                        implementation(libs.logback.classic)
-                        implementation(libs.slf4j)
-                    }
+                    dependencies { }
                 }
 
                 getByName("jvmTest") {

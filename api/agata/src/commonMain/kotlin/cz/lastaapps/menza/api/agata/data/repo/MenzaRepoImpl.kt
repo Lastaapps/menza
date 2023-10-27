@@ -34,6 +34,7 @@ import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
+import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
@@ -51,7 +52,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import org.lighthousegames.logging.logging
+
 
 internal class MenzaSubsystemRepoImpl(
     private val api: CafeteriaApi,
@@ -62,7 +63,7 @@ internal class MenzaSubsystemRepoImpl(
 ) : MenzaRepo {
 
     companion object {
-        private val log = logging()
+        private val log = localLogger()
     }
 
     override val isReady: Flow<Boolean> =
@@ -114,7 +115,7 @@ internal class MenzaSubsystemRepoImpl(
 }
 
 internal object MenzaStrahovRepoImpl : MenzaRepo {
-    private val log = logging()
+    private val log = localLogger()
 
     override val isReady: Flow<Boolean> = MutableStateFlow(true)
 

@@ -35,11 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import co.touchlab.kermit.Logger
 import com.mikepenz.aboutlibraries.entity.Library
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
-import org.lighthousegames.logging.logging
 
 @Composable
 fun LibraryList(
@@ -72,10 +72,10 @@ private fun AppLicenseButton(modifier: Modifier = Modifier) {
     val url = LocalUriHandler.current
     OutlinedButton(
         onClick = {
-            logging("AppLicenseButton").i { "Opening app license" }
+            Logger.withTag("AppLicenseButton").i { "Opening app license" }
             url.openUri("https://github.com/Lastaapps/cvutbus/LICENSE")
         },
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = stringResource(R.string.license_this_app),
