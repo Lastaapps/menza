@@ -17,33 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
-    }
+package cz.lastaapps.storage.repo
+
+import cz.lastaapps.entity.allergens.Allergen
+import cz.lastaapps.entity.allergens.AllergenId
+import kotlinx.coroutines.flow.Flow
+
+interface AllergenRepo : GeneralStorageRepo<Allergen> {
+    fun getAllergenInfo(id: AllergenId): Flow<Allergen?>
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenCentral()
-        google()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":api:buffet",
-    ":api:core",
-    ":api:main",
-    ":app",
-    ":core",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-)

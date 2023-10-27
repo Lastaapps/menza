@@ -17,33 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
+package cz.lastaapps.entity.common
+
+/**
+ * Holds price of a food
+ * https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem=1
+ */
+@JvmInline
+value class Price(val price: Int) {
+    init {
+        require(price >= 0) { "Price is negative $price" }
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenCentral()
-        google()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":api:buffet",
-    ":api:core",
-    ":api:main",
-    ":app",
-    ":core",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-)

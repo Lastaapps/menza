@@ -17,33 +17,13 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
-    }
+package cz.lastaapps.scraping
+
+import cz.lastaapps.entity.menza.MenzaId
+import cz.lastaapps.entity.week.WeekDish
+import cz.lastaapps.entity.week.WeekNumber
+import io.ktor.client.statement.*
+
+interface WeekScraper : ScraperBase<WeekDish> {
+    suspend fun createRequest(menzaId: MenzaId, weekNumber: WeekNumber): HttpResponse
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenCentral()
-        google()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":api:buffet",
-    ":api:core",
-    ":api:main",
-    ":app",
-    ":core",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-)

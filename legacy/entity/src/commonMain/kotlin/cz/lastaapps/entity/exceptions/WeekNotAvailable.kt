@@ -17,33 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
-    }
-}
+package cz.lastaapps.entity.exceptions
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenCentral()
-        google()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":api:buffet",
-    ":api:core",
-    ":api:main",
-    ":app",
-    ":core",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-)
+/**
+ * I thrown when a menza states, that they don't provide week menu
+ * Can be also thrown during celebrations
+ * https://agata.suz.cvut.cz/jidelnicky/indexTyden.php?clPodsystem=15
+ */
+class WeekNotAvailable : Exception()

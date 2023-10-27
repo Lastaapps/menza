@@ -17,33 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
+package cz.lastaapps.entity.menza
+
+/**
+ * Warning or other type of information shown for a menza
+ * https://agata.suz.cvut.cz/jidelnicky/index.php
+ */
+data class Message(
+    val id: MenzaId,
+    val message: String,
+) {
+    init {
+        require(message.isNotBlank()) { "Menza message is blank" }
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenCentral()
-        google()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":api:buffet",
-    ":api:core",
-    ":api:main",
-    ":app",
-    ":core",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-)

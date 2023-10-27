@@ -17,33 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
+package cz.lastaapps.entity.menza
+
+/**
+ * Holds value of the menza address
+ * https://agata.suz.cvut.cz/jidelnicky/kontakty.php
+ */
+@JvmInline
+value class Address(val stringForm: String) {
+    init {
+        require(stringForm.isNotBlank()) { "Address is blank" }
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenCentral()
-        google()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":api:buffet",
-    ":api:core",
-    ":api:main",
-    ":app",
-    ":core",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-)

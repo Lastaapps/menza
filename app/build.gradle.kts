@@ -61,10 +61,6 @@ dependencies {
     implementation(projects.api.agata)
     implementation(projects.api.main)
     implementation(projects.core)
-    implementation(projects.entity)
-    implementation(projects.scraping)
-    implementation(projects.storage.db)
-    implementation(projects.storage.repo)
     implementation(projects.lastaapps.common)
     implementation(projects.lastaapps.crash)
 

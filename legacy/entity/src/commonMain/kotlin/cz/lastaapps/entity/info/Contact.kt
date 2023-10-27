@@ -17,33 +17,24 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
+package cz.lastaapps.entity.info
+
+import cz.lastaapps.entity.menza.MenzaId
+
+/**
+ * Holds contact info to the menza administration
+ * https://agata.suz.cvut.cz/jidelnicky/kontakty.php
+ */
+data class Contact(
+    val id: MenzaId,
+    val name: Name?,
+    val role: Role?,
+    val phoneNumber: PhoneNumber?,
+    val email: Email?,
+) {
+    init {
+        require(role != null || name != null || phoneNumber != null || email != null) {
+            "None contact info passed"
+        }
     }
 }
-
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenCentral()
-        google()
-    }
-}
-
-rootProject.name = "Menza"
-
-include(
-    ":api:agata",
-    ":api:buffet",
-    ":api:core",
-    ":api:main",
-    ":app",
-    ":core",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-)

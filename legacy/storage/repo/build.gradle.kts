@@ -17,33 +17,21 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    includeBuild("gradle/plugins")
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
-    }
+plugins {
+    alias(libs.plugins.lastaapps.kmp.library)
 }
 
-@Suppress("UnstableApiUsage")
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenCentral()
-        google()
-    }
+android {
+    namespace = "cz.lastaapps.storage.repo"
 }
 
-rootProject.name = "Menza"
+dependencies {
+    commonMainImplementation(projects.entity)
+    commonMainImplementation(projects.scraping)
+    commonMainImplementation(projects.storage.db)
 
-include(
-    ":api:agata",
-    ":api:buffet",
-    ":api:core",
-    ":api:main",
-    ":app",
-    ":core",
-    ":lastaapps:common",
-    ":lastaapps:crash",
-)
+    commonMainImplementation(libs.ktor.client.core)
+
+    commonMainImplementation(libs.sqldelight.runtime)
+    commonMainImplementation(libs.sqldelight.coroutines)
+}
