@@ -50,7 +50,11 @@ data class Contact(
     val name: String?,
     val phone: PhoneNumber?,
     val email: Email?,
-)
+) {
+    val isEmpty: Boolean
+        get() =
+            role == null && name == null && phone == null && email == null
+}
 
 data class Link(
     val link: String,

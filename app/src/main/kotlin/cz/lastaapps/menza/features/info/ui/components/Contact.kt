@@ -124,8 +124,9 @@ private fun ContactItem(
     onAddContact: (Contact) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (contact.name == null && contact.role == null)
+    if (contact.isEmpty) {
         return
+    }
 
     ElevatedCard(
         modifier = modifier,
@@ -155,6 +156,7 @@ private fun ContactItem(
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(Padding.Small),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(Icons.Default.Call, null)
                         Text(text = it.number)
@@ -169,6 +171,7 @@ private fun ContactItem(
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(Padding.Small),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(Icons.Default.Mail, null)
                         Text(text = it.mail)
@@ -183,6 +186,7 @@ private fun ContactItem(
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(Padding.Small),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(Icons.Default.Contacts, null)
                         Text(text = stringResource(R.string.info_contacts_contact_button_add))

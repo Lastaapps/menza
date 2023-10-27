@@ -29,14 +29,15 @@ internal data class AgataBEConfig(
 ) {
     @Suppress("SpellCheckingInspection")
     fun photoLinkForAgataSubsystem(subsystemId: Int, name: String) =
-        // Use showfoto for bigger, but faster responses
-        "${protocol.name}://$host/jidelnicky/showfotoG.php?clPodsystem=$subsystemId&xFile=$name"
+        // Use showfotoG for little smaller, but slower responses
+        "${protocol.name}://$host/jidelnicky/showfoto.php?clPodsystem=$subsystemId&xFile=$name"
 
     @Suppress("SpellCheckingInspection")
     fun photoLinkForStrahov(name: String) =
-        // Use showfotoM for bigger, but faster responses
-        "${protocol.name}://$host/jidelnicky/showfotoMG.php?xFile=$name"
+        // Use showfotoMG for smaller, but slower responses
+        "${protocol.name}://$host/jidelnicky/showfotoM.php?xFile=$name"
 
+    @Suppress("unused")
     companion object {
         @Suppress("SpellCheckingInspection")
         val prod = AgataBEConfig(

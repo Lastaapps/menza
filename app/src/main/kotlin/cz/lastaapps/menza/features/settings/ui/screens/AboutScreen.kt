@@ -40,6 +40,7 @@ import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.NewReleases
+import androidx.compose.material.icons.filled.Terminal
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -122,6 +123,9 @@ internal fun AboutScreen(
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center,
                     )
+                    MenzaCliButton(
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                     WhatsNewButton(
                         onShowWhatsNew = onShowWhatsNew,
                         modifier = Modifier.fillMaxWidth(),
@@ -187,6 +191,29 @@ private fun DatasourceButton(
                 Text(
                     text = title,
                     style = LocalTextStyle.current.copy(textDecoration = TextDecoration.Underline),
+                    textAlign = TextAlign.Center,
+                )
+            },
+        )
+    }
+}
+
+@Composable
+private fun MenzaCliButton(
+    modifier: Modifier = Modifier,
+    handler: UriHandler = LocalUriHandler.current,
+) {
+    OutlinedButton(
+        modifier = modifier,
+        onClick = { handler.openUri("https://github.com/Lastaapps/menza-cli") },
+    ) {
+        IconAndText(
+            icon = {
+                Icon(Icons.Default.Terminal, null)
+            },
+            text = {
+                Text(
+                    text = stringResource(id = cz.lastaapps.menza.R.string.about_menza_cli),
                     textAlign = TextAlign.Center,
                 )
             },

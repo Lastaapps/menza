@@ -60,7 +60,7 @@ internal class InfoRepoImpl(
                 openingTimes = openTime(type),
                 links = persistentListOf(
                     Link(
-                        link = "studentcatering@seznam.cz",
+                        link = "https://studentcatering.cz/",
                         description = "Web",
                     ),
                 ),
@@ -120,19 +120,13 @@ internal class InfoRepoImpl(
                 role = "Provoz",
                 name = null,
                 phone = "+420 224 352 064".let(::PhoneNumber),
-                email = null,
+                email = "studentcatering@seznam.cz".let(::Email),
             ),
             Contact(
                 role = "jednatel",
                 name = "Ing. Michal Janča",
                 phone = "+420 602 447 080".let(::PhoneNumber),
                 email = null,
-            ),
-            Contact(
-                role = null,
-                name = null,
-                phone = null,
-                email = "studentcatering@seznam.cz".let(::Email),
             ),
         )
 
