@@ -1,0 +1,9 @@
+The whole app internals rewrite
+- API instead of web scraping
+- FEL/FS buffet added
+- Account balance added
+- New today menu view options
+- Support for English menus
+- Updated Menza selection list view
+- New data sync/processing pipeline
+- New themes and settings redesign

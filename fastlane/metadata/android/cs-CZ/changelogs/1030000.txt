@@ -1,0 +1,9 @@
+Kompletní přepis vnitřností aplikace
+- API místo scrapování webu
+- Podpora FEL/FS bufetu
+- Stav konta
+- Nové možnosti jak si zobrazit dnešní jídelníček
+- Podpora anglických menu
+- Aktualizovaný výběr menzy
+- Nová pipeline na processing dat
+- Nové barvičky a překopání nastavení
