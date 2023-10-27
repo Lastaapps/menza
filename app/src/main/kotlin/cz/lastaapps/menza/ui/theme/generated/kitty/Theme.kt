@@ -17,13 +17,13 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.theme.generated.uwu
+package cz.lastaapps.menza.ui.theme.generated.kitty
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 
 
-val UwuLightColors = lightColorScheme(
+val KittyLightColors = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
     primaryContainer = md_theme_light_primaryContainer,
@@ -56,7 +56,7 @@ val UwuLightColors = lightColorScheme(
 )
 
 
-val UwuDarkColors = darkColorScheme(
+val KittyDarkColors = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
     primaryContainer = md_theme_dark_primaryContainer,

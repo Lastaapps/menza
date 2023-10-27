@@ -147,6 +147,7 @@
     <string name="settings_theme_app_agata">Agáta</string>
     <string name="settings_theme_app_ctu">CTU</string>
     <string name="settings_theme_app_uwu">UwU</string>
+    <string name="settings_theme_app_kitty">Kitty</string>
 
     <string name="panel_price_title">Price type</string>
     <string name="panel_price_description">Which prices do you want to see?</string>

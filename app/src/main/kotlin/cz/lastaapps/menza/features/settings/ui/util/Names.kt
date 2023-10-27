@@ -25,6 +25,7 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.CTU
+import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Kitty
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.System
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
@@ -47,7 +48,8 @@ internal fun AppThemeType.name() =
             Agata -> R.string.settings_theme_app_agata
             CTU -> R.string.settings_theme_app_ctu
             Uwu -> R.string.settings_theme_app_uwu
-        }
+            Kitty -> R.string.settings_theme_app_kitty
+        },
     )
 
 @Composable

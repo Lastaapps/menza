@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
@@ -35,6 +36,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.CTU
+import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Kitty
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.System
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
@@ -42,6 +44,8 @@ import cz.lastaapps.menza.ui.theme.generated.agata.AgataDarkColors
 import cz.lastaapps.menza.ui.theme.generated.agata.AgataLightColors
 import cz.lastaapps.menza.ui.theme.generated.ctu.CtuDarkColors
 import cz.lastaapps.menza.ui.theme.generated.ctu.CtuLightColors
+import cz.lastaapps.menza.ui.theme.generated.kitty.KittyDarkColors
+import cz.lastaapps.menza.ui.theme.generated.kitty.KittyLightColors
 import cz.lastaapps.menza.ui.theme.generated.uwu.UwuDarkColors
 import cz.lastaapps.menza.ui.theme.generated.uwu.UwuLightColors
 
@@ -56,6 +60,7 @@ fun AppTheme(
 
     val colorScheme = when (theme) {
         System ->
+            @SuppressLint("NewApi")
             if (isLightMode)
                 dynamicLightColorScheme(LocalContext.current)
             else
@@ -75,6 +80,12 @@ fun AppTheme(
                 UwuLightColors
             else
                 UwuDarkColors
+
+        Kitty ->
+            if (isLightMode)
+                KittyLightColors
+            else
+                KittyDarkColors
     }.animated()
 
     if (colorSystemBars) {
@@ -119,6 +130,7 @@ private fun DarkMode.shouldUseDark(): Boolean =
         DarkMode.System -> isSystemInDarkTheme()
     }
 
+@Suppress("AnimateAsStateLabel")
 @Composable
 private fun ColorScheme.animated(): ColorScheme {
     return ColorScheme(

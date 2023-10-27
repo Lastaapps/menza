@@ -9,7 +9,11 @@
 #1b507d
 
 [UwU]
-#e86c82
-#190f2a
-#e6e8be
+#ffd4dc
+#e8c1dc
+#fce0ff
 
+[Kitty]
+#ffffcc
+#fff0cc
+#ffcfcc
