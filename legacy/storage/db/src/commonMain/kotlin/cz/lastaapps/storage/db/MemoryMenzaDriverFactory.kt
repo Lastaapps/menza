@@ -19,7 +19,7 @@
 
 package cz.lastaapps.storage.db
 
-import com.squareup.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlDriver
 
 expect class MemoryMenzaDriverFactory : MenzaDriverFactory {
     override fun createDriver(): SqlDriver

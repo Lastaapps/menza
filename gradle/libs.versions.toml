@@ -41,7 +41,7 @@ sdk-compile = "34"
 sdk-min = "21"
 sdk-target = "34"
 shadow = "8.1.0"
-sqldelight = "1.5.5"
+sqldelight = "2.0.0"
 
 [libraries]
 aboutLibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutLibraries" }
@@ -218,11 +218,11 @@ russhwolf-settings-core = { module = "com.russhwolf:multiplatform-settings", ver
 russhwolf-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "russhwolf-settings" }
 russhwolf-settings-datastore = { module = "com.russhwolf:multiplatform-settings-datastore", version.ref = "russhwolf-settings" }
 russhwolf-settings-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "russhwolf-settings" }
-sqldelight-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
-sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqldelight-jvm = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
-sqldelight-plugin = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
-sqldelight-runtime = { module = "com.squareup.sqldelight:runtime", version.ref = "sqldelight" }
+sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+sqldelight-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
+sqldelight-plugin = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqldelight" }
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 
 [bundles]
 ktor-client = [
@@ -292,5 +292,5 @@ lastaapps-kmp-library = "kmp-library-convention:none"
 lastaapps-kmp-sqldelight = "kmp-sqldelight-convention:none"
 playServices = "com.google.gms.google-services:4.4.0"
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
-sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 versionCatalogUpdate = "nl.littlerobots.version-catalog-update:0.8.0"

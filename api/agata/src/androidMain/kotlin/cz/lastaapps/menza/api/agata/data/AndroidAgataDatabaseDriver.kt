@@ -20,7 +20,7 @@
 package cz.lastaapps.menza.api.agata.data
 
 import android.content.Context
-import com.squareup.sqldelight.android.AndroidSqliteDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import cz.lastaapps.api.agata.AgataDatabase
 
 internal const val DB_NAME = "agata_api.db"

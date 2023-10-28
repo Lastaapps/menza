@@ -19,10 +19,10 @@
 
 package cz.lastaapps.storage.repo
 
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
-import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
+import app.cash.sqldelight.runtime.coroutines.asFlow
+import app.cash.sqldelight.runtime.coroutines.mapToList
+import app.cash.sqldelight.runtime.coroutines.mapToOneNotNull
+import app.cash.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.entity.allergens.Allergen
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.menza.db.MenzaDatabase

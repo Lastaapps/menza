@@ -19,7 +19,7 @@
 
 package cz.lastaapps.api.buffet.data
 
-import com.squareup.sqldelight.android.AndroidSqliteDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import cz.lastaapps.api.buffet.BuffetDatabase
 import org.koin.core.scope.Scope
 

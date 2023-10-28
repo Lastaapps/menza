@@ -22,8 +22,8 @@ package cz.lastaapps.menza.api.agata.data
 import agata.DishEntity
 import agata.OpenTimeEntity
 import agata.StrahovEntiy
-import com.squareup.sqldelight.ColumnAdapter
-import com.squareup.sqldelight.db.SqlDriver
+import app.cash.sqldelight.ColumnAdapter
+import app.cash.sqldelight.db.SqlDriver
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.datetime.DayOfWeek

@@ -19,9 +19,9 @@
 
 package cz.lastaapps.storage.repo
 
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
+import app.cash.sqldelight.runtime.coroutines.asFlow
+import app.cash.sqldelight.runtime.coroutines.mapToList
+import app.cash.sqldelight.runtime.coroutines.mapToOneNotNull
 import cz.lastaapps.entity.info.Contact
 import cz.lastaapps.entity.menza.MenzaId
 import cz.lastaapps.menza.db.MenzaDatabase

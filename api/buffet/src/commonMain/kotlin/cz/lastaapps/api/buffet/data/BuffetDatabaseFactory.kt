@@ -19,9 +19,9 @@
 
 package cz.lastaapps.api.buffet.data
 
+import app.cash.sqldelight.ColumnAdapter
+import app.cash.sqldelight.db.SqlDriver
 import buffet.DishEntity
-import com.squareup.sqldelight.ColumnAdapter
-import com.squareup.sqldelight.db.SqlDriver
 import cz.lastaapps.api.buffet.BuffetDatabase
 import cz.lastaapps.api.buffet.domain.model.BuffetType
 import kotlinx.datetime.DayOfWeek

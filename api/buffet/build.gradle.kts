@@ -36,8 +36,11 @@ dependencies {
 }
 
 sqldelight {
-    database("BuffetDatabase") {
-        packageName = "cz.lastaapps.api.buffet"
-        sourceFolders = listOf("sqldelight")
+    databases {
+        create("BuffetDatabase") {
+            packageName.set("cz.lastaapps.api.buffet")
+            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
+            verifyMigrations.set(true)
+        }
     }
 }

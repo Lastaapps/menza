@@ -1,6 +1,7 @@
 import cz.lastaapps.api.buffet.domain.model.BuffetType;
 import kotlin.collections.List;
 import kotlinx.datetime.DayOfWeek;
+import kotlin.String;
 
 CREATE TABLE DishEntity (
     buffet TEXT AS BuffetType NOT NULL,

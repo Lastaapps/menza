@@ -19,7 +19,7 @@
 
 package cz.lastaapps.api.core.domain.sync
 
-import com.squareup.sqldelight.Transacter
+import app.cash.sqldelight.Transacter
 
 interface SyncProcessor {
     suspend fun runSync(

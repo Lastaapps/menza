@@ -19,9 +19,9 @@
 
 package cz.lastaapps.menza.api.agata.data.repo
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.rightIor
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
@@ -40,6 +40,7 @@ import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -68,7 +69,7 @@ internal class TodayDishStrahovRepoImpl(
         db.strahovQueries
             .get()
             .asFlow()
-            .mapToList()
+            .mapToList(Dispatchers.IO)
             .combine(isValidFlow) { data, validity ->
                 data.takeIf { validity }.orEmpty()
             }

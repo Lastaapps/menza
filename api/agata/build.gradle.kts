@@ -43,8 +43,11 @@ dependencies {
 }
 
 sqldelight {
-    database("AgataDatabase") {
-        packageName = "cz.lastaapps.api.agata"
-        sourceFolders = listOf("sqldelight")
+    databases {
+        create("AgataDatabase") {
+            packageName.set("cz.lastaapps.api.agata")
+            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
+            verifyMigrations.set(true)
+        }
     }
 }

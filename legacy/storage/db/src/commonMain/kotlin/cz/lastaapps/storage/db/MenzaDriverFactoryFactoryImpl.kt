@@ -19,7 +19,7 @@
 
 package cz.lastaapps.storage.db
 
-import com.squareup.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlDriver
 import cz.lastaapps.menza.db.MenzaDatabase
 import menza.AllergenEntity
 import menza.ContactEntity

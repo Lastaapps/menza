@@ -19,10 +19,10 @@
 
 package cz.lastaapps.menza.api.agata.data.repo
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.right
 import arrow.core.rightIor
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
@@ -44,6 +44,7 @@ import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -69,7 +70,7 @@ internal class MenzaSubsystemRepoImpl(
     override val isReady: Flow<Boolean> =
         db.subsystemQueries.getAll()
             .asFlow()
-            .mapToList()
+            .mapToList(Dispatchers.IO)
             .map { it.isNotEmpty() }
             .distinctUntilChanged()
             .onEach { log.i { "Is ready: $it" } }
@@ -77,7 +78,7 @@ internal class MenzaSubsystemRepoImpl(
     override fun getData(): Flow<ImmutableList<Menza>> =
         db.subsystemQueries.getAll()
             .asFlow()
-            .mapToList()
+            .mapToList(Dispatchers.IO)
             .map { it.toDomain() }
             .distinctUntilChanged()
             .onEach { log.i { "Menza produced: ${it.size}" } }

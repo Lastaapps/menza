@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,7 @@
 
 package cz.lastaapps.crash.db
 
-import com.squareup.sqldelight.ColumnAdapter
+import app.cash.sqldelight.ColumnAdapter
 import cz.lastaapps.crash.entity.ErrorSeverity
 import cz.lastaapps.crash.entity.ReportState
 import java.time.LocalDateTime

@@ -19,11 +19,11 @@
 
 package cz.lastaapps.api.buffet.data.repo
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.Some
 import buffet.DishEntity
 import co.touchlab.kermit.Logger
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
 import cz.lastaapps.api.buffet.BuffetDatabase
 import cz.lastaapps.api.buffet.api.BuffetApi
 import cz.lastaapps.api.buffet.data.mappers.toDomainDays
@@ -48,6 +48,7 @@ import cz.lastaapps.core.util.extensions.findDayOfWeek
 import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -90,7 +91,7 @@ internal class DishLogicImpl(
             clock.now().toLocalDateTime(TimeZone.currentSystemDefault()).date.dayOfWeek,
         )
             .asFlow()
-            .mapToList()
+            .mapToList(Dispatchers.IO)
             .combine(hasValidData) { data, validity ->
                 data.takeIf { validity }.orEmpty()
             }
@@ -101,7 +102,7 @@ internal class DishLogicImpl(
     fun getDataWeek(type: BuffetType): Flow<ImmutableList<WeekDayDish>> =
         db.dishQueries.getForBuffet(type)
             .asFlow()
-            .mapToList()
+            .mapToList(Dispatchers.IO)
             .combine(hasValidData) { data, validity ->
                 data.takeIf { validity }.orEmpty()
             }

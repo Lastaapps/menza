@@ -1,5 +1,6 @@
 import kotlin.collections.List;
-
+import kotlin.Long;
+import kotlin.Boolean;
 
 CREATE TABLE DishEntity(
     id INTEGER NOT NULL,

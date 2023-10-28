@@ -19,13 +19,13 @@
 
 package cz.lastaapps.menza.api.agata.data.repo
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOne
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import arrow.core.right
 import arrow.core.rightIor
 import co.touchlab.kermit.Logger
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOne
-import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.Info
 import cz.lastaapps.api.core.domain.repo.InfoRepo
@@ -45,6 +45,7 @@ import cz.lastaapps.menza.api.agata.data.mapers.toEntity
 import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlin.time.Duration.Companion.days
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
@@ -64,12 +65,17 @@ internal class InfoRepoImpl(
 
     override fun getData(): Flow<Info> =
         combine6(
-            db.infoQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToOneOrNull(),
-            db.newsQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToOneOrNull(),
-            db.contactQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(),
-            db.openTimeQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(),
-            db.linkQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(),
-            db.addressQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToOne(),
+            db.infoQueries.getForSubsystem(subsystemId.toLong()).asFlow()
+                .mapToOneOrNull(Dispatchers.IO),
+            db.newsQueries.getForSubsystem(subsystemId.toLong()).asFlow()
+                .mapToOneOrNull(Dispatchers.IO),
+            db.contactQueries.getForSubsystem(subsystemId.toLong()).asFlow()
+                .mapToList(Dispatchers.IO),
+            db.openTimeQueries.getForSubsystem(subsystemId.toLong()).asFlow()
+                .mapToList(Dispatchers.IO),
+            db.linkQueries.getForSubsystem(subsystemId.toLong()).asFlow().mapToList(Dispatchers.IO),
+            db.addressQueries.getForSubsystem(subsystemId.toLong()).asFlow()
+                .mapToOne(Dispatchers.IO),
         ) { info, news, contacts, openTimes, links, address ->
             info.toDomain(news, contacts, openTimes, links, address)
         }

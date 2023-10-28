@@ -19,7 +19,7 @@
 
 package cz.lastaapps.storage.db
 
-import com.squareup.sqldelight.ColumnAdapter
+import app.cash.sqldelight.ColumnAdapter
 import cz.lastaapps.entity.allergens.AllergenId
 import cz.lastaapps.entity.info.Email
 import cz.lastaapps.entity.info.Name

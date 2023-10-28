@@ -23,9 +23,12 @@ plugins {
 }
 
 sqldelight {
-    database("CrashDatabase") {
-        packageName = "cz.lastaapps.crash"
-        sourceFolders = listOf("sqldelight")
+    databases {
+        create("CrashDatabase") {
+            packageName.set("cz.lastaapps.crash")
+            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
+            verifyMigrations.set(true)
+        }
     }
 }
 

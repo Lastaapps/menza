@@ -39,8 +39,8 @@ package cz.lastaapps.storage.db
  */
 
 import android.content.Context
-import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.squareup.sqldelight.db.SqlDriver
+import app.cash.sqldelight.android.AndroidSqliteDriver
+import app.cash.sqldelight.db.SqlDriver
 import cz.lastaapps.menza.db.MenzaDatabase
 
 actual class MemoryMenzaDriverFactory(private val context: Context) : MenzaDriverFactory {

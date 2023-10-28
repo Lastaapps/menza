@@ -23,12 +23,12 @@ import agata.DishEntity
 import agata.DishTypeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOne
 import arrow.core.Tuple4
 import arrow.core.rightIor
 import co.touchlab.kermit.Logger
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
@@ -50,6 +50,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -83,7 +84,7 @@ internal class TodayDishSubsystemRepoImpl(
         // Get dish list
         db.dishQueries.getForSubsystem(subsystemId.toLong())
             .asFlow()
-            .mapToList()
+            .mapToList(Dispatchers.IO)
             .combine(isValidFlow) { data, validity ->
                 data.takeIf { validity }.orEmpty()
             }
@@ -96,13 +97,16 @@ internal class TodayDishSubsystemRepoImpl(
                         entity,
 
                         // get dish type
-                        db.dishTypeQueries.getByDishId(entity.typeId).asFlow().mapToOne(),
+                        db.dishTypeQueries.getByDishId(entity.typeId).asFlow()
+                            .mapToOne(Dispatchers.IO),
 
                         // get dish pictogram
-                        db.pictogramQueries.getByIds(entity.pictogram).asFlow().mapToList(),
+                        db.pictogramQueries.getByIds(entity.pictogram).asFlow()
+                            .mapToList(Dispatchers.IO),
 
                         // Get dish serving places
-                        db.servingPlaceQueries.getByIds(entity.servingPlaces).asFlow().mapToList(),
+                        db.servingPlaceQueries.getByIds(entity.servingPlaces).asFlow()
+                            .mapToList(Dispatchers.IO),
                     )
                 }
 
