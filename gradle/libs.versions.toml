@@ -11,7 +11,6 @@ androidx-compose-material3 = "1.1.2"
 androidx-lifecycle = "2.6.2"
 androidx-navigation = "2.7.4"
 androidx-room = "2.6.0"
-# @keep
 androidx-security = "1.1.0-alpha06"
 androidx-test = "1.5.0"
 appyx = "2.0.0-alpha06"
@@ -80,7 +79,6 @@ androidx-constraintlayout-views = "androidx.constraintlayout:constraintlayout:2.
 androidx-core = "androidx.core:core-ktx:1.12.0"
 androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-documentFile = "androidx.documentfile:documentfile:1.0.1"
-androidx-emoji2-bundled = "androidx.emoji2:emoji2-bundled:1.4.0"
 androidx-emoji2-core = "androidx.emoji2:emoji2:1.4.0"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.6.1"
 androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
