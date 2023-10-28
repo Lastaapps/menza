@@ -57,7 +57,7 @@ class StartingNode(
     ),
     private val spotlight: Spotlight<StartingNavType> = Spotlight<StartingNavType>(
         model = spotlightModel,
-        motionController = { SpotlightSlider(it) },
+        visualisation = { SpotlightSlider(it) },
     ),
 ) : ParentNode<StartingNavType>(
     appyxComponent = spotlight,

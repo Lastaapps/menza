@@ -38,7 +38,10 @@ import com.bumble.appyx.components.backstack.operation.newRoot
 import com.bumble.appyx.components.backstack.operation.pop
 import com.bumble.appyx.components.backstack.operation.push
 import com.bumble.appyx.components.backstack.ui.fader.BackStackFader
+import com.bumble.appyx.interactions.core.model.plus
 import com.bumble.appyx.interactions.core.model.transition.Operation
+import com.bumble.appyx.interactions.permanent.PermanentAppyxComponent
+import com.bumble.appyx.navigation.composable.PermanentChild
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
@@ -73,9 +76,14 @@ class MainNode(
             initialTargets = listOf(TodayNav),
             savedStateMap = buildContext.savedStateMap,
         ),
-        motionController = { BackStackFader(it) },
+        visualisation = { BackStackFader(it) },
     ),
-) : ParentNode<MainNavType>(backStack, buildContext) {
+    private val permanent: PermanentAppyxComponent<MainNavType> =
+        PermanentAppyxComponent(
+            buildContext.savedStateMap,
+            initialTargets = listOf(DrawerContent),
+        ),
+) : ParentNode<MainNavType>(backStack + permanent, buildContext) {
 
     private var currentDrawerState: DrawerState? = null
     private val snackbarHostState = SnackbarHostState()
@@ -154,7 +162,7 @@ class MainNode(
                 }
             },
             drawerContent = {
-                PermanentChild(DrawerContent)
+                PermanentChild(permanent, DrawerContent)
             },
             content = {
                 AppyxNoDragComponent(

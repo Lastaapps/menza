@@ -46,7 +46,7 @@ class SettingsHubNode internal constructor(
             initialTargets = listOf(SETTINGS),
             savedStateMap = buildContext.savedStateMap,
         ),
-        motionController = { BackStackFader(it) },
+        visualisation = { BackStackFader(it) },
     ),
 ) : ParentNode<SettingsNavTarget>(backstack, buildContext) {
     override fun resolve(interactionTarget: SettingsNavTarget, buildContext: BuildContext): Node =

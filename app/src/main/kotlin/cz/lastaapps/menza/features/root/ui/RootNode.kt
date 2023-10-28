@@ -54,7 +54,7 @@ internal class RootNode(
     ),
     private val spotlight: Spotlight<RootNavType> = Spotlight(
         model = spotlightModel,
-        motionController = { SpotlightFader(it) },
+        visualisation = { SpotlightFader(it) },
     ),
     private val onDecided: () -> Unit,
 ) : ParentNode<RootNavType>(

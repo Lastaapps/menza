@@ -50,7 +50,7 @@ internal class DrawerNode(
             initialTargets = listOf(MENZA_LIST_NAV),
             savedStateMap = buildContext.savedStateMap,
         ),
-        motionController = { BackStackFader(it) },
+        visualisation = { BackStackFader(it) },
     ),
 ) : ParentNode<DrawerNavType>(backstack, buildContext) {
 
