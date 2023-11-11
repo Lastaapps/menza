@@ -61,7 +61,7 @@ internal class MenzaMasterRepoImpl(
             .map { it.toImmutableList() }
 
     override suspend fun sync(isForced: Boolean): SyncOutcome =
-        sources.parMap {
+        sources.parMap(concurrency = 2) {
             it.sync()
         }.let { res ->
             res.firstOrNull { it is Either.Left<DomainError> }?.let { return it }

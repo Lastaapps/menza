@@ -33,7 +33,7 @@ class SyncAllInfoUC(
 ) : UseCase(context), KoinComponent {
     suspend operator fun invoke(isForced: Boolean = false) = launch {
         val menzas = getMenzaList().first()
-        menzas.parMap {
+        menzas.parMap(concurrency = 4) {
             syncInfo(it, isForced)
         }.separateEither()
     }

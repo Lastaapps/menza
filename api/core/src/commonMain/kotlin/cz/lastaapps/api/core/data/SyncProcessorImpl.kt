@@ -43,6 +43,10 @@ internal class SyncProcessorImpl : SyncProcessor {
     companion object {
         private val log = localLogger()
 
+        // to prevent unnecessary timeouts because of slow connection or whatever
+        private const val CONCURRENCY = 4
+
+        // if you don't make it in time, you are doing something wrong
         private val jobTimeout = 8.seconds
     }
 
@@ -53,7 +57,7 @@ internal class SyncProcessorImpl : SyncProcessor {
     ): SyncOutcome = outcome {
         list.also { log.i { "Preparing run conditions" } }
             // Fetches hash codes from a remote source
-            .parMap { job ->
+            .parMap(concurrency = CONCURRENCY) { job ->
                 withTimeoutOutcome(jobTimeout) {
                     job.shouldRun(this@outcome, isForced).map { job to it }
                 }.bind()
@@ -63,7 +67,7 @@ internal class SyncProcessorImpl : SyncProcessor {
             .map { it.value }
             .also { log.i { "Executing" } }
             // Fetch data from api and convert then
-            .parMap { (job, hash) ->
+            .parMap(concurrency = CONCURRENCY) { (job, hash) ->
                 withTimeoutOutcome(jobTimeout) {
                     val storeAction = job.processFetchAndConvert().bind()
                     Pair(storeAction, hash)
