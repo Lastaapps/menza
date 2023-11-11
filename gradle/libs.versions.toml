@@ -5,11 +5,11 @@ android-gradle = "8.3.0-alpha10"
 androidx-activity = "1.8.0"
 androidx-compose = "1.6.0-alpha07"
 # @keep
-androidx-compose-compiler = "1.5.3"
+androidx-compose-compiler = "1.5.4"
 androidx-compose-material = "1.6.0-alpha07"
 androidx-compose-material3 = "1.1.2"
-androidx-lifecycle = "2.6.2"
-androidx-navigation = "2.7.4"
+androidx-lifecycle = "2.7.0-beta01"
+androidx-navigation = "2.7.5"
 androidx-room = "2.6.0"
 androidx-security = "1.1.0-alpha06"
 androidx-test = "1.5.0"
@@ -18,29 +18,29 @@ coil = "2.3.0"
 dagger = "2.44.2"
 detekt = "1.22.0"
 espresso = "3.5.1"
-firebase-bom = "32.4.0"
-google-ksp = "1.9.10-1.0.13"
+firebase-bom = "32.5.0"
+google-ksp = "1.9.20-1.0.14"
 # @keep
 java-jvmTarget = "11"
-junit5-bom = "5.9.3"
+junit5-bom = "5.10.0"
 kermit = "2.0.2"
 koin = "3.4.3"
 koin-annotations = "1.0.3"
 kotest = "5.6.2"
-kotlin = "1.9.10"
+kotlin = "1.9.20"
 # @keep
-kotlin-api = "1.9"
+kotlin-api = "2.0"
 kotlin-atomicfu = "0.22.0"
 kotlin-coroutines = "1.7.3"
-kotlin-language = "1.9"
+kotlin-language = "2.0"
 ktlint = "11.5.0"
-ktor = "2.3.4"
+ktor = "2.3.5"
 logback = "1.4.5"
 russhwolf-settings = "1.0.0"
 sdk-compile = "34"
 sdk-min = "21"
 sdk-target = "34"
-shadow = "8.1.0"
+shadow = "8.1.1"
 sqldelight = "2.0.0"
 
 [libraries]
@@ -53,7 +53,7 @@ accompanist-navigationMaterial = { module = "com.google.accompanist:accompanist-
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanist-permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 accompanist-systemUi = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
-android-desugaring = "com.android.tools:desugar_jdk_libs:2.0.3"
+android-desugaring = "com.android.tools:desugar_jdk_libs:2.0.4"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-core = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-annotation = "androidx.annotation:annotation:1.7.0"
@@ -80,7 +80,7 @@ androidx-core = "androidx.core:core-ktx:1.12.0"
 androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
 androidx-documentFile = "androidx.documentfile:documentfile:1.0.1"
 androidx-emoji2-core = "androidx.emoji2:emoji2:1.4.0"
-androidx-fragment = "androidx.fragment:fragment-ktx:1.6.1"
+androidx-fragment = "androidx.fragment:fragment-ktx:1.6.2"
 androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }

@@ -49,6 +49,7 @@ import cz.lastaapps.menza.ui.theme.generated.kitty.KittyLightColors
 import cz.lastaapps.menza.ui.theme.generated.uwu.UwuDarkColors
 import cz.lastaapps.menza.ui.theme.generated.uwu.UwuLightColors
 
+@SuppressLint("NewApi")
 @Composable
 fun AppTheme(
     darkMode: DarkMode = DarkMode.System,
@@ -60,11 +61,11 @@ fun AppTheme(
 
     val colorScheme = when (theme) {
         System ->
-            @SuppressLint("NewApi")
-            if (isLightMode)
+            if (isLightMode) {
                 dynamicLightColorScheme(LocalContext.current)
-            else
+            } else {
                 dynamicDarkColorScheme(LocalContext.current)
+            }
         Agata ->
             if (isLightMode)
                 AgataLightColors
