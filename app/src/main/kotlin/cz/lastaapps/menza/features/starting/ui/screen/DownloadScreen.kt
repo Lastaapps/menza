@@ -33,7 +33,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -45,7 +44,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +56,6 @@ import cz.lastaapps.menza.features.starting.ui.vm.DownloadDataState
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.HandleError
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun DownloadScreen(
@@ -137,17 +134,19 @@ private fun DownloadContent(
                     when {
                         isLoading && isReady -> {
                             Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
-                                val animatedProgress by animateFloatAsState(
+                                val animatedProgress = animateFloatAsState(
                                     targetValue = state.downloadProgress.progress,
                                     animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                                    label = "download_progress",
                                 )
+
                                 Row(
                                     horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.fillMaxWidth(),
                                 ) {
                                     LinearProgressIndicator(
-                                        animatedProgress,
+                                        progress = { animatedProgress.value },
                                         modifier = Modifier.weight(1f),
                                     )
 

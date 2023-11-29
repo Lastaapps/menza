@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.main.ui.node
 
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DrawerState
@@ -75,9 +74,9 @@ class MenzaSelectionNode(
                 scope.launch {
                     val drawerState = updateDrawer() ?: return@launch
                     when (drawerState.targetValue) {
-                        Closed -> Open
-                        Open -> Closed
-                    }.let { drawerState.animateTo(it, spring()) }
+                        Closed -> drawerState.open()
+                        Open -> drawerState.close()
+                    }
                 }
             },
             viewModel = nodeViewModel(),

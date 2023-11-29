@@ -34,9 +34,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PlainTooltipBox
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -175,12 +178,16 @@ private fun ColumnScope.ButtonContent(
             }
         }
 
-        PlainTooltipBox(
+        TooltipBox(
+            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
             tooltip = {
-                Text(text = stringResource(id = R.string.wallet_logout))
+                PlainTooltip {
+                    Text(text = stringResource(id = R.string.wallet_logout))
+                }
             },
+            state = rememberTooltipState(isPersistent = true),
         ) {
-            IconButton(onClick = onLogout, modifier = Modifier.tooltipAnchor()) {
+            IconButton(onClick = onLogout) {
                 Icon(
                     Icons.AutoMirrored.Default.Logout,
                     contentDescription = stringResource(id = R.string.wallet_logout),
