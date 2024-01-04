@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -33,7 +33,6 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
 import com.bumble.appyx.navigation.node.node
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.navigation.MainNode
 import cz.lastaapps.menza.features.root.ui.RootNavType.LoadingNav
 import cz.lastaapps.menza.features.root.ui.RootNavType.MainNav
@@ -43,7 +42,6 @@ import cz.lastaapps.menza.ui.util.AppyxNoDragComponent
 import cz.lastaapps.menza.ui.util.activateItem
 import cz.lastaapps.menza.ui.util.activeIndex
 import cz.lastaapps.menza.ui.util.indexOfType
-import cz.lastaapps.menza.ui.util.nodeViewModel
 import kotlinx.coroutines.launch
 
 internal class RootNode(
@@ -56,6 +54,7 @@ internal class RootNode(
         model = spotlightModel,
         visualisation = { SpotlightFader(it) },
     ),
+    val viewModel: RootViewModel,
     private val onDecided: () -> Unit,
 ) : ParentNode<RootNavType>(
     buildContext = buildContext,
@@ -79,9 +78,7 @@ internal class RootNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val viewModel: RootViewModel = nodeViewModel()
 
-        HandleAppear(viewModel)
         val state by viewModel.flowState
 
         LaunchedEffect(state.isReady, state.isSetUp) {
@@ -91,20 +88,18 @@ internal class RootNode(
             }
         }
 
-        ApplyAppTheme(viewModel) {
-            val activeIndex by remember { spotlightModel.activeIndex() }
-                .collectAsStateWithLifecycle(-1)
-            val indexOfType by remember { spotlightModel.indexOfType(LoadingNav) }
-                .collectAsStateWithLifecycle(0)
+        val activeIndex by remember { spotlightModel.activeIndex() }
+            .collectAsStateWithLifecycle(-1)
+        val indexOfType by remember { spotlightModel.indexOfType(LoadingNav) }
+            .collectAsStateWithLifecycle(0)
 
-            AppyxNoDragComponent(
-                appyxComponent = spotlight,
-                modifier = modifier.onPlaced {
-                    if (indexOfType != activeIndex) {
-                        onDecided()
-                    }
-                },
-            )
-        }
+        AppyxNoDragComponent(
+            appyxComponent = spotlight,
+            modifier = modifier.onPlaced {
+                if (indexOfType != activeIndex) {
+                    onDecided()
+                }
+            },
+        )
     }
 }

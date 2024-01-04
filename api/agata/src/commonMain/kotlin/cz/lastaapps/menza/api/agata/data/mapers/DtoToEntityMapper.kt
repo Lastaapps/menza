@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -199,6 +199,10 @@ private fun String.toLatLong() =
             LatLong(lat = lat, long = long)
         }
 
+
+// shown only if dish has neither Czech nor English name
+private const val EmptyNamePlaceholder = """"¯\(°_o)/¯"""
+
 internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
     StrahovEntiy(
         id = id.toLong(),
@@ -207,10 +211,10 @@ internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
         groupNameEn = groupNameEn.myCapitalize(),
         groupOrder = groupOrder.toLong(),
         itemOrder = order.toLong(),
-        amountCs = amountCs?.trim(),
-        amountEn = amountEn?.trim(),
-        nameCs = nameCs.trim(),
-        nameEn = nameEn.trim(),
+        amountCs = (amountCs ?: amountEn)?.trim(),
+        amountEn = (amountEn ?: amountCs)?.trim(),
+        nameCs = (nameCs ?: nameEn ?: EmptyNamePlaceholder).trim(),
+        nameEn = (nameEn ?: nameCs ?: EmptyNamePlaceholder).trim(),
         priceNormal = price.toDouble(),
         priceStudent = priceStudent.toDouble(),
         allergens = allergens,

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,15 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.root.ui
+package cz.lastaapps.menza.ui
 
+import android.graphics.Color
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import cz.lastaapps.menza.features.root.ui.RootViewModel
+import cz.lastaapps.menza.features.settings.domain.model.shouldUseDark
 import cz.lastaapps.menza.ui.theme.AppTheme
 
 @Composable
 internal fun ApplyAppTheme(
     viewModel: RootViewModel,
+    activity: ComponentActivity,
     content: @Composable () -> Unit,
 ) {
     val state by viewModel.flowState
@@ -36,5 +44,24 @@ internal fun ApplyAppTheme(
             colorSystemBars = true,
             content = content,
         )
+
+        val darkTheme = state.darkMode.shouldUseDark()
+        DisposableEffect(darkTheme) {
+            // taken from default enableEdgeToEdgeImpl
+            val lightScrim = Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
+            val darkScrim = Color.argb(0x80, 0x1b, 0x1b, 0x1b)
+
+            activity.enableEdgeToEdge(
+                statusBarStyle = SystemBarStyle.auto(
+                    Color.TRANSPARENT,
+                    Color.TRANSPARENT,
+                ) { darkTheme },
+                navigationBarStyle = SystemBarStyle.auto(
+                    lightScrim,
+                    darkScrim,
+                ) { darkTheme },
+            )
+            onDispose { }
+        }
     }
 }

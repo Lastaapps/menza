@@ -15,3 +15,4 @@
 /gradle.xml
 /migrations.xml
 /appInsightsSettings.xml
+/deploymentTargetSelector.xml

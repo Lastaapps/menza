@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,6 +31,8 @@ import cz.lastaapps.core.domain.error.ApiError.WalletError
 import cz.lastaapps.core.util.extensions.catchingNetwork
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.BrowserUserAgent
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -47,18 +49,19 @@ internal class AndroidAgataCtuWalletApi(
     httpClient: HttpClient,
 ) : AgataCtuWalletApi {
 
-    private val client: HttpClient
+    private val client: HttpClient = httpClient.config {
+        // Disable redirects, because when I was testing it with Python I got into loop sometimes
+        // Also it has to extract some cookies from some of the requests, so redirects manually handled
+        followRedirects = false
+        // Because of many redirects
+        expectSuccess = false
 
-    init {
-        client = httpClient.config {
-            // Disable redirects, because when I was testing it with Python I got into loop sometimes
-            // Also it has to extract some cookies from some of the requests, so redirects manually handled
-            followRedirects = false
-            // Because of many redirects
-            expectSuccess = false
-
-            BrowserUserAgent()
+        // disable logging, so user credentials/secrets are not accidentally logged
+        install(Logging) {
+            level = LogLevel.NONE
         }
+
+        BrowserUserAgent()
     }
 
     // Get balance from Agata

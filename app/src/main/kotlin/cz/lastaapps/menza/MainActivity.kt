@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,6 +21,7 @@ package cz.lastaapps.menza
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -30,13 +31,19 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bumble.appyx.navigation.integration.NodeComponentActivity
 import com.bumble.appyx.navigation.integration.NodeHost
 import com.bumble.appyx.navigation.platform.AndroidLifecycle
+import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.root.ui.RootNode
+import cz.lastaapps.menza.features.root.ui.RootViewModel
+import cz.lastaapps.menza.ui.ApplyAppTheme
 import cz.lastaapps.menza.ui.locals.LocalActivityViewModelOwner
 import cz.lastaapps.menza.ui.locals.WithFoldingFeature
 import cz.lastaapps.menza.ui.locals.WithLocalWindowSizes
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : NodeComponentActivity() {
+
+    private val viewModel: RootViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,14 +54,20 @@ class MainActivity : NodeComponentActivity() {
             !isReady
         }
 
+        enableEdgeToEdge()
+
         setContent {
+            HandleAppear(viewModel)
+
             ApplyProviders {
-                NodeHost(
-                    lifecycle = AndroidLifecycle(LocalLifecycleOwner.current.lifecycle),
-                    integrationPoint = appyxV2IntegrationPoint,
-                    modifier = Modifier.fillMaxSize(),
-                ) { buildContext ->
-                    RootNode(buildContext) { isReady = true }
+                ApplyAppTheme(viewModel, this) {
+                    NodeHost(
+                        lifecycle = AndroidLifecycle(LocalLifecycleOwner.current.lifecycle),
+                        integrationPoint = appyxV2IntegrationPoint,
+                        modifier = Modifier.fillMaxSize(),
+                    ) { buildContext ->
+                        RootNode(buildContext, viewModel = viewModel) { isReady = true }
+                    }
                 }
             }
         }

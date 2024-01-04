@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -46,6 +46,59 @@ android {
         }
     }
 
+    buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            isMinifyEnabled = false
+
+            extra.set("alwaysUpdateBuildId", false)
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+
+            val debug = getByName("debug")
+            signingConfig = debug.signingConfig
+            isDebuggable = true
+        }
+
+        /* Used for release testing without explicit signing.
+         * This is required to make sure that release variants of the libraries are used,
+         * as they can differ (Compose, Lifecycle, ...)
+         * You can set if minification is on (useful for debugging)
+         */
+        getByName("fakeRelease") {
+            initWith(getByName("release"))
+            matchingFallbacks += listOf("release")
+
+            val debug = getByName("debug")
+            applicationIdSuffix = debug.applicationIdSuffix
+            signingConfig = debug.signingConfig
+            isDebuggable = true
+
+            val minify = true
+            isMinifyEnabled = minify
+            isShrinkResources = minify
+
+            run {
+                if (minify) {
+                    arrayOf(
+                        getDefaultProguardFile("proguard-android-optimize.txt"),
+                        "proguard-rules.pro",
+                    )
+                } else {
+                    emptyArray()
+                }
+            }.let { rules ->
+                proguardFiles(*rules)
+            }
+        }
+    }
+
     packaging {
         // Remove some conflict between atomic-fu and datetime
         resources.pickFirsts.add("META-INF/versions/9/previous-compilation-data.bin")
@@ -53,6 +106,9 @@ android {
         // Remove some crap skrape-it dependencies
         resources.pickFirsts.add("META-INF/DEPENDENCIES")
         resources.pickFirsts.add("mozilla/public-suffix-list.txt")
+
+        // Remove sqldelight native sql driver for Widnows and Mac
+        resources.excludes.add("org/sqlite/native/**")
     }
 }
 
@@ -82,4 +138,7 @@ dependencies {
     implementation(libs.bundles.russhwolf.settings)
 
     implementation(libs.ktor.client.core)
+    // required by ktor internally (release only)
+    //noinspection UseTomlInstead
+    implementation("org.slf4j:slf4j-simple:2.0.6")
 }

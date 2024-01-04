@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -63,11 +63,6 @@ internal fun Project.configureComposeDependencies() {
         implementation(libs.androidx.compose.ui.util)
         debugImplementation(libs.androidx.compose.tooling)
         implementation(libs.androidx.compose.toolingPreview)
-        implementation(libs.accompanist.pager)
-        implementation(libs.accompanist.systemUi)
-        implementation(libs.accompanist.navigationAnimation)
-        implementation(libs.accompanist.navigationMaterial)
-        implementation(libs.accompanist.permission)
 
         implementation(libs.androidx.lifecycle.runtime)
         implementation(libs.androidx.lifecycle.runtime.compose)

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,8 +20,8 @@
 package cz.lastaapps.menza.ui.theme
 
 import android.annotation.SuppressLint
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -30,9 +30,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.CTU
@@ -40,6 +38,8 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Kitty
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.System
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.domain.model.shouldUseDark
+import cz.lastaapps.menza.ui.locals.LocalActivityViewModelOwner
 import cz.lastaapps.menza.ui.theme.generated.agata.AgataDarkColors
 import cz.lastaapps.menza.ui.theme.generated.agata.AgataLightColors
 import cz.lastaapps.menza.ui.theme.generated.ctu.CtuDarkColors
@@ -66,16 +66,19 @@ fun AppTheme(
             } else {
                 dynamicDarkColorScheme(LocalContext.current)
             }
+
         Agata ->
             if (isLightMode)
                 AgataLightColors
             else
                 AgataDarkColors
+
         CTU ->
             if (isLightMode)
                 CtuLightColors
             else
                 CtuDarkColors
+
         Uwu ->
             if (isLightMode)
                 UwuLightColors
@@ -90,18 +93,21 @@ fun AppTheme(
     }.animated()
 
     if (colorSystemBars) {
-        val systemUiController = rememberSystemUiController()
-
-        SideEffect {
-            systemUiController.setStatusBarColor(
-                color = colorScheme.background,
-                darkIcons = isLightMode,
-            )
-            systemUiController.setNavigationBarColor(
-                color = colorScheme.surfaceVariant,
-                darkIcons = isLightMode,
-            )
-        }
+        val activity = (LocalActivityViewModelOwner.current as ComponentActivity)
+//        // https://google.github.io/accompanist/systemuicontroller/
+//        '@Deprecated(...) @Composable() fun rememberSystemUiController(window: Window? = ...): SystemUiController' is deprecated.
+//        val systemUiController = rememberSystemUiController()
+//
+//        SideEffect {
+//            systemUiController.setStatusBarColor(
+//                color = colorScheme.background,
+//                darkIcons = isLightMode,
+//            )
+//            systemUiController.setNavigationBarColor(
+//                color = colorScheme.surfaceVariant,
+//                darkIcons = isLightMode,
+//            )
+//        }
     }
 
     MaterialTheme(
@@ -122,14 +128,6 @@ private val Shapes = Shapes(
     large = ShapeTokens.CornerLarge,
     extraLarge = ShapeTokens.CornerExtraLarge,*/
 )
-
-@Composable
-private fun DarkMode.shouldUseDark(): Boolean =
-    when (this) {
-        DarkMode.Dark -> true
-        DarkMode.Light -> false
-        DarkMode.System -> isSystemInDarkTheme()
-    }
 
 @Suppress("AnimateAsStateLabel")
 @Composable

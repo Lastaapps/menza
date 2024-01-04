@@ -52,4 +52,21 @@
 
 
 # Idk, I hope it doesn't crash
--dontwarn org.slf4j.impl.StaticLoggerBinder
+-dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+-dontwarn groovy.**
+-dontwarn io.ktor.client.features.HttpTimeout$Feature
+-dontwarn io.ktor.client.features.HttpTimeout$HttpTimeoutCapabilityConfiguration
+-dontwarn io.ktor.client.features.HttpTimeout
+-dontwarn io.ktor.client.features.HttpTimeoutKt
+-dontwarn io.ktor.network.sockets.ConnectTimeoutException
+-dontwarn io.ktor.network.sockets.SocketTimeoutException
+-dontwarn java.awt.**
+-dontwarn java.beans.**
+-dontwarn java.lang.management.ManagementFactory
+-dontwarn java.sql.JDBCType
+-dontwarn javax.**
+-dontwarn org.apache.bsf.BSFManager
+-dontwarn org.codehaus.groovy.**
+-dontwarn org.codehaus.janino.ClassBodyEvaluator
+-dontwarn org.ietf.jgss.**
+-dontwarn sun.**

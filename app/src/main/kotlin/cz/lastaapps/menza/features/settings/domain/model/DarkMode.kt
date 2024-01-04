@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,9 +19,21 @@
 
 package cz.lastaapps.menza.features.settings.domain.model
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
+
 enum class DarkMode(internal val id: Int) {
     Light(0),
     Dark(1),
     System(2),
     ;
+
 }
+
+@Composable
+fun DarkMode.shouldUseDark(): Boolean =
+    when (this) {
+        DarkMode.Dark -> true
+        DarkMode.Light -> false
+        DarkMode.System -> isSystemInDarkTheme()
+    }

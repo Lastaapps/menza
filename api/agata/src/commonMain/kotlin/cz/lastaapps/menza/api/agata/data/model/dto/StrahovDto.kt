@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -43,9 +43,9 @@ internal data class StrahovDto(
     @SerialName("vaha_en")
     val amountEn: String?,
     @SerialName("nazev")
-    val nameCs: String,
+    val nameCs: String?,
     @SerialName("nazev_en")
-    val nameEn: String,
+    val nameEn: String?,
     @SerialName("cena")
     val price: Float,
     @SerialName("cena_stud")
