@@ -50,6 +50,8 @@
 # @Serializable and @Polymorphic are used at runtime for polymorphic serialization.
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault
 
+# Decompose
+-keep class com.arkivanov.decompose.extensions.compose.mainthread.SwingMainThreadChecker
 
 # Idk, I hope it doesn't crash
 -dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
