@@ -20,17 +20,15 @@
 package cz.lastaapps.menza.features.root.ui.navigation
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import cz.lastaapps.menza.features.main.ui.navigation.MainContent
 import cz.lastaapps.menza.features.root.ui.RootViewModel
 import cz.lastaapps.menza.features.root.ui.navigation.RootComponent.Child.AppContent
 import cz.lastaapps.menza.features.root.ui.navigation.RootComponent.Child.AppSetup
@@ -61,12 +59,7 @@ internal fun RootContent(
         label = "Root slot",
     ) { instance ->
         when (instance) {
-            is AppContent ->
-                Surface {
-                    Box(modifier, contentAlignment = Alignment.Center) {
-                        Text(text = "App content")
-                    }
-                }
+            is AppContent -> MainContent(component = instance.component, modifier)
 
             is AppSetup -> StartingContent(
                 instance.component,

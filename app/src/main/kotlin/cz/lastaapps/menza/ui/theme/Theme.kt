@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.ui.theme
 
 import android.annotation.SuppressLint
-import androidx.activity.ComponentActivity
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalTextStyle
@@ -39,7 +38,6 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.System
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.shouldUseDark
-import cz.lastaapps.menza.ui.locals.LocalActivityViewModelOwner
 import cz.lastaapps.menza.ui.theme.generated.agata.AgataDarkColors
 import cz.lastaapps.menza.ui.theme.generated.agata.AgataLightColors
 import cz.lastaapps.menza.ui.theme.generated.ctu.CtuDarkColors
@@ -91,24 +89,6 @@ fun AppTheme(
             else
                 KittyDarkColors
     }.animated()
-
-    if (colorSystemBars) {
-        val activity = (LocalActivityViewModelOwner.current as ComponentActivity)
-//        // https://google.github.io/accompanist/systemuicontroller/
-//        '@Deprecated(...) @Composable() fun rememberSystemUiController(window: Window? = ...): SystemUiController' is deprecated.
-//        val systemUiController = rememberSystemUiController()
-//
-//        SideEffect {
-//            systemUiController.setStatusBarColor(
-//                color = colorScheme.background,
-//                darkIcons = isLightMode,
-//            )
-//            systemUiController.setNavigationBarColor(
-//                color = colorScheme.surfaceVariant,
-//                darkIcons = isLightMode,
-//            )
-//        }
-    }
 
     MaterialTheme(
         colorScheme = colorScheme,

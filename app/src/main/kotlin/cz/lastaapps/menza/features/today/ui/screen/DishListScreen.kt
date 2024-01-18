@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -44,14 +44,14 @@ import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.COMPACT
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.GRID
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.HORIZONTAL
-import cz.lastaapps.menza.features.settings.ui.components.ImageSizeSetting
-import cz.lastaapps.menza.features.today.ui.components.CompactViewSwitch
-import cz.lastaapps.menza.features.today.ui.components.Experimental
-import cz.lastaapps.menza.features.today.ui.components.TodayDishGrid
-import cz.lastaapps.menza.features.today.ui.components.TodayDishHorizontal
-import cz.lastaapps.menza.features.today.ui.components.TodayDishList
+import cz.lastaapps.menza.features.settings.ui.widget.ImageSizeSetting
 import cz.lastaapps.menza.features.today.ui.vm.DishListState
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
+import cz.lastaapps.menza.features.today.ui.widget.CompactViewSwitch
+import cz.lastaapps.menza.features.today.ui.widget.Experimental
+import cz.lastaapps.menza.features.today.ui.widget.TodayDishGrid
+import cz.lastaapps.menza.features.today.ui.widget.TodayDishHorizontal
+import cz.lastaapps.menza.features.today.ui.widget.TodayDishList
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.HandleError
 

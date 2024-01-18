@@ -30,10 +30,13 @@ import org.koin.core.component.KoinComponent
 
 internal interface PolicyComponent {
     val viewModel: PolicyViewModel
+
+    val allowAccept: Boolean
 }
 
 internal class DefaultPolicyComponent(
     componentContext: ComponentContext,
+    override val allowAccept: Boolean,
 ) : PolicyComponent, KoinComponent, ComponentContext by componentContext {
     override val viewModel: PolicyViewModel = getOrCreateKoin()
 }

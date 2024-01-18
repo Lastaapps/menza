@@ -28,6 +28,10 @@ import com.arkivanov.decompose.router.pages.childPages
 import com.arkivanov.decompose.router.pages.selectNext
 import com.arkivanov.decompose.value.Value
 import cz.lastaapps.menza.features.other.ui.vm.PolicyViewModel
+import cz.lastaapps.menza.features.settings.ui.component.AppThemeComponent
+import cz.lastaapps.menza.features.settings.ui.component.DefaultAppThemeComponent
+import cz.lastaapps.menza.features.settings.ui.component.DefaultReorderMenzaComponent
+import cz.lastaapps.menza.features.settings.ui.component.ReorderMenzaComponent
 import cz.lastaapps.menza.features.starting.ui.component.AllSetComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultAllSetComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultDownloadComponent
@@ -67,10 +71,10 @@ internal interface StartingComponent {
         value class ChoosePrice(val component: PriceTypeComponent) : Child
 
         @JvmInline
-        value class ChooseTheme(val component: ComponentContext) : Child
+        value class ChooseTheme(val component: AppThemeComponent) : Child
 
         @JvmInline
-        value class OrderMenzaList(val component: ComponentContext) : Child
+        value class OrderMenzaList(val component: ReorderMenzaComponent) : Child
 
         @JvmInline
         value class AllSet(val component: AllSetComponent) : Child
@@ -99,10 +103,10 @@ internal class DefaultStartingComponent(
             when (configuration) {
                 AllSet -> Child.AllSet(DefaultAllSetComponent(componentContext))
                 ChoosePrice -> Child.ChoosePrice(DefaultPriceTypeComponent(componentContext))
-                ChooseTheme -> TODO()
+                ChooseTheme -> Child.ChooseTheme(DefaultAppThemeComponent(componentContext))
                 DownloadData -> Child.DownloadData(DefaultDownloadComponent(componentContext))
-                OrderMenzaList -> TODO()
-                Policy -> Child.Policy(DefaultPolicyComponent(componentContext))
+                OrderMenzaList -> Child.OrderMenzaList(DefaultReorderMenzaComponent(componentContext))
+                Policy -> Child.Policy(DefaultPolicyComponent(componentContext, true))
             }
         }
 

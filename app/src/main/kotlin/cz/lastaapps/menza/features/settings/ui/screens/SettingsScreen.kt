@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,7 +36,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Share
@@ -69,10 +68,10 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.ui.components.FullReloadDialog
-import cz.lastaapps.menza.features.settings.ui.components.SettingsItem
-import cz.lastaapps.menza.features.settings.ui.components.SettingsSwitch
 import cz.lastaapps.menza.features.settings.ui.util.name
+import cz.lastaapps.menza.features.settings.ui.widget.FullReloadDialog
+import cz.lastaapps.menza.features.settings.ui.widget.SettingsItem
+import cz.lastaapps.menza.features.settings.ui.widget.SettingsSwitch
 import cz.lastaapps.menza.ui.components.ChooseFromDialog
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper

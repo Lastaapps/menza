@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,9 +21,9 @@ package cz.lastaapps.menza.features.other.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import cz.lastaapps.menza.features.other.ui.widgets.OsturakImages
+import cz.lastaapps.menza.features.other.ui.widgets.OsturakText
 import cz.lastaapps.menza.ui.components.layout.AboveOrSideBySideLayout
-import cz.lastaapps.menza.features.other.ui.components.OsturakImages
-import cz.lastaapps.menza.features.other.ui.components.OsturakText
 
 @Composable
 internal fun OsturakScreen(

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,11 +20,7 @@
 package cz.lastaapps.menza.features.panels.whatsnew.ui.vm
 
 import GetAppVersionUC
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.core.os.ConfigurationCompat
-import com.bumble.appyx.navigation.node.Node
+import cz.lastaapps.core.data.DeviceLocalesProvider
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
@@ -33,18 +29,13 @@ import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
 import cz.lastaapps.menza.features.panels.whatsnew.domain.LoadWhatsNewUC
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel.State
-import cz.lastaapps.menza.ui.util.nodeViewModel
 import java.util.Locale
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.onEach
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 internal class WhatsNewViewModel(
-    private val locales: ImmutableList<Locale>,
     context: VMContext,
+    private val localesProvider: DeviceLocalesProvider, // yes, this should be a usecase
     private val store: WhatsNewDataStore,
     private val loadWhatsNewUC: LoadWhatsNewUC,
     private val getAppVersionUC: GetAppVersionUC,
@@ -54,7 +45,8 @@ internal class WhatsNewViewModel(
     override fun onAppeared() {
         launchVM {
             val map = loadWhatsNewUC()
-            val locale = locales.firstOrNull { map.containsKey(it) } ?: Locale.US
+            val locale =
+                localesProvider.provideLocales().firstOrNull { map.containsKey(it) } ?: Locale.US
             val data = map.getOrDefault(locale, emptySet()).sorted()
 
             updateState {
@@ -77,20 +69,4 @@ internal class WhatsNewViewModel(
         val news: List<WhatsNewInfo> = persistentListOf(),
         val shouldShow: Boolean = false,
     ) : VMState
-}
-
-@Composable
-internal fun Node.whatsNewViewModel(): WhatsNewViewModel {
-    val config = LocalConfiguration.current
-
-    val locales: ImmutableList<Locale> = remember(config) {
-        val languages = ConfigurationCompat.getLocales(config)
-        List(languages.size()) { languages[it] }
-            .filterNotNull()
-            .toImmutableList()
-    }
-
-    return nodeViewModel<WhatsNewViewModel> {
-        parametersOf(locales)
-    }
 }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -40,8 +40,6 @@ import cz.lastaapps.menza.features.panels.rateus.ui.RateUsPanel
 import cz.lastaapps.menza.features.panels.rateus.ui.RateUsViewModel
 import cz.lastaapps.menza.features.panels.whatsnew.ui.WhatsNewPanel
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel
-import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.whatsNewViewModel
-import cz.lastaapps.menza.ui.locals.koinActivityViewModel
 import cz.lastaapps.menza.ui.util.HandleError
 import kotlinx.collections.immutable.persistentListOf
 

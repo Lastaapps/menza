@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -38,14 +38,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.vm.HandleAppear
-import cz.lastaapps.menza.features.info.ui.components.AddressList
-import cz.lastaapps.menza.features.info.ui.components.ContactList
-import cz.lastaapps.menza.features.info.ui.components.LinkList
-import cz.lastaapps.menza.features.info.ui.components.MessageList
-import cz.lastaapps.menza.features.info.ui.components.OpeningHoursList
 import cz.lastaapps.menza.features.info.ui.vm.InfoState
 import cz.lastaapps.menza.features.info.ui.vm.InfoViewModel
-import cz.lastaapps.menza.features.main.ui.components.WrapMenzaNotSelected
+import cz.lastaapps.menza.features.info.ui.widgets.AddressList
+import cz.lastaapps.menza.features.info.ui.widgets.ContactList
+import cz.lastaapps.menza.features.info.ui.widgets.LinkList
+import cz.lastaapps.menza.features.info.ui.widgets.MessageList
+import cz.lastaapps.menza.features.info.ui.widgets.OpeningHoursList
+import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
 import cz.lastaapps.menza.ui.components.WrapRefresh
 import cz.lastaapps.menza.ui.components.layout.AboveOrSideBySideLayout
 import cz.lastaapps.menza.ui.theme.Padding

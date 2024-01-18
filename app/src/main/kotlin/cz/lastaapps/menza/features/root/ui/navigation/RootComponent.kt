@@ -25,6 +25,8 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.value.Value
+import cz.lastaapps.menza.features.main.ui.navigation.DefaultMainComponent
+import cz.lastaapps.menza.features.main.ui.navigation.MainComponent
 import cz.lastaapps.menza.features.root.ui.RootViewModel
 import cz.lastaapps.menza.features.root.ui.navigation.DefaultRootComponent.Config.AppContentConfig
 import cz.lastaapps.menza.features.root.ui.navigation.DefaultRootComponent.Config.AppSetupConfig
@@ -38,9 +40,6 @@ import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 
 
-// TODO delete
-interface AppContentComponent
-
 internal interface RootComponent {
     val viewModel: RootViewModel
     val content: Value<ChildSlot<*, Child>>
@@ -50,7 +49,7 @@ internal interface RootComponent {
 
     sealed interface Child {
         @JvmInline
-        value class AppContent(val component: AppContentComponent) : Child
+        value class AppContent(val component: MainComponent) : Child
 
         @JvmInline
         value class AppSetup(val component: StartingComponent) : Child
@@ -70,7 +69,7 @@ internal class DefaultRootComponent(
             Config.serializer(),
         ) { config, componentContext ->
             when (config) {
-                AppContentConfig -> AppContent(object : AppContentComponent {})
+                AppContentConfig -> AppContent(DefaultMainComponent(componentContext))
                 AppSetupConfig -> AppSetup(DefaultStartingComponent(componentContext))
             }
         }

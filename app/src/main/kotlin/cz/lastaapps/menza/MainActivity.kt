@@ -25,7 +25,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.arkivanov.decompose.defaultComponentContext
@@ -33,7 +32,6 @@ import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.root.ui.navigation.DefaultRootComponent
 import cz.lastaapps.menza.features.root.ui.navigation.RootContent
 import cz.lastaapps.menza.ui.ApplyAppTheme
-import cz.lastaapps.menza.ui.locals.LocalActivityViewModelOwner
 import cz.lastaapps.menza.ui.locals.WithFoldingFeature
 import cz.lastaapps.menza.ui.locals.WithLocalWindowSizes
 
@@ -73,12 +71,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         WithLocalWindowSizes(this) {
             WithFoldingFeature(this) {
-                // TODO remove
-                CompositionLocalProvider(
-                    LocalActivityViewModelOwner provides this,
-                ) {
                     content()
-                }
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,7 +20,9 @@
 package cz.lastaapps.core.di
 
 import cz.lastaapps.core.data.AndroidAssetsProvider
+import cz.lastaapps.core.data.AndroidDeviceLocalesProvider
 import cz.lastaapps.core.data.AssetsProvider
+import cz.lastaapps.core.data.DeviceLocalesProvider
 import cz.lastaapps.core.data.IsOnMeteredNetworkProvider
 import cz.lastaapps.core.data.IsOnMeteredNetworkProviderImpl
 import cz.lastaapps.core.data.createSettings
@@ -40,4 +42,5 @@ internal actual val platform: Module = module {
     factoryOf(::IsOnMeteredNetworkProviderImpl) bind IsOnMeteredNetworkProvider::class
     factoryOf(::AndroidLinkOpener) bind LinkOpener::class
     factoryOf(::AndroidAssetsProvider) bind AssetsProvider::class
+    factoryOf(::AndroidDeviceLocalesProvider) bind DeviceLocalesProvider::class
 }

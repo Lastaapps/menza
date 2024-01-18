@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,7 +22,6 @@ package cz.lastaapps.menza.features.week.ui.screen
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -31,12 +30,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.lastaapps.core.ui.vm.HandleAppear
-import cz.lastaapps.menza.features.main.ui.components.WrapMenzaNotSelected
-import cz.lastaapps.menza.features.week.ui.components.WeekDishList
+import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.week.ui.vm.WeekState
 import cz.lastaapps.menza.features.week.ui.vm.WeekViewModel
+import cz.lastaapps.menza.features.week.ui.widget.WeekDishList
 import cz.lastaapps.menza.ui.util.HandleError
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun WeekScreen(

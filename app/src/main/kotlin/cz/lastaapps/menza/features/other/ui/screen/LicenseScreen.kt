@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,13 +25,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.mikepenz.aboutlibraries.entity.Library
 import cz.lastaapps.core.ui.vm.HandleAppear
-import cz.lastaapps.menza.features.other.ui.components.LibraryDetail
-import cz.lastaapps.menza.features.other.ui.components.LibraryList
-import cz.lastaapps.menza.features.other.ui.components.NoLibrarySelected
 import cz.lastaapps.menza.features.other.ui.vm.LicenseState
 import cz.lastaapps.menza.features.other.ui.vm.LicenseViewModel
+import cz.lastaapps.menza.features.other.ui.widgets.LibraryDetail
+import cz.lastaapps.menza.features.other.ui.widgets.LibraryList
+import cz.lastaapps.menza.features.other.ui.widgets.NoLibrarySelected
 import cz.lastaapps.menza.ui.components.layout.TwoPaneDialogLayout
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun LicenseScreen(

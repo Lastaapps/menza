@@ -28,6 +28,8 @@ import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.pages.Pages
 import com.arkivanov.decompose.extensions.compose.pages.PagesScrollAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import cz.lastaapps.menza.features.settings.ui.component.AppThemeContent
+import cz.lastaapps.menza.features.settings.ui.component.ReorderMenzaContent
 import cz.lastaapps.menza.features.starting.ui.component.AllSetContent
 import cz.lastaapps.menza.features.starting.ui.component.DownloadContent
 import cz.lastaapps.menza.features.starting.ui.component.PolicyContent
@@ -54,16 +56,16 @@ internal fun StartingContent(
         val childModifier = Modifier.padding(it)
         Pages(
             pages = pager,
-            onPageSelected = { /* TODO separate download and privacy policy */ },
+            onPageSelected = { /* TODO separate download and privacy policy, enable this after */ },
             scrollAnimation = PagesScrollAnimation.Default,
         ) { _, page ->
             val next = component::next
             when (page) {
                 is AllSet -> AllSetContent(page.component, childModifier, onDone)
                 is ChoosePrice -> PriceTypeContent(page.component, childModifier, next)
-                is ChooseTheme -> {}
+                is ChooseTheme -> AppThemeContent(page.component, next)
                 is DownloadData -> DownloadContent(page.component, childModifier, next)
-                is OrderMenzaList -> {}
+                is OrderMenzaList -> ReorderMenzaContent(page.component, onDone = next)
                 is Policy -> PolicyContent(page.component, childModifier, next)
             }
         }
