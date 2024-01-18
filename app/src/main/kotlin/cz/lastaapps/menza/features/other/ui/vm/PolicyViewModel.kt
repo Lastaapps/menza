@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.other.ui.vm
 
-import androidx.lifecycle.viewModelScope
 import cz.lastaapps.core.ui.vm.BaseViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.util.extensions.localLogger
@@ -29,7 +28,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.Clock
 
-internal class PrivacyViewModel(
+internal class PolicyViewModel(
     private val store: PrivacyStore,
     private val clock: Clock,
     context: VMContext,

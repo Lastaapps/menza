@@ -30,8 +30,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.arkivanov.decompose.defaultComponentContext
 import com.bumble.appyx.navigation.integration.NodeComponentActivity
 import cz.lastaapps.core.ui.vm.HandleAppear
-import cz.lastaapps.menza.features.root.ui.DefaultRootComponent
-import cz.lastaapps.menza.features.root.ui.RootContent
+import cz.lastaapps.menza.features.root.ui.navigation.DefaultRootComponent
+import cz.lastaapps.menza.features.root.ui.navigation.RootContent
 import cz.lastaapps.menza.ui.ApplyAppTheme
 import cz.lastaapps.menza.ui.locals.LocalActivityViewModelOwner
 import cz.lastaapps.menza.ui.locals.WithFoldingFeature
@@ -63,14 +63,6 @@ class MainActivity : NodeComponentActivity() {
                         rootComponent,
                         Modifier.fillMaxSize(),
                     ) { isReady = true }
-
-//                    NodeHost(
-//                        lifecycle = AndroidLifecycle(LocalLifecycleOwner.current.lifecycle),
-//                        integrationPoint = appyxV2IntegrationPoint,
-//                        modifier = Modifier.fillMaxSize(),
-//                    ) { buildContext ->
-//                        RootNode(buildContext, viewModel = viewModel) { isReady = true }
-//                    }
                 }
             }
         }

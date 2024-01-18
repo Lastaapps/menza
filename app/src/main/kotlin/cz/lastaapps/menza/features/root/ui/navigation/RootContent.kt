@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.root.ui
+package cz.lastaapps.menza.features.root.ui.navigation
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Spacer
@@ -27,9 +27,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-
-interface AppContentComponent
-interface AppSetupComponent
+import cz.lastaapps.menza.features.root.ui.RootViewModel
+import cz.lastaapps.menza.features.root.ui.navigation.RootComponent.Child.AppContent
+import cz.lastaapps.menza.features.root.ui.navigation.RootComponent.Child.AppSetup
+import cz.lastaapps.menza.features.starting.ui.navigation.StartingContent
 
 @Composable
 internal fun RootContent(
@@ -57,8 +58,12 @@ internal fun RootContent(
         label = "Root slot",
     ) { instance ->
         when (instance) {
-            is RootComponent.Child.AppContent -> Text(text = "App content", modifier)
-            is RootComponent.Child.AppSetup -> Text(text = "App setup", modifier)
+            is AppContent -> Text(text = "App content", modifier)
+            is AppSetup -> StartingContent(
+                instance.component,
+                modifier,
+            ) { component.toAppContent() }
+
             null -> Spacer(modifier = modifier)
         }
     }

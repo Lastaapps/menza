@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -40,13 +40,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cz.lastaapps.common.Communication
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.other.ui.vm.PrivacyViewModel
+import cz.lastaapps.menza.features.other.ui.vm.PolicyViewModel
 
 
 @Composable
 internal fun PrivacyDialogDest(
     onNotNeeded: suspend () -> Unit,
-    viewModel: PrivacyViewModel,
+    viewModel: PolicyViewModel,
 ) {
     val state by viewModel.shouldShow.collectAsState()
 

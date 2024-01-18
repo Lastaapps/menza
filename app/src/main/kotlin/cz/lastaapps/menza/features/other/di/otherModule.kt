@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,7 +21,7 @@ package cz.lastaapps.menza.features.other.di
 
 import cz.lastaapps.menza.features.other.domain.usecase.GetLibrariesUC
 import cz.lastaapps.menza.features.other.ui.vm.LicenseViewModel
-import cz.lastaapps.menza.features.other.ui.vm.PrivacyViewModel
+import cz.lastaapps.menza.features.other.ui.vm.PolicyViewModel
 import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel
 import cz.lastaapps.menza.features.starting.data.PrivacyStore
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -33,7 +33,7 @@ val otherModule = module {
     viewModelOf(::LicenseViewModel)
     factoryOf(::GetLibrariesUC)
 
-    viewModelOf(::PrivacyViewModel)
+    viewModelOf(::PolicyViewModel)
     singleOf(::PrivacyStore)
 
     viewModelOf(::CrashesViewModel)

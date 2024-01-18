@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,30 +17,40 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.starting.ui.node
+package cz.lastaapps.menza.features.starting.ui.component
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.navigation.modality.BuildContext
-import com.bumble.appyx.navigation.node.Node
+import com.arkivanov.decompose.ComponentContext
 import cz.lastaapps.menza.features.starting.ui.screen.AllSetScreen
+import cz.lastaapps.menza.features.starting.ui.vm.AllSetViewModel
 import cz.lastaapps.menza.ui.theme.Padding
-import cz.lastaapps.menza.ui.util.nodeViewModel
+import cz.lastaapps.menza.ui.util.getOrCreateKoin
+import org.koin.core.component.KoinComponent
 
-internal class AllSetNode(
-    buildContext: BuildContext,
-    private val onDone: () -> Unit,
-) : Node(buildContext) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        AllSetScreen(
-            onDone = onDone,
-            viewModel = nodeViewModel(),
-            modifier = modifier
-                .padding(Padding.More.Screen)
-                .fillMaxSize(),
-        )
-    }
+internal interface AllSetComponent {
+    val viewModel: AllSetViewModel
+}
+
+internal class DefaultAllSetComponent(
+    componentContext: ComponentContext,
+) : AllSetComponent, KoinComponent, ComponentContext by componentContext {
+    override val viewModel: AllSetViewModel = getOrCreateKoin()
+}
+
+@Composable
+internal fun AllSetContent(
+    component: AllSetComponent,
+    modifier: Modifier = Modifier,
+    onDone: () -> Unit,
+) {
+    AllSetScreen(
+        onDone = onDone,
+        viewModel = component.viewModel,
+        modifier = modifier
+            .padding(Padding.More.Screen)
+            .fillMaxSize(),
+    )
 }

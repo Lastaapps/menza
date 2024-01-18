@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,32 +17,40 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.starting.ui.node
+package cz.lastaapps.menza.features.starting.ui.component
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.navigation.modality.BuildContext
-import com.bumble.appyx.navigation.node.Node
+import com.arkivanov.decompose.ComponentContext
 import cz.lastaapps.menza.features.starting.ui.screen.DownloadScreen
+import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
 import cz.lastaapps.menza.ui.theme.Padding.More
-import cz.lastaapps.menza.ui.util.nodeViewModel
+import cz.lastaapps.menza.ui.util.getOrCreateKoin
+import org.koin.core.component.KoinComponent
 
-internal class DownloadNode(
-    buildContext: BuildContext,
-    private val onNext: () -> Unit,
-) : Node(
-    buildContext = buildContext,
+internal interface DownloadComponent {
+    val viewModel: DownloadViewModel
+}
+
+internal class DefaultDownloadComponent(
+    componentContext: ComponentContext,
+) : DownloadComponent, KoinComponent, ComponentContext by componentContext {
+    override val viewModel: DownloadViewModel = getOrCreateKoin()
+}
+
+@Composable
+internal fun DownloadContent(
+    component: DownloadComponent,
+    modifier: Modifier = Modifier,
+    onNext: () -> Unit,
 ) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        DownloadScreen(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(More.Screen),
-            viewModel = nodeViewModel(),
-            onDone = onNext,
-        )
-    }
+    DownloadScreen(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(More.Screen),
+        viewModel = component.viewModel,
+        onDone = onNext,
+    )
 }

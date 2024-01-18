@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,30 +17,40 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.starting.ui.node
+package cz.lastaapps.menza.features.starting.ui.component
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.navigation.modality.BuildContext
-import com.bumble.appyx.navigation.node.Node
+import com.arkivanov.decompose.ComponentContext
 import cz.lastaapps.menza.features.starting.ui.screen.PriceTypeScreen
+import cz.lastaapps.menza.features.starting.ui.vm.PriceTypeViewModel
 import cz.lastaapps.menza.ui.theme.Padding.More
-import cz.lastaapps.menza.ui.util.nodeViewModel
+import cz.lastaapps.menza.ui.util.getOrCreateKoin
+import org.koin.core.component.KoinComponent
 
-class PriceTypeNode(
-    buildContext: BuildContext,
-    private val onNext: () -> Unit,
-) : Node(buildContext) {
-    @Composable
-    override fun View(modifier: Modifier) {
-        PriceTypeScreen(
-            onDone = onNext,
-            viewModel = nodeViewModel(),
-            modifier = modifier
-                .padding(More.Screen)
-                .fillMaxSize(),
-        )
-    }
+internal interface PriceTypeComponent {
+    val viewModel: PriceTypeViewModel
+}
+
+internal class DefaultPriceTypeComponent(
+    componentContext: ComponentContext,
+) : PriceTypeComponent, KoinComponent, ComponentContext by componentContext {
+    override val viewModel: PriceTypeViewModel = getOrCreateKoin()
+}
+
+@Composable
+internal fun PriceTypeContent(
+    component: PriceTypeComponent,
+    modifier: Modifier = Modifier,
+    onNext: () -> Unit,
+) {
+    PriceTypeScreen(
+        onDone = onNext,
+        viewModel = component.viewModel,
+        modifier = modifier
+            .padding(More.Screen)
+            .fillMaxSize(),
+    )
 }

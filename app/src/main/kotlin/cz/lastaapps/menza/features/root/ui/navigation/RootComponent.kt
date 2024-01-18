@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.root.ui
+package cz.lastaapps.menza.features.root.ui.navigation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
@@ -25,10 +25,21 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.value.Value
+import cz.lastaapps.menza.features.root.ui.RootViewModel
+import cz.lastaapps.menza.features.root.ui.navigation.DefaultRootComponent.Config.AppContentConfig
+import cz.lastaapps.menza.features.root.ui.navigation.DefaultRootComponent.Config.AppSetupConfig
+import cz.lastaapps.menza.features.root.ui.navigation.RootComponent.Child
+import cz.lastaapps.menza.features.root.ui.navigation.RootComponent.Child.AppContent
+import cz.lastaapps.menza.features.root.ui.navigation.RootComponent.Child.AppSetup
+import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingComponent
+import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 
+
+// TODO delete
+interface AppContentComponent
 
 internal interface RootComponent {
     val viewModel: RootViewModel
@@ -39,10 +50,10 @@ internal interface RootComponent {
 
     sealed interface Child {
         @JvmInline
-        value class AppSetup(val component: AppSetupComponent) : Child
+        value class AppContent(val component: AppContentComponent) : Child
 
         @JvmInline
-        value class AppContent(val component: AppContentComponent) : Child
+        value class AppSetup(val component: StartingComponent) : Child
     }
 }
 
@@ -53,28 +64,24 @@ internal class DefaultRootComponent(
     override val viewModel = getOrCreateKoin<RootViewModel>()
 
     private val navigation = SlotNavigation<Config>()
-    override val content: Value<ChildSlot<*, RootComponent.Child>> =
+    override val content: Value<ChildSlot<*, Child>> =
         childSlot(
             navigation,
             Config.serializer(),
             handleBackButton = true,
-        ) { config, childComponentContext ->
+        ) { config, componentContext ->
             when (config) {
-                Config.AppContentConfig -> RootComponent.Child.AppContent(
-                    object :
-                        AppContentComponent {},
-                )
-
-                Config.AppSetupConfig -> RootComponent.Child.AppSetup(object : AppSetupComponent {})
+                AppContentConfig -> AppContent(object : AppContentComponent {})
+                AppSetupConfig -> AppSetup(DefaultStartingComponent(componentContext))
             }
         }
 
     override fun toInitialSetup() {
-        navigation.activate(Config.AppSetupConfig)
+        navigation.activate(AppSetupConfig)
     }
 
     override fun toAppContent() {
-        navigation.activate(Config.AppContentConfig)
+        navigation.activate(AppContentConfig)
     }
 
     @Serializable
