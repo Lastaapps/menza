@@ -68,7 +68,6 @@ internal class DefaultRootComponent(
         childSlot(
             navigation,
             Config.serializer(),
-            handleBackButton = true,
         ) { config, componentContext ->
             when (config) {
                 AppContentConfig -> AppContent(object : AppContentComponent {})
