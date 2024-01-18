@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,9 +20,11 @@
 package cz.lastaapps.core.ui.vm
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -30,15 +32,25 @@ import kotlinx.coroutines.launch
 @JvmInline
 value class VMContext(val context: CoroutineContext)
 
-abstract class BaseViewModel(private val context: VMContext) : ViewModel() {
+abstract class BaseViewModel(
+    context: VMContext,
+) : InstanceKeeper.Instance, ViewModel() {
+
+    protected val viewModelScope = CoroutineScope(context.context + SupervisorJob())
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModelScope.cancel()
+    }
+
     protected fun launchVM(block: suspend CoroutineScope.() -> Unit) {
         launchJob(block)
     }
 
     protected fun launchJob(block: suspend CoroutineScope.() -> Unit) =
-        viewModelScope.launch(context.context, block = block)
+        viewModelScope.launch(block = block)
 
     protected fun <T> Flow<T>.launchInVM() {
-        viewModelScope.launch(context.context) { collect() }
+        viewModelScope.launch { collect() }
     }
 }

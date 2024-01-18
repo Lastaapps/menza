@@ -26,24 +26,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.arkivanov.decompose.defaultComponentContext
 import com.bumble.appyx.navigation.integration.NodeComponentActivity
-import com.bumble.appyx.navigation.integration.NodeHost
-import com.bumble.appyx.navigation.platform.AndroidLifecycle
 import cz.lastaapps.core.ui.vm.HandleAppear
-import cz.lastaapps.menza.features.root.ui.RootNode
-import cz.lastaapps.menza.features.root.ui.RootViewModel
+import cz.lastaapps.menza.features.root.ui.DefaultRootComponent
+import cz.lastaapps.menza.features.root.ui.RootContent
 import cz.lastaapps.menza.ui.ApplyAppTheme
 import cz.lastaapps.menza.ui.locals.LocalActivityViewModelOwner
 import cz.lastaapps.menza.ui.locals.WithFoldingFeature
 import cz.lastaapps.menza.ui.locals.WithLocalWindowSizes
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : NodeComponentActivity() {
-
-    private val viewModel: RootViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,18 +51,26 @@ class MainActivity : NodeComponentActivity() {
 
         enableEdgeToEdge()
 
+        val rootComponent = DefaultRootComponent(defaultComponentContext())
+
         setContent {
+            val viewModel = rootComponent.viewModel
             HandleAppear(viewModel)
 
             ApplyProviders {
                 ApplyAppTheme(viewModel, this) {
-                    NodeHost(
-                        lifecycle = AndroidLifecycle(LocalLifecycleOwner.current.lifecycle),
-                        integrationPoint = appyxV2IntegrationPoint,
-                        modifier = Modifier.fillMaxSize(),
-                    ) { buildContext ->
-                        RootNode(buildContext, viewModel = viewModel) { isReady = true }
-                    }
+                    RootContent(
+                        rootComponent,
+                        Modifier.fillMaxSize(),
+                    ) { isReady = true }
+
+//                    NodeHost(
+//                        lifecycle = AndroidLifecycle(LocalLifecycleOwner.current.lifecycle),
+//                        integrationPoint = appyxV2IntegrationPoint,
+//                        modifier = Modifier.fillMaxSize(),
+//                    ) { buildContext ->
+//                        RootNode(buildContext, viewModel = viewModel) { isReady = true }
+//                    }
                 }
             }
         }
@@ -79,6 +82,7 @@ class MainActivity : NodeComponentActivity() {
     ) {
         WithLocalWindowSizes(this) {
             WithFoldingFeature(this) {
+                // TODO remove
                 CompositionLocalProvider(
                     LocalActivityViewModelOwner provides this,
                 ) {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -43,4 +43,6 @@ dependencies {
     androidMainImplementation(libs.androidx.lifecycle.runtime)
     androidMainImplementation(libs.androidx.lifecycle.runtime.compose)
     androidMainImplementation(libs.androidx.lifecycle.viewModel)
+    androidMainImplementation(libs.decompose.core)
+    androidMainImplementation(libs.decompose.compose)
 }

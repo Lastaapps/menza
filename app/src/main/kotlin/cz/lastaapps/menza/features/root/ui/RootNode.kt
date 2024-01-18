@@ -19,6 +19,9 @@
 
 package cz.lastaapps.menza.features.root.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,6 +29,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onPlaced
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.arkivanov.decompose.router.slot.ChildSlot
+import com.arkivanov.decompose.router.slot.SlotNavigation
+import com.arkivanov.decompose.router.slot.activate
+import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.value.Value
 import com.bumble.appyx.components.spotlight.Spotlight
 import com.bumble.appyx.components.spotlight.SpotlightModel
 import com.bumble.appyx.components.spotlight.ui.fader.SpotlightFader
@@ -34,6 +44,10 @@ import com.bumble.appyx.navigation.node.Node
 import com.bumble.appyx.navigation.node.ParentNode
 import com.bumble.appyx.navigation.node.node
 import cz.lastaapps.menza.features.main.ui.navigation.MainNode
+import cz.lastaapps.menza.features.root.ui.ChildConfig.AppContentConfig
+import cz.lastaapps.menza.features.root.ui.ChildConfig.AppSetupConfig
+import cz.lastaapps.menza.features.root.ui.RootComponentChild.AppContent
+import cz.lastaapps.menza.features.root.ui.RootComponentChild.AppSetup
 import cz.lastaapps.menza.features.root.ui.RootNavType.LoadingNav
 import cz.lastaapps.menza.features.root.ui.RootNavType.MainNav
 import cz.lastaapps.menza.features.root.ui.RootNavType.SetupFlowNav
@@ -41,8 +55,102 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingNode
 import cz.lastaapps.menza.ui.util.AppyxNoDragComponent
 import cz.lastaapps.menza.ui.util.activateItem
 import cz.lastaapps.menza.ui.util.activeIndex
+import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import cz.lastaapps.menza.ui.util.indexOfType
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import org.koin.core.component.KoinComponent
+
+interface AppContentComponent
+
+interface AppSetupComponent
+
+internal sealed interface RootComponentChild {
+    @JvmInline
+    value class AppSetup(val component: AppSetupComponent) : RootComponentChild
+
+    @JvmInline
+    value class AppContent(val component: AppContentComponent) : RootComponentChild
+}
+
+@Serializable
+private sealed interface ChildConfig {
+    @Serializable
+    data object AppSetupConfig : ChildConfig
+
+    @Serializable
+    data object AppContentConfig : ChildConfig
+}
+
+internal interface RootComponent {
+    val viewModel: RootViewModel
+    val content: Value<ChildSlot<*, RootComponentChild>>
+
+    fun toInitialSetup()
+    fun toAppContent()
+}
+
+internal class DefaultRootComponent(
+    componentContext: ComponentContext,
+) : RootComponent, KoinComponent, ComponentContext by componentContext {
+
+    override val viewModel = getOrCreateKoin<RootViewModel>()
+
+    private val navigation = SlotNavigation<ChildConfig>()
+    override val content: Value<ChildSlot<*, RootComponentChild>> =
+        childSlot(
+            navigation,
+            ChildConfig.serializer(),
+            handleBackButton = true,
+        ) { config, childComponentContext ->
+            when (config) {
+                AppContentConfig -> RootComponentChild.AppContent(object : AppContentComponent {})
+                AppSetupConfig -> RootComponentChild.AppSetup(object : AppSetupComponent {})
+            }
+        }
+
+    override fun toInitialSetup() {
+        navigation.activate(AppSetupConfig)
+    }
+
+    override fun toAppContent() {
+        navigation.activate(AppContentConfig)
+    }
+
+}
+
+@Composable
+internal fun RootContent(
+    component: RootComponent,
+    modifier: Modifier = Modifier,
+    onReady: () -> Unit,
+) {
+    val viewModel: RootViewModel = component.viewModel
+    val state by viewModel.flowState
+
+    LaunchedEffect(state.isReady, state.isSetUp) {
+        if (state.isReady) {
+            if (state.isSetUp) {
+                component.toAppContent()
+            } else {
+                component.toInitialSetup()
+            }
+            onReady()
+        }
+    }
+
+    val slot by component.content.subscribeAsState()
+    AnimatedContent(
+        targetState = slot.child?.instance,
+        label = "Root slot",
+    ) { instance ->
+        when (instance) {
+            is AppContent -> Text(text = "App content", modifier)
+            is AppSetup -> Text(text = "App setup", modifier)
+            null -> Spacer(modifier = modifier)
+        }
+    }
+}
 
 internal class RootNode(
     buildContext: BuildContext,
