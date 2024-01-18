@@ -12,7 +12,6 @@ androidx-navigation = "2.7.6"
 androidx-room = "2.6.1"
 androidx-security = "1.1.0-alpha06"
 androidx-test = "1.5.0"
-appyx = "2.0.0-alpha09"
 coil = "2.5.0"
 decompose = "3.0.0-alpha04"
 detekt = "1.23.4"
@@ -100,10 +99,6 @@ androidx-tracing = "androidx.tracing:tracing-ktx:1.2.0"
 androidx-vectorDrawables = "androidx.vectordrawable:vectordrawable:1.1.0"
 androidx-windowManager = "androidx.window:window:1.2.0"
 androidx-work = "androidx.work:work-runtime-ktx:2.9.0"
-appyx-navigation = { module = "com.bumble.appyx:appyx-navigation", version.ref = "appyx" }
-appyx-components-backstack = { module = "com.bumble.appyx:backstack-android", version.ref = "appyx" }
-appyx-components-spotlight = { module = "com.bumble.appyx:spotlight-android", version.ref = "appyx" }
-appyx-interactions = { module = "com.bumble.appyx:appyx-interactions", version.ref = "appyx" }
 arrowkt-bom = "io.arrow-kt:arrow-stack:1.2.1"
 arrowkt-core = { module = "io.arrow-kt:arrow-core" }
 arrowkt-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }

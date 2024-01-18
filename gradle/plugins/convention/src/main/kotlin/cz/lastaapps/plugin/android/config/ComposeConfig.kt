@@ -43,8 +43,8 @@ internal fun Project.configureComposeCompiler(
 
 internal fun Project.configureComposeDependencies() {
     pluginManager {
-        // Required by Appyx
-        alias(libs.plugins.kotlin.parcelize)
+        // Required by Decompose
+        alias(libs.plugins.kotlin.serialization)
     }
 
     dependencies {
@@ -75,11 +75,6 @@ internal fun Project.configureComposeDependencies() {
 
         implementation(libs.decompose.core)
         implementation(libs.decompose.compose)
-
-        implementation(libs.appyx.navigation)
-        implementation(libs.appyx.components.backstack)
-        implementation(libs.appyx.components.spotlight)
-        implementation(libs.appyx.interactions)
 
         implementation(libs.coil.composeComplete)
 

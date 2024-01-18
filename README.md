@@ -25,7 +25,7 @@ Menza is the Czech word for school cafeteria.
 
 - AndroidX (Compose, ...)
 - ArrowKt
-- Appyx
+- Decompose
 - SQLDelight
 - Koin
 - Coil-kt
