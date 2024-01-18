@@ -1,0 +1,88 @@
+/*
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *
+ *     This file is part of Menza.
+ *
+ *     Menza is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Menza is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package cz.lastaapps.menza.features.root.ui
+
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.router.slot.ChildSlot
+import com.arkivanov.decompose.router.slot.SlotNavigation
+import com.arkivanov.decompose.router.slot.activate
+import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.value.Value
+import cz.lastaapps.menza.ui.util.getOrCreateKoin
+import kotlinx.serialization.Serializable
+import org.koin.core.component.KoinComponent
+
+
+internal interface RootComponent {
+    val viewModel: RootViewModel
+    val content: Value<ChildSlot<*, Child>>
+
+    fun toInitialSetup()
+    fun toAppContent()
+
+    sealed interface Child {
+        @JvmInline
+        value class AppSetup(val component: AppSetupComponent) : Child
+
+        @JvmInline
+        value class AppContent(val component: AppContentComponent) : Child
+    }
+}
+
+internal class DefaultRootComponent(
+    componentContext: ComponentContext,
+) : RootComponent, KoinComponent, ComponentContext by componentContext {
+
+    override val viewModel = getOrCreateKoin<RootViewModel>()
+
+    private val navigation = SlotNavigation<Config>()
+    override val content: Value<ChildSlot<*, RootComponent.Child>> =
+        childSlot(
+            navigation,
+            Config.serializer(),
+            handleBackButton = true,
+        ) { config, childComponentContext ->
+            when (config) {
+                Config.AppContentConfig -> RootComponent.Child.AppContent(
+                    object :
+                        AppContentComponent {},
+                )
+
+                Config.AppSetupConfig -> RootComponent.Child.AppSetup(object : AppSetupComponent {})
+            }
+        }
+
+    override fun toInitialSetup() {
+        navigation.activate(Config.AppSetupConfig)
+    }
+
+    override fun toAppContent() {
+        navigation.activate(Config.AppContentConfig)
+    }
+
+    @Serializable
+    private sealed interface Config {
+        @Serializable
+        data object AppSetupConfig : Config
+
+        @Serializable
+        data object AppContentConfig : Config
+    }
+}
