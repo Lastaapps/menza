@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,7 +22,6 @@ package cz.lastaapps.api.main.data
 import arrow.core.Either.Left
 import arrow.core.Either.Right
 import arrow.core.right
-import arrow.core.rightIor
 import cz.lastaapps.api.core.data.SimpleProperties
 import cz.lastaapps.api.core.data.WalletCredentialsProvider
 import cz.lastaapps.api.core.data.model.BalanceAccountTypeSett
@@ -32,12 +31,9 @@ import cz.lastaapps.api.core.data.model.toSett
 import cz.lastaapps.api.core.domain.model.BalanceAccountType
 import cz.lastaapps.api.core.domain.model.BalanceAccountType.CTU
 import cz.lastaapps.api.core.domain.model.UserBalance
-import cz.lastaapps.api.core.domain.sync.SyncJob
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
-import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.api.core.domain.sync.SyncSource
-import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckRecent
@@ -45,14 +41,11 @@ import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.AgataCtuWalletApi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 
 internal interface WalletMasterRepository : SyncSource<UserBalance?> {
@@ -64,12 +57,10 @@ internal class WalletMasterRepositoryImpl(
     private val ctuApi: AgataCtuWalletApi,
     private val credentialsProvider: WalletCredentialsProvider,
     private val simpleProperties: SimpleProperties,
-    private val processor: SyncProcessor,
     private val checker: ValidityChecker,
 ) : WalletMasterRepository {
 
     private val validityKey = ValidityKey.agataCtuBalance()
-    private val scope = CoroutineScope(Dispatchers.Default)
 
     companion object {
         private val log = localLogger()
@@ -116,27 +107,18 @@ internal class WalletMasterRepositoryImpl(
         }
     }.distinctUntilChanged()
 
-    private val job = object : SyncJob<Float, Float>(
-        shouldRun = { _ ->
-            if (credentialsProvider.get().first()
-                    .map {
-                        it.type == BalanceAccountTypeSett.CTU
-                    }
-                    .getOrNull() == true
-            ) {
-                arrow.core.Some {}
-            } else {
-                arrow.core.None
-            }
-        },
-        fetchApi = {
-            val credentials = credentialsProvider.get().first().bind()
-            val api = selectApi(credentials.type.toDomain())
-            api.getBalance(credentials.username, credentials.password).bind()
-        },
-        convert = { it.rightIor() },
-        store = { data -> scope.launch { simpleProperties.setBalance(data) } },
-    ) {}
+    private suspend fun syncImpl(): SyncOutcome = outcome {
+        val credentials = credentialsProvider.get().first()
+            .bind()
+            .takeIf { it.type == BalanceAccountTypeSett.CTU }
+            ?: return@outcome SyncResult.Unavailable
+
+        val api = selectApi(credentials.type.toDomain())
+        val data = api.getBalance(credentials.username, credentials.password).bind()
+        simpleProperties.setBalance(data)
+
+        SyncResult.Updated
+    }
 
     override suspend fun sync(isForced: Boolean): SyncOutcome = run {
         log.i { "Requesting data sync" }
@@ -146,7 +128,7 @@ internal class WalletMasterRepositoryImpl(
                 is Left -> SyncResult.Unavailable.right()
                 is Right ->
                     checker.withCheckRecent(validityKey, isForced) {
-                        processor.runSync(job, listOf(), isForced = isForced)
+                        syncImpl()
                     }
             }
         }
