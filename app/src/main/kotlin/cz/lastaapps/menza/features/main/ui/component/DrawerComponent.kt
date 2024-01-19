@@ -121,21 +121,21 @@ internal fun DrawerContent(
         ),
     ) { item ->
         Surface {
-        when (val instance = item.instance) {
-            is Child.MenzaSelection -> MenzaSelectionContent(
-                component = instance.component,
-                onEdit = component::edit,
-                drawerState = drawableState,
-                snackbarHostState = snackbarHostState,
-                modifier = modifier,
-            )
+            when (val instance = item.instance) {
+                is Child.MenzaSelection -> MenzaSelectionContent(
+                    component = instance.component,
+                    onEdit = component::edit,
+                    drawerState = drawableState,
+                    snackbarHostState = snackbarHostState,
+                    modifier = modifier,
+                )
 
-            is Child.Edit -> ReorderMenzaContent(
-                component = instance.component,
-                onDone = component::pop,
-                modifier = modifier,
-            )
-        }
+                is Child.Edit -> ReorderMenzaContent(
+                    component = instance.component,
+                    onDone = component::pop,
+                    modifier = modifier,
+                )
+            }
         }
     }
 }

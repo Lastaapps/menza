@@ -58,8 +58,8 @@ internal class DefaultTodayComponent(
 @Composable
 internal fun TodayContent(
     component: TodayComponent,
-    hostState: SnackbarHostState,
     onOsturak: () -> Unit,
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
 
@@ -78,6 +78,7 @@ internal fun TodayContent(
         panels = panels,
         viewModel = component.viewModel,
         dishListViewModel = component.dishListViewModel,
+        hostState = hostState,
         modifier = modifier
             .padding(Padding.More.Screen)
             .fillMaxSize(),

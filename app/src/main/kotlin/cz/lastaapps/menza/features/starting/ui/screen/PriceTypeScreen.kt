@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -87,57 +86,51 @@ private fun PriceTypeContent(
     onDiscounted: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        modifier = modifier,
-    ) { padding ->
-        Box(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center,
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            color = MaterialTheme.colorScheme.primaryContainer,
         ) {
-            Surface(
-                shape = MaterialTheme.shapes.large,
-                color = MaterialTheme.colorScheme.primaryContainer,
+            Column(
+                modifier = Modifier
+                    .padding(Padding.Medium),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(
+                    Padding.Medium,
+                    Alignment.CenterVertically,
+                ),
             ) {
+                Text(
+                    text = stringResource(R.string.panel_price_title),
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center,
+                )
+
+                Text(
+                    text = stringResource(R.string.panel_price_description),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                )
+
                 Column(
-                    modifier = Modifier
-                        .padding(Padding.Medium),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(
-                        Padding.Medium,
-                        Alignment.CenterVertically,
-                    ),
+                    modifier = Modifier.width(IntrinsicSize.Max),
+                    verticalArrangement = Arrangement.spacedBy(Padding.Small),
                 ) {
-                    Text(
-                        text = stringResource(R.string.panel_price_title),
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Center,
-                    )
-
-                    Text(
-                        text = stringResource(R.string.panel_price_description),
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                    )
-
-                    Column(
-                        modifier = Modifier.width(IntrinsicSize.Max),
-                        verticalArrangement = Arrangement.spacedBy(Padding.Small),
+                    Button(
+                        onClick = onNormal,
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Button(
-                            onClick = onNormal,
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Text(stringResource(R.string.panel_price_normal))
-                        }
+                        Text(stringResource(R.string.panel_price_normal))
+                    }
 
-                        Button(
-                            onClick = onDiscounted,
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Text(stringResource(R.string.panel_price_discounted))
-                        }
+                    Button(
+                        onClick = onDiscounted,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(stringResource(R.string.panel_price_discounted))
                     }
                 }
             }

@@ -27,7 +27,6 @@ import com.arkivanov.decompose.router.pages.PagesNavigation
 import com.arkivanov.decompose.router.pages.childPages
 import com.arkivanov.decompose.router.pages.selectNext
 import com.arkivanov.decompose.value.Value
-import cz.lastaapps.menza.features.other.ui.vm.PolicyViewModel
 import cz.lastaapps.menza.features.settings.ui.component.AppThemeComponent
 import cz.lastaapps.menza.features.settings.ui.component.DefaultAppThemeComponent
 import cz.lastaapps.menza.features.settings.ui.component.DefaultReorderMenzaComponent
@@ -47,16 +46,13 @@ import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingCompone
 import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingComponent.Config.OrderMenzaList
 import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingComponent.Config.Policy
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child
-import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import kotlinx.serialization.Serializable
-import org.koin.core.component.KoinComponent
 
 
 @OptIn(ExperimentalDecomposeApi::class)
 internal interface StartingComponent {
 
     val content: Value<ChildPages<*, Child>>
-    val policyViewModel: PolicyViewModel
 
     fun next()
 
@@ -84,9 +80,8 @@ internal interface StartingComponent {
 @OptIn(ExperimentalDecomposeApi::class)
 internal class DefaultStartingComponent(
     componentContext: ComponentContext,
-) : StartingComponent, KoinComponent, ComponentContext by componentContext {
+) : StartingComponent, ComponentContext by componentContext {
 
-    override val policyViewModel: PolicyViewModel = getOrCreateKoin()
     private val navigation = PagesNavigation<Config>()
 
     override val content: Value<ChildPages<*, Child>> =
@@ -135,7 +130,7 @@ internal class DefaultStartingComponent(
         data object AllSet : Config
 
         companion object {
-            val allConfigs = listOf(
+            val allConfigs: List<Config> = listOf(
                 Policy,
                 DownloadData,
                 ChooseTheme,

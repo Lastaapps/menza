@@ -96,9 +96,7 @@ fun TodayDishList(
                 scroll = scroll,
                 header = header,
                 footer = footer,
-                modifier = Modifier
-                    .padding(top = Padding.Smaller) // so text is not cut off
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
             )
         }
 

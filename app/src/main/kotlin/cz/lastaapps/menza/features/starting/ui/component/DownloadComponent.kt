@@ -21,6 +21,7 @@ package cz.lastaapps.menza.features.starting.ui.component
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
@@ -43,6 +44,7 @@ internal class DefaultDownloadComponent(
 @Composable
 internal fun DownloadContent(
     component: DownloadComponent,
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onNext: () -> Unit,
 ) {
@@ -51,6 +53,7 @@ internal fun DownloadContent(
             .fillMaxSize()
             .padding(More.Screen),
         viewModel = component.viewModel,
+        hostState = hostState,
         onDone = onNext,
     )
 }

@@ -19,10 +19,13 @@
 
 package cz.lastaapps.menza.features.settings.ui.widget
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +45,7 @@ import kotlin.math.roundToInt
 private const val imageSizeMin = .5f
 private const val imageSizeMax = 3f
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ImageSizeSetting(
     progress: Float,
@@ -56,9 +60,14 @@ internal fun ImageSizeSetting(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Padding.Medium),
         ) {
-            SettingsTitle(
+            Text(
                 stringResource(R.string.settings_image_size_title),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .basicMarquee(),
+                style = MaterialTheme.typography.titleMedium,
+                softWrap = false,
+                maxLines = 1,
             )
             Text(
                 text = "${(uiProgress * 100).roundToInt()}%",

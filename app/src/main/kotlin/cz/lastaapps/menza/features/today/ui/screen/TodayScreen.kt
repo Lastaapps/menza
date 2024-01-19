@@ -31,7 +31,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
@@ -51,6 +50,7 @@ internal fun TodayScreen(
     panels: @Composable (Modifier) -> Unit,
     viewModel: TodayViewModel,
     dishListViewModel: DishListViewModel,
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     TodayEffects(viewModel)
@@ -62,6 +62,7 @@ internal fun TodayScreen(
         onDishSelected = viewModel::selectDish,
         panels = panels,
         dishListViewModel = dishListViewModel,
+        hostState = hostState,
         modifier = modifier,
     )
 }
@@ -85,8 +86,8 @@ private fun TodayContent(
     onOsturak: () -> Unit,
     panels: @Composable (Modifier) -> Unit,
     dishListViewModel: DishListViewModel,
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    hostState: SnackbarHostState = remember { SnackbarHostState() },
     scrollState: LazyListState = rememberLazyListState(),
     scrollGridState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
 ) {

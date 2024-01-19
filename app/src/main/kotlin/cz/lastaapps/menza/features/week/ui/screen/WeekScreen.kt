@@ -21,13 +21,9 @@ package cz.lastaapps.menza.features.week.ui.screen
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
@@ -40,8 +36,8 @@ import cz.lastaapps.menza.ui.util.HandleError
 internal fun WeekScreen(
     onOsturak: () -> Unit,
     viewModel: WeekViewModel,
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    hostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     WeekEffects(viewModel, hostState)
 
@@ -52,7 +48,6 @@ internal fun WeekScreen(
         noItems = viewModel::openWebMenu,
         onOsturak = onOsturak,
         modifier = modifier,
-        hostState = hostState,
     )
 }
 
@@ -71,29 +66,26 @@ private fun WeekContent(
     onRefresh: () -> Unit,
     noItems: () -> Unit,
     onOsturak: () -> Unit,
-    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState) },
+    WrapMenzaNotSelected(
+        menza = state.selectedMenza,
+        onOsturak = onOsturak,
         modifier = modifier,
-    ) { padding ->
-        WrapMenzaNotSelected(
-            menza = state.selectedMenza,
-            onOsturak = onOsturak,
-        ) {
-            Crossfade(targetState = state.items) { items ->
-                WeekDishList(
-                    data = items,
-                    priceType = state.priceType,
-                    isLoading = state.isLoading,
-                    onRefresh = onRefresh,
-                    noItems = noItems,
-                    modifier = Modifier
-                        .padding(padding)
-                        .fillMaxSize()
-                )
-            }
+    ) {
+        Crossfade(
+            targetState = state.items,
+            label = "week",
+            modifier = Modifier.fillMaxSize(),
+        ) { items ->
+            WeekDishList(
+                data = items,
+                priceType = state.priceType,
+                isLoading = state.isLoading,
+                onRefresh = onRefresh,
+                noItems = noItems,
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 }

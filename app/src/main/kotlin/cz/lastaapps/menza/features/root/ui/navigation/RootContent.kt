@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.features.root.ui.navigation
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -66,7 +65,7 @@ internal fun RootContent(
                 modifier,
             ) { component.toAppContent() }
 
-            null -> Surface { Spacer(modifier) }
+            null -> Surface(modifier) {}
         }
         if (instance != null) {
             SideEffect {

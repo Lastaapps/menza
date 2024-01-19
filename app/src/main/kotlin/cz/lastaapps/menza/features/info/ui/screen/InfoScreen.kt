@@ -22,12 +22,10 @@ package cz.lastaapps.menza.features.info.ui.screen
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,8 +54,8 @@ import kotlinx.collections.immutable.toImmutableList
 internal fun InfoScreen(
     viewModel: InfoViewModel,
     onOsturak: () -> Unit,
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    hostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     var error by remember { mutableStateOf<DomainError?>(null) }
     HandleError(error, hostState) { error = null }
@@ -71,7 +69,6 @@ internal fun InfoScreen(
         onOsturak = onOsturak,
         onError = { error = it },
         modifier = modifier,
-        hostState = hostState,
     )
 }
 
@@ -90,101 +87,96 @@ private fun InfoContent(
     onRefresh: () -> Unit,
     onOsturak: () -> Unit,
     onError: (DomainError) -> Unit,
-    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState) },
+    WrapMenzaNotSelected(
+        menza = state.selectedMenza,
+        onOsturak = onOsturak,
         modifier = modifier,
-    ) { padding ->
-        WrapMenzaNotSelected(
-            menza = state.selectedMenza,
-            onOsturak = onOsturak,
-        ) {
-            Crossfade(
-                targetState = state.items,
-                label = "info",
-                modifier = Modifier.padding(padding),
-            ) { items ->
-                if (items != null) {
-                    val itemSpacer: LazyListScope.() -> Unit = {
-                        item { Spacer(Modifier.height(Padding.Medium)) }
-                    }
+    ) {
+        Crossfade(
+            targetState = state.items,
+            label = "info",
+            modifier = Modifier.fillMaxSize(),
+        ) { items ->
+            if (items != null) {
+                val itemSpacer: LazyListScope.() -> Unit = {
+                    item { Spacer(Modifier.height(Padding.Medium)) }
+                }
 
-                    // There is a bug that if an item is empty, the padding is still present
-                    // But I don't want to waste my time fixing this, so sorry
-                    val contactAndMessage: LazyListScope.() -> Unit = {
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                MessageList(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    messages = listOfNotNull(
-                                        items.header, items.footer
-                                    ).toImmutableList(),
-                                )
-                            }
-                        }
-                        itemSpacer()
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                OpeningHoursList(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    data = items.openingTimes,
-                                )
-                            }
+                // There is a bug that if an item is empty, the padding is still present
+                // But I don't want to waste my time fixing this, so sorry
+                val contactAndMessage: LazyListScope.() -> Unit = {
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            MessageList(
+                                modifier = Modifier.fillMaxWidth(),
+                                messages = listOfNotNull(
+                                    items.header, items.footer,
+                                ).toImmutableList(),
+                            )
                         }
                     }
-                    val openingAndAddress: LazyListScope.() -> Unit = {
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                ContactList(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    contactList = items.contacts,
-                                    onError = onError,
-                                )
-                            }
-                        }
-                        itemSpacer()
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                AddressList(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    locations = listOfNotNull(items.address).toImmutableList(),
-                                    onError = onError,
-                                )
-                            }
-                        }
-                        itemSpacer()
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                LinkList(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    links = items.links,
-                                )
-                            }
+                    itemSpacer()
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            OpeningHoursList(
+                                modifier = Modifier.fillMaxWidth(),
+                                data = items.openingTimes,
+                            )
                         }
                     }
+                }
+                val openingAndAddress: LazyListScope.() -> Unit = {
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            ContactList(
+                                modifier = Modifier.fillMaxWidth(),
+                                contactList = items.contacts,
+                                onError = onError,
+                            )
+                        }
+                    }
+                    itemSpacer()
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            AddressList(
+                                modifier = Modifier.fillMaxWidth(),
+                                locations = listOfNotNull(items.address).toImmutableList(),
+                                onError = onError,
+                            )
+                        }
+                    }
+                    itemSpacer()
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            LinkList(
+                                modifier = Modifier.fillMaxWidth(),
+                                links = items.links,
+                            )
+                        }
+                    }
+                }
 
-                    WrapRefresh(
-                        refreshing = state.isLoading,
-                        onRefresh = onRefresh,
-                    ) {
-                        AboveOrSideBySideLayout(
-                            topLeft = contactAndMessage,
-                            bottomRight = openingAndAddress,
-                            verticalSpacer = itemSpacer,
-                        )
-                    }
+                WrapRefresh(
+                    refreshing = state.isLoading,
+                    onRefresh = onRefresh,
+                ) {
+                    AboveOrSideBySideLayout(
+                        topLeft = contactAndMessage,
+                        bottomRight = openingAndAddress,
+                        verticalSpacer = itemSpacer,
+                    )
                 }
             }
         }

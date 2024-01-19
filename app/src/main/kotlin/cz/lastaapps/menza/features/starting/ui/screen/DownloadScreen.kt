@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -38,13 +38,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -61,15 +58,14 @@ import cz.lastaapps.menza.ui.util.HandleError
 internal fun DownloadScreen(
     onDone: () -> Unit,
     viewModel: DownloadViewModel,
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    hostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     DownloadEffects(viewModel, hostState, onDone)
 
     DownloadContent(
         state = viewModel.flowState.value,
         onRefresh = viewModel::retry,
-        hostState = hostState,
         modifier = modifier,
     )
 }
@@ -97,83 +93,77 @@ private fun DownloadEffects(
 private fun DownloadContent(
     state: DownloadDataState,
     onRefresh: () -> Unit,
-    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        modifier = modifier,
-        snackbarHost = { SnackbarHost(hostState) },
-    ) { padding ->
-        Box(
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(
+                Padding.Medium,
+                Alignment.CenterVertically,
+            ),
             modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center,
+                .sizeIn(maxWidth = DownloadUI.maxWidth)
+                .fillMaxWidth()
+                .padding(Padding.Small)
+                .animateContentSize(),
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(
-                    Padding.Medium,
-                    Alignment.CenterVertically,
-                ),
-                modifier = Modifier
-                    .sizeIn(maxWidth = DownloadUI.maxWidth)
-                    .fillMaxWidth()
-                    .padding(Padding.Small)
-                    .animateContentSize(),
-            ) {
-                Text(
-                    stringResource(R.string.init_title),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+            Text(
+                stringResource(R.string.init_title),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
-                Crossfade(
-                    targetState = state.isLoading to state.isReady,
-                    modifier = Modifier.fillMaxWidth(),
-                ) { (isLoading, isReady) ->
-                    when {
-                        isLoading && isReady -> {
-                            Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
-                                val animatedProgress = animateFloatAsState(
-                                    targetValue = state.downloadProgress.progress,
-                                    animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
-                                    label = "download_progress",
-                                )
+            Crossfade(
+                targetState = state.isLoading to state.isReady,
+                modifier = Modifier.fillMaxWidth(),
+            ) { (isLoading, isReady) ->
+                when {
+                    isLoading && isReady -> {
+                        Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
+                            val animatedProgress = animateFloatAsState(
+                                targetValue = state.downloadProgress.progress,
+                                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                                label = "download_progress",
+                            )
 
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(Padding.Small),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.fillMaxWidth(),
-                                ) {
-                                    LinearProgressIndicator(
-                                        progress = { animatedProgress.value },
-                                        modifier = Modifier.weight(1f),
-                                    )
-
-                                    val percentValue = state.downloadProgress.progress * 100
-                                    Text(
-                                        "%3.0f %%".format(percentValue),
-                                        style = MaterialTheme.typography.bodySmall,
-                                    )
-                                }
-                                Text(state.downloadProgress.text)
-                            }
-                        }
-                        !isLoading && isReady -> {
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                                 verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth(),
                             ) {
-                                IconButton(onClick = onRefresh) {
-                                    Icon(Icons.Default.Refresh, contentDescription = null)
-                                }
-                                Text(stringResource(R.string.init_error))
+                                LinearProgressIndicator(
+                                    progress = { animatedProgress.value },
+                                    modifier = Modifier.weight(1f),
+                                )
+
+                                val percentValue = state.downloadProgress.progress * 100
+                                Text(
+                                    "%3.0f %%".format(percentValue),
+                                    style = MaterialTheme.typography.bodySmall,
+                                )
                             }
+                            Text(state.downloadProgress.text)
                         }
-                        else -> {
-                            Box(Modifier.fillMaxWidth()) {
-                                CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    }
+
+                    !isLoading && isReady -> {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(Padding.Small),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            IconButton(onClick = onRefresh) {
+                                Icon(Icons.Default.Refresh, contentDescription = null)
                             }
+                            Text(stringResource(R.string.init_error))
+                        }
+                    }
+
+                    else -> {
+                        Box(Modifier.fillMaxWidth()) {
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
                         }
                     }
                 }

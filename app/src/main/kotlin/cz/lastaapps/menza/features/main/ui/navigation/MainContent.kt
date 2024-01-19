@@ -28,6 +28,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.ExperimentalDecomposeApi
@@ -61,7 +62,7 @@ import cz.lastaapps.menza.ui.locals.LocalMayBeFlipCover
 internal fun MainContent(
     component: MainComponent,
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    hostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     val mainViewModel: MainViewModel = component.viewModel
 
@@ -74,7 +75,7 @@ internal fun MainContent(
 
     HandleLowBalance(
         lowBalance = state.showLowBalance,
-        hostState = snackbarHostState,
+        hostState = hostState,
         onDismiss = mainViewModel::dismissLowBalance,
     )
 
@@ -84,7 +85,7 @@ internal fun MainContent(
         currentDest = MainNavTarget.fromChild(stack.active.instance),
         drawerState = drawerState,
         settingsEverOpened = state.settingsViewed,
-        hostState = snackbarHostState,
+        hostState = hostState,
         selectedMenza = state.selectedMenza,
         isFlip = state.isFlip && LocalMayBeFlipCover.current,
         onNavItemTopBar = component::push,
@@ -93,7 +94,7 @@ internal fun MainContent(
             DrawerContent(
                 component = component.drawerComponent,
                 drawableState = drawerState,
-                snackbarHostState = snackbarHostState,
+                snackbarHostState = hostState,
             )
         },
         content = {
@@ -108,13 +109,13 @@ internal fun MainContent(
                 val onOsturak = { component.push(MainNavTarget.Osturak) }
                 Surface {
                     when (val instance = it.instance) {
-                        is Info -> InfoContent(instance.component, onOsturak)
+                        is Info -> InfoContent(instance.component, onOsturak, hostState)
                         is LicenseNotices -> LicenseContent(instance.component)
                         is Osturak -> OsturakContent(instance.component)
                         is PrivacyPolicy -> PolicyContent(instance.component) { component.pop() }
                         is Settings -> SettingsHubContent(instance.component)
-                        is Today -> TodayContent(instance.component, snackbarHostState, onOsturak)
-                        is Week -> WeekContent(instance.component, onOsturak)
+                        is Today -> TodayContent(instance.component, onOsturak, hostState)
+                        is Week -> WeekContent(instance.component, onOsturak, hostState)
                     }
                 }
             }

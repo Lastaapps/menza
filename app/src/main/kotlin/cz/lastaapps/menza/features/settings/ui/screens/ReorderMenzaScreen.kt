@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,15 +30,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -122,72 +121,67 @@ private fun ReorderMenzaContent(
         reverse = !state.fromTop,
     )
 
-    Scaffold(
-        modifier = modifier,
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(Padding.MidLarge)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(Padding.Medium),
-            horizontalAlignment = Alignment.CenterHorizontally,
+    Column(
+        modifier = modifier
+            .padding(Padding.MidLarge)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(Padding.Medium),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.menza_order_title),
+            style = MaterialTheme.typography.headlineSmall,
+        )
+
+        val animateFrom = if (state.fromTop) {
+            Alignment.TopEnd
+        } else {
+            Alignment.BottomStart
+        }
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = animateFrom,
         ) {
-            Text(
-                text = stringResource(R.string.menza_order_title),
-                style = MaterialTheme.typography.headlineSmall,
-            )
-
-            val animateFrom = if (state.fromTop) {
-                Alignment.TopEnd
-            } else {
-                Alignment.BottomStart
-            }
-            Box(
-                modifier = Modifier.weight(1f),
-                contentAlignment = animateFrom,
+            DraggableLazyColumn(
+                state = draggableState,
+                reverseLayout = !state.fromTop,
+                verticalArrangement = Arrangement.spacedBy(Padding.Medium),
+                modifier = Modifier.animateContentSize(),
             ) {
-                DraggableLazyColumn(
-                    state = draggableState,
-                    reverseLayout = !state.fromTop,
-                    verticalArrangement = Arrangement.spacedBy(Padding.Medium),
-                    modifier = Modifier.animateContentSize(),
-                ) {
-                    itemsIndexed(
-                        items = localList.value,
-                        key = { _, it -> it.first.type.id },
-                    ) { index, (menza, order) ->
-                        val itemModifier =
-                            if (draggableState.currentIndexOfDraggedItem != index) {
-                                Modifier.animateItemPlacement()
-                            } else {
-                                Modifier
-                            }
+                itemsIndexed(
+                    items = localList.value,
+                    key = { _, it -> it.first.type.id },
+                ) { index, (menza, order) ->
+                    val itemModifier =
+                        if (draggableState.currentIndexOfDraggedItem != index) {
+                            Modifier.animateItemPlacement()
+                        } else {
+                            Modifier
+                        }
 
-                        MenzaItem(
-                            menza = menza,
-                            visible = order.visible,
-                            onVisibilityClick = { onVisibilityClick(menza) },
-                            modifier = itemModifier
-                                .makeDraggableItem(draggableState, index),
-                        )
-                    }
+                    MenzaItem(
+                        menza = menza,
+                        visible = order.visible,
+                        onVisibilityClick = { onVisibilityClick(menza) },
+                        modifier = itemModifier
+                            .makeDraggableItem(draggableState, index),
+                    )
                 }
             }
-
-            CheckboxWithText(checked = state.fromTop, onCheckedChange = { onReverseOrder() }) {
-                Text(stringResource(R.string.menza_order_button_align_top))
-            }
-
-            Button(onClick = onDone) {
-                Text(stringResource(R.string.button_done))
-            }
-
-            Text(
-                text = stringResource(R.string.menza_order_text_total, state.menzaList.size),
-                style = MaterialTheme.typography.bodySmall,
-            )
         }
+
+        CheckboxWithText(checked = state.fromTop, onCheckedChange = { onReverseOrder() }) {
+            Text(stringResource(R.string.menza_order_button_align_top))
+        }
+
+        Button(onClick = onDone) {
+            Text(stringResource(R.string.button_done))
+        }
+
+        Text(
+            text = stringResource(R.string.menza_order_text_total, state.menzaList.size),
+            style = MaterialTheme.typography.bodySmall,
+        )
     }
 }
 

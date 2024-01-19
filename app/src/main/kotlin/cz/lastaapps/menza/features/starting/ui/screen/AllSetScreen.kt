@@ -22,10 +22,8 @@ package cz.lastaapps.menza.features.starting.ui.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -58,36 +56,31 @@ private fun AllSetContent(
     onDone: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        modifier = modifier,
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(
-                Padding.Medium,
-                Alignment.CenterVertically,
-            ),
-        ) {
-            AppIcon(size = AllSetScreen.iconSize)
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            Padding.Medium,
+            Alignment.CenterVertically,
+        ),
+    ) {
+        AppIcon(size = AllSetScreen.iconSize)
 
-            Text(
-                text = stringResource(R.string.all_set_title),
-                style = MaterialTheme.typography.headlineLarge,
-                textAlign = TextAlign.Center,
-            )
+        Text(
+            text = stringResource(R.string.all_set_title),
+            style = MaterialTheme.typography.headlineLarge,
+            textAlign = TextAlign.Center,
+        )
 
-            Text(
-                text = stringResource(R.string.all_set_description),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-            )
+        Text(
+            text = stringResource(R.string.all_set_description),
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+        )
 
-            Button(onClick = onDone) {
-                Text(stringResource(R.string.all_set_button))
-            }
+        Button(onClick = onDone) {
+            Text(stringResource(R.string.all_set_button))
         }
     }
 }

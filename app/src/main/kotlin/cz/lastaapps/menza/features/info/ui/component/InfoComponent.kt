@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.info.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
@@ -42,13 +43,13 @@ internal class DefaultInfoComponent(
 internal fun InfoContent(
     component: InfoComponent,
     onOsturak: () -> Unit,
+    hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     InfoScreen(
         viewModel = component.viewModel,
         onOsturak = onOsturak,
-        modifier = modifier
-            .fillMaxWidth(),
-        // .padding(Padding.More.Screen),
+        hostState = hostState,
+        modifier = modifier.fillMaxWidth(),
     )
 }

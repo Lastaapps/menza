@@ -20,9 +20,13 @@
 package cz.lastaapps.menza.features.starting.ui.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.pages.Pages
@@ -48,12 +52,18 @@ internal fun StartingContent(
     modifier: Modifier = Modifier,
     onDone: () -> Unit,
 ) {
+    val hostState = remember { SnackbarHostState() }
+
     Scaffold(
         modifier = modifier,
-    ) {
+        snackbarHost = { SnackbarHost(hostState = hostState) },
+    ) { padding ->
         val pager = component.content.subscribeAsState()
 
-        val childModifier = Modifier.padding(it)
+        val childModifier = Modifier
+            .padding(padding)
+            .fillMaxSize()
+
         Pages(
             pages = pager,
             onPageSelected = { /* TODO separate download and privacy policy, enable this after */ },
@@ -64,7 +74,7 @@ internal fun StartingContent(
                 is AllSet -> AllSetContent(page.component, childModifier, onDone)
                 is ChoosePrice -> PriceTypeContent(page.component, childModifier, next)
                 is ChooseTheme -> AppThemeContent(page.component, next)
-                is DownloadData -> DownloadContent(page.component, childModifier, next)
+                is DownloadData -> DownloadContent(page.component, hostState, childModifier, next)
                 is OrderMenzaList -> ReorderMenzaContent(page.component, onDone = next)
                 is Policy -> PolicyContent(page.component, childModifier, next)
             }
