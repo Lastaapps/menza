@@ -19,7 +19,6 @@
 
 package cz.lastaapps.core.ui.vm
 
-import androidx.lifecycle.ViewModel
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +33,7 @@ value class VMContext(val context: CoroutineContext)
 
 abstract class BaseViewModel(
     context: VMContext,
-) : InstanceKeeper.Instance, ViewModel() {
+) : InstanceKeeper.Instance {
 
     protected val viewModelScope = CoroutineScope(context.context + SupervisorJob())
 

@@ -22,14 +22,14 @@ package cz.lastaapps.menza.features.panels.whatsnew.di
 import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
 import cz.lastaapps.menza.features.panels.whatsnew.domain.LoadWhatsNewUC
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 internal val whatsNewModule = module {
     single<WhatsNewDataStore> { WhatsNewDataStore(get()) }
-    viewModelOf(::WhatsNewViewModel)
+    factoryOf(::WhatsNewViewModel)
     singleOf(::WhatsNewDataStore)
 
     factoryOf(::LoadWhatsNewUC)

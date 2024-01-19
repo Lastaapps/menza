@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,15 +24,15 @@ import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
 import cz.lastaapps.menza.features.starting.ui.vm.AllSetViewModel
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
 import cz.lastaapps.menza.features.starting.ui.vm.PriceTypeViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val startingModule = module {
 
-    viewModelOf(::DownloadViewModel)
-    viewModelOf(::AllSetViewModel)
-    viewModelOf(::PriceTypeViewModel)
+    factoryOf(::DownloadViewModel)
+    factoryOf(::AllSetViewModel)
+    factoryOf(::PriceTypeViewModel)
 
     factoryOf(::CheckDataDownloadNeededUC)
     factoryOf(::DownloadInitDataUC)

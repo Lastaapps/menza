@@ -49,7 +49,6 @@ internal fun Project.configureComposeDependencies() {
 
     dependencies {
 
-        implementation(libs.androidx.fragment)
         implementation(libs.google.material)
 
         implementation(libs.androidx.activity.compose)
@@ -66,19 +65,10 @@ internal fun Project.configureComposeDependencies() {
 
         implementation(libs.androidx.lifecycle.runtime)
         implementation(libs.androidx.lifecycle.runtime.compose)
-        implementation(libs.androidx.lifecycle.viewModel)
-        implementation(libs.androidx.lifecycle.viewModel.compose)
-
-        implementation(libs.androidx.navigation.fragment)
-        implementation(libs.androidx.navigation.ui)
-        implementation(libs.androidx.navigation.compose)
 
         implementation(libs.decompose.core)
         implementation(libs.decompose.compose)
 
         implementation(libs.coil.composeComplete)
-
-        implementation(libs.koin.android.navigation)
-        implementation(libs.koin.android.compose)
     }
 }

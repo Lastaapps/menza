@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,6 @@ import cz.lastaapps.menza.features.main.ui.vm.AgataWalletLoginViewModel
 import cz.lastaapps.menza.features.main.ui.vm.AgataWalletViewModel
 import cz.lastaapps.menza.features.main.ui.vm.MainViewModel
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -38,10 +37,10 @@ import org.koin.dsl.module
 val mainModule = module {
 
     singleOf(::SelectedMenzaRepoImpl) bind SelectedMenzaRepo::class
-    viewModelOf(::MenzaSelectionViewModel)
-    viewModelOf(::MainViewModel)
-    viewModelOf(::AgataWalletLoginViewModel)
-    viewModelOf(::AgataWalletViewModel)
+    factoryOf(::MenzaSelectionViewModel)
+    factoryOf(::MainViewModel)
+    factoryOf(::AgataWalletLoginViewModel)
+    factoryOf(::AgataWalletViewModel)
     factoryOf(::GetSelectedMenzaUC)
     factoryOf(::SelectMenzaUC)
     factoryOf(::IsFlipUC)

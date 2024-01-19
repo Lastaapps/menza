@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,7 +37,6 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.starting.ui.vm.AllSetViewModel
 import cz.lastaapps.menza.ui.components.AppIcon
 import cz.lastaapps.menza.ui.theme.Padding
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun AllSetScreen(

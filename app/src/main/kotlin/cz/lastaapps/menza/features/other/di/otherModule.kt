@@ -24,17 +24,16 @@ import cz.lastaapps.menza.features.other.ui.vm.LicenseViewModel
 import cz.lastaapps.menza.features.other.ui.vm.PolicyViewModel
 import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel
 import cz.lastaapps.menza.features.starting.data.PrivacyStore
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val otherModule = module {
-    viewModelOf(::LicenseViewModel)
+    factoryOf(::LicenseViewModel)
     factoryOf(::GetLibrariesUC)
 
-    viewModelOf(::PolicyViewModel)
+    factoryOf(::PolicyViewModel)
     singleOf(::PrivacyStore)
 
-    viewModelOf(::CrashesViewModel)
+    factoryOf(::CrashesViewModel)
 }

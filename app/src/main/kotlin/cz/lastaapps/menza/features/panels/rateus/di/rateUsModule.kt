@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,14 +29,14 @@ import cz.lastaapps.menza.features.panels.rateus.domain.usecase.DismissRateUsUC
 import cz.lastaapps.menza.features.panels.rateus.domain.usecase.RecordAppOpenedUC
 import cz.lastaapps.menza.features.panels.rateus.domain.usecase.ShouldShowRateUsUC
 import cz.lastaapps.menza.features.panels.rateus.ui.RateUsViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 internal val rateUsModule = module {
-    viewModelOf(::RateUsViewModel)
+    factoryOf(::RateUsViewModel)
 
     single { RateUsStore.create(get()) }
     @OptIn(ExperimentalSettingsApi::class)

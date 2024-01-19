@@ -39,10 +39,10 @@ dependencies {
     androidMainImplementation(libs.ktor.client.okhttp)
     jvmMainImplementation(libs.ktor.client.okhttp)
 
+    // Decompose navigation
+    commonMainImplementation(libs.decompose.core)
+
     // Lifecycle
     androidMainImplementation(libs.androidx.lifecycle.runtime)
     androidMainImplementation(libs.androidx.lifecycle.runtime.compose)
-    androidMainImplementation(libs.androidx.lifecycle.viewModel)
-    androidMainImplementation(libs.decompose.core)
-    androidMainImplementation(libs.decompose.compose)
 }

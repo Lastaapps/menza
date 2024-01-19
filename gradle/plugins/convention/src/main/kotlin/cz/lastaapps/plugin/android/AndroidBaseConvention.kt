@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -40,6 +40,5 @@ class AndroidBaseConvention : BasePlugin({
     dependencies {
         implementation(libs.androidx.appcompat)
         implementation(libs.androidx.lifecycle.runtime)
-        implementation(libs.androidx.lifecycle.viewModel)
     }
 })

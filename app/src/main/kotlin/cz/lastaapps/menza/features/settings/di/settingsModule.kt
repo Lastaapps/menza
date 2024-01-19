@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -68,8 +68,6 @@ import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetDarkModeUC
 import cz.lastaapps.menza.features.settings.ui.vm.AppThemeViewModel
 import cz.lastaapps.menza.features.settings.ui.vm.ReorderMenzaViewModel
 import cz.lastaapps.menza.features.settings.ui.vm.SettingsViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -84,8 +82,8 @@ val settingsModule = module {
     singleOf(::MainSettingsRepoImpl) bind MainSettingsRepo::class
     factoryOf(::DefaultsProviderImpl) bind DefaultsProvider::class
 
-    viewModelOf(::AppThemeViewModel)
-    viewModel {
+    factoryOf(::AppThemeViewModel)
+    factory {
         // @formatter:off
         SettingsViewModel(
             get(), get(), get(), get(), get(),
@@ -127,7 +125,7 @@ val settingsModule = module {
     factoryOf(::SetDishListModeUC)
 
     // Menza order
-    viewModelOf(::ReorderMenzaViewModel)
+    factoryOf(::ReorderMenzaViewModel)
     singleOf(::OrderRepoImpl) bind OrderRepo::class
     single { OrderSettings.create(get()) }
     factoryOf(::OrderDataSourceImpl) bind OrderDataSource::class
