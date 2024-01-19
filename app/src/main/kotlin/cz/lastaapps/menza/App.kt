@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,51 +20,5 @@
 package cz.lastaapps.menza
 
 import android.app.Application
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
-import coil.request.CachePolicy
-import coil.util.DebugLogger
-import java.util.concurrent.TimeUnit
-import okhttp3.OkHttpClient
 
-class App : Application(), ImageLoaderFactory {
-
-    override fun newImageLoader(): ImageLoader =
-        with(ImageLoader.Builder(this)) {
-            diskCachePolicy(CachePolicy.ENABLED)
-            memoryCachePolicy(CachePolicy.ENABLED)
-            networkCachePolicy(CachePolicy.ENABLED)
-            networkObserverEnabled(true)
-            respectCacheHeaders(false)
-
-            if (BuildConfig.DEBUG) {
-                logger(DebugLogger())
-            }
-
-            diskCache {
-                with(DiskCache.Builder()) {
-                    maxSizeBytes(1024 * 1024 * 64) // 64 MB
-                        .directory(cacheDir.resolve("dish_image_cache"))
-                    build()
-                }
-            }
-            memoryCache {
-                with(MemoryCache.Builder(this@App)) {
-                    weakReferencesEnabled(true)
-                    build()
-                }
-            }
-            respectCacheHeaders(true)
-            okHttpClient {
-                with(OkHttpClient.Builder()) {
-                    connectTimeout(5, TimeUnit.SECONDS)
-                    //readTimeout(10, TimeUnit.SECONDS)
-                    retryOnConnectionFailure(false)
-                    build()
-                }
-            }
-            build()
-        }
-}
+class App : Application(), coil3.SingletonImageLoader.Factory by CoilSetup()

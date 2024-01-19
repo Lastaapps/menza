@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -116,7 +116,7 @@ class KMPLibraryConvention : BasePlugin(
                 getByName("commonMain") {
                     dependencies {
                         implementation(project.dependencies.platform(libs.kotlin.bom))
-                        implementation(libs.kotlin.coroutines.common)
+                        implementation(libs.kotlinx.coroutines.common)
                         implementation(libs.kotlinx.dateTime)
                         implementation(libs.kotlinx.collection)
                         implementation(libs.kotlinx.serializationJson)
@@ -135,7 +135,7 @@ class KMPLibraryConvention : BasePlugin(
                         implementation(libs.kotlin.test.core)
                         implementation(libs.kotlin.test.jUnit5)
                         implementation(libs.kotest.assertion)
-                        implementation(libs.kotlin.coroutines.test)
+                        implementation(libs.kotlinx.coroutines.test)
 //                    implementation(libs.koin.test.jUnit5)
                     }
                 }
@@ -143,12 +143,13 @@ class KMPLibraryConvention : BasePlugin(
                 getByName("androidMain") {
                     dependencies {
                         implementation(libs.koin.android.core)
+                        implementation(libs.kotlinx.coroutines.android)
                     }
                 }
 
                 getByName("androidUnitTest") {
                     dependencies {
-                        implementation(libs.kotlin.coroutines.test)
+                        implementation(libs.kotlinx.coroutines.test)
                         implementation(libs.kotest.jUnit5runner)
                         implementation(project.dependencies.platform(libs.junit5.bom))
                         implementation(libs.junit5.jupiter.api)
@@ -157,12 +158,14 @@ class KMPLibraryConvention : BasePlugin(
                 }
 
                 getByName("jvmMain") {
-                    dependencies { }
+                    dependencies {
+                        implementation(libs.kotlinx.coroutines.swing)
+                    }
                 }
 
                 getByName("jvmTest") {
                     dependencies {
-                        implementation(libs.kotlin.coroutines.test)
+                        implementation(libs.kotlinx.coroutines.test)
                         implementation(libs.kotest.jUnit5runner)
                         implementation(project.dependencies.platform(libs.junit5.bom))
                         implementation(libs.junit5.jupiter.api)

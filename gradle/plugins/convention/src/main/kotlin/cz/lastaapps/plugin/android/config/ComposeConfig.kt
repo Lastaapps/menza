@@ -69,6 +69,6 @@ internal fun Project.configureComposeDependencies() {
         implementation(libs.decompose.core)
         implementation(libs.decompose.compose)
 
-        implementation(libs.coil.composeComplete)
+        implementation(libs.coil.compose.complete)
     }
 }

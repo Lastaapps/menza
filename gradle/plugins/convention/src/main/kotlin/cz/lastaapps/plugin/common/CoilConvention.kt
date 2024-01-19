@@ -17,31 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.plugin.android.common
+package cz.lastaapps.plugin.common
 
 import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-class CoroutinesConvention : BasePlugin(
+class CoilConvention : BasePlugin(
     {
-        tasks.withType<KotlinCompile> {
-            kotlinOptions {
-                freeCompilerArgs += listOf(
-                    "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                    "-opt-in=kotlinx.coroutines.FlowPreview",
-                )
-            }
-        }
-
         dependencies {
-            implementation(libs.kotlinx.coroutines.common)
-            implementation(libs.kotlinx.coroutines.android)
-            testImplementation(libs.kotlinx.coroutines.test)
+            implementation(libs.coil.complete)
+            implementation(libs.coil.gif)
+            implementation(libs.coil.network)
+            implementation(libs.coil.svg)
         }
     },
 )

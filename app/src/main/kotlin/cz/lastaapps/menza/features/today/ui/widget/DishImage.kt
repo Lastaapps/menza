@@ -31,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -40,12 +41,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest.Builder
+import coil3.Extras
+import coil3.compose.SubcomposeAsyncImage
+import coil3.request.ImageRequest.Builder
 import cz.lastaapps.menza.R.string
 import cz.lastaapps.menza.ui.components.placeholders.PlaceholderHighlight
 import cz.lastaapps.menza.ui.components.placeholders.fade
 import cz.lastaapps.menza.ui.components.placeholders.placeholder
+import java.util.UUID
 
 
 @Composable
@@ -62,7 +65,7 @@ internal fun DishImageRatio(
     DishImage(
         photoLink = photoLink,
         loadImmediately = loadImmediately,
-        modifier = imageModifier
+        modifier = imageModifier,
     )
 }
 
@@ -72,20 +75,22 @@ internal fun DishImage(
     loadImmediately: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    var retryHash by remember { mutableStateOf(0) }
+    var retryHash by remember { mutableIntStateOf(0) }
+    val randomUrl = rememberSaveable { UUID.randomUUID() }
     var userAllowed by rememberSaveable(photoLink) { mutableStateOf(false) }
     val canDownload = loadImmediately || userAllowed
 
     val imageRequest = with(Builder(LocalContext.current)) {
         diskCacheKey(photoLink)
         memoryCacheKey(photoLink)
-        crossfade(true)
-        setParameter("retry_hash", retryHash)
+        extras[Extras.Key("retry_hash")] = retryHash
+
         // if user is not on a metered network, images are going to be loaded from cache
-        if (canDownload)
+        if (canDownload) {
             data(photoLink)
-        else
-            data("https://userisonmeterednetwork.localhost/")
+        } else {
+            data("https://$randomUrl")
+        }
         //data(null) - cache is not working
         build()
     }
@@ -106,9 +111,9 @@ internal fun DishImage(
                             shape = MaterialTheme.shapes.medium,
                             highlight = PlaceholderHighlight.fade(
                                 highlightColor = MaterialTheme.colorScheme.primary,
-                            )
+                            ),
                         )
-                        .clickable { retryHash++ }
+                        .clickable { retryHash++ },
                 )
             },
             error = {
@@ -119,12 +124,12 @@ internal fun DishImage(
                     if (canDownload)
                         Icon(
                             Icons.Default.Refresh,
-                            stringResource(string.today_list_image_load_failed)
+                            stringResource(string.today_list_image_load_failed),
                         )
                     else
                         Icon(
                             Icons.Default.Download,
-                            stringResource(string.today_list_image_metered)
+                            stringResource(string.today_list_image_metered),
                         )
                 }
             },

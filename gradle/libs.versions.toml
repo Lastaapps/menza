@@ -10,11 +10,11 @@ androidx-compose-material3 = "1.2.0-beta02"
 androidx-lifecycle = "2.7.0"
 androidx-security = "1.1.0-alpha06"
 androidx-test = "1.5.0"
-coil = "2.5.0"
+coil = "3.0.0-alpha02"
 decompose = "3.0.0-alpha04"
 detekt = "1.23.4"
 espresso = "3.5.1"
-google-ksp = "1.9.22-1.0.16"
+google-ksp = "1.9.22-1.0.17"
 # @keep
 java-jvmTarget = "11"
 junit5-bom = "5.10.1"
@@ -87,13 +87,14 @@ arrowkt-bom = "io.arrow-kt:arrow-stack:1.2.1"
 arrowkt-core = { module = "io.arrow-kt:arrow-core" }
 arrowkt-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
 arrowkt-fx-stm = { module = "io.arrow-kt:arrow-fx-stm" }
-coil-base = { module = "io.coil-kt:coil-base", version.ref = "coil" }
-coil-composeBase = { module = "io.coil-kt:coil-compose-base", version.ref = "coil" }
-coil-composeComplete = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
-coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
-coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coil" }
-coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
+coil-core = { module = "io.coil-kt.coil3:coil-core", version.ref = "coil" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }
+coil-compose-complete = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-complete = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network", version.ref = "coil" }
+coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
+coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" }
 decompose-core = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
 detekt-kode-compose = "ru.kode:detekt-rules-compose:1.3.0"
@@ -130,9 +131,6 @@ kotest-assertion = { module = "io.kotest:kotest-assertions-core", version.ref = 
 kotest-jUnit5runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom" }
-kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
-kotlin-coroutines-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-standardLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 kotlin-test-annotation = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common" }
@@ -142,6 +140,10 @@ kotlin-test-jUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit" }
 kotlin-test-jUnit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlinx-atomicfu" }
 kotlinx-collection = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7"
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.5.0"
 kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2"
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
@@ -242,6 +244,7 @@ lastaapps-android-app-compose = "android-app-compose-convention:none"
 lastaapps-android-app-core = "android-app-convention:none"
 lastaapps-android-library-compose = "android-library-compose-convention:none"
 lastaapps-android-library-core = "android-library-convention:none"
+lastaapps-common-coil = "common-coil-convention:none"
 lastaapps-jvm-app = "jvm-app-convention:none"
 lastaapps-kmp-library = "kmp-library-convention:none"
 lastaapps-kmp-sqldelight = "kmp-sqldelight-convention:none"

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -68,7 +68,7 @@ class JvmAppConvention : BasePlugin(
         }
 
         dependencies {
-            implementation(libs.kotlin.coroutines.common)
+            implementation(libs.kotlinx.coroutines.common)
             implementation(libs.kotlinx.dateTime)
             implementation(libs.kotlinx.collection)
             implementation(libs.koin.core)
@@ -77,7 +77,7 @@ class JvmAppConvention : BasePlugin(
 
             testImplementation(kotlin("test"))
             testImplementation(libs.kotest.assertion)
-            testImplementation(libs.kotlin.coroutines.test)
+            testImplementation(libs.kotlinx.coroutines.test)
             testImplementation(libs.kotest.jUnit5runner)
             testImplementation(project.dependencies.platform(libs.junit5.bom))
             testImplementation(libs.junit5.jupiter.api)

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -63,7 +63,11 @@ gradlePlugin {
         )
         plugin(
             ids.android.library.compose,
-            pkg("android.AndroidLibraryComposeConvention")
+            pkg("android.AndroidLibraryComposeConvention"),
+        )
+        plugin(
+            ids.common.coil,
+            pkg("common.CoilConvention"),
         )
         plugin(
             ids.kmp.library,
