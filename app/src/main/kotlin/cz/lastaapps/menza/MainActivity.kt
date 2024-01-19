@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         WithLocalWindowSizes(this) {
             WithFoldingFeature(this) {
-                    content()
+                content()
             }
         }
     }

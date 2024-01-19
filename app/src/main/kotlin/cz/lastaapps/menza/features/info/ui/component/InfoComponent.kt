@@ -20,13 +20,11 @@
 package cz.lastaapps.menza.features.info.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import cz.lastaapps.menza.features.info.ui.screen.InfoScreen
 import cz.lastaapps.menza.features.info.ui.vm.InfoViewModel
-import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import org.koin.core.component.KoinComponent
 
@@ -50,7 +48,7 @@ internal fun InfoContent(
         viewModel = component.viewModel,
         onOsturak = onOsturak,
         modifier = modifier
-            .fillMaxWidth()
-            .padding(Padding.More.Screen),
+            .fillMaxWidth(),
+        // .padding(Padding.More.Screen),
     )
 }

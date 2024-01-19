@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerValue.Closed
 import androidx.compose.material3.DrawerValue.Open
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -105,14 +106,16 @@ internal fun MainContent(
                 ),
             ) {
                 val onOsturak = { component.push(MainNavTarget.Osturak) }
-                when (val instance = it.instance) {
-                    is Info -> InfoContent(instance.component, onOsturak)
-                    is LicenseNotices -> LicenseContent(instance.component)
-                    is Osturak -> OsturakContent(instance.component)
-                    is PrivacyPolicy -> PolicyContent(instance.component) { component.pop() }
-                    is Settings -> SettingsHubContent(instance.component)
-                    is Today -> TodayContent(instance.component, snackbarHostState, onOsturak)
-                    is Week -> WeekContent(instance.component, onOsturak)
+                Surface {
+                    when (val instance = it.instance) {
+                        is Info -> InfoContent(instance.component, onOsturak)
+                        is LicenseNotices -> LicenseContent(instance.component)
+                        is Osturak -> OsturakContent(instance.component)
+                        is PrivacyPolicy -> PolicyContent(instance.component) { component.pop() }
+                        is Settings -> SettingsHubContent(instance.component)
+                        is Today -> TodayContent(instance.component, snackbarHostState, onOsturak)
+                        is Week -> WeekContent(instance.component, onOsturak)
+                    }
                 }
             }
         },

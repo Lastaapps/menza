@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -50,7 +49,6 @@ import cz.lastaapps.menza.features.settings.ui.util.name
 import cz.lastaapps.menza.ui.theme.AppTheme
 import cz.lastaapps.menza.ui.theme.Padding
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AppThemeItem(
     theme: AppThemeType,

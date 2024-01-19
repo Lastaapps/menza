@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import cz.lastaapps.api.core.domain.model.Message
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.appCardColors
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -49,7 +49,7 @@ internal fun MessageList(
         ) {
             Text(
                 stringResource(R.string.info_message_title),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
             messages.forEach { message ->
                 Message(message = message)
@@ -61,9 +61,7 @@ internal fun MessageList(
 @Composable
 private fun Message(message: Message, modifier: Modifier = Modifier) {
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
+        colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         modifier = modifier,
     ) {
         Text(

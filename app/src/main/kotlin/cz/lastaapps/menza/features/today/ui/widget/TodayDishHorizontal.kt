@@ -38,7 +38,6 @@ import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -53,6 +52,7 @@ import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.appCardColors
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -202,9 +202,7 @@ private fun DishItem(
 ) {
     Card(
         onClick = { onDishSelected(dish) },
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
+        colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
         modifier = modifier,
     ) {

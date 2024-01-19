@@ -98,12 +98,13 @@ private fun InfoContent(
         modifier = modifier,
     ) { padding ->
         WrapMenzaNotSelected(
-            menza = state.selectedMenza, onOsturak = onOsturak,
-            modifier = Modifier.padding(padding),
+            menza = state.selectedMenza,
+            onOsturak = onOsturak,
         ) {
             Crossfade(
                 targetState = state.items,
                 label = "info",
+                modifier = Modifier.padding(padding),
             ) { items ->
                 if (items != null) {
                     val itemSpacer: LazyListScope.() -> Unit = {

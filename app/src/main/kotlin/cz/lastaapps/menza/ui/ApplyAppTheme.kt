@@ -41,7 +41,6 @@ internal fun ApplyAppTheme(
         AppTheme(
             theme = state.appTheme,
             darkMode = state.darkMode,
-            colorSystemBars = true,
             content = content,
         )
 

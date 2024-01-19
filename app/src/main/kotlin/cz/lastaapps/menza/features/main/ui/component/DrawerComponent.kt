@@ -21,6 +21,7 @@ package cz.lastaapps.menza.features.main.ui.component
 
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -119,6 +120,7 @@ internal fun DrawerContent(
             onBack = component::pop,
         ),
     ) { item ->
+        Surface {
         when (val instance = item.instance) {
             is Child.MenzaSelection -> MenzaSelectionContent(
                 component = instance.component,
@@ -133,6 +135,7 @@ internal fun DrawerContent(
                 onDone = component::pop,
                 modifier = modifier,
             )
+        }
         }
     }
 }

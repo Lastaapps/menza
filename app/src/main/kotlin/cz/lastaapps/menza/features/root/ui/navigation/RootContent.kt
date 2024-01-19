@@ -39,7 +39,7 @@ internal fun RootContent(
     component: RootComponent,
     modifier: Modifier = Modifier,
     onReady: () -> Unit,
-) {
+) = Surface {
     val viewModel: RootViewModel = component.viewModel
     val state by viewModel.flowState
 

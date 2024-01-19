@@ -52,7 +52,6 @@ import cz.lastaapps.menza.ui.theme.generated.uwu.UwuLightColors
 fun AppTheme(
     darkMode: DarkMode = DarkMode.System,
     theme: AppThemeType = Agata,
-    colorSystemBars: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val isLightMode = !darkMode.shouldUseDark()

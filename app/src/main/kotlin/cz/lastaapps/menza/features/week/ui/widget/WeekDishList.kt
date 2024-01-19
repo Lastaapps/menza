@@ -37,7 +37,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -57,6 +56,7 @@ import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.appCardColors
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -112,7 +112,7 @@ private fun WeekDishContent(
     val longestAmount = remember(data) { data.longestAmountOrPrice() }
     val amountWidthPx = remember(longestAmount, measurement) {
         measurement.measure(
-            buildString(longestAmount) { repeat(longestAmount) { append('m') } }
+            buildString(longestAmount) { repeat(longestAmount) { append('m') } },
         ).size.width * .8f
     }
     val amountWidth = with(LocalDensity.current) { amountWidthPx.toDp() }
@@ -133,12 +133,13 @@ private fun WeekDishContent(
 
                 items(
                     category.dishList,
-                    key = { "" + date + category.name + it.name }) { dish ->
+                    key = { "" + date + category.name + it.name },
+                ) { dish ->
                     WeekDishItem(
                         dish = dish,
                         priceType = priceType,
                         amountWidth = amountWidth,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
 
@@ -227,16 +228,14 @@ private fun WeekDishItem(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
+        colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.medium,
         modifier = modifier,
     ) {
         Row(
             Modifier.padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
                 modifier = Modifier.sizeIn(minWidth = amountWidth),

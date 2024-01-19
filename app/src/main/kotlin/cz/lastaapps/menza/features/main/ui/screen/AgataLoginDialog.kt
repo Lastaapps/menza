@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -33,7 +33,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -65,6 +64,7 @@ import cz.lastaapps.menza.features.main.ui.vm.AgataWalletLoginViewModel
 import cz.lastaapps.menza.ui.components.MenzaDialog
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
+import cz.lastaapps.menza.ui.util.appCardColors
 import cz.lastaapps.menza.ui.util.withAutofill
 
 /**
@@ -162,6 +162,7 @@ private fun AgataLoginDialogContent(
                 autofillTypes = listOf(AutofillType.Username),
                 onFill = onUsername,
             ),
+            enabled = !isLoading,
             value = username,
             onValueChange = onUsername,
             label = { Text(stringResource(R.string.wallet_login_username)) },
@@ -178,6 +179,7 @@ private fun AgataLoginDialogContent(
                 autofillTypes = listOf(AutofillType.Password),
                 onFill = onPassword,
             ),
+            enabled = !isLoading,
             value = password,
             onValueChange = onPassword,
             label = { Text(stringResource(R.string.wallet_login_password)) },
@@ -203,9 +205,7 @@ private fun AgataLoginDialogContent(
 
         error?.let {
             Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                ),
+                colors = appCardColors(MaterialTheme.colorScheme.errorContainer),
             ) {
                 Text(
                     text = error.text(),

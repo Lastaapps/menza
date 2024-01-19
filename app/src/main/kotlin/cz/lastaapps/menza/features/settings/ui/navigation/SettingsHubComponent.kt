@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.features.settings.ui.navigation
 
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -140,22 +141,24 @@ internal fun SettingsHubContent(
             onBack = component::pop,
         ),
     ) {
-        when (val instance = it.instance) {
-            is Child.AppTheme -> AppThemeContent(
-                instance.component,
-                onDone = component::pop,
-                modifier,
-            )
+        Surface {
+            when (val instance = it.instance) {
+                is Child.AppTheme -> AppThemeContent(
+                    instance.component,
+                    onDone = component::pop,
+                    modifier,
+                )
 
-            is Child.License -> LicenseContent(instance.component, modifier)
-            is Child.Osturak -> OsturakContent(instance.component, modifier)
-            is Child.Settings -> SettingsContent(
-                instance.component,
-                onChooseTheme = component::toChooseTheme,
-                onOsturak = component::toOsturak,
-                onLicense = component::toLicense,
-                modifier,
-            )
+                is Child.License -> LicenseContent(instance.component, modifier)
+                is Child.Osturak -> OsturakContent(instance.component, modifier)
+                is Child.Settings -> SettingsContent(
+                    instance.component,
+                    onChooseTheme = component::toChooseTheme,
+                    onOsturak = component::toOsturak,
+                    onLicense = component::toLicense,
+                    modifier,
+                )
+            }
         }
     }
 }
