@@ -17,15 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.starting.ui.component
+package cz.lastaapps.menza.features.settings.ui.component
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
-import cz.lastaapps.menza.features.starting.ui.screen.DishLanguageScreen
-import cz.lastaapps.menza.features.starting.ui.vm.DishLanguageViewModel
+import cz.lastaapps.menza.features.settings.ui.screens.DishLanguageScreen
+import cz.lastaapps.menza.features.settings.ui.vm.DishLanguageViewModel
 import cz.lastaapps.menza.ui.theme.Padding.More
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import org.koin.core.component.KoinComponent

@@ -41,8 +41,8 @@ internal class DefaultReorderMenzaComponent(
 @Composable
 internal fun ReorderMenzaContent(
     component: ReorderMenzaComponent,
-    onDone: () -> Unit,
     modifier: Modifier = Modifier,
+    onDone: () -> Unit,
 ) {
     ReorderMenzaScreen(
         modifier = modifier.padding(),

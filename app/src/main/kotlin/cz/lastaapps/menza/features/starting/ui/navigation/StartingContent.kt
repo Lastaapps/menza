@@ -22,6 +22,7 @@ package cz.lastaapps.menza.features.starting.ui.navigation
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -33,9 +34,9 @@ import com.arkivanov.decompose.extensions.compose.pages.Pages
 import com.arkivanov.decompose.extensions.compose.pages.PagesScrollAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import cz.lastaapps.menza.features.settings.ui.component.AppThemeContent
+import cz.lastaapps.menza.features.settings.ui.component.DishLanguageContent
 import cz.lastaapps.menza.features.settings.ui.component.ReorderMenzaContent
 import cz.lastaapps.menza.features.starting.ui.component.AllSetContent
-import cz.lastaapps.menza.features.starting.ui.component.DishLanguageContent
 import cz.lastaapps.menza.features.starting.ui.component.DownloadContent
 import cz.lastaapps.menza.features.starting.ui.component.PolicyContent
 import cz.lastaapps.menza.features.starting.ui.component.PriceTypeContent
@@ -70,15 +71,24 @@ internal fun StartingContent(
             pages = pager,
             onPageSelected = { /* TODO separate download and privacy policy, enable this after */ },
             scrollAnimation = PagesScrollAnimation.Default,
+            pager = { modifier, state, key, pageContent ->
+                HorizontalPager(
+                    modifier = modifier,
+                    state = state,
+                    key = key,
+                    pageContent = pageContent,
+                    userScrollEnabled = false,
+                )
+            },
         ) { _, page ->
             val next = component::next
             when (page) {
                 is AllSet -> AllSetContent(page.component, childModifier, onDone)
                 is ChoosePrice -> PriceTypeContent(page.component, childModifier, next)
                 is ChooseDishLanguage -> DishLanguageContent(page.component, childModifier, next)
-                is ChooseTheme -> AppThemeContent(page.component, next)
+                is ChooseTheme -> AppThemeContent(page.component, next, childModifier)
                 is DownloadData -> DownloadContent(page.component, hostState, childModifier, next)
-                is OrderMenzaList -> ReorderMenzaContent(page.component, onDone = next)
+                is OrderMenzaList -> ReorderMenzaContent(page.component, childModifier, next)
                 is Policy -> PolicyContent(page.component, childModifier, next)
             }
         }

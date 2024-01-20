@@ -65,6 +65,7 @@ internal class DefaultSettingsComponent(
 internal fun SettingsContent(
     component: SettingsComponent,
     onChooseTheme: () -> Unit,
+    onChooseDishLanguage: () -> Unit,
     onOsturak: () -> Unit,
     onLicense: () -> Unit,
     modifier: Modifier,
@@ -93,6 +94,7 @@ internal fun SettingsContent(
             appTheme = state.appTheme,
             darkMode = state.darkMode,
             onChooseTheme = onChooseTheme,
+            onChooseDishLanguage = onChooseDishLanguage,
             priceType = state.priceType,
             onDiscounterPrices = viewModel::setPriceType,
             downloadOnMetered = state.downloadOnMetered,

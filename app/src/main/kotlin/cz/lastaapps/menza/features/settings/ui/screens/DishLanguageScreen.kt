@@ -17,14 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.starting.ui.screen
+package cz.lastaapps.menza.features.settings.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ElevatedCard
@@ -35,14 +37,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.core.ui.vm.HandleDismiss
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
-import cz.lastaapps.menza.features.starting.ui.vm.DishLanguageState
-import cz.lastaapps.menza.features.starting.ui.vm.DishLanguageViewModel
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage.Czech
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage.English
+import cz.lastaapps.menza.features.settings.ui.vm.DishLanguageState
+import cz.lastaapps.menza.features.settings.ui.vm.DishLanguageViewModel
 import cz.lastaapps.menza.ui.theme.AppTheme
 import cz.lastaapps.menza.ui.theme.Padding
 
@@ -68,8 +72,6 @@ private fun DishLanguageEffects(
     viewModel: DishLanguageViewModel,
     onSelected: () -> Unit,
 ) {
-    HandleAppear(viewModel)
-
     HandleDismiss(
         viewModel,
         DishLanguageState::isSelected,
@@ -118,16 +120,25 @@ private fun DishLanguageContent(
                 LanguageButton(
                     stringResource(R.string.language_choose_czech_title),
                     stringResource(R.string.language_choose_czech_description),
-                    onClick = { onLanguage(DishLanguage.Czech) },
+                    onClick = { onLanguage(Czech) },
                     modifier = Modifier.fillMaxWidth(),
                 )
                 LanguageButton(
                     stringResource(R.string.language_choose_english_title),
                     stringResource(R.string.language_choose_english_description),
-                    onClick = { onLanguage(DishLanguage.English) },
+                    onClick = { onLanguage(English) },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
+
+            Spacer(Modifier.height(Padding.Medium))
+
+            Text(
+                text = stringResource(id = R.string.language_choose_disclaimer),
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                fontStyle = FontStyle.Italic,
+            )
         }
     }
 }

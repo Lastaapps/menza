@@ -29,15 +29,15 @@ import com.arkivanov.decompose.router.pages.selectNext
 import com.arkivanov.decompose.value.Value
 import cz.lastaapps.menza.features.settings.ui.component.AppThemeComponent
 import cz.lastaapps.menza.features.settings.ui.component.DefaultAppThemeComponent
+import cz.lastaapps.menza.features.settings.ui.component.DefaultDishLanguageComponent
 import cz.lastaapps.menza.features.settings.ui.component.DefaultReorderMenzaComponent
+import cz.lastaapps.menza.features.settings.ui.component.DishLanguageComponent
 import cz.lastaapps.menza.features.settings.ui.component.ReorderMenzaComponent
 import cz.lastaapps.menza.features.starting.ui.component.AllSetComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultAllSetComponent
-import cz.lastaapps.menza.features.starting.ui.component.DefaultDishLanguageComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultDownloadComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultPolicyComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultPriceTypeComponent
-import cz.lastaapps.menza.features.starting.ui.component.DishLanguageComponent
 import cz.lastaapps.menza.features.starting.ui.component.DownloadComponent
 import cz.lastaapps.menza.features.starting.ui.component.PolicyComponent
 import cz.lastaapps.menza.features.starting.ui.component.PriceTypeComponent
@@ -93,7 +93,7 @@ internal class DefaultStartingComponent(
     override val content: Value<ChildPages<*, Child>> =
         childPages(
             navigation,
-            Config.serializer(),
+            null, // Config.serializer(),
             initialPages = {
                 Pages(
                     items = Config.allConfigs,

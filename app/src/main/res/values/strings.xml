@@ -46,6 +46,7 @@
     <string name="language_choose_czech_description">the native\'s version</string>
     <string name="language_choose_english_title">🇬🇧 English</string>
     <string name="language_choose_english_description">(funny) translations</string>
+    <string name="language_choose_disclaimer">Translations are provided only for daily menus and in some cafeterias. None of the translations are done by the app itself.</string>
 
     <string name="privacy_title">Privacy Policy</string>
     <string name="privacy_text">
@@ -113,6 +114,8 @@
 
     <string name="settings_title">Settings</string>
     <string name="settings_switch_price">Discounted prices</string>
+    <string name="settings_language_title">Dish name</string>
+    <string name="settings_language_subtitle">Czech/English menu language</string>
     <string name="settings_switch_metered_title">Images on metered</string>
     <string name="settings_switch_metered_subtitle">Each image takes ~0.7 MB</string>
     <string name="settings_image_size_title">Image scaling</string>

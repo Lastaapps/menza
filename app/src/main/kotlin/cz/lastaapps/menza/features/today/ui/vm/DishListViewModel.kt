@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -39,15 +39,15 @@ import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
+import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import kotlinx.collections.immutable.ImmutableList
@@ -67,7 +67,7 @@ internal class DishListViewModel(
     private val getImagesOnMeteredUC: GetImagesOnMeteredUC,
     private val getImageScaleUC: GetImageScaleUC,
     private val setImageScaleUC: SetImageScaleUC,
-    private val getShowCzechUC: GetShowCzechUC,
+    private val getDishLanguageUC: GetDishLanguageUC,
     private val getDishListModeUC: GetDishListModeUC,
     private val setDishListModeUC: SetDishListModeUC,
     private val isOnMeteredUC: IsOnMeteredUC,
@@ -116,8 +116,8 @@ internal class DishListViewModel(
             updateState { copy(imageScale = it) }
         }.launchInVM()
 
-        getShowCzechUC().onEach {
-            updateState { copy(showCzech = it) }
+        getDishLanguageUC().onEach {
+            updateState { copy(language = it) }
         }.launchInVM()
 
         getDishListModeUC().onEach {
@@ -173,7 +173,7 @@ internal data class DishListState(
     val items: ImmutableList<DishCategory> = persistentListOf(),
     val priceType: PriceType = Unset,
     val downloadOnMetered: Boolean = false,
-    val showCzech: ShowCzech = ShowCzech(true),
+    val language: DishLanguage = DishLanguage.Czech,
     val imageScale: Float = 1f,
     val isOnMetered: Boolean = false,
 ) : VMState {

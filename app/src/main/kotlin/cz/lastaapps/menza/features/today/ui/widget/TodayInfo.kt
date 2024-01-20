@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -36,16 +37,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.ServingPlace
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.today.ui.util.allergenForId
 import cz.lastaapps.menza.features.today.ui.util.formatPrice
 import cz.lastaapps.menza.features.today.ui.util.getAmount
 import cz.lastaapps.menza.features.today.ui.util.getName
+import cz.lastaapps.menza.features.today.ui.util.getSecondaryName
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlin.math.max
 import kotlinx.collections.immutable.ImmutableList
@@ -53,12 +56,12 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun TodayInfo(
     dish: Dish,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier.verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         DishImageInfo(
             dish = dish,
@@ -66,11 +69,11 @@ fun TodayInfo(
 
         Header(
             dish = dish,
-            showCzech = showCzech,
+            language = language,
         )
         PriceView(
             dish = dish,
-            showCzech = showCzech,
+            language = language,
         )
         IssueLocationList(
             list = dish.servingPlaces,
@@ -87,24 +90,41 @@ fun TodayInfo(
 @Composable
 private fun Header(
     dish: Dish,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     modifier: Modifier = Modifier,
 ) {
-    Text(
-        text = dish.getName(showCzech),
-        style = MaterialTheme.typography.headlineMedium,
+    Column(
         modifier = modifier,
-    )
+    ) {
+        SelectionContainer {
+            Text(
+                text = dish.getName(language),
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier,
+            )
+        }
+
+        dish.getSecondaryName(language)?.let { name ->
+            SelectionContainer {
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier,
+                    fontStyle = FontStyle.Italic,
+                )
+            }
+        }
+    }
 }
 
 @Composable
 private fun PriceView(
     dish: Dish,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier) {
-        Text(text = dish.getAmount(showCzech) ?: "")
+        Text(text = dish.getAmount(language) ?: "")
         val priceText = buildString {
             append(dish.priceDiscounted?.formatPrice() ?: "∅")
             append(" / ")
@@ -154,7 +174,7 @@ private fun AllergenList(
 
         Text(
             stringResource(R.string.today_info_allergens_title),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
         )
 
         when {
@@ -189,7 +209,7 @@ private fun AllergenRow(id: Int, modifier: Modifier = Modifier) {
             AllergenIdBadge(id = id)
             Text(
                 text = info?.first ?: stringResource(R.string.today_info_unknown_allergen_title),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
             )
         }
 
@@ -217,10 +237,10 @@ private fun AllergenIdBadge(id: Int, modifier: Modifier = Modifier) {
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(
                         start = 6.dp, end = 6.dp,
-                        top = 2.dp, bottom = 2.dp
+                        top = 2.dp, bottom = 2.dp,
                     ),
                 )
-            }
+            },
         ) { measurable, constrains ->
             val placeable = measurable[0].measure(constrains)
             //val h = max(placeable.height, minSize)

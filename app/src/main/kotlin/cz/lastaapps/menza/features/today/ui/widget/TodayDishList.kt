@@ -49,8 +49,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.theme.Padding
@@ -67,7 +67,7 @@ fun TodayDishList(
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     imageScale: Float,
     isOnMetered: Boolean,
     header: @Composable () -> Unit,
@@ -90,7 +90,7 @@ fun TodayDishList(
                 onNoItems = onNoItems,
                 priceType = priceType,
                 downloadOnMetered = downloadOnMetered,
-                showCzech = showCzech,
+                language = language,
                 imageScale = imageScale,
                 isOnMetered = isOnMetered,
                 scroll = scroll,
@@ -112,7 +112,7 @@ private fun DishContent(
     onNoItems: () -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     imageScale: Float,
     isOnMetered: Boolean,
     scroll: LazyListState,
@@ -143,7 +143,7 @@ private fun DishContent(
                     Surface(Modifier.fillMaxWidth()) {
                         DishHeader(
                             courseType = category,
-                            showCzech = showCzech,
+                            language = language,
                             modifier = Modifier.padding(bottom = Padding.Smaller),
                         )
                     }
@@ -154,7 +154,7 @@ private fun DishContent(
                         onDishSelected = onDishSelected,
                         priceType = priceType,
                         downloadOnMetered = downloadOnMetered,
-                        showCzech = showCzech,
+                        language = language,
                         imageScale = imageScale,
                         isOnMetered = isOnMetered,
                         modifier = Modifier.fillMaxWidth(),
@@ -175,7 +175,7 @@ private fun DishItem(
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     imageScale: Float,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
@@ -199,8 +199,8 @@ private fun DishItem(
                 isOnMetered = isOnMetered,
             )
             Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
-                DishNameRow(dish, showCzech)
-                DishInfoRow(dish, showCzech)
+                DishNameRow(dish, language)
+                DishInfoRow(dish, language)
             }
         }
     }

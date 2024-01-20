@@ -46,8 +46,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
@@ -65,7 +65,7 @@ fun TodayDishGrid(
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     isOnMetered: Boolean,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
@@ -88,7 +88,7 @@ fun TodayDishGrid(
                 onNoItems = onNoItems,
                 priceType = priceType,
                 downloadOnMetered = downloadOnMetered,
-                showCzech = showCzech,
+                language = language,
                 isOnMetered = isOnMetered,
                 scroll = scrollGrid,
                 header = header,
@@ -111,7 +111,7 @@ private fun DishContent(
     onNoItems: () -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     isOnMetered: Boolean,
     scroll: LazyStaggeredGridState,
     header: @Composable () -> Unit,
@@ -151,7 +151,7 @@ private fun DishContent(
                         if (index == 0) {
                             DishHeader(
                                 courseType = category,
-                                showCzech = showCzech,
+                                language = language,
                             )
                         }
                         DishItem(
@@ -159,7 +159,7 @@ private fun DishContent(
                             onDishSelected = onDishSelected,
                             priceType = priceType,
                             downloadOnMetered = downloadOnMetered,
-                            showCzech = showCzech,
+                            language = language,
                             isOnMetered = isOnMetered,
                             modifier = Modifier.fillMaxWidth(),
                         )
@@ -180,7 +180,7 @@ private fun DishItem(
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -213,7 +213,7 @@ private fun DishItem(
                 ) {
                     DishNameRow(
                         dish = dish,
-                        showCzech = showCzech,
+                        language = language,
                         modifier = modifier.weight(1f),
                     )
                     if (dish.photoLink == null) {
@@ -221,7 +221,7 @@ private fun DishItem(
                     }
                 }
 
-                DishInfoRow(dish, showCzech)
+                DishInfoRow(dish, language)
             }
         }
     }

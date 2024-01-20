@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,10 +22,10 @@ package cz.lastaapps.menza.features.settings.domain
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import kotlinx.coroutines.flow.Flow
 
 internal interface MainSettingsRepo {
@@ -59,8 +59,8 @@ internal interface MainSettingsRepo {
     suspend fun setImagesOnMetered(enabled: Boolean)
     fun getImagesOnMetered(): Flow<Boolean>
 
-    suspend fun setShowCzech(mode: ShowCzech)
-    fun getShowCzech(): Flow<ShowCzech>
+    suspend fun setDishLanguage(language: DishLanguage)
+    fun getDishLanguage(): Flow<DishLanguage>
 
     suspend fun setCompactTodayView(mode: DishListMode)
     fun isCompactTodayView(): Flow<DishListMode>

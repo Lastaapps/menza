@@ -17,24 +17,21 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.starting.ui.vm
+package cz.lastaapps.menza.features.settings.ui.vm
 
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
+import cz.lastaapps.menza.features.settings.domain.usecase.SetDishLanguageUC
 
 internal class DishLanguageViewModel(
     context: VMContext,
-) : StateViewModel<DishLanguageState>(DishLanguageState(), context), Appearing {
-    override var hasAppeared: Boolean = false
+    private val setDishLanguageUC: SetDishLanguageUC,
+) : StateViewModel<DishLanguageState>(DishLanguageState(), context) {
 
-    override fun onAppeared() {
-
-    }
-
-    fun selectLanguage(language: DishLanguage) {
+    fun selectLanguage(language: DishLanguage) = launchVM {
+        setDishLanguageUC(language)
         updateState { copy(isSelected = true) }
     }
 

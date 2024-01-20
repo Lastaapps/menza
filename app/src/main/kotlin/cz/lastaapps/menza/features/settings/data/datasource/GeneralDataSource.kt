@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,9 +27,9 @@ import com.russhwolf.settings.coroutines.FlowSettings
 import com.russhwolf.settings.datastore.DataStoreSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -66,8 +66,8 @@ internal interface GeneralDataSource {
     suspend fun setImagesOnMetered(enabled: Boolean)
     fun getImagesOnMetered(): Flow<Boolean>
 
-    suspend fun setShowCzech(mode: ShowCzech)
-    fun getShowCzech(): Flow<ShowCzech?>
+    suspend fun setDishLanguage(language: DishLanguage)
+    fun getDishLanguage(): Flow<DishLanguage?>
 
     suspend fun setCompactTodayView(mode: DishListMode)
     fun isCompactTodayView(): Flow<DishListMode?>
@@ -87,7 +87,7 @@ internal class GeneralDataSourceImpl(
         private const val appThemeKey = "app_theme"
         private const val imageScaleKey = "image_scale"
         private const val imagesOnMeteredKey = "images_on_metered"
-        private const val showCzechKey = "show_czech"
+        private const val dishLanguageKey = "dish_language"
         private const val compactTodayView = "compact_today_view"
     }
 
@@ -143,12 +143,13 @@ internal class GeneralDataSourceImpl(
     override fun getImagesOnMetered(): Flow<Boolean> =
         settings.getBooleanFlow(imagesOnMeteredKey, true)
 
-    override suspend fun setShowCzech(mode: ShowCzech) =
-        settings.putBoolean(showCzechKey, mode.czech)
+    override suspend fun setDishLanguage(language: DishLanguage) =
+        settings.putInt(dishLanguageKey, language.id)
 
-    override fun getShowCzech(): Flow<ShowCzech?> =
-        settings.getBooleanOrNullFlow(showCzechKey)
-            .map { it?.let(::ShowCzech) }
+    override fun getDishLanguage(): Flow<DishLanguage?> =
+        settings.getIntOrNullFlow(dishLanguageKey).map { id ->
+            DishLanguage.entries.firstOrNull { it.id == id }
+        }
 
     override suspend fun setCompactTodayView(mode: DishListMode) =
         settings.putInt(compactTodayView, mode.id)

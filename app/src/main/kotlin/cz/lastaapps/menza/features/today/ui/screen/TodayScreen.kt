@@ -110,7 +110,7 @@ private fun TodayContent(
             currentDish?.let {
                 TodayInfo(
                     dish = currentDish,
-                    showCzech = state.showCzech,
+                    language = state.language,
                     modifier = Modifier.fillMaxSize(),
                 )
             }

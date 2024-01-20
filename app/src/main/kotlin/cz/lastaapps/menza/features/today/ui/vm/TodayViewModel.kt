@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,14 +28,14 @@ import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
-import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
+import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
 import kotlinx.coroutines.flow.onEach
 
 internal class TodayViewModel(
     context: VMContext,
     private val getSelectedMenza: GetSelectedMenzaUC,
-    private val getShowCzech: GetShowCzechUC,
+    private val getDishLanguageUC: GetDishLanguageUC,
 ) : StateViewModel<TodayState>(TodayState(), context), Appearing {
     override var hasAppeared: Boolean = false
 
@@ -49,8 +49,8 @@ internal class TodayViewModel(
             }
         }.launchInVM()
 
-        getShowCzech().onEach {
-            updateState { copy(showCzech = it) }
+        getDishLanguageUC().onEach {
+            updateState { copy(language = it) }
         }.launchInVM()
     }
 
@@ -61,7 +61,7 @@ internal class TodayViewModel(
 internal data class TodayState(
     val selectedMenza: Option<Menza>? = null,
     val selectedDish: Dish? = null,
-    val showCzech: ShowCzech = ShowCzech(true),
+    val language: DishLanguage = DishLanguage.Czech,
 ) : VMState {
     val hasDish: Boolean get() = selectedDish != null
 }

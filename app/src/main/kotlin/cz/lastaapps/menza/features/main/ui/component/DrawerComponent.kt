@@ -132,8 +132,8 @@ internal fun DrawerContent(
 
                 is Child.Edit -> ReorderMenzaContent(
                     component = instance.component,
-                    onDone = component::pop,
                     modifier = modifier,
+                    onDone = component::pop,
                 )
             }
         }

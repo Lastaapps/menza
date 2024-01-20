@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,10 +25,10 @@ import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -98,11 +98,11 @@ internal class MainSettingsRepoImpl(
     override fun getImagesOnMetered(): Flow<Boolean> =
         general.getImagesOnMetered()
 
-    override suspend fun setShowCzech(mode: ShowCzech) =
-        general.setShowCzech(mode)
+    override suspend fun setDishLanguage(language: DishLanguage) =
+        general.setDishLanguage(language)
 
-    override fun getShowCzech(): Flow<ShowCzech> =
-        general.getShowCzech().map { it ?: defaults.defaultShowCzech() }
+    override fun getDishLanguage(): Flow<DishLanguage> =
+        general.getDishLanguage().map { it ?: defaults.defaultDishLanguage() }
 
     override suspend fun setCompactTodayView(mode: DishListMode) =
         general.setCompactTodayView(mode)

@@ -42,6 +42,7 @@
     <string name="language_choose_czech_description">Hezky podomácku</string>
     <string name="language_choose_english_title">🇬🇧 Angliky</string>
     <string name="language_choose_english_description">Se všemi veselými překlady</string>
+    <string name="language_choose_disclaimer">Přeloženy jsou pouye denní menu a pouze v některých menzách. Žádný text nebyl přeložen aplikací samotnou.</string>
     <string name="privacy_title">Zásady ochrany osobních údajů</string>
     <string name="privacy_text">
         Tato aplikace neshromažďuje žádná (osobní) data.
@@ -100,6 +101,8 @@
     <string name="crash_status_reported">Nahlášeno, děkujeme</string>
     <string name="settings_title">Nastavení</string>
     <string name="settings_switch_price">Dotované ceny</string>
+    <string name="settings_language_title">Názvy jídel</string>
+    <string name="settings_language_subtitle">Menu v češtině/angličtině</string>
     <string name="settings_switch_metered_title">Obrázky na datech</string>
     <string name="settings_switch_metered_subtitle">Každý obrázek spotřebuje ~0.7 MB</string>
     <string name="settings_image_size_title">Škálování obrázků</string>

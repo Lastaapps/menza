@@ -84,6 +84,7 @@ internal fun SettingsScreen(
     appTheme: AppThemeType,
     darkMode: DarkMode,
     onChooseTheme: () -> Unit,
+    onChooseDishLanguage: () -> Unit,
     priceType: PriceType,
     onDiscounterPrices: (PriceType) -> Unit,
     downloadOnMetered: Boolean,
@@ -128,6 +129,13 @@ internal fun SettingsScreen(
             subtitle = priceType.name(),
             isChecked = priceType == PriceType.Discounted,
             onChecked = { onDiscounterPrices(priceType.other()) },
+        )
+
+        // Dish language
+        SettingsItem(
+            title = stringResource(id = R.string.settings_language_title),
+            subtitle = stringResource(id = R.string.settings_language_subtitle),
+            onClick = onChooseDishLanguage,
         )
 
         // Metered networks
@@ -342,6 +350,7 @@ private fun SettingsScreenPreview() = PreviewWrapper {
         appTheme = Agata,
         darkMode = DarkMode.System,
         onChooseTheme = {},
+        onChooseDishLanguage = {},
         priceType = PriceType.Discounted,
         onDiscounterPrices = {},
         downloadOnMetered = false,

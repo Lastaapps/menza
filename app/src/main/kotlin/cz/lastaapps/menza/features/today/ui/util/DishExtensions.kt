@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,11 +25,12 @@ import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.model.WeekDish
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Discounted
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Normal
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
+import cz.lastaapps.menza.features.settings.domain.model.isCzech
 
 fun Dish.getPrice(type: PriceType) =
     when (type) {
@@ -52,14 +53,17 @@ fun Float.formatPrice() =
         "%.2f".format(this)
     }
 
-fun DishCategory.getName(showCzech: ShowCzech): String =
-    nameEn.takeUnless { showCzech.czech } ?: nameCs
+fun DishCategory.getName(language: DishLanguage): String =
+    nameEn.takeUnless { language.isCzech() } ?: nameCs
 
-fun Dish.getName(showCzech: ShowCzech): String =
-    nameEn.takeUnless { showCzech.czech } ?: nameCs
+fun Dish.getName(language: DishLanguage): String =
+    nameEn.takeUnless { language.isCzech() } ?: nameCs
 
-fun Dish.getAmount(showCzech: ShowCzech): String? =
-    amountEn.takeUnless { showCzech.czech } ?: amountCs
+fun Dish.getSecondaryName(language: DishLanguage): String? =
+    nameCs.takeUnless { language.isCzech() } ?: nameEn
+
+fun Dish.getAmount(language: DishLanguage): String? =
+    amountEn.takeUnless { language.isCzech() } ?: amountCs
 
 @Composable
 fun allergenForId(id: Int): Pair<String, String>? {

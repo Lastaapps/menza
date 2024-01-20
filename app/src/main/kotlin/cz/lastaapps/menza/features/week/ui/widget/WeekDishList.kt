@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -244,7 +245,10 @@ private fun WeekDishItem(
                 dish.amount?.let { Text(it) }
                 dish.getPrice(priceType)?.let { Text("$it Kč") }
             }
-            Text(dish.name, style = MaterialTheme.typography.titleMedium)
+
+            SelectionContainer {
+                Text(dish.name, style = MaterialTheme.typography.titleMedium)
+            }
         }
     }
 }

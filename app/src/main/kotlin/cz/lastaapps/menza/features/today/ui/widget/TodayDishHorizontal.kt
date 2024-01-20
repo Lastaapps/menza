@@ -38,7 +38,6 @@ import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -47,8 +46,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
 import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.theme.Padding
@@ -65,7 +64,7 @@ fun TodayDishHorizontal(
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     isOnMetered: Boolean,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
@@ -87,7 +86,7 @@ fun TodayDishHorizontal(
                 onNoItems = onNoItems,
                 priceType = priceType,
                 downloadOnMetered = downloadOnMetered,
-                showCzech = showCzech,
+                language = language,
                 isOnMetered = isOnMetered,
                 scroll = scroll,
                 header = header,
@@ -109,7 +108,7 @@ private fun DishContent(
     onNoItems: () -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     isOnMetered: Boolean,
     scroll: LazyListState,
     header: @Composable () -> Unit,
@@ -138,7 +137,7 @@ private fun DishContent(
                 item {
                     DishHeader(
                         courseType = category,
-                        showCzech = showCzech,
+                        language = language,
                         modifier = Modifier.padding(bottom = Padding.Smaller),
                     )
                 }
@@ -151,7 +150,7 @@ private fun DishContent(
                             onDishSelected = onDishSelected,
                             priceType = priceType,
                             downloadOnMetered = downloadOnMetered,
-                            showCzech = showCzech,
+                            language = language,
                             isOnMetered = isOnMetered,
                             modifier = Modifier.fillMaxWidth(),
                         )
@@ -172,7 +171,7 @@ private fun DishContent(
                                     onDishSelected = onDishSelected,
                                     priceType = priceType,
                                     downloadOnMetered = downloadOnMetered,
-                                    showCzech = showCzech,
+                                    language = language,
                                     isOnMetered = isOnMetered,
                                     modifier = Modifier.sizeIn(maxWidth = 256.dp),
                                 )
@@ -189,14 +188,13 @@ private fun DishContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DishItem(
     dish: Dish,
     onDishSelected: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
-    showCzech: ShowCzech,
+    language: DishLanguage,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -230,7 +228,7 @@ private fun DishItem(
                 ) {
                     DishNameRow(
                         dish = dish,
-                        showCzech = showCzech,
+                        language = language,
                         modifier = modifier.weight(1f),
                     )
                     if (dish.photoLink == null) {
@@ -241,7 +239,7 @@ private fun DishItem(
                     }
                 }
 
-                DishInfoRow(dish, showCzech)
+                DishInfoRow(dish, language)
             }
         }
     }

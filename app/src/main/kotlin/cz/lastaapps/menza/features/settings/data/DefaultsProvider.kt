@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,16 +21,16 @@ package cz.lastaapps.menza.features.settings.data
 
 import android.content.Context
 import android.os.Build
-import cz.lastaapps.menza.features.settings.domain.model.ShowCzech
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 
 internal interface DefaultsProvider {
-    fun defaultShowCzech(): ShowCzech
+    fun defaultDishLanguage(): DishLanguage
 }
 
 internal class DefaultsProviderImpl(
     private val context: Context,
 ) : DefaultsProvider {
-    override fun defaultShowCzech(): ShowCzech {
+    override fun defaultDishLanguage(): DishLanguage {
         val locates = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             context.resources.configuration.locales.let { list ->
                 List(list.size()) { list[it] }
@@ -40,8 +40,12 @@ internal class DefaultsProviderImpl(
             listOf(context.resources.configuration.locale)
         }.map { it.language }
 
-        val slavic = listOf("cs", "sk", "uk", "ru", "pl")
+        val slavic = listOf("cs", "sk", "uk", "ru", "pl", "sl", "hr")
 
-        return ShowCzech(czech = locates.any { it in slavic })
+        return if (locates.any { it in slavic }) {
+            DishLanguage.Czech
+        } else {
+            DishLanguage.English
+        }
     }
 }

@@ -19,13 +19,12 @@
 
 package cz.lastaapps.menza.features.starting.di
 
+import cz.lastaapps.menza.features.settings.ui.vm.DishLanguageViewModel
 import cz.lastaapps.menza.features.starting.domain.usecase.CheckDataDownloadNeededUC
 import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
 import cz.lastaapps.menza.features.starting.ui.vm.AllSetViewModel
-import cz.lastaapps.menza.features.starting.ui.vm.DishLanguageViewModel
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadViewModel
 import cz.lastaapps.menza.features.starting.ui.vm.PriceTypeViewModel
-
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 

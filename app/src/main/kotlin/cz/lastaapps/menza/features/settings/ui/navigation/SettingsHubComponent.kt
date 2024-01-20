@@ -45,9 +45,17 @@ import cz.lastaapps.menza.features.other.ui.node.OsturakContent
 import cz.lastaapps.menza.features.settings.ui.component.AppThemeComponent
 import cz.lastaapps.menza.features.settings.ui.component.AppThemeContent
 import cz.lastaapps.menza.features.settings.ui.component.DefaultAppThemeComponent
+import cz.lastaapps.menza.features.settings.ui.component.DefaultDishLanguageComponent
 import cz.lastaapps.menza.features.settings.ui.component.DefaultSettingsComponent
+import cz.lastaapps.menza.features.settings.ui.component.DishLanguageComponent
+import cz.lastaapps.menza.features.settings.ui.component.DishLanguageContent
 import cz.lastaapps.menza.features.settings.ui.component.SettingsComponent
 import cz.lastaapps.menza.features.settings.ui.component.SettingsContent
+import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.AppTheme
+import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.DishLanguage
+import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.License
+import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.Osturak
+import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.Settings
 import cz.lastaapps.menza.features.settings.ui.navigation.SettingsHubComponent.Child
 import kotlinx.serialization.Serializable
 
@@ -55,6 +63,7 @@ internal interface SettingsHubComponent : BackHandlerOwner {
     val content: Value<ChildStack<*, Child>>
 
     fun toChooseTheme()
+    fun toChooseDishLanguage()
     fun toOsturak()
     fun toLicense()
     fun pop()
@@ -65,6 +74,9 @@ internal interface SettingsHubComponent : BackHandlerOwner {
 
         @JvmInline
         value class AppTheme(val component: AppThemeComponent) : Child
+
+        @JvmInline
+        value class DishLanguage(val component: DishLanguageComponent) : Child
 
         @JvmInline
         value class Osturak(val component: OsturakComponent) : Child
@@ -86,15 +98,20 @@ internal class DefaultSettingsHubComponent(
             initialStack = { listOf(Config.Settings) },
         ) { configuration, componentContext ->
             when (configuration) {
-                Config.AppTheme -> Child.AppTheme(DefaultAppThemeComponent(componentContext))
-                Config.License -> Child.License(DefaultLicenseComponent(componentContext))
-                Config.Osturak -> Child.Osturak(DefaultOsturakComponent(componentContext))
-                Config.Settings -> Child.Settings(DefaultSettingsComponent(componentContext))
+                AppTheme -> Child.AppTheme(DefaultAppThemeComponent(componentContext))
+                DishLanguage -> Child.DishLanguage(DefaultDishLanguageComponent(componentContext))
+                License -> Child.License(DefaultLicenseComponent(componentContext))
+                Osturak -> Child.Osturak(DefaultOsturakComponent(componentContext))
+                Settings -> Child.Settings(DefaultSettingsComponent(componentContext))
             }
         }
 
     override fun toChooseTheme() {
         navigation.push(Config.AppTheme)
+    }
+
+    override fun toChooseDishLanguage() {
+        navigation.push(Config.DishLanguage)
     }
 
     override fun toOsturak() {
@@ -117,6 +134,9 @@ internal class DefaultSettingsHubComponent(
 
         @Serializable
         data object AppTheme : Config
+
+        @Serializable
+        data object DishLanguage : Config
 
         @Serializable
         data object Osturak : Config
@@ -149,11 +169,18 @@ internal fun SettingsHubContent(
                     modifier,
                 )
 
+                is Child.DishLanguage -> DishLanguageContent(
+                    instance.component,
+                    modifier,
+                    component::pop,
+                )
+
                 is Child.License -> LicenseContent(instance.component, modifier)
                 is Child.Osturak -> OsturakContent(instance.component, modifier)
                 is Child.Settings -> SettingsContent(
                     instance.component,
                     onChooseTheme = component::toChooseTheme,
+                    onChooseDishLanguage = component::toChooseDishLanguage,
                     onOsturak = component::toOsturak,
                     onLicense = component::toLicense,
                     modifier,

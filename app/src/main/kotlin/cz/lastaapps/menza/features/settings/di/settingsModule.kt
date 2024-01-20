@@ -34,19 +34,19 @@ import cz.lastaapps.menza.features.settings.data.datasource.OrderDataSourceImpl
 import cz.lastaapps.menza.features.settings.data.datasource.OrderSettings
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
+import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleRangeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetShowCzechUC
 import cz.lastaapps.menza.features.settings.domain.usecase.OnSettingsOpenedUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.SetShowCzechUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaModeUI
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetPreferredMenzaUC
@@ -114,13 +114,13 @@ val settingsModule = module {
     factoryOf(::GetImagesOnMeteredUC)
     factoryOf(::GetPriceTypeUC)
     factoryOf(::GetSettingsEverOpenedUC)
-    factoryOf(::GetShowCzechUC)
+    factoryOf(::GetDishLanguageUC)
     factoryOf(::OnSettingsOpenedUC)
     factoryOf(::SetImageScaleUC)
     factoryOf(::GetImageScaleRangeUC)
     factoryOf(::SetImagesOnMeteredUC)
     factoryOf(::SetPriceTypeUC)
-    factoryOf(::SetShowCzechUC)
+    factoryOf(::SetDishLanguageUC)
     factoryOf(::GetDishListModeUC)
     factoryOf(::SetDishListModeUC)
 

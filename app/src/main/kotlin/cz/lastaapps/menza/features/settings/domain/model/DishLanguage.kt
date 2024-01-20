@@ -19,6 +19,9 @@
 
 package cz.lastaapps.menza.features.settings.domain.model
 
-internal enum class DishLanguage {
-    Czech, English
+enum class DishLanguage(val id: Int) {
+    Czech(0), English(1),
+    ;
 }
+
+internal fun DishLanguage.isCzech(): Boolean = this == DishLanguage.Czech
