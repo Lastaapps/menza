@@ -35,10 +35,12 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import cz.lastaapps.menza.features.settings.ui.component.AppThemeContent
 import cz.lastaapps.menza.features.settings.ui.component.ReorderMenzaContent
 import cz.lastaapps.menza.features.starting.ui.component.AllSetContent
+import cz.lastaapps.menza.features.starting.ui.component.DishLanguageContent
 import cz.lastaapps.menza.features.starting.ui.component.DownloadContent
 import cz.lastaapps.menza.features.starting.ui.component.PolicyContent
 import cz.lastaapps.menza.features.starting.ui.component.PriceTypeContent
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.AllSet
+import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.ChooseDishLanguage
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.ChoosePrice
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.ChooseTheme
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.DownloadData
@@ -73,6 +75,7 @@ internal fun StartingContent(
             when (page) {
                 is AllSet -> AllSetContent(page.component, childModifier, onDone)
                 is ChoosePrice -> PriceTypeContent(page.component, childModifier, next)
+                is ChooseDishLanguage -> DishLanguageContent(page.component, childModifier, next)
                 is ChooseTheme -> AppThemeContent(page.component, next)
                 is DownloadData -> DownloadContent(page.component, hostState, childModifier, next)
                 is OrderMenzaList -> ReorderMenzaContent(page.component, onDone = next)

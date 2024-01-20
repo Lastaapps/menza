@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -36,6 +36,12 @@
     <string name="info_message_title">Oznámení</string>
     <string name="info_opening_hours_title">Otevírací hodiny</string>
     <string name="info_links_title">Odkazy</string>
+    <string name="language_choose_title">Názvy jídel</string>
+    <string name="language_choose_subtitle">Zvolte jazyk menu</string>
+    <string name="language_choose_czech_title">🇨🇿 Česky</string>
+    <string name="language_choose_czech_description">Hezky podomácku</string>
+    <string name="language_choose_english_title">🇬🇧 Angliky</string>
+    <string name="language_choose_english_description">Se všemi veselými překlady</string>
     <string name="privacy_title">Zásady ochrany osobních údajů</string>
     <string name="privacy_text">
         Tato aplikace neshromažďuje žádná (osobní) data.

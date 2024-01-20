@@ -33,13 +33,16 @@ import cz.lastaapps.menza.features.settings.ui.component.DefaultReorderMenzaComp
 import cz.lastaapps.menza.features.settings.ui.component.ReorderMenzaComponent
 import cz.lastaapps.menza.features.starting.ui.component.AllSetComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultAllSetComponent
+import cz.lastaapps.menza.features.starting.ui.component.DefaultDishLanguageComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultDownloadComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultPolicyComponent
 import cz.lastaapps.menza.features.starting.ui.component.DefaultPriceTypeComponent
+import cz.lastaapps.menza.features.starting.ui.component.DishLanguageComponent
 import cz.lastaapps.menza.features.starting.ui.component.DownloadComponent
 import cz.lastaapps.menza.features.starting.ui.component.PolicyComponent
 import cz.lastaapps.menza.features.starting.ui.component.PriceTypeComponent
 import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingComponent.Config.AllSet
+import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingComponent.Config.ChooseDishLanguage
 import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingComponent.Config.ChoosePrice
 import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingComponent.Config.ChooseTheme
 import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingComponent.Config.DownloadData
@@ -65,6 +68,9 @@ internal interface StartingComponent {
 
         @JvmInline
         value class ChoosePrice(val component: PriceTypeComponent) : Child
+
+        @JvmInline
+        value class ChooseDishLanguage(val component: DishLanguageComponent) : Child
 
         @JvmInline
         value class ChooseTheme(val component: AppThemeComponent) : Child
@@ -98,6 +104,11 @@ internal class DefaultStartingComponent(
             when (configuration) {
                 AllSet -> Child.AllSet(DefaultAllSetComponent(componentContext))
                 ChoosePrice -> Child.ChoosePrice(DefaultPriceTypeComponent(componentContext))
+                ChooseDishLanguage -> Child.ChooseDishLanguage(
+                    DefaultDishLanguageComponent(
+                        componentContext,
+                    ),
+                )
                 ChooseTheme -> Child.ChooseTheme(DefaultAppThemeComponent(componentContext))
                 DownloadData -> Child.DownloadData(DefaultDownloadComponent(componentContext))
                 OrderMenzaList -> Child.OrderMenzaList(DefaultReorderMenzaComponent(componentContext))
@@ -121,6 +132,9 @@ internal class DefaultStartingComponent(
         data object ChoosePrice : Config
 
         @Serializable
+        data object ChooseDishLanguage : Config
+
+        @Serializable
         data object ChooseTheme : Config
 
         @Serializable
@@ -135,6 +149,7 @@ internal class DefaultStartingComponent(
                 DownloadData,
                 ChooseTheme,
                 ChoosePrice,
+                ChooseDishLanguage,
                 OrderMenzaList,
                 AllSet,
             )
