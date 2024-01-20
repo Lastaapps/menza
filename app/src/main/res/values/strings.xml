@@ -277,6 +277,7 @@
     <string name="wallet_login">Login</string>
     <string name="wallet_logged_in_as">Logged in as: %s</string>
     <string name="wallet_logout">Logout</string>
+    <string name="wallet_web">Open web</string>
     <string name="wallet_update_error">Failed to update balance 💀</string>
     <string name="wallet_login_title">Login to Agata</string>
     <string name="wallet_login_subtitle">Use your CTU credentials</string>

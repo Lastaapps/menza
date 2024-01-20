@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.outlined.Money
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -76,6 +77,7 @@ internal fun AgataWalletButton(
         isWarning = state.isWarning,
         onShowLoginDialog = onShowLoginDialog,
         onReload = viewModel::refresh,
+        onOpenWeb = viewModel::onOpenWeb,
         onLogout = viewModel::logout,
         modifier = modifier,
     )
@@ -88,6 +90,7 @@ internal fun AgataWalletButton(
     isWarning: Boolean,
     onShowLoginDialog: () -> Unit,
     onReload: () -> Unit,
+    onOpenWeb: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(
@@ -123,6 +126,7 @@ internal fun AgataWalletButton(
                     isLoading = isLoading,
                     isWarning = isWarning,
                     onReload = onReload,
+                    onOpenWeb = onOpenWeb,
                     onLogout = onLogout,
                 )
             }
@@ -138,6 +142,7 @@ private fun ColumnScope.ButtonContent(
     isLoading: Boolean,
     isWarning: Boolean,
     onReload: () -> Unit,
+    onOpenWeb: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -182,6 +187,23 @@ private fun ColumnScope.ButtonContent(
             positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
             tooltip = {
                 PlainTooltip {
+                    Text(text = stringResource(id = R.string.wallet_web))
+                }
+            },
+            state = rememberTooltipState(isPersistent = true),
+        ) {
+            IconButton(onClick = onOpenWeb) {
+                Icon(
+                    Icons.Outlined.Money,
+                    contentDescription = stringResource(id = R.string.wallet_web),
+                )
+            }
+        }
+
+        TooltipBox(
+            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+            tooltip = {
+                PlainTooltip {
                     Text(text = stringResource(id = R.string.wallet_logout))
                 }
             },
@@ -211,6 +233,7 @@ private fun AgataWalletButtonLogInPreview() = PreviewWrapper {
         isWarning = false,
         onShowLoginDialog = {},
         onReload = {},
+        onOpenWeb = {},
         onLogout = {},
     )
 }
@@ -224,6 +247,7 @@ private fun AgataWalletButtonPreview() = PreviewWrapper {
         isWarning = true,
         onShowLoginDialog = {},
         onReload = {},
+        onOpenWeb = {},
         onLogout = {},
     )
 }

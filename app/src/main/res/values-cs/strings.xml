@@ -255,6 +255,7 @@
     <string name="wallet_login">Přihlásit</string>
     <string name="wallet_logged_in_as">Přihlášen jako: %s</string>
     <string name="wallet_logout">Odhlásit</string>
+    <string name="wallet_web">Otevřít web</string>
     <string name="wallet_update_error">Něco se nám pokakalo 💩</string>
     <string name="wallet_login_title">Přihlášení do Agáty</string>
     <string name="wallet_login_subtitle">Použij svoje ČVUT údaje</string>

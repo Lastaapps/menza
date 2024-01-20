@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,6 +36,7 @@ import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
+import cz.lastaapps.core.util.providers.LinkOpener
 import kotlinx.coroutines.flow.mapLatest
 
 internal class AgataWalletViewModel(
@@ -43,6 +44,7 @@ internal class AgataWalletViewModel(
     private val walletGetBalanceUC: WalletGetBalanceUC,
     private val walletRefreshUC: WalletRefreshUC,
     private val walletLogoutUC: WalletLogoutUC,
+    private val openLink: LinkOpener,
 ) : StateViewModel<AgataWalletState>(AgataWalletState(), vmContext),
     Appearing, ErrorHolder {
     override var hasAppeared: Boolean = false
@@ -88,6 +90,11 @@ internal class AgataWalletViewModel(
 
             log.d { "Refresh done" }
         }
+    }
+
+    fun onOpenWeb() {
+        openLink.openLink("https://agata.suz.cvut.cz/jidelnicky/stravnik.php")
+            .onLeft { updateState { copy(error = it) } }
     }
 
     @Composable
