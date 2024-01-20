@@ -29,16 +29,18 @@ import cz.lastaapps.plugin.common.JavaConvention
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 
-class AndroidBaseConvention : BasePlugin({
+class AndroidBaseConvention : BasePlugin(
+    {
 
-    apply<JavaConvention>()
-    apply<KotlinBaseConvention>()
-    apply<AndroidKoinConvention>()
-    apply<DetektConvention>()
-    apply<ArrowKtConvention>()
+        apply<JavaConvention>()
+        apply<KotlinBaseConvention>()
+        apply<AndroidKoinConvention>()
+        apply<DetektConvention>()
+        apply<ArrowKtConvention>()
 
-    dependencies {
-        implementation(libs.androidx.appcompat)
-        implementation(libs.androidx.lifecycle.runtime)
-    }
-})
+        dependencies {
+            implementation(libs.androidx.appcompat)
+            implementation(libs.androidx.lifecycle.runtime.asProvider())
+        }
+    },
+)

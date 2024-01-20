@@ -63,7 +63,7 @@ internal fun Project.configureComposeDependencies() {
         debugImplementation(libs.androidx.compose.tooling)
         implementation(libs.androidx.compose.toolingPreview)
 
-        implementation(libs.androidx.lifecycle.runtime)
+        implementation(libs.androidx.lifecycle.runtime.asProvider())
         implementation(libs.androidx.lifecycle.runtime.compose)
 
         implementation(libs.decompose.core)

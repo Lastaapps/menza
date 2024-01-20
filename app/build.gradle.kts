@@ -40,66 +40,6 @@ android {
         targetSdk = libs.versions.sdk.target.get().toInt()
     }
 
-    configurations {
-        all {
-            // exclude(group = "org.apache.httpcomponents", module = "httpclient")
-            exclude(group = "commons-logging", module = "commons-logging")
-        }
-    }
-
-    buildTypes {
-        debug {
-            applicationIdSuffix = ".debug"
-            isMinifyEnabled = false
-
-            extra.set("alwaysUpdateBuildId", false)
-        }
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-
-            val debug = getByName("debug")
-            signingConfig = debug.signingConfig
-            isDebuggable = true
-        }
-
-        /* Used for release testing without explicit signing.
-         * This is required to make sure that release variants of the libraries are used,
-         * as they can differ (Compose, Lifecycle, ...)
-         * You can set if minification is on (useful for debugging)
-         */
-        getByName("fakeRelease") {
-            initWith(getByName("release"))
-            matchingFallbacks += listOf("release")
-
-            val debug = getByName("debug")
-            applicationIdSuffix = debug.applicationIdSuffix
-            signingConfig = debug.signingConfig
-            isDebuggable = true
-
-            val minify = true
-            isMinifyEnabled = minify
-            isShrinkResources = minify
-
-            run {
-                if (minify) {
-                    arrayOf(
-                        getDefaultProguardFile("proguard-android-optimize.txt"),
-                        "proguard-rules.pro",
-                    )
-                } else {
-                    emptyArray()
-                }
-            }.let { rules ->
-                proguardFiles(*rules)
-            }
-        }
-    }
-
     packaging {
         // Remove some conflict between atomic-fu and datetime
         resources.pickFirsts.add("META-INF/versions/9/previous-compilation-data.bin")
@@ -108,8 +48,11 @@ android {
         resources.pickFirsts.add("META-INF/DEPENDENCIES")
         resources.pickFirsts.add("mozilla/public-suffix-list.txt")
 
-        // Remove sqldelight native sql driver for Widnows and Mac
+        // Remove sqldelight native sql driver for Windows and Mac
         resources.excludes.add("org/sqlite/native/**")
+        // And some Apache shit
+        resources.excludes.add("org/apache/**")
+        resources.excludes.add("org/htmlunit/**")
     }
 }
 

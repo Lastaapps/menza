@@ -67,10 +67,6 @@ class AndroidAppConvention : BasePlugin(
                         getDefaultProguardFile("proguard-android-optimize.txt"),
                         "proguard-rules.pro",
                     )
-
-                    val debug = getByName("debug")
-                    signingConfig = debug.signingConfig
-                    isDebuggable = true
                 }
 
                 /* Used for release testing without explicit signing.

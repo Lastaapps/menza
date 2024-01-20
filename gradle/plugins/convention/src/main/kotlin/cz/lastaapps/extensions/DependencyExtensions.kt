@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,26 +17,54 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:Suppress("UnstableApiUsage")
+
 package cz.lastaapps.extensions
 
 import com.android.build.gradle.BaseExtension
 import org.gradle.api.Action
+import org.gradle.api.artifacts.ExternalModuleDependency
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.exclude
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
-fun DependencyHandlerScope.implementation(dependencyNotation: Any) =
-    add(Constants.IMPLEMENTATION, dependencyNotation)
+fun DependencyHandlerScope.implementation(
+    dependency: String,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) = Constants.IMPLEMENTATION(dependency) {
+    exclude(group = "org.jetbrains.kotlin", module = "kotlin-test-junit")
+    dependencyConfiguration()
+}
 
-fun DependencyHandlerScope.commonImplementation(dependencyNotation: Any) =
-    add(Constants.COMMON_IMPLEMENTATION, dependencyNotation)
+fun <T : Any> DependencyHandlerScope.implementation(
+    dependency: Provider<T>,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) = Constants.IMPLEMENTATION(dependency) {
+    exclude(group = "org.jetbrains.kotlin", module = "kotlin-test-junit")
+    dependencyConfiguration()
+}
 
-fun DependencyHandlerScope.testImplementation(dependencyNotation: Any) =
-    add(Constants.TEST_IMPLEMENTATION, dependencyNotation)
+fun <T : Any> DependencyHandlerScope.commonImplementation(
+    dependency: Provider<T>,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) = Constants.COMMON_IMPLEMENTATION(dependency, dependencyConfiguration)
 
-fun DependencyHandlerScope.debugImplementation(dependencyNotation: Any) =
-    add(Constants.DEBUG_IMPLEMENTATION, dependencyNotation)
+fun <T : Any> DependencyHandlerScope.testImplementation(
+    dependency: Provider<T>,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) = Constants.TEST_IMPLEMENTATION(dependency, dependencyConfiguration)
 
-fun DependencyHandlerScope.api(dependencyNotation: Any) = add(Constants.API, dependencyNotation)
+fun <T : Any> DependencyHandlerScope.debugImplementation(
+    dependency: Provider<T>,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) = Constants.DEBUG_IMPLEMENTATION(dependency, dependencyConfiguration)
+
+fun <T : Any> DependencyHandlerScope.api(
+    dependency: Provider<T>,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) = Constants.API(dependency, dependencyConfiguration)
+
 fun DependencyHandlerScope.coreLibraryDesugaring(dependencyNotation: Any) =
     add(Constants.DESUGARING, dependencyNotation)
 

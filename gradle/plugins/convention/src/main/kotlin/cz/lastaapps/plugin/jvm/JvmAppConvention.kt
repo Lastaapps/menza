@@ -30,7 +30,6 @@ import cz.lastaapps.plugin.common.DetektConvention
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.kotlin
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
@@ -75,7 +74,9 @@ class JvmAppConvention : BasePlugin(
             implementation(libs.kermit)
             implementation(libs.fluidLocale)
 
-            testImplementation(kotlin("test"))
+            testImplementation(libs.kotlin.test.annotation)
+            testImplementation(libs.kotlin.test.common)
+            testImplementation(libs.kotlin.test.core)
             testImplementation(libs.kotest.assertion)
             testImplementation(libs.kotlinx.coroutines.test)
             testImplementation(libs.kotest.jUnit5runner)
