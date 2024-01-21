@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,6 +26,8 @@ import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.CafeteriaApiImpl
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.api.DishApiImpl
+import cz.lastaapps.menza.api.agata.api.StravnikWalletApi
+import cz.lastaapps.menza.api.agata.api.StravnikWalletApiImpl
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.api.SubsystemApiImpl
 import cz.lastaapps.menza.api.agata.data.AgataDatabaseFactory
@@ -60,6 +62,8 @@ val apiAgataModule = module {
     single { AgataDatabaseFactory.createDatabase(get()) }
     factory { AgataBEConfig.prod }
     single { createAgataClient(get(), get()) }
+
+    factoryOf(::StravnikWalletApiImpl) bind StravnikWalletApi::class
 
     // Repos
     // Menza list

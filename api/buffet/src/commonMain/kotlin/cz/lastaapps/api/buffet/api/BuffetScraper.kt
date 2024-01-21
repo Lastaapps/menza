@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -47,10 +47,9 @@ private typealias ParsingRes<T> = Pair<Option<Nel<DomainError>>, T>
 
 internal class BuffetScraperImpl : BuffetScraper {
 
+    private val log = localLogger()
+
     companion object {
-
-        private val log = localLogger()
-
         private val regexOptions =
             setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE)
         private const val toSkip = 18_000 // offset of useless characters at the beginning

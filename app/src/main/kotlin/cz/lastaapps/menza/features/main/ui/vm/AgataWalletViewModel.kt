@@ -37,6 +37,7 @@ import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.core.util.providers.LinkOpener
+import cz.lastaapps.menza.features.main.domain.usecase.GetAddMoneyUrlUC
 import kotlinx.coroutines.flow.mapLatest
 
 internal class AgataWalletViewModel(
@@ -44,14 +45,13 @@ internal class AgataWalletViewModel(
     private val walletGetBalanceUC: WalletGetBalanceUC,
     private val walletRefreshUC: WalletRefreshUC,
     private val walletLogoutUC: WalletLogoutUC,
+    private val getAddMoneyUrlUC: GetAddMoneyUrlUC,
     private val openLink: LinkOpener,
 ) : StateViewModel<AgataWalletState>(AgataWalletState(), vmContext),
     Appearing, ErrorHolder {
     override var hasAppeared: Boolean = false
 
-    companion object {
         private val log = localLogger()
-    }
 
     override fun onAppeared() = launchVM {
         walletGetBalanceUC().mapLatest { balance ->
@@ -93,7 +93,9 @@ internal class AgataWalletViewModel(
     }
 
     fun onOpenWeb() {
-        openLink.openLink("https://agata.suz.cvut.cz/jidelnicky/stravnik.php")
+        val type = lastState().balance.getOrNull()?.type ?: return
+
+        openLink.openLink(getAddMoneyUrlUC(type))
             .onLeft { updateState { copy(error = it) } }
     }
 

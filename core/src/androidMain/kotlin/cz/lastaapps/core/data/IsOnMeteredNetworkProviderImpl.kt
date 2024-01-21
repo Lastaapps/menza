@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -38,9 +38,7 @@ internal class IsOnMeteredNetworkProviderImpl(
     private val context: Context,
 ) : IsOnMeteredNetworkProvider {
 
-    companion object {
         private val log = localLogger()
-    }
 
     override fun isOnMeteredNetwork(): Flow<Boolean> {
         val manager =

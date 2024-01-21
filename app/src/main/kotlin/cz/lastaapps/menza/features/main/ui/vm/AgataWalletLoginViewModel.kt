@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,7 +22,7 @@ package cz.lastaapps.menza.features.main.ui.vm
 import androidx.compose.runtime.Composable
 import arrow.core.Either.Left
 import arrow.core.Either.Right
-import cz.lastaapps.api.core.domain.model.BalanceAccountType.CTU
+import cz.lastaapps.api.core.domain.model.BalanceAccountType
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletLoginUC
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.vm.ErrorHolder
@@ -35,7 +35,9 @@ internal class AgataWalletLoginViewModel(
     private val walletLoginUC: WalletLoginUC,
 ) : StateViewModel<AgataWalletLoginState>(AgataWalletLoginState(), vmContext), ErrorHolder {
 
-    fun logIn() = launchVM {
+    fun logIn(
+        method: BalanceAccountType,
+    ) = launchVM {
         withLoading({ copy(isLoading = it) }) { state ->
             if (!state.enabled) {
                 return@withLoading
@@ -44,7 +46,7 @@ internal class AgataWalletLoginViewModel(
             val username = state.username.trim()
             val password = state.password.trim()
 
-            when (val res = walletLoginUC(username, password, CTU)) {
+            when (val res = walletLoginUC(username, password, method)) {
                 is Left -> updateState { copy(error = res.value) }
                 is Right -> updateState { copy(loginDone = true) }
             }
@@ -60,7 +62,7 @@ internal class AgataWalletLoginViewModel(
     }
 
     fun dismissLoginDone() {
-        updateState { copy(loginDone = false) }
+        updateState { AgataWalletLoginState() }
     }
 
     @Composable

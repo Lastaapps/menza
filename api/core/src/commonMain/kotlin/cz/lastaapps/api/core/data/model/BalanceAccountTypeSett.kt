@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,13 +24,16 @@ import cz.lastaapps.api.core.domain.model.BalanceAccountType
 
 @Keep
 enum class BalanceAccountTypeSett {
-    CTU,
+    CTU, Stravnik,
+    ;
 }
 
 fun BalanceAccountTypeSett.toDomain() = when (this) {
     BalanceAccountTypeSett.CTU -> BalanceAccountType.CTU
+    BalanceAccountTypeSett.Stravnik -> BalanceAccountType.Stravnik
 }
 
 fun BalanceAccountType.toSett() = when (this) {
     BalanceAccountType.CTU -> BalanceAccountTypeSett.CTU
+    BalanceAccountType.Stravnik -> BalanceAccountTypeSett.Stravnik
 }

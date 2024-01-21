@@ -34,9 +34,7 @@ internal class PolicyViewModel(
     context: VMContext,
 ) : BaseViewModel(context) {
 
-    companion object {
         private val log = localLogger()
-    }
 
     val shouldShow = store.approved.map { it == null }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)

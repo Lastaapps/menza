@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -41,14 +41,14 @@ import kotlinx.collections.immutable.persistentListOf
 internal class SyncProcessorImpl : SyncProcessor {
 
     companion object {
-        private val log = localLogger()
-
         // to prevent unnecessary timeouts because of slow connection or whatever
         private const val CONCURRENCY = 4
 
         // if you don't make it in time, you are doing something wrong
         private val jobTimeout = 8.seconds
     }
+
+    private val log = localLogger()
 
     override suspend fun runSync(
         list: Iterable<SyncJob<*, *>>,

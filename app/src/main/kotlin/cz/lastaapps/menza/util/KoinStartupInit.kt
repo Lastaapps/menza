@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,9 +30,7 @@ import org.koin.core.context.startKoin
 
 @Keep
 class KoinStartupInit : Initializer<Unit> {
-    companion object {
         private val log = localLogger()
-    }
 
     override fun create(context: Context) {
         log.d { "Starting" }

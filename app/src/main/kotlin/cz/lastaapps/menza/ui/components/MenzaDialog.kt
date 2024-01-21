@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,11 +19,14 @@
 
 package cz.lastaapps.menza.ui.components
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -38,6 +41,7 @@ import cz.lastaapps.menza.ui.theme.Padding.More
 fun MenzaDialog(
     onDismissRequest: () -> Unit,
     properties: DialogProperties = DialogProperties(),
+    scrollState: ScrollState? = rememberScrollState(), // use null to disable
     content: @Composable () -> Unit,
 ) {
     Dialog(
@@ -63,7 +67,11 @@ fun MenzaDialog(
                 modifier = Modifier
                     .clickable(sourceSurface, indication = null) {},
             ) {
-                Box(modifier = Modifier.padding(More.Dialog)) {
+                Box(
+                    modifier = Modifier
+                        .padding(More.Dialog)
+                        .then(scrollState?.let { Modifier.verticalScroll(it) } ?: Modifier),
+                ) {
                     content()
                 }
             }

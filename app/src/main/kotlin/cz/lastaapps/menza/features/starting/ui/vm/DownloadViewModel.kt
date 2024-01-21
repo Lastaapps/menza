@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -43,9 +43,7 @@ internal class DownloadViewModel(
 ) : StateViewModel<DownloadDataState>(DownloadDataState(), context), ErrorHolder, Appearing {
     override var hasAppeared: Boolean = false
 
-    companion object {
         private val log = localLogger()
-    }
 
     override fun onAppeared() = launchVM {
         log.i { "Appeared" }

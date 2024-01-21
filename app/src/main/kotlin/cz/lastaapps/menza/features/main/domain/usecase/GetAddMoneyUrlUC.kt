@@ -17,21 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.main.domain.usecase.wallet
+package cz.lastaapps.menza.features.main.domain.usecase
 
 import cz.lastaapps.api.core.domain.model.BalanceAccountType
-import cz.lastaapps.api.main.data.WalletMasterRepository
+import cz.lastaapps.api.core.domain.model.BalanceAccountType.CTU
+import cz.lastaapps.api.core.domain.model.BalanceAccountType.Stravnik
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 
-class WalletLoginUC internal constructor(
-    ucContext: UCContext,
-    private val repo: WalletMasterRepository,
-) : UseCase(ucContext) {
-    suspend operator fun invoke(
-        username: String, password: String, type: BalanceAccountType,
-    ) = launch {
-        repo.login(username, password, type)
-            .onRight { repo.sync(isForced = true) }
+internal class GetAddMoneyUrlUC(
+    context: UCContext,
+) : UseCase(context) {
+    operator fun invoke(type: BalanceAccountType) = when (type) {
+        CTU -> "https://agata.suz.cvut.cz/jidelnicky/stravnik.php"
+        Stravnik -> "https://stravnik.suz.cvut.cz/Transactions/NoSSO"
     }
 }

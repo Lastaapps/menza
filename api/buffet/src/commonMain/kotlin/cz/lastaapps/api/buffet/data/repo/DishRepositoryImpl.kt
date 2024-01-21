@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -71,9 +71,7 @@ internal class DishLogicImpl(
     private val clock: Clock,
     private val checker: ValidityChecker,
 ) {
-    companion object {
         private val log = localLogger()
-    }
 
     private val validFrom = clock.now()
         .toLocalDateTime(TimeZone.CET).date

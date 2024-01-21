@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,9 +29,7 @@ import cz.lastaapps.crash.StartInit
 @Keep
 @Suppress("unused")
 internal class ReEnableCrashInit : Initializer<Unit> {
-    companion object {
         private val log = localLogger()
-    }
 
     override fun create(context: Context) {
         log.d { "Starting" }

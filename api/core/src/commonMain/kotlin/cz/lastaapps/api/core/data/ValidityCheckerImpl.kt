@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,6 @@
 
 package cz.lastaapps.api.core.data
 
-import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
@@ -39,12 +38,10 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.ExperimentalSerializationApi
 
 @JvmInline
 internal value class ValiditySettings(val settings: ObservableSettings)
 
-@OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
 internal class ValidityCheckerImpl(
     private val clock: Clock,
     validitySettings: ValiditySettings,
@@ -58,6 +55,9 @@ internal class ValidityCheckerImpl(
     }
 
     private fun key(key: ValidityKey) = prefix + key.name
+    override suspend fun invalidateKey(key: ValidityKey) {
+        settings.remove(key(key))
+    }
 
     override suspend fun onDataUpdated(key: ValidityKey) {
         settings.serializeValue(Instant.serializer(), key(key), clock.now())

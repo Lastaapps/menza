@@ -24,12 +24,12 @@ import arrow.core.Either.Right
 import arrow.core.right
 import cz.lastaapps.api.core.data.SimpleProperties
 import cz.lastaapps.api.core.data.WalletCredentialsProvider
-import cz.lastaapps.api.core.data.model.BalanceAccountTypeSett
 import cz.lastaapps.api.core.data.model.LoginCredentialsSett
 import cz.lastaapps.api.core.data.model.toDomain
 import cz.lastaapps.api.core.data.model.toSett
 import cz.lastaapps.api.core.domain.model.BalanceAccountType
 import cz.lastaapps.api.core.domain.model.BalanceAccountType.CTU
+import cz.lastaapps.api.core.domain.model.BalanceAccountType.Stravnik
 import cz.lastaapps.api.core.domain.model.UserBalance
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
@@ -41,6 +41,7 @@ import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.AgataCtuWalletApi
+import cz.lastaapps.menza.api.agata.api.StravnikWalletApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -55,19 +56,19 @@ internal interface WalletMasterRepository : SyncSource<UserBalance?> {
 
 internal class WalletMasterRepositoryImpl(
     private val ctuApi: AgataCtuWalletApi,
+    private val stravnikApi: StravnikWalletApi,
     private val credentialsProvider: WalletCredentialsProvider,
     private val simpleProperties: SimpleProperties,
     private val checker: ValidityChecker,
 ) : WalletMasterRepository {
 
-    private val validityKey = ValidityKey.agataCtuBalance()
+    private val log = localLogger()
 
-    companion object {
-        private val log = localLogger()
-    }
+    private val validityKey = ValidityKey.agataCtuBalance()
 
     private fun selectApi(type: BalanceAccountType) = when (type) {
         CTU -> ctuApi
+        Stravnik -> stravnikApi
     }
 
     override suspend fun login(
@@ -76,6 +77,7 @@ internal class WalletMasterRepositoryImpl(
         type: BalanceAccountType,
     ): Outcome<Unit> = outcome {
         log.i { "Trying to login" }
+        checker.invalidateKey(validityKey)
 
         val api = selectApi(type)
         api.getBalance(username, password).bind()
@@ -85,7 +87,9 @@ internal class WalletMasterRepositoryImpl(
     }
 
     override suspend fun logout(): Outcome<Unit> = outcome {
+        checker.invalidateKey(validityKey)
         credentialsProvider.clear()
+        simpleProperties.setBalance(null)
         log.i { "Logout successful" }
     }
 
@@ -98,7 +102,11 @@ internal class WalletMasterRepositoryImpl(
                         .collectLatest { balance ->
                             send(
                                 balance?.let {
-                                    UserBalance(credentials.value.username, balance)
+                                    UserBalance(
+                                        credentials.value.username,
+                                        balance,
+                                        credentials.value.type.toDomain(),
+                                    )
                                 },
                             )
                         }
@@ -108,11 +116,8 @@ internal class WalletMasterRepositoryImpl(
     }.distinctUntilChanged()
 
     private suspend fun syncImpl(): SyncOutcome = outcome {
-        val credentials = credentialsProvider.get().first()
-            .bind()
-            .takeIf { it.type == BalanceAccountTypeSett.CTU }
-            ?: return@outcome SyncResult.Unavailable
-
+        log.d { "Syncing data" }
+        val credentials = credentialsProvider.get().first().bind()
         val api = selectApi(credentials.type.toDomain())
         val data = api.getBalance(credentials.username, credentials.password).bind()
         simpleProperties.setBalance(data)

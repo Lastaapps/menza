@@ -75,9 +75,7 @@ internal class DishListViewModel(
 ) : StateViewModel<DishListState>(DishListState(), context), Appearing, ErrorHolder {
     override var hasAppeared: Boolean = false
 
-    companion object {
         private val log = localLogger()
-    }
 
     override fun onAppeared() = launchVM {
         launchVM {

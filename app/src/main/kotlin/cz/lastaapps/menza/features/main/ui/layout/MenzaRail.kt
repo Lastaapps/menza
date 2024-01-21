@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,6 +19,8 @@
 
 package cz.lastaapps.menza.features.main.ui.layout
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
@@ -34,7 +36,7 @@ internal fun MenzaRail(
     settingsEverOpened: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    NavigationRail(modifier) {
+    NavigationRail(modifier.verticalScroll(rememberScrollState())) {
         NavItem.entries.forEach { item ->
             val showBadge = item == NavItem.Settings && !settingsEverOpened
 

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -35,9 +35,7 @@ internal class DownloadInitDataUC(
     private val syncInfoUC: SyncAllInfoUC,
 ) : UseCase(context) {
 
-    companion object {
         private val log = localLogger()
-    }
 
     suspend operator fun invoke() = launch {
         flow {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -58,16 +58,16 @@ internal class AndroidWalletCredentialsProvider(
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
             )
         }
-
-        private val log = localLogger()
     }
+
+    private val log = localLogger()
 
     private val notLoggedIn = NotLoggedIn.left()
     private val sharedPreferences by lazy { getSharedPreferences(context) }
     private var credentialsFlow: MutableStateFlow<Outcome<LoginCredentialsSett>>? = null
 
     override suspend fun store(credentials: LoginCredentialsSett) = synchronized(this) {
-        log.i { "Storing new credentials for ${credentials.username}" }
+        log.i { "Storing new credentials for ***${credentials.username.takeLast(3)}" }
 
         sharedPreferences.edit {
             with(credentials) {

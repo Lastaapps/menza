@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import co.touchlab.kermit.Logger
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.shouldBeReported
 import cz.lastaapps.core.ui.text
@@ -35,6 +36,8 @@ import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.menza.features.other.ui.dialog.ReportDialog
 import cz.lastaapps.menza.features.other.ui.dialog.sendReport
 
+
+private val errorLog = Logger.withTag("HandleError")
 
 @Composable
 fun HandleError(holder: ErrorHolder, hostState: SnackbarHostState) =
@@ -52,6 +55,8 @@ fun HandleError(error: DomainError?, hostState: SnackbarHostState, onDismiss: ()
     val context = LocalContext.current
     LaunchedEffect(error, hostState, context) {
         error?.let {
+            errorLog.e { "Handling an error: $it" }
+
             if (it.shouldBeReported) {
                 val result = hostState.showSnackbar(
                     message = error.text(context),

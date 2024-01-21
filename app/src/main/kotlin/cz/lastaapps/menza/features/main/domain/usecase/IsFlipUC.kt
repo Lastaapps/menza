@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,9 +31,7 @@ class IsFlipUC internal constructor(
     context: UCContext,
 ) : UseCase(context) {
 
-    companion object {
         private val log = localLogger()
-    }
 
     operator fun invoke() = run {
         Build.MODEL.also {
