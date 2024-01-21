@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -361,6 +361,10 @@ private fun Socials(modifier: Modifier = Modifier) {
             drawable.ic_github,
             R.string.content_description_github,
         ) { Communication.openGithub(context) },
+        SocialItem(
+            drawable.ic_discord,
+            R.string.content_description_discord,
+        ) { Communication.openDiscord(context) },
         SocialItem(
             drawable.ic_facebook,
             R.string.content_description_facebook,

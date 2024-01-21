@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,6 +34,7 @@ object Communication {
     private const val githubUrl = "https://github.com/lastaapps/"
     private const val matrixUrl = "https://matrix.to/#/#lastaapps_menza:matrix.org"
     private const val telegramUrl = "https://t.me/lasta_apps"
+    private const val discordUrl = "https://discord.com/users/694264686388052049"
     private const val playStoreUrl = "https://play.google.com/store/apps/developer?id=Lasta+apps"
 
     fun openFacebook(context: Context) = openFacebookPage(context, facebookUrl)
@@ -42,16 +43,16 @@ object Communication {
         var uri = Uri.parse(url)
         try {
             val applicationInfo =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     context.packageManager.getApplicationInfo(
                         "com.facebook.katana",
                         PackageManager.ApplicationInfoFlags.of(0),
                     )
-                else
-                    @Suppress("DEPRECATION")
+                } else {
                     context.packageManager.getApplicationInfo(
-                        "com.facebook.katana", 0
+                        "com.facebook.katana", 0,
                     )
+                }
 
             if (applicationInfo.enabled) {
                 uri = Uri.parse("fb://facewebmodal/f?href=$url")
@@ -75,6 +76,8 @@ object Communication {
     fun openMatrix(context: Context) = openUrl(context, matrixUrl)
 
     fun openTelegram(context: Context) = openUrl(context, telegramUrl)
+
+    fun openDiscord(context: Context) = openUrl(context, discordUrl)
 
     fun openPlayStore(context: Context) = openUrl(context, playStoreUrl)
 

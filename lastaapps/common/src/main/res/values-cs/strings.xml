@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -29,6 +29,7 @@
     <string name="content_description_play_store">Další aplikace od vývojářě</string>
     <string name="content_description_telegram">Kontakt na vývojáře na platformě Telegram</string>
     <string name="content_description_matrix">Matrix skupina</string>
+    <string name="content_description_discord">Discord</string>
     <string name="content_description_github_project">Zdrojový kód projektu na Githubu</string>
 
     <string name="review_dialog_title">Hodnocení</string>

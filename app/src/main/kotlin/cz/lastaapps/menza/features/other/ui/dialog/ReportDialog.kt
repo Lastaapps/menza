@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -56,6 +56,7 @@ import cz.lastaapps.common.R
 import cz.lastaapps.crash.entity.Crash
 import cz.lastaapps.crash.entity.ErrorSeverity
 import cz.lastaapps.menza.BuildConfig
+import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Discord
 import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Email
 import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Facebook
 import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.GitHub
@@ -68,6 +69,7 @@ import java.time.format.DateTimeFormatter
 sealed class ReportMode {
     data object Matrix : ReportMode()
     data object Telegram : ReportMode()
+    data object Discord : ReportMode()
     data object GitHub : ReportMode()
     data object Facebook : ReportMode()
     data object Email : ReportMode()
@@ -106,6 +108,22 @@ fun ReportDialog(
                     textAlign = TextAlign.Center,
                 )
                 Button(
+                    onClick = { onModeSelected(GitHub) },
+                    Modifier.fillMaxWidth(),
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(
+                            painterResource(id = R.drawable.ic_github),
+                            null,
+                            Modifier.size(24.dp),
+                        )
+                        Text(stringResource(cz.lastaapps.menza.R.string.report_github))
+                    }
+                }
+                Button(
                     onClick = { onModeSelected(Matrix) },
                     Modifier.fillMaxWidth()
                 ) {
@@ -123,7 +141,7 @@ fun ReportDialog(
                 }
                 Button(
                     onClick = { onModeSelected(Telegram) },
-                    Modifier.fillMaxWidth()
+                    Modifier.fillMaxWidth(),
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -132,25 +150,25 @@ fun ReportDialog(
                         Image(
                             painterResource(R.drawable.ic_telegram),
                             null,
-                            Modifier.size(24.dp)
+                            Modifier.size(24.dp),
                         )
                         Text(stringResource(cz.lastaapps.menza.R.string.report_telegram))
                     }
                 }
                 Button(
-                    onClick = { onModeSelected(GitHub) },
-                    Modifier.fillMaxWidth()
+                    onClick = { onModeSelected(Discord) },
+                    Modifier.fillMaxWidth(),
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Image(
-                            painterResource(id = R.drawable.ic_github),
+                            painterResource(R.drawable.ic_discord),
                             null,
-                            Modifier.size(24.dp)
+                            Modifier.size(24.dp),
                         )
-                        Text(stringResource(cz.lastaapps.menza.R.string.report_github))
+                        Text(stringResource(cz.lastaapps.menza.R.string.report_discord))
                     }
                 }
                 // Fuck Mark
@@ -232,6 +250,7 @@ private fun doSend(context: Context, mode: ReportMode, text: String) {
         Matrix -> sendMatrix(context, text)
         Telegram -> sendTelegram(context, text)
         GitHub -> sendGitHub(context, text)
+        Discord -> sendDiscord(context, text)
         Facebook -> sendFacebook(context, text)
         Email -> sendEmail(context, text)
     }
@@ -299,6 +318,10 @@ private fun sendGitHub(context: Context, @Suppress("UNUSED_PARAMETER") text: Str
     val intent =
         Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Lastaapps/Menza/issues/new"))
     context.startActivity(intent)
+}
+
+private fun sendDiscord(context: Context, @Suppress("UNUSED_PARAMETER") text: String) {
+    Communication.openDiscord(context)
 }
 
 private fun sendFacebook(context: Context, @Suppress("UNUSED_PARAMETER") text: String) {
