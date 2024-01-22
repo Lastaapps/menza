@@ -20,9 +20,9 @@
 package cz.lastaapps.menza
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -35,7 +35,7 @@ import cz.lastaapps.menza.ui.ApplyAppTheme
 import cz.lastaapps.menza.ui.locals.WithFoldingFeature
 import cz.lastaapps.menza.ui.locals.WithLocalWindowSizes
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

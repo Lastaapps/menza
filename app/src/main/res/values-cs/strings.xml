@@ -42,7 +42,7 @@
     <string name="language_choose_czech_description">Hezky podomácku</string>
     <string name="language_choose_english_title">🇬🇧 Angliky</string>
     <string name="language_choose_english_description">Se všemi veselými překlady</string>
-    <string name="language_choose_disclaimer">Přeloženy jsou pouye denní menu a pouze v některých menzách. Žádný text nebyl přeložen aplikací samotnou.</string>
+    <string name="language_choose_disclaimer">Přeloženy jsou pouze denní menu a pouze v některých menzách. Žádný text nebyl přeložen aplikací samotnou.</string>
     <string name="privacy_title">Zásady ochrany osobních údajů</string>
     <string name="privacy_text">
         Tato aplikace neshromažďuje žádná (osobní) data.
@@ -194,7 +194,7 @@
     <string name="today_list_mode_compact">Klasika</string>
     <string name="today_list_mode_grid">Velké</string>
     <string name="today_list_mode_horizontal">Řádky</string>
-    <string name="today_experimental_cafeteria">Experimentální menza - nemusí fungovat správně. Prosím hlašte chyby v nastavení.</string>
+    <string name="today_experimental_cafeteria">Experimentální menza - nemusí fungovat správně. Prosím, hlašte chyby v nastavení.</string>
     <string name="week_list_none">Data nejsou dostupná</string>
     <string name="week_list_web">Otevřít web</string>
     <string name="error_button_report">Nahlásit</string>
@@ -262,9 +262,9 @@
     <string name="wallet_login_tab_stravnik">Strávník</string>
     <string name="wallet_login_tab_ctu">ČVUT</string>
     <string name="wallet_login_tab_uct">VŠCHT</string>
-    <string name="wallet_login_subtitle_stravnik">Doporučená možnost. Použijte své udaje do portálu Strávník. Helso si můžete nastavit na webu Strávníka.</string>
+    <string name="wallet_login_subtitle_stravnik">Doporučená možnost. Použijte své údaje do portálu Strávník. Helso si můžete nastavit na webu Strávníka.</string>
     <string name="wallet_login_subtitle_ctu">Pro zvýšenou bezpečnost použijte přihlášení přes Strávníka.\nPoužij svoje ČVUT údaje.</string>
-    <string name="wallet_login_subtitle_uct">Jsi z VŠCHT? Kontaktuj vývojáře v nastavení a pomož přidat tvvoji metodu přihlášení! Prozatím použij přihlášení přes Strávníka.</string>
+    <string name="wallet_login_subtitle_uct">Jsi z VŠCHT? Kontaktuj vývojáře v nastavení a pomož přidat tvoji metodu přihlášení! Prozatím použij přihlášení přes Strávníka.</string>
     <string name="wallet_login_username">Uživatelské jmeno</string>
     <string name="wallet_login_password">Velmi tajné heslo</string>
     <string name="wallet_login_password_policy_hint">Uložení hesla</string>

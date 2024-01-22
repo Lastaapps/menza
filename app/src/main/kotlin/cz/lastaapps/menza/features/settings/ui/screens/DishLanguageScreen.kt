@@ -153,7 +153,9 @@ private fun LanguageButton(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
-        modifier = Modifier.padding(Padding.MidSmall),
+        modifier = Modifier
+            .padding(Padding.MidSmall)
+            .fillMaxWidth(),
     ) {
         Text(
             title,

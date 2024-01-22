@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -49,7 +49,7 @@
         android:localeConfig="@xml/locales_config"
         android:theme="@style/AppTheme.Starting"
         android:enableOnBackInvokedCallback="true"
-        tools:targetApi="tiramisu">
+        tools:targetApi="34">
         <activity
             android:name=".MainActivity"
             android:exported="true"

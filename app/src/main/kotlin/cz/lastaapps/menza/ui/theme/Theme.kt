@@ -65,28 +65,32 @@ fun AppTheme(
             }
 
         Agata ->
-            if (isLightMode)
+            if (isLightMode) {
                 AgataLightColors
-            else
+            } else {
                 AgataDarkColors
+            }
 
         CTU ->
-            if (isLightMode)
+            if (isLightMode) {
                 CtuLightColors
-            else
+            } else {
                 CtuDarkColors
+            }
 
         Uwu ->
-            if (isLightMode)
+            if (isLightMode) {
                 UwuLightColors
-            else
+            } else {
                 UwuDarkColors
+            }
 
         Kitty ->
-            if (isLightMode)
+            if (isLightMode) {
                 KittyLightColors
-            else
+            } else {
                 KittyDarkColors
+            }
     }.animated()
 
     MaterialTheme(
@@ -141,5 +145,12 @@ private fun ColorScheme.animated(): ColorScheme {
         tertiaryContainer = animateColorAsState(tertiaryContainer).value,
         outlineVariant = animateColorAsState(outlineVariant).value,
         scrim = animateColorAsState(scrim).value,
+        surfaceBright = animateColorAsState(surfaceBright).value,
+        surfaceDim = animateColorAsState(surfaceDim).value,
+        surfaceContainer = animateColorAsState(surfaceContainer).value,
+        surfaceContainerHigh = animateColorAsState(surfaceContainerHigh).value,
+        surfaceContainerHighest = animateColorAsState(surfaceContainerHighest).value,
+        surfaceContainerLow = animateColorAsState(surfaceContainerLow).value,
+        surfaceContainerLowest = animateColorAsState(surfaceContainerLowest).value,
     )
 }

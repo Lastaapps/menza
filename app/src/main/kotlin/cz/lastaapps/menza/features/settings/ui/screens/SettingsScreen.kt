@@ -276,9 +276,12 @@ private fun Buttons(
             onCrashesDialog = onCrashesDialog,
         )
 
-        FullDataReload(
-            onFullRefresh = onFullRefresh,
-        )
+        @Suppress("ConstantConditionIf")
+        if (false) {
+            FullDataReload(
+                onFullRefresh = onFullRefresh,
+            )
+        }
     }
 }
 

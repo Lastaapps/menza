@@ -34,6 +34,7 @@ import cz.lastaapps.menza.features.settings.data.datasource.OrderDataSourceImpl
 import cz.lastaapps.menza.features.settings.data.datasource.OrderSettings
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
+import cz.lastaapps.menza.features.settings.domain.usecase.FullAppReloadUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleRangeUC
@@ -88,7 +89,7 @@ val settingsModule = module {
         SettingsViewModel(
             get(), get(), get(), get(), get(),
             get(), get(), get(), get(), get(),
-            get(), get(), get(),
+            get(), get(), get(), get(),
         )
         // @formatter:on
     }
@@ -108,6 +109,7 @@ val settingsModule = module {
     factoryOf(::SetLatestMenzaUC)
     factoryOf(::SetPreferredMenzaUC)
     factoryOf(::GetPreferredMenzaUC)
+    factoryOf(::FullAppReloadUC)
 
     // Others
     factoryOf(::GetImageScaleUC)

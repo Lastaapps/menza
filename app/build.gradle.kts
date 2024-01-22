@@ -53,6 +53,9 @@ android {
         // And some Apache shit
         resources.excludes.add("org/apache/**")
         resources.excludes.add("org/htmlunit/**")
+
+        // Taken from the AS template project, should be safe
+        resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
     }
 }
 

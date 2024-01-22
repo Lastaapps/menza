@@ -65,7 +65,7 @@ fun OpeningHoursList(
         ) {
             Text(
                 stringResource(R.string.info_opening_hours_title),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
             data.forEach {
                 OpeningHoursLocationUI(
@@ -97,7 +97,10 @@ private fun OpeningHoursLocationUI(
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
-            modifier = Modifier.padding(Padding.MidSmall),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(Padding.MidSmall)
+                .align(Alignment.CenterHorizontally),
         ) {
             Text(
                 text = data.name,

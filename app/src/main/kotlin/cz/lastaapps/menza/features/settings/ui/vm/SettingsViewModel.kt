@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,6 +30,7 @@ import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode.Dark
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.settings.domain.usecase.FullAppReloadUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.OnSettingsOpenedUC
@@ -60,6 +61,7 @@ internal class SettingsViewModel(
     val setInitialMenzaUC: SetInitialMenzaUC,
     val getPreferredMenzaUC: GetPreferredMenzaUC,
     val setPreferredMenzaUC: SetPreferredMenzaUC,
+    val fullAppReloadUC: FullAppReloadUC,
 ) : StateViewModel<SettingsState>(SettingsState(), vmContext), Appearing {
     override var hasAppeared: Boolean = false
 
@@ -107,23 +109,8 @@ internal class SettingsViewModel(
         setPreferredMenzaUC(menza.type)
     }
 
-    fun fullAppReload() {
-        TODO("Implement me!!!")
-//        listOf(
-//            allergenRepo,
-//            locationRepo,
-//            messagesRepo,
-//            menzaRepo,
-//            contactsRepo,
-//            openingHoursRepo
-//        ).forEach {
-//            it.clearData()
-//        }
-//        app.imageLoader.diskCache?.clear()
-//
-//        withContext(Dispatchers.Main) {
-//            exitProcess(0)
-//        }
+    fun fullAppReload() = launchVM {
+        fullAppReloadUC()
     }
 }
 
