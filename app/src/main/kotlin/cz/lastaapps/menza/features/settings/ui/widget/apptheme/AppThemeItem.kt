@@ -33,7 +33,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -114,7 +114,7 @@ private object AppThemeItem {
 @Composable
 private fun ThemeItemPreview() {
     Column(verticalArrangement = Arrangement.spacedBy(Padding.Medium)) {
-        var selected by remember { mutableStateOf(1) }
+        var selected by remember { mutableIntStateOf(1) }
         AppThemeType.entries.forEachIndexed { index, theme ->
             AppThemeItem(theme, DarkMode.Light, selected != index, { selected = index })
         }

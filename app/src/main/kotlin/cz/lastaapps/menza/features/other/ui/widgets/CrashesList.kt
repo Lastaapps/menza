@@ -27,7 +27,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -105,7 +104,7 @@ internal fun CrashesList(
 private fun NoContent() {
     Text(
         stringResource(R.string.crash_none_title),
-        style = MaterialTheme.typography.headlineMedium
+        style = MaterialTheme.typography.headlineMedium,
     )
     Text(stringResource(R.string.crash_none_subtitle))
     Text(stringResource(R.string.crash_none_subsubtitle))
@@ -114,11 +113,11 @@ private fun NoContent() {
 @Composable
 private fun Content(
     crashes: ImmutableList<Pair<Long, Crash>>,
-    onItemSelected: (Pair<Long, Crash>) -> Unit
+    onItemSelected: (Pair<Long, Crash>) -> Unit,
 ) {
     Text(
         stringResource(R.string.crash_title),
-        style = MaterialTheme.typography.headlineMedium
+        style = MaterialTheme.typography.headlineMedium,
     )
     Text(stringResource(R.string.crash_subtitle))
 
@@ -133,49 +132,49 @@ private fun Content(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CrashItem(crash: Crash, onClick: () -> Unit) {
     ElevatedCard(onClick = onClick) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            with(crash) {
+            Text(
+                crash.message ?: stringResource(R.string.crash_message_unknown),
+                style = MaterialTheme.typography.titleLarge,
+            )
+            Column {
                 Text(
-                    message ?: stringResource(R.string.crash_message_unknown),
-                    style = MaterialTheme.typography.titleLarge,
+                    stringResource(
+                        R.string.crash_date_title,
+                        crash.date.format(
+                            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
+                        ),
+                    ),
                 )
-                Column {
-                    Text(
-                        stringResource(
-                            R.string.crash_date_title, crash.date.format(
-                                DateTimeFormatter.ISO_LOCAL_DATE_TIME
-                            )
-                        )
-                    )
-                    Text(
-                        stringResource(
-                            R.string.crash_severity_title, when (crash.severity) {
-                                ErrorSeverity.CRASH -> stringResource(R.string.crash_severity_crash)
-                                ErrorSeverity.HANDLED -> stringResource(R.string.crash_severity_internal)
-                            }
-                        )
-                    )
-                    Text(
-                        stringResource(
-                            R.string.crash_status_title, when (crash.reported) {
-                                ReportState.UNREPORTED -> stringResource(R.string.crash_status_unreported)
-                                ReportState.DISMISSED -> stringResource(R.string.crash_status_dismissed)
-                                ReportState.REPORTED -> stringResource(R.string.crash_status_reported)
-                            }
-                        )
-                    )
-                }
-                Card {
-                    Text(
-                        crash.trace,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
+                Text(
+                    stringResource(
+                        R.string.crash_severity_title,
+                        when (crash.severity) {
+                            ErrorSeverity.CRASH -> stringResource(R.string.crash_severity_crash)
+                            ErrorSeverity.HANDLED -> stringResource(R.string.crash_severity_internal)
+                        },
+                    ),
+                )
+                Text(
+                    stringResource(
+                        R.string.crash_status_title,
+                        when (crash.reported) {
+                            ReportState.UNREPORTED -> stringResource(R.string.crash_status_unreported)
+                            ReportState.DISMISSED -> stringResource(R.string.crash_status_dismissed)
+                            ReportState.REPORTED -> stringResource(R.string.crash_status_reported)
+                        },
+                    ),
+                )
+            }
+            Card {
+                Text(
+                    crash.trace,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(8.dp),
+                )
             }
         }
     }

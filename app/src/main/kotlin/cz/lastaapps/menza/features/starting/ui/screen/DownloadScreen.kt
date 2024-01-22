@@ -119,6 +119,7 @@ private fun DownloadContent(
             Crossfade(
                 targetState = state.isLoading to state.isReady,
                 modifier = Modifier.fillMaxWidth(),
+                label = "download_state",
             ) { (isLoading, isReady) ->
                 when {
                     isLoading && isReady -> {

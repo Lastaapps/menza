@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -144,12 +144,12 @@ internal class TodayDishSubsystemRepoImpl(
                         .toImmutableList()
                 }
 
-                mapped.collectLatest {
+                mapped.collectLatest { categories ->
                     log.i {
-                        val dishCount = it.sumOf { it.dishList.size }
-                        "Collected ${it.size} categories and $dishCount dishes"
+                        val dishCount = categories.sumOf { it.dishList.size }
+                        "Collected ${categories.size} categories and $dishCount dishes"
                     }
-                    send(it)
+                    send(categories)
                 }
             }
     }.onStart {

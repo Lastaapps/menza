@@ -112,5 +112,4 @@ internal data class AgataWalletState(
     val isLoading: Boolean = false,
     val isWarning: Boolean = false,
     val balance: Option<UserBalance?> = None,
-) : VMState {
-}
+) : VMState

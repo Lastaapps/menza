@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -39,7 +39,7 @@ object CrashAdapter {
     }
     val severityAdapter = object : ColumnAdapter<ErrorSeverity, Long> {
         override fun decode(databaseValue: Long): ErrorSeverity {
-            return ErrorSeverity.values().find { it.id == databaseValue.toByte() }
+            return ErrorSeverity.entries.find { it.id == databaseValue.toByte() }
                 ?: error("Error severity not found: $databaseValue")
         }
 
@@ -47,7 +47,7 @@ object CrashAdapter {
     }
     val reportedAdapter = object : ColumnAdapter<ReportState, Long> {
         override fun decode(databaseValue: Long): ReportState {
-            return ReportState.values().find { it.id == databaseValue.toByte() }
+            return ReportState.entries.find { it.id == databaseValue.toByte() }
                 ?: error("Report state not found: $databaseValue")
         }
 

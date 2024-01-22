@@ -26,7 +26,6 @@ import cz.lastaapps.extensions.kotlinOptions
 import cz.lastaapps.extensions.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.dependencies
 
 internal fun Project.configureKotlinAndroid(

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,6 +22,7 @@ package cz.lastaapps.api.agata.test
 import arrow.core.Either.Right
 import cz.lastaapps.menza.api.agata.api.CafeteriaApiImpl
 import cz.lastaapps.menza.api.agata.data.createAgataClient
+import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.model.dto.DishTypeDto
 import cz.lastaapps.menza.api.agata.data.model.dto.ServingPlaceDto
 import cz.lastaapps.menza.api.agata.data.model.dto.SubsystemDto
@@ -35,11 +36,12 @@ class CafeteriaTest : StringSpec(
     {
 
         fun client() = createAgataClient(
-            HttpClient() {
+            HttpClient {
                 install(Logging) {
                     level = BODY
                 }
             },
+            AgataBEConfig.prod,
         )
 
         fun api() = CafeteriaApiImpl(client())

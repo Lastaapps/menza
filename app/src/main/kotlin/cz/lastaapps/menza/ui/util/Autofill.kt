@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.ui.util
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,16 +27,16 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillNode
 import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 
 @OptIn(ExperimentalComposeUiApi::class)
-@Composable
 fun Modifier.withAutofill(
     autofillTypes: List<AutofillType> = listOf(),
     onFill: (String) -> Unit,
-): Modifier {
+): Modifier = composed {
     var rect by remember { mutableStateOf<Rect?>(null) }
     AutofillNode(
         autofillTypes = autofillTypes,
@@ -45,7 +44,7 @@ fun Modifier.withAutofill(
         onFill = onFill,
     )
 
-    return onGloballyPositioned {
+    onGloballyPositioned {
         rect = it.boundsInWindow()
     }
 }

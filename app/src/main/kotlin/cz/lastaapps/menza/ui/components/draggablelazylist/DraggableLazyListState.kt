@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -54,10 +55,10 @@ class DraggableLazyListState(
     private val onMoveFinished: () -> Unit,
     private val reverse: Boolean = false,
 ) {
-    var draggedDistance by mutableStateOf(0f)
+    private var draggedDistance by mutableFloatStateOf(0f)
 
     // used to obtain initial offsets on drag start
-    var initiallyDraggedElement by mutableStateOf<LazyListItemInfo?>(null)
+    private var initiallyDraggedElement by mutableStateOf<LazyListItemInfo?>(null)
 
     var currentIndexOfDraggedItem by mutableStateOf<Int?>(null)
 

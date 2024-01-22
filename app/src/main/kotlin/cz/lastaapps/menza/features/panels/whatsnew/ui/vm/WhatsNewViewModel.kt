@@ -19,8 +19,8 @@
 
 package cz.lastaapps.menza.features.panels.whatsnew.ui.vm
 
-import GetAppVersionUC
 import cz.lastaapps.core.data.DeviceLocalesProvider
+import cz.lastaapps.core.domain.usecase.GetAppVersionUC
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext

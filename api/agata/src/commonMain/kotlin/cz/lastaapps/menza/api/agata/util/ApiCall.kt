@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,7 +28,7 @@ internal suspend fun HttpClient.getFun(
     func: Func,
     subsystemId: Int? = null,
     secondId: Int? = null,
-) = get() {
+) = get {
     parameter("Funkce", func.funName)
     subsystemId?.let {
         parameter("Podsystem", it)

@@ -1,6 +1,3 @@
-import cz.lastaapps.api.core.domain.model.LatLong;
-
-
 CREATE TABLE AddressEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,

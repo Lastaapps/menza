@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -16,6 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+package cz.lastaapps.core.domain.usecase
 
 import cz.lastaapps.core.data.AppInfoProvider
 

@@ -70,7 +70,10 @@ private fun LicenseContent(
             )
         },
         detailNode = {
-            Crossfade(state.selectedLibrary) { lib ->
+            Crossfade(
+                state.selectedLibrary,
+                label = "library_detail",
+            ) { lib ->
                 if (lib != null) {
                     LibraryDetail(library = lib)
                 }
