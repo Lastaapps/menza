@@ -26,6 +26,7 @@ import cz.lastaapps.extensions.kotlinOptions
 import cz.lastaapps.extensions.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.dependencies
 
 internal fun Project.configureKotlinAndroid(
@@ -53,8 +54,10 @@ internal fun Project.configureKotlinAndroid(
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        val versionCode = libs.versions.java.jvmTarget.get().toInt()
+        val version = JavaVersion.toVersion(versionCode)
+        sourceCompatibility = version
+        targetCompatibility = version
         isCoreLibraryDesugaringEnabled = true
     }
 

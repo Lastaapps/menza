@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,6 +27,7 @@ import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.api.JavaVersion
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
@@ -42,8 +43,13 @@ class KotlinBaseConvention : BasePlugin(
         apply<CoroutinesConvention>()
 
         java {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            val versionCode = libs.versions.java.jvmTarget.get().toInt()
+            val version = JavaVersion.toVersion(versionCode)
+            sourceCompatibility = version
+            targetCompatibility = version
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(versionCode))
+            }
         }
 
         android { }

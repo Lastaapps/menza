@@ -16,7 +16,7 @@ detekt = "1.23.4"
 espresso = "3.5.1"
 google-ksp = "1.9.22-1.0.17"
 # @keep
-java-jvmTarget = "11"
+java-jvmTarget = "21"
 junit5-bom = "5.10.1"
 kermit = "2.0.2"
 koin = "3.5.3"
