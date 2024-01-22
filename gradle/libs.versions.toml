@@ -10,7 +10,7 @@ androidx-compose-material3 = "1.2.0-beta02"
 androidx-lifecycle = "2.7.0"
 androidx-security = "1.1.0-alpha06"
 androidx-test = "1.5.0"
-coil = "3.0.0-alpha02"
+coil = "3.0.0-alpha03"
 decompose = "3.0.0-alpha04"
 detekt = "1.23.4"
 espresso = "3.5.1"
@@ -91,7 +91,7 @@ coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref
 coil-compose-complete = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-complete = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
-coil-network = { module = "io.coil-kt.coil3:coil-network", version.ref = "coil" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil" }
 coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
 coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" }
 decompose-core = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }

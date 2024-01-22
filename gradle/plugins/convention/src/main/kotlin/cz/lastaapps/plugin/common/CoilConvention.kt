@@ -29,7 +29,7 @@ class CoilConvention : BasePlugin(
         dependencies {
             implementation(libs.coil.complete)
             implementation(libs.coil.gif)
-            implementation(libs.coil.network)
+            implementation(libs.coil.network.ktor)
             implementation(libs.coil.svg)
         }
     },
