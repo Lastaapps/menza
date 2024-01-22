@@ -33,12 +33,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Restaurant
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -51,13 +47,12 @@ import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
+import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.appCardColors
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TodayDishList(
     isLoading: Boolean,
@@ -74,14 +69,11 @@ fun TodayDishList(
     footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     scroll: LazyListState = rememberLazyListState(),
-    pullState: PullRefreshState = rememberPullRefreshState(
-        refreshing = isLoading, onRefresh = onRefresh,
-    ),
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .pullRefresh(pullState),
+    PullToRefreshWrapper(
+        isRefreshing = isLoading,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize(),
     ) {
         Surface(shape = MaterialTheme.shapes.large) {
             DishContent(
@@ -99,8 +91,6 @@ fun TodayDishList(
                 modifier = Modifier.fillMaxSize(),
             )
         }
-
-        MaterialPullIndicatorAligned(isLoading, pullState)
     }
 }
 
@@ -120,51 +110,48 @@ private fun DishContent(
     footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     //no data handling
     if (data.isEmpty()) {
         NoItems(modifier, onNoItems)
         return
     }
 
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(Padding.Medium)) {
-        // showing items
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
-            state = scroll,
-        ) {
-            item {
-                header()
-            }
+    // showing items
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
+        state = scroll,
+    ) {
+        item {
+            header()
+        }
 
-            data.forEach { category ->
-                stickyHeader {
-                    Surface(Modifier.fillMaxWidth()) {
-                        DishHeader(
-                            courseType = category,
-                            language = language,
-                            modifier = Modifier.padding(bottom = Padding.Smaller),
-                        )
-                    }
-                }
-                items(category.dishList) { dish ->
-                    DishItem(
-                        dish = dish,
-                        onDishSelected = onDishSelected,
-                        priceType = priceType,
-                        downloadOnMetered = downloadOnMetered,
+        data.forEach { category ->
+            stickyHeader {
+                Surface(Modifier.fillMaxWidth()) {
+                    DishHeader(
+                        courseType = category,
                         language = language,
-                        imageScale = imageScale,
-                        isOnMetered = isOnMetered,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.padding(bottom = Padding.Smaller),
                     )
                 }
             }
-
-            item {
-                footer()
+            items(category.dishList) { dish ->
+                DishItem(
+                    dish = dish,
+                    onDishSelected = onDishSelected,
+                    priceType = priceType,
+                    downloadOnMetered = downloadOnMetered,
+                    language = language,
+                    imageScale = imageScale,
+                    isOnMetered = isOnMetered,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
+        }
+
+        item {
+            footer()
         }
     }
 }

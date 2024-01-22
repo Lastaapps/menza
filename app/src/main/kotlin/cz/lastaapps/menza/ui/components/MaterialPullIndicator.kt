@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,82 +21,51 @@ package cz.lastaapps.menza.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MaterialPullIndicator(
-    refreshing: Boolean,
-    state: PullRefreshState,
-    modifier: Modifier = Modifier,
-) {
-    PullRefreshIndicator(
-        refreshing = refreshing,
-        state = state,
-        modifier,
-        contentColor = MaterialTheme.colorScheme.primary,
-        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-    )
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun BoxScope.MaterialPullIndicatorAligned(
-    refreshing: Boolean,
-    state: PullRefreshState,
-    modifier: Modifier = Modifier,
-) = MaterialPullIndicator(refreshing, state, modifier.align(Alignment.TopCenter))
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun WrapRefresh(
-    refreshing: Boolean,
+fun PullToRefreshWrapper(
+    isRefreshing: Boolean,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val state: PullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing,
-        onRefresh = onRefresh,
-    )
-
-    WrapRefresh(refreshing, state, modifier, enabled, content)
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun WrapRefresh(
-    refreshing: Boolean,
-    state: PullRefreshState,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    content: @Composable BoxScope.() -> Unit,
-) {
-    val pullModifier =
-        if (enabled) {
-            modifier.pullRefresh(state)
-        } else {
-            modifier
-        }
+    val state = rememberPullToRefreshState(enabled = { enabled })
 
     Box(
-        modifier = pullModifier,
+        modifier
+            .nestedScroll(state.nestedScrollConnection)
+            .clipToBounds(),
     ) {
         content()
-        if (enabled) {
-            MaterialPullIndicatorAligned(
-                refreshing = refreshing,
-                state = state,
-            )
+
+        PullToRefreshContainer(
+            state = state,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
+
+        LaunchedEffect(isRefreshing, state.isRefreshing) {
+            if (!isRefreshing && state.isRefreshing) {
+                onRefresh()
+            }
+        }
+
+        LaunchedEffect(isRefreshing) {
+            if (isRefreshing) {
+                // state.startRefresh()
+            } else {
+                state.endRefresh()
+            }
         }
     }
 }

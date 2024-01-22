@@ -52,7 +52,6 @@ androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", ver
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose" }
 androidx-compose-iconsCore = { module = "androidx.compose.material:material-icons-core", version.ref = "androidx-compose-material" }
 androidx-compose-iconsExtended = { module = "androidx.compose.material:material-icons-extended", version.ref = "androidx-compose-material" }
-androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "androidx-compose-material" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
 androidx-compose-material3WindowSizeClass = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "androidx-compose-material3" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "androidx-compose" }

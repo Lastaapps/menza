@@ -24,18 +24,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -48,14 +46,13 @@ import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
+import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.appCardColors
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TodayDishGrid(
     isLoading: Boolean,
@@ -71,15 +68,12 @@ fun TodayDishGrid(
     footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     scrollGrid: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
-    pullState: PullRefreshState = rememberPullRefreshState(
-        refreshing = isLoading, onRefresh = onRefresh,
-    ),
     widthSize: WindowWidthSizeClass = LocalWindowWidth.current,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .pullRefresh(pullState),
+    PullToRefreshWrapper(
+        isRefreshing = isLoading,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize(),
     ) {
         Surface(shape = MaterialTheme.shapes.large) {
             DishContent(
@@ -99,8 +93,6 @@ fun TodayDishGrid(
                     .fillMaxSize(),
             )
         }
-
-        MaterialPullIndicatorAligned(isLoading, pullState)
     }
 }
 
@@ -139,6 +131,11 @@ private fun DishContent(
             horizontalArrangement = Arrangement.spacedBy(Padding.MidSmall),
             state = scroll,
         ) {
+            // https://issuetracker.google.com/issues/321784348
+            item {
+                Spacer(modifier = Modifier.height(1.dp))
+            }
+
             item {
                 header()
             }
@@ -190,7 +187,7 @@ private fun DishItem(
         modifier = modifier.clickable { onDishSelected(dish) },
     ) {
         Column(
-            Modifier.padding(Padding.MidSmall),
+            modifier = Modifier.padding(Padding.MidSmall),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {

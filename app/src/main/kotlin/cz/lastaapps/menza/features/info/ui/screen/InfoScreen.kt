@@ -44,7 +44,7 @@ import cz.lastaapps.menza.features.info.ui.widgets.LinkList
 import cz.lastaapps.menza.features.info.ui.widgets.MessageList
 import cz.lastaapps.menza.features.info.ui.widgets.OpeningHoursList
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
-import cz.lastaapps.menza.ui.components.WrapRefresh
+import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.components.layout.AboveOrSideBySideLayout
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.HandleError
@@ -168,8 +168,8 @@ private fun InfoContent(
                     }
                 }
 
-                WrapRefresh(
-                    refreshing = state.isLoading,
+                PullToRefreshWrapper(
+                    isRefreshing = state.isLoading,
                     onRefresh = onRefresh,
                 ) {
                     AboveOrSideBySideLayout(

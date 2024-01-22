@@ -29,7 +29,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -86,7 +85,6 @@ private fun DishListEffects(
     HandleError(viewModel, hostState)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun DishListContent(
     state: DishListState,

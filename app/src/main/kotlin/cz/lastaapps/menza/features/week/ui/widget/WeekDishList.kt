@@ -34,9 +34,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -54,8 +51,8 @@ import cz.lastaapps.api.core.domain.model.WeekDish
 import cz.lastaapps.api.core.domain.model.WeekDishCategory
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.ui.util.getPrice
-import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
+import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.appCardColors
 import java.time.format.DateTimeFormatter
@@ -66,7 +63,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WeekDishList(
     data: ImmutableList<WeekDayDish>,
@@ -76,13 +72,10 @@ fun WeekDishList(
     noItems: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val pullState = rememberPullRefreshState(
-        refreshing = isLoading,
+    PullToRefreshWrapper(
+        isRefreshing = isLoading,
         onRefresh = onRefresh,
-    )
-    Box(
-        modifier = modifier
-            .pullRefresh(pullState),
+        modifier = modifier,
     ) {
         WeekDishContent(
             data = data,
@@ -90,8 +83,6 @@ fun WeekDishList(
             noItems = noItems,
             modifier = Modifier.fillMaxSize(),
         )
-
-        MaterialPullIndicatorAligned(isLoading, pullState)
     }
 }
 
@@ -119,7 +110,10 @@ private fun WeekDishContent(
     val amountWidth = with(LocalDensity.current) { amountWidthPx.toDp() }
 
     // showing items
-    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
         data.forEach { (date, categories) ->
             stickyHeader {
                 //make header nontransparent

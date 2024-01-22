@@ -53,7 +53,6 @@ internal fun Project.configureComposeDependencies() {
 
         implementation(libs.androidx.activity.compose)
         implementation(libs.androidx.constraintlayout.compose)
-        implementation(libs.androidx.compose.material)
         implementation(libs.androidx.compose.material3)
         implementation(libs.androidx.compose.material3WindowSizeClass)
         implementation(libs.androidx.compose.iconsCore)

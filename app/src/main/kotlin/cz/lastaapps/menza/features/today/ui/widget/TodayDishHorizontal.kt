@@ -33,10 +33,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -48,13 +44,12 @@ import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.ui.components.MaterialPullIndicatorAligned
 import cz.lastaapps.menza.ui.components.NoItems
+import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.appCardColors
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TodayDishHorizontal(
     isLoading: Boolean,
@@ -70,14 +65,11 @@ fun TodayDishHorizontal(
     footer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     scroll: LazyListState = rememberLazyListState(),
-    pullState: PullRefreshState = rememberPullRefreshState(
-        refreshing = isLoading, onRefresh = onRefresh,
-    ),
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .pullRefresh(pullState),
+    PullToRefreshWrapper(
+        isRefreshing = isLoading,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxWidth(),
     ) {
         Surface(shape = MaterialTheme.shapes.large) {
             DishContent(
@@ -96,8 +88,6 @@ fun TodayDishHorizontal(
                     .fillMaxSize(),
             )
         }
-
-        MaterialPullIndicatorAligned(isLoading, pullState)
     }
 }
 
