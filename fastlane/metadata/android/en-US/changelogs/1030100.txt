@@ -1,0 +1,1 @@
+Fix a crash when changing the default Menza option.
