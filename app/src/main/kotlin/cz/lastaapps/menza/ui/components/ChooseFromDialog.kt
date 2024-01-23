@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -44,7 +44,10 @@ internal fun <T> ChooseFromDialog(
     onDismiss: () -> Unit,
     toString: (T) -> String = { it.toString() },
 ) {
-    MenzaDialog(onDismissRequest = onDismiss) {
+    MenzaDialog(
+        onDismissRequest = onDismiss,
+        scrollState = null,
+    ) {
         ChooseFromDialogContent(
             title = title,
             items = items,
@@ -100,6 +103,6 @@ private fun ChooseFromDialogPreview() = PreviewWrapper {
         items = persistentListOf("Ahoj", "Jak", "Se", "Máš?", "Ale znáš to"),
         onItemSelected = {},
         onDismiss = {},
-        toString = { it }
+        toString = { it },
     )
 }
