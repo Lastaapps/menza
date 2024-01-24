@@ -1,0 +1,1 @@
+Migrace zpět na Javu 17 kvůli F-Droid build systému.

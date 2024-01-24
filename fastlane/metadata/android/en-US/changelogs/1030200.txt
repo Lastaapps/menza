@@ -1,0 +1,1 @@
+Migrate back to Java 17 to support F-Droid build system.
