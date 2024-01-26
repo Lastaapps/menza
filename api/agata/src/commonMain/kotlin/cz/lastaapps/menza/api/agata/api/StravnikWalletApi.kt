@@ -163,7 +163,7 @@ internal class StravnikWalletApiImpl(
     }
 
     private fun String.processBody(): Outcome<Float> =
-        """\[P&#x159;edem (\d+(?:[,.]\d+)?)""".toRegex()
+        """\[P&#x159;edem ([\d ]+(?:[,.]\d+)?)""".toRegex()
             .let { regex ->
                 Either.runCatching {
                     regex.find(this@processBody, startIndex = 5800)
@@ -178,6 +178,7 @@ internal class StravnikWalletApiImpl(
                 )
             }
             ?.replace(',', '.')
+            ?.replace(" ", "")
             ?.toFloatOrNull()
             ?.right()
             ?: ApiError.WalletError.TotallyBroken.left()
