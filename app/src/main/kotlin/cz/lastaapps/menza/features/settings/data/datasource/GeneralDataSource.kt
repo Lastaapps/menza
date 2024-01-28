@@ -71,6 +71,9 @@ internal interface GeneralDataSource {
 
     suspend fun setCompactTodayView(mode: DishListMode)
     fun isCompactTodayView(): Flow<DishListMode?>
+
+    suspend fun setOliverRow(isUsed: Boolean)
+    fun isOliverRow(): Flow<Boolean?>
 }
 
 @OptIn(ExperimentalSettingsApi::class)
@@ -88,7 +91,8 @@ internal class GeneralDataSourceImpl(
         private const val imageScaleKey = "image_scale"
         private const val imagesOnMeteredKey = "images_on_metered"
         private const val dishLanguageKey = "dish_language"
-        private const val compactTodayView = "compact_today_view"
+        private const val compactTodayViewKey = "compact_today_view"
+        private const val oliverRowsKey = "oliver_row"
     }
 
     override suspend fun storeAppSetupFinished() =
@@ -152,12 +156,17 @@ internal class GeneralDataSourceImpl(
         }
 
     override suspend fun setCompactTodayView(mode: DishListMode) =
-        settings.putInt(compactTodayView, mode.id)
+        settings.putInt(compactTodayViewKey, mode.id)
 
     override fun isCompactTodayView(): Flow<DishListMode?> =
-        settings.getIntOrNullFlow(compactTodayView)
+        settings.getIntOrNullFlow(compactTodayViewKey)
             .map { id ->
                 DishListMode.entries.firstOrNull { it.id == id }
             }
 
+    override suspend fun setOliverRow(isUsed: Boolean) =
+        settings.putBoolean(oliverRowsKey, isUsed)
+
+    override fun isOliverRow(): Flow<Boolean?> =
+        settings.getBooleanOrNullFlow(oliverRowsKey)
 }

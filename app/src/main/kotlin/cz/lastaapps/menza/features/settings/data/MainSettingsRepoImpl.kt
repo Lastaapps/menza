@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.settings.data
 
 import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.menza.domain.model.UserSettings
 import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSource
 import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
@@ -30,7 +31,12 @@ import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 internal class MainSettingsRepoImpl(
     private val initial: InitMenzaDataSource,
@@ -67,6 +73,23 @@ internal class MainSettingsRepoImpl(
 
     override fun isSettingsEverOpened(): Flow<Boolean> =
         general.isSettingsEverOpened()
+
+    override fun getUserSettings(): Flow<UserSettings> = channelFlow {
+        val userSettings = MutableStateFlow(UserSettings())
+
+        launch {
+            isOliverRow().collectLatest {
+                userSettings.update { state ->
+                    state.copy(useOliverRows = it)
+                }
+            }
+        }
+
+
+        userSettings.collectLatest {
+            send(it)
+        }
+    }
 
     override suspend fun setPriceType(type: PriceType) =
         general.setPriceType(type)
@@ -111,4 +134,10 @@ internal class MainSettingsRepoImpl(
         general.isCompactTodayView()
             .map { it ?: DishListMode.COMPACT }
 
+    override suspend fun setOliverRows(useOliverRows: Boolean) =
+        general.setOliverRow(useOliverRows)
+
+    override fun isOliverRow(): Flow<Boolean> =
+        general.isOliverRow()
+            .map { it ?: true }
 }

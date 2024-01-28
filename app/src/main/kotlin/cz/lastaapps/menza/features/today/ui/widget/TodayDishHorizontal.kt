@@ -19,7 +19,9 @@
 
 package cz.lastaapps.menza.features.today.ui.widget
 
+import android.os.Build
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,16 +34,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.ui.components.NoItems
@@ -61,10 +67,12 @@ fun TodayDishHorizontal(
     downloadOnMetered: Boolean,
     language: DishLanguage,
     isOnMetered: Boolean,
+    useOliverRow: Boolean,
+    onOliverRow: (Boolean) -> Unit,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
+    scroll: LazyListState,
     modifier: Modifier = Modifier,
-    scroll: LazyListState = rememberLazyListState(),
 ) {
     PullToRefreshWrapper(
         isRefreshing = isLoading,
@@ -80,6 +88,8 @@ fun TodayDishHorizontal(
                 downloadOnMetered = downloadOnMetered,
                 language = language,
                 isOnMetered = isOnMetered,
+                useOliverRow = useOliverRow,
+                onOliverRow = onOliverRow,
                 scroll = scroll,
                 header = header,
                 footer = footer,
@@ -100,6 +110,8 @@ private fun DishContent(
     downloadOnMetered: Boolean,
     language: DishLanguage,
     isOnMetered: Boolean,
+    useOliverRow: Boolean,
+    onOliverRow: (Boolean) -> Unit,
     scroll: LazyListState,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
@@ -145,30 +157,60 @@ private fun DishContent(
                             modifier = Modifier.fillMaxWidth(),
                         )
                     } else {
-                        LazyRow(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(
-                                Padding.MidLarge,
-                                Alignment.CenterHorizontally,
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateContentSize(),
-                        ) {
-                            items(category.dishList) { dish ->
-                                DishItem(
-                                    dish = dish,
-                                    onDishSelected = onDishSelected,
-                                    priceType = priceType,
-                                    downloadOnMetered = downloadOnMetered,
-                                    language = language,
-                                    isOnMetered = isOnMetered,
-                                    modifier = Modifier.sizeIn(maxWidth = 256.dp),
-                                )
+
+                        @Composable
+                        fun dishItem(dish: Dish) {
+                            DishItem(
+                                dish = dish,
+                                onDishSelected = onDishSelected,
+                                priceType = priceType,
+                                downloadOnMetered = downloadOnMetered,
+                                language = language,
+                                isOnMetered = isOnMetered,
+                                modifier = Modifier.sizeIn(maxWidth = 256.dp),
+                            )
+                        }
+
+                        val horizontalArrangement = Arrangement.spacedBy(
+                            Padding.MidLarge,
+                            Alignment.CenterHorizontally,
+                        )
+                        if (useOliverRow) {
+                            Row(
+                                verticalAlignment = Alignment.Top,
+                                horizontalArrangement = horizontalArrangement,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState())
+                                    .animateContentSize(),
+                            ) {
+                                category.dishList.forEach { dish ->
+                                    dishItem(dish)
+                                }
+                            }
+                        } else {
+                            LazyRow(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = horizontalArrangement,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateContentSize(),
+                            ) {
+                                items(category.dishList) { dish ->
+                                    dishItem(dish)
+                                }
                             }
                         }
                     }
                 }
+            }
+
+            item {
+                OliverRowSwitch(
+                    useOliverRow = useOliverRow,
+                    onOliverRow = onOliverRow,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
 
             item {
@@ -260,3 +302,38 @@ private fun DishImageWithBadge(
         )
     }
 }
+
+@Composable
+private fun OliverRowSwitch(
+    useOliverRow: Boolean,
+    onOliverRow: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        onClick = { onOliverRow(!useOliverRow) },
+        modifier = modifier,
+    ) {
+        Column(
+            modifier = Modifier.padding(Padding.MidSmall),
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(Padding.Small),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                val text = if (!amIOliver()) {
+                    stringResource(id = R.string.today_list_stable_row)
+                } else {
+                    "Oliver jméno mé. 😎"
+                }
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.weight(1f),
+                )
+                Checkbox(checked = useOliverRow, onCheckedChange = onOliverRow)
+            }
+        }
+    }
+}
+
+private fun amIOliver() = Build.MODEL == "CPH2305"

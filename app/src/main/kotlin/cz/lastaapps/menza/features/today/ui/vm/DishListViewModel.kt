@@ -47,9 +47,11 @@ import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
+import cz.lastaapps.menza.features.settings.domain.usecase.GetOliverRow
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetOliverRow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
@@ -63,6 +65,8 @@ internal class DishListViewModel(
     private val getSelectedMenzaUC: GetSelectedMenzaUC,
     private val getTodayDishListUC: GetTodayDishListUC,
     private val syncTodayDishListUC: SyncTodayDishListUC,
+    private val getOliverRowUC: GetOliverRow,
+    private val setOliverRowUC: SetOliverRow,
     private val getPriceTypeUC: GetPriceTypeUC,
     private val getImagesOnMeteredUC: GetImagesOnMeteredUC,
     private val getImageScaleUC: GetImageScaleUC,
@@ -125,6 +129,10 @@ internal class DishListViewModel(
         isOnMeteredUC().onEach {
             updateState { copy(isOnMetered = it) }
         }.launchInVM()
+
+        getOliverRowUC().onEach {
+            updateState { copy(useOliverRow = it) }
+        }.launchInVM()
     }
 
     private var syncJob: Job? = null
@@ -149,6 +157,10 @@ internal class DishListViewModel(
         setImageScaleUC(scale)
     }
 
+    fun setOliverRow(used: Boolean) = launchVM {
+        setOliverRowUC(used)
+    }
+
     private suspend fun load(menza: Menza, isForced: Boolean) {
         withLoading({ copy(isLoading = it) }) {
             when (val res = syncTodayDishListUC(menza, isForced = isForced).mapSync()) {
@@ -169,6 +181,7 @@ internal data class DishListState(
     val error: DomainError? = null,
     val selectedMenza: Option<Menza>? = null,
     val items: ImmutableList<DishCategory> = persistentListOf(),
+    val useOliverRow: Boolean = false,
     val priceType: PriceType = Unset,
     val downloadOnMetered: Boolean = false,
     val language: DishLanguage = DishLanguage.Czech,

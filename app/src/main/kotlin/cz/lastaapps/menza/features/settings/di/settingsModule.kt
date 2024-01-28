@@ -40,6 +40,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleRangeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
+import cz.lastaapps.menza.features.settings.domain.usecase.GetOliverRow
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.OnSettingsOpenedUC
@@ -47,6 +48,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.SetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImagesOnMeteredUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetOliverRow
 import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaModeUI
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaUC
@@ -114,6 +116,7 @@ val settingsModule = module {
     // Others
     factoryOf(::GetImageScaleUC)
     factoryOf(::GetImagesOnMeteredUC)
+    factoryOf(::GetOliverRow)
     factoryOf(::GetPriceTypeUC)
     factoryOf(::GetSettingsEverOpenedUC)
     factoryOf(::GetDishLanguageUC)
@@ -121,6 +124,7 @@ val settingsModule = module {
     factoryOf(::SetImageScaleUC)
     factoryOf(::GetImageScaleRangeUC)
     factoryOf(::SetImagesOnMeteredUC)
+    factoryOf(::SetOliverRow)
     factoryOf(::SetPriceTypeUC)
     factoryOf(::SetDishLanguageUC)
     factoryOf(::GetDishListModeUC)

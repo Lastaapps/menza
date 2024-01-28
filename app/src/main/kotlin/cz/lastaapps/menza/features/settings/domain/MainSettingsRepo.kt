@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.settings.domain
 
 import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.menza.domain.model.UserSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
@@ -44,6 +45,8 @@ internal interface MainSettingsRepo {
     suspend fun storeSettingsEverOpened()
     fun isSettingsEverOpened(): Flow<Boolean>
 
+    fun getUserSettings(): Flow<UserSettings>
+
     suspend fun setPriceType(type: PriceType)
     fun getPriceType(): Flow<PriceType>
 
@@ -64,4 +67,7 @@ internal interface MainSettingsRepo {
 
     suspend fun setCompactTodayView(mode: DishListMode)
     fun isCompactTodayView(): Flow<DishListMode>
+
+    suspend fun setOliverRows(useOliverRows: Boolean)
+    fun isOliverRow(): Flow<Boolean>
 }
