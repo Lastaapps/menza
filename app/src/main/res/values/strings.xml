@@ -203,7 +203,7 @@
     <string name="today_info_image_load_failed">Failed to load the image</string>
     <string name="today_info_unknown_allergen_title">Unknown allergen</string>
     <string name="today_info_unknown_allergen_description">Server returned invalid data</string>
-    <string name="today_list_none">No data available</string>
+    <string name="today_list_none">No data available 👨‍🍳</string>
     <string name="today_list_web">Check website</string>
     <string name="today_list_image_load_failed">Failed to load the image</string>
     <string name="today_list_image_metered">The image not downloaded, metered network</string>
@@ -213,7 +213,7 @@
     <string name="today_list_stable_row">Stable row height</string>
     <string name="today_experimental_cafeteria">Experimental cafeteria - may not work properly. Please report issues in the settings.</string>
 
-    <string name="week_list_none">No data available</string>
+    <string name="week_list_none">No data available 👨‍🍳</string>
     <string name="week_list_web">Check website</string>
 
     <string name="error_button_report">Report</string>

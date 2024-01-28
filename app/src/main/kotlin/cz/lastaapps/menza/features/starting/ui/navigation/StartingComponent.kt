@@ -93,7 +93,7 @@ internal class DefaultStartingComponent(
     override val content: Value<ChildPages<*, Child>> =
         childPages(
             navigation,
-            null, // Config.serializer(),
+            Config.serializer(),
             initialPages = {
                 Pages(
                     items = Config.allConfigs,
