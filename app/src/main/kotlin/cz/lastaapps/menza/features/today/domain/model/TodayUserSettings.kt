@@ -17,17 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.today.di
+package cz.lastaapps.menza.features.today.domain.model
 
-import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
-import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
-import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
+import cz.lastaapps.menza.features.settings.domain.model.DishListMode
+import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
 
-val todayModule = module {
-    factoryOf(::DishListViewModel)
-    factoryOf(::TodayViewModel)
-
-    factoryOf(::GetTodayUserSettingsUC)
-}
+internal data class TodayUserSettings(
+    val dishListMode: DishListMode? = null,
+    val useOliverRow: Boolean = false,
+    val priceType: PriceType = Unset,
+    val downloadOnMetered: Boolean = false,
+    val language: DishLanguage = DishLanguage.Czech,
+    val imageScale: Float = 1f,
+)

@@ -44,8 +44,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
@@ -54,15 +54,13 @@ import cz.lastaapps.menza.ui.util.appCardColors
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun TodayDishGrid(
+internal fun TodayDishGrid(
     isLoading: Boolean,
     onRefresh: () -> Unit,
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
     onDishSelected: (Dish) -> Unit,
-    priceType: PriceType,
-    downloadOnMetered: Boolean,
-    language: DishLanguage,
+    userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
@@ -80,9 +78,7 @@ fun TodayDishGrid(
                 data = data,
                 onDishSelected = onDishSelected,
                 onNoItems = onNoItems,
-                priceType = priceType,
-                downloadOnMetered = downloadOnMetered,
-                language = language,
+                userSettings = userSettings,
                 isOnMetered = isOnMetered,
                 scroll = scrollGrid,
                 header = header,
@@ -101,9 +97,7 @@ private fun DishContent(
     data: ImmutableList<DishCategory>,
     onDishSelected: (Dish) -> Unit,
     onNoItems: () -> Unit,
-    priceType: PriceType,
-    downloadOnMetered: Boolean,
-    language: DishLanguage,
+    userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     scroll: LazyStaggeredGridState,
     header: @Composable () -> Unit,
@@ -148,15 +142,13 @@ private fun DishContent(
                         if (index == 0) {
                             DishHeader(
                                 courseType = category,
-                                language = language,
+                                language = userSettings.language,
                             )
                         }
                         DishItem(
                             dish = dish,
                             onDishSelected = onDishSelected,
-                            priceType = priceType,
-                            downloadOnMetered = downloadOnMetered,
-                            language = language,
+                            userSettings = userSettings,
                             isOnMetered = isOnMetered,
                             modifier = Modifier.fillMaxWidth(),
                         )
@@ -175,9 +167,7 @@ private fun DishContent(
 private fun DishItem(
     dish: Dish,
     onDishSelected: (Dish) -> Unit,
-    priceType: PriceType,
-    downloadOnMetered: Boolean,
-    language: DishLanguage,
+    userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -195,8 +185,8 @@ private fun DishItem(
             if (dish.photoLink != null) {
                 DishImageWithBadge(
                     dish = dish,
-                    priceType = priceType,
-                    downloadOnMetered = downloadOnMetered,
+                    priceType = userSettings.priceType,
+                    downloadOnMetered = userSettings.downloadOnMetered,
                     isOnMetered = isOnMetered,
                 )
             }
@@ -210,15 +200,15 @@ private fun DishItem(
                 ) {
                     DishNameRow(
                         dish = dish,
-                        language = language,
+                        language = userSettings.language,
                         modifier = modifier.weight(1f),
                     )
                     if (dish.photoLink == null) {
-                        DishBadge(dish = dish, priceType = priceType)
+                        DishBadge(dish = dish, priceType = userSettings.priceType)
                     }
                 }
 
-                DishInfoRow(dish, language)
+                DishInfoRow(dish, userSettings.language)
             }
         }
     }

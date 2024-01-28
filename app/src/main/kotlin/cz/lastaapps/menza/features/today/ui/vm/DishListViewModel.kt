@@ -39,19 +39,12 @@ import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
-import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
-import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetOliverRow
-import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetOliverRow
+import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
+import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
@@ -65,16 +58,11 @@ internal class DishListViewModel(
     private val getSelectedMenzaUC: GetSelectedMenzaUC,
     private val getTodayDishListUC: GetTodayDishListUC,
     private val syncTodayDishListUC: SyncTodayDishListUC,
-    private val getOliverRowUC: GetOliverRow,
     private val setOliverRowUC: SetOliverRow,
-    private val getPriceTypeUC: GetPriceTypeUC,
-    private val getImagesOnMeteredUC: GetImagesOnMeteredUC,
-    private val getImageScaleUC: GetImageScaleUC,
     private val setImageScaleUC: SetImageScaleUC,
-    private val getDishLanguageUC: GetDishLanguageUC,
-    private val getDishListModeUC: GetDishListModeUC,
     private val setDishListModeUC: SetDishListModeUC,
     private val isOnMeteredUC: IsOnMeteredUC,
+    private val getUserSettingsUC: GetTodayUserSettingsUC,
     private val openMenuLinkUC: OpenMenuUC,
 ) : StateViewModel<DishListState>(DishListState(), context), Appearing, ErrorHolder {
     override var hasAppeared: Boolean = false
@@ -106,32 +94,11 @@ internal class DishListViewModel(
             }
         }
 
-        getPriceTypeUC().onEach {
-            updateState { copy(priceType = it) }
+        getUserSettingsUC().onEach {
+            updateState { copy(userSettings = it) }
         }.launchInVM()
-
-        getImagesOnMeteredUC().onEach {
-            updateState { copy(downloadOnMetered = it) }
-        }.launchInVM()
-
-        getImageScaleUC().onEach {
-            updateState { copy(imageScale = it) }
-        }.launchInVM()
-
-        getDishLanguageUC().onEach {
-            updateState { copy(language = it) }
-        }.launchInVM()
-
-        getDishListModeUC().onEach {
-            updateState { copy(dishListMode = it) }
-        }.launchInVM()
-
         isOnMeteredUC().onEach {
             updateState { copy(isOnMetered = it) }
-        }.launchInVM()
-
-        getOliverRowUC().onEach {
-            updateState { copy(useOliverRow = it) }
         }.launchInVM()
     }
 
@@ -177,15 +144,10 @@ internal class DishListViewModel(
 
 internal data class DishListState(
     val isLoading: Boolean = false,
-    val dishListMode: DishListMode? = null,
     val error: DomainError? = null,
     val selectedMenza: Option<Menza>? = null,
     val items: ImmutableList<DishCategory> = persistentListOf(),
-    val useOliverRow: Boolean = false,
-    val priceType: PriceType = Unset,
-    val downloadOnMetered: Boolean = false,
-    val language: DishLanguage = DishLanguage.Czech,
-    val imageScale: Float = 1f,
+    val userSettings: TodayUserSettings = TodayUserSettings(),
     val isOnMetered: Boolean = false,
 ) : VMState {
     val showExperimentalWarning: Boolean =

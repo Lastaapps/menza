@@ -45,8 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
@@ -54,16 +54,13 @@ import cz.lastaapps.menza.ui.util.appCardColors
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun TodayDishList(
+internal fun TodayDishList(
     isLoading: Boolean,
     onRefresh: () -> Unit,
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
     onDishSelected: (Dish) -> Unit,
-    priceType: PriceType,
-    downloadOnMetered: Boolean,
-    language: DishLanguage,
-    imageScale: Float,
+    userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
@@ -80,10 +77,7 @@ fun TodayDishList(
                 data = data,
                 onDishSelected = onDishSelected,
                 onNoItems = onNoItems,
-                priceType = priceType,
-                downloadOnMetered = downloadOnMetered,
-                language = language,
-                imageScale = imageScale,
+                userSettings = userSettings,
                 isOnMetered = isOnMetered,
                 scroll = scroll,
                 header = header,
@@ -100,10 +94,7 @@ private fun DishContent(
     data: ImmutableList<DishCategory>,
     onDishSelected: (Dish) -> Unit,
     onNoItems: () -> Unit,
-    priceType: PriceType,
-    downloadOnMetered: Boolean,
-    language: DishLanguage,
-    imageScale: Float,
+    userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     scroll: LazyListState,
     header: @Composable () -> Unit,
@@ -131,7 +122,7 @@ private fun DishContent(
                 Surface(Modifier.fillMaxWidth()) {
                     DishHeader(
                         courseType = category,
-                        language = language,
+                        language = userSettings.language,
                         modifier = Modifier.padding(bottom = Padding.Smaller),
                     )
                 }
@@ -140,10 +131,7 @@ private fun DishContent(
                 DishItem(
                     dish = dish,
                     onDishSelected = onDishSelected,
-                    priceType = priceType,
-                    downloadOnMetered = downloadOnMetered,
-                    language = language,
-                    imageScale = imageScale,
+                    userSettings = userSettings,
                     isOnMetered = isOnMetered,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -160,10 +148,7 @@ private fun DishContent(
 private fun DishItem(
     dish: Dish,
     onDishSelected: (Dish) -> Unit,
-    priceType: PriceType,
-    downloadOnMetered: Boolean,
-    language: DishLanguage,
-    imageScale: Float,
+    userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -180,14 +165,14 @@ private fun DishItem(
 
             DishImageWithBadge(
                 dish = dish,
-                priceType = priceType,
-                downloadOnMetered = downloadOnMetered,
-                imageScale = imageScale,
+                priceType = userSettings.priceType,
+                downloadOnMetered = userSettings.downloadOnMetered,
+                imageScale = userSettings.imageScale,
                 isOnMetered = isOnMetered,
             )
             Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
-                DishNameRow(dish, language)
-                DishInfoRow(dish, language)
+                DishNameRow(dish, userSettings.language)
+                DishInfoRow(dish, userSettings.language)
             }
         }
     }

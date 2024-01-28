@@ -48,8 +48,8 @@ import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
+import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
@@ -57,17 +57,14 @@ import cz.lastaapps.menza.ui.util.appCardColors
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun TodayDishHorizontal(
+internal fun TodayDishHorizontal(
     isLoading: Boolean,
     onRefresh: () -> Unit,
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
     onDishSelected: (Dish) -> Unit,
-    priceType: PriceType,
-    downloadOnMetered: Boolean,
-    language: DishLanguage,
+    userSettings: TodayUserSettings,
     isOnMetered: Boolean,
-    useOliverRow: Boolean,
     onOliverRow: (Boolean) -> Unit,
     header: @Composable () -> Unit,
     footer: @Composable () -> Unit,
@@ -84,11 +81,8 @@ fun TodayDishHorizontal(
                 data = data,
                 onDishSelected = onDishSelected,
                 onNoItems = onNoItems,
-                priceType = priceType,
-                downloadOnMetered = downloadOnMetered,
-                language = language,
+                userSettings = userSettings,
                 isOnMetered = isOnMetered,
-                useOliverRow = useOliverRow,
                 onOliverRow = onOliverRow,
                 scroll = scroll,
                 header = header,
@@ -106,11 +100,8 @@ private fun DishContent(
     data: ImmutableList<DishCategory>,
     onDishSelected: (Dish) -> Unit,
     onNoItems: () -> Unit,
-    priceType: PriceType,
-    downloadOnMetered: Boolean,
-    language: DishLanguage,
+    userSettings: TodayUserSettings,
     isOnMetered: Boolean,
-    useOliverRow: Boolean,
     onOliverRow: (Boolean) -> Unit,
     scroll: LazyListState,
     header: @Composable () -> Unit,
@@ -139,7 +130,7 @@ private fun DishContent(
                 item {
                     DishHeader(
                         courseType = category,
-                        language = language,
+                        language = userSettings.language,
                         modifier = Modifier.padding(bottom = Padding.Smaller),
                     )
                 }
@@ -150,9 +141,7 @@ private fun DishContent(
                         DishItem(
                             dish = category.dishList.first(),
                             onDishSelected = onDishSelected,
-                            priceType = priceType,
-                            downloadOnMetered = downloadOnMetered,
-                            language = language,
+                            userSettings = userSettings,
                             isOnMetered = isOnMetered,
                             modifier = Modifier.fillMaxWidth(),
                         )
@@ -163,9 +152,7 @@ private fun DishContent(
                             DishItem(
                                 dish = dish,
                                 onDishSelected = onDishSelected,
-                                priceType = priceType,
-                                downloadOnMetered = downloadOnMetered,
-                                language = language,
+                                userSettings = userSettings,
                                 isOnMetered = isOnMetered,
                                 modifier = Modifier.sizeIn(maxWidth = 256.dp),
                             )
@@ -175,7 +162,7 @@ private fun DishContent(
                             Padding.MidLarge,
                             Alignment.CenterHorizontally,
                         )
-                        if (useOliverRow) {
+                        if (userSettings.useOliverRow) {
                             Row(
                                 verticalAlignment = Alignment.Top,
                                 horizontalArrangement = horizontalArrangement,
@@ -207,7 +194,7 @@ private fun DishContent(
 
             item {
                 OliverRowSwitch(
-                    useOliverRow = useOliverRow,
+                    useOliverRow = userSettings.useOliverRow,
                     onOliverRow = onOliverRow,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -224,9 +211,7 @@ private fun DishContent(
 private fun DishItem(
     dish: Dish,
     onDishSelected: (Dish) -> Unit,
-    priceType: PriceType,
-    downloadOnMetered: Boolean,
-    language: DishLanguage,
+    userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -245,8 +230,8 @@ private fun DishItem(
             if (dish.photoLink != null) {
                 DishImageWithBadge(
                     dish = dish,
-                    priceType = priceType,
-                    downloadOnMetered = downloadOnMetered,
+                    priceType = userSettings.priceType,
+                    downloadOnMetered = userSettings.downloadOnMetered,
                     isOnMetered = isOnMetered,
                 )
             }
@@ -260,18 +245,18 @@ private fun DishItem(
                 ) {
                     DishNameRow(
                         dish = dish,
-                        language = language,
+                        language = userSettings.language,
                         modifier = modifier.weight(1f),
                     )
                     if (dish.photoLink == null) {
                         DishBadge(
                             dish = dish,
-                            priceType = priceType,
+                            priceType = userSettings.priceType,
                         )
                     }
                 }
 
-                DishInfoRow(dish, language)
+                DishInfoRow(dish, userSettings.language)
             }
         }
     }
