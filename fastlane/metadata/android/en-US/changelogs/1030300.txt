@@ -1,0 +1,3 @@
+Fix account balances above 1000 Kč
+Fix dark theme on MIUI 11/12
+Stable row heights option in the rows mode

@@ -1,0 +1,3 @@
+Oprava stavu konta nad 1000 Kč
+Oprava tmaného módu pro MIUI 11/12
+Možnost stabilní výšky řádku v řádkovém módu
