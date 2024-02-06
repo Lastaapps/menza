@@ -26,24 +26,17 @@ import org.gradle.api.Action
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
-import org.gradle.kotlin.dsl.exclude
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 fun DependencyHandlerScope.implementation(
     dependency: String,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) = Constants.IMPLEMENTATION(dependency) {
-    exclude(group = "org.jetbrains.kotlin", module = "kotlin-test-junit")
-    dependencyConfiguration()
-}
+) = Constants.IMPLEMENTATION(dependency, dependencyConfiguration)
 
 fun <T : Any> DependencyHandlerScope.implementation(
     dependency: Provider<T>,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) = Constants.IMPLEMENTATION(dependency) {
-    exclude(group = "org.jetbrains.kotlin", module = "kotlin-test-junit")
-    dependencyConfiguration()
-}
+) = Constants.IMPLEMENTATION(dependency, dependencyConfiguration)
 
 fun <T : Any> DependencyHandlerScope.commonImplementation(
     dependency: Provider<T>,
