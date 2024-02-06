@@ -54,17 +54,21 @@ fun PullToRefreshWrapper(
             modifier = Modifier.align(Alignment.TopCenter),
         )
 
-        LaunchedEffect(isRefreshing, state.isRefreshing) {
-            if (!isRefreshing && state.isRefreshing) {
-                onRefresh()
+        // Order here is important
+        // We first need to project the refreshing status into the state
+        // And handle the state refreshing change after
+        // Otherwise onRefresh will be called twice
+        LaunchedEffect(isRefreshing) {
+            if (isRefreshing) {
+                state.startRefresh()
+            } else {
+                state.endRefresh()
             }
         }
 
-        LaunchedEffect(isRefreshing) {
-            if (isRefreshing) {
-                // state.startRefresh()
-            } else {
-                state.endRefresh()
+        LaunchedEffect(isRefreshing, state.isRefreshing) {
+            if (!isRefreshing && state.isRefreshing) {
+                onRefresh()
             }
         }
     }
