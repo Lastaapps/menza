@@ -119,15 +119,23 @@ private fun AppLayoutCompact(
     MenzaModalDrawer(
         drawerState = drawerState,
         drawerContent = {
-            Box(Modifier.padding(vertical = Padding.Large)) {
-                drawerContent()
+            Scaffold(
+                snackbarHost = snackbarHost,
+            ) { insets ->
+                Box(
+                    Modifier
+                        .padding(insets)
+                        .padding(vertical = Padding.Large),
+                ) {
+                    drawerContent()
+                }
             }
         },
         modifier = modifier,
     ) {
         if (!isFlip) {
             Scaffold(
-                Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 topBar = { topBar(topBarState) },
                 bottomBar = bottomBar,
                 snackbarHost = snackbarHost,
@@ -135,13 +143,24 @@ private fun AppLayoutCompact(
                 Box(
                     Modifier
                         .padding(insets)
-                        .fillMaxSize()
+                        .fillMaxSize(),
                 ) {
                     content()
                 }
             }
         } else {
-            content()
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                snackbarHost = snackbarHost,
+            ) { insets ->
+                Box(
+                    Modifier
+                        .padding(insets)
+                        .fillMaxSize(),
+                ) {
+                    content()
+                }
+            }
         }
 
         BackHandler(drawerState.isOpen) {
@@ -185,7 +204,7 @@ private fun AppLayoutMedium(
                 drawerContent = drawerContent,
             ) {
                 BoxWithConstraints(
-                    Modifier.fillMaxSize()
+                    Modifier.fillMaxSize(),
                 ) {
                     val padding = Padding.More.Screen
                     val totalWidthAvailable = maxWidth - padding
@@ -193,7 +212,7 @@ private fun AppLayoutMedium(
                     val endWidth = totalWidthAvailable * 0.5f
 
                     CompositionLocalProvider(
-                        LocalSplitPosition provides Triple(startWidth, padding, endWidth)
+                        LocalSplitPosition provides Triple(startWidth, padding, endWidth),
                     ) { content() }
                 }
             }
@@ -269,7 +288,7 @@ private fun AppLayoutExpandedNoFold(
                 drawerContent = drawerContent,
             ) {
                 BoxWithConstraints(
-                    Modifier.fillMaxSize()
+                    Modifier.fillMaxSize(),
                 ) {
                     val padding = Padding.More.Screen
                     val totalWidthAvailable = maxWidth - padding
@@ -277,7 +296,7 @@ private fun AppLayoutExpandedNoFold(
                     val endWidth = totalWidthAvailable * 0.5f
 
                     CompositionLocalProvider(
-                        LocalSplitPosition provides Triple(startWidth, padding, endWidth)
+                        LocalSplitPosition provides Triple(startWidth, padding, endWidth),
                     ) { content() }
                 }
             }
@@ -337,7 +356,7 @@ private fun AppLayoutExpandedFold(
                     val endWidth = totalWidthAvailable * weightEnd
 
                     CompositionLocalProvider(
-                        LocalSplitPosition provides Triple(startWidth, spacesWidth, endWidth)
+                        LocalSplitPosition provides Triple(startWidth, spacesWidth, endWidth),
                     ) { content() }
                 }
             }
