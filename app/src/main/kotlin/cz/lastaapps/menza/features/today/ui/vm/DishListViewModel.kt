@@ -71,22 +71,22 @@ internal class DishListViewModel(
 
     override fun onAppeared() = launchVM {
         launchVM {
-            getSelectedMenzaUC().collectLatest {
-                log.i { "Registered a new: $it" }
+            getSelectedMenzaUC().collectLatest { newMenza ->
+                log.i { "Registered a new: $newMenza" }
 
                 updateState {
                     copy(
-                        selectedMenza = it.toOption(),
+                        selectedMenza = newMenza.toOption(),
                         items = persistentListOf(),
                     )
                 }
                 syncJob?.cancel()
-                if (it != null) {
+                if (newMenza != null) {
                     coroutineScope {
                         this.launch {
-                            load(it, false)
+                            load(newMenza, false)
                         }
-                        getTodayDishListUC(it).collectLatest { items ->
+                        getTodayDishListUC(newMenza).collectLatest { items ->
                             updateState { copy(items = items) }
                         }
                     }

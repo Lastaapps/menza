@@ -88,8 +88,9 @@ internal class TodayDishSubsystemRepoImpl(
             .combine(isValidFlow) { data, validity ->
                 data.takeIf { validity }.orEmpty()
             }
+            .distinctUntilChanged()
             .collectLatest { dtoList ->
-                log.i { "Starting flow combining" }
+                log.d { "Starting flow combining" }
 
                 // Finds flows that corresponds to each dish item
                 val withInfo = dtoList.asSequence().map { entity ->
@@ -142,10 +143,10 @@ internal class TodayDishSubsystemRepoImpl(
                             type.toDomain(dishList.map { it.second })
                         }
                         .toImmutableList()
-                }
+                }.distinctUntilChanged()
 
                 mapped.collectLatest { categories ->
-                    log.i {
+                    log.d {
                         val dishCount = categories.sumOf { it.dishList.size }
                         "Collected ${categories.size} categories and $dishCount dishes"
                     }
@@ -153,9 +154,9 @@ internal class TodayDishSubsystemRepoImpl(
                 }
             }
     }.onStart {
-        log.i { "Starting collection" }
+        log.d { "Starting collection" }
     }.onCompletion {
-        log.i { "Completed collection" }
+        log.d { "Completed collection" }
     }
 
     private val dishListJob = SyncJobHash(

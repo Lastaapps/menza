@@ -133,6 +133,7 @@ private fun ContactItem(
     ) {
         Column(
             modifier = Modifier.padding(Padding.MidSmall),
+            verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             contact.name?.let { name ->

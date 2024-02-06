@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -37,6 +37,7 @@ import cz.lastaapps.menza.api.agata.data.model.dto.WeekDishDto
 import cz.lastaapps.menza.api.agata.data.model.dto.WeekDto
 import cz.lastaapps.menza.api.agata.util.getFun
 import io.ktor.client.call.body
+import kotlinx.datetime.Clock
 
 internal interface DishApi {
 
@@ -63,7 +64,10 @@ internal class DishApiImpl(
     }
 
     override suspend fun getDishesHash(subsystemId: Int): Outcome<String> = catchingNetwork {
-        client.getFun(DishHash, subsystemId = subsystemId, secondId = 1).body()
+        // TODO Due error in backend this endpoint may return wrong values (just a space)
+        client.getFun(DishHash, subsystemId = subsystemId, secondId = 1).body<String>()
+            .takeUnless { it.isBlank() }
+            ?: Clock.System.now().toString()
     }
 
     override suspend fun getPictogram(): Outcome<List<PictogramDto>?> = catchingNetwork {
