@@ -126,6 +126,8 @@ private fun DishContent(
             state = scroll,
         ) {
             // https://issuetracker.google.com/issues/321784348
+            // This issue is technically fixed, but is is still not working
+            // But I cannot reproduce it anymore
             item {
                 Spacer(modifier = Modifier.height(1.dp))
             }

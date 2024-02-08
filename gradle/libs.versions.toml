@@ -2,11 +2,11 @@
 aboutLibraries = "11.1.0-b01"
 android-gradle = "8.2.2"
 androidx-activity = "1.8.2"
-androidx-compose = "1.6.0"
+androidx-compose = "1.6.1"
 # @keep
-androidx-compose-compiler = "1.5.8"
-androidx-compose-material = "1.6.0"
-androidx-compose-material3 = "1.2.0-rc01"
+androidx-compose-compiler = "1.5.9"
+androidx-compose-material = "1.6.1"
+androidx-compose-material3 = "1.2.0"
 androidx-lifecycle = "2.7.0"
 androidx-security = "1.1.0-alpha06"
 androidx-test = "1.5.0"
@@ -223,7 +223,7 @@ sqldelight = [
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
-benNamesVersions = "com.github.ben-manes.versions:0.50.0"
+benNamesVersions = "com.github.ben-manes.versions:0.51.0"
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 java-kotlin = { id = "kotlin" }
@@ -246,4 +246,4 @@ lastaapps-kmp-library = "kmp-library-convention:none"
 lastaapps-kmp-sqldelight = "kmp-sqldelight-convention:none"
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
-versionCatalogUpdate = "nl.littlerobots.version-catalog-update:0.8.1"
+versionCatalogUpdate = "nl.littlerobots.version-catalog-update:0.8.4"
