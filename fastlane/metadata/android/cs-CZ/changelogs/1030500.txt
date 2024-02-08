@@ -1,0 +1,4 @@
+Oprava robrazování nízkého stavu konta
+Oprava nenačítání denního menu (chyba v BE Agáty)
+Oprava dvojitého načítání
+Aktualizace knihoven

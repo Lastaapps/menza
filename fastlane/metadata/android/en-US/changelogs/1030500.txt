@@ -1,0 +1,4 @@
+Fix the low balance notification appearing every time
+Fix today menu not refreshing (error in the BE of Agáta)
+Fix refreshing twice
+Update libs
