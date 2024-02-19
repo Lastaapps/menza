@@ -49,7 +49,7 @@ internal fun DishHeader(
 ) {
     Text(
         text = courseType.getName(language)
-            ?: stringResource(id = R.string.today_list_cathegory_other),
+            ?: stringResource(id = R.string.today_list_category_other),
         modifier = modifier,
         style = MaterialTheme.typography.titleMedium,
     )

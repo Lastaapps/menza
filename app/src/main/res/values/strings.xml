@@ -51,8 +51,11 @@
     <string name="privacy_title">Privacy Policy</string>
     <string name="privacy_text">
         This app doesn\'t collect or send any private data.
-        If you don\'t trust it, you can check source code yourself.
-        It\'s provided free with no warranty what so ever.
+        If you don\'t trust it, you can check the source code yourself.
+        It\'s provided for free with no warranty whatsoever.
+    </string>
+    <string name="privacy_warning">
+        This app was created as a student project, it is not an official product of SFA CTU.
     </string>
     <string name="privacy_view_source">View source code</string>
     <string name="privacy_accept">Accept</string>
@@ -211,7 +214,7 @@
     <string name="today_list_mode_grid">Large</string>
     <string name="today_list_mode_horizontal">Rows</string>
     <string name="today_list_stable_row">Stable row height</string>
-    <string name="today_list_cathegory_other">Other (web sent wrong data)</string>
+    <string name="today_list_category_other">Other (web sent wrong data)</string>
     <string name="today_experimental_cafeteria">Experimental cafeteria - may not work properly. Please report issues in the settings.</string>
 
     <string name="week_list_none">No data available 👨‍🍳</string>

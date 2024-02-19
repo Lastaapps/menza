@@ -49,6 +49,9 @@
         Pokud nevěříte, můžete si sami zkontrolovat zdrojový kód.
         Je poskytována zdarma bez jakýchkoli záruk.
     </string>
+    <string name="privacy_warning">
+        Tato aplikace je studentský projekt, nejde o oficiální produkt SUZ ČVUT.
+    </string>
     <string name="privacy_view_source">Prohlédnout si zdrojový kód</string>
     <string name="privacy_accept">Přijímám</string>
     <string name="osturak_text">
@@ -195,7 +198,7 @@
     <string name="today_list_mode_grid">Velké</string>
     <string name="today_list_mode_horizontal">Řádky</string>
     <string name="today_list_stable_row">Stabilní výška řádky</string>
-    <string name="today_list_cathegory_other">Další (server odeslal špatná data)</string>
+    <string name="today_list_category_other">Další (server odeslal špatná data)</string>
     <string name="today_experimental_cafeteria">Experimentální menza - nemusí fungovat správně. Prosím, hlašte chyby v nastavení.</string>
     <string name="week_list_none">Data nejsou dostupná 👨‍🍳</string>
     <string name="week_list_web">Otevřít web</string>

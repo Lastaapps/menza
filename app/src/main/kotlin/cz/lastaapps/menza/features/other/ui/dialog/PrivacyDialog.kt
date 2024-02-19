@@ -35,32 +35,42 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cz.lastaapps.common.Communication
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.ui.vm.PolicyViewModel
+import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.PreviewWrapper
 
 
 @Composable
 internal fun PrivacyDialogDest(
-    onNotNeeded: suspend () -> Unit,
+    onNotNeeded: () -> Unit,
     viewModel: PolicyViewModel,
     isRequired: Boolean,
 ) {
     val state by viewModel.shouldShow.collectAsState()
 
-    when (state ?: !isRequired || !isRequired) {
+    when (state?.or(!isRequired)) {
         true ->
             PrivacyDialog(
-                onDismissRequest = {},
+                onDismissRequest = {
+                    if (!isRequired) {
+                        onNotNeeded()
+                    }
+                },
                 showAccept = isRequired,
                 onAccept = viewModel::onApprove,
             )
 
         false ->
             LaunchedEffect(Unit) { onNotNeeded() }
+
+        null -> {}
     }
 }
 
@@ -96,14 +106,40 @@ internal fun PrivacyDialogContent(
                 textAlign = TextAlign.Center,
             )
 
+            SUZWarning()
+
             val context = LocalContext.current
             OutlinedButton(onClick = { Communication.openProjectsGithub(context, "Menza") }) {
                 Text(stringResource(R.string.privacy_view_source))
             }
-            if (showAccept)
+            if (showAccept) {
                 Button(onClick = onAccept) {
                     Text(stringResource(R.string.privacy_accept))
                 }
+            }
         }
     }
+}
+
+@Composable
+private fun SUZWarning(modifier: Modifier = Modifier) {
+    Surface(
+        color = MaterialTheme.colorScheme.errorContainer,
+        shape = MaterialTheme.shapes.medium,
+        modifier = modifier,
+    ) {
+        Text(
+            stringResource(R.string.privacy_warning),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodySmall,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(Padding.Small),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PrivacyDialogContentPreview() = PreviewWrapper {
+    PrivacyDialogContent(showAccept = true) { }
 }
