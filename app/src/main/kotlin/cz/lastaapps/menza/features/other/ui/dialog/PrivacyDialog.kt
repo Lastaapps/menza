@@ -47,21 +47,20 @@ import cz.lastaapps.menza.features.other.ui.vm.PolicyViewModel
 internal fun PrivacyDialogDest(
     onNotNeeded: suspend () -> Unit,
     viewModel: PolicyViewModel,
+    isRequired: Boolean,
 ) {
     val state by viewModel.shouldShow.collectAsState()
 
-    when (state) {
+    when (state ?: !isRequired || !isRequired) {
         true ->
             PrivacyDialog(
                 onDismissRequest = {},
-                showAccept = true,
+                showAccept = isRequired,
                 onAccept = viewModel::onApprove,
             )
 
         false ->
             LaunchedEffect(Unit) { onNotNeeded() }
-
-        null -> {}
     }
 }
 

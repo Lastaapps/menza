@@ -110,10 +110,7 @@ internal class DefaultMainComponent(
 
                 Config.Osturak -> Child.Osturak(DefaultOsturakComponent(componentContext))
                 Config.PrivacyPolicy -> Child.PrivacyPolicy(
-                    DefaultPolicyComponent(
-                        componentContext,
-                        false,
-                    ),
+                    DefaultPolicyComponent(componentContext, false),
                 )
 
                 Config.Settings -> Child.Settings(DefaultSettingsHubComponent(componentContext))

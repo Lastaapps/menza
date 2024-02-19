@@ -31,12 +31,12 @@ import org.koin.core.component.KoinComponent
 internal interface PolicyComponent {
     val viewModel: PolicyViewModel
 
-    val allowAccept: Boolean
+    val isRequired: Boolean
 }
 
 internal class DefaultPolicyComponent(
     componentContext: ComponentContext,
-    override val allowAccept: Boolean,
+    override val isRequired: Boolean,
 ) : PolicyComponent, KoinComponent, ComponentContext by componentContext {
     override val viewModel: PolicyViewModel = getOrCreateKoin()
 }
@@ -52,5 +52,6 @@ internal fun PolicyContent(
     PrivacyDialogDest(
         onNotNeeded = onNext,
         viewModel = component.viewModel,
+        isRequired = component.isRequired,
     )
 }
