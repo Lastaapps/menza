@@ -1,0 +1,3 @@
+Improved resilience to wrong data being sent from the external API
+Fix small navigation bug/crash
+Update privacy policy view

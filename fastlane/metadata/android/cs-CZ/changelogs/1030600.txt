@@ -1,0 +1,3 @@
+Zvýšení odolnosti proti špatným datům z externí API
+Oprava drobného pádu
+Úprava privacy policy dialogu
