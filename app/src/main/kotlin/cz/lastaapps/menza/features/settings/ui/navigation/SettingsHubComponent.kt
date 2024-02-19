@@ -33,7 +33,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.pushToFront
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
 import cz.lastaapps.menza.features.other.ui.node.DefaultLicenseComponent
@@ -51,11 +51,6 @@ import cz.lastaapps.menza.features.settings.ui.component.DishLanguageComponent
 import cz.lastaapps.menza.features.settings.ui.component.DishLanguageContent
 import cz.lastaapps.menza.features.settings.ui.component.SettingsComponent
 import cz.lastaapps.menza.features.settings.ui.component.SettingsContent
-import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.AppTheme
-import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.DishLanguage
-import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.License
-import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.Osturak
-import cz.lastaapps.menza.features.settings.ui.navigation.DefaultSettingsHubComponent.Config.Settings
 import cz.lastaapps.menza.features.settings.ui.navigation.SettingsHubComponent.Child
 import kotlinx.serialization.Serializable
 
@@ -86,6 +81,7 @@ internal interface SettingsHubComponent : BackHandlerOwner {
     }
 }
 
+@OptIn(ExperimentalDecomposeApi::class)
 internal class DefaultSettingsHubComponent(
     componentContext: ComponentContext,
 ) : SettingsHubComponent, ComponentContext by componentContext {
@@ -98,28 +94,33 @@ internal class DefaultSettingsHubComponent(
             initialStack = { listOf(Config.Settings) },
         ) { configuration, componentContext ->
             when (configuration) {
-                AppTheme -> Child.AppTheme(DefaultAppThemeComponent(componentContext))
-                DishLanguage -> Child.DishLanguage(DefaultDishLanguageComponent(componentContext))
-                License -> Child.License(DefaultLicenseComponent(componentContext))
-                Osturak -> Child.Osturak(DefaultOsturakComponent(componentContext))
-                Settings -> Child.Settings(DefaultSettingsComponent(componentContext))
+                Config.AppTheme -> Child.AppTheme(DefaultAppThemeComponent(componentContext))
+                Config.DishLanguage -> Child.DishLanguage(
+                    DefaultDishLanguageComponent(
+                        componentContext,
+                    ),
+                )
+
+                Config.License -> Child.License(DefaultLicenseComponent(componentContext))
+                Config.Osturak -> Child.Osturak(DefaultOsturakComponent(componentContext))
+                Config.Settings -> Child.Settings(DefaultSettingsComponent(componentContext))
             }
         }
 
     override fun toChooseTheme() {
-        navigation.push(Config.AppTheme)
+        navigation.pushToFront(Config.AppTheme)
     }
 
     override fun toChooseDishLanguage() {
-        navigation.push(Config.DishLanguage)
+        navigation.pushToFront(Config.DishLanguage)
     }
 
     override fun toOsturak() {
-        navigation.push(Config.Osturak)
+        navigation.pushToFront(Config.Osturak)
     }
 
     override fun toLicense() {
-        navigation.push(Config.License)
+        navigation.pushToFront(Config.License)
     }
 
     override fun pop() {

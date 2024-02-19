@@ -20,13 +20,14 @@
 package cz.lastaapps.menza.features.main.ui.navigation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.navigate
 import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.pushToFront
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
 import cz.lastaapps.menza.features.info.ui.component.DefaultInfoComponent
@@ -124,8 +125,9 @@ internal class DefaultMainComponent(
     override val drawerComponent: DrawerComponent =
         DefaultDrawerComponent(childContext("drawer"))
 
+    @OptIn(ExperimentalDecomposeApi::class)
     override fun push(target: MainNavTarget) {
-        navigation.push(Config.fromTarget(target))
+        navigation.pushToFront(Config.fromTarget(target))
     }
 
     override fun pushRoot(target: MainNavTarget) {
