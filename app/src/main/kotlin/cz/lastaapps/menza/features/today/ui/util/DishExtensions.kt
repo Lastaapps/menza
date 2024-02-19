@@ -53,7 +53,7 @@ fun Float.formatPrice() =
         "%.2f".format(this)
     }
 
-fun DishCategory.getName(language: DishLanguage): String =
+fun DishCategory.getName(language: DishLanguage): String? =
     nameEn.takeUnless { language.isCzech() } ?: nameCs
 
 fun Dish.getName(language: DishLanguage): String =

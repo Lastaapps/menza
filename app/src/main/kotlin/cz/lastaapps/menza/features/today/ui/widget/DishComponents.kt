@@ -28,9 +28,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.ui.util.getAmount
@@ -46,7 +48,8 @@ internal fun DishHeader(
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = courseType.getName(language),
+        text = courseType.getName(language)
+            ?: stringResource(id = R.string.today_list_cathegory_other),
         modifier = modifier,
         style = MaterialTheme.typography.titleMedium,
     )

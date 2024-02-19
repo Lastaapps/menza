@@ -195,6 +195,7 @@
     <string name="today_list_mode_grid">Velké</string>
     <string name="today_list_mode_horizontal">Řádky</string>
     <string name="today_list_stable_row">Stabilní výška řádky</string>
+    <string name="today_list_cathegory_other">Další (server odeslal špatná data)</string>
     <string name="today_experimental_cafeteria">Experimentální menza - nemusí fungovat správně. Prosím, hlašte chyby v nastavení.</string>
     <string name="week_list_none">Data nejsou dostupná 👨‍🍳</string>
     <string name="week_list_web">Otevřít web</string>

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -121,13 +121,15 @@ private fun DishEntity.fullNameSmart() =
         }
     }
 
-internal fun DishTypeEntity.toDomain(dishList: List<Dish>) =
-    DishCategory(
-        nameShort = nameShort,
-        nameCs = nameLong,
-        nameEn = null,
-        dishList = dishList.toImmutableList(),
-    )
+internal fun DishTypeEntity?.toDomain(dishList: List<Dish>) =
+    this?.let {
+        DishCategory(
+            nameShort = nameShort,
+            nameCs = nameLong,
+            nameEn = null,
+            dishList = dishList.toImmutableList(),
+        )
+    } ?: DishCategory.other(dishList.toImmutableList())
 
 internal fun InfoEntity?.toDomain(
     news: NewsEntity?,

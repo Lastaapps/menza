@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,10 +23,16 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class DishCategory(
     val nameShort: String?,
-    val nameCs: String,
+    val nameCs: String?,
     val nameEn: String?,
     val dishList: ImmutableList<Dish>,
-)
+) {
+    companion object {
+        fun other(
+            dishList: ImmutableList<Dish>,
+        ) = DishCategory(null, null, null, dishList)
+    }
+}
 
 data class Dish(
     val amountCs: String?,

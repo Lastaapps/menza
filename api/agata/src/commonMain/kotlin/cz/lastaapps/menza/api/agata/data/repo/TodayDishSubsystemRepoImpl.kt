@@ -25,7 +25,7 @@ import agata.PictogramEntity
 import agata.ServingPlaceEntity
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import app.cash.sqldelight.coroutines.mapToOne
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import arrow.core.Tuple4
 import arrow.core.rightIor
 import co.touchlab.kermit.Logger
@@ -99,7 +99,7 @@ internal class TodayDishSubsystemRepoImpl(
 
                         // get dish type
                         db.dishTypeQueries.getByDishId(entity.typeId).asFlow()
-                            .mapToOne(Dispatchers.IO),
+                            .mapToOneOrNull(Dispatchers.IO),
 
                         // get dish pictogram
                         db.pictogramQueries.getByIds(entity.pictogram).asFlow()
@@ -121,7 +121,7 @@ internal class TodayDishSubsystemRepoImpl(
 
                 // for an empty list an empty list will be returned
                 val baseCase =
-                    flow<PersistentList<Tuple4<DishEntity, DishTypeEntity, List<PictogramEntity>, List<ServingPlaceEntity>>>> {
+                    flow<PersistentList<Tuple4<DishEntity, DishTypeEntity?, List<PictogramEntity>, List<ServingPlaceEntity>>>> {
                         emit(persistentListOf())
                     }
 
@@ -138,7 +138,7 @@ internal class TodayDishSubsystemRepoImpl(
                             type to dish.toDomain(pictogram, servingPlaces)
                         }.groupBy { it.first }
                         .entries
-                        .sortedBy { (key, _) -> key.itemOrder }
+                        .sortedBy { (key, _) -> key?.itemOrder ?: Long.MAX_VALUE }
                         .map { (type, dishList) ->
                             type.toDomain(dishList.map { it.second })
                         }
