@@ -1,0 +1,6 @@
+Oprava překlepu a odkazu na prohlášení o soukromí, díky @Radian-Fi
+Pokus o opravu timeout výjimky
+Resetování scroll pozice při změně menzy
+Úprava parsování FEL/FS jídelníčku
+Zobrazení informací menzy Strahov také pro restauraci
+Aktualizace knihoven

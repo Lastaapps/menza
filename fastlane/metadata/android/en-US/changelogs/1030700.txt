@@ -1,0 +1,6 @@
+Fix a typo and privacy policy link, thanks @Radian-Fi
+Attempt to fix timeout exception
+Reset the scroll position  when menza is changed
+Updated FEL/FS menu parsing
+Show Strahov Menza info also for the restaurant
+Update libs
