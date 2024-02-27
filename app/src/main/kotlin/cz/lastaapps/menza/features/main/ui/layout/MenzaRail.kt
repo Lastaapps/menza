@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.features.main.ui.layout
 
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.NavigationRail
@@ -36,7 +37,11 @@ internal fun MenzaRail(
     settingsEverOpened: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    NavigationRail(modifier.verticalScroll(rememberScrollState())) {
+    NavigationRail(
+        modifier
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
+    ) {
         NavItem.entries.forEach { item ->
             val showBadge = item == NavItem.Settings && !settingsEverOpened
 
