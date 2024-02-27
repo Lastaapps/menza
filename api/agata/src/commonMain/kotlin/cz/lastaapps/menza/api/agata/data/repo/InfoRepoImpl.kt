@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,21 +23,19 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.coroutines.mapToOneOrNull
-import arrow.core.right
 import arrow.core.rightIor
 import co.touchlab.kermit.Logger
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.Info
+import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
-import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.util.extensions.combine6
-import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
@@ -47,9 +45,11 @@ import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.parameter.parametersOf
 
 
 internal class InfoRepoImpl(
@@ -183,15 +183,12 @@ internal class InfoRepoImpl(
     }
 }
 
-internal object InfoStrahovRepoImpl : InfoRepo {
-    private val log = localLogger()
+internal object InfoStrahovRepoImpl : InfoRepo, KoinComponent {
+    private val strahovInfoRepo: InfoRepo by
+    inject<InfoRepo> { parametersOf(MenzaType.Agata.Subsystem(1)) }
 
-    override fun getData(): Flow<Info> = flow { emit(Info.empty) }
-        .onStart { log.i { "Starting collection" } }
-        .onCompletion { log.i { "Completed collection" } }
+    override fun getData(): Flow<Info> = strahovInfoRepo.getData()
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        SyncResult.Unavailable.right()
-    }
+    override suspend fun sync(isForced: Boolean): SyncOutcome =
+        strahovInfoRepo.sync(isForced = isForced)
 }
