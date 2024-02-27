@@ -25,12 +25,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
@@ -88,8 +87,16 @@ private fun TodayContent(
     dishListViewModel: DishListViewModel,
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    scrollState: LazyListState = rememberLazyListState(),
-    scrollGridState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
+
+    // resets scroll position when new menza is selected
+    scrollState: LazyListState = rememberSaveable(
+        state.selectedMenza,
+        saver = LazyListState.Saver,
+    ) { LazyListState() },
+    scrollGridState: LazyStaggeredGridState = rememberSaveable(
+        state.selectedMenza,
+        saver = LazyStaggeredGridState.Saver,
+    ) { LazyStaggeredGridState() },
 ) {
     val dishList: @Composable () -> Unit = {
         DishListScreen(
