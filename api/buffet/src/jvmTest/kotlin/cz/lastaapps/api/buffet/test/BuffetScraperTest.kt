@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -245,6 +245,51 @@ class BuffetScraperTest : StringSpec(
                 ingredients shouldBe listOf(
                     "mleté maso",
                     "směs koření",
+                    "trojobal",
+                )
+            }
+        }
+
+        // missing closing bracket after the contains
+        "Scrape 2024-02-26" {
+            val log = Logger.withTag("2024-02-26")
+            val html = loadPage("2024-02-26.html")
+            val scraper = scraper()
+            val date = scraper.matchValidity(html)
+            val content = scraper.matchContent(html)
+
+            log.i { date.toString() }
+            log.i { content.toString() }
+
+            dateRangeTest(
+                date,
+                LocalDate(2024, 2, 26),
+                LocalDate(2024, 3, 1),
+            )
+
+            val (fs, fel) = testDeconstruct(content)
+
+            commonTest(fs, listOf(3, 3, 3, 3, 2))
+            @Suppress("SpellCheckingInspection")
+            fs[1].dishList[2].run {
+                type shouldBe "Hlavní jídlo 2"
+                name shouldBe "Kuřecí steak se sýrem, hranolky"
+                price shouldBe 139
+                ingredients shouldBe listOf(
+                    "kuřecí maso",
+                    "sýr",
+                    "směs koření",
+                )
+            }
+
+            commonTest(fel, listOf(4, 4, 3, 3, 5))
+            @Suppress("SpellCheckingInspection")
+            fel[4].dishList[1].run {
+                type shouldBe "Hlavní jídlo 1"
+                name shouldBe "Smažený eidam; vař. brambory, tatarská omáčka"
+                price shouldBe 136
+                ingredients shouldBe listOf(
+                    "sýr eidam",
                     "trojobal",
                 )
             }

@@ -76,7 +76,7 @@ internal class BuffetScraperImpl : BuffetScraper {
 
         // Matches dishes
         // type name price contains
-        private val dishesRegex = """([^/]*):([^●]*)●\s*(\d+)[^(]*\(([^)]*)\)"""
+        private val dishesRegex = """([^/]*):([^●]*)●\s*(\d+)[^(]*\(([^).]*)"""
             .toRegex(regexOptions)
     }
 
