@@ -27,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ExperimentalDecomposeApi
@@ -61,7 +62,7 @@ internal fun StartingContent(
         modifier = modifier,
         snackbarHost = { SnackbarHost(hostState = hostState) },
     ) { padding ->
-        val pager = component.content.subscribeAsState()
+        val pager by component.content.subscribeAsState()
 
         val childModifier = Modifier
             .padding(padding)

@@ -26,7 +26,11 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatable
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.predictiveBackAnimation
+import com.arkivanov.decompose.extensions.compose.stack.animation.scale
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.stack.ChildStack
@@ -158,7 +162,8 @@ internal fun SettingsHubContent(
         stack = stack,
         animation = predictiveBackAnimation(
             backHandler = component.backHandler,
-            fallbackAnimation = stackAnimation(),
+            fallbackAnimation = stackAnimation(fade() + scale()),
+            selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
             onBack = component::pop,
         ),
     ) {
