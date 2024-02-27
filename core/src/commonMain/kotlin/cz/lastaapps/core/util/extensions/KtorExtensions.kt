@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,6 +31,9 @@ suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
 
         when (it::class.simpleName) {
             "TimeoutException",
+            "HttpRequestTimeoutException",
+            "SocketTimeoutException",
+            "OutOfSpaceException", // somehow thrown inside the KTor HttpRequestTimeoutException constructor
             -> NetworkError.Timeout
 
             "ConnectException",
@@ -41,8 +44,6 @@ suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
             "IOException",
             "SSLException",
             "SocketException",
-            "HttpRequestTimeoutException",
-            "SocketTimeoutException",
             -> NetworkError.NoInternet
 
             "JsonConvertException",

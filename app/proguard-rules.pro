@@ -16,6 +16,9 @@
 # debugging stack traces.
 -keepattributes SourceFile,LineNumberTable
 
+# Keep all the exceptions names
+-keepnames class * extends java.lang.Throwable
+
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
@@ -63,16 +66,17 @@
 # Decompose
 -keep class com.arkivanov.decompose.extensions.compose.mainthread.SwingMainThreadChecker
 
-
-# Idk, I hope it doesn't crash
--dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
--dontwarn groovy.**
+# Those are only referenced from the Apache engine I'm not using
 -dontwarn io.ktor.client.features.HttpTimeout$Feature
 -dontwarn io.ktor.client.features.HttpTimeout$HttpTimeoutCapabilityConfiguration
 -dontwarn io.ktor.client.features.HttpTimeout
 -dontwarn io.ktor.client.features.HttpTimeoutKt
 -dontwarn io.ktor.network.sockets.ConnectTimeoutException
 -dontwarn io.ktor.network.sockets.SocketTimeoutException
+
+# Idk, I hope it doesn't crash
+-dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+-dontwarn groovy.**
 -dontwarn java.awt.**
 -dontwarn java.beans.**
 -dontwarn java.lang.management.ManagementFactory
