@@ -2,10 +2,10 @@
 aboutLibraries = "11.1.0-b01"
 android-gradle = "8.2.2"
 androidx-activity = "1.8.2"
-androidx-compose = "1.6.1"
+androidx-compose = "1.6.2"
 # @keep
-androidx-compose-compiler = "1.5.9"
-androidx-compose-material = "1.6.1"
+androidx-compose-compiler = "1.5.10"
+androidx-compose-material = "1.6.2"
 androidx-compose-material3 = "1.2.0"
 androidx-lifecycle = "2.7.0"
 androidx-security = "1.1.0-alpha06"
@@ -28,7 +28,7 @@ kotlin-api = "2.0"
 # @keep
 kotlin-language = "2.0"
 kotlinx-atomicfu = "0.23.2"
-kotlinx-coroutines = "1.8.0-RC2"
+kotlinx-coroutines = "1.8.0"
 ktlint = "11.6.0"
 ktor = "2.3.8"
 russhwolf-settings = "1.1.1"
@@ -81,7 +81,7 @@ androidx-tracing = "androidx.tracing:tracing-ktx:1.2.0"
 androidx-vectorDrawables = "androidx.vectordrawable:vectordrawable:1.1.0"
 androidx-windowManager = "androidx.window:window:1.2.0"
 androidx-work = "androidx.work:work-runtime-ktx:2.9.0"
-arrowkt-bom = "io.arrow-kt:arrow-stack:1.2.1"
+arrowkt-bom = "io.arrow-kt:arrow-stack:1.2.2"
 arrowkt-core = { module = "io.arrow-kt:arrow-core" }
 arrowkt-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
 arrowkt-fx-stm = { module = "io.arrow-kt:arrow-fx-stm" }
@@ -141,7 +141,7 @@ kotlinx-coroutines-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.5.0"
-kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2"
+kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3"
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
