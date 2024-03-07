@@ -312,7 +312,7 @@ private fun ReportButton(modifier: Modifier = Modifier) {
     }
 
     val context = LocalContext.current
-    ReportDialog(shown, { shown = false }) {
+    ReportDialog(shown, false, { shown = false }) {
         sendReport(context, it)
         shown = false
     }

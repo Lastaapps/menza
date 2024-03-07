@@ -84,6 +84,7 @@ internal fun CrashesList(
             val context = LocalContext.current
             ReportDialog(
                 shown = selectedItem != null,
+                reportsCrash = true,
                 onDismissRequest = { selectedItem = null },
                 onModeSelected = { mode ->
                     selectedItem?.let { crash ->

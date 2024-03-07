@@ -37,8 +37,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -56,6 +58,7 @@ import cz.lastaapps.common.R
 import cz.lastaapps.crash.entity.Crash
 import cz.lastaapps.crash.entity.ErrorSeverity
 import cz.lastaapps.menza.BuildConfig
+import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Clipboard
 import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Discord
 import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Email
 import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Facebook
@@ -73,23 +76,26 @@ sealed class ReportMode {
     data object GitHub : ReportMode()
     data object Facebook : ReportMode()
     data object Email : ReportMode()
+    data object Clipboard : ReportMode()
 }
 
 @Composable
 fun ReportDialog(
     shown: Boolean,
+    reportsCrash: Boolean,
     onDismissRequest: () -> Unit,
     onModeSelected: (ReportMode) -> Unit,
 ) {
     if (shown) {
         ReportDialog(
-            onDismissRequest, onModeSelected
+            reportsCrash, onDismissRequest, onModeSelected,
         )
     }
 }
 
 @Composable
-fun ReportDialog(
+private fun ReportDialog(
+    reportsCrash: Boolean,
     onDismissRequest: () -> Unit,
     onModeSelected: (ReportMode) -> Unit,
 ) {
@@ -200,6 +206,19 @@ fun ReportDialog(
                         Text(stringResource(cz.lastaapps.menza.R.string.report_email))
                     }
                 }
+                if (reportsCrash)
+                Button(
+                    onClick = { onModeSelected(Clipboard) },
+                    Modifier.fillMaxWidth(),
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(Icons.Filled.ContentCopy, null, Modifier.size(24.dp))
+                        Text(stringResource(cz.lastaapps.menza.R.string.report_clipboard))
+                    }
+                }
                 TextButton(onClick = onDismissRequest) {
                     Text(stringResource(cz.lastaapps.menza.R.string.report_cancel))
                 }
@@ -253,6 +272,7 @@ private fun doSend(context: Context, mode: ReportMode, text: String) {
         Discord -> sendDiscord(context, text)
         Facebook -> sendFacebook(context, text)
         Email -> sendEmail(context, text)
+        Clipboard -> {}
     }
 }
 
@@ -272,11 +292,12 @@ private fun getPhoneInfo(context: Context): String {
 private fun copyToClipboard(context: Context, text: String) {
     val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText(
-        context.getString(cz.lastaapps.menza.R.string.report_clipboard_title),
-        text
+        context.getString(cz.lastaapps.menza.R.string.report_toast_clipboard_title),
+        text,
     )
     clipboard.setPrimaryClip(clip)
-    Toast.makeText(context, cz.lastaapps.menza.R.string.report_clipboard, Toast.LENGTH_LONG).show()
+    Toast.makeText(context, cz.lastaapps.menza.R.string.report_toast_clipboard, Toast.LENGTH_LONG)
+        .show()
 }
 
 private fun sendMatrix(context: Context, @Suppress("UNUSED_PARAMETER") text: String) {

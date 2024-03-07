@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -86,6 +86,7 @@ internal fun CrashReport(
 
             ReportDialog(
                 reportShown,
+                true,
                 onDismissRequest = { reportShown = false },
                 onModeSelected = { mode ->
                     makeReported(unreported.first, ReportState.REPORTED)

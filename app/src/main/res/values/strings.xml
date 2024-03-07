@@ -95,10 +95,11 @@
     <string name="report_facebook">Facebook Messenger</string>
     <string name="report_email">Email</string>
     <string name="report_email_no_app">No email app installed</string>
+    <string name="report_clipboard">Copy</string>
     <string name="report_cancel">Cancel</string>
     <string name="report_add_description">Please describe your problem here</string>
-    <string name="report_clipboard">Report text copied to clipboard</string>
-    <string name="report_clipboard_title">Menza problem report</string>
+    <string name="report_toast_clipboard">Report text copied to clipboard</string>
+    <string name="report_toast_clipboard_title">Menza problem report</string>
 
     <string name="crash_do">Do a crash</string>
     <string name="crash_none_title">No app crashes</string>

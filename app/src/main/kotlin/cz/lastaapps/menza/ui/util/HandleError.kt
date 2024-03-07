@@ -76,7 +76,11 @@ fun HandleError(error: DomainError?, hostState: SnackbarHostState, onDismiss: ()
     }
 
     toReport?.let { errorToReport ->
-        ReportDialog(onDismissRequest = { toReport = null }) {
+        ReportDialog(
+            shown = true,
+            reportsCrash = true,
+            onDismissRequest = { toReport = null },
+        ) {
             sendReport(context, it, errorToReport.throwable)
         }
     }

@@ -84,10 +84,11 @@
     <string name="report_facebook">Facebook Messenger</string>
     <string name="report_email">Email</string>
     <string name="report_email_no_app">Není nainstalovaný emailový klient</string>
+    <string name="report_clipboard">Zkopírovat</string>
     <string name="report_cancel">Zrušit</string>
     <string name="report_add_description">Zde prosím popište váš problém více</string>
-    <string name="report_clipboard">Chybové hlášení zkopírováno do schránky</string>
-    <string name="report_clipboard_title">Chybové hlášení Menz</string>
+    <string name="report_toast_clipboard">Chybové hlášení zkopírováno do schránky</string>
+    <string name="report_toast_clipboard_title">Chybové hlášení Menz</string>
     <string name="crash_do">Shoď se</string>
     <string name="crash_none_title">Zatím nedošlo k pádu</string>
     <string name="crash_none_subtitle">Zatím</string>
