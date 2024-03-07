@@ -29,6 +29,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,6 +49,13 @@ fun PullToRefreshWrapper(
     Box(
         modifier
             .nestedScroll(state.nestedScrollConnection)
+            .onKeyEvent {
+                if ((it.isCtrlPressed && it.key == Key.R) || it.key == Key.Refresh) {
+                    state.startRefresh()
+                    return@onKeyEvent true
+                }
+                false
+            }
             .clipToBounds(),
     ) {
         content()
