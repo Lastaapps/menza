@@ -72,7 +72,7 @@ import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.text
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.vm.AgataWalletLoginViewModel
-import cz.lastaapps.menza.ui.components.MenzaDialog
+import cz.lastaapps.menza.ui.components.BaseDialog
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import cz.lastaapps.menza.ui.util.appCardColors
@@ -125,7 +125,7 @@ private fun AgataLoginDialog(
     error: DomainError?,
     onLogin: (BalanceAccountType) -> Unit,
 ) {
-    MenzaDialog(onDismissRequest = onDismissRequest) {
+    BaseDialog(onDismissRequest = onDismissRequest) {
         var indexSelected by rememberSaveable { mutableIntStateOf(0) }
 
         AgataLoginDialogContent(

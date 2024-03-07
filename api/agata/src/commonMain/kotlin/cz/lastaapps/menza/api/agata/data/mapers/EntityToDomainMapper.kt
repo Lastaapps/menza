@@ -58,7 +58,15 @@ internal fun List<SubsystemEntity>.toDomain() =
         .toImmutableList()
 
 private fun SubsystemEntity.toDomain() =
-    Menza(Subsystem(id.toInt()), name, opened, supportsDaily, supportsWeekly, false)
+    Menza(
+        Subsystem(id.toInt()),
+        name,
+        opened,
+        supportsDaily,
+        supportsWeekly,
+        false,
+        persistentListOf(),
+    )
 
 internal fun DishEntity.toDomain(
     pictograms: List<PictogramEntity>,

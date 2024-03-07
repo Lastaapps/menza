@@ -25,6 +25,7 @@ import arrow.core.right
 import arrow.core.rightIor
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
@@ -44,6 +45,7 @@ import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,6 +80,7 @@ internal class MenzaSubsystemRepoImpl(
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { it.toDomain() }
+            .map { it.provideVideoLinks().toImmutableList() }
             .distinctUntilChanged()
             .onEach { log.i { "Menza produced: ${it.size}" } }
             .onStart { log.i { "Starting collection" } }
@@ -105,6 +108,18 @@ internal class MenzaSubsystemRepoImpl(
             },
         )
 
+    private fun Collection<Menza>.provideVideoLinks() = map {
+        when (it.type) {
+            MenzaType.Agata.Subsystem(2) -> it.copy(
+                videoLinks = persistentListOf(
+                    "https://agata.suz.cvut.cz/jidelnicky/sd-cam-img.php",
+                ),
+            )
+
+            else -> it
+        }
+    }
+
     override suspend fun sync(isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         checker.withCheckSince(ValidityKey.agataMenza(), isForced, 7.days) {
@@ -127,6 +142,7 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
                 supportsDaily = true,
                 supportsWeekly = false,
                 isExperimental = false,
+                videoLinks = persistentListOf(),
             ),
         ).let { emit(it) }
     }

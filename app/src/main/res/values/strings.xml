@@ -45,7 +45,7 @@
     <string name="language_choose_czech_title">🇨🇿 Czech</string>
     <string name="language_choose_czech_description">the native\'s version</string>
     <string name="language_choose_english_title">🇬🇧 English</string>
-    <string name="language_choose_english_description">(funny) translations</string>
+    <string name="language_choose_english_description">(creative) translations</string>
     <string name="language_choose_disclaimer">Translations are provided only for daily menus and in some cafeterias. None of the translations are done by the app itself.</string>
 
     <string name="privacy_title">Privacy Policy</string>
@@ -217,6 +217,9 @@
     <string name="today_list_stable_row">Stable row height</string>
     <string name="today_list_category_other">Other (web sent wrong data)</string>
     <string name="today_experimental_cafeteria">Experimental cafeteria - may not work properly. Please report issues in the settings.</string>
+    <string name="today_list_video_fab_content_description">Live Camera feed</string>
+    <string name="today_list_video_title">Live Camera feed</string>
+    <string name="today_list_video_error">Failed to load the image</string>
 
     <string name="week_list_none">No data available 👨‍🍳</string>
     <string name="week_list_web">Check website</string>

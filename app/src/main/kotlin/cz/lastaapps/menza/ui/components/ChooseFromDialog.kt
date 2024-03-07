@@ -44,7 +44,7 @@ internal fun <T> ChooseFromDialog(
     onDismiss: () -> Unit,
     toString: (T) -> String = { it.toString() },
 ) {
-    MenzaDialog(
+    BaseDialog(
         onDismissRequest = onDismiss,
         scrollState = null,
     ) {

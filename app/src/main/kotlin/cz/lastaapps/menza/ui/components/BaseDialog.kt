@@ -38,7 +38,7 @@ import androidx.compose.ui.window.DialogProperties
 import cz.lastaapps.menza.ui.theme.Padding.More
 
 @Composable
-fun MenzaDialog(
+fun BaseDialog(
     onDismissRequest: () -> Unit,
     properties: DialogProperties = DialogProperties(),
     scrollState: ScrollState? = rememberScrollState(), // use null to disable

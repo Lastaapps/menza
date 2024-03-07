@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -53,6 +53,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
                 supportsDaily = true,
                 supportsWeekly = true,
                 isExperimental = true,
+                videoLinks = persistentListOf(),
             ),
         ).let { emit(it) }
     }
@@ -82,6 +83,7 @@ internal object MenzaFELRepoImpl : MenzaRepo {
                 supportsDaily = true,
                 supportsWeekly = true,
                 isExperimental = true,
+                videoLinks = persistentListOf(),
             ),
         ).let { emit(it) }
     }

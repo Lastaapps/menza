@@ -43,12 +43,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil3.Extras
 import coil3.compose.SubcomposeAsyncImage
+import coil3.request.CachePolicy
 import coil3.request.ImageRequest.Builder
 import cz.lastaapps.menza.R.string
 import cz.lastaapps.menza.ui.components.placeholders.PlaceholderHighlight
 import cz.lastaapps.menza.ui.components.placeholders.fade
 import cz.lastaapps.menza.ui.components.placeholders.placeholder
-import java.util.UUID
 
 
 @Composable
@@ -76,7 +76,6 @@ internal fun DishImage(
     modifier: Modifier = Modifier,
 ) {
     var retryHash by remember { mutableIntStateOf(0) }
-    val randomUrl = rememberSaveable { UUID.randomUUID() }
     var userAllowed by rememberSaveable(photoLink) { mutableStateOf(false) }
     val canDownload = loadImmediately || userAllowed
 
@@ -86,12 +85,11 @@ internal fun DishImage(
         extras[Extras.Key("retry_hash")] = retryHash
 
         // if user is not on a metered network, images are going to be loaded from cache
-        if (canDownload) {
-            data(photoLink)
-        } else {
-            data("https://$randomUrl")
+        if (!canDownload) {
+            networkCachePolicy(CachePolicy.DISABLED)
         }
-        //data(null) - cache is not working
+
+        data(photoLink)
         build()
     }
 

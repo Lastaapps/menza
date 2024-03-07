@@ -20,19 +20,42 @@
 package cz.lastaapps.menza.features.today.ui.screen
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import coil3.compose.SubcomposeAsyncImage
+import coil3.request.CachePolicy.DISABLED
+import coil3.request.ImageRequest.Builder
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.features.today.ui.vm.TodayState
@@ -40,6 +63,7 @@ import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.features.today.ui.widget.NoDishSelected
 import cz.lastaapps.menza.features.today.ui.widget.TodayInfo
 import cz.lastaapps.menza.ui.components.BackArrow
+import cz.lastaapps.menza.ui.components.BaseDialog
 import cz.lastaapps.menza.ui.components.layout.TwoPaneLayout
 import cz.lastaapps.menza.ui.theme.Padding
 
@@ -98,9 +122,14 @@ private fun TodayContent(
         saver = LazyStaggeredGridState.Saver,
     ) { LazyStaggeredGridState() },
 ) {
+    var videoFeedUrl by remember(state.selectedMenza) {
+        mutableStateOf<String?>(null)
+    }
+
     val dishList: @Composable () -> Unit = {
         DishListScreen(
             onDishSelected = onDishSelected,
+            onVideoLink = { videoFeedUrl = it },
             viewModel = dishListViewModel,
             modifier = Modifier.fillMaxSize(),
             hostState = hostState,
@@ -148,6 +177,71 @@ private fun TodayContent(
                 Modifier
                     .fillMaxWidth()
                     .padding(top = Padding.Medium),
+            )
+        }
+    }
+
+    videoFeedUrl?.let {
+        ImagePreviewDialog(videoFeedUrl = it) {
+            videoFeedUrl = null
+        }
+    }
+}
+
+@Composable
+private fun ImagePreviewDialog(
+    videoFeedUrl: String,
+    onDismissRequest: () -> Unit,
+) {
+    BaseDialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        val imageRequest = with(Builder(LocalContext.current)) {
+            diskCachePolicy(DISABLED)
+            memoryCachePolicy(DISABLED)
+            data(videoFeedUrl)
+            build()
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Padding.Small),
+            ) {
+                Icon(Icons.Default.Videocam, null)
+                Text(
+                    text = stringResource(id = R.string.today_list_video_title),
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            SubcomposeAsyncImage(
+                imageRequest,
+                contentDescription = null,
+                contentScale = ContentScale.Inside,
+                loading = {
+                    Box(contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                },
+                error = {
+                    Box(contentAlignment = Alignment.Center) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(
+                                Padding.Small,
+                                Alignment.CenterHorizontally,
+                            ),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(Icons.Default.ErrorOutline, null)
+                            Text(stringResource(id = R.string.today_list_video_error))
+                        }
+                    }
+                },
+                modifier = Modifier.aspectRatio(4f / 3f),
             )
         }
     }

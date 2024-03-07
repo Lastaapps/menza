@@ -19,24 +19,37 @@
 
 package cz.lastaapps.menza.features.today.ui.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.COMPACT
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.GRID
@@ -55,6 +68,7 @@ import cz.lastaapps.menza.ui.util.HandleError
 @Composable
 internal fun DishListScreen(
     onDishSelected: (Dish) -> Unit,
+    onVideoLink: (String) -> Unit,
     viewModel: DishListViewModel,
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
@@ -66,6 +80,7 @@ internal fun DishListScreen(
     val state by viewModel.flowState
     DishListContent(
         state = state,
+        onVideoLink = onVideoLink,
         modifier = modifier,
         onRefresh = viewModel::reload,
         onNoItems = viewModel::openWebMenu,
@@ -87,9 +102,11 @@ private fun DishListEffects(
     HandleError(viewModel, hostState)
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 private fun DishListContent(
     state: DishListState,
+    onVideoLink: (String) -> Unit,
     onRefresh: () -> Unit,
     onNoItems: () -> Unit,
     onViewMode: (mode: DishListMode) -> Unit,
@@ -99,39 +116,49 @@ private fun DishListContent(
     scrollListState: LazyListState,
     scrollGridState: LazyStaggeredGridState,
     modifier: Modifier = Modifier,
-) {
+) = Column {
     val userSettings = state.userSettings
+    val gridSwitch: @Composable () -> Unit = {
+        CompactViewSwitch(
+            currentMode = userSettings.dishListMode,
+            onCompactChange = onViewMode,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+    val imageSizeSetting: @Composable () -> Unit = {
+        ImageSizeSetting(
+            progress = userSettings.imageScale,
+            onProgressChanged = onImageScale,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+    val footerFabPadding: @Composable () -> Unit = {
+        state.selectedMenza?.getOrNull()?.videoLinks?.firstOrNull()?.let {
+            Spacer(Modifier.height(96.dp))
+        }
+    }
 
-    Column {
-        val gridSwitch: @Composable () -> Unit = {
-            CompactViewSwitch(
-                currentMode = userSettings.dishListMode,
-                onCompactChange = onViewMode,
-                modifier = Modifier.fillMaxWidth(),
+    val header: @Composable () -> Unit = {
+        if (state.showExperimentalWarning) {
+            Experimental(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = Padding.Small),
             )
         }
-        val imageSizeSetting: @Composable () -> Unit = {
-            ImageSizeSetting(
-                progress = userSettings.imageScale,
-                onProgressChanged = onImageScale,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
+    }
 
-        val header: @Composable () -> Unit = {
-            if (state.showExperimentalWarning) {
-                Experimental(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = Padding.Small),
-                )
-            }
-        }
-
-        Crossfade(
-            targetState = userSettings.dishListMode,
-            label = "dish_list_mode_router",
-        ) { dishListMode ->
+    Crossfade(
+        targetState = userSettings.dishListMode,
+        label = "dish_list_mode_router",
+    ) { dishListMode ->
+        Scaffold(
+            floatingActionButton = {
+                state.selectedMenza?.getOrNull()?.videoLinks?.firstOrNull()?.let { link ->
+                    LiveVideoFeedFab(link = link, onVideoLink = onVideoLink)
+                }
+            },
+        ) {
             when (dishListMode) {
                 COMPACT ->
                     TodayDishList(
@@ -155,6 +182,8 @@ private fun DishListContent(
                                         imageSizeSetting()
                                     }
                                 }
+
+                                footerFabPadding()
                             }
                         },
                         modifier = modifier.fillMaxSize(),
@@ -171,7 +200,12 @@ private fun DishListContent(
                         userSettings = userSettings,
                         isOnMetered = state.isOnMetered,
                         header = header,
-                        footer = gridSwitch,
+                        footer = {
+                            Column {
+                                gridSwitch()
+                                footerFabPadding()
+                            }
+                        },
                         modifier = modifier.fillMaxSize(),
                         scrollGrid = scrollGridState,
                     )
@@ -187,7 +221,12 @@ private fun DishListContent(
                         isOnMetered = state.isOnMetered,
                         onOliverRow = onOliverRow,
                         header = header,
-                        footer = gridSwitch,
+                        footer = {
+                            Column {
+                                gridSwitch()
+                                footerFabPadding()
+                            }
+                        },
                         modifier = modifier.fillMaxSize(),
                         scroll = scrollListState,
                     )
@@ -195,5 +234,25 @@ private fun DishListContent(
                 null -> {}
             }
         }
+    }
+}
+
+@Composable
+private fun LiveVideoFeedFab(
+    link: String,
+    onVideoLink: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val size = 64.dp
+    FloatingActionButton(
+        onClick = { onVideoLink(link) },
+        modifier = modifier.size(size),
+        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+    ) {
+        Icon(
+            Icons.Default.Videocam,
+            stringResource(id = R.string.today_list_video_fab_content_description),
+            modifier = Modifier.size(size / 2),
+        )
     }
 }

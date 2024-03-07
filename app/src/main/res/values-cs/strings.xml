@@ -41,7 +41,7 @@
     <string name="language_choose_czech_title">🇨🇿 Česky</string>
     <string name="language_choose_czech_description">Hezky podomácku</string>
     <string name="language_choose_english_title">🇬🇧 Angliky</string>
-    <string name="language_choose_english_description">Se všemi veselými překlady</string>
+    <string name="language_choose_english_description">Se všemi kreativními překlady</string>
     <string name="language_choose_disclaimer">Přeloženy jsou pouze denní menu a pouze v některých menzách. Žádný text nebyl přeložen aplikací samotnou.</string>
     <string name="privacy_title">Zásady ochrany osobních údajů</string>
     <string name="privacy_text">
@@ -201,6 +201,9 @@
     <string name="today_list_stable_row">Stabilní výška řádky</string>
     <string name="today_list_category_other">Další (server odeslal špatná data)</string>
     <string name="today_experimental_cafeteria">Experimentální menza - nemusí fungovat správně. Prosím, hlašte chyby v nastavení.</string>
+    <string name="today_list_video_fab_content_description">Živý záznam z kamery</string>
+    <string name="today_list_video_title">Živý záznam z kamery</string>
+    <string name="today_list_video_error">Nepodařilo se načíst obrázek</string>
     <string name="week_list_none">Data nejsou dostupná 👨‍🍳</string>
     <string name="week_list_web">Otevřít web</string>
     <string name="error_button_report">Nahlásit</string>

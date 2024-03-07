@@ -65,6 +65,7 @@ import cz.lastaapps.menza.ui.components.draggablelazylist.makeDraggableItem
 import cz.lastaapps.menza.ui.components.draggablelazylist.rememberDraggableLazyListState
 import cz.lastaapps.menza.ui.theme.AppTheme
 import cz.lastaapps.menza.ui.theme.Padding
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun ReorderMenzaScreen(
@@ -246,6 +247,7 @@ private fun MenzaItemPreview() {
                         supportsDaily = true,
                         supportsWeekly = true,
                         isExperimental = false,
+                        videoLinks = persistentListOf(),
                     ),
                     visible = true, onVisibilityClick = {},
                 )
@@ -257,6 +259,7 @@ private fun MenzaItemPreview() {
                         supportsDaily = true,
                         supportsWeekly = true,
                         isExperimental = false,
+                        videoLinks = persistentListOf(),
                     ),
                     visible = false, onVisibilityClick = {},
                 )
