@@ -96,7 +96,7 @@ internal fun DishEntity.toDomain(
 @Suppress("unused")
 private fun DishEntity.fullName() =
     buildString {
-        append(name)
+        append(name ?: "")
         if (sideDishA != null || sideDishB != null) {
             append(" ")
 

@@ -128,7 +128,12 @@ internal class TodayDishSubsystemRepoImpl(
                 val withInfoResolved = combinedFlowList.fold(baseCase) { acu, dataFlow ->
                     // joins all the flow into one huge + adding all the previous ones
                     combine(acu, dataFlow) { list, data ->
-                        list.add(data)
+                        // used to filter placeholder dishes with names like ".  "
+                        if (data.first.name?.any { it.isLetter() } != false)
+                            list.add(data)
+                        else {
+                            list
+                        }
                     }
                 }
 
