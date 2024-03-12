@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,16 +31,16 @@ import cz.lastaapps.menza.api.agata.domain.HashStore
 /**
  * Job info for a sync processor using hash
  */
-internal class SyncJobHash<T, R>(
+internal class SyncJobHash<T, R, Params>(
     private val hashStore: HashStore,
     private val hashType: HashType,
-    private val getHashCode: suspend MenzaRaise.() -> String,
-    fetchApi: suspend MenzaRaise.() -> T,
-    convert: suspend MenzaRaise.(T) -> IorNel<DomainError, R>,
-    store: (R) -> Unit,
-) : SyncJob<T, R>(
-    { forced ->
-        val hash = getHashCode()
+    private val getHashCode: suspend MenzaRaise.(Params) -> String,
+    fetchApi: suspend MenzaRaise.(Params) -> T,
+    convert: suspend MenzaRaise.(Params, T) -> IorNel<DomainError, R>,
+    store: (Params, R) -> Unit,
+) : SyncJob<T, R, Params>(
+    { params, forced ->
+        val hash = getHashCode(params)
 
         if (forced || hashStore.shouldReload(hashType, hash)) {
             // deferred job to save the new hash code

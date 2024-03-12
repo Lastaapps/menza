@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,28 +21,32 @@ package cz.lastaapps.api.core.domain.sync
 
 import app.cash.sqldelight.Transacter
 
-interface SyncProcessor {
+interface SyncProcessor<Params> {
     suspend fun runSync(
-        list: Iterable<SyncJob<*, *>>,
+        list: Iterable<SyncJob<*, *, Params>>,
         scope: List<(() -> Unit) -> Unit> = emptyList(),
+        params: Params,
         isForced: Boolean,
     ): SyncOutcome
 }
 
-suspend fun <T, R> SyncProcessor.runSync(
-    job: SyncJob<T, R>,
+suspend fun <T, R, Params> SyncProcessor<Params>.runSync(
+    job: SyncJob<T, R, Params>,
     scope: List<(() -> Unit) -> Unit> = emptyList(),
+    params: Params,
     isForced: Boolean,
-): SyncOutcome = runSync(listOf(job), scope, isForced)
+): SyncOutcome = runSync(listOf(job), scope, params, isForced)
 
-suspend fun <T, R> SyncProcessor.runSync(
-    job: SyncJob<T, R>,
+suspend fun <T, R, Params> SyncProcessor<Params>.runSync(
+    job: SyncJob<T, R, Params>,
     db: Transacter,
+    params: Params,
     isForced: Boolean,
-) = runSync(listOf(job), db, isForced)
+) = runSync(listOf(job), db, params, isForced)
 
-suspend fun SyncProcessor.runSync(
-    list: Iterable<SyncJob<*, *>>,
+suspend fun <Params> SyncProcessor<Params>.runSync(
+    list: Iterable<SyncJob<*, *, Params>>,
     db: Transacter,
+    params: Params,
     isForced: Boolean,
-): SyncOutcome = runSync(list, listOf { db.transaction { it() } }, isForced)
+): SyncOutcome = runSync(list, listOf { db.transaction { it() } }, params, isForced)

@@ -17,24 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.main.domain.usecase
+package cz.lastaapps.menza.api.agata.data.model
 
-import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.api.core.domain.repo.WeekDishRepo
-import cz.lastaapps.core.domain.UCContext
-import cz.lastaapps.core.domain.UseCase
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
-import org.koin.core.parameter.parametersOf
+import cz.lastaapps.api.core.domain.model.RequestLanguage
 
-class SyncWeekDishListUC(
-    context: UCContext,
-    private val getRequestParamsUC: GetRequestParamsUC,
-) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(menza: Menza, isForced: Boolean = false) = launch {
-        get<WeekDishRepo> { parametersOf(menza.type) }.sync(
-            getRequestParamsUC(),
-            isForced = isForced,
-        )
-    }
+internal enum class ApiLang(val value: String) {
+    CS("cs"), EN("en"),
+}
+
+internal fun RequestLanguage.toData() = when (this) {
+    RequestLanguage.CS -> ApiLang.CS
+    RequestLanguage.EN -> ApiLang.EN
 }

@@ -1,0 +1,31 @@
+import kotlin.Long;
+import kotlin.collections.List;
+
+
+CREATE TABLE StrahovEntityTmp (
+    id INTEGER NOT NULL,
+    groupId INTEGER NOT NULL ,
+    groupName TEXT NOT NULL,
+    groupOrder INTEGER NOT NULL,
+    itemOrder INTEGER NOT NULL,
+    amount TEXT,
+    name TEXT NOT NULL,
+    priceNormal REAL NOT NULL,
+    priceStudent REAL NOT NULL,
+    allergens TEXT AS List<Long> NOT NULL,
+    photoLink TEXT,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO StrahovEntityTmp(
+    id, groupId, groupName, groupOrder, itemOrder, amount, name, priceNormal, priceStudent, allergens, photoLink
+)
+SELECT
+    id, groupId, groupNameCs, groupOrder, itemOrder, amountCs, nameCs, priceNormal, priceStudent, allergens, photoLink
+FROM StrahovEntiy;
+
+DROP TABLE StrahovEntiy;
+
+ALTER TABLE StrahovEntityTmp RENAME TO StrahovEntity;
+
+

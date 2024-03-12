@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,7 +20,10 @@
 package cz.lastaapps.api.core.domain.repo
 
 import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.api.core.domain.model.RequestParams
 import cz.lastaapps.api.core.domain.sync.SyncSource
 import kotlinx.collections.immutable.ImmutableList
 
-interface TodayDishRepo : SyncSource<ImmutableList<DishCategory>>
+typealias TodayRepoParams = RequestParams
+
+interface TodayDishRepo : SyncSource<ImmutableList<DishCategory>, TodayRepoParams>

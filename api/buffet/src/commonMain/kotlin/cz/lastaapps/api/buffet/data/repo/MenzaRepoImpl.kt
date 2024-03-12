@@ -24,6 +24,7 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.core.domain.repo.MenzaRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.util.extensions.localLogger
@@ -43,7 +44,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
     override val isReady: Flow<Boolean> = MutableStateFlow(true)
         .onEach { log.i { "Is ready: $it" } }
 
-    override fun getData(): Flow<ImmutableList<Menza>> = flow {
+    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> = flow {
         @Suppress("SpellCheckingInspection")
         persistentListOf(
             Menza(
@@ -61,7 +62,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
         .onStart { log.i { "Starting collection" } }
         .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         SyncResult.Skipped.right()
     }
@@ -73,7 +74,7 @@ internal object MenzaFELRepoImpl : MenzaRepo {
     override val isReady: Flow<Boolean> = MutableStateFlow(true)
         .onEach { log.i { "Is ready: $it" } }
 
-    override fun getData(): Flow<ImmutableList<Menza>> = flow {
+    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> = flow {
         @Suppress("SpellCheckingInspection")
         persistentListOf(
             Menza(
@@ -91,7 +92,7 @@ internal object MenzaFELRepoImpl : MenzaRepo {
         .onStart { log.i { "Starting collection" } }
         .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         SyncResult.Skipped.right()
     }

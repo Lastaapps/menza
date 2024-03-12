@@ -32,6 +32,8 @@ import co.touchlab.kermit.Logger
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
+import cz.lastaapps.api.core.domain.repo.TodayRepoParams
+import cz.lastaapps.api.core.domain.repo.WeekRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.runSync
@@ -45,6 +47,11 @@ import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import cz.lastaapps.menza.api.agata.data.mapers.toEntity
 import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.model.HashType
+import cz.lastaapps.menza.api.agata.data.model.dto.DishDto
+import cz.lastaapps.menza.api.agata.data.model.dto.DishTypeDto
+import cz.lastaapps.menza.api.agata.data.model.dto.PictogramDto
+import cz.lastaapps.menza.api.agata.data.model.dto.ServingPlaceDto
+import cz.lastaapps.menza.api.agata.data.model.toData
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
@@ -67,7 +74,7 @@ internal class TodayDishSubsystemRepoImpl(
     private val cafeteriaApi: CafeteriaApi,
     private val dishApi: DishApi,
     private val db: AgataDatabase,
-    private val processor: SyncProcessor,
+    private val processor: SyncProcessor<WeekRepoParams>,
     private val checker: ValidityChecker,
     private val beConfig: AgataBEConfig,
     hashStore: HashStore,
@@ -80,7 +87,7 @@ internal class TodayDishSubsystemRepoImpl(
         .distinctUntilChanged()
         .onEach { log.i { "Validity changed to $it" } }
 
-    override fun getData(): Flow<ImmutableList<DishCategory>> = channelFlow {
+    override fun getData(params: WeekRepoParams): Flow<ImmutableList<DishCategory>> = channelFlow {
         // Get dish list
         db.dishQueries.getForSubsystem(subsystemId.toLong())
             .asFlow()
@@ -129,7 +136,8 @@ internal class TodayDishSubsystemRepoImpl(
                     // joins all the flow into one huge + adding all the previous ones
                     combine(acu, dataFlow) { list, data ->
                         // used to filter placeholder dishes with names like ".  "
-                        if (data.first.name?.any { it.isLetter() } != false)
+                        // and dishes with null names
+                        if (data.first.name?.any { it.isLetter() } == true)
                             list.add(data)
                         else {
                             list
@@ -164,13 +172,13 @@ internal class TodayDishSubsystemRepoImpl(
         log.d { "Completed collection" }
     }
 
-    private val dishListJob = SyncJobHash(
+    private val dishListJob = SyncJobHash<List<DishDto>?, List<DishEntity>, TodayRepoParams>(
         hashStore = hashStore,
         hashType = HashType.dishHash(subsystemId),
-        getHashCode = { dishApi.getDishesHash(subsystemId).bind() },
-        fetchApi = { dishApi.getDishes(subsystemId).bind() },
-        convert = { data -> data?.map { it.toEntity(beConfig) }.orEmpty().rightIor() },
-        store = { data ->
+        getHashCode = { dishApi.getDishesHash(it.language.toData(), subsystemId).bind() },
+        fetchApi = { dishApi.getDishes(it.language.toData(), subsystemId).bind() },
+        convert = { _, data -> data?.map { it.toEntity(beConfig) }.orEmpty().rightIor() },
+        store = { _, data ->
             db.dishQueries.deleteSubsytem(subsystemId.toLong())
             data.forEach {
                 db.dishQueries.insert(it)
@@ -179,13 +187,16 @@ internal class TodayDishSubsystemRepoImpl(
         },
     )
 
-    private val dishTypeJob = SyncJobHash(
+    private val dishTypeJob =
+        SyncJobHash<List<DishTypeDto>?, List<DishTypeEntity>, TodayRepoParams>(
         hashStore = hashStore,
         hashType = HashType.typesHash(subsystemId),
-        getHashCode = { cafeteriaApi.getDishTypesHash(subsystemId).bind() },
-        fetchApi = { cafeteriaApi.getDishTypes(subsystemId).bind() },
-        convert = { data -> data?.map { it.toEntity() }.orEmpty().rightIor() },
-        store = { data ->
+            getHashCode = {
+                cafeteriaApi.getDishTypesHash(it.language.toData(), subsystemId).bind()
+            },
+            fetchApi = { cafeteriaApi.getDishTypes(it.language.toData(), subsystemId).bind() },
+            convert = { _, data -> data?.map { it.toEntity() }.orEmpty().rightIor() },
+            store = { _, data ->
             db.dishTypeQueries.deleteSubsystem(subsystemId.toLong())
             data.forEach {
                 db.dishTypeQueries.insert(it)
@@ -194,13 +205,14 @@ internal class TodayDishSubsystemRepoImpl(
         },
     )
 
-    private val pictogramJob = SyncJobHash(
+    private val pictogramJob =
+        SyncJobHash<List<PictogramDto>, List<PictogramEntity>, TodayRepoParams>(
         hashStore = hashStore,
         hashType = HashType.pictogramHash(),
-        getHashCode = { dishApi.getPictogramHash().bind() },
-        fetchApi = { dishApi.getPictogram().bind().orEmpty() },
-        convert = { data -> data.map { it.toEntity() }.rightIor() },
-        store = { data ->
+            getHashCode = { dishApi.getPictogramHash(it.language.toData()).bind() },
+            fetchApi = { dishApi.getPictogram(it.language.toData()).bind().orEmpty() },
+            convert = { _, data -> data.map { it.toEntity() }.rightIor() },
+            store = { _, data ->
             db.pictogramQueries.deleteAll()
             data.forEach {
                 db.pictogramQueries.insert(it)
@@ -209,13 +221,18 @@ internal class TodayDishSubsystemRepoImpl(
         },
     )
 
-    private val servingPlacesJob = SyncJobHash(
+    private val servingPlacesJob =
+        SyncJobHash<List<ServingPlaceDto>, List<ServingPlaceEntity>, TodayRepoParams>(
         hashStore = hashStore,
         hashType = HashType.servingPacesHash(subsystemId),
-        getHashCode = { cafeteriaApi.getServingPlacesHash(subsystemId).bind() },
-        fetchApi = { cafeteriaApi.getServingPlaces(subsystemId).bind().orEmpty() },
-        convert = { data -> data.map { it.toEntity() }.rightIor() },
-        store = { data ->
+            getHashCode = {
+                cafeteriaApi.getServingPlacesHash(it.language.toData(), subsystemId).bind()
+            },
+            fetchApi = {
+                cafeteriaApi.getServingPlaces(it.language.toData(), subsystemId).bind().orEmpty()
+            },
+            convert = { _, data -> data.map { it.toEntity() }.rightIor() },
+            store = { _, data ->
             db.servingPlaceQueries.deleteSubsystem(subsystemId.toLong())
             data.forEach {
                 db.servingPlaceQueries.insert(it)
@@ -226,10 +243,10 @@ internal class TodayDishSubsystemRepoImpl(
 
     private val jobs = listOf(dishListJob, dishTypeJob, pictogramJob, servingPlacesJob)
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: WeekRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         checker.withCheckRecent(validityKey, isForced) {
-            processor.runSync(jobs, db, isForced = isForced)
+            processor.runSync(jobs, db, params, isForced = isForced)
         }
     }
 }

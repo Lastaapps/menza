@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,6 +22,7 @@ package cz.lastaapps.menza.api.agata.api
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.util.extensions.catchingNetwork
 import cz.lastaapps.menza.api.agata.data.AgataClient
+import cz.lastaapps.menza.api.agata.data.model.ApiLang
 import cz.lastaapps.menza.api.agata.data.model.Func.ServingPaces
 import cz.lastaapps.menza.api.agata.data.model.Func.ServingPacesHash
 import cz.lastaapps.menza.api.agata.data.model.Func.Subsystem
@@ -36,14 +37,14 @@ import io.ktor.client.call.body
 
 internal interface CafeteriaApi {
 
-    suspend fun getSubsystems(): Outcome<List<SubsystemDto>?>
-    suspend fun getSubsystemsHash(): Outcome<String>
+    suspend fun getSubsystems(lang: ApiLang): Outcome<List<SubsystemDto>?>
+    suspend fun getSubsystemsHash(lang: ApiLang): Outcome<String>
 
-    suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlaceDto>?>
-    suspend fun getServingPlacesHash(subsystemId: Int): Outcome<String>
+    suspend fun getServingPlaces(lang: ApiLang, subsystemId: Int): Outcome<List<ServingPlaceDto>?>
+    suspend fun getServingPlacesHash(lang: ApiLang, subsystemId: Int): Outcome<String>
 
-    suspend fun getDishTypes(subsystemId: Int): Outcome<List<DishTypeDto>?>
-    suspend fun getDishTypesHash(subsystemId: Int): Outcome<String>
+    suspend fun getDishTypes(lang: ApiLang, subsystemId: Int): Outcome<List<DishTypeDto>?>
+    suspend fun getDishTypesHash(lang: ApiLang, subsystemId: Int): Outcome<String>
 }
 
 internal class CafeteriaApiImpl(
@@ -51,29 +52,43 @@ internal class CafeteriaApiImpl(
 ) : CafeteriaApi {
     private val client = agataClient.client
 
-    override suspend fun getSubsystems(): Outcome<List<SubsystemDto>?> = catchingNetwork {
-        client.getFun(Subsystem, secondId = 1).body()
+    override suspend fun getSubsystems(
+        lang: ApiLang,
+    ): Outcome<List<SubsystemDto>?> = catchingNetwork {
+        client.getFun(Subsystem, lang, secondId = 1).body()
     }
 
-    override suspend fun getSubsystemsHash(): Outcome<String> = catchingNetwork {
-        client.getFun(SubsystemHash, secondId = 1).body()
+    override suspend fun getSubsystemsHash(
+        lang: ApiLang,
+    ): Outcome<String> = catchingNetwork {
+        client.getFun(SubsystemHash, lang, secondId = 1).body()
     }
 
-    override suspend fun getServingPlaces(subsystemId: Int): Outcome<List<ServingPlaceDto>?> =
-        catchingNetwork {
-            client.getFun(ServingPaces, subsystemId = subsystemId).body()
-        }
-
-    override suspend fun getServingPlacesHash(subsystemId: Int): Outcome<String> = catchingNetwork {
-        client.getFun(ServingPacesHash, subsystemId = subsystemId).body()
+    override suspend fun getServingPlaces(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<List<ServingPlaceDto>?> = catchingNetwork {
+        client.getFun(ServingPaces, lang, subsystemId = subsystemId).body()
     }
 
-    override suspend fun getDishTypes(subsystemId: Int): Outcome<List<DishTypeDto>?> =
-        catchingNetwork {
-            client.getFun(Types, subsystemId = subsystemId).body()
-        }
+    override suspend fun getServingPlacesHash(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<String> = catchingNetwork {
+        client.getFun(ServingPacesHash, lang, subsystemId = subsystemId).body()
+    }
 
-    override suspend fun getDishTypesHash(subsystemId: Int): Outcome<String> = catchingNetwork {
-        client.getFun(TypesHash, subsystemId = subsystemId).body()
+    override suspend fun getDishTypes(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<List<DishTypeDto>?> = catchingNetwork {
+        client.getFun(Types, lang, subsystemId = subsystemId).body()
+    }
+
+    override suspend fun getDishTypesHash(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<String> = catchingNetwork {
+        client.getFun(TypesHash, lang, subsystemId = subsystemId).body()
     }
 }

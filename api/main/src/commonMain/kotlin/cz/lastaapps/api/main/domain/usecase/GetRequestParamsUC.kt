@@ -19,22 +19,8 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
-import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.api.core.domain.repo.WeekDishRepo
-import cz.lastaapps.core.domain.UCContext
-import cz.lastaapps.core.domain.UseCase
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
-import org.koin.core.parameter.parametersOf
+import cz.lastaapps.api.core.domain.model.RequestParams
 
-class SyncWeekDishListUC(
-    context: UCContext,
-    private val getRequestParamsUC: GetRequestParamsUC,
-) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(menza: Menza, isForced: Boolean = false) = launch {
-        get<WeekDishRepo> { parametersOf(menza.type) }.sync(
-            getRequestParamsUC(),
-            isForced = isForced,
-        )
-    }
+interface GetRequestParamsUC {
+    suspend operator fun invoke(): RequestParams
 }

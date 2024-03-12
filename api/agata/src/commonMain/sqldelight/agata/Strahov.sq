@@ -1,17 +1,14 @@
 import kotlin.collections.List;
 import kotlin.Long;
 
-CREATE TABLE StrahovEntiy (
+CREATE TABLE StrahovEntity (
     id INTEGER NOT NULL,
     groupId INTEGER NOT NULL ,
-    groupNameCs TEXT NOT NULL,
-    groupNameEn TEXT NOT NULL,
+    groupName TEXT NOT NULL,
     groupOrder INTEGER NOT NULL,
     itemOrder INTEGER NOT NULL,
-    amountCs TEXT,
-    amountEn TEXT,
-    nameCs TEXT NOT NULL,
-    nameEn TEXT NOT NULL,
+    amount TEXT,
+    name TEXT NOT NULL,
     priceNormal REAL NOT NULL,
     priceStudent REAL NOT NULL,
     allergens TEXT AS List<Long> NOT NULL,
@@ -20,11 +17,11 @@ CREATE TABLE StrahovEntiy (
 );
 
 get:
-    SELECT * FROM StrahovEntiy;
+    SELECT * FROM StrahovEntity;
 
 insert:
-    INSERT INTO StrahovEntiy
+    INSERT INTO StrahovEntity
     VALUES ?;
 
 deleteAll:
-    DELETE FROM StrahovEntiy;
+    DELETE FROM StrahovEntity;

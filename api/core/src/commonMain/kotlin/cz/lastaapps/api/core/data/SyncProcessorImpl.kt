@@ -38,7 +38,7 @@ import cz.lastaapps.core.util.extensions.withTimeoutOutcome
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.persistentListOf
 
-internal class SyncProcessorImpl : SyncProcessor {
+internal class SyncProcessorImpl<Params> : SyncProcessor<Params> {
 
     companion object {
         // to prevent unnecessary timeouts because of slow connection or whatever
@@ -51,25 +51,26 @@ internal class SyncProcessorImpl : SyncProcessor {
     private val log = localLogger()
 
     override suspend fun runSync(
-        list: Iterable<SyncJob<*, *>>,
+        list: Iterable<SyncJob<*, *, Params>>,
         scope: List<(() -> Unit) -> Unit>,
+        params: Params,
         isForced: Boolean,
     ): SyncOutcome = outcome {
         list.also { log.i { "Preparing run conditions" } }
             // Fetches hash codes from a remote source
             .parMap(concurrency = CONCURRENCY) { job ->
                 withTimeoutOutcome(jobTimeout) {
-                    job.shouldRun(this@outcome, isForced).map { job to it }
+                    job.shouldRun(this@outcome, params, isForced).map { job to it }
                 }.bind()
             }
             // remove skipped jobs
-            .filterIsInstance<Some<Pair<SyncJob<*, *>, suspend () -> Unit>>>()
+            .filterIsInstance<Some<Pair<SyncJob<*, *, Params>, suspend () -> Unit>>>()
             .map { it.value }
             .also { log.i { "Executing" } }
             // Fetch data from api and convert then
             .parMap(concurrency = CONCURRENCY) { (job, hash) ->
                 withTimeoutOutcome(jobTimeout) {
-                    val storeAction = job.processFetchAndConvert().bind()
+                    val storeAction = job.processFetchAndConvert(params).bind()
                     Pair(storeAction, hash)
                 }.bind()
             }
@@ -108,12 +109,12 @@ internal class SyncProcessorImpl : SyncProcessor {
         .onLeft { log.i { "Failed to process data ${it::class.simpleName}" } }
 
     // used to simply generics resolution
-    private suspend fun <T, R> SyncJob<T, R>.processFetchAndConvert(): Outcome<IorNel<DomainError, () -> Unit>> =
+    private suspend fun <T, R> SyncJob<T, R, Params>.processFetchAndConvert(params: Params): Outcome<IorNel<DomainError, () -> Unit>> =
         outcome {
-            val fetched = fetchApi()
+            val fetched = fetchApi(params)
 
-            convert(fetched).map { data ->
-                { store(data) }
+            convert(params, fetched).map { data ->
+                { store(params, data) }
             }
         }
 }

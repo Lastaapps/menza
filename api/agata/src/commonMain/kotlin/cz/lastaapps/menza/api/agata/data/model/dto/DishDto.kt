@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -39,7 +39,7 @@ internal data class DishDto(
     @SerialName("vaha")
     val amount: String?,
     @SerialName("nazev")
-    val name: String,
+    val name: String?,
     @SerialName("priloha_a")
     val sideDishA: String?,
     @SerialName("priloha_b")

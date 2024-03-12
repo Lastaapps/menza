@@ -29,7 +29,7 @@ import agata.NewsEntity
 import agata.OpenTimeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
-import agata.StrahovEntiy
+import agata.StrahovEntity
 import agata.SubsystemEntity
 import cz.lastaapps.api.core.domain.model.LatLong
 import cz.lastaapps.core.util.extensions.takeIfNotBlack
@@ -66,7 +66,7 @@ internal fun DishDto.toEntity(beConfig: AgataBEConfig) =
         typeId = typeId.toLong(),
         servingPlaces = servingPlaceList,
         amount = amount?.trim(),
-        name = name.trimDishName(),
+        name = name?.trimDishName(),
         sideDishA = sideDishA?.trimDishName(),
         sideDishB = sideDishB?.trimDishName(),
         priceNormal = priceNormal.toDouble(),
@@ -101,7 +101,7 @@ internal fun DishTypeDto.toEntity() =
 internal fun PictogramDto.toEntity() =
     PictogramEntity(
         id = id.toLong(),
-        name = name.trim(),
+        name = name?.trim() ?: "???",
     )
 
 internal fun ServingPlaceDto.toEntity() =
@@ -162,8 +162,13 @@ internal fun OpenTimeDto.toEntity() =
     )
 
 private val czechDaysOfWeek = arrayOf("Po", "Út", "St", "Čt", "Pá", "So", "Ne")
-private fun String.toDayOfWeek() =
-    DayOfWeek.of(czechDaysOfWeek.indexOf(this) + 1)
+private val englishDaysOfWeek = arrayOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+private fun String.toDayOfWeek() = run {
+    val index = czechDaysOfWeek.indexOf(this)
+        .takeUnless { it < 0 }
+        ?: englishDaysOfWeek.indexOf(this)
+    DayOfWeek.of(index + 1)
+}
 
 private val timeRegex = """(\d+):(\d+)""".toRegex()
 private fun String.toLocalTime() =
@@ -203,44 +208,15 @@ private fun String.toLatLong() =
 // shown only if dish has neither Czech nor English name
 private const val EmptyNamePlaceholder = """"¯\(°_o)/¯"""
 
-// TODO this is just a temporary fix before I update the database schema
-internal fun Pair<Collection<StrahovDto>, Collection<StrahovDto>>.toEntity(beConfig: AgataBEConfig) =
-    run {
-        val mapCs = first.asSequence().map { it.id to it }.toMap()
-        val mapEn = second.asSequence().map { it.id to it }.toMap()
-        val keysBoth = mapCs.keys.intersect(mapEn.keys)
-        val keysCs = mapCs.keys - keysBoth
-        val keysEn = mapEn.keys - keysBoth
-
-        val output = mutableListOf<StrahovEntiy>()
-        keysBoth.forEach { key ->
-            val cs = mapCs.getValue(key)
-            val en = mapEn.getValue(key)
-            output += cs.toEntity(beConfig, en)
-        }
-        keysCs.forEach { key ->
-            val cs = mapCs.getValue(key)
-            output += cs.toEntity(beConfig, null)
-        }
-        keysEn.forEach { key ->
-            val en = mapEn.getValue(key)
-            output += en.toEntity(beConfig, null)
-        }
-        output
-    }
-
-internal fun StrahovDto.toEntity(beConfig: AgataBEConfig, secondary: StrahovDto?) =
-    StrahovEntiy(
+internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
+    StrahovEntity(
         id = id.toLong(),
         groupId = groupId.toLong(),
-        groupNameCs = groupName.myCapitalize(),
-        groupNameEn = (secondary?.groupName ?: groupName).myCapitalize(),
+        groupName = groupName.myCapitalize(),
         groupOrder = groupOrder.toLong(),
         itemOrder = order.toLong(),
-        amountCs = (amount ?: secondary?.amount)?.trim(),
-        amountEn = (secondary?.amount ?: amount)?.trim(),
-        nameCs = (name ?: secondary?.name ?: EmptyNamePlaceholder).trim(),
-        nameEn = (secondary?.name ?: name ?: EmptyNamePlaceholder).trim(),
+        amount = amount?.trim(),
+        name = (name ?: EmptyNamePlaceholder).trim(),
         priceNormal = price.toDouble(),
         priceStudent = priceStudent.toDouble(),
         allergens = allergens,

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -38,7 +38,6 @@ internal fun List<WeekDishDto>.toDomain() =
                 categories = values.toCategory(),
             )
         }
-        .toImmutableList()
 
 private fun List<WeekDishDto>.toCategory() =
     groupBy { it.typeId }

@@ -19,12 +19,14 @@
 
 package cz.lastaapps.menza.api.agata.data.repo
 
+import agata.StrahovEntity
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.rightIor
 import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
+import cz.lastaapps.api.core.domain.repo.TodayRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.runSync
@@ -37,8 +39,9 @@ import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import cz.lastaapps.menza.api.agata.data.mapers.toEntity
 import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
-import cz.lastaapps.menza.api.agata.data.model.ApiLang
 import cz.lastaapps.menza.api.agata.data.model.HashType
+import cz.lastaapps.menza.api.agata.data.model.dto.StrahovDto
+import cz.lastaapps.menza.api.agata.data.model.toData
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +55,7 @@ import kotlinx.coroutines.flow.onStart
 internal class TodayDishStrahovRepoImpl(
     private val dishApi: DishApi,
     private val db: AgataDatabase,
-    private val processor: SyncProcessor,
+    private val processor: SyncProcessor<TodayRepoParams>,
     private val checker: ValidityChecker,
     private val beConfig: AgataBEConfig,
     hashStore: HashStore,
@@ -64,7 +67,7 @@ internal class TodayDishStrahovRepoImpl(
     private val isValidFlow = checker.isThisWeek(validityKey)
         .onEach { log.i { "Validity changed to $it" } }
 
-    override fun getData(): Flow<ImmutableList<DishCategory>> =
+    override fun getData(params: TodayRepoParams): Flow<ImmutableList<DishCategory>> =
         db.strahovQueries
             .get()
             .asFlow()
@@ -76,19 +79,17 @@ internal class TodayDishStrahovRepoImpl(
             .onStart { log.i { "Starting collection" } }
             .onCompletion { log.i { "Completed collection" } }
 
-    private val job = SyncJobHash(
+    private val job = SyncJobHash<List<StrahovDto>, List<StrahovEntity>, TodayRepoParams>(
         hashStore = hashStore,
         hashType = HashType.strahovHash(),
         getHashCode = {
-            dishApi.getStrahovHash(ApiLang.CS).bind() +
-                dishApi.getStrahovHash(ApiLang.EN).bind()
+            dishApi.getStrahovHash(it.language.toData()).bind()
         },
         fetchApi = {
-            dishApi.getStrahov(ApiLang.CS).bind().orEmpty() to
-                dishApi.getStrahov(ApiLang.EN).bind().orEmpty()
+            dishApi.getStrahov(it.language.toData()).bind().orEmpty()
         },
-        convert = { data -> data.toEntity(beConfig).rightIor() },
-        store = { data ->
+        convert = { _, data -> data.map { it.toEntity(beConfig) }.rightIor() },
+        store = { _, data ->
             db.strahovQueries.deleteAll()
             data.forEach {
                 db.strahovQueries.insert(it)
@@ -97,10 +98,10 @@ internal class TodayDishStrahovRepoImpl(
         },
     )
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: TodayRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         checker.withCheckRecent(validityKey, isForced) {
-            processor.runSync(job, isForced = isForced)
+            processor.runSync(job, db, params, isForced = isForced)
         }
     }
 }

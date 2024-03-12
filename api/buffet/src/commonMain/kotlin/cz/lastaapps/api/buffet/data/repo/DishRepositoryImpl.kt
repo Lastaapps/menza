@@ -34,6 +34,7 @@ import cz.lastaapps.api.buffet.domain.model.BuffetType
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
+import cz.lastaapps.api.core.domain.repo.TodayRepoParams
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncJob
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
@@ -67,7 +68,7 @@ import kotlinx.datetime.toLocalDateTime
 internal class DishLogicImpl(
     private val api: BuffetApi,
     private val db: BuffetDatabase,
-    private val processor: SyncProcessor,
+    private val processor: SyncProcessor<Unit>,
     private val clock: Clock,
     private val checker: ValidityChecker,
 ) {
@@ -106,15 +107,15 @@ internal class DishLogicImpl(
             }
             .map { it.toDomainWeek(clock) }
 
-    private val job = object : SyncJob<OutcomeIor<WebContentDto>, List<DishEntity>>(
-        shouldRun = { Some {} },
+    private val job = object : SyncJob<OutcomeIor<WebContentDto>, List<DishEntity>, Unit>(
+        shouldRun = { _, _ -> Some {} },
         fetchApi = {
             api.process()
         },
-        convert = { data ->
+        convert = { _, data ->
             data.map { it.toEntity() }
         },
-        store = { data ->
+        store = { _, data ->
             db.dishQueries.deleteAll()
             data.forEach {
                 db.dishQueries.insert(it)
@@ -125,7 +126,7 @@ internal class DishLogicImpl(
 
     suspend fun sync(isForced: Boolean): SyncOutcome {
         return checker.withCheckSince(validityKey, isForced, validFrom) {
-            processor.runSync(job, db, isForced = isForced)
+            processor.runSync(job, db, Unit, isForced = isForced)
         }
     }
 }
@@ -135,11 +136,12 @@ internal class WeekDishRepository(
     private val logic: DishLogicImpl,
 ) : WeekDishRepo {
     private val log = Logger.withTag(this::class.simpleName + "($type)")
-    override fun getData(): Flow<ImmutableList<WeekDayDish>> = logic.getDataWeek(type)
+    override fun getData(params: TodayRepoParams): Flow<ImmutableList<WeekDayDish>> =
+        logic.getDataWeek(type)
         .onStart { log.i { "Starting collection" } }
         .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: TodayRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         logic.sync(isForced)
     }
@@ -151,11 +153,12 @@ internal class TodayDishRepository(
 ) : TodayDishRepo {
     private val log = Logger.withTag(this::class.simpleName + "($type)")
 
-    override fun getData(): Flow<ImmutableList<DishCategory>> = logic.getDataToday(type)
+    override fun getData(params: TodayRepoParams): Flow<ImmutableList<DishCategory>> =
+        logic.getDataToday(type)
         .onStart { log.i { "Starting collection" } }
         .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: TodayRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         logic.sync(isForced)
     }

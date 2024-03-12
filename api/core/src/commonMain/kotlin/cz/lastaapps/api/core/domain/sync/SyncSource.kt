@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,7 +21,7 @@ package cz.lastaapps.api.core.domain.sync
 
 import kotlinx.coroutines.flow.Flow
 
-interface SyncSource<T> {
-    fun getData(): Flow<T>
-    suspend fun sync(isForced: Boolean = false): SyncOutcome
+interface SyncSource<T, Params> {
+    fun getData(params: Params): Flow<T>
+    suspend fun sync(params: Params, isForced: Boolean = false): SyncOutcome
 }

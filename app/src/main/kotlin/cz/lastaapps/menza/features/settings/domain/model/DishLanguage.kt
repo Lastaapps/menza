@@ -19,9 +19,16 @@
 
 package cz.lastaapps.menza.features.settings.domain.model
 
+import cz.lastaapps.api.core.domain.model.RequestLanguage
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage.Czech
+import cz.lastaapps.menza.features.settings.domain.model.DishLanguage.English
+
 enum class DishLanguage(val id: Int) {
     Czech(0), English(1),
     ;
 }
 
-internal fun DishLanguage.isCzech(): Boolean = this == DishLanguage.Czech
+internal fun DishLanguage.toRequestLanguage() = when (this) {
+    Czech -> RequestLanguage.CS
+    English -> RequestLanguage.EN
+}

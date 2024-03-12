@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,6 +26,7 @@ import arrow.fx.coroutines.parMap
 import co.touchlab.kermit.Logger
 import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
+import cz.lastaapps.api.core.domain.repo.WeekRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
@@ -38,9 +39,12 @@ import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
+import cz.lastaapps.menza.api.agata.data.model.dto.WeekDishDto
+import cz.lastaapps.menza.api.agata.data.model.toData
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -53,7 +57,7 @@ import kotlinx.coroutines.flow.onStart
 internal class WeekDishRepoImpl(
     private val subsystemId: Int,
     private val dishApi: DishApi,
-    private val processor: SyncProcessor,
+    private val processor: SyncProcessor<WeekRepoParams>,
     private val checker: ValidityChecker,
 ) : WeekDishRepo {
 
@@ -65,7 +69,7 @@ internal class WeekDishRepoImpl(
 
     private val weekDishList = MutableStateFlow<ImmutableList<WeekDayDish>>(persistentListOf())
 
-    override fun getData(): Flow<ImmutableList<WeekDayDish>> =
+    override fun getData(params: WeekRepoParams): Flow<ImmutableList<WeekDayDish>> =
         combine(
             weekDishList,
             isValidFlow,
@@ -82,30 +86,30 @@ internal class WeekDishRepoImpl(
 //        return if (now.dayOfWeek <= FRIDAY) first() else last()
 //    }
 
-    private val syncJob = SyncJobNoCache(
+    private val syncJob = SyncJobNoCache<List<WeekDishDto>, List<WeekDayDish>, WeekRepoParams>(
         fetchApi = {
-            val weeks = dishApi.getWeeks(subsystemId).bind()
+            val weeks = dishApi.getWeeks(it.language.toData(), subsystemId).bind()
                 ?: raise(WeekNotAvailable)
 
             weeks
-                .sortedBy { it.id }
+                .sortedBy { week -> week.id }
                 .parMap { week ->
-                    dishApi.getWeekDishList(week.id).bind().orEmpty()
+                    dishApi.getWeekDishList(it.language.toData(), week.id).bind().orEmpty()
                 }.flatten()
         },
-        convert = { data -> data.toDomain().rightIor() },
-        store = { data ->
-            weekDishList.value = data
+        convert = { _, data -> data.toDomain().rightIor() },
+        store = { _, data ->
+            weekDishList.value = data.toImmutableList()
         },
     )
 
     private var hasSynced = false
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: WeekRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced, h: $hasSynced)" }
 
         val myForced = isForced || !hasSynced
         checker.withCheckSince(validityKey, myForced, 1.days) {
-            processor.runSync(syncJob, isForced = myForced).recover {
+            processor.runSync(syncJob, params = params, isForced = myForced).recover {
                 if (it is WeekNotAvailable) Unavailable else raise(it)
             }
         }.onRight { hasSynced = true }
@@ -115,12 +119,12 @@ internal class WeekDishRepoImpl(
 internal object WeekRepoStrahovImpl : WeekDishRepo {
     private val log = localLogger()
 
-    override fun getData(): Flow<ImmutableList<WeekDayDish>> =
+    override fun getData(params: WeekRepoParams): Flow<ImmutableList<WeekDayDish>> =
         flow { emit(persistentListOf<WeekDayDish>()) }
             .onStart { log.i { "Starting collection" } }
             .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: WeekRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         Unavailable.right()
     }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,5 +27,5 @@ class WalletRefreshUC internal constructor(
     ucContext: UCContext,
     private val repo: WalletMasterRepository,
 ) : UseCase(ucContext) {
-    suspend operator fun invoke(isForced: Boolean) = launch { repo.sync(isForced = isForced) }
+    suspend operator fun invoke(isForced: Boolean) = launch { repo.sync(Unit, isForced = isForced) }
 }

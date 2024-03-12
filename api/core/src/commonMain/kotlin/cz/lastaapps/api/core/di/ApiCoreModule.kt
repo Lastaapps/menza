@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -35,7 +35,6 @@ import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
@@ -85,7 +84,7 @@ val apiCoreModule = module {
     }
 
     singleOf(::ValidityCheckerImpl) bind ValidityChecker::class
-    factoryOf(::SyncProcessorImpl) bind SyncProcessor::class
+    factory<SyncProcessor<Any>> { SyncProcessorImpl() }
 }
 
 @JvmInline

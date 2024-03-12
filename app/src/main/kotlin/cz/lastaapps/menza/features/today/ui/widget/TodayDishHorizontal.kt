@@ -130,7 +130,6 @@ private fun DishContent(
                 item {
                     DishHeader(
                         courseType = category,
-                        language = userSettings.language,
                         modifier = Modifier.padding(bottom = Padding.Smaller),
                     )
                 }
@@ -245,7 +244,6 @@ private fun DishItem(
                 ) {
                     DishNameRow(
                         dish = dish,
-                        language = userSettings.language,
                         modifier = modifier.weight(1f),
                     )
                     if (dish.photoLink == null) {
@@ -256,7 +254,7 @@ private fun DishItem(
                     }
                 }
 
-                DishInfoRow(dish, userSettings.language)
+                DishInfoRow(dish)
             }
         }
     }

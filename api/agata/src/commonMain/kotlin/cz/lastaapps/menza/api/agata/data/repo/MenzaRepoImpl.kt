@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.data.repo
 
+import agata.SubsystemEntity
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.right
@@ -27,7 +28,10 @@ import cz.lastaapps.api.agata.AgataDatabase
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
+import cz.lastaapps.api.core.domain.model.RequestLanguage.CS
+import cz.lastaapps.api.core.domain.model.RequestLanguage.EN
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.core.domain.repo.MenzaRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
@@ -41,6 +45,8 @@ import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import cz.lastaapps.menza.api.agata.data.mapers.toEntity
 import cz.lastaapps.menza.api.agata.data.model.HashType
+import cz.lastaapps.menza.api.agata.data.model.dto.SubsystemDto
+import cz.lastaapps.menza.api.agata.data.model.toData
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
@@ -60,7 +66,7 @@ import kotlinx.coroutines.flow.onStart
 internal class MenzaSubsystemRepoImpl(
     private val api: CafeteriaApi,
     private val db: AgataDatabase,
-    private val processor: SyncProcessor,
+    private val processor: SyncProcessor<MenzaRepoParams>,
     private val checker: ValidityChecker,
     hashStore: HashStore,
 ) : MenzaRepo {
@@ -75,7 +81,7 @@ internal class MenzaSubsystemRepoImpl(
             .distinctUntilChanged()
             .onEach { log.i { "Is ready: $it" } }
 
-    override fun getData(): Flow<ImmutableList<Menza>> =
+    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> =
         db.subsystemQueries.getAll()
             .asFlow()
             .mapToList(Dispatchers.IO)
@@ -87,19 +93,19 @@ internal class MenzaSubsystemRepoImpl(
             .onCompletion { log.i { "Completed collection" } }
 
     private val subsystemJob =
-        SyncJobHash(
+        SyncJobHash<List<SubsystemDto>, List<SubsystemEntity>, MenzaRepoParams>(
             hashStore = hashStore,
             hashType = HashType.subsystemHash(),
-            getHashCode = { api.getSubsystemsHash().bind() },
+            getHashCode = { api.getSubsystemsHash(it.language.toData()).bind() },
             fetchApi = {
-                api.getSubsystems().bind().orEmpty()
+                api.getSubsystems(it.language.toData()).bind().orEmpty()
             },
-            convert = { dtos ->
+            convert = { _, dtos ->
                 dtos.map { dto ->
                     dto.toEntity()
                 }.rightIor()
             },
-            store = { result ->
+            store = { _, result ->
                 db.subsystemQueries.deleteAll()
                 result.forEach { dto ->
                     db.subsystemQueries.insert(dto)
@@ -120,10 +126,10 @@ internal class MenzaSubsystemRepoImpl(
         }
     }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         checker.withCheckSince(ValidityKey.agataMenza(), isForced, 7.days) {
-            processor.runSync(subsystemJob, db, isForced)
+            processor.runSync(subsystemJob, db, params, isForced)
         }
     }
 }
@@ -133,11 +139,11 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
 
     override val isReady: Flow<Boolean> = MutableStateFlow(true)
 
-    override fun getData(): Flow<ImmutableList<Menza>> = flow {
+    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> = flow {
         persistentListOf(
             Menza(
                 type = Strahov,
-                name = "Restaurace Strahov",
+                name = getName(params),
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = false,
@@ -149,7 +155,12 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
         .onStart { log.i { "Starting collection" } }
         .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    private fun getName(params: MenzaRepoParams) = when (params.language) {
+        CS -> "Restaurace Strahov"
+        EN -> "Restaurant Strahov"
+    }
+
+    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         SyncResult.Skipped.right()
     }

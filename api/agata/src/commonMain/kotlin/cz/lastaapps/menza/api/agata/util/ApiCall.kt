@@ -27,18 +27,16 @@ import io.ktor.client.request.parameter
 
 internal suspend fun HttpClient.getFun(
     func: Func,
+    lang: ApiLang,
     subsystemId: Int? = null,
     secondId: Int? = null,
-    lang: ApiLang? = null,
 ) = get {
     parameter("Funkce", func.funName)
+    parameter("Lang", lang.value)
     subsystemId?.let {
         parameter("Podsystem", it)
     }
     secondId?.let {
         parameter("SecondID", it)
-    }
-    lang?.let {
-        parameter("Lang", it.value)
     }
 }

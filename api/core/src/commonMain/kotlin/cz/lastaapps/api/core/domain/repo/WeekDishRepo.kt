@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,8 +19,11 @@
 
 package cz.lastaapps.api.core.domain.repo
 
+import cz.lastaapps.api.core.domain.model.RequestParams
 import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.sync.SyncSource
 import kotlinx.collections.immutable.ImmutableList
 
-interface WeekDishRepo : SyncSource<ImmutableList<WeekDayDish>>
+typealias WeekRepoParams = RequestParams
+
+interface WeekDishRepo : SyncSource<ImmutableList<WeekDayDish>, WeekRepoParams>

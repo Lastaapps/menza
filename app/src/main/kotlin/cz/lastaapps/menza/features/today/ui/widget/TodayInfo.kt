@@ -37,18 +37,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.ServingPlace
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.today.ui.util.allergenForId
 import cz.lastaapps.menza.features.today.ui.util.formatPrice
-import cz.lastaapps.menza.features.today.ui.util.getAmount
-import cz.lastaapps.menza.features.today.ui.util.getName
-import cz.lastaapps.menza.features.today.ui.util.getSecondaryName
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlin.math.max
 import kotlinx.collections.immutable.ImmutableList
@@ -56,7 +51,6 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun TodayInfo(
     dish: Dish,
-    language: DishLanguage,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -67,14 +61,8 @@ fun TodayInfo(
             dish = dish,
         )
 
-        Header(
-            dish = dish,
-            language = language,
-        )
-        PriceView(
-            dish = dish,
-            language = language,
-        )
+        Header(dish = dish)
+        PriceView(dish = dish)
         IssueLocationList(
             list = dish.servingPlaces,
         )
@@ -90,41 +78,24 @@ fun TodayInfo(
 @Composable
 private fun Header(
     dish: Dish,
-    language: DishLanguage,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
-    ) {
-        SelectionContainer {
-            Text(
-                text = dish.getName(language),
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier,
-            )
-        }
-
-        dish.getSecondaryName(language)?.let { name ->
-            SelectionContainer {
-                Text(
-                    text = name,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier,
-                    fontStyle = FontStyle.Italic,
-                )
-            }
-        }
+    SelectionContainer {
+        Text(
+            text = dish.name,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = modifier,
+        )
     }
 }
 
 @Composable
 private fun PriceView(
     dish: Dish,
-    language: DishLanguage,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier) {
-        Text(text = dish.getAmount(language) ?: "")
+        Text(text = dish.amount ?: "")
         val priceText = buildString {
             append(dish.priceDiscounted?.formatPrice() ?: "∅")
             append(" / ")

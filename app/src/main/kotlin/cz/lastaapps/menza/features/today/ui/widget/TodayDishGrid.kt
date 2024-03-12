@@ -142,10 +142,7 @@ private fun DishContent(
                         verticalArrangement = Arrangement.spacedBy(Padding.Medium),
                     ) {
                         if (index == 0) {
-                            DishHeader(
-                                courseType = category,
-                                language = userSettings.language,
-                            )
+                            DishHeader(courseType = category)
                         }
                         DishItem(
                             dish = dish,
@@ -202,7 +199,6 @@ private fun DishItem(
                 ) {
                     DishNameRow(
                         dish = dish,
-                        language = userSettings.language,
                         modifier = modifier.weight(1f),
                     )
                     if (dish.photoLink == null) {
@@ -210,7 +206,7 @@ private fun DishItem(
                     }
                 }
 
-                DishInfoRow(dish, userSettings.language)
+                DishInfoRow(dish)
             }
         }
     }

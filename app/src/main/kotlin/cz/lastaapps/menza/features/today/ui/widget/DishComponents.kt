@@ -33,10 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.today.ui.util.getAmount
-import cz.lastaapps.menza.features.today.ui.util.getName
 import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.theme.Padding
 
@@ -44,11 +41,10 @@ import cz.lastaapps.menza.ui.theme.Padding
 @Composable
 internal fun DishHeader(
     courseType: DishCategory,
-    language: DishLanguage,
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = courseType.getName(language)
+        text = courseType.name
             ?: stringResource(id = R.string.today_list_category_other),
         modifier = modifier,
         style = MaterialTheme.typography.titleMedium,
@@ -82,11 +78,10 @@ internal fun DishBadge(
 @Composable
 internal fun DishNameRow(
     dish: Dish,
-    language: DishLanguage,
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = dish.getName(language),
+        text = dish.name,
         modifier = modifier,
         style = MaterialTheme.typography.titleMedium,
     )
@@ -95,7 +90,6 @@ internal fun DishNameRow(
 @Composable
 internal fun DishInfoRow(
     dish: Dish,
-    language: DishLanguage,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -105,7 +99,7 @@ internal fun DishInfoRow(
         Row(
             horizontalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
-            dish.getAmount(language)?.let { amount ->
+            dish.amount?.let { amount ->
                 Text(text = amount)
             }
             dish.allergens?.let { allergens ->

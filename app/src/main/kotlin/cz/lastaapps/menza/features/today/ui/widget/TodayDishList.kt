@@ -122,7 +122,6 @@ private fun DishContent(
                 Surface(Modifier.fillMaxWidth()) {
                     DishHeader(
                         courseType = category,
-                        language = userSettings.language,
                         modifier = Modifier.padding(bottom = Padding.Smaller),
                     )
                 }
@@ -171,8 +170,8 @@ private fun DishItem(
                 isOnMetered = isOnMetered,
             )
             Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
-                DishNameRow(dish, userSettings.language)
-                DishInfoRow(dish, userSettings.language)
+                DishNameRow(dish)
+                DishInfoRow(dish)
             }
         }
     }

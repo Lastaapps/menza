@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,7 +34,11 @@ import cz.lastaapps.api.core.domain.model.PhoneNumber
 import cz.lastaapps.api.core.domain.model.PlaceOpeningInfo
 import cz.lastaapps.api.core.domain.model.PlaceOpeningTime
 import cz.lastaapps.api.core.domain.model.PlaceOpeningType
+import cz.lastaapps.api.core.domain.model.RequestLanguage.CS
+import cz.lastaapps.api.core.domain.model.RequestLanguage.EN
 import cz.lastaapps.api.core.domain.repo.InfoRepo
+import cz.lastaapps.api.core.domain.repo.InfoRepoParams
+import cz.lastaapps.api.core.domain.repo.MenzaRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import kotlinx.collections.immutable.persistentListOf
@@ -50,14 +54,14 @@ internal class InfoRepoImpl(
 ) : InfoRepo {
     private val log = Logger.withTag(this::class.simpleName + "($type)")
 
-    override fun getData(): Flow<Info> = flow {
+    override fun getData(params: InfoRepoParams): Flow<Info> = flow {
         // I don't wanna parse this shit, really
         emit(
             Info(
                 header = null,
                 footer = null,
                 contacts = commonContacts,
-                openingTimes = openTime(type),
+                openingTimes = openTime(params, type),
                 links = persistentListOf(
                     Link(
                         link = "https://studentcatering.cz/",
@@ -65,7 +69,7 @@ internal class InfoRepoImpl(
                     ),
                 ),
                 address = Address(
-                    location = address(type),
+                    location = address(params, type),
                     gps = null,
                 ),
             ),
@@ -74,17 +78,10 @@ internal class InfoRepoImpl(
         .onStart { log.i { "Starting collection" } }
         .onCompletion { log.i { "Completed collection" } }
 
-    @Suppress("SpellCheckingInspection")
-    private fun openTime(type: BuffetType) = persistentListOf(
+    private fun openTime(params: InfoRepoParams, type: BuffetType) = persistentListOf(
         PlaceOpeningInfo(
-            when (type) {
-                FS -> "FS Bufet"
-                FEL -> "FEL Bufet"
-            },
-            when (type) {
-                FS -> "FS"
-                FEL -> "FEL"
-            },
+            getName(params, type),
+            getNameShort(params, type),
             persistentListOf(
                 PlaceOpeningType(
                     description = null,
@@ -108,10 +105,43 @@ internal class InfoRepoImpl(
     )
 
     @Suppress("SpellCheckingInspection")
-    private fun address(type: BuffetType) = when (type) {
-        FS -> "1. partro, Technická 1902/4, 160 00 Praha 6"
-        FEL -> "1. partro, Technická 1902/2, 160 00 Praha 6"
-    }.let(::LocationName)
+    private fun getName(params: MenzaRepoParams, type: BuffetType) = when (params.language) {
+        CS -> when (type) {
+            FS -> "FS Bufet"
+            FEL -> "FEL Bufet"
+        }
+
+        EN -> when (type) {
+            FS -> "FS Buffet"
+            FEL -> "FEE Buffet"
+        }
+    }
+
+    private fun getNameShort(params: MenzaRepoParams, type: BuffetType) = when (params.language) {
+        CS -> when (type) {
+            FS -> "FS"
+            FEL -> "FEL"
+        }
+
+        EN -> when (type) {
+            FS -> "FS"
+            FEL -> "FEE"
+        }
+    }
+
+    @Suppress("SpellCheckingInspection")
+    private fun address(params: InfoRepoParams, type: BuffetType) =
+        when (params.language) {
+            CS -> when (type) {
+                FS -> "1. partro, Technická 1902/4, 160 00 Praha 6"
+                FEL -> "1. partro, Technická 1902/2, 160 00 Praha 6"
+            }
+
+            EN -> when (type) {
+                FS -> "1st floor, Technická 1902/4, 160 00 Prague 6"
+                FEL -> "1st floor, Technická 1902/2, 160 00 Prague 6"
+            }
+        }.let(::LocationName)
 
     @Suppress("SpellCheckingInspection")
     private val commonContacts =
@@ -130,7 +160,7 @@ internal class InfoRepoImpl(
             ),
         )
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: InfoRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
         SyncResult.Skipped.right()
     }

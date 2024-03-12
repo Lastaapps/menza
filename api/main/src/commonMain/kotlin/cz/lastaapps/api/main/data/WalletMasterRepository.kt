@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 
 
-internal interface WalletMasterRepository : SyncSource<UserBalance?> {
+internal interface WalletMasterRepository : SyncSource<UserBalance?, Unit> {
     suspend fun login(username: String, password: String, type: BalanceAccountType): Outcome<Unit>
     suspend fun logout(): Outcome<Unit>
 }
@@ -93,7 +93,7 @@ internal class WalletMasterRepositoryImpl(
         log.i { "Logout successful" }
     }
 
-    override fun getData(): Flow<UserBalance?> = channelFlow {
+    override fun getData(params: Unit): Flow<UserBalance?> = channelFlow {
         credentialsProvider.get().collectLatest { credentials ->
             when (credentials) {
                 is Left -> send(null)
@@ -125,7 +125,7 @@ internal class WalletMasterRepositoryImpl(
         SyncResult.Updated
     }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome = run {
+    override suspend fun sync(params: Unit, isForced: Boolean): SyncOutcome = run {
         log.i { "Requesting data sync" }
 
         credentialsProvider.get().first().let { credentials ->

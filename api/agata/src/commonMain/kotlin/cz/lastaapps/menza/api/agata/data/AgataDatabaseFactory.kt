@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,7 +21,7 @@ package cz.lastaapps.menza.api.agata.data
 
 import agata.DishEntity
 import agata.OpenTimeEntity
-import agata.StrahovEntiy
+import agata.StrahovEntity
 import app.cash.sqldelight.ColumnAdapter
 import app.cash.sqldelight.db.SqlDriver
 import cz.lastaapps.api.agata.AgataDatabase
@@ -51,7 +51,7 @@ internal object AgataDatabaseFactory {
             timeFromAdapter = LocalTimeAdapter,
             timeToAdapter = LocalTimeAdapter,
         ),
-        StrahovEntiyAdapter = StrahovEntiy.Adapter(
+        StrahovEntityAdapter = StrahovEntity.Adapter(
             allergensAdapter = LongListAdapter,
         ),
     ).also { log.i { "Database created/loaded" } }

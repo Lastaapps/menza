@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,8 +29,9 @@ import org.koin.core.parameter.parametersOf
 
 class SyncInfoUC(
     context: UCContext,
+    private val getRequestParamsUC: GetRequestParamsUC,
 ) : UseCase(context), KoinComponent {
     suspend operator fun invoke(menza: Menza, isForced: Boolean = false) = launch {
-        get<InfoRepo> { parametersOf(menza.type) }.sync(isForced = isForced)
+        get<InfoRepo> { parametersOf(menza.type) }.sync(getRequestParamsUC(), isForced = isForced)
     }
 }

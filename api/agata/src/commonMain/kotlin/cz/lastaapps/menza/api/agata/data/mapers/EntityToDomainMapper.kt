@@ -29,7 +29,7 @@ import agata.NewsEntity
 import agata.OpenTimeEntity
 import agata.PictogramEntity
 import agata.ServingPlaceEntity
-import agata.StrahovEntiy
+import agata.StrahovEntity
 import agata.SubsystemEntity
 import cz.lastaapps.api.core.domain.model.Address
 import cz.lastaapps.api.core.domain.model.Contact
@@ -73,10 +73,8 @@ internal fun DishEntity.toDomain(
     servingPlaces: List<ServingPlaceEntity>,
 ) = let { dish ->
     Dish(
-        amountCs = dish.amount,
-        amountEn = null,
-        nameCs = dish.fullName(),
-        nameEn = null,
+        amount = dish.amount,
+        name = dish.fullName(),
         priceDiscounted = dish.priceDiscount?.toFloat(),
         priceNormal = dish.priceNormal?.toFloat(),
         allergens = dish.allergens.map(Long::toInt).toImmutableList(),
@@ -133,8 +131,7 @@ internal fun DishTypeEntity?.toDomain(dishList: List<Dish>) =
     this?.let {
         DishCategory(
             nameShort = nameShort,
-            nameCs = nameLong,
-            nameEn = null,
+            name = nameLong,
             dishList = dishList.toImmutableList(),
         )
     } ?: DishCategory.other(dishList.toImmutableList())
@@ -202,7 +199,7 @@ private fun LinkEntity.toDomain() =
     )
 
 @JvmName("javaIsFuckingStupidShit")
-internal fun List<StrahovEntiy>.toDomain() =
+internal fun List<StrahovEntity>.toDomain() =
     groupBy { it.groupId }
         .entries
         .sortedBy { it.value.first().groupOrder }
@@ -210,8 +207,7 @@ internal fun List<StrahovEntiy>.toDomain() =
             val value = values.first()
             DishCategory(
                 nameShort = null,
-                nameCs = value.groupNameCs.trim(),
-                nameEn = value.groupNameEn.trim(),
+                name = value.groupName.trim(),
                 dishList = values
                     .sortedBy { it.itemOrder }
                     .map { it.toDomain() }
@@ -219,11 +215,9 @@ internal fun List<StrahovEntiy>.toDomain() =
             )
         }.toImmutableList()
 
-private fun StrahovEntiy.toDomain() = Dish(
-    amountCs = amountCs,
-    amountEn = amountEn,
-    nameEn = nameEn,
-    nameCs = nameCs,
+private fun StrahovEntity.toDomain() = Dish(
+    amount = amount,
+    name = name,
     priceDiscounted = priceStudent.toFloat(),
     priceNormal = priceNormal.toFloat(),
     allergens = allergens.map { it.toInt() }.toImmutableList(),

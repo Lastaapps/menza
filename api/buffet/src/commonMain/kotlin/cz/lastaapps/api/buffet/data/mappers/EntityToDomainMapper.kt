@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -44,15 +44,12 @@ internal fun List<DishEntity>.toDomainDays(): List<Pair<DayOfWeek, List<DishCate
             dayOfWeek to dayDishList.map { dish ->
                 DishCategory(
                     nameShort = null,
-                    nameCs = dish.type,
-                    nameEn = null,
+                    name = dish.type,
                     dishList = persistentListOf(
                         // each dish has it's own category
                         Dish(
-                            amountCs = null,
-                            amountEn = null,
-                            nameEn = null,
-                            nameCs = dish.name,
+                            amount = null,
+                            name = dish.name,
                             priceDiscounted = null,
                             priceNormal = dish.price.toFloat(),
                             allergens = null,

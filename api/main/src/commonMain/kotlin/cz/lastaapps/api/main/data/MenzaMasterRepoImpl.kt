@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,6 +24,7 @@ import arrow.core.right
 import arrow.fx.coroutines.parMap
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.core.domain.repo.MenzaRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.domain.error.DomainError
@@ -48,10 +49,10 @@ internal class MenzaMasterRepoImpl(
             acu.combine(isReady) { a, r -> a && r }
         }
 
-    override fun getData(): Flow<ImmutableList<Menza>> =
+    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> =
         sources
             .map { repo ->
-                repo.getData().map { it.toPersistentList() }
+                repo.getData(params).map { it.toPersistentList() }
             }
             .fold(flow { emit(persistentListOf<Menza>()) }) { acu, item ->
                 acu.combine(item) { acuList, b ->
@@ -60,9 +61,9 @@ internal class MenzaMasterRepoImpl(
             }
             .map { it.toImmutableList() }
 
-    override suspend fun sync(isForced: Boolean): SyncOutcome =
+    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome =
         sources.parMap(concurrency = 2) {
-            it.sync()
+            it.sync(params)
         }.let { res ->
             res.firstOrNull { it is Either.Left<DomainError> }?.let { return it }
             val updated = res.map { (it as Either.Right<SyncResult>).value }

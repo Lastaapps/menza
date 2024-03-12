@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,5 +27,5 @@ class WalletGetBalanceUC internal constructor(
     ucContext: UCContext,
     private val repo: WalletMasterRepository,
 ) : UseCase(ucContext) {
-    operator fun invoke() = repo.getData()
+    operator fun invoke() = repo.getData(Unit)
 }

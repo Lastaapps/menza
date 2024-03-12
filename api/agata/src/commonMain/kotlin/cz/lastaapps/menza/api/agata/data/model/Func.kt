@@ -62,7 +62,3 @@ internal enum class Func(val funName: String) {
     Strahov("GetMinutkySH"),
     ;
 }
-
-internal enum class ApiLang(val value: String) {
-    CS("cs"), EN("en"),
-}

@@ -19,36 +19,6 @@
 
 package cz.lastaapps.api.core.domain.model
 
-import kotlinx.collections.immutable.ImmutableList
-
-data class DishCategory(
-    val nameShort: String?,
-    val name: String?,
-    val dishList: ImmutableList<Dish>,
-) {
-    companion object {
-        fun other(
-            dishList: ImmutableList<Dish>,
-        ) = DishCategory(null, null, dishList)
-    }
+enum class RequestLanguage {
+    CS, EN
 }
-
-data class Dish(
-    val amount: String?,
-    val name: String,
-    val priceDiscounted: Float?,
-    val priceNormal: Float?,
-    // empty - no allergens
-    // null  - unknown
-    val allergens: ImmutableList<Int>?,
-    val photoLink: String?,
-    val pictogram: ImmutableList<String>,
-    val servingPlaces: ImmutableList<ServingPlace>,
-    val ingredients: ImmutableList<String>,
-    val isActive: Boolean,
-)
-
-data class ServingPlace(
-    val name: String,
-    val abbrev: String,
-)

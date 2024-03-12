@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,10 +20,13 @@
 package cz.lastaapps.api.core.domain.repo
 
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.model.RequestParams
 import cz.lastaapps.api.core.domain.sync.SyncSource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
-interface MenzaRepo : SyncSource<ImmutableList<Menza>> {
+typealias MenzaRepoParams = RequestParams
+
+interface MenzaRepo : SyncSource<ImmutableList<Menza>, MenzaRepoParams> {
     val isReady: Flow<Boolean>
 }

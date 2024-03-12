@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,24 +25,24 @@ import arrow.core.some
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.MenzaRaise
 
-abstract class SyncJob<T, R>(
+abstract class SyncJob<T, R, Params>(
     // Some -> will be run
     // None -> should be skipped
-    val shouldRun: suspend MenzaRaise.(force: Boolean) -> Option<suspend () -> Unit>,
-    val fetchApi: suspend MenzaRaise.() -> T,
-    val convert: suspend MenzaRaise.(T) -> IorNel<DomainError, R>,
-    val store: (R) -> Unit,
+    val shouldRun: suspend MenzaRaise.(params: Params, force: Boolean) -> Option<suspend () -> Unit>,
+    val fetchApi: suspend MenzaRaise.(params: Params) -> T,
+    val convert: suspend MenzaRaise.(params: Params, T) -> IorNel<DomainError, R>,
+    val store: (params: Params, R) -> Unit,
 )
 
 /**
  * Job info for a sync processor, no cache check
  */
-class SyncJobNoCache<T, R>(
-    fetchApi: suspend MenzaRaise.() -> T,
-    convert: suspend MenzaRaise.(T) -> IorNel<DomainError, R>,
-    store: (R) -> Unit,
-) : SyncJob<T, R>(
-    {
+class SyncJobNoCache<T, R, Params>(
+    fetchApi: suspend MenzaRaise.(params: Params) -> T,
+    convert: suspend MenzaRaise.(params: Params, T) -> IorNel<DomainError, R>,
+    store: (params: Params, R) -> Unit,
+) : SyncJob<T, R, Params>(
+    { _, _ ->
         val noOp: suspend () -> Unit = {}
         noOp.some()
     },

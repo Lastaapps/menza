@@ -32,6 +32,6 @@ class WalletLoginUC internal constructor(
         username: String, password: String, type: BalanceAccountType,
     ) = launch {
         repo.login(username, password, type)
-            .onRight { repo.sync(isForced = true) }
+            .onRight { repo.sync(Unit, isForced = true) }
     }
 }

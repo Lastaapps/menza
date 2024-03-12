@@ -146,7 +146,6 @@ private fun TodayContent(
             currentDish?.let {
                 TodayInfo(
                     dish = currentDish,
-                    language = state.language,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
