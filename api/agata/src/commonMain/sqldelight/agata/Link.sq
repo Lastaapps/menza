@@ -1,13 +1,17 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
+
 CREATE TABLE LinkEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,
     link TEXT NOT NULL,
     description TEXT NOT NULL,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getForSubsystem:
-    SELECT * FROM LinkEntity WHERE subsystemId = :subsystemId;
+    SELECT * FROM LinkEntity
+    WHERE subsystemId = :subsystemId AND language = :language;
 
 insert:
     INSERT INTO LinkEntity

@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.onStart
 internal object MenzaFSRepoImpl : MenzaRepo {
     private val log = localLogger()
 
-    override val isReady: Flow<Boolean> = MutableStateFlow(true)
+    override fun isReady(params: MenzaRepoParams): Flow<Boolean> = MutableStateFlow(true)
         .onEach { log.i { "Is ready: $it" } }
 
     override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> = flow {
@@ -71,7 +71,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
 internal object MenzaFELRepoImpl : MenzaRepo {
     private val log = localLogger()
 
-    override val isReady: Flow<Boolean> = MutableStateFlow(true)
+    override fun isReady(params: MenzaRepoParams): Flow<Boolean> = MutableStateFlow(true)
         .onEach { log.i { "Is ready: $it" } }
 
     override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> = flow {

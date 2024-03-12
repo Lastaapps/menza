@@ -40,7 +40,7 @@ import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import cz.lastaapps.menza.api.agata.data.model.dto.WeekDishDto
-import cz.lastaapps.menza.api.agata.data.model.toData
+import cz.lastaapps.menza.api.agata.data.model.toDto
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -88,13 +88,13 @@ internal class WeekDishRepoImpl(
 
     private val syncJob = SyncJobNoCache<List<WeekDishDto>, List<WeekDayDish>, WeekRepoParams>(
         fetchApi = {
-            val weeks = dishApi.getWeeks(it.language.toData(), subsystemId).bind()
+            val weeks = dishApi.getWeeks(it.language.toDto(), subsystemId).bind()
                 ?: raise(WeekNotAvailable)
 
             weeks
                 .sortedBy { week -> week.id }
                 .parMap { week ->
-                    dishApi.getWeekDishList(it.language.toData(), week.id).bind().orEmpty()
+                    dishApi.getWeekDishList(it.language.toDto(), week.id).bind().orEmpty()
                 }.flatten()
         },
         convert = { _, data -> data.toDomain().rightIor() },

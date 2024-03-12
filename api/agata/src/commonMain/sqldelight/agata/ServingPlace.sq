@@ -1,14 +1,18 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
+
 CREATE TABLE ServingPlaceEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     abbrev TEXT NOT NULL,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getByIds:
-    SELECT * FROM ServingPlaceEntity WHERE id IN :id;
+    SELECT * FROM ServingPlaceEntity
+    WHERE id IN :id AND language = :language;
 
 insert:
     INSERT INTO ServingPlaceEntity

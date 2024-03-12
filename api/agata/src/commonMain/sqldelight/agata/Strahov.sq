@@ -1,5 +1,6 @@
-import kotlin.collections.List;
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
 import kotlin.Long;
+import kotlin.collections.List;
 
 CREATE TABLE StrahovEntity (
     id INTEGER NOT NULL,
@@ -13,11 +14,13 @@ CREATE TABLE StrahovEntity (
     priceStudent REAL NOT NULL,
     allergens TEXT AS List<Long> NOT NULL,
     photoLink TEXT,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 get:
-    SELECT * FROM StrahovEntity;
+    SELECT * FROM StrahovEntity
+    WHERE language = :language;
 
 insert:
     INSERT INTO StrahovEntity

@@ -42,9 +42,9 @@ internal class MenzaMasterRepoImpl(
     private val sources: List<MenzaRepo>,
 ) : MenzaRepo, KoinComponent {
 
-    override val isReady: Flow<Boolean> =
+    override fun isReady(params: MenzaRepoParams): Flow<Boolean> =
         sources.map { repo ->
-            repo.isReady
+            repo.isReady(params)
         }.fold(flow { emit(true) }) { acu, isReady ->
             acu.combine(isReady) { a, r -> a && r }
         }

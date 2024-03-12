@@ -1,11 +1,15 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
+
 CREATE TABLE PictogramEntity(
     id INTEGER NOT NULL,
     name TEXT NOT NULL,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getByIds:
-    SELECT * FROM PictogramEntity WHERE id IN :id;
+    SELECT * FROM PictogramEntity
+    WHERE id IN :id AND language = :language;
 
 insert:
     INSERT INTO PictogramEntity

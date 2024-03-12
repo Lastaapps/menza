@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.starting.domain.usecase
 
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.main.domain.usecase.GetRequestParamsUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import kotlinx.coroutines.flow.first
@@ -27,8 +28,9 @@ import kotlinx.coroutines.flow.first
 internal class CheckDataDownloadNeededUC(
     context: UCContext,
     private val masterRepo: MenzaRepo,
+    private val getRequestParamsUC: GetRequestParamsUC,
 ) : UseCase(context) {
     suspend operator fun invoke() = launch {
-        !masterRepo.isReady.first()
+        !masterRepo.isReady(getRequestParamsUC()).first()
     }
 }

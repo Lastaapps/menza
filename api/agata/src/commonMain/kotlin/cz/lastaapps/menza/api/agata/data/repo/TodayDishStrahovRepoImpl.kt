@@ -41,7 +41,8 @@ import cz.lastaapps.menza.api.agata.data.mapers.toEntity
 import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.data.model.dto.StrahovDto
-import cz.lastaapps.menza.api.agata.data.model.toData
+import cz.lastaapps.menza.api.agata.data.model.toDB
+import cz.lastaapps.menza.api.agata.data.model.toDto
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +70,7 @@ internal class TodayDishStrahovRepoImpl(
 
     override fun getData(params: TodayRepoParams): Flow<ImmutableList<DishCategory>> =
         db.strahovQueries
-            .get()
+            .get(params.language.toDB())
             .asFlow()
             .mapToList(Dispatchers.IO)
             .combine(isValidFlow) { data, validity ->
@@ -83,12 +84,14 @@ internal class TodayDishStrahovRepoImpl(
         hashStore = hashStore,
         hashType = { HashType.strahovHash().withLang(it.language) },
         getHashCode = {
-            dishApi.getStrahovHash(it.language.toData()).bind()
+            dishApi.getStrahovHash(it.language.toDto()).bind()
         },
         fetchApi = {
-            dishApi.getStrahov(it.language.toData()).bind().orEmpty()
+            dishApi.getStrahov(it.language.toDto()).bind().orEmpty()
         },
-        convert = { _, data -> data.map { it.toEntity(beConfig) }.rightIor() },
+        convert = { params, data ->
+            data.map { it.toEntity(beConfig, params.language) }.rightIor()
+        },
         store = { _, data ->
             db.strahovQueries.deleteAll()
             data.forEach {

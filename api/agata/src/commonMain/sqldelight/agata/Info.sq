@@ -1,15 +1,19 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
+
 CREATE TABLE InfoEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,
     footer TEXT,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getForSubsystem:
-    SELECT * FROM InfoEntity WHERE subsystemId = :subsystemId;
+    SELECT * FROM InfoEntity
+    WHERE subsystemId = :subsystemId AND language = :language;
 
 insert:
-    INSERT INTO InfoEntity(id, subsystemId, footer)
+    INSERT INTO InfoEntity(id, subsystemId, footer, language)
     VALUES ?;
 
 deleteSubsystem:

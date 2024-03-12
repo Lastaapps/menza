@@ -1,6 +1,7 @@
-import kotlin.collections.List;
-import kotlin.Long;
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
 import kotlin.Boolean;
+import kotlin.Long;
+import kotlin.collections.List;
 
 CREATE TABLE DishEntity(
     id INTEGER NOT NULL,
@@ -17,11 +18,13 @@ CREATE TABLE DishEntity(
     photoLink TEXT,
     pictogram TEXT AS List<Long> NOT NULL,
     isActive INTEGER AS Boolean NOT NULL,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getForSubsystem:
-    SELECT * FROM DishEntity WHERE subsystemId = :subsystemId AND isActive = 1;
+    SELECT * FROM DishEntity
+    WHERE subsystemId = :subsystemId AND language = :language AND isActive = 1;
 
 insert:
     INSERT INTO DishEntity

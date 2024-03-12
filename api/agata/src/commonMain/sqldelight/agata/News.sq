@@ -1,12 +1,15 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
+
 CREATE TABLE NewsEntity (
     subsystemId INTEGER NOT NULL,
     text TEXT NOT NULL,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (subsystemId)
 );
 
 getForSubsystem:
     SELECT * FROM NewsEntity
-    WHERE subsystemId = :subsystemId;
+    WHERE subsystemId = :subsystemId AND language = :language;
 
 insert:
     INSERT INTO NewsEntity

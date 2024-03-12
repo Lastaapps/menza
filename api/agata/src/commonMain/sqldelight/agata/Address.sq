@@ -1,14 +1,18 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
+
 CREATE TABLE AddressEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,
     address TEXT NOT NULL,
     lat REAL NOT NULL,
     long REAL NOT NULL,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getForSubsystem:
-    SELECT * FROM AddressEntity WHERE subsystemId = :subsystemId;
+    SELECT * FROM AddressEntity
+    WHERE subsystemId = :subsystemId AND language = :language;
 
 insert:
     INSERT OR REPLACE INTO AddressEntity

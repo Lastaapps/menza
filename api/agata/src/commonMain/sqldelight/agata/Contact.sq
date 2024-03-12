@@ -1,3 +1,5 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
+
 CREATE TABLE ContactEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,
@@ -6,11 +8,13 @@ CREATE TABLE ContactEntity(
     name TEXT,
     phone TEXT,
     email TEXT,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getForSubsystem:
-    SELECT * FROM ContactEntity WHERE subsystemId = :subsystemId;
+    SELECT * FROM ContactEntity
+    WHERE subsystemId = :subsystemId AND language = :language;
 
 insert:
     INSERT INTO ContactEntity

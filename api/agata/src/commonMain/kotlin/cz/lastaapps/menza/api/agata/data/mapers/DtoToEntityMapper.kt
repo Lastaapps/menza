@@ -32,6 +32,7 @@ import agata.ServingPlaceEntity
 import agata.StrahovEntity
 import agata.SubsystemEntity
 import cz.lastaapps.api.core.domain.model.LatLong
+import cz.lastaapps.api.core.domain.model.RequestLanguage
 import cz.lastaapps.core.util.extensions.takeIfNotBlack
 import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.model.dto.AddressDto
@@ -46,10 +47,11 @@ import cz.lastaapps.menza.api.agata.data.model.dto.PictogramDto
 import cz.lastaapps.menza.api.agata.data.model.dto.ServingPlaceDto
 import cz.lastaapps.menza.api.agata.data.model.dto.StrahovDto
 import cz.lastaapps.menza.api.agata.data.model.dto.SubsystemDto
+import cz.lastaapps.menza.api.agata.data.model.toDB
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 
-internal fun SubsystemDto.toEntity() =
+internal fun SubsystemDto.toEntity(lang: RequestLanguage) =
     SubsystemEntity(
         id = id.toLong(),
         name = name.trim(),
@@ -57,9 +59,10 @@ internal fun SubsystemDto.toEntity() =
         supportsDaily = supportsDaily,
         supportsWeekly = supportsWeekly,
         itemOrder = order.toLong(),
+        language = lang.toDB(),
     )
 
-internal fun DishDto.toEntity(beConfig: AgataBEConfig) =
+internal fun DishDto.toEntity(beConfig: AgataBEConfig, lang: RequestLanguage) =
     DishEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -77,6 +80,7 @@ internal fun DishDto.toEntity(beConfig: AgataBEConfig) =
         },
         pictogram = pictogram,
         isActive = isActive,
+        language = lang.toDB(),
     )
 
 private val invalidCharacters = arrayOf('(', ')', '[', ']', '\\', '/', '|', '.', '-', '_')
@@ -89,42 +93,47 @@ private fun String.trimDishName() = this
     .replace("""\s*,\s*""".toRegex(), ", ")
     .replace("""\s+""".toRegex(), " ")
 
-internal fun DishTypeDto.toEntity() =
+internal fun DishTypeDto.toEntity(lang: RequestLanguage) =
     DishTypeEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
         nameShort = nameShort,
         nameLong = nameLong,
         itemOrder = order.toLong(),
+        language = lang.toDB(),
     )
 
-internal fun PictogramDto.toEntity() =
+internal fun PictogramDto.toEntity(lang: RequestLanguage) =
     PictogramEntity(
         id = id.toLong(),
         name = name?.trim() ?: "???",
+        language = lang.toDB(),
     )
 
-internal fun ServingPlaceDto.toEntity() =
+internal fun ServingPlaceDto.toEntity(lang: RequestLanguage) =
     ServingPlaceEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
         name = name.trim(),
         description = description.trim(),
         abbrev = abbrev.trim(),
+        language = lang.toDB(),
     )
 
-internal fun InfoDto.toEntity() =
+internal fun InfoDto.toEntity(lang: RequestLanguage) =
     InfoEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
         footer = footer?.removeHtml(),
+        language = lang.toDB(),
     )
 
-internal fun NewsDto.toEntity(subsystemId: Int) =
+internal fun NewsDto.toEntity(subsystemId: Int, lang: RequestLanguage) =
     html.removeHtml().takeIfNotBlack()?.let { text ->
         NewsEntity(
             subsystemId = subsystemId.toLong(),
             text = text,
+            language = lang.toDB(),
         )
     }
 
@@ -134,7 +143,7 @@ private fun String.removeHtml() = this
     .replace("""<[^>]*>""".toRegex(), "")
     .trim()
 
-internal fun ContactDto.toEntity() =
+internal fun ContactDto.toEntity(lang: RequestLanguage) =
     ContactEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -143,9 +152,10 @@ internal fun ContactDto.toEntity() =
         name = name?.trim(),
         phone = phone?.trim(),
         email = email?.trim(),
+        language = lang.toDB(),
     )
 
-internal fun OpenTimeDto.toEntity() =
+internal fun OpenTimeDto.toEntity(lang: RequestLanguage) =
     OpenTimeEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -159,6 +169,7 @@ internal fun OpenTimeDto.toEntity() =
         dayTo = (dayTo ?: dayFrom)?.toDayOfWeek(),
         timeFrom = timeFrom.toLocalTime()!!,
         timeTo = timeTo?.toLocalTime() ?: timeFrom.toLocalTime()!!,
+        language = lang.toDB(),
     )
 
 private val czechDaysOfWeek = arrayOf("Po", "Út", "St", "Čt", "Pá", "So", "Ne")
@@ -177,15 +188,16 @@ private fun String.toLocalTime() =
         LocalTime(hours.toInt(), minutes.toInt())
     }
 
-internal fun LinkDto.toEntity() =
+internal fun LinkDto.toEntity(lang: RequestLanguage) =
     LinkEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
         link = link,
         description = description.trim(),
+        language = lang.toDB(),
     )
 
-internal fun AddressDto.toEntity() = run {
+internal fun AddressDto.toEntity(lang: RequestLanguage) = run {
     val parsed = gps.toLatLong()
     AddressEntity(
         id = id.toLong(),
@@ -193,6 +205,7 @@ internal fun AddressDto.toEntity() = run {
         address = address.trim(),
         lat = parsed.lat.toDouble(),
         long = parsed.long.toDouble(),
+        language = lang.toDB(),
     )
 }
 
@@ -208,7 +221,7 @@ private fun String.toLatLong() =
 // shown only if dish has neither Czech nor English name
 private const val EmptyNamePlaceholder = """"¯\(°_o)/¯"""
 
-internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
+internal fun StrahovDto.toEntity(beConfig: AgataBEConfig, lang: RequestLanguage) =
     StrahovEntity(
         id = id.toLong(),
         groupId = groupId.toLong(),
@@ -223,6 +236,7 @@ internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
         photoLink = photoLink?.let {
             beConfig.photoLinkForStrahov(it)
         },
+        language = lang.toDB(),
     )
 
 // Strahov uses ALL CAPS and it looks just horrible

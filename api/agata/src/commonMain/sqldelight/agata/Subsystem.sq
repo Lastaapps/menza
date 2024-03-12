@@ -1,3 +1,4 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
 import kotlin.Boolean;
 
 CREATE TABLE SubsystemEntity(
@@ -7,11 +8,13 @@ CREATE TABLE SubsystemEntity(
     itemOrder INTEGER NOT NULL,
     supportsDaily INTEGER AS Boolean NOT NULL,
     supportsWeekly INTEGER AS Boolean NOT NULL,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getAll:
-    SELECT * FROM SubsystemEntity;
+    SELECT * FROM SubsystemEntity
+    WHERE language = :language;
 
 insert:
     INSERT INTO SubsystemEntity

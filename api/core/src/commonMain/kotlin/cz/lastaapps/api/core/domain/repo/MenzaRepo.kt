@@ -28,5 +28,5 @@ import kotlinx.coroutines.flow.Flow
 typealias MenzaRepoParams = RequestParams
 
 interface MenzaRepo : SyncSource<ImmutableList<Menza>, MenzaRepoParams> {
-    val isReady: Flow<Boolean>
+    fun isReady(params: MenzaRepoParams): Flow<Boolean>
 }

@@ -1,3 +1,4 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
 import kotlinx.datetime.DayOfWeek;
 import kotlinx.datetime.LocalTime;
 
@@ -14,11 +15,13 @@ CREATE TABLE OpenTimeEntity(
     dayTo INTEGER AS DayOfWeek,
     timeFrom INTEGER AS LocalTime NOT NULL,
     timeTo INTEGER AS LocalTime NOT NULL,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getForSubsystem:
-    SELECT * FROM OpenTimeEntity WHERE subsystemId = :subsystemId;
+    SELECT * FROM OpenTimeEntity
+    WHERE subsystemId = :subsystemId AND language = :language;
 
 insert:
     INSERT INTO OpenTimeEntity

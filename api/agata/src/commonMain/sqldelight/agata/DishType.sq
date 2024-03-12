@@ -1,14 +1,18 @@
+import cz.lastaapps.menza.api.agata.data.model.DBLang;
+
 CREATE TABLE DishTypeEntity(
     id INTEGER NOT NULL,
     subsystemId INTEGER NOT NULL,
     nameShort TEXT NOT NULL,
     nameLong TEXT NOT NULL,
     itemOrder INTEGER NOT NULL,
+    language TEXT AS DBLang NOT NULL,
     PRIMARY KEY (id)
 );
 
 getByDishId:
-    SELECT * FROM DishTypeEntity WHERE id = :dishTypeId;
+    SELECT * FROM DishTypeEntity
+    WHERE id = :dishTypeId AND language = :language;
 
 insert:
     INSERT INTO DishTypeEntity

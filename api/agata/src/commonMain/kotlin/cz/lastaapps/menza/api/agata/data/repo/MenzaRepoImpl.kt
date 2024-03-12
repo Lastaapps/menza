@@ -46,7 +46,8 @@ import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import cz.lastaapps.menza.api.agata.data.mapers.toEntity
 import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.data.model.dto.SubsystemDto
-import cz.lastaapps.menza.api.agata.data.model.toData
+import cz.lastaapps.menza.api.agata.data.model.toDB
+import cz.lastaapps.menza.api.agata.data.model.toDto
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
@@ -73,8 +74,8 @@ internal class MenzaSubsystemRepoImpl(
 
     private val log = localLogger()
 
-    override val isReady: Flow<Boolean> =
-        db.subsystemQueries.getAll()
+    override fun isReady(params: MenzaRepoParams): Flow<Boolean> =
+        db.subsystemQueries.getAll(params.language.toDB())
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { it.isNotEmpty() }
@@ -82,7 +83,7 @@ internal class MenzaSubsystemRepoImpl(
             .onEach { log.i { "Is ready: $it" } }
 
     override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> =
-        db.subsystemQueries.getAll()
+        db.subsystemQueries.getAll(params.language.toDB())
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { it.toDomain() }
@@ -96,14 +97,12 @@ internal class MenzaSubsystemRepoImpl(
         SyncJobHash<List<SubsystemDto>, List<SubsystemEntity>, MenzaRepoParams>(
             hashStore = hashStore,
             hashType = { HashType.subsystemHash().withLang(it.language) },
-            getHashCode = { api.getSubsystemsHash(it.language.toData()).bind() },
+            getHashCode = { api.getSubsystemsHash(it.language.toDto()).bind() },
             fetchApi = {
-                api.getSubsystems(it.language.toData()).bind().orEmpty()
+                api.getSubsystems(it.language.toDto()).bind().orEmpty()
             },
-            convert = { _, dtos ->
-                dtos.map { dto ->
-                    dto.toEntity()
-                }.rightIor()
+            convert = { params, dtos ->
+                dtos.map { dto -> dto.toEntity(params.language) }.rightIor()
             },
             store = { _, result ->
                 db.subsystemQueries.deleteAll()
@@ -137,7 +136,7 @@ internal class MenzaSubsystemRepoImpl(
 internal object MenzaStrahovRepoImpl : MenzaRepo {
     private val log = localLogger()
 
-    override val isReady: Flow<Boolean> = MutableStateFlow(true)
+    override fun isReady(params: MenzaRepoParams): Flow<Boolean> = MutableStateFlow(true)
 
     override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> = flow {
         persistentListOf(
