@@ -23,6 +23,7 @@ import arrow.core.Either.Right
 import cz.lastaapps.menza.api.agata.api.DishApiImpl
 import cz.lastaapps.menza.api.agata.data.createAgataClient
 import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
+import cz.lastaapps.menza.api.agata.data.model.ApiLang
 import cz.lastaapps.menza.api.agata.data.model.dto.DishDto
 import cz.lastaapps.menza.api.agata.data.model.dto.PictogramDto
 import cz.lastaapps.menza.api.agata.data.model.dto.StrahovDto
@@ -80,7 +81,7 @@ class DishApiTest : StringSpec(
             }
         }
         "getStrahov" {
-            val res = api().getStrahov()
+            val res = api().getStrahov(lang = ApiLang.CS)
             res.shouldBeInstanceOf<Right<List<StrahovDto>>>()
         }
     },

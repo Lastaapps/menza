@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.util
 
+import cz.lastaapps.menza.api.agata.data.model.ApiLang
 import cz.lastaapps.menza.api.agata.data.model.Func
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -28,6 +29,7 @@ internal suspend fun HttpClient.getFun(
     func: Func,
     subsystemId: Int? = null,
     secondId: Int? = null,
+    lang: ApiLang? = null,
 ) = get {
     parameter("Funkce", func.funName)
     subsystemId?.let {
@@ -35,5 +37,8 @@ internal suspend fun HttpClient.getFun(
     }
     secondId?.let {
         parameter("SecondID", it)
+    }
+    lang?.let {
+        parameter("Lang", it.value)
     }
 }

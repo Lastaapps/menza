@@ -22,6 +22,7 @@ package cz.lastaapps.menza.api.agata.api
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.util.extensions.catchingNetwork
 import cz.lastaapps.menza.api.agata.data.AgataClient
+import cz.lastaapps.menza.api.agata.data.model.ApiLang
 import cz.lastaapps.menza.api.agata.data.model.Func.Dish
 import cz.lastaapps.menza.api.agata.data.model.Func.DishHash
 import cz.lastaapps.menza.api.agata.data.model.Func.Pictogram
@@ -37,7 +38,6 @@ import cz.lastaapps.menza.api.agata.data.model.dto.WeekDishDto
 import cz.lastaapps.menza.api.agata.data.model.dto.WeekDto
 import cz.lastaapps.menza.api.agata.util.getFun
 import io.ktor.client.call.body
-import kotlinx.datetime.Clock
 
 internal interface DishApi {
 
@@ -50,8 +50,8 @@ internal interface DishApi {
     suspend fun getWeeks(subsystemId: Int): Outcome<List<WeekDto>?>
     suspend fun getWeekDishList(weekId: Int): Outcome<List<WeekDishDto>?>
 
-    suspend fun getStrahov(): Outcome<List<StrahovDto>?>
-    suspend fun getStrahovHash(): Outcome<String>
+    suspend fun getStrahov(lang: ApiLang): Outcome<List<StrahovDto>?>
+    suspend fun getStrahovHash(lang: ApiLang): Outcome<String>
 }
 
 internal class DishApiImpl(
@@ -64,10 +64,7 @@ internal class DishApiImpl(
     }
 
     override suspend fun getDishesHash(subsystemId: Int): Outcome<String> = catchingNetwork {
-        // TODO Due error in backend this endpoint may return wrong values (just a space)
         client.getFun(DishHash, subsystemId = subsystemId, secondId = 1).body<String>()
-            .takeUnless { it.isBlank() }
-            ?: Clock.System.now().toString()
     }
 
     override suspend fun getPictogram(): Outcome<List<PictogramDto>?> = catchingNetwork {
@@ -87,11 +84,11 @@ internal class DishApiImpl(
             client.getFun(WeekDays, secondId = weekId).body()
         }
 
-    override suspend fun getStrahov(): Outcome<List<StrahovDto>?> = catchingNetwork {
-        client.getFun(Strahov).body()
+    override suspend fun getStrahov(lang: ApiLang): Outcome<List<StrahovDto>?> = catchingNetwork {
+        client.getFun(Strahov, lang = lang).body()
     }
 
-    override suspend fun getStrahovHash(): Outcome<String> = catchingNetwork {
-        client.getFun(StrahovHash).body()
+    override suspend fun getStrahovHash(lang: ApiLang): Outcome<String> = catchingNetwork {
+        client.getFun(StrahovHash, lang = lang).body()
     }
 }

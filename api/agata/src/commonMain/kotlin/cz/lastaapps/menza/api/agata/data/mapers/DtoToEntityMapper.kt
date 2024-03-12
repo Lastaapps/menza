@@ -203,18 +203,44 @@ private fun String.toLatLong() =
 // shown only if dish has neither Czech nor English name
 private const val EmptyNamePlaceholder = """"¯\(°_o)/¯"""
 
-internal fun StrahovDto.toEntity(beConfig: AgataBEConfig) =
+// TODO this is just a temporary fix before I update the database schema
+internal fun Pair<Collection<StrahovDto>, Collection<StrahovDto>>.toEntity(beConfig: AgataBEConfig) =
+    run {
+        val mapCs = first.asSequence().map { it.id to it }.toMap()
+        val mapEn = second.asSequence().map { it.id to it }.toMap()
+        val keysBoth = mapCs.keys.intersect(mapEn.keys)
+        val keysCs = mapCs.keys - keysBoth
+        val keysEn = mapEn.keys - keysBoth
+
+        val output = mutableListOf<StrahovEntiy>()
+        keysBoth.forEach { key ->
+            val cs = mapCs.getValue(key)
+            val en = mapEn.getValue(key)
+            output += cs.toEntity(beConfig, en)
+        }
+        keysCs.forEach { key ->
+            val cs = mapCs.getValue(key)
+            output += cs.toEntity(beConfig, null)
+        }
+        keysEn.forEach { key ->
+            val en = mapEn.getValue(key)
+            output += en.toEntity(beConfig, null)
+        }
+        output
+    }
+
+internal fun StrahovDto.toEntity(beConfig: AgataBEConfig, secondary: StrahovDto?) =
     StrahovEntiy(
         id = id.toLong(),
         groupId = groupId.toLong(),
-        groupNameCs = groupNameCs.myCapitalize(),
-        groupNameEn = groupNameEn.myCapitalize(),
+        groupNameCs = groupName.myCapitalize(),
+        groupNameEn = (secondary?.groupName ?: groupName).myCapitalize(),
         groupOrder = groupOrder.toLong(),
         itemOrder = order.toLong(),
-        amountCs = (amountCs ?: amountEn)?.trim(),
-        amountEn = (amountEn ?: amountCs)?.trim(),
-        nameCs = (nameCs ?: nameEn ?: EmptyNamePlaceholder).trim(),
-        nameEn = (nameEn ?: nameCs ?: EmptyNamePlaceholder).trim(),
+        amountCs = (amount ?: secondary?.amount)?.trim(),
+        amountEn = (secondary?.amount ?: amount)?.trim(),
+        nameCs = (name ?: secondary?.name ?: EmptyNamePlaceholder).trim(),
+        nameEn = (secondary?.name ?: name ?: EmptyNamePlaceholder).trim(),
         priceNormal = price.toDouble(),
         priceStudent = priceStudent.toDouble(),
         allergens = allergens,

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -61,4 +61,8 @@ internal enum class Func(val funName: String) {
     StrahovHash("GetMinutkySHHash"),
     Strahov("GetMinutkySH"),
     ;
+}
+
+internal enum class ApiLang(val value: String) {
+    CS("cs"), EN("en"),
 }

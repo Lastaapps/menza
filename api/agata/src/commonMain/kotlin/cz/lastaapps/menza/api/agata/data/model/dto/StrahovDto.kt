@@ -31,21 +31,15 @@ internal data class StrahovDto(
     @SerialName("skupina_id")
     val groupId: Int,
     @SerialName("skupina_nazev")
-    val groupNameCs: String,
-    @SerialName("skupina_nazev_en")
-    val groupNameEn: String,
+    val groupName: String,
     @SerialName("skupina_poradi")
     val groupOrder: Int,
     @SerialName("poradi")
     val order: Int,
     @SerialName("vaha")
-    val amountCs: String?,
-    @SerialName("vaha_en")
-    val amountEn: String?,
+    val amount: String?,
     @SerialName("nazev")
-    val nameCs: String?,
-    @SerialName("nazev_en")
-    val nameEn: String?,
+    val name: String?,
     @SerialName("cena")
     val price: Float,
     @SerialName("cena_stud")
@@ -53,5 +47,22 @@ internal data class StrahovDto(
     @SerialName("alergeny")
     val allergens: List<Long>,
     @SerialName("foto")
+    val photoLink: String?,
+)
+
+internal data class StrahovDtoFaked(
+    val id: Int,
+    val groupId: Int,
+    val groupNameCs: String,
+    val groupNameEn: String,
+    val groupOrder: Int,
+    val order: Int,
+    val amountCs: String?,
+    val amountEn: String?,
+    val nameCs: String?,
+    val nameEn: String?,
+    val price: Float,
+    val priceStudent: Float,
+    val allergens: List<Long>,
     val photoLink: String?,
 )

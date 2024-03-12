@@ -37,6 +37,7 @@ import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import cz.lastaapps.menza.api.agata.data.mapers.toEntity
 import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
+import cz.lastaapps.menza.api.agata.data.model.ApiLang
 import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlinx.collections.immutable.ImmutableList
@@ -78,9 +79,15 @@ internal class TodayDishStrahovRepoImpl(
     private val job = SyncJobHash(
         hashStore = hashStore,
         hashType = HashType.strahovHash(),
-        getHashCode = { dishApi.getStrahovHash().bind() },
-        fetchApi = { dishApi.getStrahov().bind().orEmpty() },
-        convert = { data -> data.map { it.toEntity(beConfig) }.rightIor() },
+        getHashCode = {
+            dishApi.getStrahovHash(ApiLang.CS).bind() +
+                dishApi.getStrahovHash(ApiLang.EN).bind()
+        },
+        fetchApi = {
+            dishApi.getStrahov(ApiLang.CS).bind().orEmpty() to
+                dishApi.getStrahov(ApiLang.EN).bind().orEmpty()
+        },
+        convert = { data -> data.toEntity(beConfig).rightIor() },
         store = { data ->
             db.strahovQueries.deleteAll()
             data.forEach {
