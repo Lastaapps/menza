@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,12 @@
 
 package cz.lastaapps.menza.api.agata.data.model
 
-data class HashType(val func: String) {
+import cz.lastaapps.api.core.domain.model.RequestLanguage
+
+@JvmInline
+value class HashType(val func: String) {
+
+    fun withLang(lang: RequestLanguage) = HashType(lang.value + '_' + func)
 
     companion object {
         fun subsystemHash() =

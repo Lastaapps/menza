@@ -81,7 +81,7 @@ internal class TodayDishStrahovRepoImpl(
 
     private val job = SyncJobHash<List<StrahovDto>, List<StrahovEntity>, TodayRepoParams>(
         hashStore = hashStore,
-        hashType = HashType.strahovHash(),
+        hashType = { HashType.strahovHash().withLang(it.language) },
         getHashCode = {
             dishApi.getStrahovHash(it.language.toData()).bind()
         },

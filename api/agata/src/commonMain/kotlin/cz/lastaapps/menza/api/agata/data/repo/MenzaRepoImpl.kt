@@ -95,7 +95,7 @@ internal class MenzaSubsystemRepoImpl(
     private val subsystemJob =
         SyncJobHash<List<SubsystemDto>, List<SubsystemEntity>, MenzaRepoParams>(
             hashStore = hashStore,
-            hashType = HashType.subsystemHash(),
+            hashType = { HashType.subsystemHash().withLang(it.language) },
             getHashCode = { api.getSubsystemsHash(it.language.toData()).bind() },
             fetchApi = {
                 api.getSubsystems(it.language.toData()).bind().orEmpty()

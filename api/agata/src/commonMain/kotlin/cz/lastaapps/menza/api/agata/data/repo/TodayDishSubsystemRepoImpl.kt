@@ -174,7 +174,7 @@ internal class TodayDishSubsystemRepoImpl(
 
     private val dishListJob = SyncJobHash<List<DishDto>?, List<DishEntity>, TodayRepoParams>(
         hashStore = hashStore,
-        hashType = HashType.dishHash(subsystemId),
+        hashType = { HashType.dishHash(subsystemId).withLang(it.language) },
         getHashCode = { dishApi.getDishesHash(it.language.toData(), subsystemId).bind() },
         fetchApi = { dishApi.getDishes(it.language.toData(), subsystemId).bind() },
         convert = { _, data -> data?.map { it.toEntity(beConfig) }.orEmpty().rightIor() },
@@ -190,7 +190,7 @@ internal class TodayDishSubsystemRepoImpl(
     private val dishTypeJob =
         SyncJobHash<List<DishTypeDto>?, List<DishTypeEntity>, TodayRepoParams>(
         hashStore = hashStore,
-        hashType = HashType.typesHash(subsystemId),
+            hashType = { HashType.typesHash(subsystemId).withLang(it.language) },
             getHashCode = {
                 cafeteriaApi.getDishTypesHash(it.language.toData(), subsystemId).bind()
             },
@@ -208,7 +208,7 @@ internal class TodayDishSubsystemRepoImpl(
     private val pictogramJob =
         SyncJobHash<List<PictogramDto>, List<PictogramEntity>, TodayRepoParams>(
         hashStore = hashStore,
-        hashType = HashType.pictogramHash(),
+            hashType = { HashType.pictogramHash().withLang(it.language) },
             getHashCode = { dishApi.getPictogramHash(it.language.toData()).bind() },
             fetchApi = { dishApi.getPictogram(it.language.toData()).bind().orEmpty() },
             convert = { _, data -> data.map { it.toEntity() }.rightIor() },
@@ -224,7 +224,7 @@ internal class TodayDishSubsystemRepoImpl(
     private val servingPlacesJob =
         SyncJobHash<List<ServingPlaceDto>, List<ServingPlaceEntity>, TodayRepoParams>(
         hashStore = hashStore,
-        hashType = HashType.servingPacesHash(subsystemId),
+            hashType = { HashType.servingPacesHash(subsystemId).withLang(it.language) },
             getHashCode = {
                 cafeteriaApi.getServingPlacesHash(it.language.toData(), subsystemId).bind()
             },

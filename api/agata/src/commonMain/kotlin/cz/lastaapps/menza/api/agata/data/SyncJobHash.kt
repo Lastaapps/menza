@@ -33,7 +33,7 @@ import cz.lastaapps.menza.api.agata.domain.HashStore
  */
 internal class SyncJobHash<T, R, Params>(
     private val hashStore: HashStore,
-    private val hashType: HashType,
+    private val hashType: (Params) -> HashType,
     private val getHashCode: suspend MenzaRaise.(Params) -> String,
     fetchApi: suspend MenzaRaise.(Params) -> T,
     convert: suspend MenzaRaise.(Params, T) -> IorNel<DomainError, R>,
@@ -42,10 +42,10 @@ internal class SyncJobHash<T, R, Params>(
     { params, forced ->
         val hash = getHashCode(params)
 
-        if (forced || hashStore.shouldReload(hashType, hash)) {
+        if (forced || hashStore.shouldReload(hashType(params), hash)) {
             // deferred job to save the new hash code
             val storeHashAction: suspend () -> Unit =
-                { hashStore.storeHash(hashType, hash) }
+                { hashStore.storeHash(hashType(params), hash) }
 
             // process this job
             Some(storeHashAction)

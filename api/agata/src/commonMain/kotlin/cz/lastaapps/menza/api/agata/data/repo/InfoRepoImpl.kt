@@ -88,7 +88,7 @@ internal class InfoRepoImpl(
         // Info
         SyncJobHash(
             hashStore = hashStore,
-            hashType = HashType.infoHash(subsystemId),
+            hashType = { HashType.infoHash(subsystemId).withLang(it.language) },
             getHashCode = { subsystemApi.getInfoHash(it.language.toData(), subsystemId).bind() },
             fetchApi = { subsystemApi.getInfo(it.language.toData(), subsystemId).bind().orEmpty() },
             convert = { _, data -> data.map { it.toEntity() }.rightIor() },
@@ -103,7 +103,7 @@ internal class InfoRepoImpl(
         // News
         SyncJobHash(
             hashStore = hashStore,
-            hashType = HashType.newsHash(subsystemId),
+            hashType = { HashType.newsHash(subsystemId).withLang(it.language) },
             getHashCode = { subsystemApi.getNewsHash(it.language.toData(), subsystemId).bind() },
             fetchApi = { subsystemApi.getNews(it.language.toData(), subsystemId).bind() },
             convert = { _, data -> data?.toEntity(subsystemId).rightIor() },
@@ -118,7 +118,7 @@ internal class InfoRepoImpl(
         // Contacts
         SyncJobHash(
             hashStore = hashStore,
-            hashType = HashType.contactsHash(),
+            hashType = { HashType.contactsHash().withLang(it.language) },
             getHashCode = { subsystemApi.getContactsHash(it.language.toData()).bind() },
             fetchApi = { subsystemApi.getContacts(it.language.toData()).bind().orEmpty() },
             convert = { _, data -> data.map { it.toEntity() }.rightIor() },
@@ -133,7 +133,7 @@ internal class InfoRepoImpl(
         // OpenTimes
         SyncJobHash(
             hashStore = hashStore,
-            hashType = HashType.openingHash(subsystemId),
+            hashType = { HashType.openingHash(subsystemId).withLang(it.language) },
             getHashCode = {
                 subsystemApi.getOpeningTimesHash(it.language.toData(), subsystemId).bind()
             },
@@ -152,7 +152,7 @@ internal class InfoRepoImpl(
         // Links
         SyncJobHash(
             hashStore = hashStore,
-            hashType = HashType.linkHash(subsystemId),
+            hashType = { HashType.linkHash(subsystemId).withLang(it.language) },
             getHashCode = { subsystemApi.getLinkHash(it.language.toData(), subsystemId).bind() },
             fetchApi = { subsystemApi.getLink(it.language.toData(), subsystemId).bind().orEmpty() },
             convert = { _, data -> data.map { it.toEntity() }.rightIor() },
@@ -167,7 +167,7 @@ internal class InfoRepoImpl(
         // Address
         SyncJobHash(
             hashStore = hashStore,
-            hashType = HashType.addressHash(),
+            hashType = { HashType.addressHash().withLang(it.language) },
             getHashCode = { subsystemApi.getAddressHash(it.language.toData()).bind() },
             fetchApi = { subsystemApi.getAddress(it.language.toData()).bind().orEmpty() },
             convert = { _, data -> data.map { it.toEntity() }.rightIor() },

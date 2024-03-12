@@ -19,6 +19,6 @@
 
 package cz.lastaapps.api.core.domain.model
 
-enum class RequestLanguage {
-    CS, EN
+enum class RequestLanguage(val value: String) {
+    CS("cs"), EN("en"),
 }
