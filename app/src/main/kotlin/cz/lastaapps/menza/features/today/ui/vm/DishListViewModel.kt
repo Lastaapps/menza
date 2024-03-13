@@ -47,10 +47,15 @@ import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 internal class DishListViewModel(
@@ -67,32 +72,30 @@ internal class DishListViewModel(
 ) : StateViewModel<DishListState>(DishListState(), context), Appearing, ErrorHolder {
     override var hasAppeared: Boolean = false
 
-        private val log = localLogger()
+    private val log = localLogger()
 
     override fun onAppeared() = launchVM {
-        launchVM {
-            getSelectedMenzaUC().collectLatest { newMenza ->
-                log.i { "Registered a new: $newMenza" }
+        getSelectedMenzaUC().onEach { newMenza ->
+            log.i { "Registered a new: $newMenza" }
 
-                updateState {
-                    copy(
-                        selectedMenza = newMenza.toOption(),
-                        items = persistentListOf(),
-                    )
-                }
-                syncJob?.cancel()
-                if (newMenza != null) {
-                    coroutineScope {
-                        this.launch {
-                            load(newMenza, false)
-                        }
-                        getTodayDishListUC(newMenza).collectLatest { items ->
-                            updateState { copy(items = items) }
-                        }
+            updateState {
+                copy(
+                    selectedMenza = newMenza.toOption(),
+                    items = persistentListOf(),
+                )
+            }
+            syncJob?.cancel()
+            if (newMenza != null) {
+                coroutineScope {
+                    this.launch {
+                        load(newMenza, false)
+                    }
+                    getTodayDishListUC(newMenza).collectLatest { items ->
+                        updateState { copy(items = items) }
                     }
                 }
             }
-        }
+        }.launchInVM()
 
         getUserSettingsUC().onEach {
             updateState { copy(userSettings = it) }

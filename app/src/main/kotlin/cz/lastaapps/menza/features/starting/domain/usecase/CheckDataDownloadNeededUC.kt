@@ -19,18 +19,30 @@
 
 package cz.lastaapps.menza.features.starting.domain.usecase
 
+import androidx.core.app.PendingIntentCompat.send
+import cz.lastaapps.api.core.domain.sync.getData
+import cz.lastaapps.api.core.domain.sync.sync
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.main.domain.usecase.GetRequestParamsUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.core.util.extensions.flattenSensible
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flattenConcat
+import kotlinx.coroutines.flow.map
 
 internal class CheckDataDownloadNeededUC(
     context: UCContext,
     private val masterRepo: MenzaRepo,
     private val getRequestParamsUC: GetRequestParamsUC,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        !masterRepo.isReady(getRequestParamsUC()).first()
-    }
+    suspend operator fun invoke() =
+        getRequestParamsUC()
+            .map { masterRepo.isReady(it) }
+            .flattenSensible()
+            .map { it.not() }
+            .distinctUntilChanged()
 }

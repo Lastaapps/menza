@@ -20,7 +20,8 @@
 package cz.lastaapps.api.main.domain.usecase
 
 import cz.lastaapps.api.core.domain.model.RequestParams
+import kotlinx.coroutines.flow.Flow
 
 interface GetRequestParamsUC {
-    suspend operator fun invoke(): RequestParams
+    operator fun invoke(): Flow<RequestParams>
 }

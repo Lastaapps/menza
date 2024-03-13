@@ -7,7 +7,7 @@ CREATE TABLE DishTypeEntity(
     nameLong TEXT NOT NULL,
     itemOrder INTEGER NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getByDishId:
@@ -19,7 +19,9 @@ insert:
     VALUES ?;
 
 deleteSubsystem:
-    DELETE FROM DishTypeEntity WHERE subsystemId = :subsystemId;
+    DELETE FROM DishTypeEntity
+    WHERE language = :language AND subsystemId = :subsystemId;
 
 deleteAll:
-    DELETE FROM DishTypeEntity;
+    DELETE FROM DishTypeEntity
+    WHERE language = :language;

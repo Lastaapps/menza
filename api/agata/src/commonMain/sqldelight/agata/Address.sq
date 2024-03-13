@@ -7,7 +7,7 @@ CREATE TABLE AddressEntity(
     lat REAL NOT NULL,
     long REAL NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getForSubsystem:
@@ -19,4 +19,5 @@ insert:
     VALUES ?;
 
 deleteAll:
-    DELETE FROM AddressEntity;
+    DELETE FROM AddressEntity
+    WHERE language = :language;

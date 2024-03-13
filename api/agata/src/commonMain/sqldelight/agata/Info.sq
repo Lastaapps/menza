@@ -5,7 +5,7 @@ CREATE TABLE InfoEntity(
     subsystemId INTEGER NOT NULL,
     footer TEXT,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getForSubsystem:
@@ -17,7 +17,9 @@ insert:
     VALUES ?;
 
 deleteSubsystem:
-    DELETE FROM InfoEntity WHERE subsystemId = :subsystemId;
+    DELETE FROM InfoEntity
+    WHERE language = :language AND subsystemId = :subsystemId;
 
 deleteAll:
-    DELETE FROM InfoEntity;
+    DELETE FROM InfoEntity
+    WHERE language = :language;

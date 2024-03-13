@@ -104,8 +104,8 @@ internal class MenzaSubsystemRepoImpl(
             convert = { params, dtos ->
                 dtos.map { dto -> dto.toEntity(params.language) }.rightIor()
             },
-            store = { _, result ->
-                db.subsystemQueries.deleteAll()
+            store = { params, result ->
+                db.subsystemQueries.deleteAll(params.language.toDB())
                 result.forEach { dto ->
                     db.subsystemQueries.insert(dto)
                 }

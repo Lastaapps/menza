@@ -97,8 +97,8 @@ internal class InfoRepoImpl(
             getHashCode = { subsystemApi.getInfoHash(it.language.toDto(), subsystemId).bind() },
             fetchApi = { subsystemApi.getInfo(it.language.toDto(), subsystemId).bind().orEmpty() },
             convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { _, data ->
-                db.infoQueries.deleteSubsystem(subsystemId.toLong())
+            store = { params, data ->
+                db.infoQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
                 data.forEach {
                     db.infoQueries.insert(it)
                 }
@@ -112,8 +112,8 @@ internal class InfoRepoImpl(
             getHashCode = { subsystemApi.getNewsHash(it.language.toDto(), subsystemId).bind() },
             fetchApi = { subsystemApi.getNews(it.language.toDto(), subsystemId).bind() },
             convert = { params, data -> data?.toEntity(subsystemId, params.language).rightIor() },
-            store = { _, data ->
-                db.newsQueries.deleteForSubsystem(subsystemId.toLong())
+            store = { params, data ->
+                db.newsQueries.deleteForSubsystem(params.language.toDB(), subsystemId.toLong())
                 data?.let {
                     db.newsQueries.insert(data)
                 }
@@ -127,8 +127,8 @@ internal class InfoRepoImpl(
             getHashCode = { subsystemApi.getContactsHash(it.language.toDto()).bind() },
             fetchApi = { subsystemApi.getContacts(it.language.toDto()).bind().orEmpty() },
             convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { _, data ->
-                db.contactQueries.deleteAll()
+            store = { params, data ->
+                db.contactQueries.deleteAll(params.language.toDB())
                 data.forEach {
                     db.contactQueries.insert(it)
                 }
@@ -146,8 +146,8 @@ internal class InfoRepoImpl(
                 subsystemApi.getOpeningTimes(it.language.toDto(), subsystemId).bind().orEmpty()
             },
             convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { _, data ->
-                db.openTimeQueries.deleteSubsystem(subsystemId.toLong())
+            store = { params, data ->
+                db.openTimeQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
                 data.forEach {
                     db.openTimeQueries.insert(it)
                 }
@@ -161,8 +161,8 @@ internal class InfoRepoImpl(
             getHashCode = { subsystemApi.getLinkHash(it.language.toDto(), subsystemId).bind() },
             fetchApi = { subsystemApi.getLink(it.language.toDto(), subsystemId).bind().orEmpty() },
             convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { _, data ->
-                db.linkQueries.deleteSubsystem(subsystemId.toLong())
+            store = { params, data ->
+                db.linkQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
                 data.forEach {
                     db.linkQueries.insert(it)
                 }
@@ -176,8 +176,8 @@ internal class InfoRepoImpl(
             getHashCode = { subsystemApi.getAddressHash(it.language.toDto()).bind() },
             fetchApi = { subsystemApi.getAddress(it.language.toDto()).bind().orEmpty() },
             convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { _, data ->
-                db.addressQueries.deleteAll()
+            store = { params, data ->
+                db.addressQueries.deleteAll(params.language.toDB())
                 data.forEach {
                     db.addressQueries.insert(it)
                 }

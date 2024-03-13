@@ -25,14 +25,24 @@ import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.toRequestLanguage
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 internal class GetRequestParamsUCImpl(
     context: UCContext,
     private val setting: MainSettingsRepo,
 ) : GetRequestParamsUC, UseCase(context) {
-    override suspend fun invoke(): RequestParams =
-        RequestParams(
-            language = setting.getDishLanguage().first().toRequestLanguage(),
-        )
+    override fun invoke(): Flow<RequestParams> =
+        setting.getDishLanguage()
+            .distinctUntilChanged()
+            .map {
+                RequestParams(
+                    language = it.toRequestLanguage(),
+                )
+            }.distinctUntilChanged()
 }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,6 +19,8 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
+import cz.lastaapps.api.core.domain.sync.getData
+import cz.lastaapps.api.core.domain.sync.sync
 import arrow.core.separateEither
 import arrow.fx.coroutines.parMap
 import cz.lastaapps.core.domain.UCContext

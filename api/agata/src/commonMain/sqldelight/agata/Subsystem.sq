@@ -9,7 +9,7 @@ CREATE TABLE SubsystemEntity(
     supportsDaily INTEGER AS Boolean NOT NULL,
     supportsWeekly INTEGER AS Boolean NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getAll:
@@ -21,4 +21,5 @@ insert:
     VALUES ?;
 
 deleteAll:
-    DELETE FROM SubsystemEntity;
+    DELETE FROM SubsystemEntity
+    WHERE language = :language;

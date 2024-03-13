@@ -7,7 +7,7 @@ CREATE TABLE ServingPlaceEntity(
     description TEXT NOT NULL,
     abbrev TEXT NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getByIds:
@@ -19,7 +19,9 @@ insert:
     VALUES ?;
 
 deleteSubsystem:
-    DELETE FROM ServingPlaceEntity WHERE subsystemId = :subsystemId;
+    DELETE FROM ServingPlaceEntity
+    WHERE language = :language AND subsystemId = :subsystemId;
 
 deleteAll:
-    DELETE FROM ServingPlaceEntity;
+    DELETE FROM ServingPlaceEntity
+    WHERE language = :language;

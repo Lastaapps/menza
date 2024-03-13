@@ -6,7 +6,7 @@ CREATE TABLE LinkEntity(
     link TEXT NOT NULL,
     description TEXT NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getForSubsystem:
@@ -18,7 +18,9 @@ insert:
     VALUES ?;
 
 deleteSubsystem:
-    DELETE FROM LinkEntity WHERE subsystemId = :subsystemId;
+    DELETE FROM LinkEntity
+    WHERE language = :language AND subsystemId = :subsystemId;
 
 deleteAll:
-    DELETE FROM LinkEntity;
+    DELETE FROM LinkEntity
+    WHERE language = :language;

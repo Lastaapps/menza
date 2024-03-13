@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,26 +25,27 @@ import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 
 class GetOrderedMenzaListUC internal constructor(
     context: UCContext,
     private val getMenzaList: GetMenzaListUC,
     private val orderRepo: OrderRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        channelFlow {
-            getMenzaList().collect { list ->
-                orderRepo.initFromIfNeeded(list.map { menza ->
+    operator fun invoke() = channelFlow {
+        getMenzaList().collectLatest { list ->
+            orderRepo.initFromIfNeeded(
+                list.map { menza ->
                     menza.type to (menza.supportsDaily || menza.supportsWeekly)
-                })
+                },
+            )
 
-                orderRepo.getOrderFor(list.map { it.type }).collect { ordered ->
-                    ordered.map { (type, order) ->
-                        list.first { menza -> menza.type == type } to order
-                    }
-                        .toImmutableList()
-                        .let { send(it) }
+            orderRepo.getOrderFor(list.map { it.type }).collect { ordered ->
+                ordered.map { (type, order) ->
+                    list.first { menza -> menza.type == type } to order
                 }
+                    .toImmutableList()
+                    .let { send(it) }
             }
         }
     }

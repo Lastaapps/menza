@@ -183,8 +183,8 @@ internal class TodayDishSubsystemRepoImpl(
         convert = { params, data ->
             data?.map { it.toEntity(beConfig, params.language) }.orEmpty().rightIor()
         },
-        store = { _, data ->
-            db.dishQueries.deleteSubsytem(subsystemId.toLong())
+        store = { params, data ->
+            db.dishQueries.deleteSubsytem(params.language.toDB(), subsystemId.toLong())
             data.forEach {
                 db.dishQueries.insert(it)
             }
@@ -203,8 +203,8 @@ internal class TodayDishSubsystemRepoImpl(
             convert = { params, data ->
                 data?.map { it.toEntity(params.language) }.orEmpty().rightIor()
             },
-            store = { _, data ->
-            db.dishTypeQueries.deleteSubsystem(subsystemId.toLong())
+            store = { params, data ->
+                db.dishTypeQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
             data.forEach {
                 db.dishTypeQueries.insert(it)
             }
@@ -219,8 +219,8 @@ internal class TodayDishSubsystemRepoImpl(
             getHashCode = { dishApi.getPictogramHash(it.language.toDto()).bind() },
             fetchApi = { dishApi.getPictogram(it.language.toDto()).bind().orEmpty() },
             convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { _, data ->
-            db.pictogramQueries.deleteAll()
+            store = { params, data ->
+                db.pictogramQueries.deleteAll(params.language.toDB())
             data.forEach {
                 db.pictogramQueries.insert(it)
             }
@@ -239,8 +239,8 @@ internal class TodayDishSubsystemRepoImpl(
                 cafeteriaApi.getServingPlaces(it.language.toDto(), subsystemId).bind().orEmpty()
             },
             convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { _, data ->
-            db.servingPlaceQueries.deleteSubsystem(subsystemId.toLong())
+            store = { params, data ->
+                db.servingPlaceQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
             data.forEach {
                 db.servingPlaceQueries.insert(it)
             }

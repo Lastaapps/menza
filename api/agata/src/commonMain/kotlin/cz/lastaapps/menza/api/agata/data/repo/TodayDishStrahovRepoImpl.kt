@@ -77,8 +77,8 @@ internal class TodayDishStrahovRepoImpl(
                 data.takeIf { validity }.orEmpty()
             }
             .map { it.toDomain() }
-            .onStart { log.i { "Starting collection" } }
-            .onCompletion { log.i { "Completed collection" } }
+            .onStart { log.d { "Starting collection" } }
+            .onCompletion { log.d { "Completed collection" } }
 
     private val job = SyncJobHash<List<StrahovDto>, List<StrahovEntity>, TodayRepoParams>(
         hashStore = hashStore,
@@ -92,12 +92,12 @@ internal class TodayDishStrahovRepoImpl(
         convert = { params, data ->
             data.map { it.toEntity(beConfig, params.language) }.rightIor()
         },
-        store = { _, data ->
-            db.strahovQueries.deleteAll()
+        store = { params, data ->
+            db.strahovQueries.deleteAll(params.language.toDB())
             data.forEach {
                 db.strahovQueries.insert(it)
             }
-            log.d { "Data stored" }
+            log.d { "Data stored: ${data.size}" }
         },
     )
 

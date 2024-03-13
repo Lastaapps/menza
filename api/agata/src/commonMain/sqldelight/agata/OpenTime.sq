@@ -16,7 +16,7 @@ CREATE TABLE OpenTimeEntity(
     timeFrom INTEGER AS LocalTime NOT NULL,
     timeTo INTEGER AS LocalTime NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getForSubsystem:
@@ -28,7 +28,9 @@ insert:
     VALUES ?;
 
 deleteSubsystem:
-    DELETE FROM OpenTimeEntity WHERE subsystemId = :subsystemId;
+    DELETE FROM OpenTimeEntity
+    WHERE language = :language AND subsystemId = :subsystemId;
 
 deleteAll:
-    DELETE FROM OpenTimeEntity;
+    DELETE FROM OpenTimeEntity
+    WHERE language = :language;

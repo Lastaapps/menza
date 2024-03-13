@@ -28,7 +28,7 @@ CREATE TABLE AddressEntityTmp(
     lat REAL NOT NULL,
     long REAL NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO AddressEntityTmp(
     id, subsystemId, address, lat, long, language
@@ -50,7 +50,7 @@ CREATE TABLE ContactEntityTmp(
     phone TEXT,
     email TEXT,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO ContactEntityTmp(
     id, subsystemId, itemOrder, role, name, phone, email, language
@@ -78,7 +78,7 @@ CREATE TABLE DishEntityTmp(
     pictogram TEXT AS List<Long> NOT NULL,
     isActive INTEGER AS Boolean NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO DishEntityTmp(
     id, subsystemId, typeId, servingPlaces, amount, name, sideDishA, sideDishB, priceNormal, priceDiscount, allergens, photoLink, pictogram, isActive, language
@@ -98,7 +98,7 @@ CREATE TABLE DishTypeEntityTmp(
     nameLong TEXT NOT NULL,
     itemOrder INTEGER NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO DishTypeEntityTmp(
     id, subsystemId, nameShort, nameLong, itemOrder, language
@@ -115,7 +115,7 @@ CREATE TABLE InfoEntityTmp(
     subsystemId INTEGER NOT NULL,
     footer TEXT,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO InfoEntityTmp(
     id, subsystemId, footer, language
@@ -133,7 +133,7 @@ CREATE TABLE LinkEntityTmp(
     link TEXT NOT NULL,
     description TEXT NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO LinkEntityTmp(
     id, subsystemId, link, description, language
@@ -149,7 +149,7 @@ CREATE TABLE NewsEntityTmp (
     subsystemId INTEGER NOT NULL,
     text TEXT NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (subsystemId)
+    PRIMARY KEY (subsystemId, language)
 );
 INSERT INTO NewsEntityTmp(
     subsystemId, text, language
@@ -175,7 +175,7 @@ CREATE TABLE OpenTimeEntityTmp(
     timeFrom INTEGER AS LocalTime NOT NULL,
     timeTo INTEGER AS LocalTime NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO OpenTimeEntityTmp(
     id, subsystemId, servingPlaceId, servingPlaceName, servingPlaceAbbrev,
@@ -193,7 +193,7 @@ CREATE TABLE PictogramEntityTmp(
     id INTEGER NOT NULL,
     name TEXT NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO PictogramEntityTmp(
     id, name, language
@@ -212,7 +212,7 @@ CREATE TABLE ServingPlaceEntityTmp(
     description TEXT NOT NULL,
     abbrev TEXT NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO ServingPlaceEntityTmp(
     id, subsystemId, name, description, abbrev, language
@@ -237,7 +237,7 @@ CREATE TABLE StrahovEntityTmp(
     allergens TEXT AS List<Long> NOT NULL,
     photoLink TEXT,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO StrahovEntityTmp(
     id, groupId, groupName, groupOrder, itemOrder,
@@ -259,7 +259,7 @@ CREATE TABLE SubsystemEntityTmp(
     supportsDaily INTEGER AS Boolean NOT NULL,
     supportsWeekly INTEGER AS Boolean NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 INSERT INTO SubsystemEntityTmp(
     id, name, opened, itemOrder, supportsDaily, supportsWeekly, language

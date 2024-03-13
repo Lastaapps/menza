@@ -23,13 +23,18 @@ import arrow.core.Option
 import arrow.core.toOption
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.main.domain.usecase.GetRequestParamsUC
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
+import cz.lastaapps.core.util.extensions.flattenSensible
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 internal class TodayViewModel(

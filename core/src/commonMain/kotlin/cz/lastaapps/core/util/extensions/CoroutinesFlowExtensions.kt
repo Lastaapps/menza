@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,6 +26,8 @@ import kotlin.time.Duration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withTimeout
 
@@ -51,4 +53,9 @@ suspend fun <T> withTimeoutOutcome(
     withTimeout(timeout, block).right()
 } catch (e: TimeoutCancellationException) {
     CommonError.WorkTimeout(e).left()
+}
+
+fun <T> Flow<Flow<T>>.flattenSensible(): Flow<T> = channelFlow {
+    // the first collect has to be collectLatest!!!
+    collectLatest { flow -> flow.collect { send(it) } }
 }

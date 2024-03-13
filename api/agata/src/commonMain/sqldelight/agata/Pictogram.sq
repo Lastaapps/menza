@@ -4,7 +4,7 @@ CREATE TABLE PictogramEntity(
     id INTEGER NOT NULL,
     name TEXT NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getByIds:
@@ -16,4 +16,5 @@ insert:
     VALUES ?;
 
 deleteAll:
-    DELETE FROM PictogramEntity;
+    DELETE FROM PictogramEntity
+    WHERE language = :language;

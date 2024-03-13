@@ -9,7 +9,7 @@ CREATE TABLE ContactEntity(
     phone TEXT,
     email TEXT,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getForSubsystem:
@@ -21,4 +21,5 @@ insert:
     VALUES ?;
 
 deleteAll:
-    DELETE FROM ContactEntity;
+    DELETE FROM ContactEntity
+    WHERE language = :language;

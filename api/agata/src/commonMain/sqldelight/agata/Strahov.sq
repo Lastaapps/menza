@@ -15,7 +15,7 @@ CREATE TABLE StrahovEntity (
     allergens TEXT AS List<Long> NOT NULL,
     photoLink TEXT,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 get:
@@ -27,4 +27,5 @@ insert:
     VALUES ?;
 
 deleteAll:
-    DELETE FROM StrahovEntity;
+    DELETE FROM StrahovEntity
+     WHERE language = :language;

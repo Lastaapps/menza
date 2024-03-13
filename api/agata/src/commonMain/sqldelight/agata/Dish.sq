@@ -19,7 +19,7 @@ CREATE TABLE DishEntity(
     pictogram TEXT AS List<Long> NOT NULL,
     isActive INTEGER AS Boolean NOT NULL,
     language TEXT AS DBLang NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, language)
 );
 
 getForSubsystem:
@@ -31,7 +31,9 @@ insert:
     VALUES ?;
 
 deleteSubsytem:
-    DELETE FROM DishEntity WHERE subsystemId = :subsystemId;
+    DELETE FROM DishEntity
+    WHERE language = :language AND subsystemId = :subsystemId;
 
 deleteAll:
-    DELETE FROM DishEntity;
+    DELETE FROM DishEntity
+    WHERE language = :language;

@@ -35,6 +35,7 @@ import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 
 internal class DownloadViewModel(
     private val checkDownloadNeeded: CheckDataDownloadNeededUC,
@@ -43,29 +44,31 @@ internal class DownloadViewModel(
 ) : StateViewModel<DownloadDataState>(DownloadDataState(), context), ErrorHolder, Appearing {
     override var hasAppeared: Boolean = false
 
-        private val log = localLogger()
+    private val log = localLogger()
 
     override fun onAppeared() = launchVM {
         log.i { "Appeared" }
 
-        when (checkDownloadNeeded()) {
-            true -> {
-                log.i { "No data, starting" }
-                updateState { copy(isReady = true) }
-                startDownload()
-            }
+        checkDownloadNeeded().onEach {
+            when (it) {
+                true -> {
+                    log.i { "No data, starting" }
+                    updateState { copy(isReady = true) }
+                    startDownload()
+                }
 
-            false -> {
-                log.i { "Already has data" }
-                updateState {
-                    copy(
-                        isReady = true,
-                        isDone = true,
-                        downloadProgress = DownloadProgress.DONE,
-                    )
+                false -> {
+                    log.i { "Already has data" }
+                    updateState {
+                        copy(
+                            isReady = true,
+                            isDone = true,
+                            downloadProgress = DownloadProgress.DONE,
+                        )
+                    }
                 }
             }
-        }
+        }.launchInVM()
     }
 
     private fun startDownload() = launchVM {
@@ -80,7 +83,7 @@ internal class DownloadViewModel(
                 is Left -> updateState {
                     log.i { "Setting an error" };copy(
                     error = res.value,
-                    isLoading = false
+                    isLoading = false,
                 )
                 }
 

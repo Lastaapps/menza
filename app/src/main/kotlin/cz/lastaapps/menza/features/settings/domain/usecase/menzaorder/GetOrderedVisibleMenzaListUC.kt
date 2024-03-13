@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,11 +28,9 @@ class GetOrderedVisibleMenzaListUC internal constructor(
     context: UCContext,
     private val getOrderedMenzaList: GetOrderedMenzaListUC,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        getOrderedMenzaList().map { list ->
-            list.filter { it.second.visible }
-                .map { it.first }
-                .toImmutableList()
-        }
+    operator fun invoke() = getOrderedMenzaList().map { list ->
+        list.filter { it.second.visible }
+            .map { it.first }
+            .toImmutableList()
     }
 }

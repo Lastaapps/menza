@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.main.ui.vm
 
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.main.domain.usecase.SyncMenzaListUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletRefreshUC
 import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
@@ -33,6 +34,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 internal class MainViewModel(
     context: VMContext,
+    private val syncMenzaListUC: SyncMenzaListUC,
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getSettingsOpened: GetSettingsEverOpenedUC,
     private val isFlip: IsFlipUC,
@@ -42,6 +44,9 @@ internal class MainViewModel(
     override var hasAppeared: Boolean = false
 
     override fun onAppeared() {
+        launchVM {
+            syncMenzaListUC()
+        }
         launchVM {
             getSelectedMenza().collectLatest {
                 updateState { copy(selectedMenza = it, isReady = true) }

@@ -20,6 +20,7 @@
 package cz.lastaapps.api.main.domain.usecase
 
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase

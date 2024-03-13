@@ -22,6 +22,8 @@ package cz.lastaapps.api.main.domain.usecase
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.api.core.domain.sync.getData
+import cz.lastaapps.api.core.domain.sync.sync
 
 class SyncMenzaListUC(
     context: UCContext,
