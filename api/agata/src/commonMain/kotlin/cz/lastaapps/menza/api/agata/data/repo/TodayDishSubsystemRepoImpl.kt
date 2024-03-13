@@ -40,6 +40,7 @@ import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckRecent
+import cz.lastaapps.core.util.extensions.foldFlows
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
@@ -55,7 +56,6 @@ import cz.lastaapps.menza.api.agata.data.model.toDB
 import cz.lastaapps.menza.api.agata.data.model.toDto
 import cz.lastaapps.menza.api.agata.domain.HashStore
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +64,6 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
@@ -129,22 +128,15 @@ internal class TodayDishSubsystemRepoImpl(
                         }
                     }
 
-                // for an empty list an empty list will be returned
-                val baseCase =
-                    flow<PersistentList<Tuple4<DishEntity, DishTypeEntity?, List<PictogramEntity>, List<ServingPlaceEntity>>>> {
-                        emit(persistentListOf())
-                    }
-
-                val withInfoResolved = combinedFlowList.fold(baseCase) { acu, dataFlow ->
-                    // joins all the flow into one huge + adding all the previous ones
-                    combine(acu, dataFlow) { list, data ->
-                        // used to filter placeholder dishes with names like ".  "
-                        // and dishes with null names
-                        if (data.first.name?.any { it.isLetter() } == true)
-                            list.add(data)
-                        else {
-                            list
-                        }
+                val withInfoResolved = combinedFlowList.foldFlows(
+                    persistentListOf<Tuple4<DishEntity, DishTypeEntity?, List<PictogramEntity>, List<ServingPlaceEntity>>>(),
+                ) { list, data ->
+                    // used to filter placeholder dishes with names like ".  "
+                    // and dishes with null names
+                    if (data.first.name?.any { it.isLetter() } == true)
+                        list.add(data)
+                    else {
+                        list
                     }
                 }
 
@@ -194,7 +186,7 @@ internal class TodayDishSubsystemRepoImpl(
 
     private val dishTypeJob =
         SyncJobHash<List<DishTypeDto>?, List<DishTypeEntity>, TodayRepoParams>(
-        hashStore = hashStore,
+            hashStore = hashStore,
             hashType = { HashType.typesHash(subsystemId).withLang(it.language) },
             getHashCode = {
                 cafeteriaApi.getDishTypesHash(it.language.toDto(), subsystemId).bind()
@@ -205,32 +197,32 @@ internal class TodayDishSubsystemRepoImpl(
             },
             store = { params, data ->
                 db.dishTypeQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
-            data.forEach {
-                db.dishTypeQueries.insert(it)
-            }
-            log.d { "Stored dish type" }
-        },
-    )
+                data.forEach {
+                    db.dishTypeQueries.insert(it)
+                }
+                log.d { "Stored dish type" }
+            },
+        )
 
     private val pictogramJob =
         SyncJobHash<List<PictogramDto>, List<PictogramEntity>, TodayRepoParams>(
-        hashStore = hashStore,
+            hashStore = hashStore,
             hashType = { HashType.pictogramHash().withLang(it.language) },
             getHashCode = { dishApi.getPictogramHash(it.language.toDto()).bind() },
             fetchApi = { dishApi.getPictogram(it.language.toDto()).bind().orEmpty() },
             convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
             store = { params, data ->
                 db.pictogramQueries.deleteAll(params.language.toDB())
-            data.forEach {
-                db.pictogramQueries.insert(it)
-            }
-            log.d { "Stored pictograms" }
-        },
-    )
+                data.forEach {
+                    db.pictogramQueries.insert(it)
+                }
+                log.d { "Stored pictograms" }
+            },
+        )
 
     private val servingPlacesJob =
         SyncJobHash<List<ServingPlaceDto>, List<ServingPlaceEntity>, TodayRepoParams>(
-        hashStore = hashStore,
+            hashStore = hashStore,
             hashType = { HashType.servingPacesHash(subsystemId).withLang(it.language) },
             getHashCode = {
                 cafeteriaApi.getServingPlacesHash(it.language.toDto(), subsystemId).bind()
@@ -241,12 +233,12 @@ internal class TodayDishSubsystemRepoImpl(
             convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
             store = { params, data ->
                 db.servingPlaceQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
-            data.forEach {
-                db.servingPlaceQueries.insert(it)
-            }
-            log.d { "Stored serving places" }
-        },
-    )
+                data.forEach {
+                    db.servingPlaceQueries.insert(it)
+                }
+                log.d { "Stored serving places" }
+            },
+        )
 
     private val jobs = listOf(dishListJob, dishTypeJob, pictogramJob, servingPlacesJob)
 

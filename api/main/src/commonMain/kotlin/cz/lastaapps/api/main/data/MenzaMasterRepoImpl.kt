@@ -28,13 +28,12 @@ import cz.lastaapps.api.core.domain.repo.MenzaRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.core.domain.error.DomainError
+import cz.lastaapps.core.util.extensions.foldBinary
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import org.koin.core.component.KoinComponent
 
@@ -45,8 +44,8 @@ internal class MenzaMasterRepoImpl(
     override fun isReady(params: MenzaRepoParams): Flow<Boolean> =
         sources.map { repo ->
             repo.isReady(params)
-        }.fold(flow { emit(true) }) { acu, isReady ->
-            acu.combine(isReady) { a, r -> a && r }
+        }.foldBinary(true) { acu, isReady ->
+            acu && isReady
         }
 
     override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> =
@@ -54,10 +53,8 @@ internal class MenzaMasterRepoImpl(
             .map { repo ->
                 repo.getData(params).map { it.toPersistentList() }
             }
-            .fold(flow { emit(persistentListOf<Menza>()) }) { acu, item ->
-                acu.combine(item) { acuList, b ->
-                    acuList.addAll(b)
-                }
+            .foldBinary(persistentListOf<Menza>()) { acu, item ->
+                acu.addAll(item)
             }
             .map { it.toImmutableList() }
 

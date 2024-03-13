@@ -29,6 +29,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withTimeout
 
 fun <T1, T2, T3, T4, T5, T6, R> combine6(
@@ -59,3 +61,42 @@ fun <T> Flow<Flow<T>>.flattenSensible(): Flow<T> = channelFlow {
     // the first collect has to be collectLatest!!!
     collectLatest { flow -> flow.collect { send(it) } }
 }
+
+fun <T, Acu> Iterable<Flow<T>>.foldFlows(
+    initial: Acu,
+    operation: (Acu, T) -> Acu,
+): Flow<Acu> = run {
+    val baseCase = flow { emit(initial) }
+
+    fold(baseCase) { acu, data ->
+        combine(acu, data, operation)
+    }
+}
+
+fun <T, Acu> Sequence<Flow<T>>.foldFlows(
+    initial: Acu,
+    operation: (Acu, T) -> Acu,
+): Flow<Acu> = asIterable().foldFlows(initial, operation)
+
+/**
+ * Like fold, but merges flows in pairs to improve
+ * update complexity from O(n) to O(log(n))
+ */
+fun <T, Acu> List<Flow<T>>.foldBinary(
+    initial: T,
+    mapper: (T) -> Acu,
+    operation: (Acu, Acu) -> Acu,
+): Flow<Acu> = when (size) {
+    0 -> flow { emit(mapper(initial)) }
+    1 -> this[0].map(mapper)
+    else -> combine(
+        subList(0, size / 2).foldBinary(initial, mapper, operation),
+        subList(size / 2, size).foldBinary(initial, mapper, operation),
+        operation,
+    )
+}
+
+fun <T> List<Flow<T>>.foldBinary(
+    initial: T,
+    operation: (T, T) -> T,
+): Flow<T> = foldBinary(initial, { it }, operation)

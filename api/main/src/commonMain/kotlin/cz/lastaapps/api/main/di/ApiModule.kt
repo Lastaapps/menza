@@ -26,6 +26,7 @@ import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.main.data.MenzaMasterRepoImpl
 import cz.lastaapps.api.main.data.WalletMasterRepository
 import cz.lastaapps.api.main.data.WalletMasterRepositoryImpl
+import cz.lastaapps.api.main.domain.usecase.GetImportantRequestParams
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
 import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
@@ -73,6 +74,7 @@ val apiModule = module {
     factoryOf(::WalletLoginUC)
     factoryOf(::WalletLogoutUC)
     factoryOf(::WalletRefreshUC)
+    factoryOf(::GetImportantRequestParams)
 }
 
 private fun Scope.MenzaMasterRepoImpl() =
