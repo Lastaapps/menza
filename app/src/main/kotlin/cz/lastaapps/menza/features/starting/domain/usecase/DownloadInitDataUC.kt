@@ -35,16 +35,16 @@ internal class DownloadInitDataUC(
     private val syncInfoUC: SyncAllInfoUC,
 ) : UseCase(context) {
 
-        private val log = localLogger()
+    private val log = localLogger()
 
-    suspend operator fun invoke() = launch {
+    suspend operator fun invoke() =
         flow {
             emit(DownloadProgress.INIT.right())
 
             emit(DownloadProgress.MENZA_LIST.right())
             log.i { "Starting menza download" }
 
-            syncMenzaListUC(isForced = true)
+            syncMenzaListUC(isForced = true, all = true)
                 .onLeft {
                     emit(it.left())
                     return@flow
@@ -64,5 +64,4 @@ internal class DownloadInitDataUC(
             log.i { "Done" }
             emit(DownloadProgress.DONE.right())
         }
-    }
 }

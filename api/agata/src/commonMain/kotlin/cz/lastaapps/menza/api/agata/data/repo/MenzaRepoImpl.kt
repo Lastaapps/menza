@@ -39,6 +39,7 @@ import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
+import cz.lastaapps.api.core.domain.validity.withParams
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
@@ -127,7 +128,7 @@ internal class MenzaSubsystemRepoImpl(
 
     override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
-        checker.withCheckSince(ValidityKey.agataMenza(), isForced, 7.days) {
+        checker.withCheckSince(ValidityKey.agataMenza().withParams(params), isForced, 7.days) {
             processor.runSync(subsystemJob, db, params, isForced)
         }
     }

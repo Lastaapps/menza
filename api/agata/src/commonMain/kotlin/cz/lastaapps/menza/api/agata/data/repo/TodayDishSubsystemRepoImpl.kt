@@ -40,6 +40,7 @@ import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckRecent
+import cz.lastaapps.api.core.domain.validity.withParams
 import cz.lastaapps.core.util.extensions.foldFlows
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
 import cz.lastaapps.menza.api.agata.api.DishApi
@@ -83,9 +84,6 @@ internal class TodayDishSubsystemRepoImpl(
     private val log = Logger.withTag(this::class.simpleName + "($subsystemId)")
 
     private val validityKey = ValidityKey.agataToday(subsystemId)
-    private val isValidFlow = checker.isFromToday(validityKey)
-        .distinctUntilChanged()
-        .onEach { log.i { "Validity changed to $it" } }
 
     override fun getData(params: WeekRepoParams): Flow<ImmutableList<DishCategory>> = channelFlow {
         val lang = params.language.toDB()
@@ -94,7 +92,13 @@ internal class TodayDishSubsystemRepoImpl(
         db.dishQueries.getForSubsystem(subsystemId.toLong(), lang)
             .asFlow()
             .mapToList(Dispatchers.IO)
-            .combine(isValidFlow) { data, validity ->
+            .combine(
+                run {
+                    checker.isFromToday(validityKey.withParams(params))
+                        .distinctUntilChanged()
+                        .onEach { log.i { "Validity changed to $it" } }
+                },
+            ) { data, validity ->
                 data.takeIf { validity }.orEmpty()
             }
             .distinctUntilChanged()
@@ -244,7 +248,7 @@ internal class TodayDishSubsystemRepoImpl(
 
     override suspend fun sync(params: WeekRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
-        checker.withCheckRecent(validityKey, isForced) {
+        checker.withCheckRecent(validityKey.withParams(params), isForced) {
             processor.runSync(jobs, db, params, isForced = isForced)
         }
     }

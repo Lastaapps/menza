@@ -19,18 +19,32 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
+import arrow.fx.coroutines.parMap
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.core.domain.sync.sync
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.api.core.domain.sync.getData
-import cz.lastaapps.api.core.domain.sync.sync
 
 class SyncMenzaListUC(
     context: UCContext,
     private val menzaRepo: MenzaRepo,
     private val getRequestParamsUC: GetRequestParamsUC,
+    private val getImportantRequestParams: GetImportantRequestParams,
 ) : UseCase(context) {
-    suspend operator fun invoke(isForced: Boolean = false) = launch {
-        menzaRepo.sync(getRequestParamsUC(), isForced = isForced)
+    suspend operator fun invoke(isForced: Boolean = false, all: Boolean = false) = launch {
+        if (all) {
+            getImportantRequestParams().parMap {
+                menzaRepo.sync(it, isForced = isForced)
+            }.let { list ->
+                if (list.all { it.isRight() }) {
+                    list.first()
+                } else {
+                    list.first { it.isLeft() }
+                }
+            }
+
+        } else {
+            menzaRepo.sync(getRequestParamsUC(), isForced = isForced)
+        }
     }
 }

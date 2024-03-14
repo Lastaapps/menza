@@ -61,7 +61,7 @@ val apiModule = module {
     singleOf(::WalletMasterRepositoryImpl) bind WalletMasterRepository::class
 
     factory { GetMenzaListUC(get(), get(rootName), get()) }
-    factory { SyncMenzaListUC(get(), get(rootName), get()) }
+    factory { SyncMenzaListUC(get(), get(rootName), get(), get()) }
     factoryOf(::GetInfoUC)
     factoryOf(::SyncInfoUC)
     factoryOf(::SyncAllInfoUC)

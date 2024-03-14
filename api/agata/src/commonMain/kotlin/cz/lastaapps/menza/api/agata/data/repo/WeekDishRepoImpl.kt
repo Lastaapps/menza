@@ -35,6 +35,7 @@ import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
+import cz.lastaapps.api.core.domain.validity.withParams
 import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.DishApi
@@ -64,15 +65,14 @@ internal class WeekDishRepoImpl(
     private val log = Logger.withTag(this::class.simpleName + "($subsystemId)")
 
     private val validityKey = ValidityKey.agataWeek(subsystemId)
-    private val isValidFlow = checker.isThisWeek(validityKey)
-        .onEach { log.i { "Validity changed to $it" } }
 
     private val weekDishList = MutableStateFlow<ImmutableList<WeekDayDish>>(persistentListOf())
 
     override fun getData(params: WeekRepoParams): Flow<ImmutableList<WeekDayDish>> =
         combine(
             weekDishList,
-            isValidFlow,
+            checker.isThisWeek(validityKey.withParams(params))
+                .onEach { log.i { "Validity changed to $it" } },
         ) { data, validity ->
             data.takeIf { validity } ?: persistentListOf()
         }
@@ -108,7 +108,7 @@ internal class WeekDishRepoImpl(
         log.i { "Starting sync (f: $isForced, h: $hasSynced)" }
 
         val myForced = isForced || !hasSynced
-        checker.withCheckSince(validityKey, myForced, 1.days) {
+        checker.withCheckSince(validityKey.withParams(params), myForced, 1.days) {
             processor.runSync(syncJob, params = params, isForced = myForced).recover {
                 if (it is WeekNotAvailable) Unavailable else raise(it)
             }

@@ -33,6 +33,7 @@ import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckRecent
+import cz.lastaapps.api.core.domain.validity.withParams
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.DishApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
@@ -65,15 +66,18 @@ internal class TodayDishStrahovRepoImpl(
     private val log = localLogger()
 
     private val validityKey = ValidityKey.strahov()
-    private val isValidFlow = checker.isThisWeek(validityKey)
-        .onEach { log.i { "Validity changed to $it" } }
 
     override fun getData(params: TodayRepoParams): Flow<ImmutableList<DishCategory>> =
         db.strahovQueries
             .get(params.language.toDB())
             .asFlow()
             .mapToList(Dispatchers.IO)
-            .combine(isValidFlow) { data, validity ->
+            .combine(
+                run {
+                    checker.isThisWeek(validityKey.withParams(params))
+                        .onEach { log.i { "Validity changed to $it" } }
+                },
+            ) { data, validity ->
                 data.takeIf { validity }.orEmpty()
             }
             .map { it.toDomain() }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,8 +19,12 @@
 
 package cz.lastaapps.api.core.domain.validity
 
+import cz.lastaapps.api.core.domain.model.RequestParams
+
 @JvmInline
 value class ValidityKey private constructor(val name: String) {
+
+    fun withLang(lang: String) = ValidityKey(lang + '_' + name)
 
     companion object {
         fun agataToday(subsystemId: Int) = ValidityKey("agata_today_$subsystemId")
@@ -33,3 +37,5 @@ value class ValidityKey private constructor(val name: String) {
         fun agataCtuBalance() = ValidityKey("balance_agata_ctu")
     }
 }
+
+fun ValidityKey.withParams(params: RequestParams) = withLang(params.language.value)
