@@ -118,13 +118,20 @@ private fun WeekDishContent(
             stickyHeader {
                 //make header nontransparent
                 Surface(Modifier.fillMaxWidth()) {
-                    Box(Modifier.padding(bottom = 8.dp)) {
+                    Box(Modifier.padding(bottom = Padding.Small)) {
                         DayHeader(date = date)
                     }
                 }
             }
             categories.forEach { category ->
-                item { CourseHeader(courseType = category) }
+                item(
+                    key = "" + date + category.name,
+                ) {
+                    CourseHeader(
+                        courseType = category,
+                        modifier = Modifier.animateItem(),
+                    )
+                }
 
                 items(
                     category.dishList,
@@ -134,7 +141,9 @@ private fun WeekDishContent(
                         dish = dish,
                         priceType = priceType,
                         amountWidth = amountWidth,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .animateItem()
+                            .fillMaxWidth(),
                     )
                 }
 

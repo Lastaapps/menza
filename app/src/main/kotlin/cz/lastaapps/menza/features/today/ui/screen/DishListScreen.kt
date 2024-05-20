@@ -22,7 +22,6 @@ package cz.lastaapps.menza.features.today.ui.screen
 import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,7 +38,6 @@ import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -138,10 +136,10 @@ private fun DishListContent(
         }
     }
 
-    val header: @Composable () -> Unit = {
+    val header: @Composable (Modifier) -> Unit = { modifier ->
         if (state.showExperimentalWarning) {
             Experimental(
-                Modifier
+                modifier
                     .fillMaxWidth()
                     .padding(bottom = Padding.Small),
             )
@@ -170,18 +168,14 @@ private fun DishListContent(
                         userSettings = userSettings,
                         isOnMetered = state.isOnMetered,
                         header = header,
-                        footer = {
+                        footer = { modifier: Modifier ->
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = modifier.fillMaxWidth(),
                             ) {
                                 gridSwitch()
 
-                                OutlinedCard(modifier = Modifier.padding(horizontal = Padding.MidSmall)) {
-                                    Box(modifier = Modifier.padding(Padding.Medium)) {
-                                        imageSizeSetting()
-                                    }
-                                }
+                                imageSizeSetting()
 
                                 footerFabPadding()
                             }

@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.features.today.ui.widget
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -51,7 +57,9 @@ import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.appCardColors
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.delay
 
 @Composable
 internal fun TodayDishList(
@@ -62,8 +70,8 @@ internal fun TodayDishList(
     onDishSelected: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
-    header: @Composable () -> Unit,
-    footer: @Composable () -> Unit,
+    header: @Composable (Modifier) -> Unit,
+    footer: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
     scroll: LazyListState = rememberLazyListState(),
 ) {
@@ -97,8 +105,8 @@ private fun DishContent(
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     scroll: LazyListState,
-    header: @Composable () -> Unit,
-    footer: @Composable () -> Unit,
+    header: @Composable (Modifier) -> Unit,
+    footer: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     //no data handling
@@ -113,8 +121,8 @@ private fun DishContent(
         verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
         state = scroll,
     ) {
-        item {
-            header()
+        item(key = "header") {
+            header(Modifier.animateItem())
         }
 
         data.forEach { category ->
@@ -126,19 +134,39 @@ private fun DishContent(
                     )
                 }
             }
-            items(category.dishList) { dish ->
+            items(
+                category.dishList,
+                key = { "" + category.name + it.name },
+            ) { dish ->
                 DishItem(
                     dish = dish,
                     onDishSelected = onDishSelected,
                     userSettings = userSettings,
                     isOnMetered = isOnMetered,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(),
                 )
             }
         }
 
-        item {
-            footer()
+        item(key = "footer") {
+            footer(Modifier.animateItem())
+        }
+    }
+
+    // When the scale is changed, scrolls to the last element
+    var latestScale by remember {
+        mutableFloatStateOf(userSettings.imageScale)
+    }
+    LaunchedEffect(userSettings.imageScale) {
+        if (latestScale != userSettings.imageScale) {
+            latestScale = userSettings.imageScale
+            val placedItems = 2 + // header, footer
+                data.size + // sticky headers
+                data.sumOf { it.dishList.size } // items
+            delay(420.milliseconds)
+            scroll.animateScrollToItem(placedItems)
         }
     }
 }
@@ -166,7 +194,10 @@ private fun DishItem(
                 dish = dish,
                 priceType = userSettings.priceType,
                 downloadOnMetered = userSettings.downloadOnMetered,
-                imageScale = userSettings.imageScale,
+                imageScale = animateFloatAsState(
+                    targetValue = userSettings.imageScale,
+                    label = "image_scale",
+                ).value,
                 isOnMetered = isOnMetered,
             )
             Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {

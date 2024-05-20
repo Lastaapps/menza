@@ -66,8 +66,8 @@ internal fun TodayDishHorizontal(
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     onOliverRow: (Boolean) -> Unit,
-    header: @Composable () -> Unit,
-    footer: @Composable () -> Unit,
+    header: @Composable (Modifier) -> Unit,
+    footer: @Composable (Modifier) -> Unit,
     scroll: LazyListState,
     modifier: Modifier = Modifier,
 ) {
@@ -104,8 +104,8 @@ private fun DishContent(
     isOnMetered: Boolean,
     onOliverRow: (Boolean) -> Unit,
     scroll: LazyListState,
-    header: @Composable () -> Unit,
-    footer: @Composable () -> Unit,
+    header: @Composable (Modifier) -> Unit,
+    footer: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -122,8 +122,8 @@ private fun DishContent(
             verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
             state = scroll,
         ) {
-            item {
-                header()
+            item(key = "header") {
+                header(Modifier.animateItem())
             }
 
             data.forEach { category ->
@@ -147,13 +147,13 @@ private fun DishContent(
                     } else {
 
                         @Composable
-                        fun dishItem(dish: Dish) {
+                        fun dishItem(dish: Dish, modifier: Modifier) {
                             DishItem(
                                 dish = dish,
                                 onDishSelected = onDishSelected,
                                 userSettings = userSettings,
                                 isOnMetered = isOnMetered,
-                                modifier = Modifier.sizeIn(maxWidth = 256.dp),
+                                modifier = modifier.sizeIn(maxWidth = 256.dp),
                             )
                         }
 
@@ -171,7 +171,7 @@ private fun DishContent(
                                     .animateContentSize(),
                             ) {
                                 category.dishList.forEach { dish ->
-                                    dishItem(dish)
+                                    dishItem(dish, Modifier)
                                 }
                             }
                         } else {
@@ -182,8 +182,11 @@ private fun DishContent(
                                     .fillMaxWidth()
                                     .animateContentSize(),
                             ) {
-                                items(category.dishList) { dish ->
-                                    dishItem(dish)
+                                items(
+                                    category.dishList,
+                                    key = { "" + category.name + it.name },
+                                ) { dish ->
+                                    dishItem(dish, Modifier.animateItem())
                                 }
                             }
                         }
@@ -191,16 +194,18 @@ private fun DishContent(
                 }
             }
 
-            item {
+            item(key = "oliver") {
                 OliverRowSwitch(
                     useOliverRow = userSettings.useOliverRow,
                     onOliverRow = onOliverRow,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(),
                 )
             }
 
-            item {
-                footer()
+            item(key = "footer") {
+                footer(Modifier.animateItem())
             }
         }
     }

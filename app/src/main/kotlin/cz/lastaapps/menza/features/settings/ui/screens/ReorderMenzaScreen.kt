@@ -155,7 +155,7 @@ private fun ReorderMenzaContent(
                 ) { index, (menza, order) ->
                     val itemModifier =
                         if (draggableState.currentIndexOfDraggedItem != index) {
-                            Modifier.animateItemPlacement()
+                            Modifier.animateItem()
                         } else {
                             Modifier
                         }

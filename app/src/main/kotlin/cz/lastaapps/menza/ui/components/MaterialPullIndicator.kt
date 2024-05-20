@@ -22,18 +22,14 @@ package cz.lastaapps.menza.ui.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,43 +40,25 @@ fun PullToRefreshWrapper(
     enabled: Boolean = true,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val state = rememberPullToRefreshState(enabled = { enabled })
+    if (!enabled) {
+        Box(modifier) {
+            content()
+        }
+        return
+    }
 
-    Box(
-        modifier
-            .nestedScroll(state.nestedScrollConnection)
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier
             .onKeyEvent {
                 if ((it.isCtrlPressed && it.key == Key.R) || it.key == Key.Refresh) {
-                    state.startRefresh()
+                    onRefresh()
                     return@onKeyEvent true
                 }
                 false
             }
             .clipToBounds(),
-    ) {
-        content()
-
-        PullToRefreshContainer(
-            state = state,
-            modifier = Modifier.align(Alignment.TopCenter),
-        )
-
-        // Order here is important
-        // We first need to project the refreshing status into the state
-        // And handle the state refreshing change after
-        // Otherwise onRefresh will be called twice
-        LaunchedEffect(isRefreshing) {
-            if (isRefreshing) {
-                state.startRefresh()
-            } else {
-                state.endRefresh()
-            }
-        }
-
-        LaunchedEffect(isRefreshing, state.isRefreshing) {
-            if (!isRefreshing && state.isRefreshing) {
-                onRefresh()
-            }
-        }
-    }
+        content = content,
+    )
 }

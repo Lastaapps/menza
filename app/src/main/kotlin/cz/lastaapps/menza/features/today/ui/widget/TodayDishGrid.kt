@@ -62,8 +62,8 @@ internal fun TodayDishGrid(
     onDishSelected: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
-    header: @Composable () -> Unit,
-    footer: @Composable () -> Unit,
+    header: @Composable (Modifier) -> Unit,
+    footer: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
     scrollGrid: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     widthSize: WindowWidthSizeClass = LocalWindowWidth.current,
@@ -100,8 +100,8 @@ private fun DishContent(
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     scroll: LazyStaggeredGridState,
-    header: @Composable () -> Unit,
-    footer: @Composable () -> Unit,
+    header: @Composable (Modifier) -> Unit,
+    footer: @Composable (Modifier) -> Unit,
     widthSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
 ) {
@@ -132,14 +132,18 @@ private fun DishContent(
                 Spacer(modifier = Modifier.height(1.dp))
             }
 
-            item {
-                header()
+            item(key = "header") {
+                header(Modifier.animateItem())
             }
 
             data.forEach { category ->
-                itemsIndexed(category.dishList) { index, dish ->
+                itemsIndexed(
+                    category.dishList,
+                    key = { _, dish -> "" + category.name + dish.name },
+                ) { index, dish ->
                     Column(
                         verticalArrangement = Arrangement.spacedBy(Padding.Medium),
+                        modifier = Modifier.animateItem(),
                     ) {
                         if (index == 0) {
                             DishHeader(courseType = category)
@@ -155,8 +159,8 @@ private fun DishContent(
                 }
             }
 
-            item {
-                footer()
+            item(key = "footer") {
+                footer(Modifier.animateItem())
             }
         }
     }
