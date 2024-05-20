@@ -29,7 +29,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *>,
+    commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) = with(commonExtension) {
 
     compileSdk = libs.versions.sdk.compile.get().toInt()

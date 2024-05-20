@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -51,11 +51,11 @@ fun Project.pluginManager(block: PluginManager.() -> Unit) {
     pluginManager.apply(block)
 }
 
-fun CommonExtension<*, *, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
+fun CommonExtension<*, *, *, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
     (this as ExtensionAware).extensions.configure("kotlinOptions", block)
 }
 
-fun Project.android(block: CommonExtension<*, *, *, *, *>.() -> Unit) {
+fun Project.android(block: CommonExtension<*, *, *, *, *, *>.() -> Unit) {
     extension("android", block)
 }
 

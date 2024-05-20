@@ -1,42 +1,42 @@
 [versions]
-aboutLibraries = "11.1.0-b01"
-android-gradle = "8.2.2"
-androidx-activity = "1.8.2"
-androidx-compose = "1.6.2"
+aboutLibraries = "11.1.4"
+android-gradle = "8.3.2"
+androidx-activity = "1.9.0"
+androidx-compose = "1.6.7"
 # @keep
-androidx-compose-compiler = "1.5.10"
-androidx-compose-material = "1.6.2"
-androidx-compose-material3 = "1.2.0"
-androidx-lifecycle = "2.7.0"
+androidx-compose-compiler = "1.5.14"
+androidx-compose-material = "1.6.7"
+androidx-compose-material3 = "1.2.1"
+androidx-lifecycle = "2.8.0"
 androidx-security = "1.1.0-alpha06"
 androidx-test = "1.5.0"
-coil = "3.0.0-alpha04"
-decompose = "3.0.0-alpha07"
+coil = "3.0.0-alpha06"
+decompose = "3.0.0"
 detekt = "1.23.4"
 espresso = "3.5.1"
-google-ksp = "1.9.22-1.0.17"
+google-ksp = "1.9.24-1.0.20"
 # @keep
 java-jvmTarget = "17"
 junit5-bom = "5.10.1"
 kermit = "2.0.3"
-koin = "3.5.3"
+koin = "3.5.6"
 koin-annotations = "1.0.3"
 kotest = "5.8.0"
-kotlin = "1.9.22"
+kotlin = "1.9.24"
 # @keep
 kotlin-api = "2.0"
 # @keep
 kotlin-language = "2.0"
-kotlinx-atomicfu = "0.23.2"
-kotlinx-coroutines = "1.8.0"
+kotlinx-atomicfu = "0.24.0"
+kotlinx-coroutines = "1.8.1"
 ktlint = "11.6.0"
-ktor = "2.3.8"
+ktor = "2.3.11"
 russhwolf-settings = "1.1.1"
 sdk-compile = "34"
 sdk-min = "21"
 sdk-target = "34"
 shadow = "8.1.1"
-sqldelight = "2.0.1"
+sqldelight = "2.0.2"
 
 [libraries]
 aboutLibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutLibraries" }
@@ -44,8 +44,8 @@ aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref
 android-desugaring = "com.android.tools:desugar_jdk_libs:2.0.4"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-core = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
-androidx-annotation = "androidx.annotation:annotation:1.7.1"
-androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-alpha03"
+androidx-annotation = "androidx.annotation:annotation:1.8.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.7.0-rc01"
 androidx-collection = "androidx.collection:collection:1.4.0"
 androidx-compose-animation = { module = "androidx.compose.animation:animation", version.ref = "androidx-compose" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
@@ -62,8 +62,8 @@ androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androi
 androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "androidx-compose" }
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 androidx-constraintlayout-views = "androidx.constraintlayout:constraintlayout:2.1.4"
-androidx-core = "androidx.core:core-ktx:1.12.0"
-androidx-datastore = "androidx.datastore:datastore-preferences:1.0.0"
+androidx-core = "androidx.core:core-ktx:1.13.1"
+androidx-datastore = "androidx.datastore:datastore-preferences:1.1.1"
 androidx-documentFile = "androidx.documentfile:documentfile:1.0.1"
 androidx-emoji2-core = "androidx.emoji2:emoji2:1.4.0"
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
@@ -78,10 +78,10 @@ androidx-test-rules = { module = "androidx.test:rules-ktx", version.ref = "andro
 androidx-test-runner = { module = "androidx.test:runner-ktx", version.ref = "androidx-test" }
 androidx-test-truth = { module = "androidx.test.ext:truth-ktx", version.ref = "androidx-test" }
 androidx-tracing = "androidx.tracing:tracing-ktx:1.2.0"
-androidx-vectorDrawables = "androidx.vectordrawable:vectordrawable:1.1.0"
+androidx-vectorDrawables = "androidx.vectordrawable:vectordrawable:1.2.0"
 androidx-windowManager = "androidx.window:window:1.2.0"
 androidx-work = "androidx.work:work-runtime-ktx:2.9.0"
-arrowkt-bom = "io.arrow-kt:arrow-stack:1.2.2"
+arrowkt-bom = "io.arrow-kt:arrow-stack:1.2.4"
 arrowkt-core = { module = "io.arrow-kt:arrow-core" }
 arrowkt-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
 arrowkt-fx-stm = { module = "io.arrow-kt:arrow-fx-stm" }
@@ -105,7 +105,7 @@ espresso-idlingResource = { module = "androidx.test.espresso:espresso-idling-res
 espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espresso" }
 espresso-web = { module = "androidx.test.espresso:espresso-web", version.ref = "espresso" }
 fluidLocale = "io.fluidsonic.locale:fluid-locale:0.13.0"
-google-material = "com.google.android.material:material:1.11.0"
+google-material = "com.google.android.material:material:1.12.0"
 gradlePlugins-android = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
 gradlePlugins-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradlePlugins-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -140,7 +140,7 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.5.0"
+kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.6.0"
 kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3"
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
