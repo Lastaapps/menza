@@ -41,6 +41,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -127,13 +128,13 @@ private fun DishContent(
             }
 
             data.forEach { category ->
-                item {
+                item(key = category.name + "_cat_header") {
                     DishHeader(
                         courseType = category,
                         modifier = Modifier.padding(bottom = Padding.Smaller),
                     )
                 }
-                item {
+                item(key = category.name + "_content") {
                     val isOnlyItem = category.dishList.size == 1
 
                     if (isOnlyItem) {
@@ -142,7 +143,9 @@ private fun DishContent(
                             onDishSelected = onDishSelected,
                             userSettings = userSettings,
                             isOnMetered = isOnMetered,
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
                         )
                     } else {
 
@@ -168,6 +171,7 @@ private fun DishContent(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .horizontalScroll(rememberScrollState())
+                                    .animateItem()
                                     .animateContentSize(),
                             ) {
                                 category.dishList.forEach { dish ->
@@ -180,6 +184,7 @@ private fun DishContent(
                                 horizontalArrangement = horizontalArrangement,
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .animateItem()
                                     .animateContentSize(),
                             ) {
                                 items(
@@ -249,7 +254,7 @@ private fun DishItem(
                 ) {
                     DishNameRow(
                         dish = dish,
-                        modifier = modifier.weight(1f),
+                        modifier = Modifier.weight(1f),
                     )
                     if (dish.photoLink == null) {
                         DishBadge(
@@ -324,4 +329,5 @@ private fun OliverRowSwitch(
     }
 }
 
-private fun amIOliver() = Build.MODEL == "CPH2305"
+@Composable
+private fun amIOliver() = remember { Build.MODEL == "CPH2305" }

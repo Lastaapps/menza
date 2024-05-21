@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.ui.widget
+package cz.lastaapps.menza.features.today.ui.widget
 
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -49,7 +49,7 @@ import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 
 private const val imageSizeMin = .5f
-private const val imageSizeMax = 3f
+private const val imageSizeMax = 2f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

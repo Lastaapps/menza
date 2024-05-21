@@ -165,7 +165,8 @@ private fun DishContent(
             val placedItems = 2 + // header, footer
                 data.size + // sticky headers
                 data.sumOf { it.dishList.size } // items
-            delay(420.milliseconds)
+            // as the other nodes are resizing, we need to wait for them to (almost) stop
+            delay(666.milliseconds)
             scroll.animateScrollToItem(placedItems)
         }
     }

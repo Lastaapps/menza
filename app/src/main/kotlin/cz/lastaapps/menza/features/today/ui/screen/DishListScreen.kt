@@ -30,9 +30,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.FloatingActionButton
@@ -42,6 +40,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -52,11 +52,11 @@ import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.COMPACT
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.GRID
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.HORIZONTAL
-import cz.lastaapps.menza.features.settings.ui.widget.ImageSizeSetting
 import cz.lastaapps.menza.features.today.ui.vm.DishListState
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.features.today.ui.widget.DishListViewModeSwitch
 import cz.lastaapps.menza.features.today.ui.widget.Experimental
+import cz.lastaapps.menza.features.today.ui.widget.ImageSizeSetting
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishGrid
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishHorizontal
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishList
@@ -70,8 +70,7 @@ internal fun DishListScreen(
     viewModel: DishListViewModel,
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    scrollState: LazyListState = rememberLazyListState(),
-    scrollGridState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
+    scrollStates: ScrollStates,
 ) {
     DishListEffects(viewModel, hostState)
 
@@ -86,8 +85,7 @@ internal fun DishListScreen(
         onImageScale = viewModel::setImageScale,
         onOliverRow = viewModel::setOliverRow,
         onDishSelected = onDishSelected,
-        scrollListState = scrollState,
-        scrollGridState = scrollGridState,
+        scrollStates = scrollStates,
     )
 }
 
@@ -111,8 +109,7 @@ private fun DishListContent(
     onImageScale: (Float) -> Unit,
     onDishSelected: (Dish) -> Unit,
     onOliverRow: (Boolean) -> Unit,
-    scrollListState: LazyListState,
-    scrollGridState: LazyStaggeredGridState,
+    scrollStates: ScrollStates,
     modifier: Modifier = Modifier,
 ) = Column {
     val userSettings = state.userSettings
@@ -181,7 +178,7 @@ private fun DishListContent(
                             }
                         },
                         modifier = modifier.fillMaxSize(),
-                        scroll = scrollListState,
+                        scroll = scrollStates.list,
                     )
 
                 GRID ->
@@ -201,7 +198,7 @@ private fun DishListContent(
                             }
                         },
                         modifier = modifier.fillMaxSize(),
-                        scrollGrid = scrollGridState,
+                        scrollGrid = scrollStates.grid,
                     )
 
                 HORIZONTAL ->
@@ -222,7 +219,7 @@ private fun DishListContent(
                             }
                         },
                         modifier = modifier.fillMaxSize(),
-                        scroll = scrollListState,
+                        scroll = scrollStates.horizontal,
                     )
 
                 null -> {}
@@ -247,6 +244,37 @@ private fun LiveVideoFeedFab(
             Icons.Default.Videocam,
             stringResource(id = R.string.today_list_video_fab_content_description),
             modifier = Modifier.size(size / 2),
+        )
+    }
+}
+
+/**
+ * Holds all the scroll states for different scroll modes.
+ * The states must not be shared as some animations will get broken
+ */
+internal data class ScrollStates(
+    val list: LazyListState = LazyListState(),
+    val grid: LazyStaggeredGridState = LazyStaggeredGridState(),
+    val horizontal: LazyListState = LazyListState(),
+) {
+    companion object {
+        val Saver: Saver<ScrollStates, *> = listSaver(
+            save = {
+                listOf(
+                    with(LazyListState.Saver) { save(it.list) },
+                    with(LazyStaggeredGridState.Saver) { save(it.grid) },
+                    with(LazyListState.Saver) { save(it.horizontal) },
+                )
+            },
+            restore = { list ->
+                @Suppress("UNCHECKED_CAST")
+                val llsSaver = LazyListState.Saver as Saver<LazyListState, Any>
+                ScrollStates(
+                    list[0]?.let { llsSaver.restore(it) }!!,
+                    list[1]?.let { LazyStaggeredGridState.Saver.restore(it) }!!,
+                    list[2]?.let { llsSaver.restore(it) }!!,
+                )
+            },
         )
     }
 }

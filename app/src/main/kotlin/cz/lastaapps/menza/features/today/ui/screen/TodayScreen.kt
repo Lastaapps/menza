@@ -28,8 +28,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Videocam
@@ -113,14 +111,10 @@ private fun TodayContent(
     modifier: Modifier = Modifier,
 
     // resets scroll position when new menza is selected
-    scrollState: LazyListState = rememberSaveable(
+    scrollStates: ScrollStates = rememberSaveable(
         state.selectedMenza,
-        saver = LazyListState.Saver,
-    ) { LazyListState() },
-    scrollGridState: LazyStaggeredGridState = rememberSaveable(
-        state.selectedMenza,
-        saver = LazyStaggeredGridState.Saver,
-    ) { LazyStaggeredGridState() },
+        saver = ScrollStates.Saver,
+    ) { ScrollStates() },
 ) {
     var videoFeedUrl by remember(state.selectedMenza) {
         mutableStateOf<String?>(null)
@@ -133,8 +127,7 @@ private fun TodayContent(
             viewModel = dishListViewModel,
             modifier = Modifier.fillMaxSize(),
             hostState = hostState,
-            scrollState = scrollState,
-            scrollGridState = scrollGridState,
+            scrollStates = scrollStates,
         )
     }
 
