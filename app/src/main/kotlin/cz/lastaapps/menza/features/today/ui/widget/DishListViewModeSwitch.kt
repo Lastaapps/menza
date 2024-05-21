@@ -19,27 +19,24 @@
 
 package cz.lastaapps.menza.features.today.ui.widget
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ElevatedButton
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
-import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-internal fun CompactViewSwitch(
+internal fun DishListViewModeSwitch(
     currentMode: DishListMode?,
-    onCompactChange: (mode: DishListMode) -> Unit,
+    onModeChange: (mode: DishListMode) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val buttons = remember {
@@ -49,40 +46,16 @@ internal fun CompactViewSwitch(
             DishListMode.HORIZONTAL to R.string.today_list_mode_horizontal,
         )
     }
-    LazyRow(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(
-            Padding.Medium, Alignment.CenterHorizontally,
-        ),
+    SingleChoiceSegmentedButtonRow(
+        modifier = modifier.horizontalScroll(rememberScrollState()),
     ) {
-        items(buttons) { (mode, resId) ->
-            CompactButton(
-                onClick = { onCompactChange(mode) },
-                isSelected = mode == currentMode,
-            ) { Text(stringResource(resId)) }
-        }
-    }
-}
-
-// TODO replace with segment button when available
-@Composable
-private fun CompactButton(
-    onClick: () -> Unit,
-    isSelected: Boolean,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
-    Crossfade(
-        targetState = isSelected,
-        modifier = modifier,
-    ) { enabled ->
-        if (enabled) {
-            ElevatedButton(onClick = onClick) {
-                content()
-            }
-        } else {
-            TextButton(onClick = onClick) {
-                content()
+        buttons.forEachIndexed { index, (mode, textId) ->
+            SegmentedButton(
+                selected = mode == currentMode,
+                onClick = { onModeChange(mode) },
+                shape = SegmentedButtonDefaults.itemShape(index = index, count = buttons.size),
+            ) {
+                Text(stringResource(id = textId))
             }
         }
     }

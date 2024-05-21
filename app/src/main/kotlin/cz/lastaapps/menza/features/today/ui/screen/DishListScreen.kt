@@ -55,7 +55,7 @@ import cz.lastaapps.menza.features.settings.domain.model.DishListMode.HORIZONTAL
 import cz.lastaapps.menza.features.settings.ui.widget.ImageSizeSetting
 import cz.lastaapps.menza.features.today.ui.vm.DishListState
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
-import cz.lastaapps.menza.features.today.ui.widget.CompactViewSwitch
+import cz.lastaapps.menza.features.today.ui.widget.DishListViewModeSwitch
 import cz.lastaapps.menza.features.today.ui.widget.Experimental
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishGrid
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishHorizontal
@@ -117,9 +117,9 @@ private fun DishListContent(
 ) = Column {
     val userSettings = state.userSettings
     val gridSwitch: @Composable () -> Unit = {
-        CompactViewSwitch(
+        DishListViewModeSwitch(
             currentMode = userSettings.dishListMode,
-            onCompactChange = onViewMode,
+            onModeChange = onViewMode,
             modifier = Modifier.fillMaxWidth(),
         )
     }
