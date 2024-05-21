@@ -141,20 +141,22 @@ internal fun InfoEntity?.toDomain(
     contacts: List<ContactEntity>,
     openingTimes: List<OpenTimeEntity>,
     links: List<LinkEntity>,
-    address: AddressEntity,
+    address: AddressEntity?,
 ) = Info(
     header = news?.text?.let(::Message),
     footer = this?.footer?.let(::Message),
     contacts = contacts.map { it.toDomain() }.toImmutableList(),
     openingTimes = openingTimes.toDomain().toImmutableList(),
     links = links.map { it.toDomain() }.toImmutableList(),
-    address = Address(
-        location = address.address.let(::LocationName),
-        gps = LatLong(
-            lat = address.lat.toFloat(),
-            long = address.long.toFloat(),
-        ),
-    ),
+    address = address?.let {
+        Address(
+            location = address.address.let(::LocationName),
+            gps = LatLong(
+                lat = address.lat.toFloat(),
+                long = address.long.toFloat(),
+            ),
+        )
+    },
 )
 
 private fun ContactEntity.toDomain() =

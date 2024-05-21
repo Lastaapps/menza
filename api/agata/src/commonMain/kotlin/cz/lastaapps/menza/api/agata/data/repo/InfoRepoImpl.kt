@@ -21,7 +21,6 @@ package cz.lastaapps.menza.api.agata.data.repo
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import arrow.core.rightIor
 import co.touchlab.kermit.Logger
@@ -36,6 +35,7 @@ import cz.lastaapps.api.core.domain.sync.runSync
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
+import cz.lastaapps.api.core.domain.validity.withParams
 import cz.lastaapps.core.util.extensions.combine6
 import cz.lastaapps.menza.api.agata.api.SubsystemApi
 import cz.lastaapps.menza.api.agata.data.SyncJobHash
@@ -45,7 +45,6 @@ import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.data.model.toDB
 import cz.lastaapps.menza.api.agata.data.model.toDto
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import java.awt.SystemColor.info
 import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -66,6 +65,7 @@ internal class InfoRepoImpl(
 ) : InfoRepo {
 
     private val log = Logger.withTag(this::class.simpleName + "($subsystemId)")
+    private val validityKey = ValidityKey.agataInfo(subsystemId)
 
     override fun getData(params: InfoRepoParams): Flow<Info> = run {
         val lang = params.language.toDB()
@@ -81,7 +81,7 @@ internal class InfoRepoImpl(
             db.linkQueries.getForSubsystem(subsystemId.toLong(), lang).asFlow()
                 .mapToList(Dispatchers.IO),
             db.addressQueries.getForSubsystem(subsystemId.toLong(), lang).asFlow()
-                .mapToOne(Dispatchers.IO),
+                .mapToOneOrNull(Dispatchers.IO),
         ) { info, news, contacts, openTimes, links, address ->
             info.toDomain(news, contacts, openTimes, links, address)
         }
@@ -188,7 +188,7 @@ internal class InfoRepoImpl(
 
     override suspend fun sync(params: InfoRepoParams, isForced: Boolean): SyncOutcome = run {
         log.i { "Starting sync (f: $isForced)" }
-        checker.withCheckSince(ValidityKey.agataInfo(subsystemId), isForced, 7.days) {
+        checker.withCheckSince(validityKey.withParams(params), isForced, 7.days) {
             processor.runSync(jobs, db, params, isForced)
         }
     }
