@@ -199,6 +199,10 @@ private fun DishContent(
                 }
             }
 
+            item(key = "footer") {
+                footer(Modifier.animateItem())
+            }
+
             item(key = "oliver") {
                 OliverRowSwitch(
                     useOliverRow = userSettings.useOliverRow,
@@ -207,10 +211,6 @@ private fun DishContent(
                         .fillMaxWidth()
                         .animateItem(),
                 )
-            }
-
-            item(key = "footer") {
-                footer(Modifier.animateItem())
             }
         }
     }
