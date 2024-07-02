@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,7 +34,7 @@ class GetSelectedMenzaUC internal constructor(
     suspend operator fun invoke() =
         combine(
             repo.getSelectedMenza(),
-            getMenzaList()
+            getMenzaList(),
         ) { selected, all ->
             if (selected == null) {
                 null

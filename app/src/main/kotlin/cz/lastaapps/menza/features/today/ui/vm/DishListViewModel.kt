@@ -47,15 +47,10 @@ import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 internal class DishListViewModel(
@@ -75,7 +70,7 @@ internal class DishListViewModel(
     private val log = localLogger()
 
     override fun onAppeared() = launchVM {
-        getSelectedMenzaUC().onEach { newMenza ->
+        getSelectedMenzaUC().collectLatestInVM { newMenza ->
             log.i { "Registered a new: $newMenza" }
 
             updateState {
@@ -95,7 +90,7 @@ internal class DishListViewModel(
                     }
                 }
             }
-        }.launchInVM()
+        }
 
         getUserSettingsUC().onEach {
             updateState { copy(userSettings = it) }

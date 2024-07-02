@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -90,7 +89,6 @@ internal class OrderRepoImpl(
             .fold(flow {emit(persistentListOf<MenzaOrder>())}) { acu, item ->
                 combine(acu, item) { a, i -> a.add(i) }
             }
-            .onEach { lock.withLock {} }
             .mapLatest { data ->
                 data.zip(list) { o, m -> m to o }
             }.map { data ->

@@ -26,6 +26,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @JvmInline
@@ -46,6 +47,10 @@ abstract class BaseViewModel(
         launchJob(block)
     }
 
+    // TODO convert to context receiver
+    protected fun <T> Flow<T>.collectLatestInVM(action: suspend (T) -> Unit) =
+        launchVM { collectLatest(action) }
+
     protected fun launchJob(block: suspend CoroutineScope.() -> Unit) =
         viewModelScope.launch(block = block)
 
@@ -53,3 +58,4 @@ abstract class BaseViewModel(
         viewModelScope.launch { collect() }
     }
 }
+
