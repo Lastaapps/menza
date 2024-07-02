@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -33,6 +33,13 @@ dependencies {
     // skrape-it
     // androidMainImplementation(projects.htmlParser)
     androidMainImplementation("it.skrape:skrapeit:1.2.2")
+    // fix security vulnerabilities in skrapeit libs
+    implementation("ch.qos.logback:logback-core:1.4.12")
+    implementation("ch.qos.logback:logback-classic:1.4.12")
+    implementation("commons-net:commons-net:3.9.0")
+    implementation("org.apache.commons:commons-text:1.10.0")
+    implementation("org.jsoup:jsoup:1.15.3")
+    implementation("xalan:xalan:2.7.3")
 
     commonMainImplementation(libs.ktor.client.core)
     commonMainImplementation(libs.ktor.client.contentNegotiation)
