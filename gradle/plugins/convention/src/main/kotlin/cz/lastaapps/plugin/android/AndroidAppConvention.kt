@@ -103,9 +103,11 @@ class AndroidAppConvention : BasePlugin(
             }
 
             packaging {
-                resources { }
+                resources {
+                    // TODO Remove after skrape-it is removed
+                    excludes.add("META-INF/INDEX.LIST")
+                }
             }
-
         }
 
         apply<AndroidBaseConvention>()

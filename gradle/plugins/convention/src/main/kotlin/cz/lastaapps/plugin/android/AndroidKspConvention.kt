@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,6 +25,7 @@ import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
+@Suppress("unused")
 class AndroidKspConvention : BasePlugin({
     pluginManager {
         alias(libs.plugins.google.ksp)

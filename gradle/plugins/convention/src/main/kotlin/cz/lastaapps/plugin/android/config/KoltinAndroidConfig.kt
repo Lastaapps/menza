@@ -20,12 +20,13 @@
 package cz.lastaapps.plugin.android.config
 
 import com.android.build.api.dsl.CommonExtension
+import cz.lastaapps.extensions.compilerOptions
 import cz.lastaapps.extensions.coreLibraryDesugaring
 import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.kotlinOptions
 import cz.lastaapps.extensions.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 
 internal fun Project.configureKotlinAndroid(
@@ -39,17 +40,16 @@ internal fun Project.configureKotlinAndroid(
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    try {
-        kotlinOptions {
-            // Treat all Kotlin warnings as errors (disabled by default)
-            allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
+    compilerOptions {
+        // Treat all Kotlin warnings as errors (disabled by default)
+        allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
 
-            freeCompilerArgs = freeCompilerArgs + listOf(
+        freeCompilerArgs.addAll(
+            listOf(
                 "-opt-in=kotlin.RequiresOptIn",
                 "-Xcontext-receivers",
-            )
-        }
-    } catch (_: Exception) {
+            ),
+        )
     }
 
     compileOptions {

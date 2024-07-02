@@ -21,6 +21,7 @@ package cz.lastaapps.plugin.android.common
 
 import cz.lastaapps.extensions.alias
 import cz.lastaapps.extensions.android
+import cz.lastaapps.extensions.compilerOptions
 import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.java
 import cz.lastaapps.extensions.libs
@@ -30,12 +31,12 @@ import org.gradle.api.JavaVersion
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+private typealias KV = org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 class KotlinBaseConvention : BasePlugin(
     {
-
         pluginManager {
             alias(libs.plugins.kotlin.serialization)
         }
@@ -54,17 +55,21 @@ class KotlinBaseConvention : BasePlugin(
 
         android { }
 
-        tasks.withType<KotlinCompile> {
-            kotlinOptions {
-                languageVersion = libs.versions.kotlin.language.get()
-                apiVersion = libs.versions.kotlin.api.get()
+        compilerOptions(
+            {
+                val versionCode = libs.versions.java.jvmTarget.get().toInt()
+                val version = JavaVersion.toVersion(versionCode)
+                jvmTarget.set(JvmTarget.fromTarget(version.toString()))
+            },
+        ) {
+            languageVersion.set(KV.fromVersion(libs.versions.kotlin.language.get()))
+            apiVersion.set(KV.fromVersion(libs.versions.kotlin.api.get()))
 
-                freeCompilerArgs += listOf(
+            freeCompilerArgs.addAll(
+                listOf(
                     "-opt-in=kotlin.ExperimentalStdlibApi",
-                    "-opt-in=kotlin.time.ExperimentalTime",
-                    "-Xcontext-receivers",
-                )
-            }
+                ),
+            )
         }
 
         dependencies {

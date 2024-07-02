@@ -19,23 +19,22 @@
 
 package cz.lastaapps.plugin.android.common
 
+import cz.lastaapps.extensions.compilerOptions
 import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class CoroutinesConvention : BasePlugin(
     {
-        tasks.withType<KotlinCompile> {
-            kotlinOptions {
-                freeCompilerArgs += listOf(
+        compilerOptions {
+            freeCompilerArgs.addAll(
+                listOf(
                     "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                     "-opt-in=kotlinx.coroutines.FlowPreview",
-                )
-            }
+                ),
+            )
         }
 
         dependencies {

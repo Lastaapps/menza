@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,7 +22,8 @@ import java.time.ZoneOffset.UTC
 import java.time.format.DateTimeFormatter
 
 plugins {
-    alias(libs.plugins.lastaapps.android.library.core)
+    alias(libs.plugins.lastaapps.android.library)
+    alias(libs.plugins.lastaapps.common.compose)
     `maven-publish`
 }
 

@@ -41,6 +41,7 @@ kotlin {
 dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
     compileOnly(libs.gradlePlugins.kotlin)
+    compileOnly(libs.gradlePlugins.kotlin.compose.compiler)
     compileOnly(libs.gradlePlugins.android)
     compileOnly(libs.gradlePlugins.ktlint)
     implementation(libs.gradlePlugins.detekt)
@@ -50,20 +51,16 @@ gradlePlugin {
     plugins {
         val ids = libs.plugins.lastaapps
         plugin(
-            ids.android.app.core,
-            pkg("android.AndroidAppConvention")
+            ids.android.app,
+            pkg("android.AndroidAppConvention"),
         )
         plugin(
-            ids.android.app.compose,
-            pkg("android.AndroidAppComposeConvention")
+            ids.android.library,
+            pkg("android.AndroidLibraryConvention"),
         )
         plugin(
-            ids.android.library.core,
-            pkg("android.AndroidLibraryConvention")
-        )
-        plugin(
-            ids.android.library.compose,
-            pkg("android.AndroidLibraryComposeConvention"),
+            ids.common.compose,
+            pkg("common.ComposeConvention"),
         )
         plugin(
             ids.common.coil,

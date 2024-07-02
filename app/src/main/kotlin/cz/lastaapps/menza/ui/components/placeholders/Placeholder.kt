@@ -136,6 +136,7 @@ fun Modifier.placeholder(
     val transitionState = remember { MutableTransitionState(visible) }.apply {
         targetState = visible
     }
+    // TODO resolve
     val transition = updateTransition(transitionState, "placeholder_crossfade")
 
     val placeholderAlpha by transition.animateFloat(

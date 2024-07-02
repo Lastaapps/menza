@@ -18,8 +18,9 @@
  */
 
 plugins {
-    alias(libs.plugins.lastaapps.android.app.compose)
+    alias(libs.plugins.lastaapps.android.app)
     alias(libs.plugins.lastaapps.common.coil)
+    alias(libs.plugins.lastaapps.common.compose)
     alias(libs.plugins.aboutLibraries)
     alias(libs.plugins.kotlin.atomicfu)
 }

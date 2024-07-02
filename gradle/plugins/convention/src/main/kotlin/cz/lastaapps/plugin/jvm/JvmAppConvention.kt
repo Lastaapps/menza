@@ -25,6 +25,7 @@ import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.android.common.KotlinBaseConvention
 import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
 import org.gradle.api.tasks.testing.Test
@@ -33,7 +34,6 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("unused")
 class JvmAppConvention : BasePlugin(
@@ -44,17 +44,12 @@ class JvmAppConvention : BasePlugin(
             alias(libs.plugins.shadow)
         }
 
+        apply<KotlinBaseConvention>()
         apply<DetektConvention>()
         apply<ArrowKtConvention>()
 
         tasks.withType<Test> {
             useJUnitPlatform()
-        }
-        tasks.withType<KotlinCompile> {
-            kotlinOptions {
-                languageVersion = libs.versions.kotlin.language.get()
-                apiVersion = libs.versions.kotlin.api.get()
-            }
         }
 
         (kotlinExtension as KotlinJvmProjectExtension).apply {

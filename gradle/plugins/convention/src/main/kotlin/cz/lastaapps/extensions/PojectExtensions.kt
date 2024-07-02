@@ -24,13 +24,19 @@ import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.PluginManager
 import org.gradle.api.provider.Provider
+import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.the
 import org.gradle.plugin.use.PluginDependency
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompilerOptions
+import org.jetbrains.kotlin.gradle.dsl.KotlinCommonProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
@@ -51,10 +57,6 @@ fun Project.pluginManager(block: PluginManager.() -> Unit) {
     pluginManager.apply(block)
 }
 
-fun CommonExtension<*, *, *, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
-    (this as ExtensionAware).extensions.configure("kotlinOptions", block)
-}
-
 fun Project.android(block: CommonExtension<*, *, *, *, *, *>.() -> Unit) {
     extension("android", block)
 }
@@ -70,6 +72,48 @@ fun Project.androidLibrary(block: LibraryExtension.() -> Unit) {
 
 fun Project.java(block: JavaPluginExtension.() -> Unit) {
     extension("java", block)
+}
+
+@OptIn(ExperimentalKotlinGradlePluginApi::class)
+fun Project.compilerOptions(
+    jvmAndroid: KotlinJvmCompilerOptions.() -> Unit = {},
+    common: KotlinCommonCompilerOptions.() -> Unit,
+) {
+    var anySucceed = false
+
+    extensions.findByType<KotlinAndroidProjectExtension>()?.apply {
+        compilerOptions {
+            common()
+            jvmAndroid()
+        }
+    }?.also { anySucceed = true }
+
+    extensions.findByType<KotlinJvmProjectExtension>()?.apply {
+        compilerOptions {
+            common()
+            jvmAndroid()
+        }
+    }?.also { anySucceed = true }
+
+    extensions.findByType<KotlinMultiplatformExtension>()?.apply {
+        compilerOptions {
+            common()
+        }
+    }?.also { anySucceed = true }
+
+    extensions.findByType<KotlinCommonProjectExtension>()?.apply {
+        target {
+            compilerOptions {
+                common()
+                jvmAndroid()
+            }
+        }
+    }?.also { anySucceed = true }
+
+    if (!anySucceed) {
+        // this will crash
+        extensions.getByType<KotlinCommonProjectExtension>()
+    }
 }
 
 inline fun <reified T : Any> Project.extension(name: String, block: Action<T>) {

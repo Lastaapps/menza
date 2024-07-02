@@ -21,12 +21,9 @@
 
 package cz.lastaapps.extensions
 
-import com.android.build.gradle.BaseExtension
-import org.gradle.api.Action
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 fun DependencyHandlerScope.implementation(
     dependency: String,
@@ -63,6 +60,3 @@ fun DependencyHandlerScope.coreLibraryDesugaring(dependencyNotation: Any) =
 
 fun DependencyHandlerScope.ksp(dependencyNotation: Any) =
     add(Constants.KSP, dependencyNotation)
-
-fun BaseExtension.kotlinOptions(configure: Action<KotlinJvmOptions>) =
-    (this as org.gradle.api.plugins.ExtensionAware).extensions.configure("kotlinOptions", configure)

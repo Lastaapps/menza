@@ -30,6 +30,7 @@ import cz.lastaapps.plugin.android.AndroidLibraryConvention
 import cz.lastaapps.plugin.android.common.KotlinBaseConvention
 import cz.lastaapps.plugin.android.config.configureKotlinAndroid
 import cz.lastaapps.plugin.common.ArrowKtConvention
+import cz.lastaapps.plugin.common.ComposeConvention
 import cz.lastaapps.plugin.common.DetektConvention
 import cz.lastaapps.plugin.common.JavaConvention
 import org.gradle.api.tasks.testing.Test
@@ -38,7 +39,6 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("unused")
 class KMPLibraryConvention : BasePlugin(
@@ -49,68 +49,28 @@ class KMPLibraryConvention : BasePlugin(
             alias(libs.plugins.android.library)
         }
 
-        apply<JavaConvention>()
         apply<KotlinBaseConvention>()
+        apply<JavaConvention>()
         apply<AndroidLibraryConvention>()
         apply<DetektConvention>()
         apply<ArrowKtConvention>()
+        apply<ComposeConvention>()
 
         extensions.configure<LibraryExtension> {
 
             sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
             configureKotlinAndroid(this)
-//        configureComposeCompiler(this)
-
-            // KMP plugin is fucking broken
-            // https://issuetracker.google.com/issues/155536223#comment7
-            val composeCompilerDependency = libs.androidx.compose.compiler
-            dependencies {
-                val namePrefixAndroid = "kotlinCompilerPluginClasspathAndroid"
-                val namePrefixCommon = "kotlinCompilerPluginClasspathCommon"
-                configurations.configureEach {
-                    if (name.startsWith(namePrefixAndroid) || name.startsWith(namePrefixCommon)) {
-                        add(name, composeCompilerDependency)
-                    }
-                }
-            }
         }
 
         tasks.withType<Test> {
             useJUnitPlatform()
         }
-        tasks.withType<KotlinCompile> {
-            kotlinOptions {
-                languageVersion = libs.versions.kotlin.language.get()
-                apiVersion = libs.versions.kotlin.api.get()
-            }
-        }
 
         multiplatform {
-
-            sourceSets.all {
-                languageSettings.apply {
-                    optIn("kotlin.RequiresOptIn")
-                    optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-                    languageVersion = libs.versions.kotlin.language.get()
-                    apiVersion = libs.versions.kotlin.api.get()
-                }
-            }
-
-            targets.all {
-                compilations.all { }
-            }
-
-            androidTarget {
-                compilations.all {
-                    kotlinOptions { }
-                }
-            }
-            jvm {
-                compilations.all {
-                    kotlinOptions { }
-                }
-            }
+            targets.all {}
+            androidTarget { }
+            jvm {}
 
             sourceSets.apply {
                 getByName("commonMain") {
