@@ -144,6 +144,7 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
             Menza(
                 type = Strahov,
                 name = getName(params),
+                isActive = false,
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = false,

@@ -38,6 +38,7 @@ import cz.lastaapps.api.core.domain.repo.WeekRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
 import cz.lastaapps.api.core.domain.sync.SyncResult.Unavailable
+import cz.lastaapps.core.data.AppInfoProvider
 import cz.lastaapps.core.util.extensions.localLogger
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -53,7 +54,9 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import org.koin.core.component.KoinComponent
 
-internal class KocourkovRepoImpl : MenzaRepo {
+internal class KocourkovRepoImpl(
+    private val appInfoProvider: AppInfoProvider,
+) : MenzaRepo {
     override fun isReady(params: MenzaRepoParams): Flow<Boolean> = flow {
         emit(true)
     }
@@ -64,6 +67,7 @@ internal class KocourkovRepoImpl : MenzaRepo {
                 Menza(
                     MenzaType.Testing.Kocourkov,
                     name = "Kocourkov",
+                    isActive = appInfoProvider.isDebug(),
                     isOpened = true,
                     supportsDaily = true,
                     supportsWeekly = false,

@@ -50,6 +50,7 @@ internal object MenzaFSRepoImpl : MenzaRepo {
             Menza(
                 type = FS,
                 name = "Bufet FS",
+                isActive = true,
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = true,
@@ -80,6 +81,7 @@ internal object MenzaFELRepoImpl : MenzaRepo {
             Menza(
                 type = FEL,
                 name = "Bufet FEL",
+                isActive = true,
                 isOpened = true,
                 supportsDaily = true,
                 supportsWeekly = true,

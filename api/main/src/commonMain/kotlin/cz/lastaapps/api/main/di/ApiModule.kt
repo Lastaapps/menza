@@ -82,7 +82,7 @@ val apiModule = module {
     factoryOf(::GetImportantRequestParams)
 
     registerMenzaType<MenzaType.Testing.Kocourkov>(
-        menzaRepo = { KocourkovRepoImpl() },
+        menzaRepo = { KocourkovRepoImpl(get()) },
         dishRepo = { TodayKocourkovDishRepoImpl },
         infoRepo = { InfoKocourkovRepoImpl },
         weekRepo = { WeekKocourkovRepoImpl },

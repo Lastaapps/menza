@@ -243,6 +243,7 @@ private fun MenzaItemPreview() {
                     menza = Menza(
                         Strahov,
                         "Menza Strahov",
+                        isActive = true,
                         isOpened = true,
                         supportsDaily = true,
                         supportsWeekly = true,
@@ -255,6 +256,7 @@ private fun MenzaItemPreview() {
                     menza = Menza(
                         Strahov,
                         "Restaurace Strahov",
+                        isActive = true,
                         isOpened = true,
                         supportsDaily = true,
                         supportsWeekly = true,

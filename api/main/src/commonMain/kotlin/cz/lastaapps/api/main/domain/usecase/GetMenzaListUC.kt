@@ -19,13 +19,12 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
-import cz.lastaapps.api.core.domain.sync.getData
-import cz.lastaapps.api.core.domain.sync.sync
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.map
 
 class GetMenzaListUC(
     context: UCContext,
@@ -33,4 +32,5 @@ class GetMenzaListUC(
     private val getRequestParamsUC: GetRequestParamsUC,
 ) : UseCase(context) {
     operator fun invoke() = menzaRepo.getData(getRequestParamsUC())
+        .map { it.filter(Menza::isActive) }
 }

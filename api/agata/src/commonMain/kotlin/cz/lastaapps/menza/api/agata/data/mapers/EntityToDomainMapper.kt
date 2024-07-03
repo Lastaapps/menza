@@ -61,6 +61,7 @@ private fun SubsystemEntity.toDomain() =
     Menza(
         Subsystem(id.toInt()),
         name,
+        true,
         opened,
         supportsDaily,
         supportsWeekly,

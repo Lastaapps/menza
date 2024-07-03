@@ -24,6 +24,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class Menza(
     val type: MenzaType,
     val name: String,
+    val isActive: Boolean,
     val isOpened: Boolean,
     val supportsDaily: Boolean,
     val supportsWeekly: Boolean,
