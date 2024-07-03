@@ -21,11 +21,16 @@ package cz.lastaapps.api.main.di
 
 import cz.lastaapps.api.buffet.di.apiBuffetModule
 import cz.lastaapps.api.core.di.apiCoreModule
+import cz.lastaapps.api.core.di.registerMenzaType
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
+import cz.lastaapps.api.main.data.InfoKocourkovRepoImpl
+import cz.lastaapps.api.main.data.KocourkovRepoImpl
 import cz.lastaapps.api.main.data.MenzaMasterRepoImpl
+import cz.lastaapps.api.main.data.TodayKocourkovDishRepoImpl
 import cz.lastaapps.api.main.data.WalletMasterRepository
 import cz.lastaapps.api.main.data.WalletMasterRepositoryImpl
+import cz.lastaapps.api.main.data.WeekKocourkovRepoImpl
 import cz.lastaapps.api.main.domain.usecase.GetImportantRequestParams
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
@@ -75,6 +80,13 @@ val apiModule = module {
     factoryOf(::WalletLogoutUC)
     factoryOf(::WalletRefreshUC)
     factoryOf(::GetImportantRequestParams)
+
+    registerMenzaType<MenzaType.Testing.Kocourkov>(
+        menzaRepo = { KocourkovRepoImpl() },
+        dishRepo = { TodayKocourkovDishRepoImpl },
+        infoRepo = { InfoKocourkovRepoImpl },
+        weekRepo = { WeekKocourkovRepoImpl },
+    )
 }
 
 private fun Scope.MenzaMasterRepoImpl() =

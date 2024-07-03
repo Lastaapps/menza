@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,6 +31,12 @@ import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
+import cz.lastaapps.api.core.domain.model.MenzaType.Testing.Kocourkov
+import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl.Companion.MenzaStoreType.AgataStrahov
+import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl.Companion.MenzaStoreType.AgataSubsystem
+import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl.Companion.MenzaStoreType.BuffetFel
+import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl.Companion.MenzaStoreType.BuffetFs
+import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSourceImpl.Companion.MenzaStoreType.TestingKocourkov
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -74,16 +80,17 @@ internal class InitMenzaDataSourceImpl(
 
         @Keep
         private enum class MenzaStoreType {
-            AgataStrahov, AgataSubsystem, BuffetFel, BuffetFs,
+            AgataStrahov, AgataSubsystem, BuffetFel, BuffetFs, TestingKocourkov,
             ;
         }
 
         private fun MenzaType.toStoreKey() =
             when (this) {
-                Strahov -> MenzaStoreType.AgataStrahov
-                is Subsystem -> MenzaStoreType.AgataSubsystem
-                FEL -> MenzaStoreType.BuffetFel
-                FS -> MenzaStoreType.BuffetFs
+                Strahov -> AgataStrahov
+                is Subsystem -> AgataSubsystem
+                FEL -> BuffetFel
+                FS -> BuffetFs
+                Kocourkov -> TestingKocourkov
             }
     }
 
@@ -123,10 +130,11 @@ internal class InitMenzaDataSourceImpl(
             val type = MenzaStoreType.entries
                 .firstOrNull { it.name == name } ?: return@combine null
             when (type) {
-                MenzaStoreType.AgataStrahov -> Strahov
-                MenzaStoreType.AgataSubsystem -> Subsystem(id ?: return@combine null)
-                MenzaStoreType.BuffetFel -> FEL
-                MenzaStoreType.BuffetFs -> FS
+                AgataStrahov -> Strahov
+                AgataSubsystem -> Subsystem(id ?: return@combine null)
+                BuffetFel -> FEL
+                BuffetFs -> FS
+                TestingKocourkov -> Kocourkov
             }
         }
 }

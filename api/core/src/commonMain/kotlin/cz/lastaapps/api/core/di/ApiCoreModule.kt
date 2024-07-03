@@ -27,6 +27,7 @@ import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
+import cz.lastaapps.api.core.domain.model.MenzaType.Testing.Kocourkov
 import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
@@ -65,6 +66,7 @@ val apiCoreModule = module {
                     is Subsystem -> createScope<Subsystem>()
                     FEL -> createScope<FEL>()
                     FS -> createScope<FS>()
+                    Kocourkov -> createScope<Kocourkov>()
                 }
             }
         }

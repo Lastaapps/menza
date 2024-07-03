@@ -19,13 +19,12 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
-import cz.lastaapps.api.core.domain.sync.getData
-import cz.lastaapps.api.core.domain.sync.sync
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FEL
 import cz.lastaapps.api.core.domain.model.MenzaType.Buffet.FS
+import cz.lastaapps.api.core.domain.model.MenzaType.Testing.Kocourkov
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.core.util.providers.LinkOpener
@@ -39,6 +38,7 @@ class OpenMenuUC internal constructor(
             Strahov -> "https://agata.suz.cvut.cz/jidelnicky/restauraceSH.php"
             is Subsystem -> "https://agata.suz.cvut.cz/jidelnicky/?clPodsystem=${type.subsystemId}"
             FEL, FS -> "http://studentcatering.cz/jidelni-listek/"
+            Kocourkov -> "http://bruxy.regnet.cz/kunda/"
         }
 
         linkOpener.openLink(url)

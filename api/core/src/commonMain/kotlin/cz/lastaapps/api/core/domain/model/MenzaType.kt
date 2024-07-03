@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,6 +31,7 @@ sealed interface MenzaType {
             named<Agata.Subsystem>(),
             named<Buffet.FS>(),
             named<Buffet.FEL>(),
+            named<Testing.Kocourkov>(),
         )
     }
 
@@ -51,6 +52,12 @@ sealed interface MenzaType {
 
         data object FEL : Buffet {
             override val id: String = "buffet_fel"
+        }
+    }
+
+    sealed interface Testing : MenzaType {
+        data object Kocourkov : Testing {
+            override val id: String = "kocourkov"
         }
     }
 }
