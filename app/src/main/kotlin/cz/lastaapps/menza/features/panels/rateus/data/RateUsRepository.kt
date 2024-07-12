@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -63,6 +63,8 @@ internal class RateUsRepositoryImpl(
     }
 
     companion object {
-        private val SHOULD_RATE_AFTER = 7.days
+        // this should not be to short and also not multiple of 7
+        // as people hate seeing it the same day every time (at least Zigy does)
+        private val SHOULD_RATE_AFTER = 25.days
     }
 }
