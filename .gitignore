@@ -10,3 +10,4 @@ local.properties
 /gradle/libs.versions.updates.toml
 /.idea/other.xml
 .kotlin
+/.idea/studiobot.xml
