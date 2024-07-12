@@ -31,9 +31,11 @@ import cz.lastaapps.menza.features.settings.domain.model.DarkMode.Dark
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.usecase.FullAppReloadUC
+import cz.lastaapps.menza.features.settings.domain.usecase.GetBalanceWarningThresholdUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.OnSettingsOpenedUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetBalanceWarningThresholdUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.GetInitialMenzaModeUI
@@ -56,6 +58,8 @@ internal class SettingsViewModel(
     val setPriceTypeUC: SetPriceTypeUC,
     val getImagesOnMeteredUC: GetImagesOnMeteredUC,
     val setImagesOnMeteredUC: SetImagesOnMeteredUC,
+    val getBalanceWarningThresholdUC: GetBalanceWarningThresholdUC,
+    val setBalanceWarningThresholdUC: SetBalanceWarningThresholdUC,
     val getMenzaListUC: GetOrderedVisibleMenzaListUC,
     val getInitialMenzaUC: GetInitialMenzaModeUI,
     val setInitialMenzaUC: SetInitialMenzaUC,
@@ -77,6 +81,9 @@ internal class SettingsViewModel(
         }.launchInVM()
         getImagesOnMeteredUC().onEach {
             updateState { copy(downloadOnMetered = it) }
+        }.launchInVM()
+        getBalanceWarningThresholdUC().onEach {
+            updateState { copy(balanceWarningThreshold = it) }
         }.launchInVM()
         getInitialMenzaUC().onEach {
             updateState { copy(initialMenzaBehaviour = it) }
@@ -101,6 +108,10 @@ internal class SettingsViewModel(
         setImagesOnMeteredUC(enable)
     }
 
+    fun setBalanceWarningThreshold(threshold: Int) = launchVM {
+        setBalanceWarningThresholdUC(threshold)
+    }
+
     fun setInitMenzaBehaviour(behaviour: InitialSelectionBehaviour) = launchVM {
         setInitialMenzaUC(behaviour)
     }
@@ -120,6 +131,7 @@ internal data class SettingsState(
     val darkMode: DarkMode = Dark,
     val priceType: PriceType = PriceType.Unset,
     val downloadOnMetered: Boolean = false,
+    val balanceWarningThreshold: Int = 0,
     val initialMenzaBehaviour: InitialSelectionBehaviour = InitialSelectionBehaviour.Ask,
     val menzaList: ImmutableList<Menza> = persistentListOf(),
     val selectedMenza: Menza? = null,

@@ -99,6 +99,8 @@ internal fun SettingsContent(
             onDiscounterPrices = viewModel::setPriceType,
             downloadOnMetered = state.downloadOnMetered,
             onDownloadOnMetered = viewModel::setDownloadOnMetered,
+            balanceThreshold = state.balanceWarningThreshold,
+            onBalanceThreshold = viewModel::setBalanceWarningThreshold,
             initialMenzaBehaviour = state.initialMenzaBehaviour,
             onInitialMenzaBehaviour = viewModel::setInitMenzaBehaviour,
             menzaList = state.menzaList,

@@ -23,11 +23,9 @@ import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
-class GetOliverRow internal constructor(
+class GetBalanceWarningThresholdUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        repo.isOliverRow()
-    }
+    operator fun invoke() = repo.getBalanceWarningThreshold()
 }

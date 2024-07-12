@@ -32,8 +32,6 @@ import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
 
 @OptIn(ExperimentalSettingsApi::class)
 @JvmInline
@@ -76,6 +74,9 @@ internal interface GeneralDataSource {
 
     suspend fun setOliverRow(isUsed: Boolean)
     fun isOliverRow(): Flow<Boolean?>
+
+    suspend fun setBalanceWarningThreshold(threshold: Int)
+    fun getBalanceWarningThreshold(): Flow<Int?>
 }
 
 @OptIn(ExperimentalSettingsApi::class)
@@ -95,6 +96,7 @@ internal class GeneralDataSourceImpl(
         private const val dishLanguageKey = "dish_language"
         private const val compactTodayViewKey = "compact_today_view"
         private const val oliverRowsKey = "oliver_row"
+        private const val balanceWarningThresholdKey = "balance_warning_threshold"
     }
 
     override suspend fun storeAppSetupFinished() =
@@ -171,4 +173,10 @@ internal class GeneralDataSourceImpl(
 
     override fun isOliverRow(): Flow<Boolean?> =
         settings.getBooleanOrNullFlow(oliverRowsKey)
+
+    override suspend fun setBalanceWarningThreshold(threshold: Int) =
+        settings.putInt(balanceWarningThresholdKey, threshold)
+
+    override fun getBalanceWarningThreshold(): Flow<Int?> =
+        settings.getIntOrNullFlow(balanceWarningThresholdKey)
 }

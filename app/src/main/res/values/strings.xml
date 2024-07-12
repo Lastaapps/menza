@@ -123,6 +123,8 @@
     <string name="settings_language_subtitle">Czech/English menu language</string>
     <string name="settings_switch_metered_title">Images on metered</string>
     <string name="settings_switch_metered_subtitle">Each image takes ~0.7 MB</string>
+    <string name="settings_balance_threshold_title">Balance warning</string>
+    <string name="settings_balance_threshold_disabled">Disabled</string>
     <string name="settings_image_size_title">Image scaling</string>
     <string name="settings_button_privacy_policy">Privacy policy</string>
     <string name="settings_about_title">About</string>

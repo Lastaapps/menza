@@ -35,15 +35,17 @@ import cz.lastaapps.menza.features.settings.data.datasource.OrderSettings
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.OrderRepo
 import cz.lastaapps.menza.features.settings.domain.usecase.FullAppReloadUC
+import cz.lastaapps.menza.features.settings.domain.usecase.GetBalanceWarningThresholdUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleRangeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetOliverRow
+import cz.lastaapps.menza.features.settings.domain.usecase.GetOliverRowUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.OnSettingsOpenedUC
+import cz.lastaapps.menza.features.settings.domain.usecase.SetBalanceWarningThresholdUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
@@ -89,9 +91,9 @@ val settingsModule = module {
     factory {
         // @formatter:off
         SettingsViewModel(
+            get(), get(), get(), get(), get(), get(),
             get(), get(), get(), get(), get(),
             get(), get(), get(), get(), get(),
-            get(), get(), get(), get(),
         )
         // @formatter:on
     }
@@ -116,7 +118,9 @@ val settingsModule = module {
     // Others
     factoryOf(::GetImageScaleUC)
     factoryOf(::GetImagesOnMeteredUC)
-    factoryOf(::GetOliverRow)
+    factoryOf(::GetBalanceWarningThresholdUC)
+    factoryOf(::SetBalanceWarningThresholdUC)
+    factoryOf(::GetOliverRowUC)
     factoryOf(::GetPriceTypeUC)
     factoryOf(::GetSettingsEverOpenedUC)
     factoryOf(::GetDishLanguageUC)

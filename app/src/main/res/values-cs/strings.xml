@@ -110,6 +110,8 @@
     <string name="settings_language_subtitle">Menu v češtině/angličtině</string>
     <string name="settings_switch_metered_title">Obrázky na datech</string>
     <string name="settings_switch_metered_subtitle">Každý obrázek spotřebuje ~0.7 MB</string>
+    <string name="settings_balance_threshold_title">Varování konta</string>
+    <string name="settings_balance_threshold_disabled">Vypnuto</string>
     <string name="settings_image_size_title">Škálování obrázků</string>
     <string name="settings_button_privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="settings_about_title">O aplikaci</string>

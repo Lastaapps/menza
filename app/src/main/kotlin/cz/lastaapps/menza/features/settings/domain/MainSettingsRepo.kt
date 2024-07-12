@@ -70,4 +70,7 @@ internal interface MainSettingsRepo {
 
     suspend fun setOliverRows(useOliverRows: Boolean)
     fun isOliverRow(): Flow<Boolean>
+
+    suspend fun setBalanceWarningThreshold(threshold: Int)
+    fun getBalanceWarningThreshold(): Flow<Int>
 }

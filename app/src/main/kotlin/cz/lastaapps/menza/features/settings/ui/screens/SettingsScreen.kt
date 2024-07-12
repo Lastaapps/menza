@@ -69,6 +69,7 @@ import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.ui.util.name
+import cz.lastaapps.menza.features.settings.ui.widget.BalanceThresholdSlider
 import cz.lastaapps.menza.features.settings.ui.widget.FullReloadDialog
 import cz.lastaapps.menza.features.settings.ui.widget.SettingsItem
 import cz.lastaapps.menza.features.settings.ui.widget.SettingsSwitch
@@ -89,6 +90,8 @@ internal fun SettingsScreen(
     onDiscounterPrices: (PriceType) -> Unit,
     downloadOnMetered: Boolean,
     onDownloadOnMetered: (Boolean) -> Unit,
+    balanceThreshold: Int,
+    onBalanceThreshold: (Int) -> Unit,
     initialMenzaBehaviour: InitialSelectionBehaviour,
     onInitialMenzaBehaviour: (InitialSelectionBehaviour) -> Unit,
     menzaList: ImmutableList<Menza>,
@@ -144,6 +147,12 @@ internal fun SettingsScreen(
             subtitle = stringResource(id = R.string.settings_switch_metered_subtitle),
             isChecked = downloadOnMetered,
             onChecked = onDownloadOnMetered,
+        )
+
+        BalanceThresholdSlider(
+            title = stringResource(id = R.string.settings_balance_threshold_title),
+            threshold = balanceThreshold,
+            onThreshold = onBalanceThreshold,
         )
 
         // Behaviour at startup
@@ -294,7 +303,7 @@ private fun FullDataReload(
     if (showFullReload) {
         FullReloadDialog(
             onDismissRequest = { showFullReload = false },
-            onConfirm = onFullRefresh
+            onConfirm = onFullRefresh,
         )
     }
 
@@ -358,6 +367,8 @@ private fun SettingsScreenPreview() = PreviewWrapper {
         onDiscounterPrices = {},
         downloadOnMetered = false,
         onDownloadOnMetered = {},
+        balanceThreshold = 256,
+        onBalanceThreshold = {},
         initialMenzaBehaviour = InitialSelectionBehaviour.Specific,
         onInitialMenzaBehaviour = {},
         menzaList = persistentListOf(),

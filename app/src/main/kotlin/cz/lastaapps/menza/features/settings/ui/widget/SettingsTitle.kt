@@ -19,13 +19,11 @@
 
 package cz.lastaapps.menza.features.settings.ui.widget
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SettingsTitle(
     text: String,

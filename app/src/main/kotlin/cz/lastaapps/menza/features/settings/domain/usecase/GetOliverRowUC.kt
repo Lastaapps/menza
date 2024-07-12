@@ -17,25 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.main.domain.usecase
+package cz.lastaapps.menza.features.settings.domain.usecase
 
-import cz.lastaapps.api.main.domain.usecase.wallet.WalletGetBalanceUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.domain.usecase.GetBalanceWarningThresholdUC
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
-internal class CheckLowBalanceUC(
+class GetOliverRowUC internal constructor(
     context: UCContext,
-    private val walletGetBalanceUC: WalletGetBalanceUC,
-    private val getBalanceWarningThreshold: GetBalanceWarningThresholdUC,
+    private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    operator fun invoke() = walletGetBalanceUC()
-        .filterNotNull()
-        .combine(getBalanceWarningThreshold()) { balance, threshold ->
-            balance.balance < threshold
-        }
-        .distinctUntilChanged()
+    suspend operator fun invoke() = launch {
+        repo.isOliverRow()
+    }
 }

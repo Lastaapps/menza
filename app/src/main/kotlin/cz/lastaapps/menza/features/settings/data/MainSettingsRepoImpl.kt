@@ -140,4 +140,12 @@ internal class MainSettingsRepoImpl(
     override fun isOliverRow(): Flow<Boolean> =
         general.isOliverRow()
             .map { it ?: true }
+
+    override suspend fun setBalanceWarningThreshold(threshold: Int) =
+        general.setBalanceWarningThreshold(threshold)
+
+    override fun getBalanceWarningThreshold(): Flow<Int> =
+        general.getBalanceWarningThreshold()
+            .map { it ?: 256 }
+
 }

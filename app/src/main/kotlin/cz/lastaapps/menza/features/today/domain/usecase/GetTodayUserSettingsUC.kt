@@ -25,20 +25,19 @@ import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetOliverRow
+import cz.lastaapps.menza.features.settings.domain.usecase.GetOliverRowUC
 import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
 internal class GetTodayUserSettingsUC(
     context: UCContext,
-    private val getOliverRowUC: GetOliverRow,
+    private val getOliverRowUC: GetOliverRowUC,
     private val getPriceTypeUC: GetPriceTypeUC,
     private val getImagesOnMeteredUC: GetImagesOnMeteredUC,
     private val getImageScaleUC: GetImageScaleUC,
