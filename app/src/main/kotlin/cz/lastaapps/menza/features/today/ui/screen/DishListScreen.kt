@@ -39,12 +39,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
@@ -62,6 +65,7 @@ import cz.lastaapps.menza.features.today.ui.widget.TodayDishHorizontal
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishList
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.HandleError
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun DishListScreen(
@@ -73,6 +77,13 @@ internal fun DishListScreen(
     scrollStates: ScrollStates,
 ) {
     DishListEffects(viewModel, hostState)
+
+    val lifecycle = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycle, viewModel) {
+        lifecycle.lifecycle.currentStateFlow.collectLatest {
+            viewModel.setIsResumed(it == Lifecycle.State.RESUMED)
+        }
+    }
 
     val state by viewModel.flowState
     DishListContent(

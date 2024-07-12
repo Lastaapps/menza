@@ -45,11 +45,15 @@ import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.SetOliverRow
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -98,6 +102,18 @@ internal class DishListViewModel(
         isOnMeteredUC().onEach {
             updateState { copy(isOnMetered = it) }
         }.launchInVM()
+
+        // Refreshes the screen if user is looking at the data for at least 42 seconds
+        flow.map {
+            it.isResumed to it.selectedMenza?.getOrNull()
+        }
+            .distinctUntilChanged()
+            .collectLatestInVM { (resumed, menza) ->
+                while (resumed && menza != null) {
+                    delay(42.seconds)
+                    load(menza, true)
+                }
+            }
     }
 
     private var syncJob: Job? = null
@@ -126,6 +142,9 @@ internal class DishListViewModel(
         setOliverRowUC(used)
     }
 
+    fun setIsResumed(resumed: Boolean) =
+        updateState { copy(isResumed = resumed) }
+
     private suspend fun load(menza: Menza, isForced: Boolean) {
         withLoading({ copy(isLoading = it) }) {
             when (val res = syncTodayDishListUC(menza, isForced = isForced).mapSync()) {
@@ -147,6 +166,8 @@ internal data class DishListState(
     val items: ImmutableList<DishCategory> = persistentListOf(),
     val userSettings: TodayUserSettings = TodayUserSettings(),
     val isOnMetered: Boolean = false,
+    // is the UI consuming this viewModel is resumed
+    val isResumed: Boolean = false,
 ) : VMState {
     val showExperimentalWarning: Boolean =
         selectedMenza?.getOrNull()?.isExperimental ?: false
