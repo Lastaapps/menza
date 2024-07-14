@@ -23,7 +23,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -55,6 +55,7 @@ import coil3.Extras
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest.Builder
+import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.menza.R.string
 import cz.lastaapps.menza.ui.components.placeholders.PlaceholderHighlight
 import cz.lastaapps.menza.ui.components.placeholders.fade
@@ -63,16 +64,42 @@ import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlin.math.absoluteValue
 import kotlin.random.Random
 
+internal fun loadImmediately(downloadOnMetered: Boolean, isOnMetered: Boolean) =
+    downloadOnMetered || !isOnMetered
+
+@Composable
+internal fun DishImageOrSupplement(
+    dish: Dish,
+    loadImmediately: Boolean,
+    modifier: Modifier = Modifier,
+    ratio: Float? = DishImageTokens.ASPECT_RATIO,
+) {
+    val imageModifier = (ratio?.let { modifier.aspectRatio(it) } ?: modifier).fillMaxSize()
+    dish.photoLink?.let {
+        DishImage(
+            it,
+            loadImmediately = loadImmediately,
+            modifier = imageModifier,
+        )
+    } ?: run {
+        DishImageSupplement(
+            dish.name.hashCode(),
+            color = MaterialTheme.colorScheme.primaryContainer,
+            modifier = imageModifier,
+        )
+    }
+}
 
 @Composable
 internal fun DishImageRatio(
     photoLink: String,
     loadImmediately: Boolean,
     modifier: Modifier = Modifier,
+    ratio: Float = DishImageTokens.ASPECT_RATIO,
 ) {
     val imageModifier = modifier
-        .fillMaxWidth()
-        .aspectRatio(DishImageTokens.ASPECT_RATIO)
+        .aspectRatio(ratio)
+        .fillMaxSize()
 
     DishImage(
         photoLink = photoLink,
@@ -155,7 +182,7 @@ internal fun DishImageSupplement(
 ) {
     Surface(
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.aspectRatio(DishImageTokens.ASPECT_RATIO),
+        modifier = modifier,
         color = color,
     ) {
         val icon =
@@ -194,7 +221,9 @@ private fun DishImageSupplementPreview() = PreviewWrapper() {
             DishImageSupplement(
                 remember { Random.nextInt() },
                 color = it,
-                modifier = Modifier.padding(12.dp),
+                modifier = Modifier
+                    .padding(12.dp)
+                    .aspectRatio(DishImageTokens.ASPECT_RATIO),
             )
         }
     }

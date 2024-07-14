@@ -52,6 +52,7 @@ import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
+import cz.lastaapps.menza.features.settings.domain.model.DishListMode.CAROUSEL
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.COMPACT
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.GRID
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.HORIZONTAL
@@ -60,6 +61,7 @@ import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.features.today.ui.widget.DishListViewModeSwitch
 import cz.lastaapps.menza.features.today.ui.widget.Experimental
 import cz.lastaapps.menza.features.today.ui.widget.ImageSizeSetting
+import cz.lastaapps.menza.features.today.ui.widget.TodayDishCarousel
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishGrid
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishHorizontal
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishList
@@ -140,7 +142,7 @@ private fun DishListContent(
     }
     val footerFabPadding: @Composable () -> Unit = {
         state.selectedMenza?.getOrNull()?.videoLinks?.firstOrNull()?.let {
-            Spacer(Modifier.height(96.dp))
+            Spacer(Modifier.height(96.dp + Padding.MidSmall))
         }
     }
 
@@ -233,6 +235,25 @@ private fun DishListContent(
                         scroll = scrollStates.horizontal,
                     )
 
+                CAROUSEL -> TodayDishCarousel(
+                    isLoading = state.isLoading,
+                    onRefresh = onRefresh,
+                    data = state.items,
+                    onNoItems = onNoItems,
+                    onDishSelected = onDishSelected,
+                    userSettings = userSettings,
+                    isOnMetered = state.isOnMetered,
+                    header = header,
+                    footer = {
+                        Column {
+                            gridSwitch()
+                            footerFabPadding()
+                        }
+                    },
+                    modifier = modifier.fillMaxSize(),
+                    scroll = scrollStates.carousel,
+                )
+
                 null -> {}
             }
         }
@@ -267,6 +288,7 @@ internal data class ScrollStates(
     val list: LazyListState = LazyListState(),
     val grid: LazyStaggeredGridState = LazyStaggeredGridState(),
     val horizontal: LazyListState = LazyListState(),
+    val carousel: LazyListState = LazyListState(),
 ) {
     companion object {
         val Saver: Saver<ScrollStates, *> = listSaver(
@@ -275,6 +297,7 @@ internal data class ScrollStates(
                     with(LazyListState.Saver) { save(it.list) },
                     with(LazyStaggeredGridState.Saver) { save(it.grid) },
                     with(LazyListState.Saver) { save(it.horizontal) },
+                    with(LazyListState.Saver) { save(it.carousel) },
                 )
             },
             restore = { list ->
@@ -284,6 +307,7 @@ internal data class ScrollStates(
                     list[0]?.let { llsSaver.restore(it) }!!,
                     list[1]?.let { LazyStaggeredGridState.Saver.restore(it) }!!,
                     list[2]?.let { llsSaver.restore(it) }!!,
+                    list[3]?.let { llsSaver.restore(it) }!!,
                 )
             },
         )

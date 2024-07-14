@@ -218,6 +218,7 @@
     <string name="today_list_mode_compact">Compact</string>
     <string name="today_list_mode_grid">Large</string>
     <string name="today_list_mode_horizontal">Rows</string>
+    <string name="today_list_mode_carousel">Carousel</string>
     <string name="today_list_stable_row">Stable row height</string>
     <string name="today_list_category_other">Other (web sent wrong data)</string>
     <string name="today_experimental_cafeteria">Experimental cafeteria - may not work properly. Please report issues in the settings.</string>

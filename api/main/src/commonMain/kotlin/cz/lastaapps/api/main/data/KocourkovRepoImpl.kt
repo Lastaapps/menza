@@ -210,12 +210,13 @@ internal object TodayKocourkovDishRepoImpl : TodayDishRepo {
 
     override suspend fun sync(params: TodayRepoParams, isForced: Boolean): SyncOutcome {
         delay(Random.nextInt(100..1000).milliseconds)
-        return if (Random.nextInt(0..3) != 0) {
-            localNotifier.value += 1
-            SyncResult.Updated.right()
-        } else {
-            SyncResult.Skipped.right()
-        }
+        return SyncResult.Skipped.right()
+//        return if (Random.nextInt(0..3) != 0) {
+//            localNotifier.value += 1
+//            SyncResult.Updated.right()
+//        } else {
+//            SyncResult.Skipped.right()
+//        }
     }
 }
 

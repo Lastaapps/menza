@@ -26,8 +26,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -197,6 +199,9 @@ private fun DishContent(
                         }
                     }
                 }
+                item(key = category.name + "_spacer") {
+                    Spacer(Modifier.height(Padding.Small))
+                }
             }
 
             item(key = "oliver") {
@@ -271,22 +276,14 @@ private fun DishImageWithBadge(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier) {
-        dish.photoLink?.let { photoLink ->
-            DishImageRatio(
-                photoLink = photoLink,
-                loadImmediately = downloadOnMetered || !isOnMetered,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(Padding.Small),
-            )
-        } ?: run {
-            DishImageSupplement(
-                dish.name.hashCode(),
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(Padding.Small),
-            )
-        }
+        DishImageOrSupplement(
+            dish = dish,
+            loadImmediately = loadImmediately(downloadOnMetered, isOnMetered),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(Padding.Small),
+        )
+
         DishBadge(
             dish = dish,
             priceType = priceType,
