@@ -19,13 +19,20 @@
 
 package cz.lastaapps.menza.features.today.ui.widget
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DinnerDining
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.EggAlt
+import androidx.compose.material.icons.filled.LocalDining
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.SoupKitchen
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -38,9 +45,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import coil3.Extras
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.CachePolicy
@@ -49,6 +59,9 @@ import cz.lastaapps.menza.R.string
 import cz.lastaapps.menza.ui.components.placeholders.PlaceholderHighlight
 import cz.lastaapps.menza.ui.components.placeholders.fade
 import cz.lastaapps.menza.ui.components.placeholders.placeholder
+import cz.lastaapps.menza.ui.util.PreviewWrapper
+import kotlin.math.absoluteValue
+import kotlin.random.Random
 
 
 @Composable
@@ -59,8 +72,7 @@ internal fun DishImageRatio(
 ) {
     val imageModifier = modifier
         .fillMaxWidth()
-//        .aspectRatio(16f / 9f)
-        .aspectRatio(4f / 3f)
+        .aspectRatio(DishImageTokens.ASPECT_RATIO)
 
     DishImage(
         photoLink = photoLink,
@@ -132,5 +144,58 @@ internal fun DishImage(
                 }
             },
         )
+    }
+}
+
+@Composable
+internal fun DishImageSupplement(
+    imageKey: Int,
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.surfaceContainer,
+) {
+    Surface(
+        shape = MaterialTheme.shapes.medium,
+        modifier = modifier.aspectRatio(DishImageTokens.ASPECT_RATIO),
+        color = color,
+    ) {
+        val icon =
+            DishImageTokens.supplementIcons[(imageKey % DishImageTokens.supplementIcons.size).absoluteValue]
+        Box(contentAlignment = Alignment.Center) {
+            Icon(
+                icon, contentDescription = null,
+                modifier = Modifier.size(DishImageTokens.SUPPLEMENT_ICON_SIZE),
+            )
+        }
+    }
+}
+
+private object DishImageTokens {
+    const val ASPECT_RATIO = 4f / 3f
+    val SUPPLEMENT_ICON_SIZE = 64.dp
+    val supplementIcons = listOf(
+        Icons.Default.LocalDining,
+        Icons.Default.DinnerDining,
+        Icons.Default.SoupKitchen,
+        Icons.Default.EggAlt,
+    )
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun DishImageSupplementPreview() = PreviewWrapper() {
+    listOf(
+        MaterialTheme.colorScheme.surfaceContainerLow,
+        MaterialTheme.colorScheme.surfaceContainer,
+        MaterialTheme.colorScheme.surfaceContainerHigh,
+        MaterialTheme.colorScheme.surfaceContainerHighest,
+    ).forEach {
+        Surface(color = MaterialTheme.colorScheme.primaryContainer) {
+            DishImageSupplement(
+                remember { Random.nextInt() },
+                color = it,
+                modifier = Modifier.padding(12.dp),
+            )
+        }
     }
 }

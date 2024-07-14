@@ -199,10 +199,6 @@ private fun DishContent(
                 }
             }
 
-            item(key = "footer") {
-                footer(Modifier.animateItem())
-            }
-
             item(key = "oliver") {
                 OliverRowSwitch(
                     useOliverRow = userSettings.useOliverRow,
@@ -211,6 +207,10 @@ private fun DishContent(
                         .fillMaxWidth()
                         .animateItem(),
                 )
+            }
+
+            item(key = "footer") {
+                footer(Modifier.animateItem())
             }
         }
     }
@@ -236,14 +236,12 @@ private fun DishItem(
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
 
-            if (dish.photoLink != null) {
-                DishImageWithBadge(
-                    dish = dish,
-                    priceType = userSettings.priceType,
-                    downloadOnMetered = userSettings.downloadOnMetered,
-                    isOnMetered = isOnMetered,
-                )
-            }
+            DishImageWithBadge(
+                dish = dish,
+                priceType = userSettings.priceType,
+                downloadOnMetered = userSettings.downloadOnMetered,
+                isOnMetered = isOnMetered,
+            )
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(Padding.Small),
@@ -256,12 +254,6 @@ private fun DishItem(
                         dish = dish,
                         modifier = Modifier.weight(1f),
                     )
-                    if (dish.photoLink == null) {
-                        DishBadge(
-                            dish = dish,
-                            priceType = userSettings.priceType,
-                        )
-                    }
                 }
 
                 DishInfoRow(dish)
@@ -283,6 +275,13 @@ private fun DishImageWithBadge(
             DishImageRatio(
                 photoLink = photoLink,
                 loadImmediately = downloadOnMetered || !isOnMetered,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(Padding.Small),
+            )
+        } ?: run {
+            DishImageSupplement(
+                dish.name.hashCode(),
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(Padding.Small),
