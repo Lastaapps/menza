@@ -20,10 +20,10 @@
 package cz.lastaapps.menza.features.settings.data
 
 import cz.lastaapps.api.core.domain.model.MenzaType
-import cz.lastaapps.menza.domain.model.UserSettings
 import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSource
 import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
+import cz.lastaapps.menza.features.settings.domain.model.AppSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
@@ -31,18 +31,49 @@ import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 internal class MainSettingsRepoImpl(
     private val initial: InitMenzaDataSource,
     private val general: GeneralDataSource,
     private val defaults: DefaultsProvider,
 ) : MainSettingsRepo {
+
+    override fun getAllSettings(): Flow<AppSettings> = combine(
+        getInitialMenzaMode(),
+        getLatestMenza(),
+        getPreferredMenza(),
+        isAppSetupFinished(),
+        isSettingsEverOpened(),
+        getPriceType(),
+        getDarkMode(),
+        getAppTheme(),
+        getImageScale(),
+        getImagesOnMetered(),
+        getDishLanguage(),
+        isCompactTodayView(),
+        isOliverRow(),
+        getBalanceWarningThreshold(),
+    ) { arr ->
+        AppSettings(
+            arr[0] as InitialSelectionBehaviour,
+            arr[1] as MenzaType?,
+            arr[2] as MenzaType?,
+            arr[3] as Boolean,
+            arr[4] as Boolean,
+            arr[5] as PriceType,
+            arr[6] as DarkMode,
+            arr[7] as AppThemeType?,
+            arr[8] as Float,
+            arr[9] as Boolean,
+            arr[10] as DishLanguage,
+            arr[11] as DishListMode,
+            arr[12] as Boolean,
+            arr[13] as Int,
+        )
+    }
+
     override suspend fun storeInitialMenzaMode(mode: InitialSelectionBehaviour) =
         initial.storeInitialMenzaMode(mode)
 
@@ -73,23 +104,6 @@ internal class MainSettingsRepoImpl(
 
     override fun isSettingsEverOpened(): Flow<Boolean> =
         general.isSettingsEverOpened()
-
-    override fun getUserSettings(): Flow<UserSettings> = channelFlow {
-        val userSettings = MutableStateFlow(UserSettings())
-
-        launch {
-            isOliverRow().collectLatest {
-                userSettings.update { state ->
-                    state.copy(useOliverRows = it)
-                }
-            }
-        }
-
-
-        userSettings.collectLatest {
-            send(it)
-        }
-    }
 
     override suspend fun setPriceType(type: PriceType) =
         general.setPriceType(type)

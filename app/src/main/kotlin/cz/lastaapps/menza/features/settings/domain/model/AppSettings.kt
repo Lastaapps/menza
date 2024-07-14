@@ -17,11 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.domain.model
+package cz.lastaapps.menza.features.settings.domain.model
 
 import androidx.compose.runtime.Immutable
+import cz.lastaapps.api.core.domain.model.MenzaType
 
 @Immutable
-data class UserSettings(
-    val useOliverRows: Boolean = false,
+internal data class AppSettings(
+    val initialMenzaMode: InitialSelectionBehaviour,
+    val latestMenza: MenzaType?,
+    val preferredMenza: MenzaType?,
+    val isAppSetupFinished: Boolean,
+    val isSettingsEverOpened: Boolean,
+    val priceType: PriceType,
+    val darkMode: DarkMode,
+    val appTheme: AppThemeType?,
+    val imageScale: Float,
+    val imagesOnMetered: Boolean,
+    val dishLanguage: DishLanguage,
+    val compactTodayView: DishListMode,
+    val useOliverRows: Boolean,
+    val balanceWarningThreshold: Int,
 )
