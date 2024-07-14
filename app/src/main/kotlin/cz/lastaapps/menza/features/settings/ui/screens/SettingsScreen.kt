@@ -63,9 +63,9 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.ui.dialog.ReportDialog
 import cz.lastaapps.menza.features.other.ui.dialog.sendReport
+import cz.lastaapps.menza.features.settings.domain.model.AppSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
-import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.ui.util.name
@@ -82,20 +82,17 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun SettingsScreen(
+    appSettings: AppSettings,
     appTheme: AppThemeType,
-    darkMode: DarkMode,
+    preferredMenza: Menza?,
     onChooseTheme: () -> Unit,
     onChooseDishLanguage: () -> Unit,
-    priceType: PriceType,
     onDiscounterPrices: (PriceType) -> Unit,
-    downloadOnMetered: Boolean,
-    onDownloadOnMetered: (Boolean) -> Unit,
-    balanceThreshold: Int,
+    onImagesOnMetered: (Boolean) -> Unit,
+    onAlternativeNavigation: (Boolean) -> Unit,
     onBalanceThreshold: (Int) -> Unit,
-    initialMenzaBehaviour: InitialSelectionBehaviour,
     onInitialMenzaBehaviour: (InitialSelectionBehaviour) -> Unit,
     menzaList: ImmutableList<Menza>,
-    selectedMenza: Menza?,
     onSelectedMenza: (Menza) -> Unit,
     showAbout: Boolean,
     onAboutClicked: () -> Unit,
@@ -121,7 +118,7 @@ internal fun SettingsScreen(
             subtitle = buildString {
                 append(appTheme.name())
                 append(", ")
-                append(darkMode.name())
+                append(appSettings.darkMode.name())
             },
             onClick = onChooseTheme,
         )
@@ -129,9 +126,9 @@ internal fun SettingsScreen(
         // Discounted prices
         SettingsSwitch(
             title = stringResource(id = R.string.settings_switch_price),
-            subtitle = priceType.name(),
-            isChecked = priceType == PriceType.Discounted,
-            onChecked = { onDiscounterPrices(priceType.other()) },
+            subtitle = appSettings.priceType.name(),
+            isChecked = appSettings.priceType == PriceType.Discounted,
+            onChecked = { onDiscounterPrices(appSettings.priceType.other()) },
         )
 
         // Dish language
@@ -145,22 +142,31 @@ internal fun SettingsScreen(
         SettingsSwitch(
             title = stringResource(id = R.string.settings_switch_metered_title),
             subtitle = stringResource(id = R.string.settings_switch_metered_subtitle),
-            isChecked = downloadOnMetered,
-            onChecked = onDownloadOnMetered,
+            isChecked = appSettings.imagesOnMetered,
+            onChecked = onImagesOnMetered,
         )
 
+        // Alternative navigation
+        SettingsSwitch(
+            title = stringResource(id = R.string.settings_alternative_navigation_title),
+            subtitle = stringResource(id = R.string.settings_alternative_navigation_subtitle),
+            isChecked = appSettings.alternativeNavigation,
+            onChecked = onAlternativeNavigation,
+        )
+
+        // Balance warning threshold
         BalanceThresholdSlider(
             title = stringResource(id = R.string.settings_balance_threshold_title),
-            threshold = balanceThreshold,
+            threshold = appSettings.balanceWarningThreshold,
             onThreshold = onBalanceThreshold,
         )
 
         // Behaviour at startup
         InitialBehaviourSelector(
-            initialMenzaBehaviour = initialMenzaBehaviour,
+            initialMenzaBehaviour = appSettings.initialMenzaMode,
             onInitialMenzaBehaviour = onInitialMenzaBehaviour,
             menzaList = menzaList,
-            selectedMenza = selectedMenza,
+            selectedMenza = preferredMenza,
             onSelectedMenza = onSelectedMenza,
         )
 
@@ -359,20 +365,17 @@ private fun IconAndText(icon: ImageVector, text: String) {
 @Composable
 private fun SettingsScreenPreview() = PreviewWrapper {
     SettingsScreen(
+        appSettings = AppSettings.default(),
         appTheme = Agata,
-        darkMode = DarkMode.System,
         onChooseTheme = {},
         onChooseDishLanguage = {},
-        priceType = PriceType.Discounted,
         onDiscounterPrices = {},
-        downloadOnMetered = false,
-        onDownloadOnMetered = {},
-        balanceThreshold = 256,
+        onImagesOnMetered = {},
+        onAlternativeNavigation = {},
         onBalanceThreshold = {},
-        initialMenzaBehaviour = InitialSelectionBehaviour.Specific,
         onInitialMenzaBehaviour = {},
         menzaList = persistentListOf(),
-        selectedMenza = null,
+        preferredMenza = null,
         onSelectedMenza = {},
         showAbout = true,
         onAboutClicked = {},

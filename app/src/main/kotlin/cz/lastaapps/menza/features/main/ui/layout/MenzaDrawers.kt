@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -39,6 +39,7 @@ import cz.lastaapps.menza.ui.theme.Padding
 internal fun MenzaModalDrawer(
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
+    alternativeNavigation: Boolean,
     drawerContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -46,9 +47,17 @@ internal fun MenzaModalDrawer(
         modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet {
-                Spacer(Modifier.height(Padding.MidSmall))
-                drawerContent()
+            if (!alternativeNavigation) {
+                // handles predictive back gesture
+                ModalDrawerSheet(drawerState) {
+                    Spacer(Modifier.height(Padding.MidSmall))
+                    drawerContent()
+                }
+            } else {
+                ModalDrawerSheet {
+                    Spacer(Modifier.height(Padding.MidSmall))
+                    drawerContent()
+                }
             }
         },
         content = content,
@@ -73,6 +82,7 @@ internal fun MenzaDismissibleDrawerWithRailLayout(
 internal fun MenzaDismissibleDrawer(
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
+    alternativeNavigation: Boolean,
     drawerContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -81,8 +91,15 @@ internal fun MenzaDismissibleDrawer(
         drawerState = drawerState,
         gesturesEnabled = true,
         drawerContent = {
-            DismissibleDrawerSheet {
-                drawerContent()
+            if (!alternativeNavigation) {
+                // handles predictive back gesture
+                DismissibleDrawerSheet(drawerState) {
+                    drawerContent()
+                }
+            } else {
+                DismissibleDrawerSheet {
+                    drawerContent()
+                }
             }
         },
         content = content,

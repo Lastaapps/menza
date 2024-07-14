@@ -41,6 +41,7 @@ internal fun MainScreen(
     settingsEverOpened: Boolean,
     hostState: SnackbarHostState,
     selectedMenza: Menza?,
+    alternativeNavigation: Boolean,
     isFlip: Boolean,
     onNavItemTopBar: (MainNavTarget) -> Unit,
     onNavItemRoot: (MainNavTarget) -> Unit,
@@ -54,6 +55,7 @@ internal fun MainScreen(
 
     MenzaScaffold(
         drawerState = drawerState,
+        alternativeNavigation = alternativeNavigation,
         snackbarHost = { SnackbarHost(hostState) },
         topBar = { topBarState ->
             MenzaTopBar(

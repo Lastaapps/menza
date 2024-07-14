@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.features.main.ui.navigation
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -64,6 +63,8 @@ internal interface MainComponent : BackHandlerOwner {
 
     fun pop()
 
+    fun exit()
+
     sealed interface Child {
         @JvmInline
         value class Today(val component: TodayComponent) : Child
@@ -90,6 +91,7 @@ internal interface MainComponent : BackHandlerOwner {
 
 internal class DefaultMainComponent(
     componentContext: ComponentContext,
+    private val onExit: () -> Unit,
 ) : MainComponent, KoinComponent, ComponentContext by componentContext {
     override val viewModel: MainViewModel = getOrCreateKoin()
 
@@ -122,7 +124,6 @@ internal class DefaultMainComponent(
     override val drawerComponent: DrawerComponent =
         DefaultDrawerComponent(childContext("drawer"))
 
-    @OptIn(ExperimentalDecomposeApi::class)
     override fun push(target: MainNavTarget) {
         navigation.pushToFront(Config.fromTarget(target))
     }
@@ -141,6 +142,10 @@ internal class DefaultMainComponent(
 
     override fun pop() {
         navigation.pop()
+    }
+
+    override fun exit() {
+        onExit()
     }
 
     @Serializable

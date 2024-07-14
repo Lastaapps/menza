@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.main.ui.layout
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,7 +29,6 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -40,13 +38,13 @@ import cz.lastaapps.menza.ui.locals.LocalFoldProvider
 import cz.lastaapps.menza.ui.locals.LocalSplitPosition
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.Padding
-import kotlinx.coroutines.launch
 
 private val railWidth = 80.dp
 
 @Composable
 fun MenzaScaffold(
     drawerState: DrawerState,
+    alternativeNavigation: Boolean,
     snackbarHost: @Composable () -> Unit,
     topBar: @Composable (TopBarState) -> Unit,
     bottomBar: @Composable () -> Unit,
@@ -62,6 +60,7 @@ fun MenzaScaffold(
         WindowWidthSizeClass.Compact ->
             AppLayoutCompact(
                 drawerState = drawerState,
+                alternativeNavigation = alternativeNavigation,
                 snackbarHost = snackbarHost,
                 topBar = topBar,
                 bottomBar = bottomBar,
@@ -74,6 +73,7 @@ fun MenzaScaffold(
         WindowWidthSizeClass.Medium ->
             AppLayoutMedium(
                 drawerState = drawerState,
+                alternativeNavigation = alternativeNavigation,
                 snackbarHost = snackbarHost,
                 topBar = topBar,
                 rail = rail,
@@ -85,6 +85,7 @@ fun MenzaScaffold(
         WindowWidthSizeClass.Expanded ->
             AppLayoutExpanded(
                 drawerState = drawerState,
+                alternativeNavigation = alternativeNavigation,
                 snackbarHost = snackbarHost,
                 topBar = topBar,
                 rail = rail,
@@ -104,6 +105,7 @@ private fun AppLayoutCompact(
     bottomBar: @Composable () -> Unit,
     drawerContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
+    alternativeNavigation: Boolean,
     isFlip: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -115,9 +117,9 @@ private fun AppLayoutCompact(
         )
     }
 
-    val scope = rememberCoroutineScope()
     MenzaModalDrawer(
         drawerState = drawerState,
+        alternativeNavigation = alternativeNavigation,
         drawerContent = {
             Scaffold(
                 snackbarHost = snackbarHost,
@@ -162,16 +164,13 @@ private fun AppLayoutCompact(
                 }
             }
         }
-
-        BackHandler(drawerState.isOpen) {
-            scope.launch { drawerState.close() }
-        }
     }
 }
 
 @Composable
 private fun AppLayoutMedium(
     drawerState: DrawerState,
+    alternativeNavigation: Boolean,
     snackbarHost: @Composable () -> Unit,
     topBar: @Composable (TopBarState) -> Unit,
     rail: @Composable () -> Unit,
@@ -200,6 +199,7 @@ private fun AppLayoutMedium(
         ) {
             MenzaDismissibleDrawer(
                 drawerState = drawerState,
+                alternativeNavigation = alternativeNavigation,
                 modifier = Modifier.fillMaxSize(),
                 drawerContent = drawerContent,
             ) {
@@ -223,6 +223,7 @@ private fun AppLayoutMedium(
 @Composable
 private fun AppLayoutExpanded(
     drawerState: DrawerState,
+    alternativeNavigation: Boolean,
     snackbarHost: @Composable () -> Unit,
     topBar: @Composable (TopBarState) -> Unit,
     rail: @Composable () -> Unit,
@@ -234,6 +235,7 @@ private fun AppLayoutExpanded(
     if (foldingFeature is FoldingClass.Supported)
         AppLayoutExpandedFold(
             drawerState = drawerState,
+            alternativeNavigation = alternativeNavigation,
             snackbarHost = snackbarHost,
             topBar = topBar,
             rail = rail,
@@ -245,6 +247,7 @@ private fun AppLayoutExpanded(
     else
         AppLayoutExpandedNoFold(
             drawerState = drawerState,
+            alternativeNavigation = alternativeNavigation,
             snackbarHost = snackbarHost,
             topBar = topBar,
             rail = rail,
@@ -257,6 +260,7 @@ private fun AppLayoutExpanded(
 @Composable
 private fun AppLayoutExpandedNoFold(
     drawerState: DrawerState,
+    alternativeNavigation: Boolean,
     snackbarHost: @Composable () -> Unit,
     topBar: @Composable (TopBarState) -> Unit,
     rail: @Composable () -> Unit,
@@ -285,6 +289,7 @@ private fun AppLayoutExpandedNoFold(
         ) {
             MenzaDismissibleDrawer(
                 drawerState = drawerState,
+                alternativeNavigation = alternativeNavigation,
                 drawerContent = drawerContent,
             ) {
                 BoxWithConstraints(
@@ -307,6 +312,7 @@ private fun AppLayoutExpandedNoFold(
 @Composable
 private fun AppLayoutExpandedFold(
     drawerState: DrawerState,
+    alternativeNavigation: Boolean,
     snackbarHost: @Composable () -> Unit,
     topBar: @Composable (TopBarState) -> Unit,
     rail: @Composable () -> Unit,
@@ -346,6 +352,7 @@ private fun AppLayoutExpandedFold(
 
             MenzaDismissibleDrawer(
                 drawerState = drawerState,
+                alternativeNavigation = alternativeNavigation,
                 drawerContent = drawerContent,
             ) {
                 BoxWithConstraints(

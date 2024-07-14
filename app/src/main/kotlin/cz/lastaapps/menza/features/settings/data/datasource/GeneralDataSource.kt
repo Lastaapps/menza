@@ -77,6 +77,9 @@ internal interface GeneralDataSource {
 
     suspend fun setBalanceWarningThreshold(threshold: Int)
     fun getBalanceWarningThreshold(): Flow<Int?>
+
+    suspend fun setAlternativeNavigation(enabled: Boolean)
+    fun getAlternativeNavigation(): Flow<Boolean?>
 }
 
 @OptIn(ExperimentalSettingsApi::class)
@@ -85,6 +88,7 @@ internal class GeneralDataSourceImpl(
 ) : GeneralDataSource {
     private val settings = generalSettings.settings
 
+    @Suppress("ConstPropertyName")
     companion object {
         private const val appSetupFinishedKey = "app_setup_finished"
         private const val settingsEverOpenedKey = "settings_ever_opened"
@@ -97,6 +101,7 @@ internal class GeneralDataSourceImpl(
         private const val compactTodayViewKey = "compact_today_view"
         private const val oliverRowsKey = "oliver_row"
         private const val balanceWarningThresholdKey = "balance_warning_threshold"
+        private const val alternativeNavigationKey = "alternative_navigation"
     }
 
     override suspend fun storeAppSetupFinished() =
@@ -179,4 +184,10 @@ internal class GeneralDataSourceImpl(
 
     override fun getBalanceWarningThreshold(): Flow<Int?> =
         settings.getIntOrNullFlow(balanceWarningThresholdKey)
+
+    override suspend fun setAlternativeNavigation(enabled: Boolean) =
+        settings.putBoolean(alternativeNavigationKey, enabled)
+
+    override fun getAlternativeNavigation(): Flow<Boolean?> =
+        settings.getBooleanOrNullFlow(alternativeNavigationKey)
 }

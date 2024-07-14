@@ -32,6 +32,7 @@ import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehavio
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 internal class MainSettingsRepoImpl(
@@ -41,38 +42,40 @@ internal class MainSettingsRepoImpl(
 ) : MainSettingsRepo {
 
     override fun getAllSettings(): Flow<AppSettings> = combine(
-        getInitialMenzaMode(),
-        getLatestMenza(),
-        getPreferredMenza(),
-        isAppSetupFinished(),
-        isSettingsEverOpened(),
-        getPriceType(),
-        getDarkMode(),
-        getAppTheme(),
-        getImageScale(),
-        getImagesOnMetered(),
-        getDishLanguage(),
-        isCompactTodayView(),
-        isOliverRow(),
-        getBalanceWarningThreshold(),
+        getInitialMenzaMode().distinctUntilChanged(),
+        getLatestMenza().distinctUntilChanged(),
+        getPreferredMenza().distinctUntilChanged(),
+        isAppSetupFinished().distinctUntilChanged(),
+        isSettingsEverOpened().distinctUntilChanged(),
+        getPriceType().distinctUntilChanged(),
+        getDarkMode().distinctUntilChanged(),
+        getAppTheme().distinctUntilChanged(),
+        getImageScale().distinctUntilChanged(),
+        getImagesOnMetered().distinctUntilChanged(),
+        getDishLanguage().distinctUntilChanged(),
+        isCompactTodayView().distinctUntilChanged(),
+        isOliverRow().distinctUntilChanged(),
+        getBalanceWarningThreshold().distinctUntilChanged(),
+        getAlternativeNavigation().distinctUntilChanged(),
     ) { arr ->
         AppSettings(
-            arr[0] as InitialSelectionBehaviour,
-            arr[1] as MenzaType?,
-            arr[2] as MenzaType?,
-            arr[3] as Boolean,
-            arr[4] as Boolean,
-            arr[5] as PriceType,
-            arr[6] as DarkMode,
-            arr[7] as AppThemeType?,
-            arr[8] as Float,
-            arr[9] as Boolean,
-            arr[10] as DishLanguage,
-            arr[11] as DishListMode,
-            arr[12] as Boolean,
-            arr[13] as Int,
+            initialMenzaMode = arr[0] as InitialSelectionBehaviour,
+            latestMenza = arr[1] as MenzaType?,
+            preferredMenza = arr[2] as MenzaType?,
+            isAppSetupFinished = arr[3] as Boolean,
+            isSettingsEverOpened = arr[4] as Boolean,
+            priceType = arr[5] as PriceType,
+            darkMode = arr[6] as DarkMode,
+            appTheme = arr[7] as AppThemeType?,
+            imageScale = arr[8] as Float,
+            imagesOnMetered = arr[9] as Boolean,
+            dishLanguage = arr[10] as DishLanguage,
+            todayViewMode = arr[11] as DishListMode,
+            useOliverRows = arr[12] as Boolean,
+            balanceWarningThreshold = arr[13] as Int,
+            alternativeNavigation = arr[14] as Boolean,
         )
-    }
+    }.distinctUntilChanged()
 
     override suspend fun storeInitialMenzaMode(mode: InitialSelectionBehaviour) =
         initial.storeInitialMenzaMode(mode)
@@ -161,5 +164,12 @@ internal class MainSettingsRepoImpl(
     override fun getBalanceWarningThreshold(): Flow<Int> =
         general.getBalanceWarningThreshold()
             .map { it ?: 256 }
+
+    override suspend fun setAlternativeNavigation(enabled: Boolean) =
+        general.setAlternativeNavigation(enabled)
+
+    override fun getAlternativeNavigation(): Flow<Boolean> =
+        general.getAlternativeNavigation()
+            .map { it ?: false }
 
 }

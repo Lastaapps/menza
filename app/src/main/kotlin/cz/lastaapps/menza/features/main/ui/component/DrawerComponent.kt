@@ -88,7 +88,6 @@ internal class DefaultDrawerComponent(
             }
         }
 
-    @OptIn(ExperimentalDecomposeApi::class)
     override fun edit() {
         navigation.pushNew(Config.Edit)
     }
@@ -111,7 +110,7 @@ internal class DefaultDrawerComponent(
 @Composable
 internal fun DrawerContent(
     component: DrawerComponent,
-    drawableState: DrawerState,
+    drawerState: DrawerState,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
@@ -130,7 +129,7 @@ internal fun DrawerContent(
                 is Child.MenzaSelection -> MenzaSelectionContent(
                     component = instance.component,
                     onEdit = component::edit,
-                    drawerState = drawableState,
+                    drawerState = drawerState,
                     snackbarHostState = snackbarHostState,
                     modifier = modifier,
                 )

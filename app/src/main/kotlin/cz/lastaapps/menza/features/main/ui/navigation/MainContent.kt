@@ -26,9 +26,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.ExperimentalDecomposeApi
@@ -40,6 +43,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback
 import com.arkivanov.decompose.extensions.compose.stack.animation.scale
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.arkivanov.essenty.backhandler.BackCallback
 import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.info.ui.component.InfoContent
@@ -60,6 +64,7 @@ import cz.lastaapps.menza.features.starting.ui.component.PolicyContent
 import cz.lastaapps.menza.features.today.ui.navigation.TodayContent
 import cz.lastaapps.menza.features.week.ui.node.WeekContent
 import cz.lastaapps.menza.ui.locals.LocalMayBeFlipCover
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
@@ -76,6 +81,7 @@ internal fun MainContent(
 
     val drawerInitial = if (state.selectedMenza == null) Open else Closed
     val drawerState = rememberDrawerState(drawerInitial)
+    val scope = rememberCoroutineScope()
 
     HandleLowBalance(
         lowBalance = state.showLowBalance,
@@ -91,17 +97,32 @@ internal fun MainContent(
         settingsEverOpened = state.settingsViewed,
         hostState = hostState,
         selectedMenza = state.selectedMenza,
+        alternativeNavigation = state.alternativeNavigation,
         isFlip = state.isFlip && LocalMayBeFlipCover.current,
         onNavItemTopBar = component::push,
         onNavItemRoot = component::pushRoot,
         drawerContent = {
             DrawerContent(
                 component = component.drawerComponent,
-                drawableState = drawerState,
+                drawerState = drawerState,
                 snackbarHostState = hostState,
             )
         },
         content = {
+            // this section is responsible for properly handling back navigation
+            // while using the alternative navigation
+            val isAlternativeTrapEnabled = drawerState.isClosed && state.alternativeNavigation
+            val alternativeCallback = remember {
+                BackCallback(isAlternativeTrapEnabled) {
+                    scope.launch { drawerState.open() }
+                }
+            }
+            SideEffect { alternativeCallback.isEnabled = isAlternativeTrapEnabled }
+            DisposableEffect(component.backHandler) {
+                component.backHandler.register(alternativeCallback)
+                onDispose { component.backHandler.unregister(alternativeCallback) }
+            }
+
             Children(
                 stack = stack,
                 animation = predictiveBackAnimation(

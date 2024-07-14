@@ -29,6 +29,7 @@ import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.CheckLowBalanceUC
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.main.domain.usecase.IsFlipUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetAppSettingsUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetSettingsEverOpenedUC
 import kotlinx.coroutines.flow.collectLatest
 
@@ -37,6 +38,7 @@ internal class MainViewModel(
     private val syncMenzaListUC: SyncMenzaListUC,
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getSettingsOpened: GetSettingsEverOpenedUC,
+    private val getAppSettings: GetAppSettingsUC,
     private val isFlip: IsFlipUC,
     private val checkLowBalanceUC: CheckLowBalanceUC,
     private val refreshWallet: WalletRefreshUC,
@@ -64,6 +66,9 @@ internal class MainViewModel(
                 updateState { copy(showLowBalance = it) }
             }
         }
+        getAppSettings().collectLatestInVM {
+            updateState { copy(alternativeNavigation = it.alternativeNavigation) }
+        }
     }
 
     fun dismissLowBalance() = updateState { copy(showLowBalance = false) }
@@ -73,6 +78,7 @@ internal data class MainState(
     val isReady: Boolean = false,
     val settingsViewed: Boolean = false,
     val selectedMenza: Menza? = null,
+    val alternativeNavigation: Boolean = false,
     val isFlip: Boolean = false,
     val showLowBalance: Boolean = false,
 ) : VMState

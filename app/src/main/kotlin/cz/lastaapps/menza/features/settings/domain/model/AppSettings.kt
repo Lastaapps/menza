@@ -35,7 +35,29 @@ internal data class AppSettings(
     val imageScale: Float,
     val imagesOnMetered: Boolean,
     val dishLanguage: DishLanguage,
-    val compactTodayView: DishListMode,
+    val todayViewMode: DishListMode,
     val useOliverRows: Boolean,
     val balanceWarningThreshold: Int,
-)
+    val alternativeNavigation: Boolean,
+) {
+    companion object {
+        // Used for previews
+        fun default() = AppSettings(
+            initialMenzaMode = InitialSelectionBehaviour.Specific,
+            latestMenza = MenzaType.Testing.Kocourkov,
+            preferredMenza = MenzaType.Testing.Kocourkov,
+            isAppSetupFinished = true,
+            isSettingsEverOpened = true,
+            priceType = PriceType.Normal,
+            darkMode = DarkMode.System,
+            appTheme = AppThemeType.Agata,
+            imageScale = 1f,
+            imagesOnMetered = true,
+            dishLanguage = DishLanguage.Czech,
+            todayViewMode = DishListMode.COMPACT,
+            useOliverRows = true,
+            balanceWarningThreshold = 256,
+            alternativeNavigation = false,
+        )
+    }
+}

@@ -24,6 +24,7 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.Value
 import cz.lastaapps.menza.features.main.ui.navigation.DefaultMainComponent
 import cz.lastaapps.menza.features.main.ui.navigation.MainComponent
@@ -69,7 +70,12 @@ internal class DefaultRootComponent(
             Config.serializer(),
         ) { config, componentContext ->
             when (config) {
-                AppContentConfig -> AppContent(DefaultMainComponent(componentContext))
+                AppContentConfig -> AppContent(
+                    DefaultMainComponent(
+                        componentContext,
+                        navigation::dismiss,
+                    ),
+                )
                 AppSetupConfig -> AppSetup(DefaultStartingComponent(componentContext))
             }
         }

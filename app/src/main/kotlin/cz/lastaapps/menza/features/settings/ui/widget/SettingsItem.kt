@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -57,9 +56,12 @@ internal fun SettingsSwitch(
     isChecked: Boolean,
     modifier: Modifier = Modifier,
     onChecked: (Boolean) -> Unit,
+) = WrapClick(
+    onClick = { onChecked(!isChecked) },
+    modifier = modifier,
+    padding = SettingsTokens.itemPadding,
 ) {
     Row(
-        modifier = modifier.padding(SettingsTokens.itemPadding),
         horizontalArrangement = Arrangement.spacedBy(Padding.Medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {

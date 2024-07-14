@@ -86,25 +86,23 @@ internal fun SettingsContent(
     var showCrashDialog by rememberSaveable { mutableStateOf(false) }
     var showWhatsNew by rememberSaveable { mutableStateOf(false) }
 
+    val appSettings = state.appSettings ?: return
     val settingsScreen: @Composable () -> Unit = {
         SettingsScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(Padding.More.Screen),
+            appSettings = appSettings,
             appTheme = state.appTheme,
-            darkMode = state.darkMode,
+            preferredMenza = state.preferredMenza,
             onChooseTheme = onChooseTheme,
             onChooseDishLanguage = onChooseDishLanguage,
-            priceType = state.priceType,
             onDiscounterPrices = viewModel::setPriceType,
-            downloadOnMetered = state.downloadOnMetered,
-            onDownloadOnMetered = viewModel::setDownloadOnMetered,
-            balanceThreshold = state.balanceWarningThreshold,
+            onImagesOnMetered = viewModel::setDownloadOnMetered,
+            onAlternativeNavigation = viewModel::setAlternativeNavigation,
             onBalanceThreshold = viewModel::setBalanceWarningThreshold,
-            initialMenzaBehaviour = state.initialMenzaBehaviour,
             onInitialMenzaBehaviour = viewModel::setInitMenzaBehaviour,
             menzaList = state.menzaList,
-            selectedMenza = state.selectedMenza,
             onSelectedMenza = viewModel::setSelectedMenza,
             showAbout = normalScreen,
             onAboutClicked = { showAbout = true },

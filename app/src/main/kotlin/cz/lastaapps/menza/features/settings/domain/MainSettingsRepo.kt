@@ -74,4 +74,7 @@ internal interface MainSettingsRepo {
 
     suspend fun setBalanceWarningThreshold(threshold: Int)
     fun getBalanceWarningThreshold(): Flow<Int>
+
+    suspend fun setAlternativeNavigation(enabled: Boolean)
+    fun getAlternativeNavigation(): Flow<Boolean>
 }

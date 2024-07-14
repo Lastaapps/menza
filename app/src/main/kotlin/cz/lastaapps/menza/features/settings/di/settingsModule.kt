@@ -47,6 +47,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.IsMenzaOrd
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.SetMenzaOrderFromTopUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.ToggleMenzaVisibilityUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.UpdateMenzaOrderUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetAppSettingsUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetBalanceWarningThresholdUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishListModeUC
@@ -57,6 +58,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetOliverRow
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetSettingsEverOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.OnSettingsOpenedUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetAlternativeNavigationUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetBalanceWarningThresholdUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetDishListModeUC
@@ -91,9 +93,9 @@ val settingsModule = module {
     factory {
         // @formatter:off
         SettingsViewModel(
-            get(), get(), get(), get(), get(), get(),
             get(), get(), get(), get(), get(),
             get(), get(), get(), get(), get(),
+            get(), get(), get(),
         )
         // @formatter:on
     }
@@ -116,6 +118,8 @@ val settingsModule = module {
     factoryOf(::FullAppReloadUC)
 
     // Others
+    factoryOf(::GetAppSettingsUC)
+    factoryOf(::SetAlternativeNavigationUC)
     factoryOf(::GetImageScaleUC)
     factoryOf(::GetImagesOnMeteredUC)
     factoryOf(::GetBalanceWarningThresholdUC)
