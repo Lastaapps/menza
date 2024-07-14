@@ -30,17 +30,6 @@ dependencies {
     commonMainImplementation(projects.core)
     commonMainImplementation(projects.api.core)
 
-    // skrape-it
-    // androidMainImplementation(projects.htmlParser)
-    androidMainImplementation("it.skrape:skrapeit:1.2.2")
-    // fix security vulnerabilities in skrapeit libs
-    androidMainImplementation("ch.qos.logback:logback-core:1.4.12")
-    androidMainImplementation("ch.qos.logback:logback-classic:1.4.12")
-    androidMainImplementation("commons-net:commons-net:3.9.0")
-    androidMainImplementation("org.apache.commons:commons-text:1.10.0")
-    androidMainImplementation("org.jsoup:jsoup:1.15.3")
-    androidMainImplementation("xalan:xalan:2.7.3")
-
     commonMainImplementation(libs.ktor.client.core)
     commonMainImplementation(libs.ktor.client.contentNegotiation)
     commonMainImplementation(libs.ktor.client.logging)

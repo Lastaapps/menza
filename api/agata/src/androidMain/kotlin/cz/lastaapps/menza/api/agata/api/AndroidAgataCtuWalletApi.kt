@@ -19,9 +19,6 @@
 
 package cz.lastaapps.menza.api.agata.api
 
-import arrow.core.Either
-import arrow.core.Either.Left
-import arrow.core.Either.Right
 import arrow.core.flatten
 import arrow.core.left
 import arrow.core.raise.nullable
@@ -42,7 +39,6 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Cookie
 import io.ktor.http.HttpHeaders
 import io.ktor.http.Parameters
-import it.skrape.core.htmlDocument
 import java.net.URLDecoder
 
 internal class AndroidAgataCtuWalletApi(
@@ -122,24 +118,24 @@ internal class AndroidAgataCtuWalletApi(
                 }
 
                 // Extract response codes from html
-                .let { htmlDocument(it.bodyAsText()) }
+                .bodyAsText()
                 .let { html ->
                     var relayState: String? = null
                     var samlResponse: String? = null
 
-                    val inputField = Either.catch {
-                        html.findAll("input")
+                    val inputRegex =
+                        """<input[^>]*name="([^"]+)"[^>]*value="([^"]+)"[^>]""".toRegex()
+                    inputRegex.findAll(html)
+                        .forEach {
+                            val name = it.groups[1].bind().value
+                            val value = it.groups[2].bind().value
+                            when (name) {
+                                "RelayState" -> relayState = URLDecoder.decode(value, "UTF-8")
+                                "SAMLResponse" -> samlResponse = value
+                            }
                     }
-                    when (inputField) {
-                        is Left -> return@catchingNetwork WalletError.InvalidCredentials.left()
-                        is Right -> inputField.value
-                    }.forEach {
-                        if (it.attribute("name") == "RelayState") {
-                            relayState = URLDecoder.decode(it.attribute("value"), "UTF-8")
-                        }
-                        if (it.attribute("name") == "SAMLResponse") {
-                            samlResponse = it.attribute("value")
-                        }
+                    if (relayState == null || samlResponse == null) {
+                        return@catchingNetwork WalletError.InvalidCredentials.left()
                     }
 
                     // Send the shit back to Agata and get session cookie
@@ -167,12 +163,9 @@ internal class AndroidAgataCtuWalletApi(
                         header("Cookie", sessionCookie)
                     }
                 }.let { finalResponse ->
-                    val html = htmlDocument(finalResponse.bodyAsText())
-
-                    // Parse
-                    html.findFirst("h4 span.badge").text
-                        .lowercase()
-                        .replace("kč", "")
+                    """<h4><span[^>]*>(?:<span[^>]*>)?([\d, ]+) Kč<""".toRegex()
+                        .find(finalResponse.bodyAsText())?.groups?.get(1)?.value
+                        .bind()
                         .replace(",", ".")
                         .replace(" ", "")
                         .trim()
