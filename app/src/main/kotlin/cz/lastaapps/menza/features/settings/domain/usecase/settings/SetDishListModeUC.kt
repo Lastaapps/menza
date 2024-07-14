@@ -17,17 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase
+package cz.lastaapps.menza.features.settings.domain.usecase.settings
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
+import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 
-class SetOliverRow internal constructor(
+class SetDishListModeUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(used: Boolean) = launch {
-        repo.setOliverRows(used)
+    suspend operator fun invoke(mode: DishListMode) = launch {
+        repo.setCompactTodayView(mode)
     }
 }

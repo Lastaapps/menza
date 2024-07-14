@@ -23,7 +23,7 @@ import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
-import cz.lastaapps.menza.features.settings.domain.usecase.SetDishLanguageUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetDishLanguageUC
 
 internal class DishLanguageViewModel(
     context: VMContext,

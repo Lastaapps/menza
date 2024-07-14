@@ -21,12 +21,12 @@ package cz.lastaapps.menza.features.today.domain.usecase
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.domain.usecase.GetDishLanguageUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetDishListModeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetImageScaleUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetImagesOnMeteredUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetOliverRowUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishLanguageUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishListModeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetImageScaleUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetImagesOnMeteredUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetOliverRowUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetPriceTypeUC
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -29,7 +29,7 @@ import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.CheckLowBalanceUC
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.main.domain.usecase.IsFlipUC
-import cz.lastaapps.menza.features.settings.domain.usecase.GetSettingsEverOpenedUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetSettingsEverOpenedUC
 import kotlinx.coroutines.flow.collectLatest
 
 internal class MainViewModel(

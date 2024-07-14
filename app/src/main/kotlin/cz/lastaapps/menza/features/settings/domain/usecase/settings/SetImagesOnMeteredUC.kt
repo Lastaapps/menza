@@ -17,15 +17,17 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase
+package cz.lastaapps.menza.features.settings.domain.usecase.settings
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
-class GetBalanceWarningThresholdUC internal constructor(
+class SetImagesOnMeteredUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    operator fun invoke() = repo.getBalanceWarningThreshold()
+    suspend operator fun invoke(showImagesOnMetered: Boolean) = launch {
+        repo.setImagesOnMetered(showImagesOnMetered)
+    }
 }

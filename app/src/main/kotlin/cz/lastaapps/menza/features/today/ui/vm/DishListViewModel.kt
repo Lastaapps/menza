@@ -40,9 +40,9 @@ import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
-import cz.lastaapps.menza.features.settings.domain.usecase.SetDishListModeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.SetImageScaleUC
-import cz.lastaapps.menza.features.settings.domain.usecase.SetOliverRow
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetDishListModeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetImageScaleUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetOliverRow
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
 import kotlin.time.Duration.Companion.seconds

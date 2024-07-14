@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,8 +24,8 @@ import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.SetPriceTypeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetPriceTypeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetPriceTypeUC
 import kotlinx.coroutines.flow.first
 
 internal class PriceTypeViewModel internal constructor(

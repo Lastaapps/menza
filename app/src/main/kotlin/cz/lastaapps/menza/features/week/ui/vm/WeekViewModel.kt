@@ -39,7 +39,7 @@ import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.usecase.GetPriceTypeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetPriceTypeUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job

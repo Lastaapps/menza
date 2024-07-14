@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,17 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase
+package cz.lastaapps.menza.features.settings.domain.usecase.settings
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
-class GetSettingsEverOpenedUC internal constructor(
+class SetImageScaleUC internal constructor(
     context: UCContext,
+    private val getImageSizeRange: GetImageScaleRangeUC,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        repo.isSettingsEverOpened()
+    suspend operator fun invoke(scale: Float) = launch {
+        val range = getImageSizeRange()
+        val new = scale.coerceIn(range)
+        repo.setImageScale(new)
     }
 }

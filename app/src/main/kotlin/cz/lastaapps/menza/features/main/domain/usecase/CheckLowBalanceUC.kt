@@ -22,7 +22,7 @@ package cz.lastaapps.menza.features.main.domain.usecase
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletGetBalanceUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.domain.usecase.GetBalanceWarningThresholdUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetBalanceWarningThresholdUC
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
