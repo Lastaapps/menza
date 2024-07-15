@@ -129,6 +129,68 @@ internal object TodayKocourkovDishRepoImpl : TodayDishRepo {
                 ),
             ),
             DishCategory(
+                "Babica",
+                "Mňamky Jirky Babici",
+                persistentListOf(
+                    Dish(
+                        amount = null,
+                        name = "Univerzální hnědá omáčka s kedlíkem",
+                        priceDiscounted = 42.0f,
+                        priceNormal = 69.0f,
+                        allergens = persistentListOf(1, 2, 3),
+                        photoLink = "https://agata.suz.cvut.cz/jidelnicky/showfotoG.php?clPodsystem=1&xFile=IMG-20240712075000098.jpg",
+                        pictogram = persistentListOf(),
+                        servingPlaces = persistentListOf(
+                            ServingPlace("Radnice", "R"),
+                        ),
+                        ingredients = persistentListOf(),
+                        isActive = true,
+                    ),
+                    Dish(
+                        amount = "1 kg",
+                        name = "Zalité kuřátko a hrany",
+                        priceDiscounted = 42.0f,
+                        priceNormal = 69.0f,
+                        allergens = persistentListOf(),
+                        photoLink = "https://agata.suz.cvut.cz/jidelnicky/showfotoG.php?clPodsystem=1&xFile=IMG-20240712075130700.jpg",
+                        pictogram = persistentListOf(),
+                        servingPlaces = persistentListOf(
+                            ServingPlace("Radnice", "R"),
+                        ),
+                        ingredients = persistentListOf(),
+                        isActive = true,
+                    ),
+                    Dish(
+                        amount = null,
+                        name = "Moravsko-španělský ptáček",
+                        priceDiscounted = 42.0f,
+                        priceNormal = 69.0f,
+                        allergens = persistentListOf(),
+                        photoLink = "https://agata.suz.cvut.cz/jidelnicky/showfotoG.php?clPodsystem=1&xFile=IMG-20240712075239254.jpg",
+                        pictogram = persistentListOf(),
+                        servingPlaces = persistentListOf(
+                            ServingPlace("Radnice", "R"),
+                        ),
+                        ingredients = persistentListOf(),
+                        isActive = true,
+                    ),
+                    Dish(
+                        amount = "12.5 ks",
+                        name = "Pelíškovské noky",
+                        priceDiscounted = 42.0f,
+                        priceNormal = 69.0f,
+                        allergens = persistentListOf(1, 2, 3),
+                        photoLink = "https://agata.suz.cvut.cz/jidelnicky/showfotoG.php?clPodsystem=1&xFile=IMG-20240712075304557.jpg",
+                        pictogram = persistentListOf(),
+                        servingPlaces = persistentListOf(
+                            ServingPlace("Radnice", "R"),
+                        ),
+                        ingredients = persistentListOf(),
+                        isActive = true,
+                    ),
+                ),
+            ),
+            DishCategory(
                 "Chlálky",
                 "Dlabance dne",
                 persistentListOf(

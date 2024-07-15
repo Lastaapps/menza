@@ -19,17 +19,20 @@
 
 package cz.lastaapps.menza.features.today.ui.widget
 
+import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,19 +42,27 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.compose.ui.zIndex
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.core.util.extensions.mapIf
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -143,7 +154,6 @@ private fun DishContent(
                             DishItem(
                                 dish = dish,
                                 onDishSelected = onDishSelected,
-                                isInCarousel = false,
                                 appSettings = appSettings,
                                 isOnMetered = isOnMetered,
                                 modifier = Modifier
@@ -153,7 +163,6 @@ private fun DishContent(
                         return@item
                     }
 
-                    val density = LocalDensity.current
                     val carouselState = rememberCarouselState { category.dishList.size }
                     HorizontalMultiBrowseCarousel(
                         state = carouselState,
@@ -166,43 +175,35 @@ private fun DishContent(
                         itemSpacing = Padding.MidSmall,
                     ) { index ->
                         val dish = category.dishList[index]
+
+                        // outside so the computation is run one only
+                        // even if progress is called multiple times
+                        val progress by remember {
+                            derivedStateOf {
+                                carouselItemInfo.let {
+                                    // breakpoints
+                                    val visible = 0.9f
+                                    val hidden = 0.5f
+
+                                    when (val ratio = it.size / it.maxSize) {
+                                        in visible..1f -> 1f
+                                        in hidden..visible -> (ratio - hidden) / (visible - hidden)
+                                        in 0.0f..hidden -> 0f
+                                        else -> 1f
+                                    }.coerceAtLeast(0f)
+                                }
+                            }
+                        }
+
                         DishItem(
                             dish = dish,
                             onDishSelected = onDishSelected,
-                            isInCarousel = true,
                             appSettings = appSettings,
                             isOnMetered = isOnMetered,
                             modifier = Modifier
                                 .height(preferredItemSize)
                                 .maskClip(MaterialTheme.shapes.extraLarge),
-                            componentsGraphics = { alignment: Alignment.Vertical ->
-                                val translationFactor = when (alignment) {
-                                    Alignment.Top -> -1f
-                                    Alignment.Bottom -> 1f
-                                    else -> error("Not supported")
-                                }
-                                {
-                                    val progress = carouselItemInfo.let {
-                                        // breakpoints
-                                        val visible = 0.9f
-                                        val hidden = 0.5f
-
-                                        when (val ratio = it.size / it.maxSize) {
-                                            in visible..1f -> 1f
-                                            in hidden..visible -> (ratio - hidden) / (visible - hidden)
-                                            in 0.0f..hidden -> 0f
-                                            else -> 1f
-                                        }.coerceAtLeast(0f)
-                                    }
-
-                                    // hides other surface components when they are not in foreground
-                                    alpha = progress
-                                    translationY =
-                                        with(density) { 48.dp.toPx() * (1f - progress) } * translationFactor
-                                    scaleX = progress / 2f + 0.5f
-                                    scaleY = progress / 2f + 0.5f
-                                }
-                            },
+                            progress = { progress },
                         )
                     }
                 }
@@ -222,16 +223,23 @@ private fun DishContent(
 private fun DishItem(
     dish: Dish,
     onDishSelected: (Dish) -> Unit,
-    isInCarousel: Boolean,
     appSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
-    componentsGraphics: ((Alignment.Vertical) -> (GraphicsLayerScope.() -> Unit))? = null,
+    progress: () -> Float = { 1f },
 ) {
-    val ratio = if (isInCarousel) {
-        1f
-    } else {
-        null
+    val componentsGraphics: GraphicsLayerScope.(Alignment.Vertical) -> Unit = { alignment ->
+        val translationFactor = when (alignment) {
+            Alignment.Top -> -1f
+            Alignment.Bottom -> 1f
+            else -> error("Not supported")
+        }
+        val prog = progress()
+        // hides other surface components when they are not in foreground
+        alpha = prog
+        translationY = 56.dp.toPx() * (1f - prog) * translationFactor
+        scaleX = prog / 2f + 0.5f
+        scaleY = prog / 2f + 0.5f
     }
 
     Box(
@@ -240,62 +248,104 @@ private fun DishItem(
         DishImageOrSupplement(
             dish,
             loadImmediately = loadImmediately(appSettings.downloadOnMetered, isOnMetered),
-            ratio = ratio,
+            ratio = null,
+            modifier = modifier.fillMaxSize(),
         )
 
-        val componentsModifier = Modifier
-
-        Surface(
-            shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.surfaceContainer,
-            modifier = componentsModifier
+        val useGradient = dish.photoLink != null
+        Column(
+            modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(Padding.MidSmall)
-                .let { modifier ->
-                    componentsGraphics
-                        ?.invoke(Alignment.Bottom)
-                        ?.let { modifier.graphicsLayer(it) }
-                        ?: modifier
-                },
+                .graphicsLayer { componentsGraphics(Alignment.Bottom) },
+            verticalArrangement = Arrangement.spacedBy(Padding.Small * -1),
         ) {
-            Row(
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.spacedBy(Padding.Small),
-                modifier = Modifier.padding(
-                    horizontal = Padding.MidSmall,
-                    vertical = Padding.Small,
-                ),
+            DishBadge(
+                dish, priceType = appSettings.priceType,
+                modifier = Modifier
+                    .zIndex(2f)
+                    .align(Alignment.End)
+                    .padding(horizontal = Padding.MidSmall),
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .mapIf(useGradient) { it.gradient() },
             ) {
+                // used to reset the marquee effect
+                val isVisible by remember { derivedStateOf { progress() > 0.2f } }
+                if (!isVisible) {
+                    @Suppress("LABEL_NAME_CLASH")
+                    return@Box
+                }
+
                 Text(
                     dish.name,
                     modifier = Modifier
-                        .basicMarquee(iterations = Int.MAX_VALUE)
-                        .weight(1f),
+                        .padding(Padding.MidSmall)
+                        .basicMarquee(
+                            initialDelayMillis = 500,
+                            iterations = Int.MAX_VALUE,
+                        ),
                     maxLines = 1,
+                    color = TodayDishCarouselTokens.gradientForeground.takeIf { useGradient }
+                        ?: Color.Unspecified,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
-                DishBadge(dish, priceType = appSettings.priceType)
             }
         }
 
-        dish.allergens?.let { allergens ->
+        remember(dish.amount, dish.allergens) {
+            listOfNotNull(
+                dish.amount,
+                dish.allergens
+                    ?.takeIf { it.isNotEmpty() }
+                    ?.joinToString(","),
+            ).joinToString(" • ").takeUnless { it.isBlank() }
+        }?.let { text ->
             Surface(
                 shape = MaterialTheme.shapes.large,
                 color = MaterialTheme.colorScheme.surfaceContainer,
-                modifier = componentsModifier
+                modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(Padding.MidSmall)
-                    .let { modifier ->
-                        componentsGraphics
-                            ?.invoke(Alignment.Top)
-                            ?.let { modifier.graphicsLayer(it) } ?: modifier
-                    },
+                    .graphicsLayer { componentsGraphics(Alignment.Top) },
             ) {
                 Text(
-                    text = allergens.joinToString(", "),
+                    text = text,
                     modifier = Modifier.padding(Padding.Small),
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
         }
+    }
+}
+
+private object TodayDishCarouselTokens {
+    val gradientBackground = Color.DarkGray
+    val gradientForeground = Color.White
+}
+
+private fun Modifier.gradient(color: Color = TodayDishCarouselTokens.gradientBackground) =
+    background(
+        Brush.verticalGradient(
+            0.0f to Color.Transparent,
+            0.3f to color.copy(alpha = 0.5f),
+            0.7f to color.copy(alpha = 0.8f),
+            1.0f to color,
+        ),
+    )
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun GradientTesting() = PreviewWrapper {
+    Box(
+        Modifier
+            .background(Color.Magenta)
+            .gradient(MaterialTheme.colorScheme.primary)
+            .size(100.dp, 50.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text("Example", color = Color.White)
     }
 }

@@ -68,7 +68,7 @@ internal fun DishBadge(
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(
                     vertical = Padding.Tiny,
-                    horizontal = Padding.Smaller,
+                    horizontal = Padding.Small,
                 ),
             )
         }
