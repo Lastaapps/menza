@@ -3,7 +3,7 @@ root = true
 [*]
 
 [*.{kt,kts}]
-ktlint_code_style = official
+ktlint_code_style = ktlint_official
 
 # Indentation
 indent_size = 4
@@ -14,3 +14,10 @@ ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
 trailing-comma-on-call-site = true
 trailing-comma-on-declaration-site = true
+
+# Compose
+# https://mrmans0n.github.io/compose-rules/ktlint/
+ktlint_function_naming_ignore_when_annotated_with = Composable
+compose_disallow_material2 = true
+compose_allowed_from_m2 = icons
+compose_disallow_unstable_collections = true

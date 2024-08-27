@@ -11,3 +11,5 @@ local.properties
 /.idea/other.xml
 .kotlin
 /.idea/studiobot.xml
+/.idea/runConfigurations.xml
+/.idea/ktlint-plugin.xml

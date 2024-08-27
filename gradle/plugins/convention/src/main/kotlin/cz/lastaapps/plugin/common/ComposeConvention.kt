@@ -29,42 +29,50 @@ import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 
-class ComposeConvention : BasePlugin(
-    {
-        pluginManager {
-            alias(libs.plugins.kotlin.compose.compiler)
-            // Required by Decompose
-            alias(libs.plugins.kotlin.serialization)
-        }
+class ComposeConvention :
+    BasePlugin(
+        {
+            pluginManager {
+                alias(libs.plugins.kotlin.compose.compiler)
+                // Required by Decompose
+                alias(libs.plugins.kotlin.serialization)
+            }
 
-        with(extensions.getByType<ComposeCompilerGradlePluginExtension>()) {
-            enableStrongSkippingMode = true
-            includeSourceInformation = true
-            enableNonSkippingGroupOptimization = true
-        }
+            with(extensions.getByType<ComposeCompilerGradlePluginExtension>()) {
+                includeSourceInformation = true
 
-        dependencies {
-            implementation(libs.google.material)
+                featureFlags =
+                    setOf(
+                        ComposeFeatureFlag.OptimizeNonSkippingGroups,
+                    )
+            }
 
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.constraintlayout.compose)
-            implementation(libs.androidx.compose.material3)
-            implementation(libs.androidx.compose.material3WindowSizeClass)
-            implementation(libs.androidx.compose.iconsCore)
-            implementation(libs.androidx.compose.iconsExtended)
-            implementation(libs.androidx.compose.animation)
-            implementation(libs.androidx.compose.ui.util)
-            debugImplementation(libs.androidx.compose.tooling)
-            implementation(libs.androidx.compose.toolingPreview)
+            dependencies {
+                implementation(libs.google.material)
 
-            implementation(libs.androidx.lifecycle.runtime.asProvider())
-            implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.constraintlayout.compose)
+                implementation(libs.androidx.compose.material3)
+                implementation(libs.androidx.compose.material3WindowSizeClass)
+                implementation(libs.androidx.compose.iconsCore)
+                implementation(libs.androidx.compose.iconsExtended)
+                implementation(libs.androidx.compose.animation)
+                implementation(libs.androidx.compose.ui.util)
+                debugImplementation(libs.androidx.compose.tooling)
+                implementation(libs.androidx.compose.toolingPreview)
 
-            implementation(libs.decompose.core)
-            implementation(libs.decompose.compose)
+                implementation(
+                    libs.androidx.lifecycle.runtime
+                        .asProvider(),
+                )
+                implementation(libs.androidx.lifecycle.runtime.compose)
 
-            implementation(libs.coil.compose.complete)
-        }
-    },
-)
+                implementation(libs.decompose.core)
+                implementation(libs.decompose.compose)
+
+                implementation(libs.coil.compose.complete)
+            }
+        },
+    )
