@@ -28,6 +28,7 @@ import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.android.common.KotlinBaseConvention
 import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
+import cz.lastaapps.plugin.common.KtLintConvention
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
@@ -36,48 +37,50 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
 @Suppress("unused")
-class JvmAppConvention : BasePlugin(
-    {
-        pluginManager {
-            apply("org.gradle.application")
-            alias(libs.plugins.kotlin.jvm)
-            alias(libs.plugins.shadow)
-        }
+class JvmAppConvention :
+    BasePlugin(
+        {
+            pluginManager {
+                apply("org.gradle.application")
+                alias(libs.plugins.kotlin.jvm)
+                alias(libs.plugins.shadow)
+            }
 
-        apply<KotlinBaseConvention>()
-        apply<DetektConvention>()
-        apply<ArrowKtConvention>()
+            apply<KtLintConvention>()
+            apply<DetektConvention>()
+            apply<KotlinBaseConvention>()
+            apply<ArrowKtConvention>()
 
-        tasks.withType<Test> {
-            useJUnitPlatform()
-        }
+            tasks.withType<Test> {
+                useJUnitPlatform()
+            }
 
-        (kotlinExtension as KotlinJvmProjectExtension).apply {
-            sourceSets.all {
-                languageSettings.apply {
-                    optIn("kotlin.RequiresOptIn")
-                    optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            (kotlinExtension as KotlinJvmProjectExtension).apply {
+                sourceSets.all {
+                    languageSettings.apply {
+                        optIn("kotlin.RequiresOptIn")
+                        optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                    }
                 }
             }
-        }
 
-        dependencies {
-            implementation(libs.kotlinx.coroutines.common)
-            implementation(libs.kotlinx.dateTime)
-            implementation(libs.kotlinx.collection)
-            implementation(libs.koin.core)
-            implementation(libs.kermit)
-            implementation(libs.fluidLocale)
+            dependencies {
+                implementation(libs.kotlinx.coroutines.common)
+                implementation(libs.kotlinx.dateTime)
+                implementation(libs.kotlinx.collection)
+                implementation(libs.koin.core)
+                implementation(libs.kermit)
+                implementation(libs.fluidLocale)
 
-            testImplementation(libs.kotlin.test.annotation)
-            testImplementation(libs.kotlin.test.common)
-            testImplementation(libs.kotlin.test.core)
-            testImplementation(libs.kotest.assertion)
-            testImplementation(libs.kotlinx.coroutines.test)
-            testImplementation(libs.kotest.jUnit5runner)
-            testImplementation(project.dependencies.platform(libs.junit5.bom))
-            testImplementation(libs.junit5.jupiter.api)
-            testImplementation(libs.junit5.jupiter.runtime)
-        }
-    },
-)
+                testImplementation(libs.kotlin.test.annotation)
+                testImplementation(libs.kotlin.test.common)
+                testImplementation(libs.kotlin.test.core)
+                testImplementation(libs.kotest.assertion)
+                testImplementation(libs.kotlinx.coroutines.test)
+                testImplementation(libs.kotest.jUnit5runner)
+                testImplementation(project.dependencies.platform(libs.junit5.bom))
+                testImplementation(libs.junit5.jupiter.api)
+                testImplementation(libs.junit5.jupiter.runtime)
+            }
+        },
+    )

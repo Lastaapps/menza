@@ -113,7 +113,7 @@ gradlePlugins-android = { module = "com.android.tools.build:gradle", version.ref
 gradlePlugins-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradlePlugins-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradlePlugins-kotlin-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
-gradlePlugins-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
+gradlePlugins-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlintGradle" }
 gradlePlugins-shadow = { module = "gradle.plugin.com.github.johnrengelman:shadow", version.ref = "shadow" }
 junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5-bom" }
 junit5-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
@@ -146,6 +146,7 @@ kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1"
 kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1"
+ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlintComposeRules" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
@@ -238,7 +239,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
 lastaapps-android-app = "android-app-convention:none"
 lastaapps-android-library = "android-library-convention:none"
 lastaapps-common-coil = "common-coil-convention:none"

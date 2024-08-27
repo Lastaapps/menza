@@ -15,6 +15,10 @@ ij_kotlin_allow_trailing_comma_on_call_site = true
 trailing-comma-on-call-site = true
 trailing-comma-on-declaration-site = true
 
+# Disable wrapping that I don't like
+ktlint_standard_wrapping = disabled
+ktlint_standard_multiline-expression-wrapping = disabled
+
 # Compose
 # https://mrmans0n.github.io/compose-rules/ktlint/
 ktlint_function_naming_ignore_when_annotated_with = Composable

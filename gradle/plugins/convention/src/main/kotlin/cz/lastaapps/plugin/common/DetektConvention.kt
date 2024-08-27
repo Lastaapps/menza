@@ -29,40 +29,45 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
-class DetektConvention : BasePlugin(
-    {
-        pluginManager {
-            alias(libs.plugins.detekt)
-        }
-
-        extensions.configure<DetektExtension>("detekt") {
-            buildUponDefaultConfig = true
-            allRules = true
-            parallel = true
-            config.setFrom(files("$projectDir/config/detekt.yml"))
-            baseline = file("$rootDir/gradle/detekt-baseline.xml")
-        }
-
-        tasks.withType<Detekt>().configureEach {
-            reports {
-                html.required.set(false)
-                xml.required.set(false)
-                txt.required.set(false)
-                sarif.required.set(false)
-                md.required.set(false)
+class DetektConvention :
+    BasePlugin(
+        {
+            pluginManager {
+                alias(libs.plugins.detekt)
             }
-        }
 
-        tasks.withType<Detekt>().configureEach {
-            jvmTarget = libs.versions.java.jvmTarget.get()
-        }
-        tasks.withType<DetektCreateBaselineTask>().configureEach {
-            jvmTarget = libs.versions.java.jvmTarget.get()
-        }
+            extensions.configure<DetektExtension>("detekt") {
+                buildUponDefaultConfig = true
+                allRules = true
+                parallel = true
+                config.setFrom(files("$projectDir/config/detekt.yml"))
+                baseline = file("$rootDir/gradle/detekt-baseline.xml")
+            }
 
-        dependencies {
-            add("detektPlugins", libs.detekt.kode.compose)
-            add("detektPlugins", libs.detekt.twitter.compose)
-        }
-    },
-)
+            tasks.withType<Detekt>().configureEach {
+                reports {
+                    html.required.set(false)
+                    xml.required.set(false)
+                    txt.required.set(false)
+                    sarif.required.set(false)
+                    md.required.set(false)
+                }
+            }
+
+            tasks.withType<Detekt>().configureEach {
+                jvmTarget =
+                    libs.versions.java.jvmTarget
+                        .get()
+            }
+            tasks.withType<DetektCreateBaselineTask>().configureEach {
+                jvmTarget =
+                    libs.versions.java.jvmTarget
+                        .get()
+            }
+
+            dependencies {
+                add("detektPlugins", libs.detekt.kode.compose)
+                add("detektPlugins", libs.detekt.twitter.compose)
+            }
+        },
+    )
