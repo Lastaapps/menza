@@ -51,43 +51,55 @@ import cz.lastaapps.menza.features.starting.ui.navigation.DefaultStartingCompone
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child
 import kotlinx.serialization.Serializable
 
-
 @OptIn(ExperimentalDecomposeApi::class)
 internal interface StartingComponent {
-
     val content: Value<ChildPages<*, Child>>
 
     fun next()
 
     sealed interface Child {
         @JvmInline
-        value class Policy(val component: PolicyComponent) : Child
+        value class Policy(
+            val component: PolicyComponent,
+        ) : Child
 
         @JvmInline
-        value class DownloadData(val component: DownloadComponent) : Child
+        value class DownloadData(
+            val component: DownloadComponent,
+        ) : Child
 
         @JvmInline
-        value class ChoosePrice(val component: PriceTypeComponent) : Child
+        value class ChoosePrice(
+            val component: PriceTypeComponent,
+        ) : Child
 
         @JvmInline
-        value class ChooseDishLanguage(val component: DishLanguageComponent) : Child
+        value class ChooseDishLanguage(
+            val component: DishLanguageComponent,
+        ) : Child
 
         @JvmInline
-        value class ChooseTheme(val component: AppThemeComponent) : Child
+        value class ChooseTheme(
+            val component: AppThemeComponent,
+        ) : Child
 
         @JvmInline
-        value class OrderMenzaList(val component: ReorderMenzaComponent) : Child
+        value class OrderMenzaList(
+            val component: ReorderMenzaComponent,
+        ) : Child
 
         @JvmInline
-        value class AllSet(val component: AllSetComponent) : Child
+        value class AllSet(
+            val component: AllSetComponent,
+        ) : Child
     }
 }
 
 @OptIn(ExperimentalDecomposeApi::class)
 internal class DefaultStartingComponent(
     componentContext: ComponentContext,
-) : StartingComponent, ComponentContext by componentContext {
-
+) : StartingComponent,
+    ComponentContext by componentContext {
     private val navigation = PagesNavigation<Config>()
 
     override val content: Value<ChildPages<*, Child>> =
@@ -104,11 +116,12 @@ internal class DefaultStartingComponent(
             when (configuration) {
                 AllSet -> Child.AllSet(DefaultAllSetComponent(componentContext))
                 ChoosePrice -> Child.ChoosePrice(DefaultPriceTypeComponent(componentContext))
-                ChooseDishLanguage -> Child.ChooseDishLanguage(
-                    DefaultDishLanguageComponent(
-                        componentContext,
-                    ),
-                )
+                ChooseDishLanguage ->
+                    Child.ChooseDishLanguage(
+                        DefaultDishLanguageComponent(
+                            componentContext,
+                        ),
+                    )
                 ChooseTheme -> Child.ChooseTheme(DefaultAppThemeComponent(componentContext))
                 DownloadData -> Child.DownloadData(DefaultDownloadComponent(componentContext))
                 OrderMenzaList -> Child.OrderMenzaList(DefaultReorderMenzaComponent(componentContext))
@@ -144,15 +157,16 @@ internal class DefaultStartingComponent(
         data object AllSet : Config
 
         companion object {
-            val allConfigs: List<Config> = listOf(
-                Policy,
-                DownloadData,
-                ChooseTheme,
-                ChoosePrice,
-                ChooseDishLanguage,
-                OrderMenzaList,
-                AllSet,
-            )
+            val allConfigs: List<Config> =
+                listOf(
+                    Policy,
+                    DownloadData,
+                    ChooseTheme,
+                    ChoosePrice,
+                    ChooseDishLanguage,
+                    OrderMenzaList,
+                    AllSet,
+                )
         }
     }
 }

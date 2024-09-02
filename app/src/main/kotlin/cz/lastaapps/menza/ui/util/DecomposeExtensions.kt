@@ -25,23 +25,24 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-
 context(KoinComponent)
 inline fun <reified T : InstanceKeeper.Instance> InstanceKeeper.getOrCreateKoin(
     qualifier: org.koin.core.qualifier.Qualifier? = null,
     noinline parameters: org.koin.core.parameter.ParametersDefinition? = null,
-): T = getOrCreate {
-    this@KoinComponent.get<T>(qualifier, parameters)
-}
+): T =
+    getOrCreate {
+        this@KoinComponent.get<T>(qualifier, parameters)
+    }
 
 context(KoinComponent)
 inline fun <reified T : InstanceKeeper.Instance> InstanceKeeper.getOrCreateKoin(
     key: Any,
     qualifier: org.koin.core.qualifier.Qualifier? = null,
     noinline parameters: org.koin.core.parameter.ParametersDefinition? = null,
-): T = getOrCreate(key) {
-    this@KoinComponent.get<T>(qualifier, parameters)
-}
+): T =
+    getOrCreate(key) {
+        this@KoinComponent.get<T>(qualifier, parameters)
+    }
 
 context(KoinComponent)
 inline fun <reified T : InstanceKeeper.Instance> ComponentContext.getOrCreateKoin(

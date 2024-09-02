@@ -29,14 +29,14 @@ import cz.lastaapps.crash.StartInit
 @Keep
 @Suppress("unused")
 internal class ReEnableCrashInit : Initializer<Unit> {
-        private val log = localLogger()
+    private val log = localLogger()
 
     override fun create(context: Context) {
         log.d { "Starting" }
-        AppInitializer.getInstance(context)
+        AppInitializer
+            .getInstance(context)
             .initializeComponent(StartInit::class.java)
     }
 
-    override fun dependencies(): List<Class<out Initializer<*>>> =
-        listOf(KoinStartupInit::class.java)
+    override fun dependencies(): List<Class<out Initializer<*>>> = listOf(KoinStartupInit::class.java)
 }

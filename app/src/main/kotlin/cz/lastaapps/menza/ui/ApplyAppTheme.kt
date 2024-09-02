@@ -51,14 +51,16 @@ internal fun ApplyAppTheme(
             val darkScrim = Color.argb(0x80, 0x1b, 0x1b, 0x1b)
 
             activity.enableEdgeToEdge(
-                statusBarStyle = SystemBarStyle.auto(
-                    Color.TRANSPARENT,
-                    Color.TRANSPARENT,
-                ) { darkTheme },
-                navigationBarStyle = SystemBarStyle.auto(
-                    lightScrim,
-                    darkScrim,
-                ) { darkTheme },
+                statusBarStyle =
+                    SystemBarStyle.auto(
+                        Color.TRANSPARENT,
+                        Color.TRANSPARENT,
+                    ) { darkTheme },
+                navigationBarStyle =
+                    SystemBarStyle.auto(
+                        lightScrim,
+                        darkScrim,
+                    ) { darkTheme },
             )
             onDispose { }
         }

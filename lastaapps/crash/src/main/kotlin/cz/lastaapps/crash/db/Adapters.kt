@@ -17,6 +17,8 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:Suppress("ktlint:standard:filename")
+
 package cz.lastaapps.crash.db
 
 import app.cash.sqldelight.ColumnAdapter
@@ -28,29 +30,29 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 object CrashAdapter {
+    val dateAdapter =
+        object : ColumnAdapter<ZonedDateTime, String> {
+            private val format = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
-    val dateAdapter = object : ColumnAdapter<ZonedDateTime, String> {
-        private val format = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-        override fun decode(databaseValue: String): ZonedDateTime =
-            ZonedDateTime.of(LocalDateTime.parse(databaseValue, format), ZoneId.of("UTC"))
+            override fun decode(databaseValue: String): ZonedDateTime =
+                ZonedDateTime.of(LocalDateTime.parse(databaseValue, format), ZoneId.of("UTC"))
 
-        override fun encode(value: ZonedDateTime): String =
-            value.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(format)
-    }
-    val severityAdapter = object : ColumnAdapter<ErrorSeverity, Long> {
-        override fun decode(databaseValue: Long): ErrorSeverity {
-            return ErrorSeverity.entries.find { it.id == databaseValue.toByte() }
-                ?: error("Error severity not found: $databaseValue")
+            override fun encode(value: ZonedDateTime): String = value.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(format)
         }
+    val severityAdapter =
+        object : ColumnAdapter<ErrorSeverity, Long> {
+            override fun decode(databaseValue: Long): ErrorSeverity =
+                ErrorSeverity.entries.find { it.id == databaseValue.toByte() }
+                    ?: error("Error severity not found: $databaseValue")
 
-        override fun encode(value: ErrorSeverity): Long = value.id.toLong()
-    }
-    val reportedAdapter = object : ColumnAdapter<ReportState, Long> {
-        override fun decode(databaseValue: Long): ReportState {
-            return ReportState.entries.find { it.id == databaseValue.toByte() }
-                ?: error("Report state not found: $databaseValue")
+            override fun encode(value: ErrorSeverity): Long = value.id.toLong()
         }
+    val reportedAdapter =
+        object : ColumnAdapter<ReportState, Long> {
+            override fun decode(databaseValue: Long): ReportState =
+                ReportState.entries.find { it.id == databaseValue.toByte() }
+                    ?: error("Report state not found: $databaseValue")
 
-        override fun encode(value: ReportState): Long = value.id.toLong()
-    }
+            override fun encode(value: ReportState): Long = value.id.toLong()
+        }
 }

@@ -55,13 +55,13 @@ import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.appCardColors
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 import kotlin.math.roundToInt
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toJavaLocalDate
 
 @Composable
 fun WeekDishList(
@@ -88,13 +88,14 @@ fun WeekDishList(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
+@Suppress("ktlint:compose:modifier-reused-check")
 private fun WeekDishContent(
     data: ImmutableList<WeekDayDish>,
     priceType: PriceType,
     noItems: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    //no data handling
+    // no data handling
     if (data.isEmpty()) {
         NoItems(modifier, noItems)
         return
@@ -102,11 +103,13 @@ private fun WeekDishContent(
 
     val measurement = rememberTextMeasurer()
     val longestAmount = remember(data) { data.longestAmountOrPrice() }
-    val amountWidthPx = remember(longestAmount, measurement) {
-        measurement.measure(
-            buildString(longestAmount) { repeat(longestAmount) { append('m') } },
-        ).size.width * .8f
-    }
+    val amountWidthPx =
+        remember(longestAmount, measurement) {
+            measurement
+                .measure(
+                    buildString(longestAmount) { repeat(longestAmount) { append('m') } },
+                ).size.width * .8f
+        }
     val amountWidth = with(LocalDensity.current) { amountWidthPx.toDp() }
 
     // showing items
@@ -116,7 +119,7 @@ private fun WeekDishContent(
     ) {
         data.forEach { (date, categories) ->
             stickyHeader {
-                //make header nontransparent
+                // make header nontransparent
                 Surface(Modifier.fillMaxWidth()) {
                     Box(Modifier.padding(bottom = Padding.Small)) {
                         DayHeader(date = date)
@@ -141,9 +144,10 @@ private fun WeekDishContent(
                         dish = dish,
                         priceType = priceType,
                         amountWidth = amountWidth,
-                        modifier = Modifier
-                            .animateItem()
-                            .fillMaxWidth(),
+                        modifier =
+                            Modifier
+                                .animateItem()
+                                .fillMaxWidth(),
                     )
                 }
 
@@ -163,7 +167,8 @@ private fun ImmutableList<WeekDayDish>.longestAmountOrPrice(): Int =
                     dish.amount?.length ?: 0,
                     (dish.priceNormal ?: dish.priceDiscounted)
                         ?.let { price -> kotlin.math.log10(price) }
-                        ?.plus(3)?.roundToInt() ?: 0,
+                        ?.plus(3)
+                        ?.roundToInt() ?: 0,
                 )
             }
         }
@@ -203,11 +208,12 @@ private fun DayHeader(
         Text(
             text = formatter(date),
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier
-                .padding(
-                    horizontal = Padding.MidLarge,
-                    vertical = Padding.Smaller,
-                ),
+            modifier =
+                Modifier
+                    .padding(
+                        horizontal = Padding.MidLarge,
+                        vertical = Padding.Smaller,
+                    ),
         )
     }
 }
@@ -255,5 +261,3 @@ private fun WeekDishItem(
         }
     }
 }
-
-

@@ -27,7 +27,8 @@ class SetOliverRow internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(used: Boolean) = launch {
-        repo.setOliverRows(used)
-    }
+    suspend operator fun invoke(used: Boolean) =
+        launch {
+            repo.setOliverRows(used)
+        }
 }

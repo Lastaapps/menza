@@ -30,7 +30,7 @@ import org.koin.core.context.startKoin
 
 @Keep
 class KoinStartupInit : Initializer<Unit> {
-        private val log = localLogger()
+    private val log = localLogger()
 
     override fun create(context: Context) {
         log.d { "Starting" }

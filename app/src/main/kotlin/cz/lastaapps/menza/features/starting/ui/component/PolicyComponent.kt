@@ -37,7 +37,9 @@ internal interface PolicyComponent {
 internal class DefaultPolicyComponent(
     componentContext: ComponentContext,
     override val isRequired: Boolean,
-) : PolicyComponent, KoinComponent, ComponentContext by componentContext {
+) : PolicyComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: PolicyViewModel = getOrCreateKoin()
 }
 

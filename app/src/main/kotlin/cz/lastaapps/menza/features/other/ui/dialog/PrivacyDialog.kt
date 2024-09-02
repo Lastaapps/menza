@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -46,21 +47,22 @@ import cz.lastaapps.menza.features.other.ui.vm.PolicyViewModel
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 
-
 @Composable
+@Suppress("ktlint:compose:parameter-naming")
 internal fun PrivacyDialogDest(
     onNotNeeded: () -> Unit,
     viewModel: PolicyViewModel,
     isRequired: Boolean,
 ) {
     val state by viewModel.shouldShow.collectAsState()
+    val onNotNeededLambda by rememberUpdatedState(onNotNeeded)
 
     when (state?.or(!isRequired)) {
         true ->
             PrivacyDialog(
                 onDismissRequest = {
                     if (!isRequired) {
-                        onNotNeeded()
+                        onNotNeededLambda()
                     }
                 },
                 showAccept = isRequired,
@@ -68,7 +70,7 @@ internal fun PrivacyDialogDest(
             )
 
         false ->
-            LaunchedEffect(Unit) { onNotNeeded() }
+            LaunchedEffect(Unit) { onNotNeededLambda() }
 
         null -> {}
     }
@@ -140,6 +142,7 @@ private fun SUZWarning(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-private fun PrivacyDialogContentPreview() = PreviewWrapper {
-    PrivacyDialogContent(showAccept = true) { }
-}
+private fun PrivacyDialogContentPreview() =
+    PreviewWrapper {
+        PrivacyDialogContent(showAccept = true) { }
+    }

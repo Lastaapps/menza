@@ -56,42 +56,43 @@ fun AppTheme(
 ) {
     val isLightMode = !darkMode.shouldUseDark()
 
-    val colorScheme = when (theme) {
-        System ->
-            if (isLightMode) {
-                dynamicLightColorScheme(LocalContext.current)
-            } else {
-                dynamicDarkColorScheme(LocalContext.current)
-            }
+    val colorScheme =
+        when (theme) {
+            System ->
+                if (isLightMode) {
+                    dynamicLightColorScheme(LocalContext.current)
+                } else {
+                    dynamicDarkColorScheme(LocalContext.current)
+                }
 
-        Agata ->
-            if (isLightMode) {
-                AgataLightColors
-            } else {
-                AgataDarkColors
-            }
+            Agata ->
+                if (isLightMode) {
+                    AgataLightColors
+                } else {
+                    AgataDarkColors
+                }
 
-        CTU ->
-            if (isLightMode) {
-                CtuLightColors
-            } else {
-                CtuDarkColors
-            }
+            CTU ->
+                if (isLightMode) {
+                    CtuLightColors
+                } else {
+                    CtuDarkColors
+                }
 
-        Uwu ->
-            if (isLightMode) {
-                UwuLightColors
-            } else {
-                UwuDarkColors
-            }
+            Uwu ->
+                if (isLightMode) {
+                    UwuLightColors
+                } else {
+                    UwuDarkColors
+                }
 
-        Kitty ->
-            if (isLightMode) {
-                KittyLightColors
-            } else {
-                KittyDarkColors
-            }
-    }.animated()
+            Kitty ->
+                if (isLightMode) {
+                    KittyLightColors
+                } else {
+                    KittyDarkColors
+                }
+        }.animated()
 
     MaterialTheme(
         colorScheme = colorScheme,
@@ -104,18 +105,19 @@ fun AppTheme(
     }
 }
 
-private val Shapes = Shapes(
+private val Shapes =
+    Shapes(
     /*extraSmall = ShapeTokens.CornerExtraSmall
     small = ShapeTokens.CornerSmall,
     medium = ShapeTokens.CornerMedium,
     large = ShapeTokens.CornerLarge,
     extraLarge = ShapeTokens.CornerExtraLarge,*/
-)
+    )
 
 @Suppress("AnimateAsStateLabel")
 @Composable
-private fun ColorScheme.animated(): ColorScheme {
-    return ColorScheme(
+private fun ColorScheme.animated(): ColorScheme =
+    ColorScheme(
         background = animateColorAsState(background).value,
         error = animateColorAsState(error).value,
         errorContainer = animateColorAsState(errorContainer).value,
@@ -153,4 +155,3 @@ private fun ColorScheme.animated(): ColorScheme {
         surfaceContainerLow = animateColorAsState(surfaceContainerLow).value,
         surfaceContainerLowest = animateColorAsState(surfaceContainerLowest).value,
     )
-}

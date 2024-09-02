@@ -76,9 +76,10 @@ internal fun CrashReport(
                         ReportState.DISMISSED,
                     )
                 },
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colorScheme.tertiary,
-                ),
+                colors =
+                    ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.tertiary,
+                    ),
             ) { Text(stringResource(R.string.panel_crash_dismiss)) }
 
             val context = LocalContext.current
@@ -88,7 +89,7 @@ internal fun CrashReport(
                 reportShown,
                 true,
                 onDismissRequest = { reportShown = false },
-                onModeSelected = { mode ->
+                onMode = { mode ->
                     makeReported(unreported.first, ReportState.REPORTED)
                     sendReport(context, mode, unreported.second)
                 },
@@ -96,10 +97,11 @@ internal fun CrashReport(
 
             Button(
                 onClick = { reportShown = true },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary,
-                    contentColor = MaterialTheme.colorScheme.onTertiary,
-                ),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary,
+                    ),
             ) { Text(stringResource(R.string.panel_crash_report)) }
         }
     }

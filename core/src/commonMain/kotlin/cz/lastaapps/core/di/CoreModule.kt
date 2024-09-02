@@ -33,14 +33,15 @@ import org.koin.dsl.module
 
 internal expect val platform: Module
 
-val coreModule = module {
-    includes(platform)
+val coreModule =
+    module {
+        includes(platform)
 
-    single { Clock.System } bind Clock::class
-    single { UCContext(Dispatchers.Default) }
-    single { httpClient }
+        single { Clock.System } bind Clock::class
+        single { UCContext(Dispatchers.Default) }
+        single { httpClient }
 
-    factoryOf(::GetAppVersionUC)
-    factoryOf(::IsOnMeteredUC)
-    factoryOf(::OpenAppSocialUC)
-}
+        factoryOf(::GetAppVersionUC)
+        factoryOf(::IsOnMeteredUC)
+        factoryOf(::OpenAppSocialUC)
+    }

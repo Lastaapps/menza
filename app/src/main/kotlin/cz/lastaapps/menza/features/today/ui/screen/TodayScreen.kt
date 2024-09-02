@@ -80,7 +80,7 @@ internal fun TodayScreen(
     TodayContent(
         state = state,
         onOsturak = onOsturak,
-        onDishSelected = viewModel::selectDish,
+        onDish = viewModel::selectDish,
         panels = panels,
         dishListViewModel = dishListViewModel,
         hostState = hostState,
@@ -89,9 +89,7 @@ internal fun TodayScreen(
 }
 
 @Composable
-private fun TodayEffects(
-    viewModel: TodayViewModel,
-) {
+private fun TodayEffects(viewModel: TodayViewModel) {
     HandleAppear(viewModel)
 
     val state by viewModel.flowState
@@ -103,18 +101,18 @@ private fun TodayEffects(
 @Composable
 private fun TodayContent(
     state: TodayState,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     onOsturak: () -> Unit,
     panels: @Composable (Modifier) -> Unit,
     dishListViewModel: DishListViewModel,
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-
     // resets scroll position when new menza is selected
-    scrollStates: ScrollStates = rememberSaveable(
-        state.selectedMenza,
-        saver = ScrollStates.Saver,
-    ) { ScrollStates() },
+    scrollStates: ScrollStates =
+        rememberSaveable(
+            state.selectedMenza,
+            saver = ScrollStates.Saver,
+        ) { ScrollStates() },
 ) {
     var videoFeedUrl by remember(state.selectedMenza) {
         mutableStateOf<String?>(null)
@@ -122,7 +120,7 @@ private fun TodayContent(
 
     val dishList: @Composable () -> Unit = {
         DishListScreen(
-            onDishSelected = onDishSelected,
+            onDish = onDish,
             onVideoLink = { videoFeedUrl = it },
             viewModel = dishListViewModel,
             modifier = Modifier.fillMaxSize(),
@@ -160,9 +158,10 @@ private fun TodayContent(
                 listNode = dishList,
                 detailNode = dishDetail,
                 emptyNode = dishNone,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
             )
 
             panels(
@@ -188,12 +187,13 @@ private fun ImagePreviewDialog(
     BaseDialog(
         onDismissRequest = onDismissRequest,
     ) {
-        val imageRequest = with(Builder(LocalContext.current)) {
-            diskCachePolicy(DISABLED)
-            memoryCachePolicy(DISABLED)
-            data(videoFeedUrl)
-            build()
-        }
+        val imageRequest =
+            with(Builder(LocalContext.current)) {
+                diskCachePolicy(DISABLED)
+                memoryCachePolicy(DISABLED)
+                data(videoFeedUrl)
+                build()
+            }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
@@ -222,10 +222,11 @@ private fun ImagePreviewDialog(
                 error = {
                     Box(contentAlignment = Alignment.Center) {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                Padding.Small,
-                                Alignment.CenterHorizontally,
-                            ),
+                            horizontalArrangement =
+                                Arrangement.spacedBy(
+                                    Padding.Small,
+                                    Alignment.CenterHorizontally,
+                                ),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Icon(Icons.Default.ErrorOutline, null)

@@ -53,7 +53,10 @@ android {
 dependencies {
 
     // Compose base
-    androidMainImplementation(libs.androidx.compose.ui.asProvider())
+    androidMainImplementation(
+        libs.androidx.compose.ui
+            .asProvider(),
+    )
 
     // Settings
     commonMainImplementation(libs.bundles.russhwolf.settings)

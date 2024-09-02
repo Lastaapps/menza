@@ -21,24 +21,36 @@ package cz.lastaapps.api.core.domain.validity
 
 import cz.lastaapps.core.util.extensions.CET
 import cz.lastaapps.core.util.extensions.atMidnight
-import kotlin.time.Duration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+import kotlin.time.Duration
 
 /**
  * Checks if data stored are valid based on date
  */
 interface ValidityChecker {
     suspend fun invalidateKey(key: ValidityKey)
+
     suspend fun onDataUpdated(key: ValidityKey)
+
     fun isRecent(key: ValidityKey): Flow<Boolean>
+
     fun isFromToday(key: ValidityKey): Flow<Boolean>
+
     fun isThisWeek(key: ValidityKey): Flow<Boolean>
-    fun isUpdatedSince(key: ValidityKey, duration: Duration): Flow<Boolean>
-    fun isUpdatedSince(key: ValidityKey, date: Instant): Flow<Boolean>
+
+    fun isUpdatedSince(
+        key: ValidityKey,
+        duration: Duration,
+    ): Flow<Boolean>
+
+    fun isUpdatedSince(
+        key: ValidityKey,
+        date: Instant,
+    ): Flow<Boolean>
 }
 
 fun ValidityChecker.isUpdatedSince(

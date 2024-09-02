@@ -33,15 +33,17 @@ internal class PolicyViewModel(
     private val clock: Clock,
     context: VMContext,
 ) : BaseViewModel(context) {
+    private val log = localLogger()
 
-        private val log = localLogger()
+    val shouldShow =
+        store.approved
+            .map { it == null }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    val shouldShow = store.approved.map { it == null }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    fun onApprove() =
+        launchVM {
+            log.i { "Setting approved" }
 
-    fun onApprove() = launchVM {
-        log.i { "Setting approved" }
-
-        store.setApproved(clock.now())
-    }
+            store.setApproved(clock.now())
+        }
 }

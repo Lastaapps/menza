@@ -49,10 +49,10 @@ private fun List<WeekDishDto>.toCategory() =
                 name = value.typeName.trim(),
                 dishList = values.map { it.toDomain() }.toImmutableList(),
             )
-        }
-        .toImmutableList()
+        }.toImmutableList()
 
 private val dateRegex = """(\d{4})-(\d+)-(\d+)""".toRegex()
+
 private fun String.parseDate(): LocalDate =
     dateRegex.find(this)!!.destructured.let { (year, month, day) ->
         LocalDate(year.toInt(), month.toInt(), day.toInt())

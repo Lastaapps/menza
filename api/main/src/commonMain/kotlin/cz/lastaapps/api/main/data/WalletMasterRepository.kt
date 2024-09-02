@@ -48,9 +48,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 
-
 internal interface WalletMasterRepository : SyncSource<UserBalance?, Unit> {
-    suspend fun login(username: String, password: String, type: BalanceAccountType): Outcome<Unit>
+    suspend fun login(
+        username: String,
+        password: String,
+        type: BalanceAccountType,
+    ): Outcome<Unit>
+
     suspend fun logout(): Outcome<Unit>
 }
 
@@ -61,81 +65,90 @@ internal class WalletMasterRepositoryImpl(
     private val simpleProperties: SimpleProperties,
     private val checker: ValidityChecker,
 ) : WalletMasterRepository {
-
     private val log = localLogger()
 
     private val validityKey = ValidityKey.agataCtuBalance()
 
-    private fun selectApi(type: BalanceAccountType) = when (type) {
-        CTU -> ctuApi
-        Stravnik -> stravnikApi
-    }
+    private fun selectApi(type: BalanceAccountType) =
+        when (type) {
+            CTU -> ctuApi
+            Stravnik -> stravnikApi
+        }
 
     override suspend fun login(
         username: String,
         password: String,
         type: BalanceAccountType,
-    ): Outcome<Unit> = outcome {
-        log.i { "Trying to login" }
-        checker.invalidateKey(validityKey)
+    ): Outcome<Unit> =
+        outcome {
+            log.i { "Trying to login" }
+            checker.invalidateKey(validityKey)
 
-        val api = selectApi(type)
-        api.getBalance(username, password).bind()
+            val api = selectApi(type)
+            api.getBalance(username, password).bind()
 
-        credentialsProvider.store(LoginCredentialsSett(username, password, type.toSett()))
-        log.i { "Login successful" }
-    }
+            credentialsProvider.store(LoginCredentialsSett(username, password, type.toSett()))
+            log.i { "Login successful" }
+        }
 
-    override suspend fun logout(): Outcome<Unit> = outcome {
-        checker.invalidateKey(validityKey)
-        credentialsProvider.clear()
-        simpleProperties.setBalance(null)
-        log.i { "Logout successful" }
-    }
+    override suspend fun logout(): Outcome<Unit> =
+        outcome {
+            checker.invalidateKey(validityKey)
+            credentialsProvider.clear()
+            simpleProperties.setBalance(null)
+            log.i { "Logout successful" }
+        }
 
-    override fun getData(params: Unit): Flow<UserBalance?> = channelFlow {
-        credentialsProvider.get().collectLatest { credentials ->
-            when (credentials) {
-                is Left -> send(null)
-                is Right -> {
-                    simpleProperties.getBalance()
-                        .collectLatest { balance ->
-                            send(
-                                balance?.let {
-                                    UserBalance(
-                                        credentials.value.username,
-                                        balance,
-                                        credentials.value.type.toDomain(),
-                                    )
-                                },
-                            )
+    override fun getData(params: Unit): Flow<UserBalance?> =
+        channelFlow {
+            credentialsProvider.get().collectLatest { credentials ->
+                when (credentials) {
+                    is Left -> send(null)
+                    is Right -> {
+                        simpleProperties
+                            .getBalance()
+                            .collectLatest { balance ->
+                                send(
+                                    balance?.let {
+                                        UserBalance(
+                                            credentials.value.username,
+                                            balance,
+                                            credentials.value.type.toDomain(),
+                                        )
+                                    },
+                                )
+                            }
+                    }
+                }
+            }
+        }.distinctUntilChanged()
+
+    private suspend fun syncImpl(): SyncOutcome =
+        outcome {
+            log.d { "Syncing data" }
+            val credentials = credentialsProvider.get().first().bind()
+            val api = selectApi(credentials.type.toDomain())
+            val data = api.getBalance(credentials.username, credentials.password).bind()
+            simpleProperties.setBalance(data)
+
+            SyncResult.Updated
+        }
+
+    override suspend fun sync(
+        params: Unit,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Requesting data sync" }
+
+            credentialsProvider.get().first().let { credentials ->
+                when (credentials) {
+                    is Left -> SyncResult.Unavailable.right()
+                    is Right ->
+                        checker.withCheckRecent(validityKey, isForced) {
+                            syncImpl()
                         }
                 }
             }
         }
-    }.distinctUntilChanged()
-
-    private suspend fun syncImpl(): SyncOutcome = outcome {
-        log.d { "Syncing data" }
-        val credentials = credentialsProvider.get().first().bind()
-        val api = selectApi(credentials.type.toDomain())
-        val data = api.getBalance(credentials.username, credentials.password).bind()
-        simpleProperties.setBalance(data)
-
-        SyncResult.Updated
-    }
-
-    override suspend fun sync(params: Unit, isForced: Boolean): SyncOutcome = run {
-        log.i { "Requesting data sync" }
-
-        credentialsProvider.get().first().let { credentials ->
-            when (credentials) {
-                is Left -> SyncResult.Unavailable.right()
-                is Right ->
-                    checker.withCheckRecent(validityKey, isForced) {
-                        syncImpl()
-                    }
-            }
-        }
-    }
 }

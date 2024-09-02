@@ -19,7 +19,10 @@
 
 package cz.lastaapps.core.util.extensions
 
-inline fun <T> T.mapIf(condition: Boolean, action: (T) -> T): T =
+inline fun <T> T.mapIf(
+    condition: Boolean,
+    action: (T) -> T,
+): T =
     if (condition) {
         action(this)
     } else {

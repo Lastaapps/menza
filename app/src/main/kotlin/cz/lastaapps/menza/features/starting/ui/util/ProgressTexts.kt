@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,11 +30,12 @@ import cz.lastaapps.menza.features.starting.domain.model.DownloadProgress.MENZA_
 
 internal val DownloadProgress.text
     @Composable
-    get() = stringResource(
-        when (this) {
-            INIT -> R.string.init_message_preparing
-            MENZA_LIST -> R.string.init_message_menza
-            INFO -> R.string.init_message_info
-            DONE -> R.string.init_message_done
-        }
-    )
+    get() =
+        stringResource(
+            when (this) {
+                INIT -> R.string.init_message_preparing
+                MENZA_LIST -> R.string.init_message_menza
+                INFO -> R.string.init_message_info
+                DONE -> R.string.init_message_done
+            },
+        )

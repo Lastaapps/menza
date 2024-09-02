@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,58 +32,67 @@ import cz.lastaapps.core.domain.error.CommonError
 internal class AndroidLinkOpener(
     private val context: Context,
 ) : LinkOpener {
+    private fun <T> runCatchingAppNotFound(block: () -> T) = Either.catchOrThrow<ActivityNotFoundException, T>(block)
 
-    private fun <T> runCatchingAppNotFound(block: () -> T) =
-        Either.catchOrThrow<ActivityNotFoundException, T>(block)
-
-    override fun openLink(url: String): Outcome<Unit> = runCatchingAppNotFound {
-        Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .let {
-                context.startActivity(it)
-            }
-    }.mapLeft { CommonError.AppNotFound.Link }
-
-    override fun writeEmail(email: String): Outcome<Unit> = runCatchingAppNotFound {
-        error("Not yet implemented")
-    }.mapLeft { CommonError.AppNotFound.Email }
-
-    override fun callPhoneNumber(number: String): Outcome<Unit> = runCatchingAppNotFound {
-        error("Not yet implemented")
-    }.mapLeft { CommonError.AppNotFound.PhoneCall }
-
-    override fun openAddress(address: String): Outcome<Unit> = runCatchingAppNotFound {
-        error("Not yet implemented")
-    }.mapLeft { CommonError.AppNotFound.Map }
-
-    override fun openGeo(lat: Float, long: Float): Outcome<Unit> = runCatchingAppNotFound {
-        error("Not yet implemented")
-    }.mapLeft { CommonError.AppNotFound.Map }
-
-    override fun openTelegram(groupUrl: String): Outcome<Unit> = openLink(groupUrl)
-        .mapLeft { CommonError.AppNotFound.Telegram }
-
-    override fun openFacebookPage(pageUrl: String): Outcome<Unit> = runCatchingAppNotFound {
-        var uri = Uri.parse(pageUrl)
-        try {
-            val applicationInfo =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    context.packageManager.getApplicationInfo(
-                        "com.facebook.katana",
-                        PackageManager.ApplicationInfoFlags.of(0),
-                    )
-                } else {
-                    context.packageManager.getApplicationInfo(
-                        "com.facebook.katana", 0
-                    )
+    override fun openLink(url: String): Outcome<Unit> =
+        runCatchingAppNotFound {
+            Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .let {
+                    context.startActivity(it)
                 }
+        }.mapLeft { CommonError.AppNotFound.Link }
 
-            if (applicationInfo.enabled) {
-                uri = Uri.parse("fb://facewebmodal/f?href=$pageUrl")
+    override fun writeEmail(email: String): Outcome<Unit> =
+        runCatchingAppNotFound {
+            error("Not yet implemented")
+        }.mapLeft { CommonError.AppNotFound.Email }
+
+    override fun callPhoneNumber(number: String): Outcome<Unit> =
+        runCatchingAppNotFound {
+            error("Not yet implemented")
+        }.mapLeft { CommonError.AppNotFound.PhoneCall }
+
+    override fun openAddress(address: String): Outcome<Unit> =
+        runCatchingAppNotFound {
+            error("Not yet implemented")
+        }.mapLeft { CommonError.AppNotFound.Map }
+
+    override fun openGeo(
+        lat: Float,
+        long: Float,
+    ): Outcome<Unit> =
+        runCatchingAppNotFound {
+            error("Not yet implemented")
+        }.mapLeft { CommonError.AppNotFound.Map }
+
+    override fun openTelegram(groupUrl: String): Outcome<Unit> =
+        openLink(groupUrl)
+            .mapLeft { CommonError.AppNotFound.Telegram }
+
+    override fun openFacebookPage(pageUrl: String): Outcome<Unit> =
+        runCatchingAppNotFound {
+            var uri = Uri.parse(pageUrl)
+            try {
+                val applicationInfo =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        context.packageManager.getApplicationInfo(
+                            "com.facebook.katana",
+                            PackageManager.ApplicationInfoFlags.of(0),
+                        )
+                    } else {
+                        context.packageManager.getApplicationInfo(
+                            "com.facebook.katana",
+                            0,
+                        )
+                    }
+
+                if (applicationInfo.enabled) {
+                    uri = Uri.parse("fb://facewebmodal/f?href=$pageUrl")
+                }
+            } catch (ignored: PackageManager.NameNotFoundException) {
             }
-        } catch (ignored: PackageManager.NameNotFoundException) {
-        }
 
-        context.startActivity(Intent(Intent.ACTION_VIEW, uri))
-    }.mapLeft { CommonError.AppNotFound.Facebook }
+            context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+        }.mapLeft { CommonError.AppNotFound.Facebook }
 }

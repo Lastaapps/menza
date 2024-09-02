@@ -35,7 +35,9 @@ import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalSettingsApi::class)
 @JvmInline
-internal value class GeneralSettings(val settings: FlowSettings) {
+internal value class GeneralSettings(
+    val settings: FlowSettings,
+) {
     @OptIn(ExperimentalSettingsImplementation::class)
     companion object {
         private val Context.store by preferencesDataStore("menza_general_store")
@@ -46,39 +48,51 @@ internal value class GeneralSettings(val settings: FlowSettings) {
 
 internal interface GeneralDataSource {
     suspend fun storeAppSetupFinished()
+
     fun isAppSetupFinished(): Flow<Boolean>
 
     suspend fun storeSettingsEverOpened()
+
     fun isSettingsEverOpened(): Flow<Boolean>
 
     suspend fun setPriceType(type: PriceType)
+
     fun getPriceType(): Flow<PriceType>
 
     suspend fun setDarkMode(mode: DarkMode)
+
     fun getDarkMode(): Flow<DarkMode>
 
     suspend fun setAppTheme(theme: AppThemeType)
+
     fun getAppTheme(): Flow<AppThemeType?>
 
     suspend fun setImageScale(scale: Float)
+
     fun getImageScale(): Flow<Float>
 
     suspend fun setImagesOnMetered(enabled: Boolean)
+
     fun getImagesOnMetered(): Flow<Boolean>
 
     suspend fun setDishLanguage(language: DishLanguage)
+
     fun getDishLanguage(): Flow<DishLanguage?>
 
     suspend fun setCompactTodayView(mode: DishListMode)
+
     fun isCompactTodayView(): Flow<DishListMode?>
 
     suspend fun setOliverRow(isUsed: Boolean)
+
     fun isOliverRow(): Flow<Boolean?>
 
     suspend fun setBalanceWarningThreshold(threshold: Int)
+
     fun getBalanceWarningThreshold(): Flow<Int?>
 
     suspend fun setAlternativeNavigation(enabled: Boolean)
+
     fun getAlternativeNavigation(): Flow<Boolean?>
 }
 
@@ -104,20 +118,16 @@ internal class GeneralDataSourceImpl(
         private const val alternativeNavigationKey = "alternative_navigation"
     }
 
-    override suspend fun storeAppSetupFinished() =
-        settings.putBoolean(appSetupFinishedKey, true)
+    override suspend fun storeAppSetupFinished() = settings.putBoolean(appSetupFinishedKey, true)
 
-    override fun isAppSetupFinished(): Flow<Boolean> =
-        settings.getBooleanFlow(appSetupFinishedKey, false)
+    override fun isAppSetupFinished(): Flow<Boolean> = settings.getBooleanFlow(appSetupFinishedKey, false)
 
-    override suspend fun storeSettingsEverOpened() =
-        settings.putBoolean(settingsEverOpenedKey, true)
+    override suspend fun storeSettingsEverOpened() = settings.putBoolean(settingsEverOpenedKey, true)
 
     override fun isSettingsEverOpened(): Flow<Boolean> =
         settings.getBooleanFlow(settingsEverOpenedKey, false)
 
-    override suspend fun setPriceType(type: PriceType) =
-        settings.putInt(priceTypeKey, type.id)
+    override suspend fun setPriceType(type: PriceType) = settings.putInt(priceTypeKey, type.id)
 
     override fun getPriceType(): Flow<PriceType> =
         settings.getIntOrNullFlow(priceTypeKey).map {
@@ -128,27 +138,23 @@ internal class GeneralDataSourceImpl(
             }
         }
 
-    override suspend fun setDarkMode(mode: DarkMode) =
-        settings.putInt(darkModeKey, mode.id)
+    override suspend fun setDarkMode(mode: DarkMode) = settings.putInt(darkModeKey, mode.id)
 
     override fun getDarkMode(): Flow<DarkMode> =
         settings.getIntOrNullFlow(darkModeKey).map { id ->
             DarkMode.entries.firstOrNull { it.id == id } ?: DarkMode.System
         }
 
-    override suspend fun setAppTheme(theme: AppThemeType) =
-        settings.putInt(appThemeKey, theme.id)
+    override suspend fun setAppTheme(theme: AppThemeType) = settings.putInt(appThemeKey, theme.id)
 
     override fun getAppTheme(): Flow<AppThemeType?> =
         settings.getIntOrNullFlow(appThemeKey).map { id ->
             AppThemeType.entries.firstOrNull { type -> type.id == id }
         }
 
-    override suspend fun setImageScale(scale: Float) =
-        settings.putFloat(imageScaleKey, scale)
+    override suspend fun setImageScale(scale: Float) = settings.putFloat(imageScaleKey, scale)
 
-    override fun getImageScale(): Flow<Float> =
-        settings.getFloatFlow(imageScaleKey, 1f)
+    override fun getImageScale(): Flow<Float> = settings.getFloatFlow(imageScaleKey, 1f)
 
     override suspend fun setImagesOnMetered(enabled: Boolean) =
         settings.putBoolean(imagesOnMeteredKey, enabled)
@@ -168,16 +174,15 @@ internal class GeneralDataSourceImpl(
         settings.putInt(compactTodayViewKey, mode.id)
 
     override fun isCompactTodayView(): Flow<DishListMode?> =
-        settings.getIntOrNullFlow(compactTodayViewKey)
+        settings
+            .getIntOrNullFlow(compactTodayViewKey)
             .map { id ->
                 DishListMode.entries.firstOrNull { it.id == id }
             }
 
-    override suspend fun setOliverRow(isUsed: Boolean) =
-        settings.putBoolean(oliverRowsKey, isUsed)
+    override suspend fun setOliverRow(isUsed: Boolean) = settings.putBoolean(oliverRowsKey, isUsed)
 
-    override fun isOliverRow(): Flow<Boolean?> =
-        settings.getBooleanOrNullFlow(oliverRowsKey)
+    override fun isOliverRow(): Flow<Boolean?> = settings.getBooleanOrNullFlow(oliverRowsKey)
 
     override suspend fun setBalanceWarningThreshold(threshold: Int) =
         settings.putInt(balanceWarningThresholdKey, threshold)

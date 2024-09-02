@@ -28,9 +28,11 @@ class GetOrderedVisibleMenzaListUC internal constructor(
     context: UCContext,
     private val getOrderedMenzaList: GetOrderedMenzaListUC,
 ) : UseCase(context) {
-    operator fun invoke() = getOrderedMenzaList().map { list ->
-        list.filter { it.second.visible }
-            .map { it.first }
-            .toImmutableList()
-    }
+    operator fun invoke() =
+        getOrderedMenzaList().map { list ->
+            list
+                .filter { it.second.visible }
+                .map { it.first }
+                .toImmutableList()
+        }
 }

@@ -44,7 +44,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun LibraryList(
     libraries: ImmutableList<Library>,
-    onLibrarySelected: (Library?) -> Unit,
+    onLibrary: (Library?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -56,7 +56,7 @@ fun LibraryList(
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
             items(libraries, key = { it.artifactId }) { library ->
-                LicenseItem(library, Modifier.clickable { onLibrarySelected(library) })
+                LicenseItem(library, Modifier.clickable { onLibrary(library) })
             }
             item {
                 Spacer(modifier = Modifier.height(Padding.More.ScrollBottomSpace))
@@ -80,8 +80,7 @@ private fun AppLicenseButton(modifier: Modifier = Modifier) {
         Text(
             text = stringResource(R.string.license_this_app),
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
-

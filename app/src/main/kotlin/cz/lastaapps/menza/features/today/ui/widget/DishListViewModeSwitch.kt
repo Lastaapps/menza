@@ -39,14 +39,15 @@ internal fun DishListViewModeSwitch(
     onModeChange: (mode: DishListMode) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val buttons = remember {
-        persistentListOf(
-            DishListMode.COMPACT to R.string.today_list_mode_compact,
-            DishListMode.GRID to R.string.today_list_mode_grid,
-            DishListMode.HORIZONTAL to R.string.today_list_mode_horizontal,
-            DishListMode.CAROUSEL to R.string.today_list_mode_carousel,
-        )
-    }
+    val buttons =
+        remember {
+            persistentListOf(
+                DishListMode.COMPACT to R.string.today_list_mode_compact,
+                DishListMode.GRID to R.string.today_list_mode_grid,
+                DishListMode.HORIZONTAL to R.string.today_list_mode_horizontal,
+                DishListMode.CAROUSEL to R.string.today_list_mode_carousel,
+            )
+        }
     SingleChoiceSegmentedButtonRow(
         modifier = modifier.horizontalScroll(rememberScrollState()),
     ) {

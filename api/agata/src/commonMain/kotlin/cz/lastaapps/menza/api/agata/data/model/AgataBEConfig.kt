@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,8 +28,10 @@ internal data class AgataBEConfig(
     val apiKey: String,
 ) {
     @Suppress("SpellCheckingInspection")
-    fun photoLinkForAgataSubsystem(subsystemId: Int, name: String) =
-        // Use showfotoG for little smaller, but slower responses
+    fun photoLinkForAgataSubsystem(
+        subsystemId: Int,
+        name: String,
+    ) = // Use showfotoG for little smaller, but slower responses
         "${protocol.name}://$host/jidelnicky/showfoto.php?clPodsystem=$subsystemId&xFile=$name"
 
     @Suppress("SpellCheckingInspection")
@@ -40,23 +42,24 @@ internal data class AgataBEConfig(
     @Suppress("unused")
     companion object {
         @Suppress("SpellCheckingInspection")
-        val prod = AgataBEConfig(
-            protocol = URLProtocol.HTTPS,
-            host = "agata.suz.cvut.cz",
-            apiPath = "jidelnicky/JAPIV2/json_API.php",
-            apiKey = "vl1dXKi1WojTvIDb".decrypt(),
-        )
+        val prod =
+            AgataBEConfig(
+                protocol = URLProtocol.HTTPS,
+                host = "agata.suz.cvut.cz",
+                apiPath = "jidelnicky/JAPIV2/json_API.php",
+                apiKey = "vl1dXKi1WojTvIDb".decrypt(),
+            )
 
         @Suppress("SpellCheckingInspection")
-        val staging = AgataBEConfig(
-            protocol = URLProtocol.HTTPS,
-            host = "agata-new.suz.cvut.cz",
-            apiPath = "jidelnicky/JAPIV2/json_API.php",
-            apiKey = "vl1dXKi1WojTvIDb".decrypt(),
-        )
+        val staging =
+            AgataBEConfig(
+                protocol = URLProtocol.HTTPS,
+                host = "agata-new.suz.cvut.cz",
+                apiPath = "jidelnicky/JAPIV2/json_API.php",
+                apiKey = "vl1dXKi1WojTvIDb".decrypt(),
+            )
 
         // "Decrypt" the key so GitHub scrapers cannot find the real one that easily
-        private fun String.decrypt() =
-            filterIndexed { index, _ -> index % 2 == 0 }
+        private fun String.decrypt() = filterIndexed { index, _ -> index % 2 == 0 }
     }
 }

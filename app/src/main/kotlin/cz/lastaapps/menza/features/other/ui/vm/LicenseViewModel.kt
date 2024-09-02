@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,20 +32,22 @@ import kotlinx.collections.immutable.toImmutableList
 internal class LicenseViewModel(
     context: VMContext,
     private val getLibs: GetLibrariesUC,
-) : StateViewModel<LicenseState>(LicenseState(), context), Appearing {
+) : StateViewModel<LicenseState>(LicenseState(), context),
+    Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launchVM {
-        val lib = getLibs()
+    override fun onAppeared() =
+        launchVM {
+            val lib = getLibs()
 
-        // to filter out wrongly named libraries
-        lib.libraries
-            .filter { !it.name.startsWith("$") }
-            .toImmutableList()
-            .let { libs ->
-                updateState { copy(libs = libs) }
-            }
-    }
+            // to filter out wrongly named libraries
+            lib.libraries
+                .filter { !it.name.startsWith("$") }
+                .toImmutableList()
+                .let { libs ->
+                    updateState { copy(libs = libs) }
+                }
+        }
 
     fun selectLibrary(library: Library?) {
         updateState { copy(selectedLibrary = library) }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,8 +22,11 @@ package cz.lastaapps.core.domain.error
 sealed interface ParsingError : DomainError.Runtime {
     sealed interface Buffet : ParsingError {
         data object DateRangeCannotBeParsed : Buffet
+
         data object DayCannotBeParsed : Buffet
+
         data object DishCannotBeParsed : Buffet
+
         data object MenuCannotBeParsed : Buffet
     }
 }

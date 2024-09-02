@@ -39,22 +39,22 @@ internal class SyncJobHash<T, R, Params>(
     convert: suspend MenzaRaise.(Params, T) -> IorNel<DomainError, R>,
     store: (Params, R) -> Unit,
 ) : SyncJob<T, R, Params>(
-    { params, forced ->
-        val hash = getHashCode(params)
+        { params, forced ->
+            val hash = getHashCode(params)
 
-        if (forced || hashStore.shouldReload(hashType(params), hash)) {
-            // deferred job to save the new hash code
-            val storeHashAction: suspend () -> Unit =
-                { hashStore.storeHash(hashType(params), hash) }
+            if (forced || hashStore.shouldReload(hashType(params), hash)) {
+                // deferred job to save the new hash code
+                val storeHashAction: suspend () -> Unit =
+                    { hashStore.storeHash(hashType(params), hash) }
 
-            // process this job
-            Some(storeHashAction)
-        } else {
-            // skip this job
-            None
-        }
-    },
-    fetchApi,
-    convert,
-    store,
+                // process this job
+                Some(storeHashAction)
+            } else {
+                // skip this job
+                None
+            }
+        },
+        fetchApi,
+        convert,
+        store,
 )

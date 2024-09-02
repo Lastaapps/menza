@@ -28,9 +28,10 @@ class SetImageScaleUC internal constructor(
     private val getImageSizeRange: GetImageScaleRangeUC,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(scale: Float) = launch {
-        val range = getImageSizeRange()
-        val new = scale.coerceIn(range)
-        repo.setImageScale(new)
-    }
+    suspend operator fun invoke(scale: Float) =
+        launch {
+            val range = getImageSizeRange()
+            val new = scale.coerceIn(range)
+            repo.setImageScale(new)
+        }
 }

@@ -24,16 +24,18 @@ import cz.lastaapps.api.core.domain.model.BalanceAccountType
 
 @Keep
 enum class BalanceAccountTypeSett {
-    CTU, Stravnik,
-    ;
+    CTU,
+    Stravnik,
 }
 
-fun BalanceAccountTypeSett.toDomain() = when (this) {
-    BalanceAccountTypeSett.CTU -> BalanceAccountType.CTU
-    BalanceAccountTypeSett.Stravnik -> BalanceAccountType.Stravnik
-}
+fun BalanceAccountTypeSett.toDomain() =
+    when (this) {
+        BalanceAccountTypeSett.CTU -> BalanceAccountType.CTU
+        BalanceAccountTypeSett.Stravnik -> BalanceAccountType.Stravnik
+    }
 
-fun BalanceAccountType.toSett() = when (this) {
-    BalanceAccountType.CTU -> BalanceAccountTypeSett.CTU
-    BalanceAccountType.Stravnik -> BalanceAccountTypeSett.Stravnik
-}
+fun BalanceAccountType.toSett() =
+    when (this) {
+        BalanceAccountType.CTU -> BalanceAccountTypeSett.CTU
+        BalanceAccountType.Stravnik -> BalanceAccountTypeSett.Stravnik
+    }

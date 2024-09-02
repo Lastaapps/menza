@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,8 +21,12 @@ package cz.lastaapps.core.domain.error
 
 sealed interface NetworkError : DomainError.Runtime {
     data object Timeout : NetworkError
+
     data object NoInternet : NetworkError
+
     data object ConnectionClosed : NetworkError
 
-    data class SerializationError(override val throwable: Throwable) : NetworkError
+    data class SerializationError(
+        override val throwable: Throwable,
+    ) : NetworkError
 }

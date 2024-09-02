@@ -40,7 +40,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal fun <T> ChooseFromDialog(
     title: String,
     items: ImmutableList<T>,
-    onItemSelected: (T) -> Unit,
+    onItemSelect: (T) -> Unit,
     onDismiss: () -> Unit,
     toString: (T) -> String = { it.toString() },
 ) {
@@ -51,7 +51,7 @@ internal fun <T> ChooseFromDialog(
         ChooseFromDialogContent(
             title = title,
             items = items,
-            onItemSelected = onItemSelected,
+            onItemSelect = onItemSelect,
             onDismiss = onDismiss,
             toString = toString,
         )
@@ -62,7 +62,7 @@ internal fun <T> ChooseFromDialog(
 private fun <T> ChooseFromDialogContent(
     title: String,
     items: ImmutableList<T>,
-    onItemSelected: (T) -> Unit,
+    onItemSelect: (T) -> Unit,
     onDismiss: () -> Unit,
     toString: (T) -> String,
     modifier: Modifier = Modifier,
@@ -81,7 +81,7 @@ private fun <T> ChooseFromDialogContent(
             items(items) { item ->
                 WrapClick(
                     onClick = {
-                        onItemSelected(item)
+                        onItemSelect(item)
                         onDismiss()
                     },
                 ) {
@@ -97,12 +97,13 @@ private fun <T> ChooseFromDialogContent(
 
 @Preview
 @Composable
-private fun ChooseFromDialogPreview() = PreviewWrapper {
-    ChooseFromDialogContent(
-        title = "Great title",
-        items = persistentListOf("Ahoj", "Jak", "Se", "Máš?", "Ale znáš to"),
-        onItemSelected = {},
-        onDismiss = {},
-        toString = { it },
-    )
-}
+private fun ChooseFromDialogPreview() =
+    PreviewWrapper {
+        ChooseFromDialogContent(
+            title = "Great title",
+            items = persistentListOf("Ahoj", "Jak", "Se", "Máš?", "Ale znáš to"),
+            onItemSelect = {},
+            onDismiss = {},
+            toString = { it },
+        )
+    }

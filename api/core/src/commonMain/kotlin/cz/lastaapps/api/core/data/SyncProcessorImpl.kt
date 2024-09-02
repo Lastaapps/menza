@@ -35,17 +35,16 @@ import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.core.util.extensions.withTimeoutOutcome
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.persistentListOf
+import kotlin.time.Duration.Companion.seconds
 
 internal class SyncProcessorImpl<Params> : SyncProcessor<Params> {
-
     companion object {
         // to prevent unnecessary timeouts because of slow connection or whatever
         private const val CONCURRENCY = 4
 
         // if you don't make it in time, you are doing something wrong
-        private val jobTimeout = 8.seconds
+        private val jobTimeout = 10.seconds
     }
 
     private val log = localLogger()
@@ -55,58 +54,60 @@ internal class SyncProcessorImpl<Params> : SyncProcessor<Params> {
         scope: List<(() -> Unit) -> Unit>,
         params: Params,
         isForced: Boolean,
-    ): SyncOutcome = outcome {
-        list.also { log.i { "Preparing run conditions" } }
-            // Fetches hash codes from a remote source
-            .parMap(concurrency = CONCURRENCY) { job ->
-                withTimeoutOutcome(jobTimeout) {
-                    job.shouldRun(this@outcome, params, isForced).map { job to it }
-                }.bind()
-            }
-            // remove skipped jobs
-            .filterIsInstance<Some<Pair<SyncJob<*, *, Params>, suspend () -> Unit>>>()
-            .map { it.value }
-            .also { log.i { "Executing" } }
-            // Fetch data from api and convert then
-            .parMap(concurrency = CONCURRENCY) { (job, hash) ->
-                withTimeoutOutcome(jobTimeout) {
-                    val storeAction = job.processFetchAndConvert(params).bind()
-                    Pair(storeAction, hash)
-                }.bind()
-            }
-            // Store data
-            .also { log.i { "Storing data" } }
-            .also { results ->
+    ): SyncOutcome =
+        outcome {
+            list
+                .also { log.i { "Preparing run conditions" } }
+                // Fetches hash codes from a remote source
+                .parMap(concurrency = CONCURRENCY) { job ->
+                    withTimeoutOutcome(jobTimeout) {
+                        job.shouldRun(this@outcome, params, isForced).map { job to it }
+                    }.bind()
+                }
+                // remove skipped jobs
+                .filterIsInstance<Some<Pair<SyncJob<*, *, Params>, suspend () -> Unit>>>()
+                .map { it.value }
+                .also { log.i { "Executing" } }
+                // Fetch data from api and convert then
+                .parMap(concurrency = CONCURRENCY) { (job, hash) ->
+                    withTimeoutOutcome(jobTimeout) {
+                        val storeAction = job.processFetchAndConvert(params).bind()
+                        Pair(storeAction, hash)
+                    }.bind()
+                }
+                // Store data
+                .also { log.i { "Storing data" } }
+                .also { results ->
 
-                // store data in a single transaction
-                scope.foldRight(
-                    { results.forEach { (action, _) -> action.map { it() } } },
-                ) { func, acu ->
-                    { func(acu) }
-                }.invoke()
+                    // store data in a single transaction
+                    scope
+                        .foldRight(
+                            { results.forEach { (action, _) -> action.map { it() } } },
+                        ) { func, acu ->
+                            { func(acu) }
+                        }.invoke()
 
-                // store new hash codes
-                results.forEach { (_, hash) -> hash() }
-            }
-            // collect noncritical errors
-            .map(Pair<IorNel<DomainError, *>, *>::first)
-            .foldRight(persistentListOf<DomainError>()) { item, acu ->
-                acu.addAll(
-                    // defeated male leaves
-                    when (item) {
-                        is Both -> item.leftValue
-                        is Left -> item.value
-                        is Right -> emptyList()
-                    },
-                )
-            }.let {
-                it.toNonEmptyListOrNull()?.let { nel ->
-                    SyncResult.Problem(nel)
-                } ?: SyncResult.Updated
-            }
-    }
-        .onRight { log.i { "Succeed to process data: $it" } }
-        .onLeft { log.i { "Failed to process data ${it::class.simpleName}" } }
+                    // store new hash codes
+                    results.forEach { (_, hash) -> hash() }
+                }
+                // collect noncritical errors
+                .map(Pair<IorNel<DomainError, *>, *>::first)
+                .foldRight(persistentListOf<DomainError>()) { item, acu ->
+                    acu.addAll(
+                        // defeated male leaves
+                        when (item) {
+                            is Both -> item.leftValue
+                            is Left -> item.value
+                            is Right -> emptyList()
+                        },
+                    )
+                }.let {
+                    it.toNonEmptyListOrNull()?.let { nel ->
+                        SyncResult.Problem(nel)
+                    } ?: SyncResult.Updated
+                }
+        }.onRight { log.i { "Succeed to process data: $it" } }
+            .onLeft { log.i { "Failed to process data ${it::class.simpleName}" } }
 
     // used to simply generics resolution
     private suspend fun <T, R> SyncJob<T, R, Params>.processFetchAndConvert(params: Params): Outcome<IorNel<DomainError, () -> Unit>> =

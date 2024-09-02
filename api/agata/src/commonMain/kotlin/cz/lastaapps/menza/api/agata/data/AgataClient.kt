@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
 @JvmInline
-internal value class AgataClient(val client: HttpClient)
+internal value class AgataClient(
+    val client: HttpClient,
+)
 
 @OptIn(ExperimentalSerializationApi::class)
 internal fun createAgataClient(

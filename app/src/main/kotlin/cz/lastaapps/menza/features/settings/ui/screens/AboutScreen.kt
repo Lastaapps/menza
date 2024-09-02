@@ -79,13 +79,13 @@ internal fun AboutScreen(
 ) {
     Box(modifier, contentAlignment = Alignment.TopCenter) {
         Column(
-            modifier = Modifier
-                .verticalScroll(scrollState)
-                .width(IntrinsicSize.Max),
+            modifier =
+                Modifier
+                    .verticalScroll(scrollState)
+                    .width(IntrinsicSize.Max),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
-
             Surface(modifier = Modifier.fillMaxWidth()) {
                 Box(
                     modifier = Modifier.padding(Padding.Medium),
@@ -101,9 +101,10 @@ internal fun AboutScreen(
 
             ElevatedCard {
                 Column(
-                    modifier = Modifier
-                        .padding(Padding.MidSmall)
-                        .align(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .padding(Padding.MidSmall)
+                            .align(Alignment.CenterHorizontally),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(Padding.Small),
                 ) {
@@ -140,9 +141,10 @@ internal fun AboutScreen(
             }
             ElevatedCard {
                 Contributors(
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .align(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .padding(12.dp)
+                            .align(Alignment.CenterHorizontally),
                 )
             }
             Surface(Modifier.fillMaxWidth()) {
@@ -154,7 +156,6 @@ internal fun AboutScreen(
 
 @Composable
 private fun DataSource(modifier: Modifier = Modifier) {
-
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = stringResource(cz.lastaapps.menza.R.string.about_data_source),
@@ -348,41 +349,42 @@ private fun Contributor(
 @Composable
 private fun Socials(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val icons = listOf(
-        SocialItem(
-            drawable.ic_matrix,
-            R.string.content_description_matrix,
-        ) { Communication.openMatrix(context) },
-        SocialItem(
-            drawable.ic_telegram,
-            R.string.content_description_telegram,
-        ) { Communication.openTelegram(context) },
-        SocialItem(
-            drawable.ic_github,
-            R.string.content_description_github,
-        ) { Communication.openGithub(context) },
-        SocialItem(
-            drawable.ic_discord,
-            R.string.content_description_discord,
-        ) { Communication.openDiscord(context) },
-        SocialItem(
-            drawable.ic_facebook,
-            R.string.content_description_facebook,
-        ) { Communication.openFacebook(context) },
-        SocialItem(
-            drawable.ic_play_store,
-            R.string.content_description_play_store,
-        ) { Communication.openPlayStore(context) },
-    )
+    val icons =
+        listOf(
+            SocialItem(
+                drawable.ic_matrix,
+                R.string.content_description_matrix,
+            ) { Communication.openMatrix(context) },
+            SocialItem(
+                drawable.ic_telegram,
+                R.string.content_description_telegram,
+            ) { Communication.openTelegram(context) },
+            SocialItem(
+                drawable.ic_github,
+                R.string.content_description_github,
+            ) { Communication.openGithub(context) },
+            SocialItem(
+                drawable.ic_discord,
+                R.string.content_description_discord,
+            ) { Communication.openDiscord(context) },
+            SocialItem(
+                drawable.ic_facebook,
+                R.string.content_description_facebook,
+            ) { Communication.openFacebook(context) },
+            SocialItem(
+                drawable.ic_play_store,
+                R.string.content_description_play_store,
+            ) { Communication.openPlayStore(context) },
+        )
 
-    Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = stringResource(cz.lastaapps.menza.R.string.about_developer_contact),
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
         )
         Row(
-            modifier.horizontalScroll(rememberScrollState()),
+            Modifier.horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             icons.forEach {
@@ -404,9 +406,7 @@ private data class SocialItem(
 )
 
 @Composable
-private fun Contributors(
-    modifier: Modifier = Modifier,
-) {
+private fun Contributors(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -425,7 +425,8 @@ private fun Contributors(
             )
         }.forEach { (user, url) ->
             Contributor(
-                user, url,
+                user,
+                url,
                 modifier = Modifier.fillMaxWidth(),
             )
         }

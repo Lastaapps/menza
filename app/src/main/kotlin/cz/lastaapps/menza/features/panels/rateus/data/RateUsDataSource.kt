@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,7 +34,9 @@ import kotlinx.datetime.Instant
     ExperimentalSettingsImplementation::class,
 )
 @JvmInline
-internal value class RateUsStore(val settings: FlowSettings) {
+internal value class RateUsStore(
+    val settings: FlowSettings,
+) {
     companion object {
         private val Context.store by preferencesDataStore("menza_rate_us_store")
 
@@ -44,8 +46,11 @@ internal value class RateUsStore(val settings: FlowSettings) {
 
 internal interface RateUsDataSource {
     fun getShouldRate(): Flow<Instant?>
+
     suspend fun setShouldRate(instant: Instant)
+
     fun isDisabled(): Flow<Boolean?>
+
     suspend fun setDisabled(notAllowed: Boolean)
 }
 
@@ -64,11 +69,9 @@ internal class RateUsDataSourceImpl(
         store.putLong(KEY_LAST_OPENED, instant.epochSeconds)
     }
 
-    override fun isDisabled(): Flow<Boolean?> =
-        store.getBooleanOrNullFlow(KEY_DISABLED)
+    override fun isDisabled(): Flow<Boolean?> = store.getBooleanOrNullFlow(KEY_DISABLED)
 
-    override suspend fun setDisabled(notAllowed: Boolean) =
-        store.putBoolean(KEY_DISABLED, notAllowed)
+    override suspend fun setDisabled(notAllowed: Boolean) = store.putBoolean(KEY_DISABLED, notAllowed)
 
     companion object {
         private const val KEY_LAST_OPENED = "last_opened"

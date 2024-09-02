@@ -31,14 +31,15 @@ internal class DefaultsProviderImpl(
     private val context: Context,
 ) : DefaultsProvider {
     override fun defaultDishLanguage(): DishLanguage {
-        val locates = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.locales.let { list ->
-                List(list.size()) { list[it] }
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            listOf(context.resources.configuration.locale)
-        }.map { it.language }
+        val locates =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.resources.configuration.locales.let { list ->
+                    List(list.size()) { list[it] }
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                listOf(context.resources.configuration.locale)
+            }.map { it.language }
 
         val slavic = listOf("cs", "sk", "uk", "ru", "pl", "sl", "hr")
 

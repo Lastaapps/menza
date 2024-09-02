@@ -35,20 +35,19 @@ import cz.lastaapps.menza.ui.theme.AppTheme
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.theme.Padding.More
 
-
 @Composable
-fun PreviewWrapper(
-    content: @Composable ColumnScope.() -> Unit,
-) {
+@Suppress("ktlint:compose:modifier-missing-check")
+fun PreviewWrapper(content: @Composable ColumnScope.() -> Unit) {
     AppTheme {
         Surface(
             color = MaterialTheme.colorScheme.background,
         ) {
             Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(More.Screen)
-                    .width(300.dp),
+                modifier =
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(More.Screen)
+                        .width(300.dp),
                 verticalArrangement = Arrangement.spacedBy(Padding.Small),
                 content = content,
             )

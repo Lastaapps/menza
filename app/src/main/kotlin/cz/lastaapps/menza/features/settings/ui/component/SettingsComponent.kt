@@ -55,7 +55,9 @@ internal interface SettingsComponent {
 
 internal class DefaultSettingsComponent(
     componentContext: ComponentContext,
-) : SettingsComponent, KoinComponent, ComponentContext by componentContext {
+) : SettingsComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: SettingsViewModel = getOrCreateKoin()
     override val crashViewModel: CrashesViewModel = getOrCreateKoin()
     override val whatsNewViewModel: WhatsNewViewModel = getOrCreateKoin()
@@ -68,7 +70,7 @@ internal fun SettingsContent(
     onChooseDishLanguage: () -> Unit,
     onOsturak: () -> Unit,
     onLicense: () -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     val viewModel: SettingsViewModel = component.viewModel
     val crashesViewModel: CrashesViewModel = component.crashViewModel
@@ -89,9 +91,10 @@ internal fun SettingsContent(
     val appSettings = state.appSettings ?: return
     val settingsScreen: @Composable () -> Unit = {
         SettingsScreen(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(Padding.More.Screen),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(Padding.More.Screen),
             appSettings = appSettings,
             appTheme = state.appTheme,
             preferredMenza = state.preferredMenza,
@@ -105,7 +108,7 @@ internal fun SettingsContent(
             menzaList = state.menzaList,
             onSelectedMenza = viewModel::setSelectedMenza,
             showAbout = normalScreen,
-            onAboutClicked = { showAbout = true },
+            onAboutClick = { showAbout = true },
             onPrivacyPolicy = { showPrivacyDialog = true },
             onFullRefresh = viewModel::fullAppReload,
             onCrashesDialog = { showCrashDialog = true },
@@ -113,9 +116,10 @@ internal fun SettingsContent(
     }
     val aboutScreen: @Composable () -> Unit = {
         AboutScreen(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(Padding.More.Screen),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(Padding.More.Screen),
             onOsturak = onOsturak,
             onLicense = onLicense,
             onShowWhatsNew = { showWhatsNew = true },

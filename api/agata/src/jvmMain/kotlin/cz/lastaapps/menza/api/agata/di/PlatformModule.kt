@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,6 +23,7 @@ import cz.lastaapps.menza.api.agata.data.createAgataDBDriver
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-internal actual val platform: Module = module {
-    factory { createAgataDBDriver() }
-}
+internal actual val platform: Module =
+    module {
+        factory { createAgataDBDriver() }
+    }

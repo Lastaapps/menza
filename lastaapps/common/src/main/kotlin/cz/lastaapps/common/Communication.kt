@@ -27,19 +27,21 @@ import android.os.Build
 import android.util.Log
 
 object Communication {
-
     private val TAG get() = Communication::class.simpleName
 
-    private const val facebookUrl = "https://www.facebook.com/lastaapps/"
-    private const val githubUrl = "https://github.com/lastaapps/"
-    private const val matrixUrl = "https://matrix.to/#/#lastaapps_menza:matrix.org"
-    private const val telegramUrl = "https://t.me/lasta_apps"
-    private const val discordUrl = "https://discord.com/users/694264686388052049"
-    private const val playStoreUrl = "https://play.google.com/store/apps/developer?id=Lasta+apps"
+    private const val FACEBOOK_URL = "https://www.facebook.com/lastaapps/"
+    private const val GITHUB_URL = "https://github.com/lastaapps/"
+    private const val MATRIX_URL = "https://matrix.to/#/#lastaapps_menza:matrix.org"
+    private const val TELEGRAM_URL = "https://t.me/lasta_apps"
+    private const val DISCORD_URL = "https://discord.com/users/694264686388052049"
+    private const val PLAY_STORE_URL = "https://play.google.com/store/apps/developer?id=Lasta+apps"
 
-    fun openFacebook(context: Context) = openFacebookPage(context, facebookUrl)
+    fun openFacebook(context: Context) = openFacebookPage(context, FACEBOOK_URL)
 
-    fun openFacebookPage(context: Context, url: String) {
+    fun openFacebookPage(
+        context: Context,
+        url: String,
+    ) {
         var uri = Uri.parse(url)
         try {
             val applicationInfo =
@@ -50,7 +52,8 @@ object Communication {
                     )
                 } else {
                     context.packageManager.getApplicationInfo(
-                        "com.facebook.katana", 0,
+                        "com.facebook.katana",
+                        0,
                     )
                 }
 
@@ -65,28 +68,33 @@ object Communication {
         context.startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
-    fun openGithub(context: Context) = openUrl(context, githubUrl)
+    fun openGithub(context: Context) = openUrl(context, GITHUB_URL)
 
-    fun openProjectsGithub(context: Context, name: String) =
-        openUrl(context, "$githubUrl$name/")
+    fun openProjectsGithub(
+        context: Context,
+        name: String,
+    ) = openUrl(context, "$GITHUB_URL$name/")
 
-    fun openProjectsCommits(context: Context, name: String) =
-        openUrl(context, "$githubUrl$name/commits/")
+    fun openProjectsCommits(
+        context: Context,
+        name: String,
+    ) = openUrl(context, "$GITHUB_URL$name/commits/")
 
-    fun openMatrix(context: Context) = openUrl(context, matrixUrl)
+    fun openMatrix(context: Context) = openUrl(context, MATRIX_URL)
 
-    fun openTelegram(context: Context) = openUrl(context, telegramUrl)
+    fun openTelegram(context: Context) = openUrl(context, TELEGRAM_URL)
 
-    fun openDiscord(context: Context) = openUrl(context, discordUrl)
+    fun openDiscord(context: Context) = openUrl(context, DISCORD_URL)
 
-    fun openPlayStore(context: Context) = openUrl(context, playStoreUrl)
+    fun openPlayStore(context: Context) = openUrl(context, PLAY_STORE_URL)
 
-    private fun openUrl(context: Context, url: String) {
-
+    private fun openUrl(
+        context: Context,
+        url: String,
+    ) {
         Log.i(TAG, "Opening link: $url")
 
         val uri = Uri.parse(url)
         context.startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
-
 }

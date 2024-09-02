@@ -47,7 +47,9 @@ import kotlinx.coroutines.flow.map
     ExperimentalSettingsImplementation::class,
 )
 @JvmInline
-internal value class InitialSettings(val settings: FlowSettings) {
+internal value class InitialSettings(
+    val settings: FlowSettings,
+) {
     companion object {
         private val Context.store by preferencesDataStore("menza_initial_store")
 
@@ -57,12 +59,15 @@ internal value class InitialSettings(val settings: FlowSettings) {
 
 internal interface InitMenzaDataSource {
     suspend fun storeInitialMenzaMode(mode: InitialSelectionBehaviour)
+
     fun getInitialMenzaMode(): Flow<InitialSelectionBehaviour>
 
     suspend fun storeLatestMenza(type: MenzaType)
+
     fun getLatestMenza(): Flow<MenzaType?>
 
     suspend fun storePreferredMenza(type: MenzaType)
+
     fun getPreferredMenza(): Flow<MenzaType?>
 }
 
@@ -71,17 +76,20 @@ internal class InitMenzaDataSourceImpl(
     initialSettings: InitialSettings,
 ) : InitMenzaDataSource {
     companion object {
-        private const val initialModeKey = "initial_mode"
+        private const val INITIAL_MODE_KEY = "initial_mode"
 
-        private const val latestPrefix = "latest_"
-        private const val preferredPrefix = "preferred_"
-        private const val menzaNameKey = "menza_name"
-        private const val menzaIdExtraKey = "menza_id"
+        private const val LATEST_PREFIX = "latest_"
+        private const val PREFERRED_PREFIX = "preferred_"
+        private const val MENZA_NAME_KEY = "menza_name"
+        private const val MENZA_ID_EXTRA_KEY = "menza_id"
 
         @Keep
         private enum class MenzaStoreType {
-            AgataStrahov, AgataSubsystem, BuffetFel, BuffetFs, TestingKocourkov,
-            ;
+            AgataStrahov,
+            AgataSubsystem,
+            BuffetFel,
+            BuffetFs,
+            TestingKocourkov,
         }
 
         private fun MenzaType.toStoreKey() =
@@ -96,11 +104,11 @@ internal class InitMenzaDataSourceImpl(
 
     private val settings = initialSettings.settings
 
-    override suspend fun storeInitialMenzaMode(mode: InitialSelectionBehaviour) =
-        settings.putInt(initialModeKey, mode.id)
+    override suspend fun storeInitialMenzaMode(mode: InitialSelectionBehaviour) = settings.putInt(INITIAL_MODE_KEY, mode.id)
 
     override fun getInitialMenzaMode(): Flow<InitialSelectionBehaviour> =
-        settings.getIntFlow(initialModeKey, 0)
+        settings
+            .getIntFlow(INITIAL_MODE_KEY, 0)
             .map {
                 when (it) {
                     1 -> InitialSelectionBehaviour.Remember
@@ -109,26 +117,33 @@ internal class InitMenzaDataSourceImpl(
                 }
             }
 
-    override suspend fun storeLatestMenza(type: MenzaType) = storeMenza(latestPrefix, type)
-    override fun getLatestMenza(): Flow<MenzaType?> = getMenza(latestPrefix)
-    override suspend fun storePreferredMenza(type: MenzaType) = storeMenza(preferredPrefix, type)
-    override fun getPreferredMenza(): Flow<MenzaType?> = getMenza(preferredPrefix)
+    override suspend fun storeLatestMenza(type: MenzaType) = storeMenza(LATEST_PREFIX, type)
 
-    private suspend fun storeMenza(prefix: String, type: MenzaType) {
-        settings.putString(prefix + menzaNameKey, type.toStoreKey().name)
+    override fun getLatestMenza(): Flow<MenzaType?> = getMenza(LATEST_PREFIX)
+
+    override suspend fun storePreferredMenza(type: MenzaType) = storeMenza(PREFERRED_PREFIX, type)
+
+    override fun getPreferredMenza(): Flow<MenzaType?> = getMenza(PREFERRED_PREFIX)
+
+    private suspend fun storeMenza(
+        prefix: String,
+        type: MenzaType,
+    ) {
+        settings.putString(prefix + MENZA_NAME_KEY, type.toStoreKey().name)
         when (type) {
-            is Subsystem -> settings.putInt(prefix + menzaIdExtraKey, type.subsystemId)
+            is Subsystem -> settings.putInt(prefix + MENZA_ID_EXTRA_KEY, type.subsystemId)
             else -> {}
         }
     }
 
     private fun getMenza(prefix: String): Flow<MenzaType?> =
         combine(
-            settings.getStringOrNullFlow(prefix + menzaNameKey),
-            settings.getIntOrNullFlow(prefix + menzaIdExtraKey)
+            settings.getStringOrNullFlow(prefix + MENZA_NAME_KEY),
+            settings.getIntOrNullFlow(prefix + MENZA_ID_EXTRA_KEY),
         ) { name, id ->
-            val type = MenzaStoreType.entries
-                .firstOrNull { it.name == name } ?: return@combine null
+            val type =
+                MenzaStoreType.entries
+                    .firstOrNull { it.name == name } ?: return@combine null
             when (type) {
                 AgataStrahov -> Strahov
                 AgataSubsystem -> Subsystem(id ?: return@combine null)

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,7 +32,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 @JvmInline
-internal value class OrderSettings(val settings: FlowSettings) {
+internal value class OrderSettings(
+    val settings: FlowSettings,
+) {
     companion object {
         private val Context.store by preferencesDataStore("menza_order_store")
 
@@ -41,7 +43,10 @@ internal value class OrderSettings(val settings: FlowSettings) {
 }
 
 internal interface OrderDataSource {
-    suspend fun putMenzaOrder(key: String, order: MenzaOrder)
+    suspend fun putMenzaOrder(
+        key: String,
+        order: MenzaOrder,
+    )
 
     suspend fun getMenzaOrder(key: String): MenzaOrder?
 
@@ -60,23 +65,27 @@ internal class OrderDataSourceImpl(
     private val settings = orderSettings.settings
 
     companion object {
-        private const val orderPrefix = "order_"
-        private const val visiblePrefix = "visible_"
-        private const val internalPrefix = "internal_"
+        private const val ORDER_PREFIX = "order_"
+        private const val VISIBLE_PREFIX = "visible_"
+        private const val INTERNAL_PREFIX = "internal_"
 
-        private const val fromTopKey = internalPrefix + "from_top"
+        private const val FROM_TOP_KEY = INTERNAL_PREFIX + "from_top"
 
-        private fun orderKey(key: String) = orderPrefix + key
-        private fun visibleKey(key: String) = visiblePrefix + key
+        private fun orderKey(key: String) = ORDER_PREFIX + key
+
+        private fun visibleKey(key: String) = VISIBLE_PREFIX + key
 
         private fun Set<String>.removePrefixes() =
             asSequence()
-                .map { it.removePrefix(orderPrefix).removePrefix(visiblePrefix) }
-                .filter { !it.startsWith(internalPrefix) }
+                .map { it.removePrefix(ORDER_PREFIX).removePrefix(VISIBLE_PREFIX) }
+                .filter { !it.startsWith(INTERNAL_PREFIX) }
                 .toSet()
     }
 
-    override suspend fun putMenzaOrder(key: String, order: MenzaOrder) {
+    override suspend fun putMenzaOrder(
+        key: String,
+        order: MenzaOrder,
+    ) {
         settings.putInt(orderKey(key), order.order)
         settings.putBoolean(visibleKey(key), order.visible)
     }
@@ -84,7 +93,7 @@ internal class OrderDataSourceImpl(
     override suspend fun getMenzaOrder(key: String): MenzaOrder? {
         return MenzaOrder(
             order = settings.getIntOrNull(orderKey(key)) ?: return null,
-            visible = settings.getBooleanOrNull(visibleKey(key)) ?: return null
+            visible = settings.getBooleanOrNull(visibleKey(key)) ?: return null,
         )
     }
 
@@ -92,21 +101,22 @@ internal class OrderDataSourceImpl(
         val larges = MenzaOrder.largest
         return combine(
             settings.getIntFlow(orderKey(key), larges.order),
-            settings.getBooleanFlow(visibleKey(key), larges.visible)
+            settings.getBooleanFlow(visibleKey(key), larges.visible),
         ) { order, visible ->
             MenzaOrder(order = order, visible = visible)
         }
     }
 
     override suspend fun forEach(block: (MenzaOrder?) -> Unit) {
-        settings.keys().removePrefixes()
+        settings
+            .keys()
+            .removePrefixes()
             .forEach { key -> block(getMenzaOrder(key)) }
     }
 
-    override fun isFromTop(): Flow<Boolean> =
-        settings.getBooleanFlow(fromTopKey, true)
+    override fun isFromTop(): Flow<Boolean> = settings.getBooleanFlow(FROM_TOP_KEY, true)
 
     override suspend fun setFromTop(fromTop: Boolean) {
-        settings.putBoolean(fromTopKey, fromTop)
+        settings.putBoolean(FROM_TOP_KEY, fromTop)
     }
 }

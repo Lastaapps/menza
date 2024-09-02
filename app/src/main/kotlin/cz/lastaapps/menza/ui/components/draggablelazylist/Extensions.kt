@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,9 +27,13 @@ import androidx.compose.foundation.lazy.LazyListState
     Based on the item's "relative position" with the "currently top" visible item,
     this returns LazyListItemInfo corresponding to it
 */
-fun LazyListState.getVisibleItemInfoFor(absoluteIndex: Int): LazyListItemInfo? {
-    return this.layoutInfo.visibleItemsInfo.getOrNull(absoluteIndex - this.layoutInfo.visibleItemsInfo.first().index)
-}
+fun LazyListState.getVisibleItemInfoFor(absoluteIndex: Int): LazyListItemInfo? =
+    this.layoutInfo.visibleItemsInfo.getOrNull(
+        absoluteIndex -
+            this.layoutInfo.visibleItemsInfo
+                .first()
+                .index,
+    )
 
 /*
   Bottom offset of the element in Vertical list
@@ -40,9 +44,13 @@ val LazyListItemInfo.offsetEnd: Int
 /*
    Moving element in the list
 */
-fun <T> MutableList<T>.move(from: Int, to: Int) {
-    if (from == to)
+fun <T> MutableList<T>.move(
+    from: Int,
+    to: Int,
+) {
+    if (from == to) {
         return
+    }
 
     val element = this.removeAt(from) ?: return
     this.add(to, element)

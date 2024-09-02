@@ -54,94 +54,114 @@ internal class InfoRepoImpl(
 ) : InfoRepo {
     private val log = Logger.withTag(this::class.simpleName + "($type)")
 
-    override fun getData(params: InfoRepoParams): Flow<Info> = flow {
-        // I don't wanna parse this shit, really
-        emit(
-            Info(
-                header = null,
-                footer = null,
-                contacts = commonContacts,
-                openingTimes = openTime(params, type),
-                links = persistentListOf(
-                    Link(
-                        link = "https://studentcatering.cz/",
-                        description = "Web",
-                    ),
+    override fun getData(params: InfoRepoParams): Flow<Info> =
+        flow {
+            // I don't wanna parse this shit, really
+            emit(
+                Info(
+                    header = null,
+                    footer = null,
+                    contacts = commonContacts,
+                    openingTimes = openTime(params, type),
+                    links =
+                        persistentListOf(
+                            Link(
+                                link = "https://studentcatering.cz/",
+                                description = "Web",
+                            ),
+                        ),
+                    address =
+                        Address(
+                            location = address(params, type),
+                            gps = null,
+                        ),
                 ),
-                address = Address(
-                    location = address(params, type),
-                    gps = null,
-                ),
-            ),
-        )
-    }
-        .onStart { log.i { "Starting collection" } }
-        .onCompletion { log.i { "Completed collection" } }
+            )
+        }.onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
 
-    private fun openTime(params: InfoRepoParams, type: BuffetType) = persistentListOf(
+    private fun openTime(
+        params: InfoRepoParams,
+        type: BuffetType,
+    ) = persistentListOf(
         PlaceOpeningInfo(
             getName(params, type),
             getNameShort(params, type),
             persistentListOf(
                 PlaceOpeningType(
                     description = null,
-                    times = persistentListOf(
-                        PlaceOpeningTime(
-                            startDay = DayOfWeek.MONDAY,
-                            endDay = DayOfWeek.THURSDAY,
-                            startTime = LocalTime(7, 45),
-                            endTime = LocalTime(16, 45),
+                    times =
+                        persistentListOf(
+                            PlaceOpeningTime(
+                                startDay = DayOfWeek.MONDAY,
+                                endDay = DayOfWeek.THURSDAY,
+                                startTime = LocalTime(7, 45),
+                                endTime = LocalTime(16, 45),
+                            ),
+                            PlaceOpeningTime(
+                                startDay = DayOfWeek.FRIDAY,
+                                endDay = DayOfWeek.FRIDAY,
+                                startTime = LocalTime(7, 45),
+                                endTime = LocalTime(14, 0),
+                            ),
                         ),
-                        PlaceOpeningTime(
-                            startDay = DayOfWeek.FRIDAY,
-                            endDay = DayOfWeek.FRIDAY,
-                            startTime = LocalTime(7, 45),
-                            endTime = LocalTime(14, 0),
-                        ),
-                    ),
                 ),
             ),
         ),
     )
 
     @Suppress("SpellCheckingInspection")
-    private fun getName(params: MenzaRepoParams, type: BuffetType) = when (params.language) {
-        CS -> when (type) {
-            FS -> "FS Bufet"
-            FEL -> "FEL Bufet"
-        }
+    private fun getName(
+        params: MenzaRepoParams,
+        type: BuffetType,
+    ) = when (params.language) {
+        CS ->
+            when (type) {
+                FS -> "FS Bufet"
+                FEL -> "FEL Bufet"
+            }
 
-        EN -> when (type) {
-            FS -> "FS Buffet"
-            FEL -> "FEE Buffet"
-        }
+        EN ->
+            when (type) {
+                FS -> "FS Buffet"
+                FEL -> "FEE Buffet"
+            }
     }
 
-    private fun getNameShort(params: MenzaRepoParams, type: BuffetType) = when (params.language) {
-        CS -> when (type) {
-            FS -> "FS"
-            FEL -> "FEL"
-        }
+    private fun getNameShort(
+        params: MenzaRepoParams,
+        type: BuffetType,
+    ) = when (params.language) {
+        CS ->
+            when (type) {
+                FS -> "FS"
+                FEL -> "FEL"
+            }
 
-        EN -> when (type) {
-            FS -> "FS"
-            FEL -> "FEE"
-        }
+        EN ->
+            when (type) {
+                FS -> "FS"
+                FEL -> "FEE"
+            }
     }
 
     @Suppress("SpellCheckingInspection")
-    private fun address(params: InfoRepoParams, type: BuffetType) =
-        when (params.language) {
-            CS -> when (type) {
+    private fun address(
+        params: InfoRepoParams,
+        type: BuffetType,
+    ) = when (params.language) {
+        CS ->
+            when (type) {
                 FS -> "1. partro, Technická 1902/4, 160 00 Praha 6"
                 FEL -> "1. partro, Technická 1902/2, 160 00 Praha 6"
             }
 
-            EN -> when (type) {
+        EN ->
+            when (type) {
                 FS -> "1st floor, Technická 1902/4, 160 00 Prague 6"
                 FEL -> "1st floor, Technická 1902/2, 160 00 Prague 6"
             }
-        }.let(::LocationName)
+    }.let(::LocationName)
 
     @Suppress("SpellCheckingInspection")
     private val commonContacts =
@@ -160,8 +180,12 @@ internal class InfoRepoImpl(
             ),
         )
 
-    override suspend fun sync(params: InfoRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        SyncResult.Skipped.right()
-    }
+    override suspend fun sync(
+        params: InfoRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            SyncResult.Skipped.right()
+        }
 }

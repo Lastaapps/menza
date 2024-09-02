@@ -35,12 +35,13 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-internal actual val platform: Module = module {
-    single { createSettings(get()) }
-    single { VMContext(Dispatchers.Default) }
+internal actual val platform: Module =
+    module {
+        single { createSettings(get()) }
+        single { VMContext(Dispatchers.Default) }
 
-    factoryOf(::IsOnMeteredNetworkProviderImpl) bind IsOnMeteredNetworkProvider::class
-    factoryOf(::AndroidLinkOpener) bind LinkOpener::class
-    factoryOf(::AndroidAssetsProvider) bind AssetsProvider::class
-    factoryOf(::AndroidDeviceLocalesProvider) bind DeviceLocalesProvider::class
-}
+        factoryOf(::IsOnMeteredNetworkProviderImpl) bind IsOnMeteredNetworkProvider::class
+        factoryOf(::AndroidLinkOpener) bind LinkOpener::class
+        factoryOf(::AndroidAssetsProvider) bind AssetsProvider::class
+        factoryOf(::AndroidDeviceLocalesProvider) bind DeviceLocalesProvider::class
+    }

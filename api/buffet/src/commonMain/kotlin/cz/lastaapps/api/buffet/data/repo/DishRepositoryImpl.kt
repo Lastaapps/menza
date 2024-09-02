@@ -64,7 +64,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
-
 internal class DishLogicImpl(
     private val api: BuffetApi,
     private val db: BuffetDatabase,
@@ -72,63 +71,70 @@ internal class DishLogicImpl(
     private val clock: Clock,
     private val checker: ValidityChecker,
 ) {
-        private val log = localLogger()
+    private val log = localLogger()
 
-    private val validFrom = clock.now()
-        .toLocalDateTime(TimeZone.CET).date
-        .findDayOfWeek(DayOfWeek.SATURDAY)
-        .let { LocalDateTime(it, LocalTime(12, 0)) }
-        .toInstant(TimeZone.CET)
+    private val validFrom =
+        clock
+            .now()
+            .toLocalDateTime(TimeZone.CET)
+            .date
+            .findDayOfWeek(DayOfWeek.SATURDAY)
+            .let { LocalDateTime(it, LocalTime(12, 0)) }
+            .toInstant(TimeZone.CET)
 
     private val validityKey = ValidityKey.buffetDish()
-    private val hasValidData = checker.isUpdatedSince(validityKey, validFrom)
-        .onEach { log.i { "Validity changed to $it" } }
+    private val hasValidData =
+        checker
+            .isUpdatedSince(validityKey, validFrom)
+            .onEach { log.i { "Validity changed to $it" } }
 
     fun getDataToday(type: BuffetType): Flow<ImmutableList<DishCategory>> =
-        db.dishQueries.getForBuffetAndDayOfWeek(
-            buffet = type,
-            clock.now().toLocalDateTime(TimeZone.currentSystemDefault()).date.dayOfWeek,
-        )
-            .asFlow()
+        db.dishQueries
+            .getForBuffetAndDayOfWeek(
+                buffet = type,
+                clock
+                    .now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .date.dayOfWeek,
+            ).asFlow()
             .mapToList(Dispatchers.IO)
             .combine(hasValidData) { data, validity ->
                 data.takeIf { validity }.orEmpty()
-            }
-            .map { it.toDomainDays() }
+            }.map { it.toDomainDays() }
             .map { it.firstOrNull()?.second ?: emptyList() }
             .map { it.toImmutableList() }
 
     fun getDataWeek(type: BuffetType): Flow<ImmutableList<WeekDayDish>> =
-        db.dishQueries.getForBuffet(type)
+        db.dishQueries
+            .getForBuffet(type)
             .asFlow()
             .mapToList(Dispatchers.IO)
             .combine(hasValidData) { data, validity ->
                 data.takeIf { validity }.orEmpty()
-            }
-            .map { it.toDomainWeek(clock) }
+            }.map { it.toDomainWeek(clock) }
 
-    private val job = object : SyncJob<OutcomeIor<WebContentDto>, List<DishEntity>, Unit>(
-        shouldRun = { _, _ -> Some {} },
-        fetchApi = {
-            api.process()
-        },
-        convert = { _, data ->
-            data.map { it.toEntity() }
-        },
-        store = { _, data ->
-            db.dishQueries.deleteAll()
-            data.forEach {
-                db.dishQueries.insert(it)
-            }
-            log.d { "Data stored" }
-        },
-    ) {}
+    private val job =
+        object : SyncJob<OutcomeIor<WebContentDto>, List<DishEntity>, Unit>(
+            shouldRun = { _, _ -> Some {} },
+            fetchApi = {
+                api.process()
+            },
+            convert = { _, data ->
+                data.map { it.toEntity() }
+            },
+            store = { _, data ->
+                db.dishQueries.deleteAll()
+                data.forEach {
+                    db.dishQueries.insert(it)
+                }
+                log.d { "Data stored" }
+            },
+        ) {}
 
-    suspend fun sync(isForced: Boolean): SyncOutcome {
-        return checker.withCheckSince(validityKey, isForced, validFrom) {
+    suspend fun sync(isForced: Boolean): SyncOutcome =
+        checker.withCheckSince(validityKey, isForced, validFrom) {
             processor.runSync(job, db, Unit, isForced = isForced)
         }
-    }
 }
 
 internal class WeekDishRepository(
@@ -136,15 +142,21 @@ internal class WeekDishRepository(
     private val logic: DishLogicImpl,
 ) : WeekDishRepo {
     private val log = Logger.withTag(this::class.simpleName + "($type)")
-    override fun getData(params: TodayRepoParams): Flow<ImmutableList<WeekDayDish>> =
-        logic.getDataWeek(type)
-        .onStart { log.i { "Starting collection" } }
-        .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(params: TodayRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        logic.sync(isForced)
-    }
+    override fun getData(params: TodayRepoParams): Flow<ImmutableList<WeekDayDish>> =
+        logic
+            .getDataWeek(type)
+            .onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
+
+    override suspend fun sync(
+        params: TodayRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            logic.sync(isForced)
+        }
 }
 
 internal class TodayDishRepository(
@@ -154,12 +166,17 @@ internal class TodayDishRepository(
     private val log = Logger.withTag(this::class.simpleName + "($type)")
 
     override fun getData(params: TodayRepoParams): Flow<ImmutableList<DishCategory>> =
-        logic.getDataToday(type)
-        .onStart { log.i { "Starting collection" } }
-        .onCompletion { log.i { "Completed collection" } }
+        logic
+            .getDataToday(type)
+            .onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(params: TodayRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        logic.sync(isForced)
-    }
+    override suspend fun sync(
+        params: TodayRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            logic.sync(isForced)
+        }
 }

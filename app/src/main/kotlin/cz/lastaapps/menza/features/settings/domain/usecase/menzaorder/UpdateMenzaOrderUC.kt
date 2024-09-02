@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,9 +28,12 @@ class UpdateMenzaOrderUC internal constructor(
     context: UCContext,
     private val repo: OrderRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(list: List<Pair<Menza, Boolean>>) = launch {
-        repo.updateOrder(list.map { (menza, visible) ->
-            menza.type to visible
-        })
-    }
+    suspend operator fun invoke(list: List<Pair<Menza, Boolean>>) =
+        launch {
+            repo.updateOrder(
+                list.map { (menza, visible) ->
+                    menza.type to visible
+                },
+            )
+        }
 }

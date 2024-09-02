@@ -43,269 +43,287 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.HttpClient
 import kotlinx.datetime.LocalDate
 
-class BuffetScraperTest : StringSpec(
-    {
-        fun loadPage(name: String): String =
-            BuffetScraperTest::class.java.classLoader?.getResource(name)!!.readText()
+class BuffetScraperTest :
+    StringSpec(
+        {
+            fun loadPage(name: String): String =
+                BuffetScraperTest::class.java.classLoader
+                    ?.getResource(name)!!
+                    .readText()
 
-        fun scraper() = BuffetScraperImpl()
-        fun client() = HttpClient()
+            fun scraper() = BuffetScraperImpl()
 
-        "Scrape live" {
-            val log = Logger.withTag("Live")
-            val api: BuffetApi = BuffetApiImpl(client(), scraper())
-            val res = api.process()
-            res.map {
-                log.i { "${it.from} ${it.to}" }
-                log.i { it.fs.toString() }
-                log.i { it.fel.toString() }
+            fun client() = HttpClient()
+
+            "Scrape live" {
+                val log = Logger.withTag("Live")
+                val api: BuffetApi = BuffetApiImpl(client(), scraper())
+                val res = api.process()
+                res.map {
+                    log.i { "${it.from} ${it.to}" }
+                    log.i { it.fs.toString() }
+                    log.i { it.fel.toString() }
+                }
+                res.shouldBeInstanceOf<Ior.Right<WebContentDto>>()
+                val value = res.value
+                listOf(value.fs, value.fel).forEach { type ->
+                    type.shouldHaveSize(5)
+                }
             }
-            res.shouldBeInstanceOf<Ior.Right<WebContentDto>>()
-            val value = res.value
-            listOf(value.fs, value.fel).forEach { type ->
-                type.shouldHaveSize(5)
-            }
-        }
 
-        "Scrape 2023-01-23" {
-            val log = Logger.withTag("2023-01-23")
-            val html = loadPage("2023-01-23.html")
-            val scraper = scraper()
-            val date = scraper.matchValidity(html)
-            val content = scraper.matchContent(html)
+            "Scrape 2023-01-23" {
+                val log = Logger.withTag("2023-01-23")
+                val html = loadPage("2023-01-23.html")
+                val scraper = scraper()
+                val date = scraper.matchValidity(html)
+                val content = scraper.matchContent(html)
 
-            log.i { date.toString() }
-            log.i { content.toString() }
+                log.i { date.toString() }
+                log.i { content.toString() }
 
-            dateRangeTest(
-                date,
-                LocalDate(2023, 1, 23),
-                LocalDate(2023, 1, 27),
-            )
-
-            val (fs, fel) = testDeconstruct(content)
-
-            commonTest(fs, listOf(3, 3, 3, 3, 3))
-            @Suppress("SpellCheckingInspection")
-            fs[0].dishList[2].run {
-                type shouldBe "Hlavní jídlo 2"
-                name shouldBe "Kuřecí steak marinovaný na bylinkách; hranolky"
-                price shouldBe 128
-                ingredients shouldBe listOf(
-                    "kuřecí maso",
-                    "bylinky",
-                    "marináda",
+                dateRangeTest(
+                    date,
+                    LocalDate(2023, 1, 23),
+                    LocalDate(2023, 1, 27),
                 )
+
+                val (fs, fel) = testDeconstruct(content)
+
+                commonTest(fs, listOf(3, 3, 3, 3, 3))
+                @Suppress("SpellCheckingInspection")
+                fs[0].dishList[2].run {
+                    type shouldBe "Hlavní jídlo 2"
+                    name shouldBe "Kuřecí steak marinovaný na bylinkách; hranolky"
+                    price shouldBe 128
+                    ingredients shouldBe
+                        listOf(
+                            "kuřecí maso",
+                            "bylinky",
+                            "marináda",
+                        )
+                }
+
+                commonTest(fel, listOf(3, 3, 4, 3, 4))
+                @Suppress("SpellCheckingInspection")
+                fel[4].dishList[3].run {
+                    // is not in a <strong> tag
+                    type shouldBe "Hlavní jídlo 3"
+                    name shouldBe "Špagety Aglio Olio"
+                    price shouldBe 104
+                    ingredients shouldBe
+                        listOf(
+                            "špagety",
+                            "česnek",
+                            "olivový olej",
+                            "feferonky",
+                            "parmazán",
+                        )
+                }
             }
 
-            commonTest(fel, listOf(3, 3, 4, 3, 4))
-            @Suppress("SpellCheckingInspection")
-            fel[4].dishList[3].run { // is not in a <strong> tag
-                type shouldBe "Hlavní jídlo 3"
-                name shouldBe "Špagety Aglio Olio"
-                price shouldBe 104
-                ingredients shouldBe listOf(
-                    "špagety",
-                    "česnek",
-                    "olivový olej",
-                    "feferonky",
-                    "parmazán",
+            "Scrape 2023-01-30" {
+                val log = Logger.withTag("2023-01-30")
+                val html = loadPage("2023-01-30.html")
+                val scraper = scraper()
+                val date = scraper.matchValidity(html)
+                val content = scraper.matchContent(html)
+
+                log.i { date.toString() }
+                log.i { content.toString() }
+
+                dateRangeTest(
+                    date,
+                    LocalDate(2023, 1, 30),
+                    LocalDate(2023, 2, 3),
                 )
+
+                val (fs, fel) = testDeconstruct(content)
+
+                commonTest(fs, listOf(3, 3, 3, 3, 2))
+                @Suppress("SpellCheckingInspection")
+                fs[2].dishList[1].run {
+                    type shouldBe "Hlavní jídlo 1"
+                    name shouldBe "Špíz z vepřového a kuřecího masa, vařené brambory/hranolkyr"
+                    price shouldBe 128
+                    ingredients shouldBe
+                        listOf(
+                            "vepřové a kuřecí maso",
+                            "cibule",
+                            "slanina",
+                            "klobása",
+                        )
+                }
+
+                commonTest(fel, listOf(4, 4, 4, 3, 5))
+                @Suppress("SpellCheckingInspection")
+                fel[0].dishList[1].run {
+                    // is not in a <strong> tag
+                    type shouldBe "Hlavní jídlo 1"
+                    name shouldBe "Kuřecí směs s nivou; hranolky / rýže"
+                    price shouldBe 119
+                    ingredients shouldBe
+                        listOf(
+                            "kuřecí maso",
+                            "niva",
+                            "smetana",
+                            "směs koření",
+                        )
+                }
             }
-        }
 
-        "Scrape 2023-01-30" {
-            val log = Logger.withTag("2023-01-30")
-            val html = loadPage("2023-01-30.html")
-            val scraper = scraper()
-            val date = scraper.matchValidity(html)
-            val content = scraper.matchContent(html)
+            "Scrape 2023-02-20" {
+                val log = Logger.withTag("2023-02-20")
+                val html = loadPage("2023-02-20.html")
+                val scraper = scraper()
+                val date = scraper.matchValidity(html)
+                val content = scraper.matchContent(html)
 
-            log.i { date.toString() }
-            log.i { content.toString() }
+                log.i { date.toString() }
+                log.i { content.toString() }
 
-            dateRangeTest(
-                date,
-                LocalDate(2023, 1, 30),
-                LocalDate(2023, 2, 3),
-            )
-
-            val (fs, fel) = testDeconstruct(content)
-
-            commonTest(fs, listOf(3, 3, 3, 3, 2))
-            @Suppress("SpellCheckingInspection")
-            fs[2].dishList[1].run {
-                type shouldBe "Hlavní jídlo 1"
-                name shouldBe "Špíz z vepřového a kuřecího masa, vařené brambory/hranolkyr"
-                price shouldBe 128
-                ingredients shouldBe listOf(
-                    "vepřové a kuřecí maso",
-                    "cibule",
-                    "slanina",
-                    "klobása",
+                dateRangeTest(
+                    date,
+                    LocalDate(2023, 2, 20),
+                    LocalDate(2023, 2, 24),
                 )
+
+                val (fs, fel) = testDeconstruct(content)
+
+                commonTest(fs, listOf(3, 4, 3, 3, 2))
+                @Suppress("SpellCheckingInspection")
+                fs[4].dishList[1].run {
+                    type shouldBe "Hlavní jídlo 1"
+                    name shouldBe "Grilovaný vepřový kotlet po balkánsku, pikantní zelný salát, hranolky"
+                    price shouldBe 128
+                    ingredients shouldBe
+                        listOf(
+                            "vepřové maso",
+                            "směs koření",
+                        )
+                }
+
+                commonTest(fel, listOf(3, 4, 3, 3, 3))
+                @Suppress("SpellCheckingInspection")
+                fel[3].dishList[1].run {
+                    // is not in a <strong> tag
+                    type shouldBe "Hlavní jídlo 1"
+                    name shouldBe "Marinovaný kuřecí plátek s baby karotkou; vařené brambory / hranolky"
+                    price shouldBe 119
+                    ingredients shouldBe
+                        listOf(
+                            "kuřecí maso",
+                            "marináda",
+                            "baby karotka",
+                        )
+                }
             }
 
-            commonTest(fel, listOf(4, 4, 4, 3, 5))
-            @Suppress("SpellCheckingInspection")
-            fel[0].dishList[1].run { // is not in a <strong> tag
-                type shouldBe "Hlavní jídlo 1"
-                name shouldBe "Kuřecí směs s nivou; hranolky / rýže"
-                price shouldBe 119
-                ingredients shouldBe listOf(
-                    "kuřecí maso",
-                    "niva",
-                    "smetana",
-                    "směs koření",
+            "Scrape 2023-02-27" {
+                val log = Logger.withTag("2023-02-27")
+                val html = loadPage("2023-02-27.html")
+                val scraper = scraper()
+                val date = scraper.matchValidity(html)
+                val content = scraper.matchContent(html)
+
+                log.i { date.toString() }
+                log.i { content.toString() }
+
+                dateRangeTest(
+                    date,
+                    LocalDate(2023, 2, 27),
+                    LocalDate(2023, 3, 3),
                 )
+
+                val (fs, fel) = testDeconstruct(content)
+
+                commonTest(fs, listOf(3, 3, 3, 3, 3))
+                @Suppress("SpellCheckingInspection")
+                fs[4].dishList[1].run {
+                    type shouldBe "Hlavní jídlo 1"
+                    name shouldBe "Pikantní kuřecí nudličky; rýže"
+                    price shouldBe 119
+                    ingredients shouldBe
+                        listOf(
+                            "kuřecí maso",
+                            "směs koření",
+                            "zelenina",
+                        )
+                }
+
+                commonTest(fel, listOf(3, 3, 4, 3, 4))
+                @Suppress("SpellCheckingInspection")
+                fel[3].dishList[1].run {
+                    // is not in a <strong> tag
+                    type shouldBe "Hlavní jídlo 1"
+                    name shouldBe "Smažený karbanátek; bramborová kaše"
+                    price shouldBe 123
+                    ingredients shouldBe
+                        listOf(
+                            "mleté maso",
+                            "směs koření",
+                            "trojobal",
+                        )
+                }
             }
-        }
 
-        "Scrape 2023-02-20" {
-            val log = Logger.withTag("2023-02-20")
-            val html = loadPage("2023-02-20.html")
-            val scraper = scraper()
-            val date = scraper.matchValidity(html)
-            val content = scraper.matchContent(html)
+            // missing closing bracket after the contains
+            "Scrape 2024-02-26" {
+                val log = Logger.withTag("2024-02-26")
+                val html = loadPage("2024-02-26.html")
+                val scraper = scraper()
+                val date = scraper.matchValidity(html)
+                val content = scraper.matchContent(html)
 
-            log.i { date.toString() }
-            log.i { content.toString() }
+                log.i { date.toString() }
+                log.i { content.toString() }
 
-            dateRangeTest(
-                date,
-                LocalDate(2023, 2, 20),
-                LocalDate(2023, 2, 24),
-            )
-
-            val (fs, fel) = testDeconstruct(content)
-
-            commonTest(fs, listOf(3, 4, 3, 3, 2))
-            @Suppress("SpellCheckingInspection")
-            fs[4].dishList[1].run {
-                type shouldBe "Hlavní jídlo 1"
-                name shouldBe "Grilovaný vepřový kotlet po balkánsku, pikantní zelný salát, hranolky"
-                price shouldBe 128
-                ingredients shouldBe listOf(
-                    "vepřové maso",
-                    "směs koření",
+                dateRangeTest(
+                    date,
+                    LocalDate(2024, 2, 26),
+                    LocalDate(2024, 3, 1),
                 )
+
+                val (fs, fel) = testDeconstruct(content)
+
+                commonTest(fs, listOf(3, 3, 3, 3, 2))
+                @Suppress("SpellCheckingInspection")
+                fs[1].dishList[2].run {
+                    type shouldBe "Hlavní jídlo 2"
+                    name shouldBe "Kuřecí steak se sýrem, hranolky"
+                    price shouldBe 139
+                    ingredients shouldBe
+                        listOf(
+                            "kuřecí maso",
+                            "sýr",
+                            "směs koření",
+                        )
+                }
+
+                commonTest(fel, listOf(4, 4, 3, 3, 5))
+                @Suppress("SpellCheckingInspection")
+                fel[4].dishList[1].run {
+                    type shouldBe "Hlavní jídlo 1"
+                    name shouldBe "Smažený eidam; vař. brambory, tatarská omáčka"
+                    price shouldBe 136
+                    ingredients shouldBe
+                        listOf(
+                            "sýr eidam",
+                            "trojobal",
+                        )
+                }
             }
 
-            commonTest(fel, listOf(3, 4, 3, 3, 3))
-            @Suppress("SpellCheckingInspection")
-            fel[3].dishList[1].run { // is not in a <strong> tag
-                type shouldBe "Hlavní jídlo 1"
-                name shouldBe "Marinovaný kuřecí plátek s baby karotkou; vařené brambory / hranolky"
-                price shouldBe 119
-                ingredients shouldBe listOf(
-                    "kuřecí maso",
-                    "marináda",
-                    "baby karotka",
-                )
+            "Scrape summer" {
+                val log = Logger.withTag("summer")
+                val html = loadPage("summer.html")
+                val scraper = scraper()
+                val date = scraper.matchValidity(html)
+
+                log.i { "Got $date" }
+                date shouldBe SyncError.Closed.left()
             }
-        }
-
-        "Scrape 2023-02-27" {
-            val log = Logger.withTag("2023-02-27")
-            val html = loadPage("2023-02-27.html")
-            val scraper = scraper()
-            val date = scraper.matchValidity(html)
-            val content = scraper.matchContent(html)
-
-            log.i { date.toString() }
-            log.i { content.toString() }
-
-            dateRangeTest(
-                date,
-                LocalDate(2023, 2, 27),
-                LocalDate(2023, 3, 3),
-            )
-
-            val (fs, fel) = testDeconstruct(content)
-
-            commonTest(fs, listOf(3, 3, 3, 3, 3))
-            @Suppress("SpellCheckingInspection")
-            fs[4].dishList[1].run {
-                type shouldBe "Hlavní jídlo 1"
-                name shouldBe "Pikantní kuřecí nudličky; rýže"
-                price shouldBe 119
-                ingredients shouldBe listOf(
-                    "kuřecí maso",
-                    "směs koření",
-                    "zelenina",
-                )
-            }
-
-            commonTest(fel, listOf(3, 3, 4, 3, 4))
-            @Suppress("SpellCheckingInspection")
-            fel[3].dishList[1].run { // is not in a <strong> tag
-                type shouldBe "Hlavní jídlo 1"
-                name shouldBe "Smažený karbanátek; bramborová kaše"
-                price shouldBe 123
-                ingredients shouldBe listOf(
-                    "mleté maso",
-                    "směs koření",
-                    "trojobal",
-                )
-            }
-        }
-
-        // missing closing bracket after the contains
-        "Scrape 2024-02-26" {
-            val log = Logger.withTag("2024-02-26")
-            val html = loadPage("2024-02-26.html")
-            val scraper = scraper()
-            val date = scraper.matchValidity(html)
-            val content = scraper.matchContent(html)
-
-            log.i { date.toString() }
-            log.i { content.toString() }
-
-            dateRangeTest(
-                date,
-                LocalDate(2024, 2, 26),
-                LocalDate(2024, 3, 1),
-            )
-
-            val (fs, fel) = testDeconstruct(content)
-
-            commonTest(fs, listOf(3, 3, 3, 3, 2))
-            @Suppress("SpellCheckingInspection")
-            fs[1].dishList[2].run {
-                type shouldBe "Hlavní jídlo 2"
-                name shouldBe "Kuřecí steak se sýrem, hranolky"
-                price shouldBe 139
-                ingredients shouldBe listOf(
-                    "kuřecí maso",
-                    "sýr",
-                    "směs koření",
-                )
-            }
-
-            commonTest(fel, listOf(4, 4, 3, 3, 5))
-            @Suppress("SpellCheckingInspection")
-            fel[4].dishList[1].run {
-                type shouldBe "Hlavní jídlo 1"
-                name shouldBe "Smažený eidam; vař. brambory, tatarská omáčka"
-                price shouldBe 136
-                ingredients shouldBe listOf(
-                    "sýr eidam",
-                    "trojobal",
-                )
-            }
-        }
-
-        "Scrape summer" {
-            val log = Logger.withTag("summer")
-            val html = loadPage("summer.html")
-            val scraper = scraper()
-            val date = scraper.matchValidity(html)
-
-            log.i { "Got $date" }
-            date shouldBe SyncError.Closed.left()
-        }
-    },
-)
+        },
+    )
 
 private fun dateRangeTest(
     date: Outcome<Pair<LocalDate, LocalDate>>,
@@ -317,19 +335,26 @@ private fun dateRangeTest(
     date.value.second shouldBe to
 }
 
-private fun testDeconstruct(content: Outcome<Pair<Option<Nel<DomainError>>, Pair<List<DishDayDto>, List<DishDayDto>>>>): Pair<List<DishDayDto>, List<DishDayDto>> {
+private fun testDeconstruct(
+    content: Outcome<Pair<Option<Nel<DomainError>>, Pair<List<DishDayDto>, List<DishDayDto>>>>,
+): Pair<List<DishDayDto>, List<DishDayDto>> {
     content.shouldBeInstanceOf<Right<Pair<Option<Nel<DomainError>>, Pair<List<DishDayDto>, List<DishDayDto>>>>>()
     content.value.first shouldBe None
     val (fs, fel) = content.value.second
     return fs to fel
 }
 
-private fun commonTest(buffet: List<DishDayDto>, days: List<Int>) {
+private fun commonTest(
+    buffet: List<DishDayDto>,
+    days: List<Int>,
+) {
     buffet.map { it.dishList.size } shouldBe days
     // checks if all the html parts were successfully removed
-    buffet.map { day ->
-        day.dishList.map { listOf(it.name, it.type, it.ingredients.toString()) }
-    }.flatten().flatten()
+    buffet
+        .map { day ->
+            day.dishList.map { listOf(it.name, it.type, it.ingredients.toString()) }
+        }.flatten()
+        .flatten()
         .forEach {
             it shouldNotContain "<"
             it shouldNotContain ">"

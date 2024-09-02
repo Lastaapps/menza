@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -37,26 +37,32 @@ fun Modifier.makeDraggableList(
             change.consume()
             dragDropListState.onDrag(offset, scope)
 
-            if (dragDropListState.overscrollJob?.isActive == true)
+            if (dragDropListState.overscrollJob?.isActive == true) {
                 return@detectDragGesturesAfterLongPress
+            }
 
-            dragDropListState.checkForOverScroll()
+            dragDropListState
+                .checkForOverScroll()
                 .takeIf { it != 0f }
                 ?.let {
-                    val job = scope.launch {
-                        dragDropListState.lazyListState.scrollBy(it)
-                    }
+                    val job =
+                        scope.launch {
+                            dragDropListState.lazyListState.scrollBy(it)
+                        }
                     dragDropListState.overscrollJob = job
                 }
                 ?: run { dragDropListState.overscrollJob?.cancel() }
         },
         onDragStart = { offset -> dragDropListState.onDragStart(offset) },
         onDragEnd = { dragDropListState.onDragEnd() },
-        onDragCancel = { dragDropListState.onDragInterrupted() }
+        onDragCancel = { dragDropListState.onDragInterrupted() },
     )
 }
 
-fun Modifier.makeDraggableItem(dragDropListState: DraggableLazyListState, index: Int): Modifier {
+fun Modifier.makeDraggableItem(
+    dragDropListState: DraggableLazyListState,
+    index: Int,
+): Modifier {
     val offsetOrNull =
         dragDropListState.elementDisplacement.takeIf {
             index == dragDropListState.currentIndexOfDraggedItem

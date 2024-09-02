@@ -29,21 +29,21 @@ import cz.lastaapps.menza.features.panels.rateus.domain.usecase.DismissRateUsUC
 import cz.lastaapps.menza.features.panels.rateus.domain.usecase.RecordAppOpenedUC
 import cz.lastaapps.menza.features.panels.rateus.domain.usecase.ShouldShowRateUsUC
 import cz.lastaapps.menza.features.panels.rateus.ui.RateUsViewModel
-
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-internal val rateUsModule = module {
-    factoryOf(::RateUsViewModel)
+internal val rateUsModule =
+    module {
+        factoryOf(::RateUsViewModel)
 
-    single { RateUsStore.create(get()) }
-    @OptIn(ExperimentalSettingsApi::class)
-    factoryOf(::RateUsDataSourceImpl) bind RateUsDataSource::class
-    singleOf(::RateUsRepositoryImpl) bind RateUsRepository::class
+        single { RateUsStore.create(get()) }
+        @OptIn(ExperimentalSettingsApi::class)
+        factoryOf(::RateUsDataSourceImpl) bind RateUsDataSource::class
+        singleOf(::RateUsRepositoryImpl) bind RateUsRepository::class
 
-    factoryOf(::DismissRateUsUC)
-    factoryOf(::RecordAppOpenedUC)
-    factoryOf(::ShouldShowRateUsUC)
-}
+        factoryOf(::DismissRateUsUC)
+        factoryOf(::RecordAppOpenedUC)
+        factoryOf(::ShouldShowRateUsUC)
+    }

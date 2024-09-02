@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,7 +28,8 @@ class SetPreferredMenzaUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(menza: MenzaType) = launch {
-        repo.storePreferredMenza(menza)
-    }
+    suspend operator fun invoke(menza: MenzaType) =
+        launch {
+            repo.storePreferredMenza(menza)
+        }
 }

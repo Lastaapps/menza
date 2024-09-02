@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,6 +22,7 @@ package cz.lastaapps.menza.util
 import java.text.Collator
 import java.util.Locale
 
-fun String.compareToLocal(other: String, locale: Locale) =
-    Collator.getInstance(locale).compare(this, other)
-
+fun String.compareToLocal(
+    other: String,
+    locale: Locale,
+) = Collator.getInstance(locale).compare(this, other)

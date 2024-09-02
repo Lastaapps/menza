@@ -55,56 +55,66 @@ internal class WeekViewModel(
     private val syncWeekDish: SyncWeekDishListUC,
     private val openMenuLink: OpenMenuUC,
     private val getPriceType: GetPriceTypeUC,
-) : StateViewModel<WeekState>(WeekState(), context), Appearing, ErrorHolder {
+) : StateViewModel<WeekState>(WeekState(), context),
+    Appearing,
+    ErrorHolder {
     override var hasAppeared: Boolean = false
 
-        private val log = localLogger()
+    private val log = localLogger()
 
-    override fun onAppeared() = launchVM {
+    override fun onAppeared() =
         launchVM {
-            getSelectedMenza().collectLatest {
-                log.i { "Registered a new: $it" }
+            launchVM {
+                getSelectedMenza().collectLatest {
+                    log.i { "Registered a new: $it" }
 
-                updateState {
-                    copy(
-                        selectedMenza = it.toOption(),
-                        items = persistentListOf(),
-                    )
-                }
-                syncJob?.cancel()
-                if (it != null) {
-                    coroutineScope {
-                        this.launch {
-                            load(it, false)
-                        }
-                        getWeekDish(it).collectLatest { items ->
-                            updateState { copy(items = items) }
+                    updateState {
+                        copy(
+                            selectedMenza = it.toOption(),
+                            items = persistentListOf(),
+                        )
+                    }
+                    syncJob?.cancel()
+                    if (it != null) {
+                        coroutineScope {
+                            this.launch {
+                                load(it, false)
+                            }
+                            getWeekDish(it).collectLatest { items ->
+                                updateState { copy(items = items) }
+                            }
                         }
                     }
                 }
             }
-        }
 
-        getPriceType().onEach {
-            updateState { copy(priceType = it) }
-        }.launchInVM()
-    }
+            getPriceType()
+                .onEach {
+                    updateState { copy(priceType = it) }
+                }.launchInVM()
+        }
 
     private var syncJob: Job? = null
+
     fun reload() {
         if (lastState().isLoading) return
-        syncJob = launchJob {
-            lastState().selectedMenza?.getOrNull()?.let {
-                load(it, true)
+        syncJob =
+            launchJob {
+                lastState().selectedMenza?.getOrNull()?.let {
+                    load(it, true)
+                }
             }
+    }
+
+    fun openWebMenu() =
+        launchVM {
+            lastState().selectedMenza?.getOrNull()?.let { openMenuLink(it) }
         }
-    }
 
-    fun openWebMenu() = launchVM {
-        lastState().selectedMenza?.getOrNull()?.let { openMenuLink(it) }
-    }
-
-    private suspend fun load(menza: Menza, isForced: Boolean) {
+    private suspend fun load(
+        menza: Menza,
+        isForced: Boolean,
+    ) {
         withLoading({ copy(isLoading = it) }) {
             when (val res = syncWeekDish(menza, isForced = isForced).mapSync()) {
                 is Left -> updateState { copy(error = res.value) }
@@ -115,6 +125,7 @@ internal class WeekViewModel(
 
     @Composable
     override fun getError(): DomainError? = flowState.value.error
+
     override fun dismissError() = updateState { copy(error = null) }
 }
 

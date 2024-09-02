@@ -42,24 +42,24 @@ fun OsturakText(modifier: Modifier = Modifier) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
             stringResource(R.string.osturak_title),
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineMedium,
         )
         Text(stringResource(R.string.osturak_text))
         Text(
             stringResource(R.string.osturak_brought_by),
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
         )
     }
 }
 
 @Composable
 fun OsturakImages(modifier: Modifier = Modifier) {
-
-    val items = listOf(
-        R.drawable.bodla to "bodla.cz",
-        R.drawable.bohynekuchyne to "bohynekuchyne.cz",
-        R.drawable.sachyvlasim to "sachyvlasim.cz",
-    )
+    val items =
+        listOf(
+            R.drawable.bodla to "bodla.cz",
+            R.drawable.bohynekuchyne to "bohynekuchyne.cz",
+            R.drawable.sachyvlasim to "sachyvlasim.cz",
+        )
 
     BoxWithConstraints(modifier) {
         val width = min(maxWidth, 256.dp)
@@ -73,7 +73,7 @@ fun OsturakImages(modifier: Modifier = Modifier) {
                 ImageWithImage(
                     imageId = it.first,
                     link = it.second,
-                    modifier = Modifier.width(width)
+                    modifier = Modifier.width(width),
                 )
             }
         }
@@ -93,7 +93,7 @@ private fun ImageWithImage(
         Image(painterResource(id = imageId), link, modifier = Modifier.fillMaxWidth())
         Text(
             "${stringResource(R.string.osturak_source)}: $link",
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
     }
 }

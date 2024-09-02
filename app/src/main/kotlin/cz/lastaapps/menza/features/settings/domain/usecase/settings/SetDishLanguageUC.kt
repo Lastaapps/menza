@@ -28,7 +28,8 @@ class SetDishLanguageUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(language: DishLanguage) = launch {
-        repo.setDishLanguage(language)
-    }
+    suspend operator fun invoke(language: DishLanguage) =
+        launch {
+            repo.setDishLanguage(language)
+        }
 }

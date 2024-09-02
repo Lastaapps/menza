@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,15 +28,15 @@ class GetThemeListUC internal constructor(
     context: UCContext,
     private val isDynamicThemeSupported: IsDynamicThemeSupportedUC,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        AppThemeType.entries
-            .toMutableList()
-            .also {
-                if (!isDynamicThemeSupported()) {
-                    it.remove(AppThemeType.System)
-                }
-            }
-            .sortedBy { it.order }
-            .toPersistentList()
-    }
+    suspend operator fun invoke() =
+        launch {
+            AppThemeType.entries
+                .toMutableList()
+                .also {
+                    if (!isDynamicThemeSupported()) {
+                        it.remove(AppThemeType.System)
+                    }
+                }.sortedBy { it.order }
+                .toPersistentList()
+        }
 }

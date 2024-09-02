@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,9 +36,14 @@ import cz.lastaapps.menza.ui.locals.FoldingClass.Unknown
 val LocalFoldProvider = compositionLocalOf<FoldingClass> { Unknown }
 
 private val foldingLog = Logger.withTag(FoldingClass::class.simpleName!!)
+
 sealed class FoldingClass private constructor() {
-    class Supported(val foldingFeature: FoldingFeature) : FoldingClass()
+    class Supported(
+        val foldingFeature: FoldingFeature,
+    ) : FoldingClass()
+
     data object NotSupported : FoldingClass()
+
     data object Unknown : FoldingClass()
 }
 
@@ -59,11 +64,15 @@ private fun rememberFoldingFeature(activity: Activity): FoldingClass {
         WindowInfoTracker.getOrCreate(activity).windowLayoutInfo(activity)
     }.collectAsState(initial = null)
 
-    if (foldingFeatureList == null)
+    if (foldingFeatureList == null) {
         return Unknown
+    }
 
-    val feature = foldingFeatureList?.displayFeatures?.firstOrNull { it is FoldingFeature }
-        ?.let { it as FoldingFeature }
+    val feature =
+        foldingFeatureList
+            ?.displayFeatures
+            ?.firstOrNull { it is FoldingFeature }
+            ?.let { it as FoldingFeature }
 
     return if (feature != null) {
         foldingLog.i { "Folding supported: $feature" }

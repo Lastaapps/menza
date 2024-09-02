@@ -23,6 +23,7 @@ import cz.lastaapps.menza.features.info.ui.vm.InfoViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
-val infoModule = module {
-    factoryOf(::InfoViewModel)
-}
+val infoModule =
+    module {
+        factoryOf(::InfoViewModel)
+    }

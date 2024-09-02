@@ -20,8 +20,8 @@
 package cz.lastaapps.api.main.domain.usecase
 
 import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
+import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import org.koin.core.component.KoinComponent
@@ -31,8 +31,10 @@ import org.koin.core.parameter.parametersOf
 class GetWeekDishListUC(
     context: UCContext,
     private val getRequestParamsUC: GetRequestParamsUC,
-) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(menza: Menza) = launch {
-        get<WeekDishRepo> { parametersOf(menza.type) }.getData(getRequestParamsUC())
-    }
+) : UseCase(context),
+    KoinComponent {
+    suspend operator fun invoke(menza: Menza) =
+        launch {
+            get<WeekDishRepo> { parametersOf(menza.type) }.getData(getRequestParamsUC())
+        }
 }

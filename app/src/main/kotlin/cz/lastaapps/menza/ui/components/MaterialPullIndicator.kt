@@ -55,22 +55,23 @@ fun PullToRefreshWrapper(
                 state = state,
                 isRefreshing = isRefreshing,
                 onRefresh = onRefresh,
-            )
-            .onKeyEvent {
+            ).onKeyEvent {
                 if ((it.isCtrlPressed && it.key == Key.R) || it.key == Key.Refresh) {
                     onRefresh()
                     return@onKeyEvent true
                 }
                 false
-            }
-            .clipToBounds(),
+            }.clipToBounds(),
     ) {
         content()
 
         if (enabled) {
             val scaleFraction = {
-                if (isRefreshing) 1f else
+                if (isRefreshing) {
+                    1f
+                } else {
                     LinearOutSlowInEasing.transform(state.distanceFraction).coerceIn(0f, 1f)
+                }
             }
 
             Box(

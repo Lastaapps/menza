@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -81,6 +81,5 @@ val md_theme_dark_shadow = Color(0xFF000000)
 val md_theme_dark_surfaceTint = Color(0xFFFFB1C3)
 val md_theme_dark_outlineVariant = Color(0xFF514346)
 val md_theme_dark_scrim = Color(0xFF000000)
-
 
 val seed = Color(0xFFFFD4DC)

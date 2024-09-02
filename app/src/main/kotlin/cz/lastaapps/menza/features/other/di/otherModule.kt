@@ -28,12 +28,13 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-val otherModule = module {
-    factoryOf(::LicenseViewModel)
-    factoryOf(::GetLibrariesUC)
+val otherModule =
+    module {
+        factoryOf(::LicenseViewModel)
+        factoryOf(::GetLibrariesUC)
 
-    factoryOf(::PolicyViewModel)
-    singleOf(::PrivacyStore)
+        factoryOf(::PolicyViewModel)
+        singleOf(::PrivacyStore)
 
-    factoryOf(::CrashesViewModel)
-}
+        factoryOf(::CrashesViewModel)
+    }

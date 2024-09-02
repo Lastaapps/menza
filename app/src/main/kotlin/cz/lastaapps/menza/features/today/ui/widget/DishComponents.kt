@@ -37,15 +37,15 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.theme.Padding
 
-
 @Composable
 internal fun DishHeader(
     courseType: DishCategory,
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = courseType.name
-            ?: stringResource(id = R.string.today_list_category_other),
+        text =
+            courseType.name
+                ?: stringResource(id = R.string.today_list_category_other),
         modifier = modifier,
         style = MaterialTheme.typography.titleMedium,
     )
@@ -66,10 +66,11 @@ internal fun DishBadge(
             Text(
                 text = "$price Kč",
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(
-                    vertical = Padding.Tiny,
-                    horizontal = Padding.Small,
-                ),
+                modifier =
+                    Modifier.padding(
+                        vertical = Padding.Tiny,
+                        horizontal = Padding.Small,
+                    ),
             )
         }
     }

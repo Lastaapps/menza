@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,8 +26,7 @@ import cz.lastaapps.api.buffet.domain.model.BuffetType
 import cz.lastaapps.api.buffet.domain.model.BuffetType.FEL
 import cz.lastaapps.api.buffet.domain.model.BuffetType.FS
 
-internal fun WebContentDto.toEntity() =
-    fs.toEntity(FS) + fel.toEntity(FEL)
+internal fun WebContentDto.toEntity() = fs.toEntity(FS) + fel.toEntity(FEL)
 
 private fun List<DishDayDto>.toEntity(buffet: BuffetType) =
     map { day ->

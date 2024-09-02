@@ -36,21 +36,24 @@ internal interface DishLanguageComponent {
 
 internal class DefaultDishLanguageComponent(
     componentContext: ComponentContext,
-) : DishLanguageComponent, KoinComponent, ComponentContext by componentContext {
+) : DishLanguageComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: DishLanguageViewModel = getOrCreateKoin()
 }
 
 @Composable
 internal fun DishLanguageContent(
     component: DishLanguageComponent,
-    modifier: Modifier = Modifier,
     onNext: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     DishLanguageScreen(
-        onDone = onNext,
+        onComplete = onNext,
         viewModel = component.viewModel,
-        modifier = modifier
-            .padding(More.Screen)
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .padding(More.Screen)
+                .fillMaxSize(),
     )
 }

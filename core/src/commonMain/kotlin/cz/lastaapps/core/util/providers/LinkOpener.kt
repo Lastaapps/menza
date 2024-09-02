@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,10 +23,19 @@ import cz.lastaapps.core.domain.Outcome
 
 interface LinkOpener {
     fun openLink(url: String): Outcome<Unit>
+
     fun writeEmail(email: String): Outcome<Unit>
+
     fun callPhoneNumber(number: String): Outcome<Unit>
+
     fun openAddress(address: String): Outcome<Unit>
-    fun openGeo(lat: Float, long: Float): Outcome<Unit>
+
+    fun openGeo(
+        lat: Float,
+        long: Float,
+    ): Outcome<Unit>
+
     fun openTelegram(groupUrl: String): Outcome<Unit>
+
     fun openFacebookPage(pageUrl: String): Outcome<Unit>
 }

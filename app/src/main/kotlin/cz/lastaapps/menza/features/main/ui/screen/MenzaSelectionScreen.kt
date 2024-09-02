@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -64,7 +64,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 internal fun MenzaSelectionScreen(
     onEdit: () -> Unit,
-    onMenzaSelected: () -> Unit,
+    onMenzaSelect: () -> Unit,
     viewModel: MenzaSelectionViewModel,
     accountBalance: @Composable () -> Unit,
     modifier: Modifier = Modifier,
@@ -75,9 +75,9 @@ internal fun MenzaSelectionScreen(
     MenzaSelectionListContent(
         state = state,
         onEdit = onEdit,
-        onMenzaSelected = {
+        onMenzaSelect = {
             viewModel.selectMenza(it)
-            onMenzaSelected()
+            onMenzaSelect()
         },
         accountBalance = accountBalance,
         modifier = modifier,
@@ -85,9 +85,7 @@ internal fun MenzaSelectionScreen(
 }
 
 @Composable
-private fun MenzaSelectionListEffects(
-    viewModel: MenzaSelectionViewModel,
-) {
+private fun MenzaSelectionListEffects(viewModel: MenzaSelectionViewModel) {
     HandleAppear(viewModel)
 }
 
@@ -95,16 +93,17 @@ private fun MenzaSelectionListEffects(
 private fun MenzaSelectionListContent(
     state: MenzaSelectionState,
     onEdit: () -> Unit,
-    onMenzaSelected: (Menza) -> Unit,
+    onMenzaSelect: (Menza) -> Unit,
     accountBalance: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     lazyState: LazyListState = rememberLazyListState(),
 ) {
-    val animateFrom = if (state.fromTop) {
-        Alignment.TopCenter
-    } else {
-        Alignment.BottomCenter
-    }
+    val animateFrom =
+        if (state.fromTop) {
+            Alignment.TopCenter
+        } else {
+            Alignment.BottomCenter
+        }
     Box(
         modifier = modifier,
         contentAlignment = animateFrom,
@@ -113,11 +112,12 @@ private fun MenzaSelectionListContent(
             fromTop = state.fromTop,
             selectedMenza = state.selectedMenza,
             menzaList = state.menzaList,
-            onMenzaSelected = onMenzaSelected,
+            onMenzaSelect = onMenzaSelect,
             onEdit = onEdit,
             lazyState = lazyState,
             accountBalance = accountBalance,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .animateContentSize(),
         )
@@ -129,7 +129,7 @@ private fun MenzaList(
     fromTop: Boolean,
     selectedMenza: Menza?,
     menzaList: ImmutableList<Menza>,
-    onMenzaSelected: (Menza) -> Unit,
+    onMenzaSelect: (Menza) -> Unit,
     onEdit: () -> Unit,
     lazyState: LazyListState,
     accountBalance: @Composable () -> Unit,
@@ -138,10 +138,11 @@ private fun MenzaList(
     LazyColumn(
         state = lazyState,
         reverseLayout = !fromTop,
-        verticalArrangement = Arrangement.spacedBy(
-            Padding.Medium,
-            if (fromTop) Alignment.Top else Alignment.Bottom,
-        ),
+        verticalArrangement =
+            Arrangement.spacedBy(
+                Padding.Medium,
+                if (fromTop) Alignment.Top else Alignment.Bottom,
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
@@ -149,7 +150,8 @@ private fun MenzaList(
             Text(
                 text = stringResource(R.string.app_name_long),
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(vertical = Padding.Smaller)
                     .padding(start = Padding.Medium),
             )
@@ -163,8 +165,8 @@ private fun MenzaList(
             MenzaItem(
                 menza = menza,
                 selected = selectedMenza == menza,
-                onClick = onMenzaSelected,
-                modifier = Modifier.fillMaxWidth()
+                onClick = onMenzaSelect,
+                modifier = Modifier.fillMaxWidth(),
             )
         }
 
@@ -186,9 +188,10 @@ private fun MenzaList(
             Icon(
                 painterResource(R.drawable.ic_launcher_foreground),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(128.dp)
-                    .scale(2f),
+                modifier =
+                    Modifier
+                        .size(128.dp)
+                        .scale(2f),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
@@ -213,13 +216,14 @@ internal fun MenzaItem(
         label = { Text(menza.name) },
         selected = selected,
         onClick = { onClick(menza) },
-        shape = GenericShape { size, direction ->
-            if (LayoutDirection.Ltr == direction) {
-                addRect(Rect(0f, 0f, size.width - size.height / 2, size.height))
-                addOval(Rect(size.width - size.height, 0f, size.width, size.height))
-            } else {
-                addRect(Rect(size.width, 0f, size.height / 2, size.height))
-                addOval(Rect(size.height, 0f, 0f, size.height))
+        shape =
+            GenericShape { size, direction ->
+                if (LayoutDirection.Ltr == direction) {
+                    addRect(Rect(0f, 0f, size.width - size.height / 2, size.height))
+                    addOval(Rect(size.width - size.height, 0f, size.width, size.height))
+                } else {
+                    addRect(Rect(size.width, 0f, size.height / 2, size.height))
+                    addOval(Rect(size.height, 0f, 0f, size.height))
             }
         },
         modifier = modifier.alpha(openedAlpha),

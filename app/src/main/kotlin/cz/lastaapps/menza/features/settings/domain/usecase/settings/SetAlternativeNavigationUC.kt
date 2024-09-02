@@ -27,7 +27,8 @@ class SetAlternativeNavigationUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(enabled: Boolean) = launch {
-        repo.setAlternativeNavigation(enabled)
-    }
+    suspend operator fun invoke(enabled: Boolean) =
+        launch {
+            repo.setAlternativeNavigation(enabled)
+        }
 }

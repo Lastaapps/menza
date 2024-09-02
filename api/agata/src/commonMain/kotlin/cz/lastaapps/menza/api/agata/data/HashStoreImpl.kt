@@ -29,14 +29,20 @@ import kotlinx.coroutines.sync.withLock
 internal class HashStoreImpl(
     private val settings: Settings,
 ) : HashStore {
-
     private val mutex = Mutex()
 
-    override suspend fun storeHash(type: HashType, hash: String) = mutex.withLock {
+    override suspend fun storeHash(
+        type: HashType,
+        hash: String,
+    ) = mutex.withLock {
         settings[type.func] = hash
     }
 
-    override suspend fun shouldReload(type: HashType, hash: String): Boolean = mutex.withLock {
-        settings.getStringOrNull(type.func) != hash
-    }
+    override suspend fun shouldReload(
+        type: HashType,
+        hash: String,
+    ): Boolean =
+        mutex.withLock {
+            settings.getStringOrNull(type.func) != hash
+        }
 }

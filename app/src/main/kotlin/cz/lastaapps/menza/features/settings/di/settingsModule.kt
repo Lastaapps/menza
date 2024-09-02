@@ -80,73 +80,84 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val settingsModule = module {
+val settingsModule =
+    module {
 
-    single { InitialSettings.create(get()) }
-    factoryOf(::InitMenzaDataSourceImpl) bind InitMenzaDataSource::class
-    single { GeneralSettings.create(get()) }
-    factoryOf(::GeneralDataSourceImpl) bind GeneralDataSource::class
-    singleOf(::MainSettingsRepoImpl) bind MainSettingsRepo::class
-    factoryOf(::DefaultsProviderImpl) bind DefaultsProvider::class
+        single { InitialSettings.create(get()) }
+        factoryOf(::InitMenzaDataSourceImpl) bind InitMenzaDataSource::class
+        single { GeneralSettings.create(get()) }
+        factoryOf(::GeneralDataSourceImpl) bind GeneralDataSource::class
+        singleOf(::MainSettingsRepoImpl) bind MainSettingsRepo::class
+        factoryOf(::DefaultsProviderImpl) bind DefaultsProvider::class
 
-    factoryOf(::AppThemeViewModel)
-    factory {
-        // @formatter:off
-        SettingsViewModel(
-            get(), get(), get(), get(), get(),
-            get(), get(), get(), get(), get(),
-            get(), get(), get(),
-        )
-        // @formatter:on
+        factoryOf(::AppThemeViewModel)
+        factory {
+            // @formatter:off
+            SettingsViewModel(
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+            )
+            // @formatter:on
+        }
+
+        // Theme
+        factoryOf(::GetAppThemeUC)
+        factoryOf(::GetThemeListUC)
+        factoryOf(::SetAppThemeUC)
+        factoryOf(::IsDynamicThemeSupportedUC)
+        factoryOf(::GetDarkModeUC)
+        factoryOf(::SetDarkModeUC)
+
+        // Initial
+        factoryOf(::GetInitialMenzaModeUI)
+        factoryOf(::GetInitialMenzaUC)
+        factoryOf(::SetInitialMenzaUC)
+        factoryOf(::SetLatestMenzaUC)
+        factoryOf(::SetPreferredMenzaUC)
+        factoryOf(::GetPreferredMenzaUC)
+        factoryOf(::FullAppReloadUC)
+
+        // Others
+        factoryOf(::GetAppSettingsUC)
+        factoryOf(::SetAlternativeNavigationUC)
+        factoryOf(::GetImageScaleUC)
+        factoryOf(::GetImagesOnMeteredUC)
+        factoryOf(::GetBalanceWarningThresholdUC)
+        factoryOf(::SetBalanceWarningThresholdUC)
+        factoryOf(::GetOliverRowUC)
+        factoryOf(::GetPriceTypeUC)
+        factoryOf(::GetSettingsEverOpenedUC)
+        factoryOf(::GetDishLanguageUC)
+        factoryOf(::OnSettingsOpenedUC)
+        factoryOf(::SetImageScaleUC)
+        factoryOf(::GetImageScaleRangeUC)
+        factoryOf(::SetImagesOnMeteredUC)
+        factoryOf(::SetOliverRow)
+        factoryOf(::SetPriceTypeUC)
+        factoryOf(::SetDishLanguageUC)
+        factoryOf(::GetDishListModeUC)
+        factoryOf(::SetDishListModeUC)
+
+        // Menza order
+        factoryOf(::ReorderMenzaViewModel)
+        singleOf(::OrderRepoImpl) bind OrderRepo::class
+        single { OrderSettings.create(get()) }
+        factoryOf(::OrderDataSourceImpl) bind OrderDataSource::class
+        factoryOf(::GetOrderedMenzaListUC)
+        factoryOf(::GetOrderedVisibleMenzaListUC)
+        factoryOf(::ToggleMenzaVisibilityUC)
+        factoryOf(::UpdateMenzaOrderUC)
+        factoryOf(::IsMenzaOrderFromTopUC)
+        factoryOf(::SetMenzaOrderFromTopUC)
     }
-
-    // Theme
-    factoryOf(::GetAppThemeUC)
-    factoryOf(::GetThemeListUC)
-    factoryOf(::SetAppThemeUC)
-    factoryOf(::IsDynamicThemeSupportedUC)
-    factoryOf(::GetDarkModeUC)
-    factoryOf(::SetDarkModeUC)
-
-    // Initial
-    factoryOf(::GetInitialMenzaModeUI)
-    factoryOf(::GetInitialMenzaUC)
-    factoryOf(::SetInitialMenzaUC)
-    factoryOf(::SetLatestMenzaUC)
-    factoryOf(::SetPreferredMenzaUC)
-    factoryOf(::GetPreferredMenzaUC)
-    factoryOf(::FullAppReloadUC)
-
-    // Others
-    factoryOf(::GetAppSettingsUC)
-    factoryOf(::SetAlternativeNavigationUC)
-    factoryOf(::GetImageScaleUC)
-    factoryOf(::GetImagesOnMeteredUC)
-    factoryOf(::GetBalanceWarningThresholdUC)
-    factoryOf(::SetBalanceWarningThresholdUC)
-    factoryOf(::GetOliverRowUC)
-    factoryOf(::GetPriceTypeUC)
-    factoryOf(::GetSettingsEverOpenedUC)
-    factoryOf(::GetDishLanguageUC)
-    factoryOf(::OnSettingsOpenedUC)
-    factoryOf(::SetImageScaleUC)
-    factoryOf(::GetImageScaleRangeUC)
-    factoryOf(::SetImagesOnMeteredUC)
-    factoryOf(::SetOliverRow)
-    factoryOf(::SetPriceTypeUC)
-    factoryOf(::SetDishLanguageUC)
-    factoryOf(::GetDishListModeUC)
-    factoryOf(::SetDishListModeUC)
-
-    // Menza order
-    factoryOf(::ReorderMenzaViewModel)
-    singleOf(::OrderRepoImpl) bind OrderRepo::class
-    single { OrderSettings.create(get()) }
-    factoryOf(::OrderDataSourceImpl) bind OrderDataSource::class
-    factoryOf(::GetOrderedMenzaListUC)
-    factoryOf(::GetOrderedVisibleMenzaListUC)
-    factoryOf(::ToggleMenzaVisibilityUC)
-    factoryOf(::UpdateMenzaOrderUC)
-    factoryOf(::IsMenzaOrderFromTopUC)
-    factoryOf(::SetMenzaOrderFromTopUC)
-}

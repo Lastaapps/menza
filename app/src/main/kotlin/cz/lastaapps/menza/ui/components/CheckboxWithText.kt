@@ -55,10 +55,11 @@ fun CheckboxWithText(
         Row(
             horizontalArrangement = Arrangement.spacedBy(Padding.Small),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(
-                horizontal = Padding.MidSmall,
-                vertical = Padding.Smaller,
-            ),
+            modifier =
+                Modifier.padding(
+                    horizontal = Padding.MidSmall,
+                    vertical = Padding.Smaller,
+                ),
         ) {
             Checkbox(
                 checked = checked,

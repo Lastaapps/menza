@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,17 +26,19 @@ sealed interface ApiError : DomainError.Logic {
     data object WeekNotAvailable : ApiError
 
     sealed interface SyncError : ApiError {
-
         data object Unavailable : SyncError
 
         data object Closed : SyncError
 
         @JvmInline
-        value class Problem(val errors: Nel<DomainError>) : SyncError
+        value class Problem(
+            val errors: Nel<DomainError>,
+        ) : SyncError
     }
 
     sealed interface WalletError : ApiError {
         data object TotallyBroken : WalletError
+
         data object InvalidCredentials : WalletError
     }
 }

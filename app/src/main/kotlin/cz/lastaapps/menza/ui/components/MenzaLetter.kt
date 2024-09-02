@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -33,21 +33,24 @@ import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.menza.ui.theme.colorForMenza
 
 @Composable
-fun MenzaLetter(menza: Menza, modifier: Modifier = Modifier) {
+fun MenzaLetter(
+    menza: Menza,
+    modifier: Modifier = Modifier,
+) {
     val colors = colorForMenza(menza)
     val brush = Brush.horizontalGradient(colors)
     val size = 32.dp
 
     Box(
         modifier.size(size),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Canvas(modifier = Modifier.size(size)) {
             drawCircle(brush)
         }
         Text(
             text = menza.name.first().toString(),
-            color = Color(0xffffffff)
+            color = Color(0xffffffff),
         )
     }
 }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,14 +34,15 @@ data class Info(
 ) {
     companion object {
         val empty: Info
-            get() = Info(
-                null,
-                null,
-                persistentListOf(),
-                persistentListOf(),
-                persistentListOf(),
-                null,
-            )
+            get() =
+                Info(
+                    null,
+                    null,
+                    persistentListOf(),
+                    persistentListOf(),
+                    persistentListOf(),
+                    null,
+                )
     }
 }
 
@@ -85,15 +86,26 @@ data class Address(
 )
 
 @JvmInline
-value class Message(val text: String)
+value class Message(
+    val text: String,
+)
 
 @JvmInline
-value class LocationName(val name: String)
+value class LocationName(
+    val name: String,
+)
 
 @JvmInline
-value class Email(val mail: String)
+value class Email(
+    val mail: String,
+)
 
 @JvmInline
-value class PhoneNumber(val number: String)
+value class PhoneNumber(
+    val number: String,
+)
 
-data class LatLong(val lat: Float, val long: Float)
+data class LatLong(
+    val lat: Float,
+    val long: Float,
+)

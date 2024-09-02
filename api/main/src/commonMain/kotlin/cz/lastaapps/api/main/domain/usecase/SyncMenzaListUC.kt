@@ -31,18 +31,21 @@ class SyncMenzaListUC(
     private val getRequestParamsUC: GetRequestParamsUC,
     private val getImportantRequestParams: GetImportantRequestParams,
 ) : UseCase(context) {
-    suspend operator fun invoke(isForced: Boolean = false, all: Boolean = false) = launch {
+    suspend operator fun invoke(
+        isForced: Boolean = false,
+        all: Boolean = false,
+    ) = launch {
         if (all) {
-            getImportantRequestParams().parMap {
-                menzaRepo.sync(it, isForced = isForced)
-            }.let { list ->
-                if (list.all { it.isRight() }) {
-                    list.first()
-                } else {
-                    list.first { it.isLeft() }
+            getImportantRequestParams()
+                .parMap {
+                    menzaRepo.sync(it, isForced = isForced)
+                }.let { list ->
+                    if (list.all { it.isRight() }) {
+                        list.first()
+                    } else {
+                        list.first { it.isLeft() }
+                    }
                 }
-            }
-
         } else {
             menzaRepo.sync(getRequestParamsUC(), isForced = isForced)
         }

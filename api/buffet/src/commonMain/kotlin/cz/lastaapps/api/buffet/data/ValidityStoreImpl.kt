@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,7 +32,9 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @JvmInline
-internal value class ValiditySettings(val settings: Settings)
+internal value class ValiditySettings(
+    val settings: Settings,
+)
 
 @OptIn(ExperimentalSerializationApi::class, ExperimentalSettingsApi::class)
 internal class ValidityStoreImpl(
@@ -40,18 +42,18 @@ internal class ValidityStoreImpl(
     private val clock: Clock,
 ) : ValidityStore {
     companion object {
-        private const val untilKey = "buffet_until"
+        private const val UNTIL_KEY = "buffet_until"
     }
 
     private val settings = validitySettings.settings
 
     override suspend fun shouldReload(): Boolean {
-        val stored = settings.decodeValue(LocalDate.serializer(), untilKey, LocalDate(2023, 1, 1))
+        val stored = settings.decodeValue(LocalDate.serializer(), UNTIL_KEY, LocalDate(2023, 1, 1))
         val now = clock.now().toLocalDateTime(TimeZone.CET).date
         return stored < now
     }
 
     override suspend fun storeValidUntil(until: LocalDate) {
-        settings.encodeValue(LocalDate.serializer(), untilKey, until)
+        settings.encodeValue(LocalDate.serializer(), UNTIL_KEY, until)
     }
 }

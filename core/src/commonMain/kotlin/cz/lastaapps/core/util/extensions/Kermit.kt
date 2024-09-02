@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,5 +21,4 @@ package cz.lastaapps.core.util.extensions
 
 import co.touchlab.kermit.Logger
 
-inline fun <reified T : Any> T.localLogger() =
-    Logger.withTag(this::class.simpleName!!.take(23))
+inline fun <reified T : Any> T.localLogger() = Logger.withTag(this::class.simpleName!!.take(23))

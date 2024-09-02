@@ -36,7 +36,9 @@ internal interface AllSetComponent {
 
 internal class DefaultAllSetComponent(
     componentContext: ComponentContext,
-) : AllSetComponent, KoinComponent, ComponentContext by componentContext {
+) : AllSetComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: AllSetViewModel = getOrCreateKoin()
 }
 
@@ -44,13 +46,14 @@ internal class DefaultAllSetComponent(
 internal fun AllSetContent(
     component: AllSetComponent,
     modifier: Modifier = Modifier,
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
 ) {
     AllSetScreen(
-        onDone = onDone,
+        onComplete = onComplete,
         viewModel = component.viewModel,
-        modifier = modifier
-            .padding(Padding.More.Screen)
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .padding(Padding.More.Screen)
+                .fillMaxSize(),
     )
 }

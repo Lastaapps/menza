@@ -51,7 +51,9 @@ internal interface MenzaSelectionComponent {
 
 internal class DefaultMenzaSelectionComponent(
     componentContext: ComponentContext,
-) : MenzaSelectionComponent, KoinComponent, ComponentContext by componentContext {
+) : MenzaSelectionComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val agataWalletViewModel: AgataWalletViewModel = getOrCreateKoin()
     override val agataWalletLoginViewModel: AgataWalletLoginViewModel = getOrCreateKoin()
     override val selectionViewModel: MenzaSelectionViewModel = getOrCreateKoin()
@@ -86,7 +88,7 @@ internal fun MenzaSelectionContent(
 
     MenzaSelectionScreen(
         onEdit = onEdit,
-        onMenzaSelected = {
+        onMenzaSelect = {
             scope.launch {
                 when (drawerState.targetValue) {
                     Closed -> drawerState.open()

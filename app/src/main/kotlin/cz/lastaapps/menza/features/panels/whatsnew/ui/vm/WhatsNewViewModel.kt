@@ -29,9 +29,9 @@ import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
 import cz.lastaapps.menza.features.panels.whatsnew.domain.LoadWhatsNewUC
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel.State
-import java.util.Locale
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.onEach
+import java.util.Locale
 
 internal class WhatsNewViewModel(
     context: VMContext,
@@ -39,7 +39,8 @@ internal class WhatsNewViewModel(
     private val store: WhatsNewDataStore,
     private val loadWhatsNewUC: LoadWhatsNewUC,
     private val getAppVersionUC: GetAppVersionUC,
-) : StateViewModel<State>(State(), context), Appearing {
+) : StateViewModel<State>(State(), context),
+    Appearing {
     override var hasAppeared: Boolean = false
 
     override fun onAppeared() {
@@ -54,16 +55,18 @@ internal class WhatsNewViewModel(
             }
         }
 
-        store.lastViewed.onEach { lastViewed ->
-            updateState {
-                copy(shouldShow = getAppVersionUC() > lastViewed)
-            }
-        }.launchInVM()
+        store.lastViewed
+            .onEach { lastViewed ->
+                updateState {
+                    copy(shouldShow = getAppVersionUC() > lastViewed)
+                }
+            }.launchInVM()
     }
 
-    fun onDismiss() = launchVM {
-        store.setLastViewed(getAppVersionUC())
-    }
+    fun onDismiss() =
+        launchVM {
+            store.setLastViewed(getAppVersionUC())
+        }
 
     data class State(
         val news: List<WhatsNewInfo> = persistentListOf(),

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,6 +24,8 @@ import cz.lastaapps.menza.BuildConfig
 
 internal class AndroidAppInfoProvider : AppInfoProvider {
     override fun getAppName(): String = BuildConfig.VERSION_NAME
+
     override fun getAppVersion(): Int = BuildConfig.VERSION_CODE
+
     override fun isDebug(): Boolean = BuildConfig.DEBUG
 }

@@ -45,7 +45,6 @@ import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetImageScal
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetOliverRow
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
@@ -56,6 +55,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 internal class DishListViewModel(
     context: VMContext,
@@ -68,84 +68,97 @@ internal class DishListViewModel(
     private val isOnMeteredUC: IsOnMeteredUC,
     private val getUserSettingsUC: GetTodayUserSettingsUC,
     private val openMenuLinkUC: OpenMenuUC,
-) : StateViewModel<DishListState>(DishListState(), context), Appearing, ErrorHolder {
+) : StateViewModel<DishListState>(DishListState(), context),
+    Appearing,
+    ErrorHolder {
     override var hasAppeared: Boolean = false
 
     private val log = localLogger()
 
-    override fun onAppeared() = launchVM {
-        getSelectedMenzaUC().collectLatestInVM { newMenza ->
-            log.i { "Registered a new: $newMenza" }
+    override fun onAppeared() =
+        launchVM {
+            getSelectedMenzaUC().collectLatestInVM { newMenza ->
+                log.i { "Registered a new: $newMenza" }
 
-            updateState {
-                copy(
-                    selectedMenza = newMenza.toOption(),
-                    items = persistentListOf(),
-                )
-            }
-            syncJob?.cancel()
-            if (newMenza != null) {
-                coroutineScope {
-                    this.launch {
-                        load(newMenza, false)
-                    }
-                    getTodayDishListUC(newMenza).collectLatest { items ->
-                        updateState { copy(items = items) }
+                updateState {
+                    copy(
+                        selectedMenza = newMenza.toOption(),
+                        items = persistentListOf(),
+                    )
+                }
+                syncJob?.cancel()
+                if (newMenza != null) {
+                    coroutineScope {
+                        this.launch {
+                            load(newMenza, false)
+                        }
+                        getTodayDishListUC(newMenza).collectLatest { items ->
+                            updateState { copy(items = items) }
+                        }
                     }
                 }
             }
-        }
 
-        getUserSettingsUC().onEach {
-            updateState { copy(userSettings = it) }
-        }.launchInVM()
-        isOnMeteredUC().onEach {
-            updateState { copy(isOnMetered = it) }
-        }.launchInVM()
+            getUserSettingsUC()
+                .onEach {
+                    updateState { copy(userSettings = it) }
+                }.launchInVM()
+            isOnMeteredUC()
+                .onEach {
+                    updateState { copy(isOnMetered = it) }
+                }.launchInVM()
 
-        // Refreshes the screen if user is looking at the data for at least 42 seconds
-        flow.map {
-            it.isResumed to it.selectedMenza?.getOrNull()
-        }
-            .distinctUntilChanged()
-            .collectLatestInVM { (resumed, menza) ->
-                while (resumed && menza != null) {
-                    delay(42.seconds)
-                    load(menza, true)
+            // Refreshes the screen if user is looking at the data for at least 42 seconds
+            flow
+                .map {
+                    it.isResumed to it.selectedMenza?.getOrNull()
+                }.distinctUntilChanged()
+                .collectLatestInVM { (resumed, menza) ->
+                    while (resumed && menza != null) {
+                        delay(42.seconds)
+                        load(menza, true)
+                    }
                 }
-            }
-    }
+        }
 
     private var syncJob: Job? = null
+
     fun reload() {
         if (lastState().isLoading) return
-        syncJob = launchJob {
-            lastState().selectedMenza?.getOrNull()?.let {
-                load(it, true)
+        syncJob =
+            launchJob {
+                lastState().selectedMenza?.getOrNull()?.let {
+                    load(it, true)
+                }
             }
+    }
+
+    fun openWebMenu() =
+        launchVM {
+            lastState().selectedMenza?.getOrNull()?.let { openMenuLinkUC(it) }
         }
-    }
 
-    fun openWebMenu() = launchVM {
-        lastState().selectedMenza?.getOrNull()?.let { openMenuLinkUC(it) }
-    }
+    fun setCompactView(mode: DishListMode) =
+        launchVM {
+            setDishListModeUC(mode)
+        }
 
-    fun setCompactView(mode: DishListMode) = launchVM {
-        setDishListModeUC(mode)
-    }
+    fun setImageScale(scale: Float) =
+        launchVM {
+            setImageScaleUC(scale)
+        }
 
-    fun setImageScale(scale: Float) = launchVM {
-        setImageScaleUC(scale)
-    }
+    fun setOliverRow(used: Boolean) =
+        launchVM {
+            setOliverRowUC(used)
+        }
 
-    fun setOliverRow(used: Boolean) = launchVM {
-        setOliverRowUC(used)
-    }
+    fun setIsResumed(resumed: Boolean) = updateState { copy(isResumed = resumed) }
 
-    fun setIsResumed(resumed: Boolean) =
-        updateState { copy(isResumed = resumed) }
-
-    private suspend fun load(menza: Menza, isForced: Boolean) {
+    private suspend fun load(
+        menza: Menza,
+        isForced: Boolean,
+    ) {
         withLoading({ copy(isLoading = it) }) {
             when (val res = syncTodayDishListUC(menza, isForced = isForced).mapSync()) {
                 is Left -> updateState { copy(error = res.value) }
@@ -156,6 +169,7 @@ internal class DishListViewModel(
 
     @Composable
     override fun getError(): DomainError? = flowState.value.error
+
     override fun dismissError() = updateState { copy(error = null) }
 }
 

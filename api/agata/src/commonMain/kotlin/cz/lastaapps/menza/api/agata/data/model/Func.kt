@@ -21,7 +21,9 @@
 
 package cz.lastaapps.menza.api.agata.data.model
 
-internal enum class Func(val funName: String) {
+internal enum class Func(
+    val funName: String,
+) {
     SubsystemHash("GetPodsystemyHash"),
     Subsystem("GetPodsystemy"),
 
@@ -60,5 +62,4 @@ internal enum class Func(val funName: String) {
 
     StrahovHash("GetMinutkySHHash"),
     Strahov("GetMinutkySH"),
-    ;
 }

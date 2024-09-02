@@ -30,19 +30,21 @@ import cz.lastaapps.crash.entity.Crash
 import cz.lastaapps.crash.entity.ErrorSeverity
 import cz.lastaapps.crash.entity.ReportState
 import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel.State
-import java.time.ZonedDateTime
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 
 internal class CrashesViewModel(
     context: VMContext,
     private val database: CrashDatabase,
 ) : StateViewModel<State>(State(), context) {
-
-    fun makeReported(id: Long, state: ReportState) {
+    fun makeReported(
+        id: Long,
+        state: ReportState,
+    ) {
         viewModelScope.launch {
             database.crashQueries.updateReported(state, id)
         }
@@ -50,10 +52,17 @@ internal class CrashesViewModel(
 
     init {
         launchVM {
-            database.crashQueries.getCrashes { id: Long, date: ZonedDateTime, severity: ErrorSeverity, message: String?, trace: String, reported: ReportState ->
-                id to Crash(date, severity, message, trace, reported)
-            }
-                .asFlow()
+            database.crashQueries
+                .getCrashes {
+                        id: Long,
+                        date: ZonedDateTime,
+                        severity: ErrorSeverity,
+                        message: String?,
+                        trace: String,
+                        reported: ReportState,
+                    ->
+                    id to Crash(date, severity, message, trace, reported)
+                }.asFlow()
                 .mapToList(coroutineContext)
                 .collectLatest {
                     updateState {
@@ -65,10 +74,17 @@ internal class CrashesViewModel(
                 }
         }
         launchVM {
-            database.crashQueries.getUnreported { id: Long, date: ZonedDateTime, severity: ErrorSeverity, message: String?, trace: String, reported: ReportState ->
-                id to Crash(date, severity, message, trace, reported)
-            }
-                .asFlow()
+            database.crashQueries
+                .getUnreported {
+                        id: Long,
+                        date: ZonedDateTime,
+                        severity: ErrorSeverity,
+                        message: String?,
+                        trace: String,
+                        reported: ReportState,
+                    ->
+                    id to Crash(date, severity, message, trace, reported)
+                }.asFlow()
                 .mapToList(coroutineContext)
                 .collectLatest {
                     updateState {
@@ -77,7 +93,10 @@ internal class CrashesViewModel(
                 }
         }
         launchVM {
-            database.crashQueries.hasUnreported().asFlow().mapToOne(coroutineContext)
+            database.crashQueries
+                .hasUnreported()
+                .asFlow()
+                .mapToOne(coroutineContext)
                 .collectLatest {
                     updateState {
                         copy(hasUnreported = it > 0)

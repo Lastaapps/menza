@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,8 +27,8 @@ class AppSetupFinishedUC internal constructor(
     context: UCContext,
     private val settings: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        settings.storeAppSetupFinished()
-    }
+    suspend operator fun invoke() =
+        launch {
+            settings.storeAppSetupFinished()
+        }
 }
-

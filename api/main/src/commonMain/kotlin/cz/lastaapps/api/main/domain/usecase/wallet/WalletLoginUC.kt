@@ -29,9 +29,12 @@ class WalletLoginUC internal constructor(
     private val repo: WalletMasterRepository,
 ) : UseCase(ucContext) {
     suspend operator fun invoke(
-        username: String, password: String, type: BalanceAccountType,
+        username: String,
+        password: String,
+        type: BalanceAccountType,
     ) = launch {
-        repo.login(username, password, type)
+        repo
+            .login(username, password, type)
             .onRight { repo.sync(Unit, isForced = true) }
     }
 }

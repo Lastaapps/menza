@@ -34,7 +34,9 @@ internal interface ReorderMenzaComponent {
 
 internal class DefaultReorderMenzaComponent(
     componentContext: ComponentContext,
-) : ReorderMenzaComponent, KoinComponent, ComponentContext by componentContext {
+) : ReorderMenzaComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: ReorderMenzaViewModel = getOrCreateKoin()
 }
 
@@ -42,11 +44,11 @@ internal class DefaultReorderMenzaComponent(
 internal fun ReorderMenzaContent(
     component: ReorderMenzaComponent,
     modifier: Modifier = Modifier,
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
 ) {
     ReorderMenzaScreen(
         modifier = modifier.padding(),
         viewModel = component.viewModel,
-        onDone = onDone,
+        onComplete = onComplete,
     )
 }

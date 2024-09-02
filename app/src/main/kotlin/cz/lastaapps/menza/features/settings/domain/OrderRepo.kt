@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,7 +31,10 @@ interface OrderRepo {
 
     suspend fun toggleVisible(menza: MenzaType)
 
-    suspend fun switch(m1: MenzaType, m2: MenzaType)
+    suspend fun switch(
+        m1: MenzaType,
+        m2: MenzaType,
+    )
 
     suspend fun updateOrder(list: List<Pair<MenzaType, Boolean>>)
 

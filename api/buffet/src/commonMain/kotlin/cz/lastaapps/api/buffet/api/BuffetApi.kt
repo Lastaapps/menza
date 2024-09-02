@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -43,29 +43,31 @@ internal class BuffetApiImpl(
     private val client: HttpClient,
     private val scraper: BuffetScraper,
 ) : BuffetApi {
-    override suspend fun process(): OutcomeIor<WebContentDto> = outcome {
-        val text = catchingNetwork { getPageText() }.bind()
-        val (from, to) = scraper.matchValidity(text).bind()
-        val (errors, buffets) = scraper.matchContent(text).bind()
-        val (fs, fel) = buffets
+    override suspend fun process(): OutcomeIor<WebContentDto> =
+        outcome {
+            val text = catchingNetwork { getPageText() }.bind()
+            val (from, to) = scraper.matchValidity(text).bind()
+            val (errors, buffets) = scraper.matchContent(text).bind()
+            val (fs, fel) = buffets
 
-        val res = WebContentDto(
-            from = from,
-            to = to,
-            fs = fs,
-            fel = fel,
-        )
+            val res =
+                WebContentDto(
+                    from = from,
+                    to = to,
+                    fs = fs,
+                    fel = fel,
+                )
 
-        when (errors) {
-            None -> res.rightIor()
-            is Some -> Ior.Both(errors.value, res)
+            when (errors) {
+                None -> res.rightIor()
+                is Some -> Ior.Both(errors.value, res)
+            }
+        }.let {
+            when (it) {
+                is Left -> return it.value.nel().leftIor()
+                is Right -> it.value
+            }
         }
-    }.let {
-        when (it) {
-            is Left -> return it.value.nel().leftIor()
-            is Right -> it.value
-        }
-    }
 
     private suspend fun getPageText() =
         client

@@ -58,13 +58,24 @@ internal fun DarkThemeChooser(
     onSelect: (DarkMode) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val items = listOf(
-        DarkThemeItem(R.string.settings_theme_dark_light, Icons.Default.WbSunny, DarkMode.Light),
-        DarkThemeItem(
-            R.string.settings_theme_dark_system, Icons.Default.BrightnessMedium, DarkMode.System,
-        ),
-        DarkThemeItem(R.string.settings_theme_dark_dark, Icons.Default.Brightness3, DarkMode.Dark),
-    )
+    val items =
+        listOf(
+            DarkThemeItem(
+                R.string.settings_theme_dark_light,
+                Icons.Default.WbSunny,
+                DarkMode.Light,
+            ),
+            DarkThemeItem(
+                R.string.settings_theme_dark_system,
+                Icons.Default.BrightnessMedium,
+                DarkMode.System,
+            ),
+            DarkThemeItem(
+                R.string.settings_theme_dark_dark,
+                Icons.Default.Brightness3,
+                DarkMode.Dark,
+            ),
+        )
     Layout(
         modifier = modifier,
         content = {
@@ -81,21 +92,26 @@ internal fun DarkThemeChooser(
         val maxItemWidth = constrains.maxWidth / itemNumber
 
         val placeableWidth =
-            measurable.map { it.minIntrinsicWidth(maxItemWidth) }
+            measurable
+                .map { it.minIntrinsicWidth(maxItemWidth) }
                 .maxOf { it }
-                //.takeIf {it <= maxItemWidth} ?: maxItemWidth
+                // .takeIf {it <= maxItemWidth} ?: maxItemWidth
                 .let { min(it, maxItemWidth) }
         val placeablesHeight =
             measurable.map { it.minIntrinsicHeight(constrains.maxHeight) }.maxOf { it }
 
-        val smallerConst = Constraints(
-            placeableWidth, placeableWidth,
-            placeablesHeight, placeablesHeight,
-        )
+        val smallerConst =
+            Constraints(
+                placeableWidth,
+                placeableWidth,
+                placeablesHeight,
+                placeablesHeight,
+            )
 
-        val placeables = measurable.map {
-            it.measure(smallerConst)
-        }
+        val placeables =
+            measurable.map {
+                it.measure(smallerConst)
+            }
 
         val width = constrains.maxWidth
         val height = min(placeables.first().height, constrains.maxHeight)
@@ -118,17 +134,18 @@ private fun DarkThemeItem(
     item: DarkThemeItem,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
-    onItemSelected: () -> Unit,
+    onItem: () -> Unit,
 ) {
-    val color = if (isSelected) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        MaterialTheme.colorScheme.tertiary
-    }
+    val color =
+        if (isSelected) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.tertiary
+        }
 
     val interaction = remember { MutableInteractionSource() }
     val scale by animateFloatAsState(
-        if (isSelected) 1f else DarkThemeChooser.unselectedScale,
+        if (isSelected) 1f else DarkThemeChooser.UNSELECTED_SCALE,
         label = "scale",
     )
 
@@ -136,7 +153,7 @@ private fun DarkThemeItem(
     val colorContent by animateColorAsState(contentColorFor(color), label = "content_color")
 
     Surface(
-        onClick = onItemSelected,
+        onClick = onItem,
         interactionSource = interaction,
         shape = MaterialTheme.shapes.medium,
         color = colorContainer,
@@ -163,9 +180,11 @@ private fun DarkThemeItem(
 }
 
 private data class DarkThemeItem(
-    @StringRes val title: Int, val icon: ImageVector, val mode: DarkMode,
+    @StringRes val title: Int,
+    val icon: ImageVector,
+    val mode: DarkMode,
 )
 
 private object DarkThemeChooser {
-    const val unselectedScale = .95f
+    const val UNSELECTED_SCALE = .95f
 }

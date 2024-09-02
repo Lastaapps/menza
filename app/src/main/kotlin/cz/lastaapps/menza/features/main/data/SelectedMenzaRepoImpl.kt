@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,20 +34,21 @@ internal class SelectedMenzaRepoImpl(
     private val getInitialMenza: GetInitialMenzaUC,
     private val setLatestMenza: SetLatestMenzaUC,
 ) : SelectedMenzaRepo {
-
     private var isReady = false
     private val selected = MutableStateFlow<MenzaType?>(null)
 
     private val creationLock = Mutex()
-    override suspend fun getSelectedMenza(): Flow<MenzaType?> = creationLock.withLock {
-        if (!isReady) {
-            isReady = true
-            getInitialMenza().first().let { initial ->
-                selected.update { initial }
+
+    override suspend fun getSelectedMenza(): Flow<MenzaType?> =
+        creationLock.withLock {
+            if (!isReady) {
+                isReady = true
+                getInitialMenza().first().let { initial ->
+                    selected.update { initial }
+                }
             }
+            selected
         }
-        selected
-    }
 
     override suspend fun selectMenza(menza: MenzaType?) {
         menza?.let { setLatestMenza(menza) }

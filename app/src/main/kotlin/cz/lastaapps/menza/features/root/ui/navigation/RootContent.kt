@@ -60,10 +60,11 @@ internal fun RootContent(
         when (instance) {
             is AppContent -> MainContent(component = instance.component, modifier)
 
-            is AppSetup -> StartingContent(
-                instance.component,
-                modifier,
-            ) { component.toAppContent() }
+            is AppSetup ->
+                StartingContent(
+                    instance.component,
+                    modifier,
+                ) { component.toAppContent() }
 
             null -> Surface(modifier) {}
         }

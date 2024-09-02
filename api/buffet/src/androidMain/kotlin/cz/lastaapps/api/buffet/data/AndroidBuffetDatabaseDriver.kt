@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,5 +25,4 @@ import org.koin.core.scope.Scope
 
 internal const val DB_NAME = "buffet_api.db"
 
-internal fun Scope.createBuffetDBDriver() =
-    BuffetDatabaseSqlDriver(AndroidSqliteDriver(BuffetDatabase.Schema, get(), DB_NAME))
+internal fun Scope.createBuffetDBDriver() = BuffetDatabaseSqlDriver(AndroidSqliteDriver(BuffetDatabase.Schema, get(), DB_NAME))

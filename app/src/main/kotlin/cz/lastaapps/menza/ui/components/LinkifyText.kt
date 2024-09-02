@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -35,10 +35,10 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
-import java.util.regex.Pattern
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
+import java.util.regex.Pattern
 
 // https://stackoverflow.com/questions/66130513/linkify-with-compose-text
 @Composable
@@ -48,53 +48,61 @@ fun LinkifyText(
     linkColor: Color = LocalContentColor.current,
 ) {
     val uriHandler = LocalUriHandler.current
-    val layoutResult = remember {
-        mutableStateOf<TextLayoutResult?>(null)
-    }
-    val linksList = remember(text) { extractUrls(text) }
-    val annotatedString = buildAnnotatedString {
-        append(text)
-        linksList.forEach {
-            addStyle(
-                style = SpanStyle(
-                    color = linkColor,
-                    textDecoration = TextDecoration.Underline,
-                ),
-                start = it.start,
-                end = it.end
-            )
-            addStringAnnotation(
-                tag = "URL",
-                annotation = it.url,
-                start = it.start,
-                end = it.end
-            )
+    val layoutResult =
+        remember {
+            mutableStateOf<TextLayoutResult?>(null)
         }
-    }
-    Text(text = annotatedString,
-        modifier = modifier.pointerInput(Unit) {
-            detectTapGestures { offsetPosition ->
-                layoutResult.value?.let {
-                    val position = it.getOffsetForPosition(offsetPosition)
-                    annotatedString.getStringAnnotations(position, position).firstOrNull()
-                        ?.let { result ->
-                            if (result.tag == "URL") {
-                                uriHandler.openUri(result.item)
-                            }
-                        }
-                }
+    val linksList = remember(text) { extractUrls(text) }
+    val annotatedString =
+        buildAnnotatedString {
+            append(text)
+            linksList.forEach {
+                addStyle(
+                    style =
+                        SpanStyle(
+                            color = linkColor,
+                            textDecoration = TextDecoration.Underline,
+                        ),
+                    start = it.start,
+                    end = it.end,
+                )
+                addStringAnnotation(
+                    tag = "URL",
+                    annotation = it.url,
+                    start = it.start,
+                    end = it.end,
+                )
             }
-        },
-        onTextLayout = { layoutResult.value = it }
+        }
+    Text(
+        text = annotatedString,
+        modifier =
+            modifier.pointerInput(Unit) {
+                detectTapGestures { offsetPosition ->
+                    layoutResult.value?.let {
+                        val position = it.getOffsetForPosition(offsetPosition)
+                        annotatedString
+                            .getStringAnnotations(position, position)
+                            .firstOrNull()
+                            ?.let { result ->
+                                if (result.tag == "URL") {
+                                    uriHandler.openUri(result.item)
+                                }
+                            }
+                    }
+                }
+            },
+        onTextLayout = { layoutResult.value = it },
     )
 }
 
-private val urlPattern: Pattern = Pattern.compile(
-    "(?:^|[\\W])((ht|f)tp(s?)://|www\\.)"
-            + "(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*"
-            + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*)",
-    Pattern.CASE_INSENSITIVE or Pattern.MULTILINE or Pattern.DOTALL
-)
+private val urlPattern: Pattern =
+    Pattern.compile(
+        "(?:^|[\\W])((ht|f)tp(s?)://|www\\.)" +
+            "(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*" +
+            "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*)",
+        Pattern.CASE_INSENSITIVE or Pattern.MULTILINE or Pattern.DOTALL,
+    )
 
 private fun extractUrls(text: String): ImmutableList<LinkInfo> =
     persistentListOf<LinkInfo>().mutate { links ->
@@ -107,8 +115,9 @@ private fun extractUrls(text: String): ImmutableList<LinkInfo> =
             matchEnd = matcher.end()
 
             var url = text.substring(matchStart, matchEnd)
-            if (!url.startsWith("http://") && !url.startsWith("https://"))
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
                 url = "https://$url"
+            }
 
             links.add(LinkInfo(url, matchStart, matchEnd))
         }
@@ -117,5 +126,5 @@ private fun extractUrls(text: String): ImmutableList<LinkInfo> =
 private data class LinkInfo(
     val url: String,
     val start: Int,
-    val end: Int
+    val end: Int,
 )

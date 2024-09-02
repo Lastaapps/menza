@@ -36,7 +36,9 @@ internal interface PriceTypeComponent {
 
 internal class DefaultPriceTypeComponent(
     componentContext: ComponentContext,
-) : PriceTypeComponent, KoinComponent, ComponentContext by componentContext {
+) : PriceTypeComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: PriceTypeViewModel = getOrCreateKoin()
 }
 
@@ -47,10 +49,11 @@ internal fun PriceTypeContent(
     onNext: () -> Unit,
 ) {
     PriceTypeScreen(
-        onDone = onNext,
+        onComplete = onNext,
         viewModel = component.viewModel,
-        modifier = modifier
-            .padding(More.Screen)
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .padding(More.Screen)
+                .fillMaxSize(),
     )
 }

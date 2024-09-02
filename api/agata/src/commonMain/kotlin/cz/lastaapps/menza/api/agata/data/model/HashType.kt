@@ -22,45 +22,34 @@ package cz.lastaapps.menza.api.agata.data.model
 import cz.lastaapps.api.core.domain.model.RequestLanguage
 
 @JvmInline
-value class HashType(val func: String) {
-
+value class HashType(
+    val func: String,
+) {
     fun withLang(lang: RequestLanguage) = HashType(lang.value + '_' + func)
 
     companion object {
-        fun subsystemHash() =
-            HashType("subsystems")
+        fun subsystemHash() = HashType("subsystems")
 
-        fun servingPacesHash(subsystemId: Int) =
-            HashType("serving_places_$subsystemId")
+        fun servingPacesHash(subsystemId: Int) = HashType("serving_places_$subsystemId")
 
-        fun typesHash(subsystemId: Int) =
-            HashType("types_$subsystemId")
+        fun typesHash(subsystemId: Int) = HashType("types_$subsystemId")
 
-        fun dishHash(subsystemId: Int) =
-            HashType("dish_$subsystemId")
+        fun dishHash(subsystemId: Int) = HashType("dish_$subsystemId")
 
-        fun infoHash(subsystemId: Int) =
-            HashType("info_$subsystemId")
+        fun infoHash(subsystemId: Int) = HashType("info_$subsystemId")
 
-        fun openingHash(subsystemId: Int) =
-            HashType("open_times_$subsystemId")
+        fun openingHash(subsystemId: Int) = HashType("open_times_$subsystemId")
 
-        fun contactsHash() =
-            HashType("contacts")
+        fun contactsHash() = HashType("contacts")
 
-        fun pictogramHash() =
-            HashType("pictograms")
+        fun pictogramHash() = HashType("pictograms")
 
-        fun linkHash(subsystemId: Int) =
-            HashType("links_$subsystemId")
+        fun linkHash(subsystemId: Int) = HashType("links_$subsystemId")
 
-        fun addressHash() =
-            HashType("address")
+        fun addressHash() = HashType("address")
 
-        fun newsHash(subsystemId: Int) =
-            HashType("news_$subsystemId")
+        fun newsHash(subsystemId: Int) = HashType("news_$subsystemId")
 
-        fun strahovHash() =
-            HashType("strahov")
+        fun strahovHash() = HashType("strahov")
     }
 }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -43,9 +43,10 @@ import java.time.LocalDate
 import java.time.Month
 
 @Composable
-internal fun shouldShowAprilFools(): Boolean = remember {
-    LocalDate.now().takeIf { it.dayOfMonth == 1 && it.month == Month.APRIL } != null
-}
+internal fun shouldShowAprilFools(): Boolean =
+    remember {
+        LocalDate.now().takeIf { it.dayOfMonth == 1 && it.month == Month.APRIL } != null
+    }
 
 @Composable
 internal fun AprilFools(modifier: Modifier = Modifier) {
@@ -72,10 +73,11 @@ internal fun AprilFools(modifier: Modifier = Modifier) {
                 onClick = {
                     progress = (it + 1) % (array.size / 2)
                 },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary,
-                    contentColor = MaterialTheme.colorScheme.onTertiary,
-                ),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary,
+                    ),
             ) {
                 Text(
                     array[2 * it + 1],

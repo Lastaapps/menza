@@ -33,9 +33,10 @@ fun appCardColors(
     contentColor: Color = contentColorFor(backgroundColor = containerColor),
     disabledContainerColor: Color = Color.Unspecified,
     disabledContentColor: Color = contentColorFor(backgroundColor = disabledContainerColor),
-): CardColors = CardColors(
-    containerColor = containerColor,
-    contentColor = contentColor,
-    disabledContainerColor = disabledContainerColor,
-    disabledContentColor = disabledContentColor,
-)
+): CardColors =
+    CardColors(
+        containerColor = containerColor,
+        contentColor = contentColor,
+        disabledContainerColor = disabledContainerColor,
+        disabledContentColor = disabledContentColor,
+    )

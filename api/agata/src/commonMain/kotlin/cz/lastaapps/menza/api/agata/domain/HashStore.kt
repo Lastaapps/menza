@@ -22,6 +22,13 @@ package cz.lastaapps.menza.api.agata.domain
 import cz.lastaapps.menza.api.agata.data.model.HashType
 
 internal interface HashStore {
-    suspend fun storeHash(type: HashType, hash: String)
-    suspend fun shouldReload(type: HashType, hash: String): Boolean
+    suspend fun storeHash(
+        type: HashType,
+        hash: String,
+    )
+
+    suspend fun shouldReload(
+        type: HashType,
+        hash: String,
+    ): Boolean
 }

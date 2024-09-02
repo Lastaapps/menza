@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -35,8 +35,8 @@ abstract class StateViewModel<State : VMState>(
     private val myState = MutableStateFlow(init)
 
     protected fun lastState() = myState.value
-    protected fun updateState(block: State.() -> State) =
-        myState.update(block)
+
+    protected fun updateState(block: State.() -> State) = myState.update(block)
 
     val flow = myState.asStateFlow()
     val flowState

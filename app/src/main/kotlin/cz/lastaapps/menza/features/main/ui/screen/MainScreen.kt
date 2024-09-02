@@ -46,12 +46,13 @@ internal fun MainScreen(
     onNavItemTopBar: (MainNavTarget) -> Unit,
     onNavItemRoot: (MainNavTarget) -> Unit,
     drawerContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-    val navItem = remember(currentDest) {
-        currentDest?.toNavItem()
-    }
+    val navItem =
+        remember(currentDest) {
+            currentDest?.toNavItem()
+        }
 
     MenzaScaffold(
         drawerState = drawerState,
@@ -85,7 +86,6 @@ internal fun MainScreen(
         modifier = modifier,
     )
 }
-
 
 private fun MainNavTarget.toNavItem(): NavItem? =
     when (this) {

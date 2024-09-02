@@ -113,9 +113,11 @@ private fun InfoContent(
                         ) {
                             MessageList(
                                 modifier = Modifier.fillMaxWidth(),
-                                messages = listOfNotNull(
-                                    items.header, items.footer,
-                                ).toImmutableList(),
+                                messages =
+                                    listOfNotNull(
+                                        items.header,
+                                        items.footer,
+                                    ).toImmutableList(),
                             )
                         }
                     }

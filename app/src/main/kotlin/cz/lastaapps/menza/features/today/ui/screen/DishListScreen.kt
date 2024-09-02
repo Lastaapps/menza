@@ -71,12 +71,12 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun DishListScreen(
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     onVideoLink: (String) -> Unit,
     viewModel: DishListViewModel,
     hostState: SnackbarHostState,
-    modifier: Modifier = Modifier,
     scrollStates: ScrollStates,
+    modifier: Modifier = Modifier,
 ) {
     DishListEffects(viewModel, hostState)
 
@@ -97,7 +97,7 @@ internal fun DishListScreen(
         onViewMode = viewModel::setCompactView,
         onImageScale = viewModel::setImageScale,
         onOliverRow = viewModel::setOliverRow,
-        onDishSelected = onDishSelected,
+        onDish = onDish,
         scrollStates = scrollStates,
     )
 }
@@ -120,7 +120,7 @@ private fun DishListContent(
     onNoItems: () -> Unit,
     onViewMode: (mode: DishListMode) -> Unit,
     onImageScale: (Float) -> Unit,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     onOliverRow: (Boolean) -> Unit,
     scrollStates: ScrollStates,
     modifier: Modifier = Modifier,
@@ -136,7 +136,7 @@ private fun DishListContent(
     val imageSizeSetting: @Composable () -> Unit = {
         ImageSizeSetting(
             progress = userSettings.imageScale,
-            onProgressChanged = onImageScale,
+            onProgressChange = onImageScale,
             modifier = Modifier.fillMaxWidth(),
         )
     }
@@ -174,7 +174,7 @@ private fun DishListContent(
                         onRefresh = onRefresh,
                         data = state.items,
                         onNoItems = onNoItems,
-                        onDishSelected = onDishSelected,
+                        onDish = onDish,
                         userSettings = userSettings,
                         isOnMetered = state.isOnMetered,
                         header = header,
@@ -200,7 +200,7 @@ private fun DishListContent(
                         onRefresh = onRefresh,
                         data = state.items,
                         onNoItems = onNoItems,
-                        onDishSelected = onDishSelected,
+                        onDish = onDish,
                         userSettings = userSettings,
                         isOnMetered = state.isOnMetered,
                         header = header,
@@ -220,7 +220,7 @@ private fun DishListContent(
                         onRefresh = onRefresh,
                         data = state.items,
                         onNoItems = onNoItems,
-                        onDishSelected = onDishSelected,
+                        onDish = onDish,
                         userSettings = userSettings,
                         isOnMetered = state.isOnMetered,
                         onOliverRow = onOliverRow,
@@ -235,24 +235,25 @@ private fun DishListContent(
                         scroll = scrollStates.horizontal,
                     )
 
-                CAROUSEL -> TodayDishCarousel(
-                    isLoading = state.isLoading,
-                    onRefresh = onRefresh,
-                    data = state.items,
-                    onNoItems = onNoItems,
-                    onDishSelected = onDishSelected,
-                    userSettings = userSettings,
-                    isOnMetered = state.isOnMetered,
-                    header = header,
-                    footer = {
-                        Column {
-                            gridSwitch()
-                            footerFabPadding()
-                        }
-                    },
-                    modifier = modifier.fillMaxSize(),
-                    scroll = scrollStates.carousel,
-                )
+                CAROUSEL ->
+                    TodayDishCarousel(
+                        isLoading = state.isLoading,
+                        onRefresh = onRefresh,
+                        data = state.items,
+                        onNoItems = onNoItems,
+                        onDish = onDish,
+                        userSettings = userSettings,
+                        isOnMetered = state.isOnMetered,
+                        header = header,
+                        footer = {
+                            Column {
+                                gridSwitch()
+                                footerFabPadding()
+                            }
+                        },
+                        modifier = modifier.fillMaxSize(),
+                        scroll = scrollStates.carousel,
+                    )
 
                 null -> {}
             }
@@ -291,25 +292,26 @@ internal data class ScrollStates(
     val carousel: LazyListState = LazyListState(),
 ) {
     companion object {
-        val Saver: Saver<ScrollStates, *> = listSaver(
-            save = {
-                listOf(
-                    with(LazyListState.Saver) { save(it.list) },
-                    with(LazyStaggeredGridState.Saver) { save(it.grid) },
-                    with(LazyListState.Saver) { save(it.horizontal) },
-                    with(LazyListState.Saver) { save(it.carousel) },
-                )
-            },
-            restore = { list ->
-                @Suppress("UNCHECKED_CAST")
-                val llsSaver = LazyListState.Saver as Saver<LazyListState, Any>
-                ScrollStates(
-                    list[0]?.let { llsSaver.restore(it) }!!,
-                    list[1]?.let { LazyStaggeredGridState.Saver.restore(it) }!!,
-                    list[2]?.let { llsSaver.restore(it) }!!,
-                    list[3]?.let { llsSaver.restore(it) }!!,
-                )
-            },
-        )
+        val Saver: Saver<ScrollStates, *> =
+            listSaver(
+                save = {
+                    listOf(
+                        with(LazyListState.Saver) { save(it.list) },
+                        with(LazyStaggeredGridState.Saver) { save(it.grid) },
+                        with(LazyListState.Saver) { save(it.horizontal) },
+                        with(LazyListState.Saver) { save(it.carousel) },
+                    )
+                },
+                restore = { list ->
+                    @Suppress("UNCHECKED_CAST")
+                    val llsSaver = LazyListState.Saver as Saver<LazyListState, Any>
+                    ScrollStates(
+                        list[0]?.let { llsSaver.restore(it) }!!,
+                        list[1]?.let { LazyStaggeredGridState.Saver.restore(it) }!!,
+                        list[2]?.let { llsSaver.restore(it) }!!,
+                        list[3]?.let { llsSaver.restore(it) }!!,
+                    )
+                },
+            )
     }
 }

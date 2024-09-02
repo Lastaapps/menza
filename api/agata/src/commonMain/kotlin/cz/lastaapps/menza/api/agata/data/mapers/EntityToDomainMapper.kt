@@ -81,12 +81,14 @@ internal fun DishEntity.toDomain(
         allergens = dish.allergens.map(Long::toInt).toImmutableList(),
         photoLink = dish.photoLink,
         pictogram = pictograms.map(PictogramEntity::name).toImmutableList(),
-        servingPlaces = servingPlaces.map { entity ->
-            ServingPlace(
-                name = entity.name,
-                abbrev = entity.abbrev,
-            )
-        }.toImmutableList(),
+        servingPlaces =
+            servingPlaces
+                .map { entity ->
+                    ServingPlace(
+                        name = entity.name,
+                        abbrev = entity.abbrev,
+                    )
+                }.toImmutableList(),
         ingredients = persistentListOf(),
         isActive = isActive,
     )
@@ -149,15 +151,17 @@ internal fun InfoEntity?.toDomain(
     contacts = contacts.map { it.toDomain() }.toImmutableList(),
     openingTimes = openingTimes.toDomain().toImmutableList(),
     links = links.map { it.toDomain() }.toImmutableList(),
-    address = address?.let {
-        Address(
-            location = address.address.let(::LocationName),
-            gps = LatLong(
-                lat = address.lat.toFloat(),
-                long = address.long.toFloat(),
-            ),
-        )
-    },
+    address =
+        address?.let {
+            Address(
+                location = address.address.let(::LocationName),
+                gps =
+                    LatLong(
+                        lat = address.lat.toFloat(),
+                        long = address.long.toFloat(),
+                    ),
+            )
+        },
 )
 
 private fun ContactEntity.toDomain() =
@@ -168,32 +172,37 @@ private fun ContactEntity.toDomain() =
         email = email?.let(::Email),
     )
 
-fun List<OpenTimeEntity>.toDomain() = this
-    .groupBy { it.servingPlaceId }.entries
-    .map { (_, entities1) ->
-        val one = entities1.first()
-        PlaceOpeningInfo(
-            name = one.servingPlaceName,
-            abbrev = one.servingPlaceAbbrev,
-            types = entities1
-                .groupBy { it.description }.entries
-                .map { (description, entities2) ->
-                    PlaceOpeningType(
-                        description = description,
-                        times = entities2.map {
-                            PlaceOpeningTime(
-                                startDay = it.dayFrom ?: DayOfWeek.MONDAY,
-                                endDay = it.dayTo ?: it.dayFrom ?: DayOfWeek.MONDAY,
-                                startTime = it.timeFrom,
-                                endTime = it.timeTo,
-                            )
-                        }
-                            .sortedBy { it.startDay }
-                            .toImmutableList(),
-                    )
-                }.toImmutableList(),
-        )
-    }
+fun List<OpenTimeEntity>.toDomain() =
+    this
+        .groupBy { it.servingPlaceId }
+        .entries
+        .map { (_, entities1) ->
+            val one = entities1.first()
+            PlaceOpeningInfo(
+                name = one.servingPlaceName,
+                abbrev = one.servingPlaceAbbrev,
+                types =
+                    entities1
+                        .groupBy { it.description }
+                        .entries
+                        .map { (description, entities2) ->
+                            PlaceOpeningType(
+                                description = description,
+                                times =
+                                    entities2
+                                        .map {
+                                            PlaceOpeningTime(
+                                                startDay = it.dayFrom ?: DayOfWeek.MONDAY,
+                                                endDay = it.dayTo ?: it.dayFrom ?: DayOfWeek.MONDAY,
+                                                startTime = it.timeFrom,
+                                                endTime = it.timeTo,
+                                            )
+                                        }.sortedBy { it.startDay }
+                                        .toImmutableList(),
+                        )
+                    }.toImmutableList(),
+            )
+        }
 
 private fun LinkEntity.toDomain() =
     Link(
@@ -211,22 +220,24 @@ internal fun List<StrahovEntity>.toDomain() =
             DishCategory(
                 nameShort = null,
                 name = value.groupName.trim(),
-                dishList = values
-                    .sortedBy { it.itemOrder }
+                dishList =
+                    values
+                        .sortedBy { it.itemOrder }
                     .map { it.toDomain() }
                     .toImmutableList(),
             )
         }.toImmutableList()
 
-private fun StrahovEntity.toDomain() = Dish(
-    amount = amount,
-    name = name,
-    priceDiscounted = priceStudent.toFloat(),
-    priceNormal = priceNormal.toFloat(),
-    allergens = allergens.map { it.toInt() }.toImmutableList(),
-    photoLink = photoLink,
-    pictogram = persistentListOf(),
-    servingPlaces = persistentListOf(),
-    ingredients = persistentListOf(),
-    isActive = true,
-)
+private fun StrahovEntity.toDomain() =
+    Dish(
+        amount = amount,
+        name = name,
+        priceDiscounted = priceStudent.toFloat(),
+        priceNormal = priceNormal.toFloat(),
+        allergens = allergens.map { it.toInt() }.toImmutableList(),
+        photoLink = photoLink,
+        pictogram = persistentListOf(),
+        servingPlaces = persistentListOf(),
+        ingredients = persistentListOf(),
+        isActive = true,
+    )

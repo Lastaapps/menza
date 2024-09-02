@@ -32,6 +32,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.ExperimentalDecomposeApi
@@ -112,11 +113,12 @@ internal fun MainContent(
             // this section is responsible for properly handling back navigation
             // while using the alternative navigation
             val isAlternativeTrapEnabled = drawerState.isClosed && state.alternativeNavigation
-            val alternativeCallback = remember {
-                BackCallback(isAlternativeTrapEnabled) {
-                    scope.launch { drawerState.open() }
+            val alternativeCallback =
+                remember {
+                    BackCallback(isAlternativeTrapEnabled) {
+                        scope.launch { drawerState.open() }
+                    }
                 }
-            }
             SideEffect { alternativeCallback.isEnabled = isAlternativeTrapEnabled }
             DisposableEffect(component.backHandler) {
                 component.backHandler.register(alternativeCallback)
@@ -125,12 +127,13 @@ internal fun MainContent(
 
             Children(
                 stack = stack,
-                animation = predictiveBackAnimation(
-                    backHandler = component.backHandler,
-                    fallbackAnimation = stackAnimation(fade() + scale()),
-                    selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
-                    onBack = component::pop,
-                ),
+                animation =
+                    predictiveBackAnimation(
+                        backHandler = component.backHandler,
+                        fallbackAnimation = stackAnimation(fade() + scale()),
+                        selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
+                        onBack = component::pop,
+                    ),
             ) {
                 val onOsturak = { component.push(MainNavTarget.Osturak) }
                 Surface {
@@ -157,10 +160,11 @@ private fun HandleLowBalance(
     onDismiss: () -> Unit,
 ) {
     val message = stringResource(id = R.string.wallet_low_balance)
+    val onDismissLambda by rememberUpdatedState(newValue = onDismiss)
     LaunchedEffect(lowBalance) {
         if (lowBalance) {
             hostState.showSnackbar(message)
-            onDismiss()
+            onDismissLambda()
         }
     }
 }

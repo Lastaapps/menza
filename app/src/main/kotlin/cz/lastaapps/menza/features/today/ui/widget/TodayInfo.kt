@@ -45,8 +45,8 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.today.ui.util.allergenForId
 import cz.lastaapps.menza.features.today.ui.util.formatPrice
 import cz.lastaapps.menza.ui.theme.Padding
-import kotlin.math.max
 import kotlinx.collections.immutable.ImmutableList
+import kotlin.math.max
 
 @Composable
 fun TodayInfo(
@@ -96,12 +96,13 @@ private fun PriceView(
 ) {
     Row(modifier) {
         Text(text = dish.amount ?: "")
-        val priceText = buildString {
-            append(dish.priceDiscounted?.formatPrice() ?: "∅")
-            append(" / ")
-            append(dish.priceNormal?.formatPrice() ?: "∅")
-            append(" Kč")
-        }
+        val priceText =
+            buildString {
+                append(dish.priceDiscounted?.formatPrice() ?: "∅")
+                append(" / ")
+                append(dish.priceNormal?.formatPrice() ?: "∅")
+                append(" Kč")
+            }
         Text(
             text = priceText,
             textAlign = TextAlign.End,
@@ -142,7 +143,6 @@ private fun AllergenList(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-
         Text(
             stringResource(R.string.today_info_allergens_title),
             style = MaterialTheme.typography.titleLarge,
@@ -166,7 +166,10 @@ private fun AllergenList(
 }
 
 @Composable
-private fun AllergenRow(id: Int, modifier: Modifier = Modifier) {
+private fun AllergenRow(
+    id: Int,
+    modifier: Modifier = Modifier,
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
         modifier = modifier,
@@ -191,7 +194,10 @@ private fun AllergenRow(id: Int, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun AllergenIdBadge(id: Int, modifier: Modifier = Modifier) {
+private fun AllergenIdBadge(
+    id: Int,
+    modifier: Modifier = Modifier,
+) {
     Surface(
         color = MaterialTheme.colorScheme.tertiary,
         shape = CircleShape,
@@ -206,15 +212,18 @@ private fun AllergenIdBadge(id: Int, modifier: Modifier = Modifier) {
                 Text(
                     id.toString(),
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(
-                        start = 6.dp, end = 6.dp,
-                        top = 2.dp, bottom = 2.dp,
-                    ),
+                    modifier =
+                        Modifier.padding(
+                            start = 6.dp,
+                            end = 6.dp,
+                            top = 2.dp,
+                            bottom = 2.dp,
+                        ),
                 )
             },
         ) { measurable, constrains ->
             val placeable = measurable[0].measure(constrains)
-            //val h = max(placeable.height, minSize)
+            // val h = max(placeable.height, minSize)
             val h = placeable.height
             val w = max(placeable.width, h)
             layout(w, h) {
@@ -249,7 +258,10 @@ private fun Ingredients(
 }
 
 @Composable
-private fun DishImageInfo(dish: Dish, modifier: Modifier = Modifier) {
+private fun DishImageInfo(
+    dish: Dish,
+    modifier: Modifier = Modifier,
+) {
     dish.photoLink?.let { photoLink ->
         DishImageRatio(
             photoLink = photoLink,

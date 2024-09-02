@@ -62,7 +62,7 @@ internal fun AppThemeItem(
         theme = theme,
     ) {
         val scale by animateFloatAsState(
-            if (isSelected) 1f else AppThemeItem.unselectedScale,
+            if (isSelected) 1f else AppThemeItem.UNSELECTED_STATE,
             label = "theme_card_scale",
         )
         Surface(
@@ -77,9 +77,10 @@ internal fun AppThemeItem(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(Padding.MidLarge),
-                    modifier = Modifier
-                        .padding(Padding.Medium)
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .padding(Padding.Medium)
+                            .fillMaxWidth(),
                 ) {
                     ColorPreview()
                     Text(theme.name())
@@ -103,7 +104,7 @@ private fun ColorPreview(modifier: Modifier = Modifier) {
 }
 
 private object AppThemeItem {
-    const val unselectedScale = .97f
+    const val UNSELECTED_STATE = .97f
     val colorPreviewSize = 60.dp
     val borderStrokeSize: Float
         @Composable

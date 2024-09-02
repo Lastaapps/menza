@@ -46,13 +46,14 @@ internal interface TodayComponent {
 
 internal class DefaultTodayComponent(
     componentContext: ComponentContext,
-) : TodayComponent, KoinComponent, ComponentContext by componentContext {
+) : TodayComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: TodayViewModel = getOrCreateKoin()
     override val dishListViewModel: DishListViewModel = getOrCreateKoin()
     override val crashesViewModel: CrashesViewModel = getOrCreateKoin()
     override val whatsNewViewModel: WhatsNewViewModel = getOrCreateKoin()
     override val rageUsViewModel: RateUsViewModel = getOrCreateKoin()
-
 }
 
 @Composable
@@ -62,7 +63,6 @@ internal fun TodayContent(
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-
     val panels: @Composable (Modifier) -> Unit = {
         Panels(
             modifier = it,
@@ -79,8 +79,9 @@ internal fun TodayContent(
         viewModel = component.viewModel,
         dishListViewModel = component.dishListViewModel,
         hostState = hostState,
-        modifier = modifier
-            .padding(Padding.More.Screen)
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .padding(Padding.More.Screen)
+                .fillMaxSize(),
     )
 }

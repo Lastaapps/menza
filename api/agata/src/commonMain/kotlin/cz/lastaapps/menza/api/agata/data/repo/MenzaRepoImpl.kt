@@ -50,7 +50,6 @@ import cz.lastaapps.menza.api.agata.data.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.data.model.toDB
 import cz.lastaapps.menza.api.agata.data.model.toDto
 import cz.lastaapps.menza.api.agata.domain.HashStore
-import kotlin.time.Duration.Companion.days
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -63,7 +62,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-
+import kotlin.time.Duration.Companion.days
 
 internal class MenzaSubsystemRepoImpl(
     private val api: CafeteriaApi,
@@ -72,11 +71,11 @@ internal class MenzaSubsystemRepoImpl(
     private val checker: ValidityChecker,
     hashStore: HashStore,
 ) : MenzaRepo {
-
     private val log = localLogger()
 
     override fun isReady(params: MenzaRepoParams): Flow<Boolean> =
-        db.subsystemQueries.getAll(params.language.toDB())
+        db.subsystemQueries
+            .getAll(params.language.toDB())
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { it.isNotEmpty() }
@@ -84,7 +83,8 @@ internal class MenzaSubsystemRepoImpl(
             .onEach { log.i { "Is ready: $it" } }
 
     override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> =
-        db.subsystemQueries.getAll(params.language.toDB())
+        db.subsystemQueries
+            .getAll(params.language.toDB())
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { it.toDomain() }
@@ -114,24 +114,31 @@ internal class MenzaSubsystemRepoImpl(
             },
         )
 
-    private fun Collection<Menza>.provideVideoLinks() = map {
-        when (it.type) {
-            MenzaType.Agata.Subsystem(2) -> it.copy(
-                videoLinks = persistentListOf(
-                    "https://agata.suz.cvut.cz/jidelnicky/sd-cam-img.php",
-                ),
-            )
+    private fun Collection<Menza>.provideVideoLinks() =
+        map {
+            when (it.type) {
+                MenzaType.Agata.Subsystem(2) ->
+                    it.copy(
+                        videoLinks =
+                            persistentListOf(
+                                "https://agata.suz.cvut.cz/jidelnicky/sd-cam-img.php",
+                            ),
+                    )
 
-            else -> it
+                else -> it
+            }
         }
-    }
 
-    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        checker.withCheckSince(ValidityKey.agataMenza().withParams(params), isForced, 7.days) {
-            processor.runSync(subsystemJob, db, params, isForced)
+    override suspend fun sync(
+        params: MenzaRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            checker.withCheckSince(ValidityKey.agataMenza().withParams(params), isForced, 7.days) {
+                processor.runSync(subsystemJob, db, params, isForced)
+            }
         }
-    }
 }
 
 internal object MenzaStrahovRepoImpl : MenzaRepo {
@@ -139,30 +146,35 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
 
     override fun isReady(params: MenzaRepoParams): Flow<Boolean> = MutableStateFlow(true)
 
-    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> = flow {
-        persistentListOf(
-            Menza(
-                type = Strahov,
-                name = getName(params),
-                isActive = false,
-                isOpened = true,
-                supportsDaily = true,
-                supportsWeekly = false,
-                isExperimental = false,
-                videoLinks = persistentListOf(),
-            ),
-        ).let { emit(it) }
-    }
-        .onStart { log.i { "Starting collection" } }
-        .onCompletion { log.i { "Completed collection" } }
+    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> =
+        flow {
+            persistentListOf(
+                Menza(
+                    type = Strahov,
+                    name = getName(params),
+                    isActive = false,
+                    isOpened = true,
+                    supportsDaily = true,
+                    supportsWeekly = false,
+                    isExperimental = false,
+                    videoLinks = persistentListOf(),
+                ),
+            ).let { emit(it) }
+        }.onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
 
-    private fun getName(params: MenzaRepoParams) = when (params.language) {
-        CS -> "Restaurace Strahov"
-        EN -> "Restaurant Strahov"
-    }
+    private fun getName(params: MenzaRepoParams) =
+        when (params.language) {
+            CS -> "Restaurace Strahov"
+            EN -> "Restaurant Strahov"
+        }
 
-    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        SyncResult.Skipped.right()
-    }
+    override suspend fun sync(
+        params: MenzaRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            SyncResult.Skipped.right()
+        }
 }

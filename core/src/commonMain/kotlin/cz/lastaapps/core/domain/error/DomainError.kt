@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,9 +26,12 @@ sealed interface DomainError {
         get() = null
 
     sealed interface Runtime : DomainError
+
     sealed interface Logic : DomainError
 
-    data class Unknown(override val throwable: Throwable) : Runtime
+    data class Unknown(
+        override val throwable: Throwable,
+    ) : Runtime
 }
 
 typealias MenzaRaise = Raise<DomainError>

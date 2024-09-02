@@ -22,12 +22,12 @@ package cz.lastaapps.menza.features.settings.domain.model
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 
-enum class DarkMode(internal val id: Int) {
+enum class DarkMode(
+    internal val id: Int,
+) {
     Light(0),
     Dark(1),
     System(2),
-    ;
-
 }
 
 @Composable

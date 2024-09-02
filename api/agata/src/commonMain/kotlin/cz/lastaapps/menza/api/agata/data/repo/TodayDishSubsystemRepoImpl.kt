@@ -80,113 +80,125 @@ internal class TodayDishSubsystemRepoImpl(
     private val beConfig: AgataBEConfig,
     hashStore: HashStore,
 ) : TodayDishRepo {
-
     private val log = Logger.withTag(this::class.simpleName + "($subsystemId)")
 
     private val validityKey = ValidityKey.agataToday(subsystemId)
 
-    override fun getData(params: WeekRepoParams): Flow<ImmutableList<DishCategory>> = channelFlow {
-        val lang = params.language.toDB()
+    override fun getData(params: WeekRepoParams): Flow<ImmutableList<DishCategory>> =
+        channelFlow {
+            val lang = params.language.toDB()
 
-        // Get dish list
-        db.dishQueries.getForSubsystem(subsystemId.toLong(), lang)
-            .asFlow()
-            .mapToList(Dispatchers.IO)
-            .combine(
-                run {
-                    checker.isFromToday(validityKey.withParams(params))
-                        .distinctUntilChanged()
-                        .onEach { log.i { "Validity changed to $it" } }
-                },
-            ) { data, validity ->
-                data.takeIf { validity }.orEmpty()
-            }
-            .distinctUntilChanged()
-            .collectLatest { dtoList ->
-                log.d { "Starting flow combining" }
-
-                // Finds flows that corresponds to each dish item
-                val withInfo = dtoList.asSequence().map { entity ->
-                    Tuple4(
-                        entity,
-
-                        // get dish type
-                        db.dishTypeQueries.getByDishId(entity.typeId, lang).asFlow()
-                            .mapToOneOrNull(Dispatchers.IO),
-
-                        // get dish pictogram
-                        db.pictogramQueries.getByIds(entity.pictogram, lang).asFlow()
-                            .mapToList(Dispatchers.IO),
-
-                        // Get dish serving places
-                        db.servingPlaceQueries.getByIds(entity.servingPlaces, lang).asFlow()
-                            .mapToList(Dispatchers.IO),
-                    )
-                }
-
-                // Combine flows together
-                val combinedFlowList =
-                    withInfo.map { (entity, typeFlow, pictogramFlow, servingFlow) ->
-                        combine(typeFlow, pictogramFlow, servingFlow) { type, pictogram, serving ->
-                            Tuple4(entity, type, pictogram, serving)
-                        }
-                    }
-
-                val withInfoResolved = combinedFlowList.foldFlows(
-                    persistentListOf<Tuple4<DishEntity, DishTypeEntity?, List<PictogramEntity>, List<ServingPlaceEntity>>>(),
-                ) { list, data ->
-                    // used to filter placeholder dishes with names like ".  "
-                    // and dishes with null names
-                    if (data.first.name?.any { it.isLetter() } == true)
-                        list.add(data)
-                    else {
-                        list
-                    }
-                }
-
-                val mapped = withInfoResolved.map { list ->
-                    list
-                        .map { (dish, type, pictogram, servingPlaces) ->
-                            type to dish.toDomain(pictogram, servingPlaces)
-                        }.groupBy { it.first }
-                        .entries
-                        .sortedBy { (key, _) -> key?.itemOrder ?: Long.MAX_VALUE }
-                        .map { (type, dishList) ->
-                            type.toDomain(dishList.map { it.second })
-                        }
-                        .toImmutableList()
+            // Get dish list
+            db.dishQueries
+                .getForSubsystem(subsystemId.toLong(), lang)
+                .asFlow()
+                .mapToList(Dispatchers.IO)
+                .combine(
+                    run {
+                        checker
+                            .isFromToday(validityKey.withParams(params))
+                            .distinctUntilChanged()
+                            .onEach { log.i { "Validity changed to $it" } }
+                    },
+                ) { data, validity ->
+                    data.takeIf { validity }.orEmpty()
                 }.distinctUntilChanged()
+                .collectLatest { dtoList ->
+                    log.d { "Starting flow combining" }
 
-                mapped.collectLatest { categories ->
-                    log.d {
-                        val dishCount = categories.sumOf { it.dishList.size }
-                        "Collected ${categories.size} categories and $dishCount dishes"
+                    // Finds flows that corresponds to each dish item
+                    val withInfo =
+                        dtoList.asSequence().map { entity ->
+                            Tuple4(
+                                entity,
+                                // get dish type
+                                db.dishTypeQueries
+                                    .getByDishId(entity.typeId, lang)
+                                    .asFlow()
+                                    .mapToOneOrNull(Dispatchers.IO),
+                                // get dish pictogram
+                                db.pictogramQueries
+                                    .getByIds(entity.pictogram, lang)
+                                    .asFlow()
+                                    .mapToList(Dispatchers.IO),
+                                // Get dish serving places
+                                db.servingPlaceQueries
+                                    .getByIds(entity.servingPlaces, lang)
+                                    .asFlow()
+                                    .mapToList(Dispatchers.IO),
+                            )
+                        }
+
+                    // Combine flows together
+                    val combinedFlowList =
+                        withInfo.map { (entity, typeFlow, pictogramFlow, servingFlow) ->
+                            combine(
+                                typeFlow,
+                                pictogramFlow,
+                                servingFlow,
+                            ) { type, pictogram, serving ->
+                                Tuple4(entity, type, pictogram, serving)
+                            }
+                        }
+
+                    val withInfoResolved =
+                        combinedFlowList.foldFlows(
+                            persistentListOf<Tuple4<DishEntity, DishTypeEntity?, List<PictogramEntity>, List<ServingPlaceEntity>>>(),
+                        ) { list, data ->
+                            // used to filter placeholder dishes with names like ".  "
+                            // and dishes with null names
+                            if (data.first.name?.any { it.isLetter() } == true) {
+                                list.add(data)
+                            } else {
+                                list
+                            }
+                        }
+
+                    val mapped =
+                        withInfoResolved
+                            .map { list ->
+                                list
+                                    .map { (dish, type, pictogram, servingPlaces) ->
+                                        type to dish.toDomain(pictogram, servingPlaces)
+                                    }.groupBy { it.first }
+                                    .entries
+                                    .sortedBy { (key, _) -> key?.itemOrder ?: Long.MAX_VALUE }
+                                    .map { (type, dishList) ->
+                                        type.toDomain(dishList.map { it.second })
+                                    }.toImmutableList()
+                            }.distinctUntilChanged()
+
+                    mapped.collectLatest { categories ->
+                        log.d {
+                            val dishCount = categories.sumOf { it.dishList.size }
+                            "Collected ${categories.size} categories and $dishCount dishes"
+                        }
+                        send(categories)
                     }
-                    send(categories)
                 }
-            }
-    }.onStart {
-        log.d { "Starting collection" }
-    }.onCompletion {
-        log.d { "Completed collection" }
-    }
+        }.onStart {
+            log.d { "Starting collection" }
+        }.onCompletion {
+            log.d { "Completed collection" }
+        }
 
-    private val dishListJob = SyncJobHash<List<DishDto>?, List<DishEntity>, TodayRepoParams>(
-        hashStore = hashStore,
-        hashType = { HashType.dishHash(subsystemId).withLang(it.language) },
-        getHashCode = { dishApi.getDishesHash(it.language.toDto(), subsystemId).bind() },
-        fetchApi = { dishApi.getDishes(it.language.toDto(), subsystemId).bind() },
-        convert = { params, data ->
-            data?.map { it.toEntity(beConfig, params.language) }.orEmpty().rightIor()
-        },
-        store = { params, data ->
-            db.dishQueries.deleteSubsytem(params.language.toDB(), subsystemId.toLong())
-            data.forEach {
-                db.dishQueries.insert(it)
-            }
-            log.d { "Stored dish list" }
-        },
-    )
+    private val dishListJob =
+        SyncJobHash<List<DishDto>?, List<DishEntity>, TodayRepoParams>(
+            hashStore = hashStore,
+            hashType = { HashType.dishHash(subsystemId).withLang(it.language) },
+            getHashCode = { dishApi.getDishesHash(it.language.toDto(), subsystemId).bind() },
+            fetchApi = { dishApi.getDishes(it.language.toDto(), subsystemId).bind() },
+            convert = { params, data ->
+                data?.map { it.toEntity(beConfig, params.language) }.orEmpty().rightIor()
+            },
+            store = { params, data ->
+                db.dishQueries.deleteSubsytem(params.language.toDB(), subsystemId.toLong())
+                data.forEach {
+                    db.dishQueries.insert(it)
+                }
+                log.d { "Stored dish list" }
+            },
+        )
 
     private val dishTypeJob =
         SyncJobHash<List<DishTypeDto>?, List<DishTypeEntity>, TodayRepoParams>(
@@ -246,10 +258,14 @@ internal class TodayDishSubsystemRepoImpl(
 
     private val jobs = listOf(dishListJob, dishTypeJob, pictogramJob, servingPlacesJob)
 
-    override suspend fun sync(params: WeekRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        checker.withCheckRecent(validityKey.withParams(params), isForced) {
-            processor.runSync(jobs, db, params, isForced = isForced)
+    override suspend fun sync(
+        params: WeekRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            checker.withCheckRecent(validityKey.withParams(params), isForced) {
+                processor.runSync(jobs, db, params, isForced = isForced)
+            }
         }
-    }
 }

@@ -59,7 +59,7 @@ internal fun TodayDishGrid(
     onRefresh: () -> Unit,
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     header: @Composable (Modifier) -> Unit,
@@ -76,7 +76,7 @@ internal fun TodayDishGrid(
         Surface(shape = MaterialTheme.shapes.large) {
             DishContent(
                 data = data,
-                onDishSelected = onDishSelected,
+                onDish = onDish,
                 onNoItems = onNoItems,
                 userSettings = userSettings,
                 isOnMetered = isOnMetered,
@@ -84,7 +84,8 @@ internal fun TodayDishGrid(
                 header = header,
                 footer = footer,
                 widthSize = widthSize,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(top = Padding.Smaller) // so text is not cut off
                     .fillMaxSize(),
             )
@@ -93,9 +94,10 @@ internal fun TodayDishGrid(
 }
 
 @Composable
+@Suppress("ktlint:compose:modifier-reused-check")
 private fun DishContent(
     data: ImmutableList<DishCategory>,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     onNoItems: () -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
@@ -150,7 +152,7 @@ private fun DishContent(
                         }
                         DishItem(
                             dish = dish,
-                            onDishSelected = onDishSelected,
+                            onDish = onDish,
                             userSettings = userSettings,
                             isOnMetered = isOnMetered,
                             modifier = Modifier.fillMaxWidth(),
@@ -169,7 +171,7 @@ private fun DishContent(
 @Composable
 private fun DishItem(
     dish: Dish,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
@@ -177,14 +179,13 @@ private fun DishItem(
     Card(
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
-        modifier = modifier.clickable { onDishSelected(dish) },
+        modifier = modifier.clickable { onDish(dish) },
     ) {
         Column(
             modifier = Modifier.padding(Padding.MidSmall),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
-
             if (dish.photoLink != null) {
                 DishImageWithBadge(
                     dish = dish,
@@ -203,7 +204,7 @@ private fun DishItem(
                 ) {
                     DishNameRow(
                         dish = dish,
-                        modifier = modifier.weight(1f),
+                        modifier = Modifier.weight(1f),
                     )
                     if (dish.photoLink == null) {
                         DishBadge(dish = dish, priceType = userSettings.priceType)
@@ -228,9 +229,10 @@ private fun DishImageWithBadge(
         DishImageRatio(
             photoLink = dish.photoLink ?: "Impossible",
             loadImmediately = downloadOnMetered || !isOnMetered,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(Padding.Small),
+            modifier =
+            Modifier
+                    .align(Alignment.Center)
+                    .padding(Padding.Small),
         )
         DishBadge(
             dish = dish,

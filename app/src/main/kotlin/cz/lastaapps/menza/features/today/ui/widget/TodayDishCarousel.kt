@@ -71,7 +71,7 @@ internal fun TodayDishCarousel(
     onRefresh: () -> Unit,
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     header: @Composable (Modifier) -> Unit,
@@ -87,14 +87,15 @@ internal fun TodayDishCarousel(
         Surface(shape = MaterialTheme.shapes.large) {
             DishContent(
                 data = data,
-                onDishSelected = onDishSelected,
+                onDish = onDish,
                 onNoItems = onNoItems,
                 appSettings = userSettings,
                 isOnMetered = isOnMetered,
                 scroll = scroll,
                 header = header,
                 footer = footer,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(top = Padding.Smaller) // so text is not cut off
                     .fillMaxSize(),
             )
@@ -104,9 +105,10 @@ internal fun TodayDishCarousel(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Suppress("ktlint:compose:modifier-reused-check")
 private fun DishContent(
     data: ImmutableList<DishCategory>,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     onNoItems: () -> Unit,
     appSettings: TodayUserSettings,
     isOnMetered: Boolean,
@@ -115,8 +117,7 @@ private fun DishContent(
     footer: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-    //no data handling
+    // no data handling
     if (data.isEmpty()) {
         NoItems(modifier, onNoItems)
         return
@@ -144,7 +145,6 @@ private fun DishContent(
                     )
                 }
                 item(key = category.name + "_content") {
-
                     if (category.dishList.size == 1) {
                         val dish = category.dishList.first()
                         Box(
@@ -153,11 +153,12 @@ private fun DishContent(
                         ) {
                             DishItem(
                                 dish = dish,
-                                onDishSelected = onDishSelected,
+                                onDish = onDish,
                                 appSettings = appSettings,
                                 isOnMetered = isOnMetered,
-                                modifier = Modifier
-                                    .height(preferredItemSize),
+                                modifier =
+                                Modifier
+                                        .height(preferredItemSize),
                             )
                         }
                         return@item
@@ -167,9 +168,10 @@ private fun DishContent(
                     HorizontalMultiBrowseCarousel(
                         state = carouselState,
                         preferredItemWidth = preferredItemSize,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .animateItem(),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
                         minSmallItemWidth = 64.dp,
                         maxSmallItemWidth = 128.dp,
                         itemSpacing = Padding.MidSmall,
@@ -197,12 +199,13 @@ private fun DishContent(
 
                         DishItem(
                             dish = dish,
-                            onDishSelected = onDishSelected,
+                            onDish = onDish,
                             appSettings = appSettings,
                             isOnMetered = isOnMetered,
-                            modifier = Modifier
-                                .height(preferredItemSize)
-                                .maskClip(MaterialTheme.shapes.extraLarge),
+                            modifier =
+                                Modifier
+                                    .height(preferredItemSize)
+                                    .maskClip(MaterialTheme.shapes.extraLarge),
                             progress = { progress },
                         )
                     }
@@ -222,18 +225,19 @@ private fun DishContent(
 @Composable
 private fun DishItem(
     dish: Dish,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     appSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
     progress: () -> Float = { 1f },
 ) {
     val componentsGraphics: GraphicsLayerScope.(Alignment.Vertical) -> Unit = { alignment ->
-        val translationFactor = when (alignment) {
-            Alignment.Top -> -1f
-            Alignment.Bottom -> 1f
-            else -> error("Not supported")
-        }
+        val translationFactor =
+            when (alignment) {
+                Alignment.Top -> -1f
+                Alignment.Bottom -> 1f
+                else -> error("Not supported")
+            }
         val prog = progress()
         // hides other surface components when they are not in foreground
         alpha = prog
@@ -243,31 +247,35 @@ private fun DishItem(
     }
 
     Box(
-        modifier = modifier.clickable { onDishSelected(dish) },
+        modifier = modifier.clickable { onDish(dish) },
     ) {
         DishImageOrSupplement(
             dish,
             loadImmediately = loadImmediately(appSettings.downloadOnMetered, isOnMetered),
             ratio = null,
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         )
 
         val useGradient = dish.photoLink != null
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.BottomStart)
                 .graphicsLayer { componentsGraphics(Alignment.Bottom) },
             verticalArrangement = Arrangement.spacedBy(Padding.Small * -1),
         ) {
             DishBadge(
-                dish, priceType = appSettings.priceType,
-                modifier = Modifier
+                dish,
+                priceType = appSettings.priceType,
+                modifier =
+                Modifier
                     .zIndex(2f)
                     .align(Alignment.End)
                     .padding(horizontal = Padding.MidSmall),
             )
             Box(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxWidth()
                     .mapIf(useGradient) { it.gradient() },
             ) {
@@ -280,14 +288,16 @@ private fun DishItem(
 
                 Text(
                     dish.name,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .padding(Padding.MidSmall)
                         .basicMarquee(
                             initialDelayMillis = 500,
                             iterations = Int.MAX_VALUE,
                         ),
                     maxLines = 1,
-                    color = TodayDishCarouselTokens.gradientForeground.takeIf { useGradient }
+                    color =
+                    TodayDishCarouselTokens.gradientForeground.takeIf { useGradient }
                         ?: Color.Unspecified,
                     style = MaterialTheme.typography.bodyLarge,
                 )
@@ -305,7 +315,8 @@ private fun DishItem(
             Surface(
                 shape = MaterialTheme.shapes.large,
                 color = MaterialTheme.colorScheme.surfaceContainer,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .align(Alignment.TopEnd)
                     .padding(Padding.MidSmall)
                     .graphicsLayer { componentsGraphics(Alignment.Top) },
@@ -338,14 +349,15 @@ private fun Modifier.gradient(color: Color = TodayDishCarouselTokens.gradientBac
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun GradientTesting() = PreviewWrapper {
-    Box(
-        Modifier
-            .background(Color.Magenta)
-            .gradient(MaterialTheme.colorScheme.primary)
-            .size(100.dp, 50.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text("Example", color = Color.White)
+private fun GradientTesting() =
+    PreviewWrapper {
+        Box(
+            Modifier
+                .background(Color.Magenta)
+                .gradient(MaterialTheme.colorScheme.primary)
+                .size(100.dp, 50.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text("Example", color = Color.White)
+        }
     }
-}

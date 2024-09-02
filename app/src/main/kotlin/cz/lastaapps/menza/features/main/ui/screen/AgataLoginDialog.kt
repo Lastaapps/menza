@@ -22,7 +22,6 @@ package cz.lastaapps.menza.features.main.ui.screen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,6 +53,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -88,11 +88,12 @@ internal fun AgataLoginDialog(
     onDismissRequest: () -> Unit,
 ) {
     val state by viewModel.flowState
+    val onDismissRequestLambda by rememberUpdatedState(onDismissRequest)
 
     LaunchedEffect(key1 = state.loginDone) {
         if (state.loginDone) {
             viewModel.dismissLoginDone()
-            onDismissRequest()
+            onDismissRequestLambda()
         }
     }
 
@@ -129,8 +130,8 @@ private fun AgataLoginDialog(
         var indexSelected by rememberSaveable { mutableIntStateOf(0) }
 
         AgataLoginDialogContent(
-            indexSelected = indexSelected,
-            onIndexSelected = { indexSelected = it },
+            selectedIndex = indexSelected,
+            onSelectIndex = { indexSelected = it },
             username = username,
             password = password,
             onUsername = onUsername,
@@ -146,8 +147,8 @@ private fun AgataLoginDialog(
 
 @Composable
 private fun AgataLoginDialogContent(
-    indexSelected: Int,
-    onIndexSelected: (Int) -> Unit,
+    selectedIndex: Int,
+    onSelectIndex: (Int) -> Unit,
     username: String,
     password: String,
     onUsername: (String) -> Unit,
@@ -171,23 +172,25 @@ private fun AgataLoginDialogContent(
         )
 
         BalanceTypesTabs(
-            indexSelected = indexSelected,
-            onIndexSelected = onIndexSelected,
+            selectedIndex = selectedIndex,
+            onSelectIndex = onSelectIndex,
         )
 
         SubtitleWidget(
-            indexSelected = indexSelected,
-            modifier = Modifier
+            indexSelected = selectedIndex,
+            modifier =
+            Modifier
                 .padding(vertical = Padding.Tiny)
                 .animateContentSize(),
         )
 
-        val modeType = when (indexSelected) {
-            0 -> BalanceAccountType.Stravnik
-            1 -> BalanceAccountType.CTU
-            2 -> null
-            else -> error("Mode index out of range: $indexSelected")
-        }
+        val modeType =
+            when (selectedIndex) {
+                0 -> BalanceAccountType.Stravnik
+                1 -> BalanceAccountType.CTU
+                2 -> null
+                else -> error("Mode index out of range: $selectedIndex")
+            }
         Box(Modifier.animateContentSize()) {
             modeType?.let {
                 LoginForm(
@@ -207,20 +210,20 @@ private fun AgataLoginDialogContent(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BalanceTypesTabs(
-    indexSelected: Int,
-    onIndexSelected: (Int) -> Unit,
+    selectedIndex: Int,
+    onSelectIndex: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PrimaryTabRow(
-        selectedTabIndex = indexSelected,
+        selectedTabIndex = selectedIndex,
         modifier = modifier,
     ) {
         Tab(
-            selected = indexSelected == 0,
-            onClick = { onIndexSelected(0) },
+            selected = selectedIndex == 0,
+            onClick = { onSelectIndex(0) },
             text = {
                 Text(
                     text = stringResource(id = R.string.wallet_login_tab_stravnik),
@@ -231,8 +234,8 @@ private fun BalanceTypesTabs(
             icon = { Icon(Icons.Outlined.RestaurantMenu, null) },
         )
         Tab(
-            selected = indexSelected == 1,
-            onClick = { onIndexSelected(1) },
+            selected = selectedIndex == 1,
+            onClick = { onSelectIndex(1) },
             text = {
                 Text(
                     text = stringResource(id = R.string.wallet_login_tab_ctu),
@@ -243,8 +246,8 @@ private fun BalanceTypesTabs(
             icon = { Icon(Icons.Outlined.Architecture, null) },
         )
         Tab(
-            selected = indexSelected == 2,
-            onClick = { onIndexSelected(2) },
+            selected = selectedIndex == 2,
+            onClick = { onSelectIndex(2) },
             text = {
                 Text(
                     text = stringResource(id = R.string.wallet_login_tab_uct),
@@ -262,12 +265,13 @@ private fun SubtitleWidget(
     indexSelected: Int,
     modifier: Modifier = Modifier,
 ) {
-    val subtitleText = when (indexSelected) {
-        0 -> stringResource(R.string.wallet_login_subtitle_stravnik)
-        1 -> stringResource(R.string.wallet_login_subtitle_ctu)
-        2 -> stringResource(R.string.wallet_login_subtitle_uct)
-        else -> error("Mode index out of range: $indexSelected")
-    }
+    val subtitleText =
+        when (indexSelected) {
+            0 -> stringResource(R.string.wallet_login_subtitle_stravnik)
+            1 -> stringResource(R.string.wallet_login_subtitle_ctu)
+            2 -> stringResource(R.string.wallet_login_subtitle_uct)
+            else -> error("Mode index out of range: $indexSelected")
+        }
     Text(
         text = subtitleText,
         textAlign = TextAlign.Center,
@@ -296,38 +300,43 @@ private fun LoginForm(
     verticalArrangement = Arrangement.spacedBy(Padding.Small),
 ) {
     OutlinedTextField(
-        modifier = Modifier.withAutofill(
-            autofillTypes = persistentListOf(AutofillType.Username),
-            onFill = onUsername,
-        ),
+        modifier =
+        Modifier.withAutofill(
+                autofillTypes = persistentListOf(AutofillType.Username),
+                onFill = onUsername,
+            ),
         enabled = !isLoading,
         value = username,
         onValueChange = onUsername,
         label = { Text(stringResource(R.string.wallet_login_username)) },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Ascii,
-            imeAction = ImeAction.Next,
+        keyboardOptions =
+            KeyboardOptions(
+                keyboardType = KeyboardType.Ascii,
+                imeAction = ImeAction.Next,
         ),
     )
 
     var showPasswordInfo by rememberSaveable { mutableStateOf(false) }
 
     OutlinedTextField(
-        modifier = Modifier.withAutofill(
-            autofillTypes = persistentListOf(AutofillType.Password),
-            onFill = onPassword,
+        modifier =
+            Modifier.withAutofill(
+                autofillTypes = persistentListOf(AutofillType.Password),
+                onFill = onPassword,
         ),
         enabled = !isLoading,
         value = password,
         onValueChange = onPassword,
         label = { Text(stringResource(R.string.wallet_login_password)) },
         visualTransformation = PasswordVisualTransformation(),
-        keyboardActions = KeyboardActions {
+        keyboardActions =
+        KeyboardActions {
             if (loginEnabled) {
                 onLogin(balanceType)
             }
         },
-        keyboardOptions = KeyboardOptions(
+        keyboardOptions =
+        KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Go,
         ),
@@ -389,36 +398,38 @@ private fun LoginForm(
 
 @Preview
 @Composable
-private fun AgataLoginDialogPreview() = PreviewWrapper {
-    AgataLoginDialogContent(
-        indexSelected = 0,
-        onIndexSelected = {},
-        username = "Sultán",
-        password = "Solimán",
-        onUsername = {},
-        onPassword = {},
-        onDismissRequest = {},
-        isLoading = false,
-        loginEnabled = true,
-        onLogin = { },
-        error = WalletError.InvalidCredentials,
-    )
-}
+private fun AgataLoginDialogPreview() =
+    PreviewWrapper {
+        AgataLoginDialogContent(
+            selectedIndex = 0,
+            onSelectIndex = {},
+            username = "Sultán",
+            password = "Solimán",
+            onUsername = {},
+            onPassword = {},
+            onDismissRequest = {},
+            isLoading = false,
+            loginEnabled = true,
+            onLogin = { },
+            error = WalletError.InvalidCredentials,
+        )
+    }
 
 @Preview
 @Composable
-private fun AgataLoginDialogNotSupportedPreview() = PreviewWrapper {
-    AgataLoginDialogContent(
-        indexSelected = 2,
-        onIndexSelected = {},
-        username = "Sultán",
-        password = "Solimán",
-        onUsername = {},
-        onPassword = {},
-        onDismissRequest = {},
-        isLoading = false,
-        loginEnabled = true,
-        onLogin = { },
-        error = WalletError.InvalidCredentials,
-    )
-}
+private fun AgataLoginDialogNotSupportedPreview() =
+    PreviewWrapper {
+        AgataLoginDialogContent(
+            selectedIndex = 2,
+            onSelectIndex = {},
+            username = "Sultán",
+            password = "Solimán",
+            onUsername = {},
+            onPassword = {},
+            onDismissRequest = {},
+            isLoading = false,
+            loginEnabled = true,
+            onLogin = { },
+            error = WalletError.InvalidCredentials,
+        )
+    }

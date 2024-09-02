@@ -32,10 +32,10 @@ internal class CheckLowBalanceUC(
     private val walletGetBalanceUC: WalletGetBalanceUC,
     private val getBalanceWarningThreshold: GetBalanceWarningThresholdUC,
 ) : UseCase(context) {
-    operator fun invoke() = walletGetBalanceUC()
-        .filterNotNull()
-        .combine(getBalanceWarningThreshold()) { balance, threshold ->
-            balance.balance < threshold
-        }
-        .distinctUntilChanged()
+    operator fun invoke() =
+        walletGetBalanceUC()
+            .filterNotNull()
+            .combine(getBalanceWarningThreshold()) { balance, threshold ->
+                balance.balance < threshold
+            }.distinctUntilChanged()
 }

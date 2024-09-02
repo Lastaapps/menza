@@ -17,17 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.usecase.settings
+package cz.lastaapps.menza.features.root.domain.usecase
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
-class GetSettingsEverOpenedUC internal constructor(
+internal class IsAppSetUpUC(
     context: UCContext,
-    private val repo: MainSettingsRepo,
+    private val settings: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        repo.isSettingsEverOpened()
-    }
+    suspend operator fun invoke() =
+        launch {
+            settings.isAppSetupFinished()
+        }
 }

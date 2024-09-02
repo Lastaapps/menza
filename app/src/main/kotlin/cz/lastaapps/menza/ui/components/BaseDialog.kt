@@ -52,25 +52,28 @@ fun BaseDialog(
         val sourceSurface = remember { MutableInteractionSource() }
 
         Box(
-            modifier = Modifier
-                .fillMaxSize(.95f)
-                .clickable(sourceBackground, indication = null) {
-                    if (properties.dismissOnClickOutside) {
-                        onDismissRequest()
-                    }
-                },
+            modifier =
+                Modifier
+                    .fillMaxSize(.95f)
+                    .clickable(sourceBackground, indication = null) {
+                        if (properties.dismissOnClickOutside) {
+                            onDismissRequest()
+                        }
+                    },
             contentAlignment = Alignment.Center,
         ) {
             Surface(
                 color = MaterialTheme.colorScheme.background,
                 shape = MaterialTheme.shapes.large,
-                modifier = Modifier
-                    .clickable(sourceSurface, indication = null) {},
+                modifier =
+                    Modifier
+                        .clickable(sourceSurface, indication = null) {},
             ) {
                 Box(
-                    modifier = Modifier
-                        .padding(More.Dialog)
-                        .then(scrollState?.let { Modifier.verticalScroll(it) } ?: Modifier),
+                    modifier =
+                        Modifier
+                            .padding(More.Dialog)
+                            .then(scrollState?.let { Modifier.verticalScroll(it) } ?: Modifier),
                 ) {
                     content()
                 }

@@ -22,7 +22,6 @@ package cz.lastaapps.core.util.extensions
 import arrow.core.left
 import arrow.core.right
 import cz.lastaapps.core.domain.error.CommonError
-import kotlin.time.Duration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.Flow
@@ -32,6 +31,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration
 
 fun <T1, T2, T3, T4, T5, T6, R> combine6(
     flow1: Flow<T1>,
@@ -41,12 +41,13 @@ fun <T1, T2, T3, T4, T5, T6, R> combine6(
     flow5: Flow<T5>,
     flow6: Flow<T6>,
     transform: suspend (T1, T2, T3, T4, T5, T6) -> R,
-): Flow<R> = combine(
-    combine(flow1, flow2, flow3, ::Triple),
-    combine(flow4, flow5, flow6, ::Triple),
-) { (v1, v2, v3), (v4, v5, v6) ->
-    transform(v1, v2, v3, v4, v5, v6)
-}
+): Flow<R> =
+    combine(
+        combine(flow1, flow2, flow3, ::Triple),
+        combine(flow4, flow5, flow6, ::Triple),
+    ) { (v1, v2, v3), (v4, v5, v6) ->
+        transform(v1, v2, v3, v4, v5, v6)
+    }
 
 suspend fun <T> withTimeoutOutcome(
     timeout: Duration,
@@ -57,21 +58,23 @@ suspend fun <T> withTimeoutOutcome(
     CommonError.WorkTimeout(e).left()
 }
 
-fun <T> Flow<Flow<T>>.flattenSensible(): Flow<T> = channelFlow {
-    // the first collect has to be collectLatest!!!
-    collectLatest { flow -> flow.collect { send(it) } }
-}
+fun <T> Flow<Flow<T>>.flattenSensible(): Flow<T> =
+    channelFlow {
+        // the first collect has to be collectLatest!!!
+        collectLatest { flow -> flow.collect { send(it) } }
+    }
 
 fun <T, Acu> Iterable<Flow<T>>.foldFlows(
     initial: Acu,
     operation: (Acu, T) -> Acu,
-): Flow<Acu> = run {
-    val baseCase = flow { emit(initial) }
+): Flow<Acu> =
+    run {
+        val baseCase = flow { emit(initial) }
 
-    fold(baseCase) { acu, data ->
-        combine(acu, data, operation)
+        fold(baseCase) { acu, data ->
+            combine(acu, data, operation)
+        }
     }
-}
 
 fun <T, Acu> Sequence<Flow<T>>.foldFlows(
     initial: Acu,
@@ -86,15 +89,17 @@ fun <T, Acu> List<Flow<T>>.foldBinary(
     initial: T,
     mapper: (T) -> Acu,
     operation: (Acu, Acu) -> Acu,
-): Flow<Acu> = when (size) {
-    0 -> flow { emit(mapper(initial)) }
-    1 -> this[0].map(mapper)
-    else -> combine(
-        subList(0, size / 2).foldBinary(initial, mapper, operation),
-        subList(size / 2, size).foldBinary(initial, mapper, operation),
-        operation,
-    )
-}
+): Flow<Acu> =
+    when (size) {
+        0 -> flow { emit(mapper(initial)) }
+        1 -> this[0].map(mapper)
+        else ->
+            combine(
+                subList(0, size / 2).foldBinary(initial, mapper, operation),
+                subList(size / 2, size).foldBinary(initial, mapper, operation),
+                operation,
+            )
+    }
 
 fun <T> List<Flow<T>>.foldBinary(
     initial: T,

@@ -71,11 +71,17 @@ import java.time.format.DateTimeFormatter
 
 sealed class ReportMode {
     data object Matrix : ReportMode()
+
     data object Telegram : ReportMode()
+
     data object Discord : ReportMode()
+
     data object GitHub : ReportMode()
+
     data object Facebook : ReportMode()
+
     data object Email : ReportMode()
+
     data object Clipboard : ReportMode()
 }
 
@@ -84,11 +90,13 @@ fun ReportDialog(
     shown: Boolean,
     reportsCrash: Boolean,
     onDismissRequest: () -> Unit,
-    onModeSelected: (ReportMode) -> Unit,
+    onMode: (ReportMode) -> Unit,
 ) {
     if (shown) {
         ReportDialog(
-            reportsCrash, onDismissRequest, onModeSelected,
+            reportsCrash,
+            onDismissRequest,
+            onMode,
         )
     }
 }
@@ -97,16 +105,17 @@ fun ReportDialog(
 private fun ReportDialog(
     reportsCrash: Boolean,
     onDismissRequest: () -> Unit,
-    onModeSelected: (ReportMode) -> Unit,
+    onMode: (ReportMode) -> Unit,
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.extraLarge) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .width(IntrinsicSize.Max)
-                    .padding(16.dp)
+                modifier =
+                    Modifier
+                        .width(IntrinsicSize.Max)
+                        .padding(16.dp),
             ) {
                 Text(
                     stringResource(cz.lastaapps.menza.R.string.report_title),
@@ -114,7 +123,7 @@ private fun ReportDialog(
                     textAlign = TextAlign.Center,
                 )
                 Button(
-                    onClick = { onModeSelected(GitHub) },
+                    onClick = { onMode(GitHub) },
                     Modifier.fillMaxWidth(),
                 ) {
                     Row(
@@ -130,8 +139,8 @@ private fun ReportDialog(
                     }
                 }
                 Button(
-                    onClick = { onModeSelected(Matrix) },
-                    Modifier.fillMaxWidth()
+                    onClick = { onMode(Matrix) },
+                    Modifier.fillMaxWidth(),
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -140,13 +149,13 @@ private fun ReportDialog(
                         Image(
                             painterResource(R.drawable.ic_matrix),
                             null,
-                            Modifier.size(24.dp)
+                            Modifier.size(24.dp),
                         )
                         Text(stringResource(cz.lastaapps.menza.R.string.report_matrix))
                     }
                 }
                 Button(
-                    onClick = { onModeSelected(Telegram) },
+                    onClick = { onMode(Telegram) },
                     Modifier.fillMaxWidth(),
                 ) {
                     Row(
@@ -162,7 +171,7 @@ private fun ReportDialog(
                     }
                 }
                 Button(
-                    onClick = { onModeSelected(Discord) },
+                    onClick = { onMode(Discord) },
                     Modifier.fillMaxWidth(),
                 ) {
                     Row(
@@ -195,8 +204,8 @@ private fun ReportDialog(
 //                    }
 //                }
                 Button(
-                    onClick = { onModeSelected(Email) },
-                    Modifier.fillMaxWidth()
+                    onClick = { onMode(Email) },
+                    Modifier.fillMaxWidth(),
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -206,17 +215,18 @@ private fun ReportDialog(
                         Text(stringResource(cz.lastaapps.menza.R.string.report_email))
                     }
                 }
-                if (reportsCrash)
-                Button(
-                    onClick = { onModeSelected(Clipboard) },
-                    Modifier.fillMaxWidth(),
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                if (reportsCrash) {
+                    Button(
+                        onClick = { onMode(Clipboard) },
+                        Modifier.fillMaxWidth(),
                     ) {
-                        Icon(Icons.Filled.ContentCopy, null, Modifier.size(24.dp))
-                        Text(stringResource(cz.lastaapps.menza.R.string.report_clipboard))
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(Icons.Filled.ContentCopy, null, Modifier.size(24.dp))
+                            Text(stringResource(cz.lastaapps.menza.R.string.report_clipboard))
+                        }
                     }
                 }
                 TextButton(onClick = onDismissRequest) {
@@ -227,8 +237,13 @@ private fun ReportDialog(
     }
 }
 
-fun sendReport(context: Context, mode: ReportMode, throwable: Throwable? = null) {
-    val text = """
+fun sendReport(
+    context: Context,
+    mode: ReportMode,
+    throwable: Throwable? = null,
+) {
+    val text =
+        """
         |${context.getString(cz.lastaapps.menza.R.string.report_add_description)}
         |
         |
@@ -238,31 +253,40 @@ fun sendReport(context: Context, mode: ReportMode, throwable: Throwable? = null)
         |${LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)}
         |${throwable?.message ?: "Unknown error message"}
         |${throwable?.stackTraceToString() ?: ""}
-    """.trimMargin()
+        """.trimMargin()
     doSend(context, mode, text)
 }
 
-fun sendReport(context: Context, mode: ReportMode, crash: Crash) {
-    val text = """
+fun sendReport(
+    context: Context,
+    mode: ReportMode,
+    crash: Crash,
+) {
+    val text =
+        """
         |${context.getString(cz.lastaapps.menza.R.string.report_add_description)}
         |
         |
         |${getPhoneInfo(context)}
         |
         |${
-        when (crash.severity) {
-            ErrorSeverity.CRASH -> "App crashed"
-            ErrorSeverity.HANDLED -> "Internal app problem"
+            when (crash.severity) {
+                ErrorSeverity.CRASH -> "App crashed"
+                ErrorSeverity.HANDLED -> "Internal app problem"
+            }
         }
-    }
         |${crash.date.format(DateTimeFormatter.ISO_DATE_TIME)}
         |${crash.message}
         |${crash.trace}
-    """.trimMargin()
+        """.trimMargin()
     doSend(context, mode, text)
 }
 
-private fun doSend(context: Context, mode: ReportMode, text: String) {
+private fun doSend(
+    context: Context,
+    mode: ReportMode,
+    text: String,
+) {
     copyToClipboard(context, text)
 
     when (mode) {
@@ -286,25 +310,34 @@ private fun getPhoneInfo(context: Context): String {
         |Phone manufacturer: ${Build.MANUFACTURER} 
         |Date and Time:      ${ZonedDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)}
         |Screen size:        ${metrics.widthPixels} x ${metrics.heightPixels} px
-    """.trimMargin()
+        """.trimMargin()
 }
 
-private fun copyToClipboard(context: Context, text: String) {
+private fun copyToClipboard(
+    context: Context,
+    text: String,
+) {
     val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText(
-        context.getString(cz.lastaapps.menza.R.string.report_toast_clipboard_title),
-        text,
-    )
+    val clip =
+        ClipData.newPlainText(
+            context.getString(cz.lastaapps.menza.R.string.report_toast_clipboard_title),
+            text,
+        )
     clipboard.setPrimaryClip(clip)
-    Toast.makeText(context, cz.lastaapps.menza.R.string.report_toast_clipboard, Toast.LENGTH_LONG)
+    Toast
+        .makeText(context, cz.lastaapps.menza.R.string.report_toast_clipboard, Toast.LENGTH_LONG)
         .show()
 }
 
-private fun sendMatrix(context: Context, @Suppress("UNUSED_PARAMETER") text: String) {
-    val intent = Intent(
-        Intent.ACTION_VIEW,
-        Uri.parse("https://matrix.to/#/#lastaapps_menza:matrix.org"),
-    )
+private fun sendMatrix(
+    context: Context,
+    @Suppress("UNUSED_PARAMETER") text: String,
+) {
+    val intent =
+        Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://matrix.to/#/#lastaapps_menza:matrix.org"),
+        )
     try {
         context.startActivity(intent)
     } catch (e: Exception) {
@@ -312,44 +345,61 @@ private fun sendMatrix(context: Context, @Suppress("UNUSED_PARAMETER") text: Str
     }
 }
 
-private fun sendTelegram(context: Context, text: String) {
-    //val myId = Uri.encode("-1001494132666") //group id
+private fun sendTelegram(
+    context: Context,
+    text: String,
+) {
+    // val myId = Uri.encode("-1001494132666") //group id
     val groupName = Uri.encode("lastaapps")
     val encoded = Uri.encode(text)
 
-    val intent = Intent(
-        Intent.ACTION_VIEW,
-        //Uri.parse("tg://msg?to=$myId&text=$encoded"),
-        Uri.parse("tg://resolve?domain=$groupName&text=$encoded"),
-    )
+    val intent =
+        Intent(
+            Intent.ACTION_VIEW,
+            // Uri.parse("tg://msg?to=$myId&text=$encoded"),
+            Uri.parse("tg://resolve?domain=$groupName&text=$encoded"),
+        )
     try {
         context.startActivity(intent)
     } catch (e: Exception) {
         e.printStackTrace()
-        val webIntent = Intent(
-            Intent.ACTION_VIEW,
-            //Uri.parse("https://t.me/share/msg?to=$myId&text=$encoded"),
-            Uri.parse("http://www.telegram.me/$groupName"),
-        )
+        val webIntent =
+            Intent(
+                Intent.ACTION_VIEW,
+                // Uri.parse("https://t.me/share/msg?to=$myId&text=$encoded"),
+                Uri.parse("http://www.telegram.me/$groupName"),
+            )
         context.startActivity(webIntent)
     }
 }
 
-private fun sendGitHub(context: Context, @Suppress("UNUSED_PARAMETER") text: String) {
+private fun sendGitHub(
+    context: Context,
+    @Suppress("UNUSED_PARAMETER") text: String,
+) {
     val intent =
         Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Lastaapps/Menza/issues/new"))
     context.startActivity(intent)
 }
 
-private fun sendDiscord(context: Context, @Suppress("UNUSED_PARAMETER") text: String) {
+private fun sendDiscord(
+    context: Context,
+    @Suppress("UNUSED_PARAMETER") text: String,
+) {
     Communication.openDiscord(context)
 }
 
-private fun sendFacebook(context: Context, @Suppress("UNUSED_PARAMETER") text: String) {
+private fun sendFacebook(
+    context: Context,
+    @Suppress("UNUSED_PARAMETER") text: String,
+) {
     Communication.openFacebook(context)
 }
 
-private fun sendEmail(context: Context, text: String) {
+private fun sendEmail(
+    context: Context,
+    text: String,
+) {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = Uri.parse("mailto:")
     intent.putExtra(Intent.EXTRA_EMAIL, "lastaappsdev@gmail.com")
@@ -359,8 +409,8 @@ private fun sendEmail(context: Context, text: String) {
         context.startActivity(intent)
     } catch (e: Exception) {
         e.printStackTrace()
-        Toast.makeText(context, cz.lastaapps.menza.R.string.report_email_no_app, Toast.LENGTH_LONG)
+        Toast
+            .makeText(context, cz.lastaapps.menza.R.string.report_email_no_app, Toast.LENGTH_LONG)
             .show()
     }
 }
-

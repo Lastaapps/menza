@@ -47,7 +47,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun AppThemeScreen(
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     viewModel: AppThemeViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -61,15 +61,13 @@ internal fun AppThemeScreen(
         selectedDarkMode = state.darkMode ?: return,
         onAppTheme = viewModel::setAppTheme,
         onDarkMode = viewModel::setDarkMode,
-        onDone = onDone,
+        onComplete = onComplete,
         modifier = modifier.fillMaxSize(),
     )
 }
 
 @Composable
-private fun AppThemeEffects(
-    viewModel: AppThemeViewModel,
-) {
+private fun AppThemeEffects(viewModel: AppThemeViewModel) {
     HandleAppear(viewModel)
 }
 
@@ -80,18 +78,18 @@ private fun AppThemeContent(
     selectedDarkMode: DarkMode,
     onAppTheme: (AppThemeType) -> Unit,
     onDarkMode: (DarkMode) -> Unit,
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(
-            Padding.MidLarge,
-            Alignment.CenterVertically,
-        ),
+        verticalArrangement =
+            Arrangement.spacedBy(
+                Padding.MidLarge,
+                Alignment.CenterVertically,
+            ),
     ) {
-
         item {
             Text(
                 text = stringResource(R.string.settings_theme_title),
@@ -139,7 +137,7 @@ private fun AppThemeContent(
         }
 
         item {
-            Button(onClick = onDone) {
+            Button(onClick = onComplete) {
                 Text(stringResource(R.string.button_continue))
             }
         }

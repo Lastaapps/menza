@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -41,26 +41,29 @@ internal class AppThemeViewModel(
     private val getDarkMode: GetDarkModeUC,
     private val setAppTheme: SetAppThemeUC,
     private val setDarkMode: SetDarkModeUC,
-) : StateViewModel<AppThemeState>(AppThemeState(), context), Appearing {
+) : StateViewModel<AppThemeState>(AppThemeState(), context),
+    Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launchVM {
+    override fun onAppeared() =
         launchVM {
-            getAppTheme().collectLatest { theme ->
-                updateState { copy(theme = theme) }
+            launchVM {
+                getAppTheme().collectLatest { theme ->
+                    updateState { copy(theme = theme) }
+                }
+            }
+            launchVM {
+                getDarkMode().collectLatest { mode ->
+                    updateState { copy(darkMode = mode) }
+                }
+            }
+            getAppThemeList().let {
+                updateState { copy(availableThemes = it) }
             }
         }
-        launchVM {
-            getDarkMode().collectLatest { mode ->
-                updateState { copy(darkMode = mode) }
-            }
-        }
-        getAppThemeList().let {
-            updateState { copy(availableThemes = it) }
-        }
-    }
 
     fun setAppTheme(theme: AppThemeType) = launchVM { setAppTheme.invoke(theme) }
+
     fun setDarkMode(mode: DarkMode) = launchVM { setDarkMode.invoke(mode) }
 }
 

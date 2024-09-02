@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -62,67 +62,79 @@ import cz.lastaapps.core.domain.error.ParsingError.Buffet.MenuCannotBeParsed
 private inline fun T(text: String) = Rich(text)
 
 @Suppress("NOTHING_TO_INLINE", "FunctionName")
-private inline fun E(@StringRes resId: Int) = Resource(resId)
+private inline fun E(
+    @StringRes resId: Int,
+) = Resource(resId)
 
 @Suppress("NOTHING_TO_INLINE", "FunctionName")
-private inline fun F(@StringRes resId: Int, vararg args: Any) = Formatted(resId, args)
+private inline fun F(
+    @StringRes resId: Int,
+    vararg args: Any,
+) = Formatted(resId, args)
 
 val DomainError.text: AppText
-    get() = when (this) {
-        is NetworkError -> text
-        is ParsingError -> text
-        is ApiError -> text
-        is CommonError -> text
-        is Unknown -> F(
-            R.string.error_unknown,
-            throwable.localizedMessage ?: "null",
-        )
-    }
+    get() =
+        when (this) {
+            is NetworkError -> text
+            is ParsingError -> text
+            is ApiError -> text
+            is CommonError -> text
+            is Unknown ->
+                F(
+                    R.string.error_unknown,
+                    throwable.localizedMessage ?: "null",
+                )
+        }
 
 val NetworkError.text: AppText
-    get() = when (this) {
-        ConnectionClosed -> E(R.string.error_network_connection_closed)
-        NoInternet -> E(R.string.error_network_no_internet)
-        Timeout -> E(R.string.error_network_timeout)
-        is SerializationError -> E(R.string.error_network_serialization)
-    }
+    get() =
+        when (this) {
+            ConnectionClosed -> E(R.string.error_network_connection_closed)
+            NoInternet -> E(R.string.error_network_no_internet)
+            Timeout -> E(R.string.error_network_timeout)
+            is SerializationError -> E(R.string.error_network_serialization)
+        }
 
 val ParsingError.text: AppText
-    get() = when (this) {
-        DateRangeCannotBeParsed -> E(R.string.error_parsing_date_range)
-        DayCannotBeParsed -> E(R.string.error_parsing_day)
-        DishCannotBeParsed -> E(R.string.error_parsing_dish)
-        MenuCannotBeParsed -> E(R.string.error_parsing_menu)
-    }
+    get() =
+        when (this) {
+            DateRangeCannotBeParsed -> E(R.string.error_parsing_date_range)
+            DayCannotBeParsed -> E(R.string.error_parsing_day)
+            DishCannotBeParsed -> E(R.string.error_parsing_dish)
+            MenuCannotBeParsed -> E(R.string.error_parsing_menu)
+        }
 
 val ApiError.text: AppText
-    get() = when (this) {
-        WeekNotAvailable -> E(R.string.error_api_week_not_available)
-        is SyncError ->
-            when (this) {
-                is Problem -> E(R.string.error_api_incomplete_data)
-                Unavailable -> E(R.string.error_api_module_unavailable)
-                Closed -> E(R.string.error_api_menza_cloned)
-            }
+    get() =
+        when (this) {
+            WeekNotAvailable -> E(R.string.error_api_week_not_available)
+            is SyncError ->
+                when (this) {
+                    is Problem -> E(R.string.error_api_incomplete_data)
+                    Unavailable -> E(R.string.error_api_module_unavailable)
+                    Closed -> E(R.string.error_api_menza_cloned)
+                }
 
-        is WalletError ->
-            when (this) {
-                TotallyBroken -> E(R.string.error_wallet_login_failed_critical)
-                InvalidCredentials -> E(R.string.error_wallet_login_failed_credentials)
-            }
-    }
+            is WalletError ->
+                when (this) {
+                    TotallyBroken -> E(R.string.error_wallet_login_failed_critical)
+                    InvalidCredentials -> E(R.string.error_wallet_login_failed_credentials)
+                }
+        }
 
 val CommonError.text: AppText
-    get() = when (this) {
-        is WorkTimeout -> E(R.string.error_network_timeout)
-        is NotLoggedIn -> E(R.string.error_not_logged_in)
-        is AppNotFound -> when (this) {
-            AddContact -> E(R.string.error_no_app_contacts)
-            Email -> E(R.string.error_no_app_email)
-            Facebook -> E(R.string.error_no_app_facebook)
-            Link -> E(R.string.error_no_app_browser)
-            Map -> E(R.string.error_no_app_location)
-            PhoneCall -> E(R.string.error_no_app_dial)
-            Telegram -> E(R.string.error_no_app_telegram)
+    get() =
+        when (this) {
+            is WorkTimeout -> E(R.string.error_network_timeout)
+            is NotLoggedIn -> E(R.string.error_not_logged_in)
+            is AppNotFound ->
+                when (this) {
+                    AddContact -> E(R.string.error_no_app_contacts)
+                    Email -> E(R.string.error_no_app_email)
+                    Facebook -> E(R.string.error_no_app_facebook)
+                    Link -> E(R.string.error_no_app_browser)
+                    Map -> E(R.string.error_no_app_location)
+                    PhoneCall -> E(R.string.error_no_app_dial)
+                    Telegram -> E(R.string.error_no_app_telegram)
+                }
         }
-    }

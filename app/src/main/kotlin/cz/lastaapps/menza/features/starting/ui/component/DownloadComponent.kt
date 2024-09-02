@@ -37,7 +37,9 @@ internal interface DownloadComponent {
 
 internal class DefaultDownloadComponent(
     componentContext: ComponentContext,
-) : DownloadComponent, KoinComponent, ComponentContext by componentContext {
+) : DownloadComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: DownloadViewModel = getOrCreateKoin()
 }
 
@@ -49,11 +51,12 @@ internal fun DownloadContent(
     onNext: () -> Unit,
 ) {
     DownloadScreen(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(More.Screen),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(More.Screen),
         viewModel = component.viewModel,
         hostState = hostState,
-        onDone = onNext,
+        onComplete = onNext,
     )
 }

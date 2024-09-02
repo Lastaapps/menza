@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,7 +27,8 @@ internal class IsMenzaOrderFromTopUC internal constructor(
     context: UCContext,
     private val repo: OrderRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        repo.isFromTop()
-    }
+    suspend operator fun invoke() =
+        launch {
+            repo.isFromTop()
+        }
 }

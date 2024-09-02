@@ -25,7 +25,10 @@ plugins {
 group = "cz.lastaapps.convention-plugins"
 
 java {
-    val versionCode = libs.versions.java.jvmTarget.get().toInt()
+    val versionCode =
+        libs.versions.java.jvmTarget
+            .get()
+            .toInt()
     val version = JavaVersion.toVersion(versionCode)
     sourceCompatibility = version
     targetCompatibility = version
@@ -68,21 +71,22 @@ gradlePlugin {
         )
         plugin(
             ids.kmp.library,
-            pkg("multiplatform.KMPLibraryConvention")
+            pkg("multiplatform.KMPLibraryConvention"),
         )
         plugin(
             ids.kmp.sqldelight,
-            pkg("multiplatform.SqlDelightConvention")
+            pkg("multiplatform.SqlDelightConvention"),
         )
         plugin(
             ids.jvm.app,
-            pkg("jvm.JvmAppConvention")
+            pkg("jvm.JvmAppConvention"),
         )
     }
 }
 
 fun NamedDomainObjectContainer<PluginDeclaration>.plugin(
-    name: Provider<out PluginDependency>, plugin: String,
+    name: Provider<out PluginDependency>,
+    plugin: String,
 ) {
     val pluginId = name.get().pluginId
     register(pluginId) {

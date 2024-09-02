@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,8 @@ import cz.lastaapps.core.domain.UseCase
 class IsDynamicThemeSupportedUC internal constructor(
     context: UCContext,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        DynamicColors.isDynamicColorAvailable()
-    }
+    suspend operator fun invoke() =
+        launch {
+            DynamicColors.isDynamicColorAvailable()
+        }
 }

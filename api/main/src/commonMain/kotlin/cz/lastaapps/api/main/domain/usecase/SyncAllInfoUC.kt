@@ -19,8 +19,6 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
-import cz.lastaapps.api.core.domain.sync.getData
-import cz.lastaapps.api.core.domain.sync.sync
 import arrow.core.separateEither
 import arrow.fx.coroutines.parMap
 import cz.lastaapps.core.domain.UCContext
@@ -32,11 +30,14 @@ class SyncAllInfoUC(
     context: UCContext,
     private val getMenzaList: GetMenzaListUC,
     private val syncInfo: SyncInfoUC,
-) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(isForced: Boolean = false) = launch {
-        val menzas = getMenzaList().first()
-        menzas.parMap(concurrency = 4) {
-            syncInfo(it, isForced)
-        }.separateEither()
-    }
+) : UseCase(context),
+    KoinComponent {
+    suspend operator fun invoke(isForced: Boolean = false) =
+        launch {
+            val menzas = getMenzaList().first()
+            menzas
+                .parMap(concurrency = 4) {
+                    syncInfo(it, isForced)
+                }.separateEither()
+        }
 }

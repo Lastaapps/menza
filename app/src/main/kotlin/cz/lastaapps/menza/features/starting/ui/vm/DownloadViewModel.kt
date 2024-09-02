@@ -32,83 +32,96 @@ import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.starting.domain.model.DownloadProgress
 import cz.lastaapps.menza.features.starting.domain.usecase.CheckDataDownloadNeededUC
 import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
+import kotlin.time.Duration.Companion.seconds
 
 internal class DownloadViewModel(
     private val checkDownloadNeeded: CheckDataDownloadNeededUC,
     private val downloadData: DownloadInitDataUC,
     context: VMContext,
-) : StateViewModel<DownloadDataState>(DownloadDataState(), context), ErrorHolder, Appearing {
+) : StateViewModel<DownloadDataState>(DownloadDataState(), context),
+    ErrorHolder,
+    Appearing {
     override var hasAppeared: Boolean = false
 
     private val log = localLogger()
 
-    override fun onAppeared() = launchVM {
-        log.i { "Appeared" }
+    override fun onAppeared() =
+        launchVM {
+            log.i { "Appeared" }
 
-        checkDownloadNeeded().onEach {
-            when (it) {
-                true -> {
-                    log.i { "No data, starting" }
-                    updateState { copy(isReady = true) }
-                    startDownload()
-                }
+            checkDownloadNeeded()
+                .onEach {
+                    when (it) {
+                        true -> {
+                            log.i { "No data, starting" }
+                            updateState { copy(isReady = true) }
+                            startDownload()
+                        }
 
-                false -> {
-                    log.i { "Already has data" }
-                    updateState {
-                        copy(
-                            isReady = true,
-                            isDone = true,
-                            downloadProgress = DownloadProgress.DONE,
-                        )
+                        false -> {
+                            log.i { "Already has data" }
+                            updateState {
+                                copy(
+                                    isReady = true,
+                                    isDone = true,
+                                    downloadProgress = DownloadProgress.DONE,
+                                )
+                            }
+                        }
                     }
-                }
-            }
-        }.launchInVM()
-    }
+                }.launchInVM()
+        }
 
-    private fun startDownload() = launchVM {
-        updateState { copy(isLoading = true) }
+    private fun startDownload() =
+        launchVM {
+            updateState { copy(isLoading = true) }
 
-        log.i { "Starting download" }
+            log.i { "Starting download" }
 
-        downloadData().collectLatest { res ->
-            log.i { "Download progress: $res" }
+            downloadData().collectLatest { res ->
+                log.i { "Download progress: $res" }
 
-            when (res) {
-                is Left -> updateState {
-                    log.i { "Setting an error" };copy(
-                    error = res.value,
-                    isLoading = false,
-                )
-                }
+                when (res) {
+                    is Left ->
+                        updateState {
+                            log.i { "Setting an error" }
+                            copy(
+                                error = res.value,
+                                isLoading = false,
+                            )
+                        }
 
-                is Right -> {
-                    updateState { copy(downloadProgress = res.value) }
+                    is Right -> {
+                        updateState { copy(downloadProgress = res.value) }
 
-                    if (res.value == DownloadProgress.DONE) {
-                        delay(1.seconds)
-                        updateState { copy(isDone = true, isLoading = false) }
+                        if (res.value == DownloadProgress.DONE) {
+                            delay(1.seconds)
+                            updateState { copy(isDone = true, isLoading = false) }
+                        }
                     }
                 }
             }
         }
-    }
 
-    fun retry() = launchVM {
-        log.i { "Retrying" }
-        startDownload()
-    }
+    fun retry() =
+        launchVM {
+            log.i { "Retrying" }
+            startDownload()
+        }
 
     fun dismissDone() = updateState { copy(isDone = false) }
 
     @Composable
     override fun getError(): DomainError? = flowState.value.error
-    override fun dismissError() = updateState { log.i { "Clearing error" }; copy(error = null) }
+
+    override fun dismissError() =
+        updateState {
+            log.i { "Clearing error" }
+            copy(error = null)
+        }
 }
 
 internal data class DownloadDataState(

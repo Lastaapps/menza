@@ -30,51 +30,65 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import kotlinx.coroutines.flow.Flow
 
 internal interface MainSettingsRepo {
-
     fun getAllSettings(): Flow<AppSettings>
 
     suspend fun storeInitialMenzaMode(mode: InitialSelectionBehaviour)
+
     fun getInitialMenzaMode(): Flow<InitialSelectionBehaviour>
 
     suspend fun storeLatestMenza(type: MenzaType)
+
     fun getLatestMenza(): Flow<MenzaType?>
 
     suspend fun storePreferredMenza(type: MenzaType)
+
     fun getPreferredMenza(): Flow<MenzaType?>
 
     suspend fun storeAppSetupFinished()
+
     fun isAppSetupFinished(): Flow<Boolean>
 
     suspend fun storeSettingsEverOpened()
+
     fun isSettingsEverOpened(): Flow<Boolean>
 
     suspend fun setPriceType(type: PriceType)
+
     fun getPriceType(): Flow<PriceType>
 
     suspend fun setDarkMode(mode: DarkMode)
+
     fun getDarkMode(): Flow<DarkMode>
 
     suspend fun setAppTheme(theme: AppThemeType)
+
     fun getAppTheme(): Flow<AppThemeType?>
 
     suspend fun setImageScale(scale: Float)
+
     fun getImageScale(): Flow<Float>
 
     suspend fun setImagesOnMetered(enabled: Boolean)
+
     fun getImagesOnMetered(): Flow<Boolean>
 
     suspend fun setDishLanguage(language: DishLanguage)
+
     fun getDishLanguage(): Flow<DishLanguage>
 
     suspend fun setCompactTodayView(mode: DishListMode)
+
     fun isCompactTodayView(): Flow<DishListMode>
 
     suspend fun setOliverRows(useOliverRows: Boolean)
+
     fun isOliverRow(): Flow<Boolean>
 
     suspend fun setBalanceWarningThreshold(threshold: Int)
+
     fun getBalanceWarningThreshold(): Flow<Int>
 
     suspend fun setAlternativeNavigation(enabled: Boolean)
+
     fun getAlternativeNavigation(): Flow<Boolean>
 }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,11 +31,12 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class PrivacyStore(appContext: Context) {
-
+class PrivacyStore(
+    appContext: Context,
+) {
     companion object {
-        private const val storeName = "privacy_store"
-        val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = storeName)
+        private const val STORE_NAME = "privacy_store"
+        val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = STORE_NAME)
     }
 
     private val store = appContext.dataStore
@@ -43,11 +44,12 @@ class PrivacyStore(appContext: Context) {
     private val approvedKey = stringPreferencesKey("approved")
 
     val approved: Flow<Instant?>
-        get() = store.data.map { pref ->
-            pref[approvedKey]?.let {
-                Json.decodeFromString<Instant>(it)
+        get() =
+            store.data.map { pref ->
+                pref[approvedKey]?.let {
+                    Json.decodeFromString<Instant>(it)
+                }
             }
-        }
 
     suspend fun setApproved(date: Instant) {
         store.edit {

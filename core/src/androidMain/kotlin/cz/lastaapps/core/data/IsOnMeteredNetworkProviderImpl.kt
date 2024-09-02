@@ -37,8 +37,7 @@ import kotlinx.coroutines.flow.onEach
 internal class IsOnMeteredNetworkProviderImpl(
     private val context: Context,
 ) : IsOnMeteredNetworkProvider {
-
-        private val log = localLogger()
+    private val log = localLogger()
 
     override fun isOnMeteredNetwork(): Flow<Boolean> {
         val manager =
@@ -56,15 +55,16 @@ internal class IsOnMeteredNetworkProviderImpl(
             send(manager.getNetworkCapabilities(network))
 
             val request = NetworkRequest.Builder().build()
-            val callback = object : ConnectivityManager.NetworkCallback() {
-                override fun onCapabilitiesChanged(
-                    network: Network,
-                    networkCapabilities: NetworkCapabilities,
-                ) {
-                    super.onCapabilitiesChanged(network, networkCapabilities)
-                    trySend(networkCapabilities)
+            val callback =
+                object : ConnectivityManager.NetworkCallback() {
+                    override fun onCapabilitiesChanged(
+                        network: Network,
+                        networkCapabilities: NetworkCapabilities,
+                    ) {
+                        super.onCapabilitiesChanged(network, networkCapabilities)
+                        trySend(networkCapabilities)
+                    }
                 }
-            }
             manager.registerNetworkCallback(request, callback)
 
             awaitClose {
@@ -77,6 +77,5 @@ internal class IsOnMeteredNetworkProviderImpl(
         }
     }
 
-    private fun NetworkCapabilities.isMetered(): Boolean =
-        !hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
+    private fun NetworkCapabilities.isMetered(): Boolean = !hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
 }

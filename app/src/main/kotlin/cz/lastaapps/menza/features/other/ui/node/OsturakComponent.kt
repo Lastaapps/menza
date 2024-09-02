@@ -31,7 +31,8 @@ internal interface OsturakComponent
 
 internal class DefaultOsturakComponent(
     componentContext: ComponentContext,
-) : OsturakComponent, ComponentContext by componentContext
+) : OsturakComponent,
+    ComponentContext by componentContext
 
 @Composable
 internal fun OsturakContent(

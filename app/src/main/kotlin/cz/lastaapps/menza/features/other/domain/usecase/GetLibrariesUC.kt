@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,8 @@ internal class GetLibrariesUC internal constructor(
     context: UCContext,
     private val androidContext: Context,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        Libs.Builder().withContext(androidContext).build()
-    }
+    suspend operator fun invoke() =
+        launch {
+            Libs.Builder().withContext(androidContext).build()
+        }
 }

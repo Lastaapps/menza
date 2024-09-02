@@ -54,7 +54,7 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Chil
 internal fun StartingContent(
     component: StartingComponent,
     modifier: Modifier = Modifier,
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
 ) {
     val hostState = remember { SnackbarHostState() }
 
@@ -64,17 +64,18 @@ internal fun StartingContent(
     ) { padding ->
         val pager by component.content.subscribeAsState()
 
-        val childModifier = Modifier
-            .padding(padding)
-            .fillMaxSize()
+        val childModifier =
+            Modifier
+                .padding(padding)
+                .fillMaxSize()
 
         Pages(
             pages = pager,
             onPageSelected = { /* TODO separate download and privacy policy, enable this after */ },
             scrollAnimation = PagesScrollAnimation.Default,
-            pager = { modifier, state, key, pageContent ->
+            pager = { pagerModifier, state, key, pageContent ->
                 HorizontalPager(
-                    modifier = modifier,
+                    modifier = pagerModifier,
                     state = state,
                     key = key,
                     pageContent = pageContent,
@@ -84,9 +85,9 @@ internal fun StartingContent(
         ) { _, page ->
             val next = component::next
             when (page) {
-                is AllSet -> AllSetContent(page.component, childModifier, onDone)
+                is AllSet -> AllSetContent(page.component, childModifier, onComplete)
                 is ChoosePrice -> PriceTypeContent(page.component, childModifier, next)
-                is ChooseDishLanguage -> DishLanguageContent(page.component, childModifier, next)
+                is ChooseDishLanguage -> DishLanguageContent(page.component, next, childModifier)
                 is ChooseTheme -> AppThemeContent(page.component, next, childModifier)
                 is DownloadData -> DownloadContent(page.component, hostState, childModifier, next)
                 is OrderMenzaList -> ReorderMenzaContent(page.component, childModifier, next)

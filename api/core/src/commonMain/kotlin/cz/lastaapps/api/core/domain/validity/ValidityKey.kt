@@ -22,16 +22,22 @@ package cz.lastaapps.api.core.domain.validity
 import cz.lastaapps.api.core.domain.model.RequestParams
 
 @JvmInline
-value class ValidityKey private constructor(val name: String) {
-
+value class ValidityKey private constructor(
+    val name: String,
+) {
     fun withLang(lang: String) = ValidityKey(lang + '_' + name)
 
     companion object {
         fun agataToday(subsystemId: Int) = ValidityKey("agata_today_$subsystemId")
+
         fun agataInfo(subsystemId: Int) = ValidityKey("agata_info_$subsystemId")
+
         fun agataWeek(subsystemId: Int) = ValidityKey("agata_week_$subsystemId")
+
         fun agataMenza() = ValidityKey("agata_menza")
+
         fun strahov() = ValidityKey("strahov")
+
         fun buffetDish() = ValidityKey("buffet_dish")
 
         fun agataCtuBalance() = ValidityKey("balance_agata_ctu")

@@ -67,32 +67,48 @@ internal interface MainComponent : BackHandlerOwner {
 
     sealed interface Child {
         @JvmInline
-        value class Today(val component: TodayComponent) : Child
+        value class Today(
+            val component: TodayComponent,
+        ) : Child
 
         @JvmInline
-        value class Week(val component: WeekComponent) : Child
+        value class Week(
+            val component: WeekComponent,
+        ) : Child
 
         @JvmInline
-        value class Info(val component: InfoComponent) : Child
+        value class Info(
+            val component: InfoComponent,
+        ) : Child
 
         @JvmInline
-        value class Settings(val component: SettingsHubComponent) : Child
+        value class Settings(
+            val component: SettingsHubComponent,
+        ) : Child
 
         @JvmInline
-        value class Osturak(val component: OsturakComponent) : Child
+        value class Osturak(
+            val component: OsturakComponent,
+        ) : Child
 
         @JvmInline
-        value class PrivacyPolicy(val component: PolicyComponent) : Child
+        value class PrivacyPolicy(
+            val component: PolicyComponent,
+        ) : Child
 
         @JvmInline
-        value class LicenseNotices(val component: LicenseComponent) : Child
+        value class LicenseNotices(
+            val component: LicenseComponent,
+        ) : Child
     }
 }
 
 internal class DefaultMainComponent(
     componentContext: ComponentContext,
     private val onExit: () -> Unit,
-) : MainComponent, KoinComponent, ComponentContext by componentContext {
+) : MainComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: MainViewModel = getOrCreateKoin()
 
     private val navigation = StackNavigation<Config>()
@@ -104,16 +120,18 @@ internal class DefaultMainComponent(
         ) { configuration, componentContext ->
             when (configuration) {
                 Config.Info -> Child.Info(DefaultInfoComponent(componentContext))
-                Config.LicenseNotices -> Child.LicenseNotices(
-                    DefaultLicenseComponent(
-                        componentContext,
-                    ),
-                )
+                Config.LicenseNotices ->
+                    Child.LicenseNotices(
+                        DefaultLicenseComponent(
+                            componentContext,
+                        ),
+                    )
 
                 Config.Osturak -> Child.Osturak(DefaultOsturakComponent(componentContext))
-                Config.PrivacyPolicy -> Child.PrivacyPolicy(
-                    DefaultPolicyComponent(componentContext, false),
-                )
+                Config.PrivacyPolicy ->
+                    Child.PrivacyPolicy(
+                        DefaultPolicyComponent(componentContext, false),
+                    )
 
                 Config.Settings -> Child.Settings(DefaultSettingsHubComponent(componentContext))
                 Config.Today -> Child.Today(DefaultTodayComponent(componentContext))

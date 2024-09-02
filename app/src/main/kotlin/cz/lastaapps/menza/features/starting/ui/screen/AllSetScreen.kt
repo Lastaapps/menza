@@ -38,14 +38,14 @@ import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
 internal fun AllSetScreen(
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     viewModel: AllSetViewModel,
     modifier: Modifier = Modifier,
 ) {
     AllSetContent(
-        onDone = {
+        onComplete = {
             viewModel.onFinished()
-            onDone()
+            onComplete()
         },
         modifier = modifier,
     )
@@ -53,17 +53,19 @@ internal fun AllSetScreen(
 
 @Composable
 private fun AllSetContent(
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(
-            Padding.Medium,
-            Alignment.CenterVertically,
-        ),
+        verticalArrangement =
+            Arrangement.spacedBy(
+                Padding.Medium,
+                Alignment.CenterVertically,
+            ),
     ) {
         AppIcon(size = AllSetScreen.iconSize)
 
@@ -79,7 +81,7 @@ private fun AllSetContent(
             textAlign = TextAlign.Center,
         )
 
-        Button(onClick = onDone) {
+        Button(onClick = onComplete) {
             Text(stringResource(R.string.all_set_button))
         }
     }

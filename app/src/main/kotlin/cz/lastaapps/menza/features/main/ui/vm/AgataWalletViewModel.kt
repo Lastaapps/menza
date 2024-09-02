@@ -48,19 +48,22 @@ internal class AgataWalletViewModel(
     private val getAddMoneyUrlUC: GetAddMoneyUrlUC,
     private val openLink: LinkOpener,
 ) : StateViewModel<AgataWalletState>(AgataWalletState(), vmContext),
-    Appearing, ErrorHolder {
+    Appearing,
+    ErrorHolder {
     override var hasAppeared: Boolean = false
 
-        private val log = localLogger()
+    private val log = localLogger()
 
-    override fun onAppeared() = launchVM {
-        walletGetBalanceUC().mapLatest { balance ->
-            log.i { "New balance: $balance" }
-            processBalance(balance)
-        }.launchInVM()
+    override fun onAppeared() =
+        launchVM {
+            walletGetBalanceUC()
+                .mapLatest { balance ->
+                    log.i { "New balance: $balance" }
+                    processBalance(balance)
+                }.launchInVM()
 
-        load(false)
-    }
+            load(false)
+        }
 
     private fun processBalance(balance: UserBalance?) =
         if (balance != null) {
@@ -71,13 +74,15 @@ internal class AgataWalletViewModel(
             false
         }
 
-    fun logout() = launchVM {
-        walletLogoutUC()
-    }
+    fun logout() =
+        launchVM {
+            walletLogoutUC()
+        }
 
-    fun refresh() = launchVM {
-        load(true)
-    }
+    fun refresh() =
+        launchVM {
+            load(true)
+        }
 
     private suspend fun load(force: Boolean) {
         withLoading({ copy(isLoading = it) }) {
@@ -95,7 +100,8 @@ internal class AgataWalletViewModel(
     fun onOpenWeb() {
         val type = lastState().balance.getOrNull()?.type ?: return
 
-        openLink.openLink(getAddMoneyUrlUC(type))
+        openLink
+            .openLink(getAddMoneyUrlUC(type))
             .onLeft { updateState { copy(error = it) } }
     }
 

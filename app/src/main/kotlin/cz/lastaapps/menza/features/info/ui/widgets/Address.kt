@@ -82,7 +82,7 @@ private fun AddressList(
         ) {
             Text(
                 stringResource(R.string.info_location_title),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
             locations.forEach {
                 Address(
@@ -128,23 +128,27 @@ private fun Address(
     }
 }
 
-private fun openMap(context: Context, location: LatLong, onError: () -> Unit) {
-    val intent = with(location) {
-        Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("geo:$lat,$long?g=$lat,$long&z=19")
-        )
-    }
+private fun openMap(
+    context: Context,
+    location: LatLong,
+    onError: () -> Unit,
+) {
+    val intent =
+        with(location) {
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("geo:$lat,$long?g=$lat,$long&z=19"),
+            )
+        }
     try {
         context.startActivity(
             Intent.createChooser(
                 intent,
-                context.getString(R.string.info_location_choose_app)
-            )
+                context.getString(R.string.info_location_choose_app),
+            ),
         )
     } catch (e: Exception) {
         onError()
         e.printStackTrace()
     }
 }
-

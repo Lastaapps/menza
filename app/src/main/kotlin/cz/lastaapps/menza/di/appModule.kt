@@ -40,22 +40,23 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val appModule = module {
-    includes(
-        apiModule,
-        coreModule,
-        crashModule,
-        rootModule,
-        settingsModule,
-        mainModule,
-        startingModule,
-        todayModule,
-        weekModule,
-        otherModule,
-        infoModule,
-        panelsModule,
-    )
+val appModule =
+    module {
+        includes(
+            apiModule,
+            coreModule,
+            crashModule,
+            rootModule,
+            settingsModule,
+            mainModule,
+            startingModule,
+            todayModule,
+            weekModule,
+            otherModule,
+            infoModule,
+            panelsModule,
+        )
 
-    factoryOf(::AndroidAppInfoProvider) bind AppInfoProvider::class
-    singleOf(::GetRequestParamsUCImpl) bind GetRequestParamsUC::class
-}
+        factoryOf(::AndroidAppInfoProvider) bind AppInfoProvider::class
+        singleOf(::GetRequestParamsUCImpl) bind GetRequestParamsUC::class
+    }

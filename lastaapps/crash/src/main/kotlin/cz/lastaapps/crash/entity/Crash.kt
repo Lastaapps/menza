@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,10 @@ data class Crash(
     val reported: ReportState,
 ) {
     companion object {
-        fun fromError(error: Throwable, severity: ErrorSeverity): Crash =
+        fun fromError(
+            error: Throwable,
+            severity: ErrorSeverity,
+        ): Crash =
             Crash(
                 date = ZonedDateTime.now(),
                 severity = severity,

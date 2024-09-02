@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -43,28 +43,29 @@ import org.koin.dsl.module
 
 internal expect val platform: Module
 
-val apiBuffetModule = module {
-    includes(platform)
+val apiBuffetModule =
+    module {
+        includes(platform)
 
-    factoryOf(::BuffetScraperImpl) bind BuffetScraper::class
-    factoryOf(::BuffetApiImpl) bind BuffetApi::class
-    singleOf(::ValidityStoreImpl) bind ValidityStore::class
+        factoryOf(::BuffetScraperImpl) bind BuffetScraper::class
+        factoryOf(::BuffetApiImpl) bind BuffetApi::class
+        singleOf(::ValidityStoreImpl) bind ValidityStore::class
 
-    single { BuffetDatabaseFactory.createDatabase(get()) }
+        single { BuffetDatabaseFactory.createDatabase(get()) }
 
-    singleOf(::DishLogicImpl)
-    // FS
-    registerMenzaType<MenzaType.Buffet.FS>(
-        menzaRepo = { MenzaFSRepoImpl },
-        dishRepo = { TodayDishRepository(it.toType(), get()) },
-        infoRepo = { InfoRepoImpl(it.toType()) },
-        weekRepo = { WeekDishRepository(it.toType(), get()) },
-    )
-    // FEL
-    registerMenzaType<MenzaType.Buffet.FEL>(
-        menzaRepo = { MenzaFELRepoImpl },
-        dishRepo = { TodayDishRepository(it.toType(), get()) },
-        infoRepo = { InfoRepoImpl(it.toType()) },
-        weekRepo = { WeekDishRepository(it.toType(), get()) },
-    )
-}
+        singleOf(::DishLogicImpl)
+        // FS
+        registerMenzaType<MenzaType.Buffet.FS>(
+            menzaRepo = { MenzaFSRepoImpl },
+            dishRepo = { TodayDishRepository(it.toType(), get()) },
+            infoRepo = { InfoRepoImpl(it.toType()) },
+            weekRepo = { WeekDishRepository(it.toType(), get()) },
+        )
+        // FEL
+        registerMenzaType<MenzaType.Buffet.FEL>(
+            menzaRepo = { MenzaFELRepoImpl },
+            dishRepo = { TodayDishRepository(it.toType(), get()) },
+            infoRepo = { InfoRepoImpl(it.toType()) },
+            weekRepo = { WeekDishRepository(it.toType(), get()) },
+        )
+    }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,6 @@
 
 package cz.lastaapps.core.util.extensions
 
-import java.time.DayOfWeek.MONDAY
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -27,6 +26,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
+import java.time.DayOfWeek.MONDAY
 
 val TimeZone.Companion.CET get() = TimeZone.of("Europe/Prague")
 val LocalTime.Companion.MIDNIGHT get() = LocalTime.fromSecondOfDay(0)
@@ -36,13 +36,14 @@ fun LocalDate.atMidnight() = LocalDateTime(this, LocalTime.MIDNIGHT)
 /**
  * Finds the first day with the type given before this date
  */
-fun LocalDate.findDayOfWeek(dof: DayOfWeek) = (this.dayOfWeek.value - dof.value).let {
-    when {
-        it == 0 -> this
-        it < 0 -> this.minus(it + 7, DateTimeUnit.DAY)
-        else -> this.minus(it, DateTimeUnit.DAY)
+fun LocalDate.findDayOfWeek(dof: DayOfWeek) =
+    (this.dayOfWeek.value - dof.value).let {
+        when {
+            it == 0 -> this
+            it < 0 -> this.minus(it + 7, DateTimeUnit.DAY)
+            else -> this.minus(it, DateTimeUnit.DAY)
+        }
     }
-}
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun LocalDate.findMonday() = findDayOfWeek(MONDAY)

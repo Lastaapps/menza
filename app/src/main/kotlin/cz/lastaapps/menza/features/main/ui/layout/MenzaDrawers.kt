@@ -38,9 +38,9 @@ import cz.lastaapps.menza.ui.theme.Padding
 @Composable
 internal fun MenzaModalDrawer(
     drawerState: DrawerState,
-    modifier: Modifier = Modifier,
     alternativeNavigation: Boolean,
     drawerContent: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     ModalNavigationDrawer(
@@ -66,8 +66,8 @@ internal fun MenzaModalDrawer(
 
 @Composable
 internal fun MenzaDismissibleDrawerWithRailLayout(
-    modifier: Modifier = Modifier,
     rail: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     drawer: @Composable () -> Unit,
 ) {
     Row(modifier) {
@@ -81,9 +81,9 @@ internal fun MenzaDismissibleDrawerWithRailLayout(
 @Composable
 internal fun MenzaDismissibleDrawer(
     drawerState: DrawerState,
-    modifier: Modifier = Modifier,
     alternativeNavigation: Boolean,
     drawerContent: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     DismissibleNavigationDrawer(
@@ -111,8 +111,8 @@ internal fun MenzaDismissibleDrawer(
 internal fun MenzaPermanentDrawer(
     @Suppress("UNUSED_PARAMETER")
     drawerState: DrawerState,
-    modifier: Modifier = Modifier,
     drawerContent: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     PermanentNavigationDrawer(

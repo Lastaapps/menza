@@ -45,24 +45,53 @@ import cz.lastaapps.menza.api.agata.util.getFun
 import io.ktor.client.call.body
 
 internal sealed interface SubsystemApi {
+    suspend fun getInfo(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<List<InfoDto>?>
 
-    suspend fun getInfo(lang: ApiLang, subsystemId: Int): Outcome<List<InfoDto>?>
-    suspend fun getInfoHash(lang: ApiLang, subsystemId: Int): Outcome<String>
+    suspend fun getInfoHash(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<String>
 
-    suspend fun getNews(lang: ApiLang, subsystemId: Int): Outcome<NewsDto?>
-    suspend fun getNewsHash(lang: ApiLang, subsystemId: Int): Outcome<String>
+    suspend fun getNews(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<NewsDto?>
 
-    suspend fun getOpeningTimes(lang: ApiLang, subsystemId: Int): Outcome<List<OpenTimeDto>?>
-    suspend fun getOpeningTimesHash(lang: ApiLang, subsystemId: Int): Outcome<String>
+    suspend fun getNewsHash(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<String>
+
+    suspend fun getOpeningTimes(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<List<OpenTimeDto>?>
+
+    suspend fun getOpeningTimesHash(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<String>
 
     suspend fun getContacts(lang: ApiLang): Outcome<List<ContactDto>?>
+
     suspend fun getContactsHash(lang: ApiLang): Outcome<String>
 
     suspend fun getAddress(lang: ApiLang): Outcome<List<AddressDto>?>
+
     suspend fun getAddressHash(lang: ApiLang): Outcome<String>
 
-    suspend fun getLink(lang: ApiLang, subsystemId: Int): Outcome<List<LinkDto>?>
-    suspend fun getLinkHash(lang: ApiLang, subsystemId: Int): Outcome<String>
+    suspend fun getLink(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<List<LinkDto>?>
+
+    suspend fun getLinkHash(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<String>
 }
 
 internal class SubsystemApiImpl(
@@ -73,30 +102,34 @@ internal class SubsystemApiImpl(
     override suspend fun getInfo(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<List<InfoDto>?> = catchingNetwork {
-        client.getFun(Info, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<List<InfoDto>?> =
+        catchingNetwork {
+            client.getFun(Info, lang, subsystemId = subsystemId).body()
+        }
 
     override suspend fun getInfoHash(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(InfoHash, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<String> =
+        catchingNetwork {
+            client.getFun(InfoHash, lang, subsystemId = subsystemId).body()
+        }
 
     override suspend fun getNews(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<NewsDto?> = catchingNetwork {
-        client.getFun(News, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<NewsDto?> =
+        catchingNetwork {
+            client.getFun(News, lang, subsystemId = subsystemId).body()
+        }
 
     override suspend fun getNewsHash(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(NewsHash, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<String> =
+        catchingNetwork {
+            client.getFun(NewsHash, lang, subsystemId = subsystemId).body()
+        }
 
     override suspend fun getOpeningTimes(
         lang: ApiLang,
@@ -109,45 +142,44 @@ internal class SubsystemApiImpl(
     override suspend fun getOpeningTimesHash(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(OpeningHash, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<String> =
+        catchingNetwork {
+            client.getFun(OpeningHash, lang, subsystemId = subsystemId).body()
+        }
 
-    override suspend fun getContacts(
-        lang: ApiLang,
-    ): Outcome<List<ContactDto>?> = catchingNetwork {
-        client.getFun(Contacts, lang).body()
-    }
+    override suspend fun getContacts(lang: ApiLang): Outcome<List<ContactDto>?> =
+        catchingNetwork {
+            client.getFun(Contacts, lang).body()
+        }
 
-    override suspend fun getContactsHash(
-        lang: ApiLang,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(ContactsHash, lang).body()
-    }
+    override suspend fun getContactsHash(lang: ApiLang): Outcome<String> =
+        catchingNetwork {
+            client.getFun(ContactsHash, lang).body()
+        }
 
-    override suspend fun getAddress(
-        lang: ApiLang,
-    ): Outcome<List<AddressDto>?> = catchingNetwork {
-        client.getFun(Address, lang).body()
-    }
+    override suspend fun getAddress(lang: ApiLang): Outcome<List<AddressDto>?> =
+        catchingNetwork {
+            client.getFun(Address, lang).body()
+        }
 
-    override suspend fun getAddressHash(
-        lang: ApiLang,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(AddressHash, lang).body()
-    }
+    override suspend fun getAddressHash(lang: ApiLang): Outcome<String> =
+        catchingNetwork {
+            client.getFun(AddressHash, lang).body()
+        }
 
     override suspend fun getLink(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<List<LinkDto>?> = catchingNetwork {
-        client.getFun(Link, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<List<LinkDto>?> =
+        catchingNetwork {
+            client.getFun(Link, lang, subsystemId = subsystemId).body()
+        }
 
     override suspend fun getLinkHash(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(LinkHash, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<String> =
+        catchingNetwork {
+            client.getFun(LinkHash, lang, subsystemId = subsystemId).body()
+        }
 }

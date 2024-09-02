@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,7 +22,10 @@ package cz.lastaapps.menza.api.agata.api
 import cz.lastaapps.core.domain.Outcome
 
 interface WalletApi {
-    suspend fun getBalance(username: String, password: String): Outcome<Float>
+    suspend fun getBalance(
+        username: String,
+        password: String,
+    ): Outcome<Float>
 }
 
 interface AgataCtuWalletApi : WalletApi

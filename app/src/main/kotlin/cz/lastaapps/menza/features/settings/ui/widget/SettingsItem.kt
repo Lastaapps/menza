@@ -55,9 +55,9 @@ internal fun SettingsSwitch(
     subtitle: String,
     isChecked: Boolean,
     modifier: Modifier = Modifier,
-    onChecked: (Boolean) -> Unit,
+    onCheck: (Boolean) -> Unit,
 ) = WrapClick(
-    onClick = { onChecked(!isChecked) },
+    onClick = { onCheck(!isChecked) },
     modifier = modifier,
     padding = SettingsTokens.itemPadding,
 ) {
@@ -72,7 +72,7 @@ internal fun SettingsSwitch(
         )
         Switch(
             checked = isChecked,
-            onCheckedChange = onChecked,
+            onCheckedChange = onCheck,
         )
     }
 }
@@ -96,21 +96,22 @@ private fun SettingsLabels(
 
 @Preview
 @Composable
-private fun SettingsItemPreview() = PreviewWrapper {
-    SettingsItem(
-        title = "Title title",
-        subtitle = "This is a description, idk what more to add...",
-        onClick = {},
-    )
-    SettingsItem(
-        title = "Title title",
-        subtitle = "This is a description, idk what more to add let's make it even longer so we can wrap.",
-        onClick = {},
-    )
-    SettingsSwitch(
-        title = "Title title",
-        subtitle = "Turn me on, baby",
-        isChecked = true,
-        onChecked = {},
-    )
-}
+private fun SettingsItemPreview() =
+    PreviewWrapper {
+        SettingsItem(
+            title = "Title title",
+            subtitle = "This is a description, idk what more to add...",
+            onClick = {},
+        )
+        SettingsItem(
+            title = "Title title",
+            subtitle = "This is a description, idk what more to add let's make it even longer so we can wrap.",
+            onClick = {},
+        )
+        SettingsSwitch(
+            title = "Title title",
+            subtitle = "Turn me on, baby",
+            isChecked = true,
+            onCheck = {},
+        )
+    }

@@ -40,27 +40,32 @@ import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 
-
 internal interface RootComponent {
     val viewModel: RootViewModel
     val content: Value<ChildSlot<*, Child>>
 
     fun toInitialSetup()
+
     fun toAppContent()
 
     sealed interface Child {
         @JvmInline
-        value class AppContent(val component: MainComponent) : Child
+        value class AppContent(
+            val component: MainComponent,
+        ) : Child
 
         @JvmInline
-        value class AppSetup(val component: StartingComponent) : Child
+        value class AppSetup(
+            val component: StartingComponent,
+        ) : Child
     }
 }
 
 internal class DefaultRootComponent(
     componentContext: ComponentContext,
-) : RootComponent, KoinComponent, ComponentContext by componentContext {
-
+) : RootComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel = getOrCreateKoin<RootViewModel>()
 
     private val navigation = SlotNavigation<Config>()
@@ -70,12 +75,13 @@ internal class DefaultRootComponent(
             Config.serializer(),
         ) { config, componentContext ->
             when (config) {
-                AppContentConfig -> AppContent(
-                    DefaultMainComponent(
-                        componentContext,
-                        navigation::dismiss,
-                    ),
-                )
+                AppContentConfig ->
+                    AppContent(
+                        DefaultMainComponent(
+                            componentContext,
+                            navigation::dismiss,
+                        ),
+                    )
                 AppSetupConfig -> AppSetup(DefaultStartingComponent(componentContext))
             }
         }

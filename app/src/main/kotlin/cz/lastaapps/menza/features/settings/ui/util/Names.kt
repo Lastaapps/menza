@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -59,7 +59,7 @@ internal fun DarkMode.name() =
             Light -> R.string.settings_theme_dark_light
             Dark -> R.string.settings_theme_dark_dark
             DarkMode.System -> R.string.settings_theme_dark_system
-        }
+        },
     )
 
 @Composable
@@ -69,15 +69,16 @@ internal fun PriceType.name() =
             Discounted -> R.string.panel_price_discounted
             Normal -> R.string.panel_price_normal
             Unset -> R.string.panel_price_normal
-        }
+        },
     )
 
 @Composable
 internal fun InitialSelectionBehaviour.name() =
     stringResource(
-        id = when (this) {
-            Ask -> R.string.settings_init_menza_ask
-            Remember -> R.string.settings_init_menza_remember
-            Specific -> R.string.settings_init_menza_specific
-        }
+        id =
+            when (this) {
+                Ask -> R.string.settings_init_menza_ask
+                Remember -> R.string.settings_init_menza_remember
+                Specific -> R.string.settings_init_menza_specific
+            },
     )

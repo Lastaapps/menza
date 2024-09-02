@@ -33,25 +33,24 @@ import cz.lastaapps.core.ui.vm.VMState
 internal class AgataWalletLoginViewModel(
     vmContext: VMContext,
     private val walletLoginUC: WalletLoginUC,
-) : StateViewModel<AgataWalletLoginState>(AgataWalletLoginState(), vmContext), ErrorHolder {
+) : StateViewModel<AgataWalletLoginState>(AgataWalletLoginState(), vmContext),
+    ErrorHolder {
+    fun logIn(method: BalanceAccountType) =
+        launchVM {
+            withLoading({ copy(isLoading = it) }) { state ->
+                if (!state.enabled) {
+                    return@withLoading
+                }
 
-    fun logIn(
-        method: BalanceAccountType,
-    ) = launchVM {
-        withLoading({ copy(isLoading = it) }) { state ->
-            if (!state.enabled) {
-                return@withLoading
-            }
+                val username = state.username.trim()
+                val password = state.password.trim()
 
-            val username = state.username.trim()
-            val password = state.password.trim()
-
-            when (val res = walletLoginUC(username, password, method)) {
-                is Left -> updateState { copy(error = res.value) }
-                is Right -> updateState { copy(loginDone = true) }
+                when (val res = walletLoginUC(username, password, method)) {
+                    is Left -> updateState { copy(error = res.value) }
+                    is Right -> updateState { copy(loginDone = true) }
+                }
             }
         }
-    }
 
     fun setUsername(username: String) {
         updateState { copy(username = username) }

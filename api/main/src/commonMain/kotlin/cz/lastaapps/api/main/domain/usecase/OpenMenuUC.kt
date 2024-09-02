@@ -33,14 +33,16 @@ class OpenMenuUC internal constructor(
     context: UCContext,
     private val linkOpener: LinkOpener,
 ) : UseCase(context) {
-    suspend operator fun invoke(menza: Menza) = launch {
-        val url = when (val type = menza.type) {
-            Strahov -> "https://agata.suz.cvut.cz/jidelnicky/restauraceSH.php"
-            is Subsystem -> "https://agata.suz.cvut.cz/jidelnicky/?clPodsystem=${type.subsystemId}"
-            FEL, FS -> "http://studentcatering.cz/jidelni-listek/"
-            Kocourkov -> "http://bruxy.regnet.cz/kunda/"
-        }
+    suspend operator fun invoke(menza: Menza) =
+        launch {
+            val url =
+                when (val type = menza.type) {
+                    Strahov -> "https://agata.suz.cvut.cz/jidelnicky/restauraceSH.php"
+                    is Subsystem -> "https://agata.suz.cvut.cz/jidelnicky/?clPodsystem=${type.subsystemId}"
+                    FEL, FS -> "http://studentcatering.cz/jidelni-listek/"
+                    Kocourkov -> "http://bruxy.regnet.cz/kunda/"
+                }
 
-        linkOpener.openLink(url)
-    }
+            linkOpener.openLink(url)
+        }
 }

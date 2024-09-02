@@ -17,35 +17,42 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package cz.lastaapps.menza.ui.util
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillNode
 import androidx.compose.ui.autofill.AutofillType
-import androidx.compose.ui.composed
-import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalAutofill
+import androidx.compose.ui.platform.LocalAutofillTree
+import kotlinx.collections.immutable.ImmutableList
 
+@Suppress("ktlint:compose:modifier-composable-check")
 @OptIn(ExperimentalComposeUiApi::class)
+@Composable
 fun Modifier.withAutofill(
-    autofillTypes: List<AutofillType> = listOf(),
+    autofillTypes: ImmutableList<AutofillType>,
     onFill: (String) -> Unit,
-): Modifier = composed {
-    var rect by remember { mutableStateOf<Rect?>(null) }
-    AutofillNode(
-        autofillTypes = autofillTypes,
-        boundingBox = rect,
-        onFill = onFill,
-    )
+): Modifier {
+    val autofill = LocalAutofill.current
+    val autofillNode = AutofillNode(onFill = onFill, autofillTypes = autofillTypes)
+    LocalAutofillTree.current += autofillNode
 
-    onGloballyPositioned {
-        rect = it.boundsInWindow()
+    return onGloballyPositioned {
+        autofillNode.boundingBox = it.boundsInWindow()
+    }.onFocusChanged { focusState ->
+        autofill?.run {
+            if (focusState.isFocused) {
+                requestAutofillForNode(autofillNode)
+            } else {
+                cancelAutofillForNode(autofillNode)
+            }
+        }
     }
 }
-

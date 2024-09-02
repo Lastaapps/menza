@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-@file:Suppress("KDocUnresolvedReference")
+@file:Suppress("KDocUnresolvedReference", "InfinitePropertiesLabel", "InfiniteTransitionLabel")
 
 package cz.lastaapps.menza.ui.components.placeholders
 
@@ -29,16 +29,15 @@ import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.toRect
@@ -51,7 +50,6 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.node.Ref
-import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.LayoutDirection
 
 /**
@@ -107,6 +105,8 @@ object PlaceholderDefaults {
  * @param contentFadeTransitionSpec The transition spec to use when fading the content
  * on/off screen. The boolean parameter defined for the transition is [visible].
  */
+@Suppress("ktlint:compose:modifier-composable-check")
+@Composable
 fun Modifier.placeholder(
     visible: Boolean,
     color: Color,
@@ -114,16 +114,7 @@ fun Modifier.placeholder(
     highlight: PlaceholderHighlight? = null,
     placeholderFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
     contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
-): Modifier = composed(
-    inspectorInfo = debugInspectorInfo {
-        name = "placeholder"
-        value = visible
-        properties["visible"] = visible
-        properties["color"] = color
-        properties["highlight"] = highlight
-        properties["shape"] = shape
-    },
-) {
+): Modifier {
     // Values used for caching purposes
     val lastSize = remember { Ref<Size>() }
     val lastLayoutDirection = remember { Ref<LayoutDirection>() }
@@ -133,11 +124,12 @@ fun Modifier.placeholder(
     var highlightProgress: Float by remember { mutableFloatStateOf(0f) }
 
     // This is our cross-fade transition
-    val transitionState = remember { MutableTransitionState(visible) }.apply {
-        targetState = visible
-    }
-    // TODO resolve
-    val transition = updateTransition(transitionState, "placeholder_crossfade")
+    val transitionState =
+        remember { MutableTransitionState(visible) }.apply {
+            targetState = visible
+        }
+
+    val transition = rememberTransition(transitionState, "placeholder_crossfade")
 
     val placeholderAlpha by transition.animateFloat(
         transitionSpec = placeholderFadeTransitionSpec,
@@ -154,15 +146,17 @@ fun Modifier.placeholder(
     val animationSpec = highlight?.animationSpec
     if (animationSpec != null && (visible || placeholderAlpha >= 0.01f)) {
         val infiniteTransition = rememberInfiniteTransition()
-        highlightProgress = infiniteTransition.animateFloat(
-            initialValue = 0f,
-            targetValue = 1f,
-            animationSpec = animationSpec,
-        ).value
+        highlightProgress =
+            infiniteTransition
+                .animateFloat(
+                    initialValue = 0f,
+                    targetValue = 1f,
+                    animationSpec = animationSpec,
+                ).value
     }
 
     val paint = remember { Paint() }
-    remember(color, shape, highlight) {
+    return remember(color, shape, highlight) {
         drawWithContent {
             // Draw the composable content first
             if (contentAlpha in 0.01f..0.99f) {
@@ -184,7 +178,21 @@ fun Modifier.placeholder(
                 // the alpha applied
                 paint.alpha = placeholderAlpha
                 withLayer(paint) {
-                    lastOutline.value = drawPlaceholder(
+                    lastOutline.value =
+                        drawPlaceholder(
+                            shape = shape,
+                            color = color,
+                            highlight = highlight,
+                            progress = highlightProgress,
+                            lastOutline = lastOutline.value,
+                            lastLayoutDirection = lastLayoutDirection.value,
+                            lastSize = lastSize.value,
+                        )
+                }
+            } else if (placeholderAlpha >= 0.99f) {
+                // If the placeholder alpha is > 99%, draw it with no alpha
+                lastOutline.value =
+                    drawPlaceholder(
                         shape = shape,
                         color = color,
                         highlight = highlight,
@@ -193,18 +201,6 @@ fun Modifier.placeholder(
                         lastLayoutDirection = lastLayoutDirection.value,
                         lastSize = lastSize.value,
                     )
-                }
-            } else if (placeholderAlpha >= 0.99f) {
-                // If the placeholder alpha is > 99%, draw it with no alpha
-                lastOutline.value = drawPlaceholder(
-                    shape = shape,
-                    color = color,
-                    highlight = highlight,
-                    progress = highlightProgress,
-                    lastOutline = lastOutline.value,
-                    lastLayoutDirection = lastLayoutDirection.value,
-                    lastSize = lastSize.value,
-                )
             }
 
             // Keep track of the last size & layout direction
@@ -239,9 +235,10 @@ private fun DrawScope.drawPlaceholder(
     }
 
     // Otherwise we need to create an outline from the shape
-    val outline = lastOutline.takeIf {
-        size == lastSize && layoutDirection == lastLayoutDirection
-    } ?: shape.createOutline(size, layoutDirection, this)
+    val outline =
+        lastOutline.takeIf {
+            size == lastSize && layoutDirection == lastLayoutDirection
+        } ?: shape.createOutline(size, layoutDirection, this)
 
     // Draw the placeholder color
     drawOutline(outline = outline, color = color)

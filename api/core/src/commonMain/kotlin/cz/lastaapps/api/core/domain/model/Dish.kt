@@ -27,9 +27,7 @@ data class DishCategory(
     val dishList: ImmutableList<Dish>,
 ) {
     companion object {
-        fun other(
-            dishList: ImmutableList<Dish>,
-        ) = DishCategory(null, null, dishList)
+        fun other(dishList: ImmutableList<Dish>) = DishCategory(null, null, dishList)
     }
 }
 

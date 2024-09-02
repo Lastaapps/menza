@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,6 +21,8 @@ package cz.lastaapps.core.ui.vm
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import kotlin.reflect.KFunction1
 import kotlin.reflect.KProperty1
 
@@ -33,10 +35,11 @@ inline fun <State : Any, VM : StateViewModel<State>> HandleDismiss(
     noinline launch: () -> Unit,
 ) {
     val isSelected = getVal(viewModel.flowState.value)
+    val launchLambda by rememberUpdatedState(newValue = launch)
     LaunchedEffect(isSelected) {
         if (isSelected) {
             dismiss(viewModel)
-            launch()
+            launchLambda()
         }
     }
 }

@@ -28,7 +28,10 @@ plugins {
 android {
     namespace = "cz.lastaapps.menza"
 
-    compileSdk = libs.versions.sdk.compile.get().toInt()
+    compileSdk =
+        libs.versions.sdk.compile
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "cz.lastaapps.menza"
@@ -37,8 +40,14 @@ android {
         versionCode = 1030700 // 1x major . 2x minor . 2x path . 2x build diff
         versionName = "1.3.7"
 
-        minSdk = libs.versions.sdk.min.get().toInt()
-        targetSdk = libs.versions.sdk.target.get().toInt()
+        minSdk =
+            libs.versions.sdk.min
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.sdk.target
+                .get()
+                .toInt()
     }
 
     packaging {

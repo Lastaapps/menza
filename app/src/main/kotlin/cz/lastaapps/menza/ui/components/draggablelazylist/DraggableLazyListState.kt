@@ -35,16 +35,16 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun rememberDraggableLazyListState(
-    lazyListState: LazyListState = rememberLazyListState(),
     onMove: (Int, Int) -> Unit,
-    onMoveFinished: () -> Unit,
+    onMoveFinish: () -> Unit,
+    lazyListState: LazyListState = rememberLazyListState(),
     reverse: Boolean = false,
 ): DraggableLazyListState =
     remember(lazyListState, reverse) {
         DraggableLazyListState(
             lazyListState = lazyListState,
             onMove = onMove,
-            onMoveFinished = onMoveFinished,
+            onMoveFinished = onMoveFinish,
             reverse = reverse,
         )
     }
@@ -66,17 +66,22 @@ class DraggableLazyListState(
         get() = initiallyDraggedElement?.let { Pair(it.offset, it.offsetEnd) }
 
     val elementDisplacement: Float?
-        get() = currentElement
-            ?.let { item ->
-                (initiallyDraggedElement?.offset ?: 0f).toFloat() + draggedDistance - item.offset
-            }?.let {
-                if (reverse) -1 * it else it
-            }
+        get() =
+            currentElement
+                ?.let { item ->
+                    (
+                        initiallyDraggedElement?.offset
+                            ?: 0f
+                    ).toFloat() + draggedDistance - item.offset
+                }?.let {
+                    if (reverse) -1 * it else it
+                }
 
     private val currentElement: LazyListItemInfo?
-        get() = currentIndexOfDraggedItem?.let {
-            lazyListState.getVisibleItemInfoFor(absoluteIndex = it)
-        }
+        get() =
+            currentIndexOfDraggedItem?.let {
+                lazyListState.getVisibleItemInfoFor(absoluteIndex = it)
+            }
 
     var overscrollJob by mutableStateOf<Job?>(null)
 
@@ -104,7 +109,10 @@ class DraggableLazyListState(
         onMoveFinished()
     }
 
-    fun onDrag(offset: Offset, scope: CoroutineScope) {
+    fun onDrag(
+        offset: Offset,
+        scope: CoroutineScope,
+    ) {
         draggedDistance += offset.y * if (reverse) -1 else 1
 
         initialOffsets?.let { (topOffset, bottomOffset) ->
@@ -120,12 +128,11 @@ class DraggableLazyListState(
                             delta > 0 -> (endOffset > item.offsetEnd)
                             else -> (startOffset < item.offset)
                         }
-                    }
-                    ?.also { item ->
+                    }?.also { item ->
                         currentIndexOfDraggedItem?.let { current ->
                             onMove.invoke(
                                 current,
-                                item.index
+                                item.index,
                             )
 
                             // Issue only when keys are used
@@ -138,7 +145,8 @@ class DraggableLazyListState(
                                 if (current == firstVisibleItemIndex || item.index == firstVisibleItemIndex) {
                                     scope.launch {
                                         scrollToItem(
-                                            firstVisibleItemIndex, firstVisibleItemScrollOffset,
+                                            firstVisibleItemIndex,
+                                            firstVisibleItemScrollOffset,
                                         )
                                     }
                                 }
@@ -162,7 +170,10 @@ class DraggableLazyListState(
 
             return@let when {
                 draggedDistance > 0 -> (endOffset - lazyListState.layoutInfo.viewportEndOffset + scrollOffset).takeIf { diff -> diff > 0 }
-                draggedDistance < 0 -> (startOffset - lazyListState.layoutInfo.viewportStartOffset - scrollOffset).takeIf { diff -> diff < 0 }
+                draggedDistance < 0 ->
+                    (startOffset - lazyListState.layoutInfo.viewportStartOffset - scrollOffset).takeIf { diff ->
+                        diff < 0
+                    }
                 else -> null
             }.also {
                 if (it != null) {

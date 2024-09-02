@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,7 +32,6 @@ import androidx.compose.ui.window.Dialog
 import cz.lastaapps.menza.ui.components.BackArrow
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.Padding
-
 
 @Composable
 fun TwoPaneDialogLayout(

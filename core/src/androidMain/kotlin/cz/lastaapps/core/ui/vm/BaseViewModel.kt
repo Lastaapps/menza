@@ -30,12 +30,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @JvmInline
-value class VMContext(val context: CoroutineContext)
+value class VMContext(
+    val context: CoroutineContext,
+)
 
 abstract class BaseViewModel(
     context: VMContext,
 ) : InstanceKeeper.Instance {
-
     protected val viewModelScope = CoroutineScope(context.context + SupervisorJob())
 
     override fun onDestroy() {
@@ -48,14 +49,11 @@ abstract class BaseViewModel(
     }
 
     // TODO convert to context receiver
-    protected fun <T> Flow<T>.collectLatestInVM(action: suspend (T) -> Unit) =
-        launchVM { collectLatest(action) }
+    protected fun <T> Flow<T>.collectLatestInVM(action: suspend (T) -> Unit) = launchVM { collectLatest(action) }
 
-    protected fun launchJob(block: suspend CoroutineScope.() -> Unit) =
-        viewModelScope.launch(block = block)
+    protected fun launchJob(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch(block = block)
 
     protected fun <T> Flow<T>.launchInVM() {
         viewModelScope.launch { collect() }
     }
 }
-

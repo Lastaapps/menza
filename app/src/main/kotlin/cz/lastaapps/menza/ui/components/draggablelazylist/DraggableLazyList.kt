@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -48,8 +48,12 @@ fun DraggableLazyColumn(
     LazyColumn(
         modifier.makeDraggableList(state, scope),
         state.lazyListState,
-        contentPadding, reverseLayout, verticalArrangement,
-        horizontalAlignment, flingBehavior, userScrollEnabled,
+        contentPadding,
+        reverseLayout,
+        verticalArrangement,
+        horizontalAlignment,
+        flingBehavior,
+        userScrollEnabled,
         content,
     )
 }

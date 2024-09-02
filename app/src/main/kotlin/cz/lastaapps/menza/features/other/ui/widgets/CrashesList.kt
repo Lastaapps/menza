@@ -21,6 +21,7 @@ package cz.lastaapps.menza.features.other.ui.widgets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -49,11 +50,14 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.ui.dialog.ReportDialog
 import cz.lastaapps.menza.features.other.ui.dialog.sendReport
 import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel
-import java.time.format.DateTimeFormatter
 import kotlinx.collections.immutable.ImmutableList
+import java.time.format.DateTimeFormatter
 
 @Composable
-internal fun CrashesDialog(viewModel: CrashesViewModel, onDismissRequest: () -> Unit) {
+internal fun CrashesDialog(
+    viewModel: CrashesViewModel,
+    onDismissRequest: () -> Unit,
+) {
     Dialog(onDismissRequest) {
         Surface(shape = MaterialTheme.shapes.extraLarge) {
             CrashesList(viewModel, Modifier.padding(16.dp))
@@ -67,7 +71,6 @@ internal fun CrashesList(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-
         if (BuildConfig.DEBUG) {
             Button(
                 onClick = { throw RuntimeException("London bridge is falling down") },
@@ -86,7 +89,7 @@ internal fun CrashesList(
                 shown = selectedItem != null,
                 reportsCrash = true,
                 onDismissRequest = { selectedItem = null },
-                onModeSelected = { mode ->
+                onMode = { mode ->
                     selectedItem?.let { crash ->
                         viewModel.makeReported(crash.first, ReportState.REPORTED)
                         sendReport(context, mode, crash.second)
@@ -101,8 +104,9 @@ internal fun CrashesList(
     }
 }
 
+@Suppress("UnusedReceiverParameter")
 @Composable
-private fun NoContent() {
+private fun ColumnScope.NoContent() {
     Text(
         stringResource(R.string.crash_none_title),
         style = MaterialTheme.typography.headlineMedium,
@@ -111,10 +115,11 @@ private fun NoContent() {
     Text(stringResource(R.string.crash_none_subsubtitle))
 }
 
+@Suppress("UnusedReceiverParameter")
 @Composable
-private fun Content(
+private fun ColumnScope.Content(
     crashes: ImmutableList<Pair<Long, Crash>>,
-    onItemSelected: (Pair<Long, Crash>) -> Unit,
+    onItem: (Pair<Long, Crash>) -> Unit,
 ) {
     Text(
         stringResource(R.string.crash_title),
@@ -126,7 +131,7 @@ private fun Content(
         LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             items(crashes, key = { it.first }) {
                 CrashItem(it.second) {
-                    onItemSelected(it)
+                    onItem(it)
                 }
             }
         }
@@ -134,7 +139,10 @@ private fun Content(
 }
 
 @Composable
-private fun CrashItem(crash: Crash, onClick: () -> Unit) {
+private fun CrashItem(
+    crash: Crash,
+    onClick: () -> Unit,
+) {
     ElevatedCard(onClick = onClick) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(

@@ -62,36 +62,41 @@ internal fun SubsystemDto.toEntity(lang: RequestLanguage) =
         language = lang.toDB(),
     )
 
-internal fun DishDto.toEntity(beConfig: AgataBEConfig, lang: RequestLanguage) =
-    DishEntity(
-        id = id.toLong(),
-        subsystemId = subsystemId.toLong(),
-        typeId = typeId.toLong(),
-        servingPlaces = servingPlaceList,
-        amount = amount?.trim(),
-        name = name?.trimDishName(),
-        sideDishA = sideDishA?.trimDishName(),
-        sideDishB = sideDishB?.trimDishName(),
-        priceNormal = priceNormal.toDouble(),
-        priceDiscount = priceDiscount.toDouble(),
-        allergens = allergens,
-        photoLink = photoLink?.let {
+internal fun DishDto.toEntity(
+    beConfig: AgataBEConfig,
+    lang: RequestLanguage,
+) = DishEntity(
+    id = id.toLong(),
+    subsystemId = subsystemId.toLong(),
+    typeId = typeId.toLong(),
+    servingPlaces = servingPlaceList,
+    amount = amount?.trim(),
+    name = name?.trimDishName(),
+    sideDishA = sideDishA?.trimDishName(),
+    sideDishB = sideDishB?.trimDishName(),
+    priceNormal = priceNormal.toDouble(),
+    priceDiscount = priceDiscount.toDouble(),
+    allergens = allergens,
+    photoLink =
+        photoLink?.let {
             beConfig.photoLinkForAgataSubsystem(subsystemId, it)
         },
-        pictogram = pictogram,
-        isActive = isActive,
-        language = lang.toDB(),
-    )
+    pictogram = pictogram,
+    isActive = isActive,
+    language = lang.toDB(),
+)
 
 private val invalidCharacters = arrayOf('(', ')', '[', ']', '\\', '/', '|', '.', '-', '_')
-private fun String.trimDishName() = this
-    .trim()
+
+private fun String.trimDishName() =
+    this
+        .trim()
 //    .dropWhile { it == ',' }
 //    .dropLastWhile { it == ',' }
-    .map { if (it in invalidCharacters) ' ' else it }
-    .joinToString(separator = "")
-    .replace("""\s*,\s*""".toRegex(), ", ")
-    .replace("""\s+""".toRegex(), " ")
+        .map { if (it in invalidCharacters) ' ' else it }
+        .joinToString(separator = "")
+        .replace("""\s*,\s*""".toRegex(), ", ")
+        .replace("""\s+""".toRegex(), " ")
 
 internal fun DishTypeDto.toEntity(lang: RequestLanguage) =
     DishTypeEntity(
@@ -128,20 +133,23 @@ internal fun InfoDto.toEntity(lang: RequestLanguage) =
         language = lang.toDB(),
     )
 
-internal fun NewsDto.toEntity(subsystemId: Int, lang: RequestLanguage) =
-    html.removeHtml().takeIfNotBlack()?.let { text ->
-        NewsEntity(
-            subsystemId = subsystemId.toLong(),
-            text = text,
-            language = lang.toDB(),
-        )
-    }
+internal fun NewsDto.toEntity(
+    subsystemId: Int,
+    lang: RequestLanguage,
+) = html.removeHtml().takeIfNotBlack()?.let { text ->
+    NewsEntity(
+        subsystemId = subsystemId.toLong(),
+        text = text,
+        language = lang.toDB(),
+    )
+}
 
-private fun String.removeHtml() = this
-    .replace("<br>", "\n")
-    .replace("<BR>", "\n")
-    .replace("""<[^>]*>""".toRegex(), "")
-    .trim()
+private fun String.removeHtml() =
+    this
+        .replace("<br>", "\n")
+        .replace("<BR>", "\n")
+        .replace("""<[^>]*>""".toRegex(), "")
+        .trim()
 
 internal fun ContactDto.toEntity(lang: RequestLanguage) =
     ContactEntity(
@@ -174,14 +182,19 @@ internal fun OpenTimeDto.toEntity(lang: RequestLanguage) =
 
 private val czechDaysOfWeek = arrayOf("Po", "Út", "St", "Čt", "Pá", "So", "Ne")
 private val englishDaysOfWeek = arrayOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-private fun String.toDayOfWeek() = run {
-    val index = czechDaysOfWeek.indexOf(this)
-        .takeUnless { it < 0 }
-        ?: englishDaysOfWeek.indexOf(this)
-    DayOfWeek.of(index + 1)
-}
+
+private fun String.toDayOfWeek() =
+    run {
+        val index =
+            czechDaysOfWeek
+                .indexOf(this)
+                .takeUnless { it < 0 }
+                ?: englishDaysOfWeek.indexOf(this)
+        DayOfWeek.of(index + 1)
+    }
 
 private val timeRegex = """(\d+):(\d+)""".toRegex()
+
 private fun String.toLocalTime() =
     timeRegex.find(this)?.let { match ->
         val (hours, minutes) = match.destructured
@@ -197,17 +210,18 @@ internal fun LinkDto.toEntity(lang: RequestLanguage) =
         language = lang.toDB(),
     )
 
-internal fun AddressDto.toEntity(lang: RequestLanguage) = run {
-    val parsed = gps.toLatLong()
-    AddressEntity(
-        id = id.toLong(),
-        subsystemId = subsystemId.toLong(),
-        address = address.trim(),
-        lat = parsed.lat.toDouble(),
-        long = parsed.long.toDouble(),
-        language = lang.toDB(),
-    )
-}
+internal fun AddressDto.toEntity(lang: RequestLanguage) =
+    run {
+        val parsed = gps.toLatLong()
+        AddressEntity(
+            id = id.toLong(),
+            subsystemId = subsystemId.toLong(),
+            address = address.trim(),
+            lat = parsed.lat.toDouble(),
+            long = parsed.long.toDouble(),
+            language = lang.toDB(),
+        )
+    }
 
 private fun String.toLatLong() =
     this
@@ -217,27 +231,29 @@ private fun String.toLatLong() =
             LatLong(lat = lat, long = long)
         }
 
-
 // shown only if dish has neither Czech nor English name
-private const val EmptyNamePlaceholder = """"¯\(°_o)/¯"""
+private const val EMPTY_NAME_PLACEHOLDER = """"¯\(°_o)/¯"""
 
-internal fun StrahovDto.toEntity(beConfig: AgataBEConfig, lang: RequestLanguage) =
-    StrahovEntity(
-        id = id.toLong(),
-        groupId = groupId.toLong(),
-        groupName = groupName.myCapitalize(),
-        groupOrder = groupOrder.toLong(),
-        itemOrder = order.toLong(),
-        amount = amount?.trim(),
-        name = (name ?: EmptyNamePlaceholder).trim(),
-        priceNormal = price.toDouble(),
-        priceStudent = priceStudent.toDouble(),
-        allergens = allergens,
-        photoLink = photoLink?.let {
+internal fun StrahovDto.toEntity(
+    beConfig: AgataBEConfig,
+    lang: RequestLanguage,
+) = StrahovEntity(
+    id = id.toLong(),
+    groupId = groupId.toLong(),
+    groupName = groupName.myCapitalize(),
+    groupOrder = groupOrder.toLong(),
+    itemOrder = order.toLong(),
+    amount = amount?.trim(),
+    name = (name ?: EMPTY_NAME_PLACEHOLDER).trim(),
+    priceNormal = price.toDouble(),
+    priceStudent = priceStudent.toDouble(),
+    allergens = allergens,
+    photoLink =
+        photoLink?.let {
             beConfig.photoLinkForStrahov(it)
         },
-        language = lang.toDB(),
-    )
+    language = lang.toDB(),
+)
 
 // Strahov uses ALL CAPS and it looks just horrible
 private fun String.myCapitalize() =

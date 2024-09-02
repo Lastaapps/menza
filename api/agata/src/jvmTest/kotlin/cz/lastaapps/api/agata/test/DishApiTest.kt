@@ -37,52 +37,54 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
 
-class DishApiTest : StringSpec(
-    {
+class DishApiTest :
+    StringSpec(
+        {
 
-        fun client() = createAgataClient(
-            HttpClient {
-                install(Logging) {
-                    level = BODY
-                }
-            },
-            AgataBEConfig.prod,
-        )
+            fun client() =
+                createAgataClient(
+                    HttpClient {
+                        install(Logging) {
+                            level = BODY
+                        }
+                    },
+                    AgataBEConfig.prod,
+                )
 
-        fun api() = DishApiImpl(client())
+            fun api() = DishApiImpl(client())
 
-        val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
-        val weekIds = listOf(1, 2, 3, 6, 8, 9)
+            val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
+            val weekIds = listOf(1, 2, 3, 6, 8, 9)
 
-        "getDishes" {
-            ids.forEach { subsystemId ->
-                val res = api().getDishes(subsystemId)
-                res.shouldBeInstanceOf<Right<List<DishDto>>>()
-            }
-        }
-        "getPictogram" {
-            val res = api().getPictogram()
-            res.shouldBeInstanceOf<Right<List<PictogramDto>>>()
-        }
-        "getWeeksValid" {
-            weekIds.forEach { subsystemId ->
-                val res = api().getWeeks(subsystemId)
-                res.shouldBeInstanceOf<Right<List<WeekDto>>>()
-                res.value.shouldNotBeEmpty()
-                res.value.map { it.id }.forEach { id ->
-                    val res2 = api().getWeekDishList(id)
-                    res2.shouldBeInstanceOf<Right<List<WeekDishDto>>>()
+            "getDishes" {
+                ids.forEach { subsystemId ->
+                    val res = api().getDishes(subsystemId)
+                    res.shouldBeInstanceOf<Right<List<DishDto>>>()
                 }
             }
-            (ids - weekIds).forEach { subsystemId ->
-                val res = api().getWeeks(subsystemId)
-                res.shouldBeInstanceOf<Right<List<WeekDto>?>>()
-                res.value shouldBe null
+            "getPictogram" {
+                val res = api().getPictogram()
+                res.shouldBeInstanceOf<Right<List<PictogramDto>>>()
             }
-        }
-        "getStrahov" {
-            val res = api().getStrahov(lang = ApiLang.CS)
-            res.shouldBeInstanceOf<Right<List<StrahovDto>>>()
-        }
-    },
-)
+            "getWeeksValid" {
+                weekIds.forEach { subsystemId ->
+                    val res = api().getWeeks(subsystemId)
+                    res.shouldBeInstanceOf<Right<List<WeekDto>>>()
+                    res.value.shouldNotBeEmpty()
+                    res.value.map { it.id }.forEach { id ->
+                        val res2 = api().getWeekDishList(id)
+                        res2.shouldBeInstanceOf<Right<List<WeekDishDto>>>()
+                    }
+                }
+                (ids - weekIds).forEach { subsystemId ->
+                    val res = api().getWeeks(subsystemId)
+                    res.shouldBeInstanceOf<Right<List<WeekDto>?>>()
+                    res.value shouldBe null
+                }
+            }
+            "getStrahov" {
+                val res = api().getStrahov(lang = ApiLang.CS)
+                res.shouldBeInstanceOf<Right<List<StrahovDto>>>()
+            }
+        },
+    )

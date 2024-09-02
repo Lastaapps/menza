@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -53,6 +53,7 @@ internal fun WhatsNewDialog(
     viewModel: WhatsNewViewModel,
     onDismissRequest: () -> Unit,
 ) {
+    @Suppress("")
     HandleAppear(appearing = viewModel)
 
     Dialog(onDismissRequest) {
@@ -71,7 +72,10 @@ internal fun WhatsNewDialog(
 }
 
 @Composable
-internal fun WhatsNewHistory(whatsNewViewModel: WhatsNewViewModel, modifier: Modifier = Modifier) {
+internal fun WhatsNewHistory(
+    whatsNewViewModel: WhatsNewViewModel,
+    modifier: Modifier = Modifier,
+) {
     val state by whatsNewViewModel.flowState
     val items = state.news
 
@@ -94,7 +98,10 @@ internal fun WhatsNewHistory(whatsNewViewModel: WhatsNewViewModel, modifier: Mod
 }
 
 @Composable
-private fun HistoryItem(item: WhatsNewInfo, modifier: Modifier = Modifier) {
+private fun HistoryItem(
+    item: WhatsNewInfo,
+    modifier: Modifier = Modifier,
+) {
     Card(modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),

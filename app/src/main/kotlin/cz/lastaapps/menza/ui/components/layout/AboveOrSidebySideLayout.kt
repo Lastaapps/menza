@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -83,17 +83,17 @@ private fun AboveOrSideBySideCompact(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier.fillMaxWidth(),
     ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(Padding.Medium),
-        modifier = Modifier.sizeIn(maxWidth = Padding.More.MaxColumnWidth),
-    ) {
-        topLeft()
-        verticalSpacer()
-        bottomRight()
-        item {
-            Spacer(Modifier.height(Padding.More.ScrollBottomSpace))
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(Padding.Medium),
+            modifier = Modifier.sizeIn(maxWidth = Padding.More.MaxColumnWidth),
+        ) {
+            topLeft()
+            verticalSpacer()
+            bottomRight()
+            item {
+                Spacer(Modifier.height(Padding.More.ScrollBottomSpace))
+            }
         }
-    }
     }
 }
 
@@ -123,14 +123,14 @@ private fun AboveOrSideBySideExpanded(
                 contentAlignment = Alignment.TopCenter,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-            LazyColumn(
-                modifier = Modifier.sizeIn(maxWidth = Padding.More.MaxColumnWidth),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                topLeft()
-                item { Spacer(Modifier.height(Padding.More.ScrollBottomSpace)) }
-            }
+                LazyColumn(
+                    modifier = Modifier.sizeIn(maxWidth = Padding.More.MaxColumnWidth),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    topLeft()
+                    item { Spacer(Modifier.height(Padding.More.ScrollBottomSpace)) }
+                }
             }
         },
         panel2 = {

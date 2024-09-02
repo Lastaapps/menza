@@ -47,48 +47,56 @@ internal class InfoViewModel(
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getInfo: GetInfoUC,
     private val syncInfo: SyncInfoUC,
-) : StateViewModel<InfoState>(InfoState(), context), Appearing, ErrorHolder {
+) : StateViewModel<InfoState>(InfoState(), context),
+    Appearing,
+    ErrorHolder {
     override var hasAppeared: Boolean = false
 
-        private val log = localLogger()
+    private val log = localLogger()
 
-    override fun onAppeared() = launchVM {
+    override fun onAppeared() =
         launchVM {
-            getSelectedMenza().collectLatest {
-                log.i { "Registered a new: $it" }
+            launchVM {
+                getSelectedMenza().collectLatest {
+                    log.i { "Registered a new: $it" }
 
-                updateState {
-                    copy(
-                        selectedMenza = it.toOption(),
-                        items = null,
-                    )
-                }
-                syncJob?.cancel()
-                if (it != null) {
-                    coroutineScope {
-                        this.launch {
-                            load(it, false)
-                        }
-                        getInfo(it).collectLatest { items ->
-                            updateState { copy(items = items) }
+                    updateState {
+                        copy(
+                            selectedMenza = it.toOption(),
+                            items = null,
+                        )
+                    }
+                    syncJob?.cancel()
+                    if (it != null) {
+                        coroutineScope {
+                            this.launch {
+                                load(it, false)
+                            }
+                            getInfo(it).collectLatest { items ->
+                                updateState { copy(items = items) }
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
     private var syncJob: Job? = null
+
     fun reload() {
         if (lastState().isLoading) return
-        syncJob = launchJob {
-            lastState().selectedMenza?.getOrNull()?.let {
-                load(it, true)
+        syncJob =
+            launchJob {
+                lastState().selectedMenza?.getOrNull()?.let {
+                    load(it, true)
+                }
             }
-        }
     }
 
-    private suspend fun load(menza: Menza, isForced: Boolean) {
+    private suspend fun load(
+        menza: Menza,
+        isForced: Boolean,
+    ) {
         withLoading({ copy(isLoading = it) }) {
             when (val res = syncInfo(menza, isForced = isForced).mapSync()) {
                 is Left -> updateState { copy(error = res.value) }
@@ -99,6 +107,7 @@ internal class InfoViewModel(
 
     @Composable
     override fun getError(): DomainError? = flowState.value.error
+
     override fun dismissError() = updateState { copy(error = null) }
 }
 

@@ -101,7 +101,7 @@ private fun ContactList(
         ) {
             Text(
                 stringResource(R.string.info_contacts_title),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
             contactList.forEach {
                 ContactItem(
@@ -198,15 +198,19 @@ private fun ContactItem(
     }
 }
 
-private fun makePhoneCall(context: Context, phoneNumber: PhoneNumber, onError: () -> Unit) {
+private fun makePhoneCall(
+    context: Context,
+    phoneNumber: PhoneNumber,
+    onError: () -> Unit,
+) {
     val intent = Intent(Intent.ACTION_DIAL)
     intent.data = Uri.parse("tel:${Uri.encode(phoneNumber.number)}")
     try {
         context.startActivity(
             Intent.createChooser(
                 intent,
-                context.getString(R.string.info_contacts_dial_choose_app)
-            )
+                context.getString(R.string.info_contacts_dial_choose_app),
+            ),
         )
     } catch (e: Exception) {
         e.printStackTrace()
@@ -214,15 +218,19 @@ private fun makePhoneCall(context: Context, phoneNumber: PhoneNumber, onError: (
     }
 }
 
-private fun sendEmail(context: Context, email: Email, onError: () -> Unit) {
+private fun sendEmail(
+    context: Context,
+    email: Email,
+    onError: () -> Unit,
+) {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = Uri.parse("mailto:${Uri.encode(email.mail)}")
     try {
         context.startActivity(
             Intent.createChooser(
                 intent,
-                context.getString(R.string.info_contacts_email_choose_app)
-            )
+                context.getString(R.string.info_contacts_email_choose_app),
+            ),
         )
     } catch (e: Exception) {
         e.printStackTrace()
@@ -230,30 +238,34 @@ private fun sendEmail(context: Context, email: Email, onError: () -> Unit) {
     }
 }
 
-private fun addContact(context: Context, contact: Contact, onError: () -> Unit) {
+private fun addContact(
+    context: Context,
+    contact: Contact,
+    onError: () -> Unit,
+) {
+    val intent =
+        Intent(Intent.ACTION_INSERT).apply {
+            type = ContactsContract.Contacts.CONTENT_TYPE
 
-    val intent = Intent(Intent.ACTION_INSERT).apply {
-        type = ContactsContract.Contacts.CONTENT_TYPE
+            val name = contact.name ?: contact.role ?: return
+            putExtra(ContactsContract.Intents.Insert.NAME, name)
 
-        val name = contact.name ?: contact.role ?: return
-        putExtra(ContactsContract.Intents.Insert.NAME, name)
-
-        contact.role?.let {
-            putExtra(ContactsContract.Intents.Insert.JOB_TITLE, it)
+            contact.role?.let {
+                putExtra(ContactsContract.Intents.Insert.JOB_TITLE, it)
+            }
+            contact.phone?.let {
+                putExtra(ContactsContract.Intents.Insert.PHONE, it.number)
+            }
+            contact.email?.let {
+                putExtra(ContactsContract.Intents.Insert.EMAIL, it.mail)
+            }
         }
-        contact.phone?.let {
-            putExtra(ContactsContract.Intents.Insert.PHONE, it.number)
-        }
-        contact.email?.let {
-            putExtra(ContactsContract.Intents.Insert.EMAIL, it.mail)
-        }
-    }
     try {
         context.startActivity(
             Intent.createChooser(
                 intent,
-                context.getString(R.string.info_contacts_contact_choose_app)
-            )
+                context.getString(R.string.info_contacts_contact_choose_app),
+            ),
         )
     } catch (e: Exception) {
         e.printStackTrace()

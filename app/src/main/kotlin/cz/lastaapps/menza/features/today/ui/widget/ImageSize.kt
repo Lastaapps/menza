@@ -50,14 +50,14 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 
-private const val imageSizeMin = .5f
-private const val imageSizeMax = 2f
+private const val IMAGE_SIZE_MIN = .5f
+private const val IMAGE_SIZE_MAX = 2f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ImageSizeSetting(
     progress: Float,
-    onProgressChanged: (Float) -> Unit,
+    onProgressChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var uiProgress by remember(progress) { mutableFloatStateOf(progress) }
@@ -80,10 +80,11 @@ internal fun ImageSizeSetting(
         Slider(
             value = uiProgress,
             onValueChange = { uiProgress = it },
-            onValueChangeFinished = { onProgressChanged(uiProgress) },
-            valueRange = imageSizeMin..imageSizeMax,
-            steps = (10 * (imageSizeMax - imageSizeMin)).toInt() + -1,
-            modifier = Modifier
+            onValueChangeFinished = { onProgressChange(uiProgress) },
+            valueRange = IMAGE_SIZE_MIN..IMAGE_SIZE_MAX,
+            steps = (10 * (IMAGE_SIZE_MAX - IMAGE_SIZE_MIN)).toInt() + -1,
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Padding.Medium)
                 .semantics { this.contentDescription = contentDescription },
@@ -113,10 +114,14 @@ internal fun ImageSizeSetting(
 
 @Preview
 @Composable
-private fun ImageSizeSettingPreview() = PreviewWrapper {
-    Column {
-        ImageSizeSetting(progress = imageSizeMin, onProgressChanged = {})
-        ImageSizeSetting(progress = imageSizeMin.plus(imageSizeMax) / 2, onProgressChanged = {})
-        ImageSizeSetting(progress = imageSizeMax, onProgressChanged = {})
+private fun ImageSizeSettingPreview() =
+    PreviewWrapper {
+        Column {
+            ImageSizeSetting(progress = IMAGE_SIZE_MIN, onProgressChange = {})
+            ImageSizeSetting(
+                progress = IMAGE_SIZE_MIN.plus(IMAGE_SIZE_MAX) / 2,
+                onProgressChange = {},
+            )
+            ImageSizeSetting(progress = IMAGE_SIZE_MAX, onProgressChange = {})
+        }
     }
-}

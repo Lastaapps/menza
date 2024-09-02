@@ -44,11 +44,13 @@ internal class AndroidWalletCredentialsProvider(
     private val context: Context,
 ) : WalletCredentialsProvider {
     companion object {
-        /// Get encrypted shared preferences to store username & password
+        // / Get encrypted shared preferences to store username & password
         private fun getSharedPreferences(context: Context): SharedPreferences {
-            val masterKey = MasterKey.Builder(context)
-                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                .build()
+            val masterKey =
+                MasterKey
+                    .Builder(context)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build()
             return EncryptedSharedPreferences.create(
                 context,
                 // Update backup and extraction rules if changed!!!
@@ -66,49 +68,56 @@ internal class AndroidWalletCredentialsProvider(
     private val sharedPreferences by lazy { getSharedPreferences(context) }
     private var credentialsFlow: MutableStateFlow<Outcome<LoginCredentialsSett>>? = null
 
-    override suspend fun store(credentials: LoginCredentialsSett) = synchronized(this) {
-        log.i { "Storing new credentials for ***${credentials.username.takeLast(3)}" }
+    override suspend fun store(credentials: LoginCredentialsSett) =
+        synchronized(this) {
+            log.i { "Storing new credentials for ***${credentials.username.takeLast(3)}" }
 
-        sharedPreferences.edit {
-            with(credentials) {
-                putString("username", username)
-                putString("password", password)
-                putString("type", type.name)
+            sharedPreferences.edit {
+                with(credentials) {
+                    putString("username", username)
+                    putString("password", password)
+                    putString("type", type.name)
+                }
             }
+
+            credentialsFlow?.value = credentials.right()
         }
 
-        credentialsFlow?.value = credentials.right()
-    }
+    override suspend fun clear() =
+        synchronized(this) {
+            log.i { "Clearing credentials" }
+            sharedPreferences.edit { clear() }
+            credentialsFlow?.value = notLoggedIn
+        }
 
-    override suspend fun clear() = synchronized(this) {
-        log.i { "Clearing credentials" }
-        sharedPreferences.edit { clear() }
-        credentialsFlow?.value = notLoggedIn
-    }
+    override fun get(): Flow<Outcome<LoginCredentialsSett>> =
+        synchronized(this) {
+            if (credentialsFlow == null) {
+                credentialsFlow =
+                    MutableStateFlow(
+                        nullable {
+                            val username = sharedPreferences.getString("username", null).bind()
+                            val password = sharedPreferences.getString("password", null).bind()
+                            val typeName = sharedPreferences.getString("type", null).bind()
 
-    override fun get(): Flow<Outcome<LoginCredentialsSett>> = synchronized(this) {
-        if (credentialsFlow == null) {
-            credentialsFlow = MutableStateFlow(
-                nullable {
-                    val username = sharedPreferences.getString("username", null).bind()
-                    val password = sharedPreferences.getString("password", null).bind()
-                    val typeName = sharedPreferences.getString("type", null).bind()
+                            val type =
+                                BalanceAccountTypeSett.entries
+                                    .firstOrNull { it.name == typeName }
+                                    .bind()
 
-                    val type = BalanceAccountTypeSett.entries
-                        .firstOrNull { it.name == typeName }
-                        .bind()
-
-                    log.i { "Read credentials for $username" }
-                    LoginCredentialsSett(
-                        username, password, type,
+                            log.i { "Read credentials for $username" }
+                            LoginCredentialsSett(
+                                username,
+                                password,
+                                type,
+                            )
+                        }?.right() ?: let {
+                            log.i { "Read empty credentials" }
+                            notLoggedIn
+                        },
                     )
-                }?.right() ?: let {
-                    log.i { "Read empty credentials" }
-                    notLoggedIn
-                },
-            )
-        }
+            }
 
-        credentialsFlow!!.asSharedFlow()
-    }
+            credentialsFlow!!.asSharedFlow()
+        }
 }

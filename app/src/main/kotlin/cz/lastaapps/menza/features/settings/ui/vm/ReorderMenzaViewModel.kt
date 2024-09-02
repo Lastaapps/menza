@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -40,33 +40,38 @@ internal class ReorderMenzaViewModel(
     private val updateMenzaOrder: UpdateMenzaOrderUC,
     private val isMenzaOrderFromTop: IsMenzaOrderFromTopUC,
     private val setMenzaOrderFromTop: SetMenzaOrderFromTopUC,
-) : StateViewModel<ReorderMenzaState>(ReorderMenzaState(), context), Appearing {
+) : StateViewModel<ReorderMenzaState>(ReorderMenzaState(), context),
+    Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launchVM {
+    override fun onAppeared() =
         launchVM {
-            getOrderedMenzaList().collect {
-                updateState { copy(menzaList = it) }
+            launchVM {
+                getOrderedMenzaList().collect {
+                    updateState { copy(menzaList = it) }
+                }
+            }
+            launchVM {
+                isMenzaOrderFromTop().collect {
+                    updateState { copy(fromTop = it) }
+                }
             }
         }
+
+    fun toggleVisibility(menza: Menza) =
         launchVM {
-            isMenzaOrderFromTop().collect {
-                updateState { copy(fromTop = it) }
-            }
+            toggleVisibility.invoke(menza)
         }
-    }
 
-    fun toggleVisibility(menza: Menza) = launchVM {
-        toggleVisibility.invoke(menza)
-    }
+    fun saveOrder(items: List<Pair<Menza, MenzaOrder>>) =
+        launchVM {
+            updateMenzaOrder(items.map { (menza, order) -> menza to order.visible })
+        }
 
-    fun saveOrder(items: List<Pair<Menza, MenzaOrder>>) = launchVM {
-        updateMenzaOrder(items.map { (menza, order) -> menza to order.visible })
-    }
-
-    fun reverseOrder() = launchVM {
-        setMenzaOrderFromTop(!lastState().fromTop)
-    }
+    fun reverseOrder() =
+        launchVM {
+            setMenzaOrderFromTop(!lastState().fromTop)
+        }
 }
 
 internal data class ReorderMenzaState(

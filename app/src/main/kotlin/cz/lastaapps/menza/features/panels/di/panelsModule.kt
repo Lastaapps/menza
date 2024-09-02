@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,9 +23,10 @@ import cz.lastaapps.menza.features.panels.rateus.di.rateUsModule
 import cz.lastaapps.menza.features.panels.whatsnew.di.whatsNewModule
 import org.koin.dsl.module
 
-val panelsModule = module {
-    includes(
-        whatsNewModule,
-        rateUsModule,
-    )
-}
+val panelsModule =
+    module {
+        includes(
+            whatsNewModule,
+            rateUsModule,
+        )
+    }

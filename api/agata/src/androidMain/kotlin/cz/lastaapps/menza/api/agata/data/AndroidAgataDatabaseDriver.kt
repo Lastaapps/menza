@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,6 +25,4 @@ import cz.lastaapps.api.agata.AgataDatabase
 
 internal const val DB_NAME = "agata_api.db"
 
-internal fun createAgataDBDriver(
-    context: Context,
-) = AgataDatabaseSqlDriver(AndroidSqliteDriver(AgataDatabase.Schema, context, DB_NAME))
+internal fun createAgataDBDriver(context: Context) = AgataDatabaseSqlDriver(AndroidSqliteDriver(AgataDatabase.Schema, context, DB_NAME))

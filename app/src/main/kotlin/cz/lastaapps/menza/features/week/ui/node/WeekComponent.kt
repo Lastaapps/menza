@@ -37,7 +37,9 @@ internal interface WeekComponent {
 
 internal class DefaultWeekComponent(
     componentContext: ComponentContext,
-) : WeekComponent, KoinComponent, ComponentContext by componentContext {
+) : WeekComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: WeekViewModel = getOrCreateKoin()
 }
 
@@ -52,8 +54,9 @@ internal fun WeekContent(
         onOsturak = onOsturak,
         viewModel = component.viewModel,
         hostState = hostState,
-        modifier = modifier
-            .padding(Padding.More.Screen)
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .padding(Padding.More.Screen)
+                .fillMaxSize(),
     )
 }

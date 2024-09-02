@@ -32,39 +32,41 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
 
-class CafeteriaTest : StringSpec(
-    {
+class CafeteriaTest :
+    StringSpec(
+        {
 
-        fun client() = createAgataClient(
-            HttpClient {
-                install(Logging) {
-                    level = BODY
+            fun client() =
+                createAgataClient(
+                    HttpClient {
+                        install(Logging) {
+                            level = BODY
+                        }
+                    },
+                    AgataBEConfig.prod,
+                )
+
+            fun api() = CafeteriaApiImpl(client())
+
+            val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
+
+            "getSubsystems" {
+                val res = api().getSubsystems()
+                res.shouldBeInstanceOf<Right<List<SubsystemDto>>>()
+            }
+
+            "getServingPlaces" {
+                ids.forEach { subsystemId ->
+                    val res = api().getServingPlaces(subsystemId)
+                    res.shouldBeInstanceOf<Right<List<ServingPlaceDto>>>()
                 }
-            },
-            AgataBEConfig.prod,
-        )
-
-        fun api() = CafeteriaApiImpl(client())
-
-        val ids = listOf(1, 2, 3, 5, 6, 8, 9, 12, 15)
-
-        "getSubsystems" {
-            val res = api().getSubsystems()
-            res.shouldBeInstanceOf<Right<List<SubsystemDto>>>()
-        }
-
-        "getServingPlaces" {
-            ids.forEach { subsystemId ->
-                val res = api().getServingPlaces(subsystemId)
-                res.shouldBeInstanceOf<Right<List<ServingPlaceDto>>>()
             }
-        }
 
-        "getDishTypes" {
-            ids.forEach { subsystemId ->
-                val res = api().getDishTypes(subsystemId)
-                res.shouldBeInstanceOf<Right<List<DishTypeDto>?>>()
+            "getDishTypes" {
+                ids.forEach { subsystemId ->
+                    val res = api().getDishTypes(subsystemId)
+                    res.shouldBeInstanceOf<Right<List<DishTypeDto>?>>()
+                }
             }
-        }
-    },
-)
+        },
+    )

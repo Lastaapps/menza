@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,8 +27,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 @Keep
-class StartInit : Initializer<Unit>, KoinComponent {
-
+class StartInit :
+    Initializer<Unit>,
+    KoinComponent {
     companion object {
         private val log = Logger.withTag(this::class.simpleName!!)
     }

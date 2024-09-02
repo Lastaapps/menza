@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,25 +36,30 @@ typealias SyncOutcome = Outcome<SyncResult>
 
 sealed interface SyncResult {
     data object Updated : SyncResult
+
     data object Skipped : SyncResult
+
     data object Unavailable : SyncResult
 
     @JvmInline
-    value class Problem(val errors: Nel<DomainError>) : SyncResult
+    value class Problem(
+        val errors: Nel<DomainError>,
+    ) : SyncResult
 }
 
-fun SyncOutcome.mapSync() = map {
-    when (it) {
-        is Problem -> {
-            when (it.errors.first()) {
-                is SyncError.Closed -> SyncError.Closed
-                is WeekNotAvailable -> WeekNotAvailable
-                else -> SyncError.Problem(it.errors)
-            }.left()
-        }
+fun SyncOutcome.mapSync() =
+    map {
+        when (it) {
+            is Problem -> {
+                when (it.errors.first()) {
+                    is SyncError.Closed -> SyncError.Closed
+                    is WeekNotAvailable -> WeekNotAvailable
+                    else -> SyncError.Problem(it.errors)
+                }.left()
+            }
 
-        Unavailable -> SyncError.Unavailable.left()
-        Skipped -> it.right()
-        Updated -> it.right()
-    }
-}.flatten()
+            Unavailable -> SyncError.Unavailable.left()
+            Skipped -> it.right()
+            Updated -> it.right()
+        }
+    }.flatten()

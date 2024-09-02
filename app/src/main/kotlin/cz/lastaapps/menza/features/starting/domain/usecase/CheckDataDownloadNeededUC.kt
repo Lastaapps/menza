@@ -33,11 +33,11 @@ internal class CheckDataDownloadNeededUC(
     private val masterRepo: MenzaRepo,
     private val getRequestParamsUC: GetImportantRequestParams,
 ) : UseCase(context) {
-
     suspend operator fun invoke() =
-        getRequestParamsUC().parMap {
-            masterRepo.isReady(it)
-        }.foldBinary(true) { a, b -> a && b }
+        getRequestParamsUC()
+            .parMap {
+                masterRepo.isReady(it)
+            }.foldBinary(true) { a, b -> a && b }
             .map { it.not() }
             .distinctUntilChanged()
 }

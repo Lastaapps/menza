@@ -29,11 +29,11 @@ internal class DishLanguageViewModel(
     context: VMContext,
     private val setDishLanguageUC: SetDishLanguageUC,
 ) : StateViewModel<DishLanguageState>(DishLanguageState(), context) {
-
-    fun selectLanguage(language: DishLanguage) = launchVM {
-        setDishLanguageUC(language)
-        updateState { copy(isSelected = true) }
-    }
+    fun selectLanguage(language: DishLanguage) =
+        launchVM {
+            setDishLanguageUC(language)
+            updateState { copy(isSelected = true) }
+        }
 
     fun dismissSelected() {
         updateState { copy(isSelected = false) }

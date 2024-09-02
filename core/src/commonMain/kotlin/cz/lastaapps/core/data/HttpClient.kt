@@ -26,34 +26,37 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
-@OptIn(ExperimentalSerializationApi::class)
-internal val httpClient = HttpClient {
-    install(ContentNegotiation) {
-        json(
-            Json {
-                encodeDefaults = true
-                ignoreUnknownKeys = true
-                explicitNulls = true
-            },
-        )
-    }
+internal val httpClient =
+    HttpClient {
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    encodeDefaults = true
+                    ignoreUnknownKeys = true
+                    explicitNulls = true
+                },
+            )
+        }
 
-    install(HttpTimeout) {
-        connectTimeoutMillis = 3_000
-        socketTimeoutMillis = 5_000
-        requestTimeoutMillis = 5_000
-    }
+        install(HttpTimeout) {
+            connectTimeoutMillis = 3_000
+            socketTimeoutMillis = 5_000
+            requestTimeoutMillis = 10_000
+        }
 
-    install(Logging) {
-        level = LogLevel.INFO
-        logger = object : Logger {
-            private val log = co.touchlab.kermit.Logger.withTag("Ktor")
-            override fun log(message: String) {
-                log.i { message }
-            }
+        install(Logging) {
+            level = LogLevel.INFO
+            logger =
+                object : Logger {
+                    private val log =
+                        co.touchlab.kermit.Logger
+                            .withTag("Ktor")
+
+                    override fun log(message: String) {
+                        log.i { message }
+                    }
+                }
         }
     }
-}

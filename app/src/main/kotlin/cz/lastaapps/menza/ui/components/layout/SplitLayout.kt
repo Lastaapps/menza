@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -37,13 +37,13 @@ fun SplitLayout(
 ) {
     Row(modifier) {
         Box(
-            Modifier.width(size.first)
+            Modifier.width(size.first),
         ) { panel1() }
 
         Spacer(Modifier.width(size.second))
 
         Box(
-            Modifier.width(size.third)
+            Modifier.width(size.third),
         ) { panel2() }
     }
 }

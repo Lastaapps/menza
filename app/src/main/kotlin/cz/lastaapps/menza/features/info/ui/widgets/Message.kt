@@ -59,7 +59,10 @@ internal fun MessageList(
 }
 
 @Composable
-private fun Message(message: Message, modifier: Modifier = Modifier) {
+private fun Message(
+    message: Message,
+    modifier: Modifier = Modifier,
+) {
     Card(
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         modifier = modifier,

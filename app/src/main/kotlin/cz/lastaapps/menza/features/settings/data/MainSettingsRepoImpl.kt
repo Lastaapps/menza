@@ -40,136 +40,115 @@ internal class MainSettingsRepoImpl(
     private val general: GeneralDataSource,
     private val defaults: DefaultsProvider,
 ) : MainSettingsRepo {
+    override fun getAllSettings(): Flow<AppSettings> =
+        combine(
+            getInitialMenzaMode().distinctUntilChanged(),
+            getLatestMenza().distinctUntilChanged(),
+            getPreferredMenza().distinctUntilChanged(),
+            isAppSetupFinished().distinctUntilChanged(),
+            isSettingsEverOpened().distinctUntilChanged(),
+            getPriceType().distinctUntilChanged(),
+            getDarkMode().distinctUntilChanged(),
+            getAppTheme().distinctUntilChanged(),
+            getImageScale().distinctUntilChanged(),
+            getImagesOnMetered().distinctUntilChanged(),
+            getDishLanguage().distinctUntilChanged(),
+            isCompactTodayView().distinctUntilChanged(),
+            isOliverRow().distinctUntilChanged(),
+            getBalanceWarningThreshold().distinctUntilChanged(),
+            getAlternativeNavigation().distinctUntilChanged(),
+        ) { arr ->
+            AppSettings(
+                initialMenzaMode = arr[0] as InitialSelectionBehaviour,
+                latestMenza = arr[1] as MenzaType?,
+                preferredMenza = arr[2] as MenzaType?,
+                isAppSetupFinished = arr[3] as Boolean,
+                isSettingsEverOpened = arr[4] as Boolean,
+                priceType = arr[5] as PriceType,
+                darkMode = arr[6] as DarkMode,
+                appTheme = arr[7] as AppThemeType?,
+                imageScale = arr[8] as Float,
+                imagesOnMetered = arr[9] as Boolean,
+                dishLanguage = arr[10] as DishLanguage,
+                todayViewMode = arr[11] as DishListMode,
+                useOliverRows = arr[12] as Boolean,
+                balanceWarningThreshold = arr[13] as Int,
+                alternativeNavigation = arr[14] as Boolean,
+            )
+        }.distinctUntilChanged()
 
-    override fun getAllSettings(): Flow<AppSettings> = combine(
-        getInitialMenzaMode().distinctUntilChanged(),
-        getLatestMenza().distinctUntilChanged(),
-        getPreferredMenza().distinctUntilChanged(),
-        isAppSetupFinished().distinctUntilChanged(),
-        isSettingsEverOpened().distinctUntilChanged(),
-        getPriceType().distinctUntilChanged(),
-        getDarkMode().distinctUntilChanged(),
-        getAppTheme().distinctUntilChanged(),
-        getImageScale().distinctUntilChanged(),
-        getImagesOnMetered().distinctUntilChanged(),
-        getDishLanguage().distinctUntilChanged(),
-        isCompactTodayView().distinctUntilChanged(),
-        isOliverRow().distinctUntilChanged(),
-        getBalanceWarningThreshold().distinctUntilChanged(),
-        getAlternativeNavigation().distinctUntilChanged(),
-    ) { arr ->
-        AppSettings(
-            initialMenzaMode = arr[0] as InitialSelectionBehaviour,
-            latestMenza = arr[1] as MenzaType?,
-            preferredMenza = arr[2] as MenzaType?,
-            isAppSetupFinished = arr[3] as Boolean,
-            isSettingsEverOpened = arr[4] as Boolean,
-            priceType = arr[5] as PriceType,
-            darkMode = arr[6] as DarkMode,
-            appTheme = arr[7] as AppThemeType?,
-            imageScale = arr[8] as Float,
-            imagesOnMetered = arr[9] as Boolean,
-            dishLanguage = arr[10] as DishLanguage,
-            todayViewMode = arr[11] as DishListMode,
-            useOliverRows = arr[12] as Boolean,
-            balanceWarningThreshold = arr[13] as Int,
-            alternativeNavigation = arr[14] as Boolean,
-        )
-    }.distinctUntilChanged()
+    override suspend fun storeInitialMenzaMode(mode: InitialSelectionBehaviour) = initial.storeInitialMenzaMode(mode)
 
-    override suspend fun storeInitialMenzaMode(mode: InitialSelectionBehaviour) =
-        initial.storeInitialMenzaMode(mode)
+    override fun getInitialMenzaMode(): Flow<InitialSelectionBehaviour> = initial.getInitialMenzaMode()
 
-    override fun getInitialMenzaMode(): Flow<InitialSelectionBehaviour> =
-        initial.getInitialMenzaMode()
+    override suspend fun storeLatestMenza(type: MenzaType) = initial.storeLatestMenza(type)
 
+    override fun getLatestMenza(): Flow<MenzaType?> = initial.getLatestMenza()
 
-    override suspend fun storeLatestMenza(type: MenzaType) =
-        initial.storeLatestMenza(type)
+    override suspend fun storePreferredMenza(type: MenzaType) = initial.storePreferredMenza(type)
 
-    override fun getLatestMenza(): Flow<MenzaType?> =
-        initial.getLatestMenza()
+    override fun getPreferredMenza(): Flow<MenzaType?> = initial.getPreferredMenza()
 
-    override suspend fun storePreferredMenza(type: MenzaType) =
-        initial.storePreferredMenza(type)
+    override suspend fun storeAppSetupFinished() = general.storeAppSetupFinished()
 
-    override fun getPreferredMenza(): Flow<MenzaType?> =
-        initial.getPreferredMenza()
+    override fun isAppSetupFinished(): Flow<Boolean> = general.isAppSetupFinished()
 
-    override suspend fun storeAppSetupFinished() =
-        general.storeAppSetupFinished()
+    override suspend fun storeSettingsEverOpened() = general.storeSettingsEverOpened()
 
-    override fun isAppSetupFinished(): Flow<Boolean> =
-        general.isAppSetupFinished()
+    override fun isSettingsEverOpened(): Flow<Boolean> = general.isSettingsEverOpened()
 
-    override suspend fun storeSettingsEverOpened() =
-        general.storeSettingsEverOpened()
+    override suspend fun setPriceType(type: PriceType) = general.setPriceType(type)
 
-    override fun isSettingsEverOpened(): Flow<Boolean> =
-        general.isSettingsEverOpened()
+    override fun getPriceType(): Flow<PriceType> = general.getPriceType()
 
-    override suspend fun setPriceType(type: PriceType) =
-        general.setPriceType(type)
+    override suspend fun setDarkMode(mode: DarkMode) = general.setDarkMode(mode)
 
-    override fun getPriceType(): Flow<PriceType> =
-        general.getPriceType()
+    override fun getDarkMode(): Flow<DarkMode> = general.getDarkMode()
 
-    override suspend fun setDarkMode(mode: DarkMode) =
-        general.setDarkMode(mode)
+    override suspend fun setAppTheme(theme: AppThemeType) = general.setAppTheme(theme)
 
-    override fun getDarkMode(): Flow<DarkMode> =
-        general.getDarkMode()
+    override fun getAppTheme(): Flow<AppThemeType?> = general.getAppTheme()
 
-    override suspend fun setAppTheme(theme: AppThemeType) =
-        general.setAppTheme(theme)
+    override suspend fun setImageScale(scale: Float) = general.setImageScale(scale)
 
-    override fun getAppTheme(): Flow<AppThemeType?> =
-        general.getAppTheme()
+    override fun getImageScale(): Flow<Float> = general.getImageScale()
 
-    override suspend fun setImageScale(scale: Float) =
-        general.setImageScale(scale)
+    override suspend fun setImagesOnMetered(enabled: Boolean) = general.setImagesOnMetered(enabled)
 
-    override fun getImageScale(): Flow<Float> =
-        general.getImageScale()
+    override fun getImagesOnMetered(): Flow<Boolean> = general.getImagesOnMetered()
 
-    override suspend fun setImagesOnMetered(enabled: Boolean) =
-        general.setImagesOnMetered(enabled)
-
-    override fun getImagesOnMetered(): Flow<Boolean> =
-        general.getImagesOnMetered()
-
-    override suspend fun setDishLanguage(language: DishLanguage) =
-        general.setDishLanguage(language)
+    override suspend fun setDishLanguage(language: DishLanguage) = general.setDishLanguage(language)
 
     override fun getDishLanguage(): Flow<DishLanguage> =
         general.getDishLanguage().map { it ?: defaults.defaultDishLanguage() }
 
-    override suspend fun setCompactTodayView(mode: DishListMode) =
-        general.setCompactTodayView(mode)
+    override suspend fun setCompactTodayView(mode: DishListMode) = general.setCompactTodayView(mode)
 
     override fun isCompactTodayView(): Flow<DishListMode> =
-        general.isCompactTodayView()
+        general
+            .isCompactTodayView()
             .map { it ?: DishListMode.COMPACT }
 
-    override suspend fun setOliverRows(useOliverRows: Boolean) =
-        general.setOliverRow(useOliverRows)
+    override suspend fun setOliverRows(useOliverRows: Boolean) = general.setOliverRow(useOliverRows)
 
     override fun isOliverRow(): Flow<Boolean> =
-        general.isOliverRow()
+        general
+            .isOliverRow()
             .map { it ?: true }
 
     override suspend fun setBalanceWarningThreshold(threshold: Int) =
         general.setBalanceWarningThreshold(threshold)
 
     override fun getBalanceWarningThreshold(): Flow<Int> =
-        general.getBalanceWarningThreshold()
+        general
+            .getBalanceWarningThreshold()
             .map { it ?: 256 }
 
     override suspend fun setAlternativeNavigation(enabled: Boolean) =
         general.setAlternativeNavigation(enabled)
 
     override fun getAlternativeNavigation(): Flow<Boolean> =
-        general.getAlternativeNavigation()
+        general
+            .getAlternativeNavigation()
             .map { it ?: false }
-
 }

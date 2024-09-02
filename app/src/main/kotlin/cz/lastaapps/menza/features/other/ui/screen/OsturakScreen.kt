@@ -26,18 +26,14 @@ import cz.lastaapps.menza.features.other.ui.widgets.OsturakText
 import cz.lastaapps.menza.ui.components.layout.AboveOrSideBySideLayout
 
 @Composable
-internal fun OsturakScreen(
-    modifier: Modifier = Modifier,
-) {
+internal fun OsturakScreen(modifier: Modifier = Modifier) {
     OsturakContent(
         modifier = modifier,
     )
 }
 
 @Composable
-private fun OsturakContent(
-    modifier: Modifier = Modifier,
-) {
+private fun OsturakContent(modifier: Modifier = Modifier) {
     AboveOrSideBySideLayout(
         topLeft = {
             item {

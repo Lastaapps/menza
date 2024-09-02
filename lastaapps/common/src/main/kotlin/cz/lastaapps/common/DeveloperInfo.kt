@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,10 +24,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 object DeveloperInfo {
-
-    fun getName(context: Context): String {
-        return context.getString(R.string.developer_name)
-    }
+    fun getName(context: Context): String = context.getString(R.string.developer_name)
 
     fun getNameAndBuildYear(context: Context): String {
         val date = LocalDate.parse(BuildConfig.BUILD_DATE)
@@ -35,5 +32,4 @@ object DeveloperInfo {
 
         return context.getString(R.string.developer_name_date, formatted)
     }
-
 }

@@ -42,7 +42,8 @@ internal class MainViewModel(
     private val isFlip: IsFlipUC,
     private val checkLowBalanceUC: CheckLowBalanceUC,
     private val refreshWallet: WalletRefreshUC,
-) : StateViewModel<MainState>(MainState(), context), Appearing {
+) : StateViewModel<MainState>(MainState(), context),
+    Appearing {
     override var hasAppeared: Boolean = false
 
     override fun onAppeared() {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,18 +25,19 @@ import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import crash.Crashes
 import cz.lastaapps.crash.CrashDatabase
 
-internal data class CrashDatabaseDriver(val driver: SqlDriver)
+internal data class CrashDatabaseDriver(
+    val driver: SqlDriver,
+)
 
-internal fun createCrashDriver(context: Context) =
-    CrashDatabaseDriver(AndroidSqliteDriver(CrashDatabase.Schema, context, "crash.db"))
+internal fun createCrashDriver(context: Context) = CrashDatabaseDriver(AndroidSqliteDriver(CrashDatabase.Schema, context, "crash.db"))
 
-internal fun createDatabase(driver: CrashDatabaseDriver): CrashDatabase {
-    return CrashDatabase(
+internal fun createDatabase(driver: CrashDatabaseDriver): CrashDatabase =
+    CrashDatabase(
         driver.driver,
-        crashesAdapter = Crashes.Adapter(
-            CrashAdapter.dateAdapter,
-            CrashAdapter.severityAdapter,
-            CrashAdapter.reportedAdapter,
-        )
+        crashesAdapter =
+            Crashes.Adapter(
+                CrashAdapter.dateAdapter,
+                CrashAdapter.severityAdapter,
+                CrashAdapter.reportedAdapter,
+            ),
     )
-}

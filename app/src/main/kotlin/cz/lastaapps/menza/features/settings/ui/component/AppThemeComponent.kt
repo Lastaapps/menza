@@ -36,21 +36,24 @@ internal interface AppThemeComponent {
 
 internal class DefaultAppThemeComponent(
     componentContext: ComponentContext,
-) : AppThemeComponent, KoinComponent, ComponentContext by componentContext {
+) : AppThemeComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: AppThemeViewModel = getOrCreateKoin()
 }
 
 @Composable
 internal fun AppThemeContent(
     component: AppThemeComponent,
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AppThemeScreen(
-        onDone = onDone,
+        onComplete = onComplete,
         viewModel = component.viewModel,
-        modifier = modifier
-            .fillMaxSize()
-            .padding(Padding.More.Screen),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(Padding.More.Screen),
     )
 }

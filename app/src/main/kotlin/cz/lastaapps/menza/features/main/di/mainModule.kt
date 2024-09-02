@@ -35,16 +35,17 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val mainModule = module {
+val mainModule =
+    module {
 
-    singleOf(::SelectedMenzaRepoImpl) bind SelectedMenzaRepo::class
-    factoryOf(::MenzaSelectionViewModel)
-    factoryOf(::MainViewModel)
-    factoryOf(::AgataWalletLoginViewModel)
-    factoryOf(::AgataWalletViewModel)
-    factoryOf(::GetAddMoneyUrlUC)
-    factoryOf(::GetSelectedMenzaUC)
-    factoryOf(::SelectMenzaUC)
-    factoryOf(::IsFlipUC)
-    factoryOf(::CheckLowBalanceUC)
-}
+        singleOf(::SelectedMenzaRepoImpl) bind SelectedMenzaRepo::class
+        factoryOf(::MenzaSelectionViewModel)
+        factoryOf(::MainViewModel)
+        factoryOf(::AgataWalletLoginViewModel)
+        factoryOf(::AgataWalletViewModel)
+        factoryOf(::GetAddMoneyUrlUC)
+        factoryOf(::GetSelectedMenzaUC)
+        factoryOf(::SelectMenzaUC)
+        factoryOf(::IsFlipUC)
+        factoryOf(::CheckLowBalanceUC)
+    }

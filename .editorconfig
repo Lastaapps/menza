@@ -8,16 +8,11 @@ ktlint_code_style = ktlint_official
 # Indentation
 indent_size = 4
 indent_style = space
+max_line_lengt = 100
 
 # Trailing Comma
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
-trailing-comma-on-call-site = true
-trailing-comma-on-declaration-site = true
-
-# Disable wrapping that I don't like
-ktlint_standard_wrapping = disabled
-ktlint_standard_multiline-expression-wrapping = disabled
 
 # Compose
 # https://mrmans0n.github.io/compose-rules/ktlint/
@@ -25,3 +20,9 @@ ktlint_function_naming_ignore_when_annotated_with = Composable
 compose_disallow_material2 = true
 compose_allowed_from_m2 = icons
 compose_disallow_unstable_collections = true
+# I'm responsible enough, hopefully
+ktlint_compose_vm-forwarding-check = disabled
+
+# modules for DI
+[*Module.kt]
+ktlint_standard_filename = disabled

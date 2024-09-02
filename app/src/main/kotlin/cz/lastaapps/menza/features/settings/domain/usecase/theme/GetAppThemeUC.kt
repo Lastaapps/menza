@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,15 +30,16 @@ class GetAppThemeUC internal constructor(
     private val repo: MainSettingsRepo,
     private val isDynamicThemeSupported: IsDynamicThemeSupportedUC,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        repo.getAppTheme().map {
-            it ?: run {
-                if (isDynamicThemeSupported()) {
-                    AppThemeType.System
-                } else {
-                    AppThemeType.Agata
+    suspend operator fun invoke() =
+        launch {
+            repo.getAppTheme().map {
+                it ?: run {
+                    if (isDynamicThemeSupported()) {
+                        AppThemeType.System
+                    } else {
+                        AppThemeType.Agata
+                    }
                 }
             }
         }
-    }
 }

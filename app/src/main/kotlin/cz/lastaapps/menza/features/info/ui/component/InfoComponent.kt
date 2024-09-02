@@ -35,7 +35,9 @@ internal interface InfoComponent {
 
 internal class DefaultInfoComponent(
     componentContext: ComponentContext,
-) : InfoComponent, KoinComponent, ComponentContext by componentContext {
+) : InfoComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: InfoViewModel = getOrCreateKoin()
 }
 

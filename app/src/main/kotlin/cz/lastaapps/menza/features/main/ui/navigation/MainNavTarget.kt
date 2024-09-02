@@ -33,14 +33,15 @@ internal enum class MainNavTarget {
     ;
 
     companion object {
-        fun fromChild(child: MainComponent.Child) = when (child) {
-            is MainComponent.Child.Info -> Info
-            is MainComponent.Child.LicenseNotices -> LicenseNotices
-            is MainComponent.Child.Osturak -> Osturak
-            is MainComponent.Child.PrivacyPolicy -> PrivacyPolicy
-            is MainComponent.Child.Settings -> Settings
-            is MainComponent.Child.Today -> Today
-            is MainComponent.Child.Week -> Week
-        }
+        fun fromChild(child: MainComponent.Child) =
+            when (child) {
+                is MainComponent.Child.Info -> Info
+                is MainComponent.Child.LicenseNotices -> LicenseNotices
+                is MainComponent.Child.Osturak -> Osturak
+                is MainComponent.Child.PrivacyPolicy -> PrivacyPolicy
+                is MainComponent.Child.Settings -> Settings
+                is MainComponent.Child.Today -> Today
+                is MainComponent.Child.Week -> Week
+            }
     }
 }

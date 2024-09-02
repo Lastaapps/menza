@@ -21,9 +21,9 @@ package cz.lastaapps.menza.features.week.di
 
 import cz.lastaapps.menza.features.week.ui.vm.WeekViewModel
 import org.koin.core.module.dsl.factoryOf
-
 import org.koin.dsl.module
 
-val weekModule = module {
-    factoryOf(::WeekViewModel)
-}
+val weekModule =
+    module {
+        factoryOf(::WeekViewModel)
+    }

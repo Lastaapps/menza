@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,17 +31,18 @@ class GetInitialMenzaUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        combine(
-            repo.getInitialMenzaMode(),
-            repo.getPreferredMenza(),
-            repo.getLatestMenza(),
-        ) { mode, preferred, latest ->
-            when (mode) {
-                Ask -> null
-                Remember -> latest
-                Specific -> preferred
+    suspend operator fun invoke() =
+        launch {
+            combine(
+                repo.getInitialMenzaMode(),
+                repo.getPreferredMenza(),
+                repo.getLatestMenza(),
+            ) { mode, preferred, latest ->
+                when (mode) {
+                    Ask -> null
+                    Remember -> latest
+                    Specific -> preferred
+                }
             }
         }
-    }
 }

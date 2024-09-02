@@ -81,6 +81,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
+@Suppress("ktlint:compose:parameter-naming")
 internal fun SettingsScreen(
     appSettings: AppSettings,
     appTheme: AppThemeType,
@@ -95,7 +96,7 @@ internal fun SettingsScreen(
     menzaList: ImmutableList<Menza>,
     onSelectedMenza: (Menza) -> Unit,
     showAbout: Boolean,
-    onAboutClicked: () -> Unit,
+    onAboutClick: () -> Unit,
     onPrivacyPolicy: () -> Unit,
     onFullRefresh: () -> Unit,
     onCrashesDialog: () -> Unit,
@@ -105,7 +106,6 @@ internal fun SettingsScreen(
         modifier = modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(Padding.None),
     ) {
-
 //        Text(
 //            text = stringResource(id = R.string.settings_title),
 //            style = MaterialTheme.typography.displaySmall,
@@ -115,11 +115,12 @@ internal fun SettingsScreen(
         // App theme
         SettingsItem(
             title = stringResource(id = R.string.settings_theme_title),
-            subtitle = buildString {
-                append(appTheme.name())
-                append(", ")
-                append(appSettings.darkMode.name())
-            },
+            subtitle =
+                buildString {
+                    append(appTheme.name())
+                    append(", ")
+                    append(appSettings.darkMode.name())
+                },
             onClick = onChooseTheme,
         )
 
@@ -128,7 +129,7 @@ internal fun SettingsScreen(
             title = stringResource(id = R.string.settings_switch_price),
             subtitle = appSettings.priceType.name(),
             isChecked = appSettings.priceType == PriceType.Discounted,
-            onChecked = { onDiscounterPrices(appSettings.priceType.other()) },
+            onCheck = { onDiscounterPrices(appSettings.priceType.other()) },
         )
 
         // Dish language
@@ -143,7 +144,7 @@ internal fun SettingsScreen(
             title = stringResource(id = R.string.settings_switch_metered_title),
             subtitle = stringResource(id = R.string.settings_switch_metered_subtitle),
             isChecked = appSettings.imagesOnMetered,
-            onChecked = onImagesOnMetered,
+            onCheck = onImagesOnMetered,
         )
 
         // Alternative navigation
@@ -151,7 +152,7 @@ internal fun SettingsScreen(
             title = stringResource(id = R.string.settings_alternative_navigation_title),
             subtitle = stringResource(id = R.string.settings_alternative_navigation_subtitle),
             isChecked = appSettings.alternativeNavigation,
-            onChecked = onAlternativeNavigation,
+            onCheck = onAlternativeNavigation,
         )
 
         // Balance warning threshold
@@ -175,7 +176,7 @@ internal fun SettingsScreen(
             SettingsItem(
                 title = stringResource(id = R.string.settings_about_title),
                 subtitle = stringResource(id = R.string.settings_about_subtitle),
-                onClick = onAboutClicked,
+                onClick = onAboutClick,
             )
         }
 
@@ -208,20 +209,19 @@ private fun ColumnScope.InitialBehaviourSelector(
     ) { initDialogVisible = true }
 
     if (initDialogVisible) {
-
-        val items = InitialSelectionBehaviour.entries
-            .map { it to it.name() }
-            .toImmutableList()
+        val items =
+            InitialSelectionBehaviour.entries
+                .map { it to it.name() }
+                .toImmutableList()
 
         ChooseFromDialog(
             title = stringResource(id = R.string.settings_init_menza_title),
             items = items,
-            onItemSelected = { onInitialMenzaBehaviour(it.first) },
+            onItemSelect = { onInitialMenzaBehaviour(it.first) },
             onDismiss = { initDialogVisible = false },
             toString = Pair<InitialSelectionBehaviour, String>::second,
         )
     }
-
 
     // Specific menza
     var selectDialogVisible by remember { mutableStateOf(false) }
@@ -229,17 +229,17 @@ private fun ColumnScope.InitialBehaviourSelector(
     if (initialMenzaBehaviour == InitialSelectionBehaviour.Specific) {
         SettingsItem(
             title = stringResource(id = R.string.settings_init_menza_select_title),
-            subtitle = selectedMenza?.name
-                ?: stringResource(id = R.string.settings_init_menza_select_placeholder),
+            subtitle =
+                selectedMenza?.name
+                    ?: stringResource(id = R.string.settings_init_menza_select_placeholder),
         ) { selectDialogVisible = true }
     }
 
     if (selectDialogVisible) {
-
         ChooseFromDialog(
             title = stringResource(id = R.string.settings_init_menza_title),
             items = menzaList,
-            onItemSelected = { onSelectedMenza(it) },
+            onItemSelect = { onSelectedMenza(it) },
             onDismiss = { selectDialogVisible = false },
             toString = Menza::name,
         )
@@ -258,21 +258,22 @@ private fun Buttons(
 ) {
     FlowRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(
-            Padding.Small,
-            Alignment.CenterHorizontally,
-        ),
+        horizontalArrangement =
+            Arrangement.spacedBy(
+                Padding.Small,
+                Alignment.CenterHorizontally,
+            ),
         verticalArrangement = Arrangement.Center,
     ) {
-
         val shareText = stringResource(R.string.settings_button_share_text)
         OutlinedButton(
             onClick = {
-                val sendIntent: Intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, shareText)
-                    type = "text/plain"
-                }
+                val sendIntent: Intent =
+                    Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, shareText)
+                        type = "text/plain"
+                    }
                 context.startActivity(Intent.createChooser(sendIntent, null))
             },
         ) { IconAndText(Icons.Default.Share, R.string.settings_button_share) }
@@ -347,11 +348,16 @@ fun CrashesButton(
 }
 
 @Composable
-private fun IconAndText(icon: ImageVector, @StringRes textId: Int) =
-    IconAndText(icon, stringResource(textId))
+private fun IconAndText(
+    icon: ImageVector,
+    @StringRes textId: Int,
+) = IconAndText(icon, stringResource(textId))
 
 @Composable
-private fun IconAndText(icon: ImageVector, text: String) {
+private fun IconAndText(
+    icon: ImageVector,
+    text: String,
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
@@ -363,24 +369,25 @@ private fun IconAndText(icon: ImageVector, text: String) {
 
 @Preview
 @Composable
-private fun SettingsScreenPreview() = PreviewWrapper {
-    SettingsScreen(
-        appSettings = AppSettings.default(),
-        appTheme = Agata,
-        onChooseTheme = {},
-        onChooseDishLanguage = {},
-        onDiscounterPrices = {},
-        onImagesOnMetered = {},
-        onAlternativeNavigation = {},
-        onBalanceThreshold = {},
-        onInitialMenzaBehaviour = {},
-        menzaList = persistentListOf(),
-        preferredMenza = null,
-        onSelectedMenza = {},
-        showAbout = true,
-        onAboutClicked = {},
-        onFullRefresh = {},
-        onPrivacyPolicy = {},
-        onCrashesDialog = {},
-    )
-}
+private fun SettingsScreenPreview() =
+    PreviewWrapper {
+        SettingsScreen(
+            appSettings = AppSettings.default(),
+            appTheme = Agata,
+            onChooseTheme = {},
+            onChooseDishLanguage = {},
+            onDiscounterPrices = {},
+            onImagesOnMetered = {},
+            onAlternativeNavigation = {},
+            onBalanceThreshold = {},
+            onInitialMenzaBehaviour = {},
+            menzaList = persistentListOf(),
+            preferredMenza = null,
+            onSelectedMenza = {},
+            showAbout = true,
+            onAboutClick = {},
+            onFullRefresh = {},
+            onPrivacyPolicy = {},
+            onCrashesDialog = {},
+        )
+    }

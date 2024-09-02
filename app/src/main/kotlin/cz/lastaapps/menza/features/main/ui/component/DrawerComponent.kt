@@ -58,17 +58,22 @@ internal interface DrawerComponent : BackHandlerOwner {
 
     sealed interface Child {
         @JvmInline
-        value class MenzaSelection(val component: MenzaSelectionComponent) : Child
+        value class MenzaSelection(
+            val component: MenzaSelectionComponent,
+        ) : Child
 
         @JvmInline
-        value class Edit(val component: ReorderMenzaComponent) : Child
+        value class Edit(
+            val component: ReorderMenzaComponent,
+        ) : Child
     }
 }
 
 internal class DefaultDrawerComponent(
     componentContext: ComponentContext,
-) : DrawerComponent, KoinComponent, ComponentContext by componentContext {
-
+) : DrawerComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
     override val content: Value<ChildStack<*, Child>> =
         childStack(
@@ -78,11 +83,12 @@ internal class DefaultDrawerComponent(
             handleBackButton = true,
         ) { configuration, componentContext ->
             when (configuration) {
-                Config.MenzaList -> Child.MenzaSelection(
-                    DefaultMenzaSelectionComponent(
-                        componentContext,
-                    ),
-                )
+                Config.MenzaList ->
+                    Child.MenzaSelection(
+                        DefaultMenzaSelectionComponent(
+                            componentContext,
+                        ),
+                    )
 
                 Config.Edit -> Child.Edit(DefaultReorderMenzaComponent(componentContext))
             }
@@ -116,29 +122,31 @@ internal fun DrawerContent(
 ) {
     val content by component.content.subscribeAsState()
     Children(
+        modifier = modifier,
         stack = content,
-        animation = predictiveBackAnimation(
-            backHandler = component.backHandler,
-            fallbackAnimation = stackAnimation(fade() + scale()),
-            selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
-            onBack = component::pop,
-        ),
+        animation =
+            predictiveBackAnimation(
+                backHandler = component.backHandler,
+                fallbackAnimation = stackAnimation(fade() + scale()),
+                selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
+                onBack = component::pop,
+            ),
     ) { item ->
         Surface {
             when (val instance = item.instance) {
-                is Child.MenzaSelection -> MenzaSelectionContent(
-                    component = instance.component,
-                    onEdit = component::edit,
-                    drawerState = drawerState,
-                    snackbarHostState = snackbarHostState,
-                    modifier = modifier,
-                )
+                is Child.MenzaSelection ->
+                    MenzaSelectionContent(
+                        component = instance.component,
+                        onEdit = component::edit,
+                        drawerState = drawerState,
+                        snackbarHostState = snackbarHostState,
+                    )
 
-                is Child.Edit -> ReorderMenzaContent(
-                    component = instance.component,
-                    modifier = modifier,
-                    onDone = component::pop,
-                )
+                is Child.Edit ->
+                    ReorderMenzaContent(
+                        component = instance.component,
+                        onComplete = component::pop,
+                    )
             }
         }
     }

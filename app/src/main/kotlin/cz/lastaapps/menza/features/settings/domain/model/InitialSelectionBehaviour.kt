@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,10 +21,13 @@ package cz.lastaapps.menza.features.settings.domain.model
 
 import kotlinx.collections.immutable.persistentListOf
 
-
-internal sealed class InitialSelectionBehaviour private constructor(val id: Int) {
+internal sealed class InitialSelectionBehaviour private constructor(
+    val id: Int,
+) {
     data object Ask : InitialSelectionBehaviour(0)
+
     data object Remember : InitialSelectionBehaviour(1)
+
     data object Specific : InitialSelectionBehaviour(2)
 
     companion object {

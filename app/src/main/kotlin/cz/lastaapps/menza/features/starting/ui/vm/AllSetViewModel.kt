@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,7 +27,8 @@ class AllSetViewModel(
     context: VMContext,
     private val appSetupFinished: AppSetupFinishedUC,
 ) : BaseViewModel(context) {
-    fun onFinished() = launchVM {
-        appSetupFinished()
-    }
+    fun onFinished() =
+        launchVM {
+            appSetupFinished()
+        }
 }

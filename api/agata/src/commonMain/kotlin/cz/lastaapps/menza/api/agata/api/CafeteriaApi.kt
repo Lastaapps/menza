@@ -36,15 +36,29 @@ import cz.lastaapps.menza.api.agata.util.getFun
 import io.ktor.client.call.body
 
 internal interface CafeteriaApi {
-
     suspend fun getSubsystems(lang: ApiLang): Outcome<List<SubsystemDto>?>
+
     suspend fun getSubsystemsHash(lang: ApiLang): Outcome<String>
 
-    suspend fun getServingPlaces(lang: ApiLang, subsystemId: Int): Outcome<List<ServingPlaceDto>?>
-    suspend fun getServingPlacesHash(lang: ApiLang, subsystemId: Int): Outcome<String>
+    suspend fun getServingPlaces(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<List<ServingPlaceDto>?>
 
-    suspend fun getDishTypes(lang: ApiLang, subsystemId: Int): Outcome<List<DishTypeDto>?>
-    suspend fun getDishTypesHash(lang: ApiLang, subsystemId: Int): Outcome<String>
+    suspend fun getServingPlacesHash(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<String>
+
+    suspend fun getDishTypes(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<List<DishTypeDto>?>
+
+    suspend fun getDishTypesHash(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<String>
 }
 
 internal class CafeteriaApiImpl(
@@ -52,43 +66,45 @@ internal class CafeteriaApiImpl(
 ) : CafeteriaApi {
     private val client = agataClient.client
 
-    override suspend fun getSubsystems(
-        lang: ApiLang,
-    ): Outcome<List<SubsystemDto>?> = catchingNetwork {
-        client.getFun(Subsystem, lang, secondId = 1).body()
-    }
+    override suspend fun getSubsystems(lang: ApiLang): Outcome<List<SubsystemDto>?> =
+        catchingNetwork {
+            client.getFun(Subsystem, lang, secondId = 1).body()
+        }
 
-    override suspend fun getSubsystemsHash(
-        lang: ApiLang,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(SubsystemHash, lang, secondId = 1).body()
-    }
+    override suspend fun getSubsystemsHash(lang: ApiLang): Outcome<String> =
+        catchingNetwork {
+            client.getFun(SubsystemHash, lang, secondId = 1).body()
+        }
 
     override suspend fun getServingPlaces(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<List<ServingPlaceDto>?> = catchingNetwork {
-        client.getFun(ServingPaces, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<List<ServingPlaceDto>?> =
+        catchingNetwork {
+            client.getFun(ServingPaces, lang, subsystemId = subsystemId).body()
+        }
 
     override suspend fun getServingPlacesHash(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(ServingPacesHash, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<String> =
+        catchingNetwork {
+            client.getFun(ServingPacesHash, lang, subsystemId = subsystemId).body()
+        }
 
     override suspend fun getDishTypes(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<List<DishTypeDto>?> = catchingNetwork {
-        client.getFun(Types, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<List<DishTypeDto>?> =
+        catchingNetwork {
+            client.getFun(Types, lang, subsystemId = subsystemId).body()
+        }
 
     override suspend fun getDishTypesHash(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(TypesHash, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<String> =
+        catchingNetwork {
+            client.getFun(TypesHash, lang, subsystemId = subsystemId).body()
+        }
 }

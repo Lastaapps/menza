@@ -21,4 +21,6 @@ package cz.lastaapps.menza
 
 import android.app.Application
 
-class App : Application(), coil3.SingletonImageLoader.Factory by CoilSetup()
+class App :
+    Application(),
+    coil3.SingletonImageLoader.Factory by CoilSetup()

@@ -32,21 +32,22 @@ class GetOrderedMenzaListUC internal constructor(
     private val getMenzaList: GetMenzaListUC,
     private val orderRepo: OrderRepo,
 ) : UseCase(context) {
-    operator fun invoke() = channelFlow {
-        getMenzaList().collectLatest { list ->
-            orderRepo.initFromIfNeeded(
-                list.map { menza ->
-                    menza.type to (menza.supportsDaily || menza.supportsWeekly)
-                },
-            )
+    operator fun invoke() =
+        channelFlow {
+            getMenzaList().collectLatest { list ->
+                orderRepo.initFromIfNeeded(
+                    list.map { menza ->
+                        menza.type to (menza.supportsDaily || menza.supportsWeekly)
+                    },
+                )
 
-            orderRepo.getOrderFor(list.map { it.type }).collect { ordered ->
-                ordered.map { (type, order) ->
-                    list.first { menza -> menza.type == type } to order
+                orderRepo.getOrderFor(list.map { it.type }).collect { ordered ->
+                    ordered
+                        .map { (type, order) ->
+                            list.first { menza -> menza.type == type } to order
+                        }.toImmutableList()
+                        .let { send(it) }
                 }
-                    .toImmutableList()
-                    .let { send(it) }
             }
         }
-    }
 }

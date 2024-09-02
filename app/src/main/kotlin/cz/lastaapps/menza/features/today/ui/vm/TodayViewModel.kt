@@ -36,26 +36,29 @@ internal class TodayViewModel(
     context: VMContext,
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getDishLanguageUC: GetDishLanguageUC,
-) : StateViewModel<TodayState>(TodayState(), context), Appearing {
+) : StateViewModel<TodayState>(TodayState(), context),
+    Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launchVM {
-        getSelectedMenza().onEach {
-            updateState {
-                copy(
-                    selectedMenza = it.toOption(),
-                    selectedDish = null,
-                )
-            }
-        }.launchInVM()
+    override fun onAppeared() =
+        launchVM {
+            getSelectedMenza()
+                .onEach {
+                    updateState {
+                        copy(
+                            selectedMenza = it.toOption(),
+                            selectedDish = null,
+                        )
+                    }
+                }.launchInVM()
 
-        getDishLanguageUC().onEach {
-            updateState { copy(language = it) }
-        }.launchInVM()
-    }
+            getDishLanguageUC()
+                .onEach {
+                    updateState { copy(language = it) }
+                }.launchInVM()
+        }
 
-    fun selectDish(dish: Dish?) =
-        updateState { copy(selectedDish = dish) }
+    fun selectDish(dish: Dish?) = updateState { copy(selectedDish = dish) }
 }
 
 internal data class TodayState(

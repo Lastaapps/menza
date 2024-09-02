@@ -48,9 +48,7 @@ internal fun LicenseScreen(
 }
 
 @Composable
-private fun LicenseEffects(
-    viewModel: LicenseViewModel,
-) {
+private fun LicenseEffects(viewModel: LicenseViewModel) {
     HandleAppear(viewModel)
 }
 
@@ -66,7 +64,7 @@ private fun LicenseContent(
         listNode = {
             LibraryList(
                 libraries = state.libs,
-                onLibrarySelected = onSelectLibrary,
+                onLibrary = onSelectLibrary,
             )
         },
         detailNode = {

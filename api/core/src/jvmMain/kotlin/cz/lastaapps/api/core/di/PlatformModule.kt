@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,13 +22,14 @@ package cz.lastaapps.api.core.di
 import com.russhwolf.settings.PreferencesSettings
 import cz.lastaapps.api.core.data.ValiditySettings
 import cz.lastaapps.core.util.datastructures.StateFlowSettings
-import java.util.prefs.Preferences
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import java.util.prefs.Preferences
 
-internal actual val platform: Module = module {
-    single { createValiditySettings() }
-}
+internal actual val platform: Module =
+    module {
+        single { createValiditySettings() }
+    }
 
 private fun createValiditySettings() =
     ValiditySettings(

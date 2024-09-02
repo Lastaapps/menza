@@ -44,55 +44,60 @@ import org.koin.dsl.module
 
 internal expect val platform: Module
 
-val apiCoreModule = module {
-    includes(platform)
+val apiCoreModule =
+    module {
+        includes(platform)
 
-    // Once global
-    singleOf(::MenzaScopeStore)
+        // Once global
+        singleOf(::MenzaScopeStore)
 
-    val scopeLog = Logger.withTag("MenzaKoinScope")
-    val scopeLock = reentrantLock()
+        val scopeLog = Logger.withTag("MenzaKoinScope")
+        val scopeLock = reentrantLock()
 
-    factory { (menza: MenzaType) ->
-        scopeLock.withLock {
-            scopeLog.v { "Obtaining scope for $menza" }
+        factory { (menza: MenzaType) ->
+            scopeLock.withLock {
+                scopeLog.v { "Obtaining scope for $menza" }
 
-            val store = get<MenzaScopeStore>()
-            store.getOrPut(menza) {
-                scopeLog.d { "Creating scope for $menza" }
+                val store = get<MenzaScopeStore>()
+                store.getOrPut(menza) {
+                    scopeLog.d { "Creating scope for $menza" }
 
-                when (menza) {
-                    Strahov -> createScope<Strahov>()
-                    is Subsystem -> createScope<Subsystem>()
-                    FEL -> createScope<FEL>()
-                    FS -> createScope<FS>()
-                    Kocourkov -> createScope<Kocourkov>()
+                    when (menza) {
+                        Strahov -> createScope<Strahov>()
+                        is Subsystem -> createScope<Subsystem>()
+                        FEL -> createScope<FEL>()
+                        FS -> createScope<FS>()
+                        Kocourkov -> createScope<Kocourkov>()
+                    }
                 }
             }
         }
-    }
 
-    factory { (menza: MenzaType) ->
-        get<MenzaTypeScope> { parametersOf(menza) }
-            .scope.get<TodayDishRepo> { parametersOf(menza) }
-    }
-    factory { (menza: MenzaType) ->
-        get<MenzaTypeScope> { parametersOf(menza) }
-            .scope.get<InfoRepo> { parametersOf(menza) }
-    }
-    factory { (menza: MenzaType) ->
-        get<MenzaTypeScope> { parametersOf(menza) }
-            .scope.get<WeekDishRepo> { parametersOf(menza) }
-    }
+        factory { (menza: MenzaType) ->
+            get<MenzaTypeScope> { parametersOf(menza) }
+                .scope
+                .get<TodayDishRepo> { parametersOf(menza) }
+        }
+        factory { (menza: MenzaType) ->
+            get<MenzaTypeScope> { parametersOf(menza) }
+                .scope
+                .get<InfoRepo> { parametersOf(menza) }
+        }
+        factory { (menza: MenzaType) ->
+            get<MenzaTypeScope> { parametersOf(menza) }
+                .scope
+                .get<WeekDishRepo> { parametersOf(menza) }
+        }
 
-    singleOf(::ValidityCheckerImpl) bind ValidityChecker::class
-    factory<SyncProcessor<Any>> { SyncProcessorImpl() }
-}
+        singleOf(::ValidityCheckerImpl) bind ValidityChecker::class
+        factory<SyncProcessor<Any>> { SyncProcessorImpl() }
+    }
 
 @JvmInline
-private value class MenzaTypeScope(val scope: Scope)
+private value class MenzaTypeScope(
+    val scope: Scope,
+)
 
-private inline fun <reified T : MenzaType> Scope.createScope() =
-    MenzaTypeScope(getKoin().createScope<T>())
+private inline fun <reified T : MenzaType> Scope.createScope() = MenzaTypeScope(getKoin().createScope<T>())
 
 private class MenzaScopeStore : MutableMap<MenzaType, MenzaTypeScope> by HashMap()

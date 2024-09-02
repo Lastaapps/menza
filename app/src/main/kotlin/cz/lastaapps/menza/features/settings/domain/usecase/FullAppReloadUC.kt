@@ -25,9 +25,9 @@ import cz.lastaapps.core.domain.UseCase
 class FullAppReloadUC(
     context: UCContext,
 ) : UseCase(context) {
-
-    suspend operator fun invoke(): Nothing = launch {
-        TODO("Implement me!!!")
+    suspend operator fun invoke(): Nothing =
+        launch {
+            TODO("Implement me!!!")
 //        listOf(
 //            allergenRepo,
 //            locationRepo,
@@ -43,5 +43,5 @@ class FullAppReloadUC(
 //        withContext(Dispatchers.Main) {
 //            exitProcess(0)
 //        }
-    }
+        }
 }

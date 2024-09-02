@@ -28,8 +28,9 @@ class SetPriceTypeUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(type: PriceType) = launch {
-        if (type == PriceType.Unset) return@launch
-        repo.setPriceType(type)
-    }
+    suspend operator fun invoke(type: PriceType) =
+        launch {
+            if (type == PriceType.Unset) return@launch
+            repo.setPriceType(type)
+        }
 }

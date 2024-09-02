@@ -27,7 +27,8 @@ class GetImageScaleUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke() = launch {
-        repo.getImageScale()
-    }
+    suspend operator fun invoke() =
+        launch {
+            repo.getImageScale()
+        }
 }

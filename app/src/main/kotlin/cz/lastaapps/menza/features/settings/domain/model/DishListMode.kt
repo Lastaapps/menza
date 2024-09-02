@@ -19,10 +19,11 @@
 
 package cz.lastaapps.menza.features.settings.domain.model
 
-enum class DishListMode(val id: Int) {
+enum class DishListMode(
+    val id: Int,
+) {
     COMPACT(0),
     GRID(1),
     HORIZONTAL(2),
     CAROUSEL(3),
-    ;
 }

@@ -26,17 +26,20 @@ sealed interface MenzaType {
     val id: String
 
     companion object {
-        val allNamed = listOf(
-            named<Agata.Strahov>(),
-            named<Agata.Subsystem>(),
-            named<Buffet.FS>(),
-            named<Buffet.FEL>(),
-            named<Testing.Kocourkov>(),
-        )
+        val allNamed =
+            listOf(
+                named<Agata.Strahov>(),
+                named<Agata.Subsystem>(),
+                named<Buffet.FS>(),
+                named<Buffet.FEL>(),
+                named<Testing.Kocourkov>(),
+            )
     }
 
     sealed interface Agata : MenzaType {
-        data class Subsystem(val subsystemId: Int) : Agata {
+        data class Subsystem(
+            val subsystemId: Int,
+        ) : Agata {
             override val id: String = "agata_subsystem_$subsystemId"
         }
 

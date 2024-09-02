@@ -31,6 +31,8 @@ class GetMenzaListUC(
     private val menzaRepo: MenzaRepo,
     private val getRequestParamsUC: GetRequestParamsUC,
 ) : UseCase(context) {
-    operator fun invoke() = menzaRepo.getData(getRequestParamsUC())
-        .map { it.filter(Menza::isActive) }
+    operator fun invoke() =
+        menzaRepo
+            .getData(getRequestParamsUC())
+            .map { it.filter(Menza::isActive) }
 }

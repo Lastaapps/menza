@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -40,11 +40,14 @@ import cz.lastaapps.menza.R.string
 import kotlinx.coroutines.delay
 
 @Composable
-fun NoItems(modifier: Modifier, onNoItems: () -> Unit) {
+fun NoItems(
+    modifier: Modifier = Modifier,
+    onNoItems: () -> Unit,
+) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
     ) {
         Text(stringResource(string.today_list_none))
 

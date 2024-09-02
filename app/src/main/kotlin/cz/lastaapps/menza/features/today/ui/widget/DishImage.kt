@@ -64,8 +64,10 @@ import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlin.math.absoluteValue
 import kotlin.random.Random
 
-internal fun loadImmediately(downloadOnMetered: Boolean, isOnMetered: Boolean) =
-    downloadOnMetered || !isOnMetered
+internal fun loadImmediately(
+    downloadOnMetered: Boolean,
+    isOnMetered: Boolean,
+) = downloadOnMetered || !isOnMetered
 
 @Composable
 internal fun DishImageOrSupplement(
@@ -97,9 +99,10 @@ internal fun DishImageRatio(
     modifier: Modifier = Modifier,
     ratio: Float = DishImageTokens.ASPECT_RATIO,
 ) {
-    val imageModifier = modifier
-        .aspectRatio(ratio)
-        .fillMaxSize()
+    val imageModifier =
+        modifier
+            .aspectRatio(ratio)
+            .fillMaxSize()
 
     DishImage(
         photoLink = photoLink,
@@ -118,19 +121,20 @@ internal fun DishImage(
     var userAllowed by rememberSaveable(photoLink) { mutableStateOf(false) }
     val canDownload = loadImmediately || userAllowed
 
-    val imageRequest = with(Builder(LocalContext.current)) {
-        diskCacheKey(photoLink)
-        memoryCacheKey(photoLink)
-        extras[Extras.Key("retry_hash")] = retryHash
+    val imageRequest =
+        with(Builder(LocalContext.current)) {
+            diskCacheKey(photoLink)
+            memoryCacheKey(photoLink)
+            extras[Extras.Key("retry_hash")] = retryHash
 
-        // if user is not on a metered network, images are going to be loaded from cache
-        if (!canDownload) {
-            networkCachePolicy(CachePolicy.DISABLED)
+            // if user is not on a metered network, images are going to be loaded from cache
+            if (!canDownload) {
+                networkCachePolicy(CachePolicy.DISABLED)
+            }
+
+            data(photoLink)
+            build()
         }
-
-        data(photoLink)
-        build()
-    }
 
     Surface(
         shape = MaterialTheme.shapes.medium,
@@ -144,9 +148,11 @@ internal fun DishImage(
                 Box(
                     Modifier
                         .placeholder(
-                            true, color = MaterialTheme.colorScheme.secondary,
+                            true,
+                            color = MaterialTheme.colorScheme.secondary,
                             shape = MaterialTheme.shapes.medium,
-                            highlight = PlaceholderHighlight.fade(
+                            highlight =
+                            PlaceholderHighlight.fade(
                                 highlightColor = MaterialTheme.colorScheme.primary,
                             ),
                         )
@@ -155,19 +161,23 @@ internal fun DishImage(
             },
             error = {
                 Box(
-                    Modifier.clickable { retryHash++; userAllowed = true },
+                    Modifier.clickable {
+                        retryHash++
+                        userAllowed = true
+                    },
                     contentAlignment = Alignment.Center,
                 ) {
-                    if (canDownload)
+                    if (canDownload) {
                         Icon(
                             Icons.Default.Refresh,
                             stringResource(string.today_list_image_load_failed),
                         )
-                    else
+                    } else {
                         Icon(
                             Icons.Default.Download,
                             stringResource(string.today_list_image_metered),
                         )
+                    }
                 }
             },
         )
@@ -189,7 +199,8 @@ internal fun DishImageSupplement(
             DishImageTokens.supplementIcons[(imageKey % DishImageTokens.supplementIcons.size).absoluteValue]
         Box(contentAlignment = Alignment.Center) {
             Icon(
-                icon, contentDescription = null,
+                icon,
+                contentDescription = null,
                 modifier = Modifier.size(DishImageTokens.SUPPLEMENT_ICON_SIZE),
             )
         }
@@ -199,32 +210,35 @@ internal fun DishImageSupplement(
 private object DishImageTokens {
     const val ASPECT_RATIO = 4f / 3f
     val SUPPLEMENT_ICON_SIZE = 64.dp
-    val supplementIcons = listOf(
-        Icons.Default.LocalDining,
-        Icons.Default.DinnerDining,
-        Icons.Default.SoupKitchen,
-        Icons.Default.EggAlt,
-    )
+    val supplementIcons =
+        listOf(
+            Icons.Default.LocalDining,
+            Icons.Default.DinnerDining,
+            Icons.Default.SoupKitchen,
+            Icons.Default.EggAlt,
+        )
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun DishImageSupplementPreview() = PreviewWrapper() {
-    listOf(
-        MaterialTheme.colorScheme.surfaceContainerLow,
-        MaterialTheme.colorScheme.surfaceContainer,
-        MaterialTheme.colorScheme.surfaceContainerHigh,
-        MaterialTheme.colorScheme.surfaceContainerHighest,
-    ).forEach {
-        Surface(color = MaterialTheme.colorScheme.primaryContainer) {
-            DishImageSupplement(
-                remember { Random.nextInt() },
-                color = it,
-                modifier = Modifier
-                    .padding(12.dp)
-                    .aspectRatio(DishImageTokens.ASPECT_RATIO),
-            )
+private fun DishImageSupplementPreview() =
+    PreviewWrapper {
+        listOf(
+            MaterialTheme.colorScheme.surfaceContainerLow,
+            MaterialTheme.colorScheme.surfaceContainer,
+            MaterialTheme.colorScheme.surfaceContainerHigh,
+            MaterialTheme.colorScheme.surfaceContainerHighest,
+        ).forEach {
+            Surface(color = MaterialTheme.colorScheme.primaryContainer) {
+                DishImageSupplement(
+                    remember { Random.nextInt() },
+                    color = it,
+                    modifier =
+                        Modifier
+                            .padding(12.dp)
+                            .aspectRatio(DishImageTokens.ASPECT_RATIO),
+                )
+            }
         }
     }
-}

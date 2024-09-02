@@ -27,7 +27,8 @@ class SetImagesOnMeteredUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(showImagesOnMetered: Boolean) = launch {
-        repo.setImagesOnMetered(showImagesOnMetered)
-    }
+    suspend operator fun invoke(showImagesOnMetered: Boolean) =
+        launch {
+            repo.setImagesOnMetered(showImagesOnMetered)
+        }
 }

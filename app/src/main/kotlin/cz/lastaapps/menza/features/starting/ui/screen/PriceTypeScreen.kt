@@ -49,18 +49,18 @@ import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
 internal fun PriceTypeScreen(
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     viewModel: PriceTypeViewModel,
     modifier: Modifier = Modifier,
 ) {
     PriceTypeEffects(
         viewModel,
-        onSelected = onDone,
+        onSelect = onComplete,
     )
 
     PriceTypeContent(
         onNormal = { viewModel.selectType(Normal) },
-        onDiscounted = { viewModel.selectType(Discounted) },
+        onDiscount = { viewModel.selectType(Discounted) },
         modifier = modifier,
     )
 }
@@ -68,7 +68,7 @@ internal fun PriceTypeScreen(
 @Composable
 private fun PriceTypeEffects(
     viewModel: PriceTypeViewModel,
-    onSelected: () -> Unit,
+    onSelect: () -> Unit,
 ) {
     HandleAppear(viewModel)
 
@@ -76,14 +76,14 @@ private fun PriceTypeEffects(
         viewModel,
         PriceTypeState::isSelected,
         PriceTypeViewModel::dismissSelected,
-        onSelected,
+        onSelect,
     )
 }
 
 @Composable
 private fun PriceTypeContent(
     onNormal: () -> Unit,
-    onDiscounted: () -> Unit,
+    onDiscount: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -95,13 +95,15 @@ private fun PriceTypeContent(
             color = MaterialTheme.colorScheme.primaryContainer,
         ) {
             Column(
-                modifier = Modifier
-                    .padding(Padding.Medium),
+                modifier =
+                    Modifier
+                        .padding(Padding.Medium),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(
-                    Padding.Medium,
-                    Alignment.CenterVertically,
-                ),
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        Padding.Medium,
+                        Alignment.CenterVertically,
+                    ),
             ) {
                 Text(
                     text = stringResource(R.string.panel_price_title),
@@ -127,7 +129,7 @@ private fun PriceTypeContent(
                     }
 
                     Button(
-                        onClick = onDiscounted,
+                        onClick = onDiscount,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(stringResource(R.string.panel_price_discounted))
@@ -142,6 +144,6 @@ private fun PriceTypeContent(
 @Composable
 private fun PriceTypePreview() {
     AppTheme {
-        PriceTypeContent(onNormal = {}, onDiscounted = {})
+        PriceTypeContent(onNormal = {}, onDiscount = {})
     }
 }

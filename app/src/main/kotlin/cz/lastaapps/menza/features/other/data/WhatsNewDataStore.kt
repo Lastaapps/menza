@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-class WhatsNewDataStore(context: Context) {
+class WhatsNewDataStore(
+    context: Context,
+) {
     companion object {
         private val Context.whatsNewDataStore by preferencesDataStore("whatsnew_data_store")
         private val lastViewedKey = intPreferencesKey("last_viewed")

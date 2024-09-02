@@ -42,11 +42,11 @@ class SyncJobNoCache<T, R, Params>(
     convert: suspend MenzaRaise.(params: Params, T) -> IorNel<DomainError, R>,
     store: (params: Params, R) -> Unit,
 ) : SyncJob<T, R, Params>(
-    { _, _ ->
-        val noOp: suspend () -> Unit = {}
-        noOp.some()
-    },
-    fetchApi,
-    convert,
-    store,
+        { _, _ ->
+            val noOp: suspend () -> Unit = {}
+            noOp.some()
+        },
+        fetchApi,
+        convert,
+        store,
 )

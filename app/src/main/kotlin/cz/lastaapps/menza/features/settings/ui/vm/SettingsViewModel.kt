@@ -59,55 +59,69 @@ internal class SettingsViewModel(
     val setPreferredMenzaUC: SetPreferredMenzaUC,
     val getMenzaListUC: GetOrderedVisibleMenzaListUC,
     val fullAppReloadUC: FullAppReloadUC,
-) : StateViewModel<SettingsState>(SettingsState(), vmContext), Appearing {
+) : StateViewModel<SettingsState>(SettingsState(), vmContext),
+    Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launchVM {
-        getAppSettingsUC().onEach {
-            updateState { copy(appSettings = it) }
-        }.launchInVM()
-        getAppThemeUC().onEach {
-            updateState { copy(appTheme = it) }
-        }.launchInVM()
-        getPreferredMenzaUC().onEach {
-            updateState { copy(preferredMenza = it) }
-        }.launchInVM()
-        getMenzaListUC().onEach {
-            updateState { copy(menzaList = it) }
-        }.launchInVM()
-    }
+    override fun onAppeared() =
+        launchVM {
+            getAppSettingsUC()
+                .onEach {
+                    updateState { copy(appSettings = it) }
+                }.launchInVM()
+            getAppThemeUC()
+                .onEach {
+                    updateState { copy(appTheme = it) }
+                }.launchInVM()
+            getPreferredMenzaUC()
+                .onEach {
+                    updateState { copy(preferredMenza = it) }
+                }.launchInVM()
+            getMenzaListUC()
+                .onEach {
+                    updateState { copy(menzaList = it) }
+                }.launchInVM()
+        }
 
-    fun markAsViewed() = launchVM {
-        onSettingsOpenedUC()
-    }
+    fun markAsViewed() =
+        launchVM {
+            onSettingsOpenedUC()
+        }
 
-    fun setPriceType(type: PriceType) = launchVM {
-        setPriceTypeUC(type)
-    }
+    fun setPriceType(type: PriceType) =
+        launchVM {
+            setPriceTypeUC(type)
+        }
 
-    fun setDownloadOnMetered(enable: Boolean) = launchVM {
-        setImagesOnMeteredUC(enable)
-    }
+    fun setDownloadOnMetered(enable: Boolean) =
+        launchVM {
+            setImagesOnMeteredUC(enable)
+        }
 
-    fun setBalanceWarningThreshold(threshold: Int) = launchVM {
-        setBalanceWarningThresholdUC(threshold)
-    }
+    fun setBalanceWarningThreshold(threshold: Int) =
+        launchVM {
+            setBalanceWarningThresholdUC(threshold)
+        }
 
-    fun setInitMenzaBehaviour(behaviour: InitialSelectionBehaviour) = launchVM {
-        setInitialMenzaUC(behaviour)
-    }
+    fun setInitMenzaBehaviour(behaviour: InitialSelectionBehaviour) =
+        launchVM {
+            setInitialMenzaUC(behaviour)
+        }
 
-    fun setSelectedMenza(menza: Menza) = launchVM {
-        setPreferredMenzaUC(menza.type)
-    }
+    fun setSelectedMenza(menza: Menza) =
+        launchVM {
+            setPreferredMenzaUC(menza.type)
+        }
 
-    fun setAlternativeNavigation(enabled: Boolean) = launchVM {
-        setAlternativeNavigationUC(enabled)
-    }
+    fun setAlternativeNavigation(enabled: Boolean) =
+        launchVM {
+            setAlternativeNavigationUC(enabled)
+        }
 
-    fun fullAppReload() = launchVM {
-        fullAppReloadUC()
-    }
+    fun fullAppReload() =
+        launchVM {
+            fullAppReloadUC()
+        }
 }
 
 internal data class SettingsState(

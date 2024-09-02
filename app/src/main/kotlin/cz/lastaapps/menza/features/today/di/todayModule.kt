@@ -25,9 +25,10 @@ import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
-val todayModule = module {
-    factoryOf(::DishListViewModel)
-    factoryOf(::TodayViewModel)
+val todayModule =
+    module {
+        factoryOf(::DishListViewModel)
+        factoryOf(::TodayViewModel)
 
-    factoryOf(::GetTodayUserSettingsUC)
-}
+        factoryOf(::GetTodayUserSettingsUC)
+    }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -18,6 +18,7 @@
  */
 
 @file:OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@file:Suppress("ktlint:compose:compositionlocal-allowlist")
 
 package cz.lastaapps.menza.ui.locals
 
@@ -50,8 +51,9 @@ fun WithLocalWindowSizes(
     val size = calculateWindowSizeClass(activity)
     BoxWithConstraints {
         val mayBeFlipCover =
-            (maxWidth == 512.dp && maxHeight == 260.dp) // same for Flip 3 and 4
-                    || (maxWidth == 512.dp && maxHeight == 245.dp) // when bottom bar is enabled
+            (maxWidth == 512.dp && maxHeight == 260.dp) ||
+                // same for Flip 3 and 4
+                (maxWidth == 512.dp && maxHeight == 245.dp) // when bottom bar is enabled
 
         LaunchedEffect(size, mayBeFlipCover) {
             Logger.withTag("WindowSize").let { log ->

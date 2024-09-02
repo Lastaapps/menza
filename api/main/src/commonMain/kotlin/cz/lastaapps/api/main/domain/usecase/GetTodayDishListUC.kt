@@ -20,8 +20,8 @@
 package cz.lastaapps.api.main.domain.usecase
 
 import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
+import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import kotlinx.collections.immutable.toImmutableList
@@ -33,20 +33,23 @@ import org.koin.core.parameter.parametersOf
 class GetTodayDishListUC(
     context: UCContext,
     private val getRequestParamsUC: GetRequestParamsUC,
-) : UseCase(context), KoinComponent {
-    suspend operator fun invoke(menza: Menza) = launch {
-        get<TodayDishRepo> { parametersOf(menza.type) }
-            .getData(getRequestParamsUC())
-            .map {
-                it.map { category ->
-                    val newDishList = category.dishList.filter { dish -> dish.isActive }
+) : UseCase(context),
+    KoinComponent {
+    suspend operator fun invoke(menza: Menza) =
+        launch {
+            get<TodayDishRepo> { parametersOf(menza.type) }
+                .getData(getRequestParamsUC())
+                .map {
+                    it
+                        .map { category ->
+                            val newDishList = category.dishList.filter { dish -> dish.isActive }
 
-                    if (newDishList == category.dishList) {
-                        category
-                    } else {
-                        category.copy(dishList = newDishList.toImmutableList())
-                    }
-                }.toImmutableList()
-            }
-    }
+                            if (newDishList == category.dishList) {
+                                category
+                            } else {
+                                category.copy(dishList = newDishList.toImmutableList())
+                            }
+                        }.toImmutableList()
+                }
+        }
 }

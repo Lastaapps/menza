@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,7 +22,6 @@ package cz.lastaapps.menza.features.panels.rateus.domain.usecase
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.panels.rateus.data.RateUsRepository
-
 
 internal class RecordAppOpenedUC(
     context: UCContext,

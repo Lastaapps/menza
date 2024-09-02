@@ -40,17 +40,32 @@ import cz.lastaapps.menza.api.agata.util.getFun
 import io.ktor.client.call.body
 
 internal interface DishApi {
+    suspend fun getDishes(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<List<DishDto>?>
 
-    suspend fun getDishes(lang: ApiLang, subsystemId: Int): Outcome<List<DishDto>?>
-    suspend fun getDishesHash(lang: ApiLang, subsystemId: Int): Outcome<String>
+    suspend fun getDishesHash(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<String>
 
     suspend fun getPictogram(lang: ApiLang): Outcome<List<PictogramDto>?>
+
     suspend fun getPictogramHash(lang: ApiLang): Outcome<String>
 
-    suspend fun getWeeks(lang: ApiLang, subsystemId: Int): Outcome<List<WeekDto>?>
-    suspend fun getWeekDishList(lang: ApiLang, weekId: Int): Outcome<List<WeekDishDto>?>
+    suspend fun getWeeks(
+        lang: ApiLang,
+        subsystemId: Int,
+    ): Outcome<List<WeekDto>?>
+
+    suspend fun getWeekDishList(
+        lang: ApiLang,
+        weekId: Int,
+    ): Outcome<List<WeekDishDto>?>
 
     suspend fun getStrahov(lang: ApiLang): Outcome<List<StrahovDto>?>
+
     suspend fun getStrahovHash(lang: ApiLang): Outcome<String>
 }
 
@@ -62,52 +77,52 @@ internal class DishApiImpl(
     override suspend fun getDishes(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<List<DishDto>?> = catchingNetwork {
-        client.getFun(Dish, lang, subsystemId = subsystemId, secondId = 1).body()
-    }
+    ): Outcome<List<DishDto>?> =
+        catchingNetwork {
+            client.getFun(Dish, lang, subsystemId = subsystemId, secondId = 1).body()
+        }
 
     override suspend fun getDishesHash(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(DishHash, lang, subsystemId = subsystemId, secondId = 1).body<String>()
-    }
+    ): Outcome<String> =
+        catchingNetwork {
+            client.getFun(DishHash, lang, subsystemId = subsystemId, secondId = 1).body<String>()
+        }
 
-    override suspend fun getPictogram(
-        lang: ApiLang,
-    ): Outcome<List<PictogramDto>?> = catchingNetwork {
-        client.getFun(Pictogram, lang).body()
-    }
+    override suspend fun getPictogram(lang: ApiLang): Outcome<List<PictogramDto>?> =
+        catchingNetwork {
+            client.getFun(Pictogram, lang).body()
+        }
 
-    override suspend fun getPictogramHash(
-        lang: ApiLang,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(PictogramHash, lang).body()
-    }
+    override suspend fun getPictogramHash(lang: ApiLang): Outcome<String> =
+        catchingNetwork {
+            client.getFun(PictogramHash, lang).body()
+        }
 
     override suspend fun getWeeks(
         lang: ApiLang,
         subsystemId: Int,
-    ): Outcome<List<WeekDto>?> = catchingNetwork {
-        client.getFun(Week, lang, subsystemId = subsystemId).body()
-    }
+    ): Outcome<List<WeekDto>?> =
+        catchingNetwork {
+            client.getFun(Week, lang, subsystemId = subsystemId).body()
+        }
 
     override suspend fun getWeekDishList(
         lang: ApiLang,
         weekId: Int,
-    ): Outcome<List<WeekDishDto>?> = catchingNetwork {
-        client.getFun(WeekDays, lang, secondId = weekId).body()
-    }
+    ): Outcome<List<WeekDishDto>?> =
+        catchingNetwork {
+            client.getFun(WeekDays, lang, secondId = weekId).body()
+        }
 
-    override suspend fun getStrahov(
-        lang: ApiLang,
-    ): Outcome<List<StrahovDto>?> = catchingNetwork {
-        client.getFun(Strahov, lang).body()
-    }
+    override suspend fun getStrahov(lang: ApiLang): Outcome<List<StrahovDto>?> =
+        catchingNetwork {
+            client.getFun(Strahov, lang).body()
+        }
 
-    override suspend fun getStrahovHash(
-        lang: ApiLang,
-    ): Outcome<String> = catchingNetwork {
-        client.getFun(StrahovHash, lang).body()
-    }
+    override suspend fun getStrahovHash(lang: ApiLang): Outcome<String> =
+        catchingNetwork {
+            client.getFun(StrahovHash, lang).body()
+        }
 }

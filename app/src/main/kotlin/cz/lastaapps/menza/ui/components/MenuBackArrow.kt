@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,6 +32,7 @@ class MenuBackArrow {
     fun shouldShowBackArrow(): Boolean = actions.isNotEmpty()
 
     fun registerBackEvent(event: () -> Unit) = actions.add(event)
+
     fun unregisterBackEvent(event: () -> Unit) = actions.remove(event)
 
     fun runLast() {
@@ -41,7 +42,8 @@ class MenuBackArrow {
 
 @Composable
 fun BackArrow(
-    enabled: Boolean = true, action: () -> Unit
+    enabled: Boolean = true,
+    action: () -> Unit,
 ) {
     if (enabled) {
         val menuBackArrow = LocalMenuBackArrow.current

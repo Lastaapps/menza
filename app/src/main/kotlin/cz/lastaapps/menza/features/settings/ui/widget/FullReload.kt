@@ -44,7 +44,7 @@ fun FullReloadDialog(
         ) {
             Text(
                 stringResource(R.string.settings_reload_title),
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
             )
             Text(stringResource(R.string.settings_reload_text))
 

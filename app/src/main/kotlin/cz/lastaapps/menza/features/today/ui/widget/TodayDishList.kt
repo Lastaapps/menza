@@ -57,9 +57,9 @@ import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.appCardColors
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun TodayDishList(
@@ -67,7 +67,7 @@ internal fun TodayDishList(
     onRefresh: () -> Unit,
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     header: @Composable (Modifier) -> Unit,
@@ -83,7 +83,7 @@ internal fun TodayDishList(
         Surface(shape = MaterialTheme.shapes.large) {
             DishContent(
                 data = data,
-                onDishSelected = onDishSelected,
+                onDish = onDish,
                 onNoItems = onNoItems,
                 userSettings = userSettings,
                 isOnMetered = isOnMetered,
@@ -98,9 +98,10 @@ internal fun TodayDishList(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
+@Suppress("ktlint:compose:modifier-reused-check")
 private fun DishContent(
     data: ImmutableList<DishCategory>,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     onNoItems: () -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
@@ -109,7 +110,7 @@ private fun DishContent(
     footer: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    //no data handling
+    // no data handling
     if (data.isEmpty()) {
         NoItems(modifier, onNoItems)
         return
@@ -140,12 +141,13 @@ private fun DishContent(
             ) { dish ->
                 DishItem(
                     dish = dish,
-                    onDishSelected = onDishSelected,
+                    onDish = onDish,
                     userSettings = userSettings,
                     isOnMetered = isOnMetered,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
                 )
             }
         }
@@ -162,9 +164,10 @@ private fun DishContent(
     LaunchedEffect(userSettings.imageScale) {
         if (latestScale != userSettings.imageScale) {
             latestScale = userSettings.imageScale
-            val placedItems = 2 + // header, footer
-                data.size + // sticky headers
-                data.sumOf { it.dishList.size } // items
+            val placedItems =
+                2 + // header, footer
+                    data.size + // sticky headers
+                    data.sumOf { it.dishList.size } // items
             // as the other nodes are resizing, we need to wait for them to (almost) stop
             delay(666.milliseconds)
             scroll.animateScrollToItem(placedItems)
@@ -175,7 +178,7 @@ private fun DishContent(
 @Composable
 private fun DishItem(
     dish: Dish,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
@@ -183,22 +186,22 @@ private fun DishItem(
     Card(
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
-        modifier = modifier.clickable { onDishSelected(dish) },
+        modifier = modifier.clickable { onDish(dish) },
     ) {
         Row(
             Modifier.padding(Padding.MidSmall),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
-
             DishImageWithBadge(
                 dish = dish,
                 priceType = userSettings.priceType,
                 downloadOnMetered = userSettings.downloadOnMetered,
-                imageScale = animateFloatAsState(
-                    targetValue = userSettings.imageScale,
-                    label = "image_scale",
-                ).value,
+                imageScale =
+                    animateFloatAsState(
+                        targetValue = userSettings.imageScale,
+                        label = "image_scale",
+                    ).value,
                 isOnMetered = isOnMetered,
             )
             Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
@@ -224,13 +227,14 @@ private fun DishImageWithBadge(
             downloadOnMetered = downloadOnMetered,
             imageScale = imageScale,
             isOnMetered = isOnMetered,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(
-                    top = Padding.Small,
-                    bottom = Padding.Small,
-                    end = Padding.Small,
-                ),
+            modifier =
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(
+                        top = Padding.Small,
+                        bottom = Padding.Small,
+                        end = Padding.Small,
+                    ),
         )
         DishBadge(
             dish = dish,
@@ -252,14 +256,12 @@ private fun DishImageWithPlaceholder(
         val size = (96 * imageScale).dp
         val imageModifier = Modifier.size(size)
 
-
         if (photoLink != null) {
             DishImage(
                 photoLink = photoLink,
                 loadImmediately = downloadOnMetered || !isOnMetered,
                 modifier = imageModifier,
             )
-
         } else {
             Box(imageModifier, contentAlignment = Alignment.Center) {
                 Icon(

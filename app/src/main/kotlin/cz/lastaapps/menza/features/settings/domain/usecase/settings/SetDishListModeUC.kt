@@ -28,7 +28,8 @@ class SetDishListModeUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(mode: DishListMode) = launch {
-        repo.setCompactTodayView(mode)
-    }
+    suspend operator fun invoke(mode: DishListMode) =
+        launch {
+            repo.setCompactTodayView(mode)
+        }
 }

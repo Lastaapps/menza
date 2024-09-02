@@ -32,25 +32,28 @@ internal class PriceTypeViewModel internal constructor(
     context: VMContext,
     private val getPriceType: GetPriceTypeUC,
     private val setPriceType: SetPriceTypeUC,
-) : StateViewModel<PriceTypeState>(PriceTypeState(), context), Appearing {
+) : StateViewModel<PriceTypeState>(PriceTypeState(), context),
+    Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launchVM {
-        getPriceType()
-            .first()
-            .let { type ->
-                if (type != PriceType.Unset) {
-                    updateState { copy(isReady = true, isSelected = true) }
-                } else {
-                    updateState { copy(isReady = true) }
+    override fun onAppeared() =
+        launchVM {
+            getPriceType()
+                .first()
+                .let { type ->
+                    if (type != PriceType.Unset) {
+                        updateState { copy(isReady = true, isSelected = true) }
+                    } else {
+                        updateState { copy(isReady = true) }
+                    }
                 }
-            }
-    }
+        }
 
-    fun selectType(type: PriceType) = launchVM {
-        setPriceType(type)
-        updateState { copy(isSelected = true) }
-    }
+    fun selectType(type: PriceType) =
+        launchVM {
+            setPriceType(type)
+            updateState { copy(isSelected = true) }
+        }
 
     fun dismissSelected() = updateState { copy(isSelected = false) }
 }

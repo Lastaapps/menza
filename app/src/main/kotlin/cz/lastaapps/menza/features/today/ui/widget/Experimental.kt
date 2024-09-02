@@ -38,9 +38,7 @@ import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 
 @Composable
-internal fun Experimental(
-    modifier: Modifier = Modifier,
-) {
+internal fun Experimental(modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.tertiaryContainer,
@@ -62,6 +60,7 @@ internal fun Experimental(
 
 @Preview
 @Composable
-private fun ExperimentalPreview() = PreviewWrapper {
-    Experimental()
-}
+private fun ExperimentalPreview() =
+    PreviewWrapper {
+        Experimental()
+    }

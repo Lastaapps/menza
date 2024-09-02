@@ -37,65 +37,74 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-
 internal object MenzaFSRepoImpl : MenzaRepo {
     private val log = localLogger()
 
-    override fun isReady(params: MenzaRepoParams): Flow<Boolean> = MutableStateFlow(true)
-        .onEach { log.i { "Is ready: $it" } }
+    override fun isReady(params: MenzaRepoParams): Flow<Boolean> =
+        MutableStateFlow(true)
+            .onEach { log.i { "Is ready: $it" } }
 
-    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> = flow {
-        @Suppress("SpellCheckingInspection")
-        persistentListOf(
-            Menza(
-                type = FS,
-                name = "Bufet FS",
-                isActive = true,
-                isOpened = true,
-                supportsDaily = true,
-                supportsWeekly = true,
-                isExperimental = true,
-                videoLinks = persistentListOf(),
-            ),
-        ).let { emit(it) }
-    }
-        .onEach { log.i { "Menza produced: ${it.size}" } }
-        .onStart { log.i { "Starting collection" } }
-        .onCompletion { log.i { "Completed collection" } }
+    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> =
+        flow {
+            @Suppress("SpellCheckingInspection")
+            persistentListOf(
+                Menza(
+                    type = FS,
+                    name = "Bufet FS",
+                    isActive = true,
+                    isOpened = true,
+                    supportsDaily = true,
+                    supportsWeekly = true,
+                    isExperimental = true,
+                    videoLinks = persistentListOf(),
+                ),
+            ).let { emit(it) }
+        }.onEach { log.i { "Menza produced: ${it.size}" } }
+            .onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        SyncResult.Skipped.right()
-    }
+    override suspend fun sync(
+        params: MenzaRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            SyncResult.Skipped.right()
+        }
 }
 
 internal object MenzaFELRepoImpl : MenzaRepo {
     private val log = localLogger()
 
-    override fun isReady(params: MenzaRepoParams): Flow<Boolean> = MutableStateFlow(true)
-        .onEach { log.i { "Is ready: $it" } }
+    override fun isReady(params: MenzaRepoParams): Flow<Boolean> =
+        MutableStateFlow(true)
+            .onEach { log.i { "Is ready: $it" } }
 
-    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> = flow {
-        @Suppress("SpellCheckingInspection")
-        persistentListOf(
-            Menza(
-                type = FEL,
-                name = "Bufet FEL",
-                isActive = true,
-                isOpened = true,
-                supportsDaily = true,
-                supportsWeekly = true,
-                isExperimental = true,
-                videoLinks = persistentListOf(),
-            ),
-        ).let { emit(it) }
-    }
-        .onEach { log.i { "Menza produced: ${it.size}" } }
-        .onStart { log.i { "Starting collection" } }
-        .onCompletion { log.i { "Completed collection" } }
+    override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> =
+        flow {
+            @Suppress("SpellCheckingInspection")
+            persistentListOf(
+                Menza(
+                    type = FEL,
+                    name = "Bufet FEL",
+                    isActive = true,
+                    isOpened = true,
+                    supportsDaily = true,
+                    supportsWeekly = true,
+                    isExperimental = true,
+                    videoLinks = persistentListOf(),
+                ),
+            ).let { emit(it) }
+        }.onEach { log.i { "Menza produced: ${it.size}" } }
+            .onStart { log.i { "Starting collection" } }
+            .onCompletion { log.i { "Completed collection" } }
 
-    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        SyncResult.Skipped.right()
-    }
+    override suspend fun sync(
+        params: MenzaRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            SyncResult.Skipped.right()
+        }
 }

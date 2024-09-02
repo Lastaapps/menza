@@ -27,20 +27,21 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
-class KtLintConvention : BasePlugin(
-    {
-        pluginManager {
-            alias(libs.plugins.ktlint)
-        }
+class KtLintConvention :
+    BasePlugin(
+        {
+            pluginManager {
+                alias(libs.plugins.ktlint)
+            }
 
-        with(extensions.getByType<KtlintExtension>()) {
-            verbose.set(true)
-            version.set(libs.versions.ktlintJar.get())
-            enableExperimentalRules.set(true)
-        }
+            with(extensions.getByType<KtlintExtension>()) {
+                verbose.set(true)
+                version.set(libs.versions.ktlintJar.get())
+                enableExperimentalRules.set(true)
+            }
 
-        dependencies {
-            "ktlintRuleset"(libs.ktlint.compose.rules)
-        }
-    },
-)
+            dependencies {
+                "ktlintRuleset"(libs.ktlint.compose.rules)
+            }
+        },
+    )

@@ -69,7 +69,6 @@ import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.coroutines.launch
 
-
 data class TopBarState(
     val alignRail: Boolean,
     val enableHamburger: Boolean,
@@ -134,10 +133,11 @@ private fun TopBarScaffold(
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(
-                    Padding.Medium,
-                    Alignment.CenterHorizontally,
-                ),
+                horizontalArrangement =
+                    Arrangement.spacedBy(
+                        Padding.Medium,
+                        Alignment.CenterHorizontally,
+                    ),
             ) {
                 if (windowWidth != WindowWidthSizeClass.Compact) {
                     AppIcon(size = 48.dp)
@@ -153,11 +153,12 @@ private fun TopBarScaffold(
             }
         },
         navigationIcon = {
-            val mod = if (alignRail) {
-                Modifier.width(76.dp)
-            } else {
-                Modifier
-            } //rail - 4.dp for padding
+            val mod =
+                if (alignRail) {
+                    Modifier.width(76.dp)
+                } else {
+                    Modifier
+                } // rail - 4.dp for padding
             Box(
                 modifier = mod,
                 contentAlignment = Alignment.Center,
@@ -196,21 +197,24 @@ private fun LeadingIcon(
 ) {
     val showBackArrow = menuBack.shouldShowBackArrow()
 
-    val isRotated = remember(drawerState.targetValue) {
-        drawerState.targetValue == DrawerValue.Open && state.enableRotation
-    }
+    val isRotated =
+        remember(drawerState.targetValue) {
+            drawerState.targetValue == DrawerValue.Open && state.enableRotation
+        }
     val rotation by animateFloatAsState(if (!isRotated) 0f else 90f)
 
-    val leadingIcon = when {
-        showBackArrow -> Icons.AutoMirrored.Default.ArrowBack
-        state.enableHamburger -> Icons.Default.Menu
-        else -> null
-    }
-    val leadingContentDescription = when {
-        showBackArrow -> stringResource(R.string.ui_top_bar_back_arrow)
-        state.enableHamburger -> stringResource(R.string.ui_top_bar_show_menza_list)
-        else -> null
-    }
+    val leadingIcon =
+        when {
+            showBackArrow -> Icons.AutoMirrored.Default.ArrowBack
+            state.enableHamburger -> Icons.Default.Menu
+            else -> null
+        }
+    val leadingContentDescription =
+        when {
+            showBackArrow -> stringResource(R.string.ui_top_bar_back_arrow)
+            state.enableHamburger -> stringResource(R.string.ui_top_bar_show_menza_list)
+            else -> null
+        }
 
     Crossfade(
         targetState = leadingIcon,
@@ -232,10 +236,10 @@ private fun LeadingIcon(
     }
 }
 
-
 @Composable
 private fun TopBarPopup(
-    expanded: Boolean, onDismissRequest: () -> Unit,
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     navigateTo: (TopBarNavTarget) -> Unit,
 ) {
@@ -246,25 +250,29 @@ private fun TopBarPopup(
             {
                 navigateTo(PrivacyPolicy)
                 onDismissRequest()
-            })
+            },
+        )
         DropdownMenuItem(
             { Text(stringResource(R.string.ui_top_bar_action_license)) },
             {
                 navigateTo(LicenseNotices)
                 onDismissRequest()
-            })
+            },
+        )
         DropdownMenuItem(
             { Text(stringResource(R.string.ui_top_bar_action_osturak)) },
             {
                 navigateTo(Osturak)
                 onDismissRequest()
-            })
+            },
+        )
         DropdownMenuItem(
             { Text(stringResource(R.string.ui_top_bar_action_web_agata)) },
             {
                 uriHandler.openUri("https://agata.suz.cvut.cz/jidelnicky/")
                 onDismissRequest()
-            })
+            },
+        )
         DropdownMenuItem(
             { Text(stringResource(R.string.ui_top_bar_action_web_buffet)) },
             {
@@ -283,5 +291,7 @@ private fun TopBarPopup(
 }
 
 enum class TopBarNavTarget {
-    PrivacyPolicy, LicenseNotices, Osturak,
+    PrivacyPolicy,
+    LicenseNotices,
+    Osturak,
 }

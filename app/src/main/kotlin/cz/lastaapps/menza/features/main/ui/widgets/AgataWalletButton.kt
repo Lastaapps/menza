@@ -158,8 +158,9 @@ private fun ColumnScope.ButtonContent(
             onClick = onReload,
         ) {
             Row(
-                modifier = Modifier
-                    .animateContentSize(),
+                modifier =
+                    Modifier
+                        .animateContentSize(),
                 horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -227,29 +228,30 @@ private fun ColumnScope.ButtonContent(
 
 @Preview
 @Composable
-private fun AgataWalletButtonLogInPreview() = PreviewWrapper {
-    AgataWalletButton(
-        balance = Some(null),
-        isLoading = false,
-        isWarning = false,
-        onShowLoginDialog = {},
-        onReload = {},
-        onOpenWeb = {},
-        onLogout = {},
-    )
-}
+private fun AgataWalletButtonLogInPreview() =
+    PreviewWrapper {
+        AgataWalletButton(
+            balance = Some(null),
+            isLoading = false,
+            isWarning = false,
+            onShowLoginDialog = {},
+            onReload = {},
+            onOpenWeb = {},
+            onLogout = {},
+        )
+    }
 
 @Preview
 @Composable
-private fun AgataWalletButtonPreview() = PreviewWrapper {
-    AgataWalletButton(
-        balance = Some(UserBalance("Jára", 420f, CTU)),
-        isLoading = true,
-        isWarning = true,
-        onShowLoginDialog = {},
-        onReload = {},
-        onOpenWeb = {},
-        onLogout = {},
-    )
-}
-
+private fun AgataWalletButtonPreview() =
+    PreviewWrapper {
+        AgataWalletButton(
+            balance = Some(UserBalance("Jára", 420f, CTU)),
+            isLoading = true,
+            isWarning = true,
+            onShowLoginDialog = {},
+            onReload = {},
+            onOpenWeb = {},
+            onLogout = {},
+        )
+    }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -39,13 +39,16 @@ internal class RateUsViewModel(
     private val appOpenedUC: RecordAppOpenedUC,
     private val dismissRateUsUC: DismissRateUsUC,
     private val openSocialsUC: OpenAppSocialUC,
-) : StateViewModel<RateUsViewModel.State>(State(), context), Appearing, ErrorHolder {
+) : StateViewModel<RateUsViewModel.State>(State(), context),
+    Appearing,
+    ErrorHolder {
     override var hasAppeared: Boolean = false
 
     override fun onAppeared() {
-        shouldShowRateUsUC().onEach {
-            updateState { copy(shouldShow = it) }
-        }.launchInVM()
+        shouldShowRateUsUC()
+            .onEach {
+                updateState { copy(shouldShow = it) }
+            }.launchInVM()
 
         launchVM { appOpenedUC() }
     }
@@ -55,8 +58,7 @@ internal class RateUsViewModel(
             .onRight {
                 updateState { copy(playRated = true) }
                 dismissIfCompleted()
-            }
-            .onLeft {
+            }.onLeft {
                 updateState { copy(error = it) }
             }.let {}
 
@@ -65,26 +67,28 @@ internal class RateUsViewModel(
             .onRight {
                 updateState { copy(githubRated = true) }
                 dismissIfCompleted()
-            }
-            .onLeft {
+            }.onLeft {
                 updateState { copy(error = it) }
             }.let {}
 
-    fun later() = launchVM {
-        dismissRateUsUC(permanent = false)
-    }
+    fun later() =
+        launchVM {
+            dismissRateUsUC(permanent = false)
+        }
 
-    fun dismiss() = launchVM {
-        dismissRateUsUC(permanent = true)
-    }
+    fun dismiss() =
+        launchVM {
+            dismissRateUsUC(permanent = true)
+        }
 
-    private fun dismissIfCompleted() = lastState().let { state ->
-        if (state.playRated && state.githubRated) {
-            launchVM {
-                dismissRateUsUC(permanent = true)
+    private fun dismissIfCompleted() =
+        lastState().let { state ->
+            if (state.playRated && state.githubRated) {
+                launchVM {
+                    dismissRateUsUC(permanent = true)
+                }
             }
         }
-    }
 
     data class State(
         val shouldShow: Boolean = false,

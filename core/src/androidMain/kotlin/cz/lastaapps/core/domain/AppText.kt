@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -55,8 +55,7 @@ sealed interface AppText {
         @StringRes private val resId: Int,
         private val args: Array<out Any>,
     ) : AppText {
-        override operator fun invoke(context: Context): String =
-            context.getString(resId, args)
+        override operator fun invoke(context: Context): String = context.getString(resId, args)
 
         @Composable
         override operator fun invoke(): String = stringResource(resId, args)
@@ -64,5 +63,7 @@ sealed interface AppText {
 }
 
 @Suppress("FunctionName", "NOTHING_TO_INLINE")
-inline fun FormattedVarargs(@StringRes resId: Int, vararg args: Any) =
-    Formatted(resId, args)
+inline fun FormattedVarargs(
+    @StringRes resId: Int,
+    vararg args: Any,
+) = Formatted(resId, args)

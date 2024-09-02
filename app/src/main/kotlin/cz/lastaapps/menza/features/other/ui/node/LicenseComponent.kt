@@ -36,7 +36,9 @@ internal interface LicenseComponent {
 
 internal class DefaultLicenseComponent(
     componentContext: ComponentContext,
-) : LicenseComponent, KoinComponent, ComponentContext by componentContext {
+) : LicenseComponent,
+    KoinComponent,
+    ComponentContext by componentContext {
     override val viewModel: LicenseViewModel = getOrCreateKoin()
 }
 
@@ -47,8 +49,9 @@ internal fun LicenseContent(
 ) {
     LicenseScreen(
         viewModel = component.viewModel,
-        modifier = modifier
-            .padding(Padding.More.Screen)
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .padding(Padding.More.Screen)
+                .fillMaxSize(),
     )
 }

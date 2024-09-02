@@ -62,7 +62,6 @@ internal class TodayDishStrahovRepoImpl(
     private val beConfig: AgataBEConfig,
     hashStore: HashStore,
 ) : TodayDishRepo {
-
     private val log = localLogger()
 
     private val validityKey = ValidityKey.strahov()
@@ -74,41 +73,46 @@ internal class TodayDishStrahovRepoImpl(
             .mapToList(Dispatchers.IO)
             .combine(
                 run {
-                    checker.isThisWeek(validityKey.withParams(params))
+                    checker
+                        .isThisWeek(validityKey.withParams(params))
                         .onEach { log.i { "Validity changed to $it" } }
                 },
             ) { data, validity ->
                 data.takeIf { validity }.orEmpty()
-            }
-            .map { it.toDomain() }
+            }.map { it.toDomain() }
             .onStart { log.d { "Starting collection" } }
             .onCompletion { log.d { "Completed collection" } }
 
-    private val job = SyncJobHash<List<StrahovDto>, List<StrahovEntity>, TodayRepoParams>(
-        hashStore = hashStore,
-        hashType = { HashType.strahovHash().withLang(it.language) },
-        getHashCode = {
-            dishApi.getStrahovHash(it.language.toDto()).bind()
-        },
-        fetchApi = {
-            dishApi.getStrahov(it.language.toDto()).bind().orEmpty()
-        },
-        convert = { params, data ->
-            data.map { it.toEntity(beConfig, params.language) }.rightIor()
-        },
-        store = { params, data ->
-            db.strahovQueries.deleteAll(params.language.toDB())
-            data.forEach {
-                db.strahovQueries.insert(it)
-            }
-            log.d { "Data stored: ${data.size}" }
-        },
-    )
+    private val job =
+        SyncJobHash<List<StrahovDto>, List<StrahovEntity>, TodayRepoParams>(
+            hashStore = hashStore,
+            hashType = { HashType.strahovHash().withLang(it.language) },
+            getHashCode = {
+                dishApi.getStrahovHash(it.language.toDto()).bind()
+            },
+            fetchApi = {
+                dishApi.getStrahov(it.language.toDto()).bind().orEmpty()
+            },
+            convert = { params, data ->
+                data.map { it.toEntity(beConfig, params.language) }.rightIor()
+            },
+            store = { params, data ->
+                db.strahovQueries.deleteAll(params.language.toDB())
+                data.forEach {
+                    db.strahovQueries.insert(it)
+                }
+                log.d { "Data stored: ${data.size}" }
+            },
+        )
 
-    override suspend fun sync(params: TodayRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        checker.withCheckRecent(validityKey, isForced) {
-            processor.runSync(job, db, params, isForced = isForced)
+    override suspend fun sync(
+        params: TodayRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            checker.withCheckRecent(validityKey, isForced) {
+                processor.runSync(job, db, params, isForced = isForced)
+            }
         }
-    }
 }

@@ -61,20 +61,21 @@ internal fun Panels(
         val showRateUs = rateUsViewModel.flowState.value.shouldShow
         val showAprils = shouldShowAprilFools()
 
-        val items = remember(showCrash, showWhatsNew, showRateUs, showAprils) {
-            persistentListOf(
-                PanelItem(showCrash) {
-                    CrashReport(
-                        crashesViewModel.flowState.value,
-                        crashesViewModel::makeReported,
-                        it,
-                    )
-                },
-                PanelItem(showWhatsNew) { WhatsNewPanel(whatsNewViewModel, it) },
-                PanelItem(showRateUs) { RateUsPanel(rateUsViewModel, it) },
-                PanelItem(showAprils) { AprilFools(it) },
-            )
-        }
+        val items =
+            remember(showCrash, showWhatsNew, showRateUs, showAprils) {
+                persistentListOf(
+                    PanelItem(showCrash) {
+                        CrashReport(
+                            crashesViewModel.flowState.value,
+                            crashesViewModel::makeReported,
+                            it,
+                        )
+                    },
+                    PanelItem(showWhatsNew) { WhatsNewPanel(whatsNewViewModel, it) },
+                    PanelItem(showRateUs) { RateUsPanel(rateUsViewModel, it) },
+                    PanelItem(showAprils) { AprilFools(it) },
+                )
+            }
 
         Card(
             colors = CardDefaults.cardColors(),

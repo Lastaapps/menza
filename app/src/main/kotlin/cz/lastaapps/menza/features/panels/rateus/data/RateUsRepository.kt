@@ -19,17 +19,20 @@
 
 package cz.lastaapps.menza.features.panels.rateus.data
 
-import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
+import kotlin.time.Duration.Companion.days
 
 internal interface RateUsRepository {
     fun shouldShow(): Flow<Boolean>
+
     suspend fun dismissPermanently()
+
     suspend fun showLater()
+
     suspend fun appOpened()
 }
 
@@ -39,7 +42,8 @@ internal class RateUsRepositoryImpl(
 ) : RateUsRepository {
     override fun shouldShow(): Flow<Boolean> =
         combine(
-            source.getShouldRate()
+            source
+                .getShouldRate()
                 .map { instant ->
                     instant?.let { it < clock.now() } ?: false
                 },

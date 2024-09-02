@@ -50,11 +50,11 @@ fun MenzaScaffold(
     bottomBar: @Composable () -> Unit,
     rail: @Composable () -> Unit,
     drawerContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
     isFlip: Boolean,
     modifier: Modifier = Modifier,
     windowWidth: WindowWidthSizeClass = LocalWindowWidth.current,
     foldingFeature: FoldingClass = LocalFoldProvider.current,
+    content: @Composable () -> Unit,
 ) {
     when (windowWidth) {
         WindowWidthSizeClass.Compact ->
@@ -104,18 +104,19 @@ private fun AppLayoutCompact(
     topBar: @Composable (TopBarState) -> Unit,
     bottomBar: @Composable () -> Unit,
     drawerContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
     alternativeNavigation: Boolean,
     isFlip: Boolean,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-    val topBarState = remember {
-        TopBarState(
-            alignRail = false,
-            enableHamburger = true,
-            enableRotation = true,
-        )
-    }
+    val topBarState =
+        remember {
+            TopBarState(
+                alignRail = false,
+                enableHamburger = true,
+                enableRotation = true,
+            )
+        }
 
     MenzaModalDrawer(
         drawerState = drawerState,
@@ -175,16 +176,17 @@ private fun AppLayoutMedium(
     topBar: @Composable (TopBarState) -> Unit,
     rail: @Composable () -> Unit,
     drawerContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-    val topBarState = remember {
-        TopBarState(
-            alignRail = true,
-            enableHamburger = true,
-            enableRotation = false,
-        )
-    }
+    val topBarState =
+        remember {
+            TopBarState(
+                alignRail = true,
+                enableHamburger = true,
+                enableRotation = false,
+            )
+        }
 
     Scaffold(
         topBar = { topBar(topBarState) },
@@ -192,9 +194,10 @@ private fun AppLayoutMedium(
         modifier = modifier,
     ) { insets ->
         MenzaDismissibleDrawerWithRailLayout(
-            Modifier
-                .padding(insets)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(insets)
+                    .fillMaxSize(),
             rail = rail,
         ) {
             MenzaDismissibleDrawer(
@@ -228,11 +231,11 @@ private fun AppLayoutExpanded(
     topBar: @Composable (TopBarState) -> Unit,
     rail: @Composable () -> Unit,
     drawerContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     foldingFeature: FoldingClass = LocalFoldProvider.current,
+    content: @Composable () -> Unit,
 ) {
-    if (foldingFeature is FoldingClass.Supported)
+    if (foldingFeature is FoldingClass.Supported) {
         AppLayoutExpandedFold(
             drawerState = drawerState,
             alternativeNavigation = alternativeNavigation,
@@ -244,7 +247,7 @@ private fun AppLayoutExpanded(
             modifier = modifier,
             foldingFeature = foldingFeature,
         )
-    else
+    } else {
         AppLayoutExpandedNoFold(
             drawerState = drawerState,
             alternativeNavigation = alternativeNavigation,
@@ -255,6 +258,7 @@ private fun AppLayoutExpanded(
             content = content,
             modifier = modifier,
         )
+    }
 }
 
 @Composable
@@ -265,16 +269,17 @@ private fun AppLayoutExpandedNoFold(
     topBar: @Composable (TopBarState) -> Unit,
     rail: @Composable () -> Unit,
     drawerContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-    val topBarState = remember {
-        TopBarState(
-            alignRail = true,
-            enableHamburger = false,
-            enableRotation = false,
-        )
-    }
+    val topBarState =
+        remember {
+            TopBarState(
+                alignRail = true,
+                enableHamburger = false,
+                enableRotation = false,
+            )
+        }
 
     Scaffold(
         topBar = { topBar(topBarState) },
@@ -282,9 +287,10 @@ private fun AppLayoutExpandedNoFold(
         modifier = modifier,
     ) { insets ->
         MenzaDismissibleDrawerWithRailLayout(
-            Modifier
-                .padding(insets)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(insets)
+                    .fillMaxSize(),
             rail = rail,
         ) {
             MenzaDismissibleDrawer(
@@ -317,17 +323,18 @@ private fun AppLayoutExpandedFold(
     topBar: @Composable (TopBarState) -> Unit,
     rail: @Composable () -> Unit,
     drawerContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
     foldingFeature: FoldingClass.Supported,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-    val topBarState = remember {
-        TopBarState(
-            alignRail = true,
-            enableHamburger = false,
-            enableRotation = false,
-        )
-    }
+    val topBarState =
+        remember {
+            TopBarState(
+                alignRail = true,
+                enableHamburger = false,
+                enableRotation = false,
+            )
+        }
 
     Scaffold(
         topBar = { topBar(topBarState) },
@@ -335,20 +342,24 @@ private fun AppLayoutExpandedFold(
         modifier = modifier,
     ) { insets ->
         MenzaDismissibleDrawerWithRailLayout(
-            Modifier
-                .padding(insets)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(insets)
+                    .fillMaxSize(),
             rail = rail,
         ) {
-
             val density = LocalDensity.current
             val weightStart = 0.5f
             val weightEnd = 0.5f
-            val spacesWidth = remember(density, foldingFeature) {
-                @Suppress("ComplexRedundantLet")
-                with(density) { foldingFeature.foldingFeature.bounds.width().toDp() }
-                    .let { max(it, Padding.More.Screen) }
-            }
+            val spacesWidth =
+                remember(density, foldingFeature) {
+                    @Suppress("ComplexRedundantLet")
+                    with(density) {
+                        foldingFeature.foldingFeature.bounds
+                            .width()
+                            .toDp()
+                    }.let { max(it, Padding.More.Screen) }
+                }
 
             MenzaDismissibleDrawer(
                 drawerState = drawerState,

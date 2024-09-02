@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -94,7 +94,6 @@ private fun RateUsPanel(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
         ) {
-
             if (!state.githubRated) {
                 GithubButton(onClick = onGithubClick, modifier = Modifier.fillMaxWidth())
             }
@@ -117,10 +116,11 @@ private fun PlayButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val colors = ButtonDefaults.buttonColors(
-        containerColor = Color(0xff01875f),
-        contentColor = Color(0xffe6f3ef),
-    )
+    val colors =
+        ButtonDefaults.buttonColors(
+            containerColor = Color(0xff01875f),
+            contentColor = Color(0xffe6f3ef),
+        )
     Button(
         onClick = onClick,
         colors = colors,
@@ -145,10 +145,11 @@ private fun GithubButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val colors = ButtonDefaults.buttonColors(
-        containerColor = Color(0xff24292e),
-        contentColor = Color(0xfffafbfc),
-    )
+    val colors =
+        ButtonDefaults.buttonColors(
+            containerColor = Color(0xff24292e),
+            contentColor = Color(0xfffafbfc),
+        )
     Button(
         onClick = onClick,
         colors = colors,
@@ -196,12 +197,13 @@ private fun DismissOrLater(
 
 @Preview
 @Composable
-private fun RatePanelPreview() = PreviewWrapper {
-    RateUsPanel(
-        RateUsViewModel.State(),
-        {},
-        {},
-        {},
-        {},
-    )
-}
+private fun RatePanelPreview() =
+    PreviewWrapper {
+        RateUsPanel(
+            RateUsViewModel.State(),
+            {},
+            {},
+            {},
+            {},
+        )
+    }

@@ -44,36 +44,42 @@ internal class GetTodayUserSettingsUC(
     private val getDishLanguageUC: GetDishLanguageUC,
     private val getDishListModeUC: GetDishListModeUC,
 ) : UseCase(context) {
-    operator fun invoke(): Flow<TodayUserSettings> = channelFlow {
-        val state = MutableStateFlow(TodayUserSettings())
+    operator fun invoke(): Flow<TodayUserSettings> =
+        channelFlow {
+            val state = MutableStateFlow(TodayUserSettings())
 
-        fun updateState(block: TodayUserSettings.() -> TodayUserSettings) =
-            state.update(block)
+            fun updateState(block: TodayUserSettings.() -> TodayUserSettings) = state.update(block)
 
-        getPriceTypeUC().onEach {
-            updateState { copy(priceType = it) }
-        }.launchIn(this)
+            getPriceTypeUC()
+                .onEach {
+                    updateState { copy(priceType = it) }
+                }.launchIn(this)
 
-        getImagesOnMeteredUC().onEach {
-            updateState { copy(downloadOnMetered = it) }
-        }.launchIn(this)
+            getImagesOnMeteredUC()
+                .onEach {
+                    updateState { copy(downloadOnMetered = it) }
+                }.launchIn(this)
 
-        getImageScaleUC().onEach {
-            updateState { copy(imageScale = it) }
-        }.launchIn(this)
+            getImageScaleUC()
+                .onEach {
+                    updateState { copy(imageScale = it) }
+                }.launchIn(this)
 
-        getDishLanguageUC().onEach {
-            updateState { copy(language = it) }
-        }.launchIn(this)
+            getDishLanguageUC()
+                .onEach {
+                    updateState { copy(language = it) }
+                }.launchIn(this)
 
-        getDishListModeUC().onEach {
-            updateState { copy(dishListMode = it) }
-        }.launchIn(this)
+            getDishListModeUC()
+                .onEach {
+                    updateState { copy(dishListMode = it) }
+                }.launchIn(this)
 
-        getOliverRowUC().onEach {
-            updateState { copy(useOliverRow = it) }
-        }.launchIn(this)
+            getOliverRowUC()
+                .onEach {
+                    updateState { copy(useOliverRow = it) }
+                }.launchIn(this)
 
-        state.collect { send(it) }
-    }
+            state.collect { send(it) }
+        }
 }

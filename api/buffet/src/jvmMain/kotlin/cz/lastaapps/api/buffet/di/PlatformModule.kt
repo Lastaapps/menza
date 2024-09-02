@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,14 +22,15 @@ package cz.lastaapps.api.buffet.di
 import com.russhwolf.settings.PreferencesSettings
 import cz.lastaapps.api.buffet.data.ValiditySettings
 import cz.lastaapps.api.buffet.data.createBuffetDBDriver
-import java.util.prefs.Preferences
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import java.util.prefs.Preferences
 
-internal actual val platform: Module = module {
-    factory { createBuffetDBDriver() }
-    factory { createValiditySettings() }
-}
+internal actual val platform: Module =
+    module {
+        factory { createBuffetDBDriver() }
+        factory { createValiditySettings() }
+    }
 
 private fun createValiditySettings(): ValiditySettings {
     val delegate: Preferences = Preferences.systemRoot()

@@ -38,24 +38,30 @@ internal class MenzaSelectionViewModel(
     private val isMenzaOrderFromTop: IsMenzaOrderFromTopUC,
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val selectMenza: SelectMenzaUC,
-) : StateViewModel<MenzaSelectionState>(MenzaSelectionState(), context), Appearing {
+) : StateViewModel<MenzaSelectionState>(MenzaSelectionState(), context),
+    Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launchVM {
-        getSelectedMenza().onEach {
-            updateState { copy(selectedMenza = it) }
-        }.launchInVM()
-        getMenzaList().onEach {
-            updateState { copy(menzaList = it) }
-        }.launchInVM()
-        isMenzaOrderFromTop().onEach {
-            updateState { copy(fromTop = it) }
-        }.launchInVM()
-    }
+    override fun onAppeared() =
+        launchVM {
+            getSelectedMenza()
+                .onEach {
+                    updateState { copy(selectedMenza = it) }
+                }.launchInVM()
+            getMenzaList()
+                .onEach {
+                    updateState { copy(menzaList = it) }
+                }.launchInVM()
+            isMenzaOrderFromTop()
+                .onEach {
+                    updateState { copy(fromTop = it) }
+                }.launchInVM()
+        }
 
-    fun selectMenza(menza: Menza) = launchVM {
-        selectMenza.invoke(menza)
-    }
+    fun selectMenza(menza: Menza) =
+        launchVM {
+            selectMenza.invoke(menza)
+        }
 }
 
 internal data class MenzaSelectionState(

@@ -36,7 +36,6 @@ import cz.lastaapps.menza.ui.locals.WithFoldingFeature
 import cz.lastaapps.menza.ui.locals.WithLocalWindowSizes
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,9 +65,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun ApplyProviders(
-        content: @Composable () -> Unit,
-    ) {
+    private fun ApplyProviders(content: @Composable () -> Unit) {
         WithLocalWindowSizes(this) {
             WithFoldingFeature(this) {
                 content()

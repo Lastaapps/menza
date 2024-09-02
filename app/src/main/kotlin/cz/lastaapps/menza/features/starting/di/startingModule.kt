@@ -28,13 +28,14 @@ import cz.lastaapps.menza.features.starting.ui.vm.PriceTypeViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
-val startingModule = module {
+val startingModule =
+    module {
 
-    factoryOf(::DownloadViewModel)
-    factoryOf(::DishLanguageViewModel)
-    factoryOf(::AllSetViewModel)
-    factoryOf(::PriceTypeViewModel)
+        factoryOf(::DownloadViewModel)
+        factoryOf(::DishLanguageViewModel)
+        factoryOf(::AllSetViewModel)
+        factoryOf(::PriceTypeViewModel)
 
-    factoryOf(::CheckDataDownloadNeededUC)
-    factoryOf(::DownloadInitDataUC)
-}
+        factoryOf(::CheckDataDownloadNeededUC)
+        factoryOf(::DownloadInitDataUC)
+    }

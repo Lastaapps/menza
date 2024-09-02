@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import co.touchlab.kermit.Logger
@@ -36,32 +37,38 @@ import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.menza.features.other.ui.dialog.ReportDialog
 import cz.lastaapps.menza.features.other.ui.dialog.sendReport
 
-
 private val errorLog = Logger.withTag("HandleError")
 
 @Composable
-fun HandleError(holder: ErrorHolder, hostState: SnackbarHostState) =
-    HandleError(
-        error = holder.getError(),
-        hostState = hostState,
-        onDismiss = holder::dismissError,
-    )
+fun HandleError(
+    holder: ErrorHolder,
+    hostState: SnackbarHostState,
+) = HandleError(
+    error = holder.getError(),
+    hostState = hostState,
+    onDismiss = holder::dismissError,
+)
 
 @Composable
-fun HandleError(error: DomainError?, hostState: SnackbarHostState, onDismiss: () -> Unit) {
-
+fun HandleError(
+    error: DomainError?,
+    hostState: SnackbarHostState,
+    onDismiss: () -> Unit,
+) {
     var toReport by remember { mutableStateOf<DomainError?>(null) }
 
     val context = LocalContext.current
+    val onDismissLambda by rememberUpdatedState(onDismiss)
     LaunchedEffect(error, hostState, context) {
         error?.let {
             errorLog.e { "Handling an error: $it" }
 
             if (it.shouldBeReported) {
-                val result = hostState.showSnackbar(
-                    message = error.text(context),
-                    actionLabel = context.getString(cz.lastaapps.menza.R.string.error_button_report),
-                )
+                val result =
+                    hostState.showSnackbar(
+                        message = error.text(context),
+                        actionLabel = context.getString(cz.lastaapps.menza.R.string.error_button_report),
+                    )
                 when (result) {
                     SnackbarResult.Dismissed -> {}
                     SnackbarResult.ActionPerformed -> {
@@ -71,7 +78,7 @@ fun HandleError(error: DomainError?, hostState: SnackbarHostState, onDismiss: ()
             } else {
                 hostState.showSnackbar(message = error.text(context))
             }
-            onDismiss()
+            onDismissLambda()
         }
     }
 

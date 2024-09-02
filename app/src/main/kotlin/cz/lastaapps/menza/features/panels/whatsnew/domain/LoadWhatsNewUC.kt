@@ -30,32 +30,34 @@ internal class LoadWhatsNewUC(
     context: UCContext,
     private val assets: AssetsProvider,
 ) : UseCase(context) {
-
     private val log = localLogger()
 
     companion object {
-        private const val sourceDir = "changelogs"
+        private const val SOURCE_DIR = "changelogs"
     }
 
-    suspend operator fun invoke(): Map<Locale, Set<WhatsNewInfo>> = launch {
-        val map = HashMap<Locale, MutableSet<WhatsNewInfo>>()
+    suspend operator fun invoke(): Map<Locale, Set<WhatsNewInfo>> =
+        launch {
+            val map = HashMap<Locale, MutableSet<WhatsNewInfo>>()
 
-        val languages = assets.listDirectory(sourceDir)
+            val languages = assets.listDirectory(SOURCE_DIR)
 
-        languages.asSequence()
-            .forEach { localeDir ->
-                log.i { "Loading what's new for $localeDir" }
-                val path = "$sourceDir/$localeDir"
-                val files = assets.listDirectory(path)
-                val language = Locale.forLanguageTag(localeDir)
+            languages
+                .asSequence()
+                .forEach { localeDir ->
+                    log.i { "Loading what's new for $localeDir" }
+                    val path = "$SOURCE_DIR/$localeDir"
+                    val files = assets.listDirectory(path)
+                    val language = Locale.forLanguageTag(localeDir)
 
-                files.forEach { file ->
-                    val versionCode = file.removeSuffix(".txt").toLong()
-                    val changes = assets.readFile("$path/$file")
-                    map.getOrPut(language) { mutableSetOf() }
-                        .add(WhatsNewInfo(versionCode, changes))
+                    files.forEach { file ->
+                        val versionCode = file.removeSuffix(".txt").toLong()
+                        val changes = assets.readFile("$path/$file")
+                        map
+                            .getOrPut(language) { mutableSetOf() }
+                            .add(WhatsNewInfo(versionCode, changes))
+                    }
                 }
-            }
-        map
-    }
+            map
+        }
 }

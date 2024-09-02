@@ -46,11 +46,11 @@ import androidx.compose.ui.res.stringResource
 import cz.lastaapps.api.core.domain.model.PlaceOpeningInfo
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.Padding
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.datetime.toJavaLocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.datetime.toJavaLocalTime
 
 @Composable
 fun OpeningHoursList(
@@ -81,16 +81,18 @@ fun OpeningHoursList(
 private fun OpeningHoursLocationUI(
     data: PlaceOpeningInfo,
     modifier: Modifier = Modifier,
-    locale: Locale = LocalConfiguration.current.let {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) it.locales[0] else it.locale
-    },
+    locale: Locale =
+        LocalConfiguration.current.let {
+            @Suppress("DEPRECATION")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) it.locales[0] else it.locale
+        },
     use24: Boolean = DateFormat.is24HourFormat(LocalContext.current),
 ) {
-    val formatter = remember(use24) {
-        val patter = if (use24) "H:mm" else "h:mm a"
-        DateTimeFormatter.ofPattern(patter)
-    }
+    val formatter =
+        remember(use24) {
+            val patter = if (use24) "H:mm" else "h:mm a"
+            DateTimeFormatter.ofPattern(patter)
+        }
 
     ElevatedCard(
         modifier = modifier,
@@ -98,9 +100,10 @@ private fun OpeningHoursLocationUI(
         Column(
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(Padding.MidSmall)
-                .align(Alignment.CenterHorizontally),
+            modifier =
+                Modifier
+                    .padding(Padding.MidSmall)
+                    .align(Alignment.CenterHorizontally),
         ) {
             Text(
                 text = data.name,
@@ -109,9 +112,10 @@ private fun OpeningHoursLocationUI(
 
             // types
             Column(
-                modifier = Modifier
-                    .horizontalScroll(rememberScrollState())
-                    .width(IntrinsicSize.Max),
+                modifier =
+                    Modifier
+                        .horizontalScroll(rememberScrollState())
+                        .width(IntrinsicSize.Max),
                 verticalArrangement = Arrangement.spacedBy(Padding.Small),
             ) {
                 data.types.forEachIndexed { typeIndex, type ->

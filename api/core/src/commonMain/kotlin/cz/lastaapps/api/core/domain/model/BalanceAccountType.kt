@@ -20,5 +20,6 @@
 package cz.lastaapps.api.core.domain.model
 
 enum class BalanceAccountType {
-    CTU, Stravnik,
+    CTU,
+    Stravnik,
 }

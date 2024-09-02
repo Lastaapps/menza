@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,40 +36,42 @@ internal class RootViewModel(
     private val isAppSetUp: IsAppSetUpUC,
     private val getAppTheme: GetAppThemeUC,
     private val getDarkMode: GetDarkModeUC,
-) : StateViewModel<RootState>(RootState(), context), Appearing {
+) : StateViewModel<RootState>(RootState(), context),
+    Appearing {
     override var hasAppeared: Boolean = false
 
-    override fun onAppeared() = launchVM {
-        val isSetUp = isAppSetUp().first()
-        val appTheme = getAppTheme().first()
-        val darkMode = getDarkMode().first()
-
-        updateState {
-            copy(
-                isSetUp = isSetUp,
-                appTheme = appTheme,
-                darkMode = darkMode,
-                isReady = true,
-            )
-        }
-
+    override fun onAppeared() =
         launchVM {
-            isAppSetUp().collectLatest {
-                updateState { copy(isSetUp = it) }
+            val isSetUp = isAppSetUp().first()
+            val appTheme = getAppTheme().first()
+            val darkMode = getDarkMode().first()
+
+            updateState {
+                copy(
+                    isSetUp = isSetUp,
+                    appTheme = appTheme,
+                    darkMode = darkMode,
+                    isReady = true,
+                )
+            }
+
+            launchVM {
+                isAppSetUp().collectLatest {
+                    updateState { copy(isSetUp = it) }
+                }
+            }
+
+            launchVM {
+                getAppTheme().collectLatest {
+                    updateState { copy(appTheme = it) }
+                }
+            }
+            launchVM {
+                getDarkMode().collectLatest {
+                    updateState { copy(darkMode = it) }
+                }
             }
         }
-
-        launchVM {
-            getAppTheme().collectLatest {
-                updateState { copy(appTheme = it) }
-            }
-        }
-        launchVM {
-            getDarkMode().collectLatest {
-                updateState { copy(darkMode = it) }
-            }
-        }
-    }
 }
 
 internal data class RootState(

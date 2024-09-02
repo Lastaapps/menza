@@ -32,7 +32,10 @@ import com.mikepenz.aboutlibraries.entity.Library
 import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
-fun LicenseItem(library: Library, modifier: Modifier = Modifier) {
+fun LicenseItem(
+    library: Library,
+    modifier: Modifier = Modifier,
+) {
     ElevatedCard(
         shape = MaterialTheme.shapes.medium,
         modifier = modifier,
@@ -65,25 +68,37 @@ fun LicenseItem(library: Library, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun LicenseName(name: String, modifier: Modifier = Modifier) {
+private fun LicenseName(
+    name: String,
+    modifier: Modifier = Modifier,
+) {
     Text(name, style = MaterialTheme.typography.titleLarge, modifier = modifier)
 }
 
 @Composable
-private fun LicenseDeveloper(developer: String?, modifier: Modifier = Modifier) {
-    if (developer != null)
+private fun LicenseDeveloper(
+    developer: String?,
+    modifier: Modifier = Modifier,
+) {
+    if (developer != null) {
         Text(developer, style = MaterialTheme.typography.bodyLarge, modifier = modifier)
+    }
 }
 
 @Composable
-private fun LicenseLicense(license: String, modifier: Modifier = Modifier) {
+private fun LicenseLicense(
+    license: String,
+    modifier: Modifier = Modifier,
+) {
     Text(license, style = MaterialTheme.typography.bodyMedium, modifier = modifier)
 }
 
 @Composable
-private fun LicenseVersion(version: String?, modifier: Modifier = Modifier) {
-    if (version != null)
+private fun LicenseVersion(
+    version: String?,
+    modifier: Modifier = Modifier,
+) {
+    if (version != null) {
         Text(version, style = MaterialTheme.typography.bodyMedium, modifier = modifier)
+    }
 }
-
-

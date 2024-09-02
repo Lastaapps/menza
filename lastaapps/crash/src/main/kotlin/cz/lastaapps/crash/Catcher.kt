@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,6 @@ class Catcher(
     private val database: CrashDatabase,
     private val default: Thread.UncaughtExceptionHandler?,
 ) : Thread.UncaughtExceptionHandler {
-
     companion object {
         fun register(database: CrashDatabase) {
             val defaultEH = Thread.getDefaultUncaughtExceptionHandler()
@@ -37,12 +36,19 @@ class Catcher(
         }
     }
 
-    override fun uncaughtException(t: Thread, e: Throwable) {
+    override fun uncaughtException(
+        t: Thread,
+        e: Throwable,
+    ) {
         try {
             runBlocking(Dispatchers.IO) {
                 with(Crash.fromError(e, ErrorSeverity.CRASH)) {
                     database.crashQueries.saveCrash(
-                        date, severity, message, trace, reported,
+                        date,
+                        severity,
+                        message,
+                        trace,
+                        reported,
                     )
                 }
             }

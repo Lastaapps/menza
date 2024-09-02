@@ -62,34 +62,48 @@ internal interface SettingsHubComponent : BackHandlerOwner {
     val content: Value<ChildStack<*, Child>>
 
     fun toChooseTheme()
+
     fun toChooseDishLanguage()
+
     fun toOsturak()
+
     fun toLicense()
+
     fun pop()
 
     sealed interface Child {
         @JvmInline
-        value class Settings(val component: SettingsComponent) : Child
+        value class Settings(
+            val component: SettingsComponent,
+        ) : Child
 
         @JvmInline
-        value class AppTheme(val component: AppThemeComponent) : Child
+        value class AppTheme(
+            val component: AppThemeComponent,
+        ) : Child
 
         @JvmInline
-        value class DishLanguage(val component: DishLanguageComponent) : Child
+        value class DishLanguage(
+            val component: DishLanguageComponent,
+        ) : Child
 
         @JvmInline
-        value class Osturak(val component: OsturakComponent) : Child
+        value class Osturak(
+            val component: OsturakComponent,
+        ) : Child
 
         @JvmInline
-        value class License(val component: LicenseComponent) : Child
+        value class License(
+            val component: LicenseComponent,
+        ) : Child
     }
 }
 
 @OptIn(ExperimentalDecomposeApi::class)
 internal class DefaultSettingsHubComponent(
     componentContext: ComponentContext,
-) : SettingsHubComponent, ComponentContext by componentContext {
-
+) : SettingsHubComponent,
+    ComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
     override val content: Value<ChildStack<*, Child>> =
         childStack(
@@ -99,11 +113,12 @@ internal class DefaultSettingsHubComponent(
         ) { configuration, componentContext ->
             when (configuration) {
                 Config.AppTheme -> Child.AppTheme(DefaultAppThemeComponent(componentContext))
-                Config.DishLanguage -> Child.DishLanguage(
-                    DefaultDishLanguageComponent(
-                        componentContext,
-                    ),
-                )
+                Config.DishLanguage ->
+                    Child.DishLanguage(
+                        DefaultDishLanguageComponent(
+                            componentContext,
+                        ),
+                    )
 
                 Config.License -> Child.License(DefaultLicenseComponent(componentContext))
                 Config.Osturak -> Child.Osturak(DefaultOsturakComponent(componentContext))
@@ -130,7 +145,6 @@ internal class DefaultSettingsHubComponent(
     override fun pop() {
         navigation.pop()
     }
-
 
     @Serializable
     private sealed interface Config {
@@ -159,38 +173,40 @@ internal fun SettingsHubContent(
 ) {
     val stack by component.content.subscribeAsState()
     Children(
+        modifier = modifier,
         stack = stack,
-        animation = predictiveBackAnimation(
-            backHandler = component.backHandler,
-            fallbackAnimation = stackAnimation(fade() + scale()),
-            selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
-            onBack = component::pop,
-        ),
+        animation =
+            predictiveBackAnimation(
+                backHandler = component.backHandler,
+                fallbackAnimation = stackAnimation(fade() + scale()),
+                selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
+                onBack = component::pop,
+            ),
     ) {
         Surface {
             when (val instance = it.instance) {
-                is Child.AppTheme -> AppThemeContent(
-                    instance.component,
-                    onDone = component::pop,
-                    modifier,
-                )
+                is Child.AppTheme ->
+                    AppThemeContent(
+                        instance.component,
+                        onComplete = component::pop,
+                    )
 
-                is Child.DishLanguage -> DishLanguageContent(
-                    instance.component,
-                    modifier,
-                    component::pop,
-                )
+                is Child.DishLanguage ->
+                    DishLanguageContent(
+                        instance.component,
+                        component::pop,
+                    )
 
-                is Child.License -> LicenseContent(instance.component, modifier)
-                is Child.Osturak -> OsturakContent(instance.component, modifier)
-                is Child.Settings -> SettingsContent(
-                    instance.component,
-                    onChooseTheme = component::toChooseTheme,
-                    onChooseDishLanguage = component::toChooseDishLanguage,
-                    onOsturak = component::toOsturak,
-                    onLicense = component::toLicense,
-                    modifier,
-                )
+                is Child.License -> LicenseContent(instance.component)
+                is Child.Osturak -> OsturakContent(instance.component)
+                is Child.Settings ->
+                    SettingsContent(
+                        instance.component,
+                        onChooseTheme = component::toChooseTheme,
+                        onChooseDishLanguage = component::toChooseDishLanguage,
+                        onOsturak = component::toOsturak,
+                        onLicense = component::toLicense,
+                    )
             }
         }
     }

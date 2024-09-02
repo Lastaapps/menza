@@ -34,7 +34,6 @@ internal class DownloadInitDataUC(
     private val syncMenzaListUC: SyncMenzaListUC,
     private val syncInfoUC: SyncAllInfoUC,
 ) : UseCase(context) {
-
     private val log = localLogger()
 
     suspend operator fun invoke() =

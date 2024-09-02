@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,6 +19,10 @@
 
 package cz.lastaapps.crash.entity
 
-enum class ReportState(val id: Byte) {
-    UNREPORTED(0), DISMISSED(1), REPORTED(2),
+enum class ReportState(
+    val id: Byte,
+) {
+    UNREPORTED(0),
+    DISMISSED(1),
+    REPORTED(2),
 }

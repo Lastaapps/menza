@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,17 +20,25 @@
 package cz.lastaapps.core.domain.error
 
 sealed interface CommonError : DomainError.Runtime {
-    data class WorkTimeout(override val throwable: Throwable) : CommonError
+    data class WorkTimeout(
+        override val throwable: Throwable,
+    ) : CommonError
 
     data object NotLoggedIn : CommonError
 
     sealed interface AppNotFound : CommonError {
         data object PhoneCall : AppNotFound
+
         data object Email : AppNotFound
+
         data object AddContact : AppNotFound
+
         data object Map : AppNotFound
+
         data object Link : AppNotFound
+
         data object Facebook : AppNotFound
+
         data object Telegram : AppNotFound
     }
 }

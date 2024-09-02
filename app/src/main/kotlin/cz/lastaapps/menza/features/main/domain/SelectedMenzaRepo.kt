@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,5 +24,6 @@ import kotlinx.coroutines.flow.Flow
 
 internal interface SelectedMenzaRepo {
     suspend fun getSelectedMenza(): Flow<MenzaType?>
+
     suspend fun selectMenza(menza: MenzaType?)
 }

@@ -54,7 +54,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
-
 internal class InfoRepoImpl(
     private val subsystemId: Int,
     private val subsystemApi: SubsystemApi,
@@ -63,143 +62,167 @@ internal class InfoRepoImpl(
     private val checker: ValidityChecker,
     hashStore: HashStore,
 ) : InfoRepo {
-
     private val log = Logger.withTag(this::class.simpleName + "($subsystemId)")
     private val validityKey = ValidityKey.agataInfo(subsystemId)
 
-    override fun getData(params: InfoRepoParams): Flow<Info> = run {
-        val lang = params.language.toDB()
-        combine6(
-            db.infoQueries.getForSubsystem(subsystemId.toLong(), lang).asFlow()
-                .mapToOneOrNull(Dispatchers.IO),
-            db.newsQueries.getForSubsystem(subsystemId.toLong(), lang).asFlow()
-                .mapToOneOrNull(Dispatchers.IO),
-            db.contactQueries.getForSubsystem(subsystemId.toLong(), lang).asFlow()
-                .mapToList(Dispatchers.IO),
-            db.openTimeQueries.getForSubsystem(subsystemId.toLong(), lang).asFlow()
-                .mapToList(Dispatchers.IO),
-            db.linkQueries.getForSubsystem(subsystemId.toLong(), lang).asFlow()
-                .mapToList(Dispatchers.IO),
-            db.addressQueries.getForSubsystem(subsystemId.toLong(), lang).asFlow()
-                .mapToOneOrNull(Dispatchers.IO),
-        ) { info, news, contacts, openTimes, links, address ->
-            info.toDomain(news, contacts, openTimes, links, address)
+    override fun getData(params: InfoRepoParams): Flow<Info> =
+        run {
+            val lang = params.language.toDB()
+            combine6(
+                db.infoQueries
+                    .getForSubsystem(subsystemId.toLong(), lang)
+                    .asFlow()
+                    .mapToOneOrNull(Dispatchers.IO),
+                db.newsQueries
+                    .getForSubsystem(subsystemId.toLong(), lang)
+                    .asFlow()
+                    .mapToOneOrNull(Dispatchers.IO),
+                db.contactQueries
+                    .getForSubsystem(subsystemId.toLong(), lang)
+                    .asFlow()
+                    .mapToList(Dispatchers.IO),
+                db.openTimeQueries
+                    .getForSubsystem(subsystemId.toLong(), lang)
+                    .asFlow()
+                    .mapToList(Dispatchers.IO),
+                db.linkQueries
+                    .getForSubsystem(subsystemId.toLong(), lang)
+                    .asFlow()
+                    .mapToList(Dispatchers.IO),
+                db.addressQueries
+                    .getForSubsystem(subsystemId.toLong(), lang)
+                    .asFlow()
+                    .mapToOneOrNull(Dispatchers.IO),
+            ) { info, news, contacts, openTimes, links, address ->
+                info.toDomain(news, contacts, openTimes, links, address)
+            }.onStart { log.i { "Starting collection" } }
+                .onCompletion { log.i { "Completed collection" } }
         }
-            .onStart { log.i { "Starting collection" } }
-            .onCompletion { log.i { "Completed collection" } }
-    }
 
-    private val jobs = listOf<SyncJobHash<*, *, InfoRepoParams>>(
-        // Info
-        SyncJobHash(
-            hashStore = hashStore,
-            hashType = { HashType.infoHash(subsystemId).withLang(it.language) },
-            getHashCode = { subsystemApi.getInfoHash(it.language.toDto(), subsystemId).bind() },
-            fetchApi = { subsystemApi.getInfo(it.language.toDto(), subsystemId).bind().orEmpty() },
-            convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { params, data ->
-                db.infoQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
-                data.forEach {
-                    db.infoQueries.insert(it)
-                }
-                log.d { "Info stored" }
-            },
-        ),
-        // News
-        SyncJobHash(
-            hashStore = hashStore,
-            hashType = { HashType.newsHash(subsystemId).withLang(it.language) },
-            getHashCode = { subsystemApi.getNewsHash(it.language.toDto(), subsystemId).bind() },
-            fetchApi = { subsystemApi.getNews(it.language.toDto(), subsystemId).bind() },
-            convert = { params, data -> data?.toEntity(subsystemId, params.language).rightIor() },
-            store = { params, data ->
-                db.newsQueries.deleteForSubsystem(params.language.toDB(), subsystemId.toLong())
-                data?.let {
-                    db.newsQueries.insert(data)
-                }
-                log.d { "News stored" }
-            },
-        ),
-        // Contacts
-        SyncJobHash(
-            hashStore = hashStore,
-            hashType = { HashType.contactsHash().withLang(it.language) },
-            getHashCode = { subsystemApi.getContactsHash(it.language.toDto()).bind() },
-            fetchApi = { subsystemApi.getContacts(it.language.toDto()).bind().orEmpty() },
-            convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { params, data ->
-                db.contactQueries.deleteAll(params.language.toDB())
-                data.forEach {
-                    db.contactQueries.insert(it)
-                }
-                log.d { "Contacts stored" }
-            },
-        ),
-        // OpenTimes
-        SyncJobHash(
-            hashStore = hashStore,
-            hashType = { HashType.openingHash(subsystemId).withLang(it.language) },
-            getHashCode = {
-                subsystemApi.getOpeningTimesHash(it.language.toDto(), subsystemId).bind()
-            },
-            fetchApi = {
-                subsystemApi.getOpeningTimes(it.language.toDto(), subsystemId).bind().orEmpty()
-            },
-            convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { params, data ->
-                db.openTimeQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
-                data.forEach {
-                    db.openTimeQueries.insert(it)
-                }
-                log.d { "Open times stored" }
-            },
-        ),
-        // Links
-        SyncJobHash(
-            hashStore = hashStore,
-            hashType = { HashType.linkHash(subsystemId).withLang(it.language) },
-            getHashCode = { subsystemApi.getLinkHash(it.language.toDto(), subsystemId).bind() },
-            fetchApi = { subsystemApi.getLink(it.language.toDto(), subsystemId).bind().orEmpty() },
-            convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { params, data ->
-                db.linkQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
-                data.forEach {
-                    db.linkQueries.insert(it)
-                }
-                log.d { "Links stored" }
-            },
-        ),
-        // Address
-        SyncJobHash(
-            hashStore = hashStore,
-            hashType = { HashType.addressHash().withLang(it.language) },
-            getHashCode = { subsystemApi.getAddressHash(it.language.toDto()).bind() },
-            fetchApi = { subsystemApi.getAddress(it.language.toDto()).bind().orEmpty() },
-            convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
-            store = { params, data ->
-                db.addressQueries.deleteAll(params.language.toDB())
-                data.forEach {
-                    db.addressQueries.insert(it)
-                }
-                log.d { "Address stored" }
-            },
-        ),
-    )
+    private val jobs =
+        listOf<SyncJobHash<*, *, InfoRepoParams>>(
+            // Info
+            SyncJobHash(
+                hashStore = hashStore,
+                hashType = { HashType.infoHash(subsystemId).withLang(it.language) },
+                getHashCode = { subsystemApi.getInfoHash(it.language.toDto(), subsystemId).bind() },
+                fetchApi = {
+                    subsystemApi.getInfo(it.language.toDto(), subsystemId).bind().orEmpty()
+                },
+                convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
+                store = { params, data ->
+                    db.infoQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
+                    data.forEach {
+                        db.infoQueries.insert(it)
+                    }
+                    log.d { "Info stored" }
+                },
+            ),
+            // News
+            SyncJobHash(
+                hashStore = hashStore,
+                hashType = { HashType.newsHash(subsystemId).withLang(it.language) },
+                getHashCode = { subsystemApi.getNewsHash(it.language.toDto(), subsystemId).bind() },
+                fetchApi = { subsystemApi.getNews(it.language.toDto(), subsystemId).bind() },
+                convert = { params, data ->
+                    data?.toEntity(subsystemId, params.language).rightIor()
+                },
+                store = { params, data ->
+                    db.newsQueries.deleteForSubsystem(params.language.toDB(), subsystemId.toLong())
+                    data?.let {
+                        db.newsQueries.insert(data)
+                    }
+                    log.d { "News stored" }
+                },
+            ),
+            // Contacts
+            SyncJobHash(
+                hashStore = hashStore,
+                hashType = { HashType.contactsHash().withLang(it.language) },
+                getHashCode = { subsystemApi.getContactsHash(it.language.toDto()).bind() },
+                fetchApi = { subsystemApi.getContacts(it.language.toDto()).bind().orEmpty() },
+                convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
+                store = { params, data ->
+                    db.contactQueries.deleteAll(params.language.toDB())
+                    data.forEach {
+                        db.contactQueries.insert(it)
+                    }
+                    log.d { "Contacts stored" }
+                },
+            ),
+            // OpenTimes
+            SyncJobHash(
+                hashStore = hashStore,
+                hashType = { HashType.openingHash(subsystemId).withLang(it.language) },
+                getHashCode = {
+                    subsystemApi.getOpeningTimesHash(it.language.toDto(), subsystemId).bind()
+                },
+                fetchApi = {
+                    subsystemApi.getOpeningTimes(it.language.toDto(), subsystemId).bind().orEmpty()
+                },
+                convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
+                store = { params, data ->
+                    db.openTimeQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
+                    data.forEach {
+                        db.openTimeQueries.insert(it)
+                    }
+                    log.d { "Open times stored" }
+                },
+            ),
+            // Links
+            SyncJobHash(
+                hashStore = hashStore,
+                hashType = { HashType.linkHash(subsystemId).withLang(it.language) },
+                getHashCode = { subsystemApi.getLinkHash(it.language.toDto(), subsystemId).bind() },
+                fetchApi = {
+                    subsystemApi.getLink(it.language.toDto(), subsystemId).bind().orEmpty()
+                },
+                convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
+                store = { params, data ->
+                    db.linkQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
+                    data.forEach {
+                        db.linkQueries.insert(it)
+                    }
+                    log.d { "Links stored" }
+                },
+            ),
+            // Address
+            SyncJobHash(
+                hashStore = hashStore,
+                hashType = { HashType.addressHash().withLang(it.language) },
+                getHashCode = { subsystemApi.getAddressHash(it.language.toDto()).bind() },
+                fetchApi = { subsystemApi.getAddress(it.language.toDto()).bind().orEmpty() },
+                convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
+                store = { params, data ->
+                    db.addressQueries.deleteAll(params.language.toDB())
+                    data.forEach {
+                        db.addressQueries.insert(it)
+                    }
+                    log.d { "Address stored" }
+                },
+            ),
+        )
 
-    override suspend fun sync(params: InfoRepoParams, isForced: Boolean): SyncOutcome = run {
-        log.i { "Starting sync (f: $isForced)" }
-        checker.withCheckSince(validityKey.withParams(params), isForced, 7.days) {
-            processor.runSync(jobs, db, params, isForced)
+    override suspend fun sync(
+        params: InfoRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        run {
+            log.i { "Starting sync (f: $isForced)" }
+            checker.withCheckSince(validityKey.withParams(params), isForced, 7.days) {
+                processor.runSync(jobs, db, params, isForced)
+            }
         }
-    }
 }
 
 internal object InfoStrahovRepoImpl : InfoRepo, KoinComponent {
     private val strahovInfoRepo: InfoRepo by
-    inject<InfoRepo> { parametersOf(MenzaType.Agata.Subsystem(1)) }
+        inject<InfoRepo> { parametersOf(MenzaType.Agata.Subsystem(1)) }
 
     override fun getData(params: InfoRepoParams): Flow<Info> = strahovInfoRepo.getData(params)
 
-    override suspend fun sync(params: InfoRepoParams, isForced: Boolean): SyncOutcome =
-        strahovInfoRepo.sync(params, isForced = isForced)
+    override suspend fun sync(
+        params: InfoRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome = strahovInfoRepo.sync(params, isForced = isForced)
 }

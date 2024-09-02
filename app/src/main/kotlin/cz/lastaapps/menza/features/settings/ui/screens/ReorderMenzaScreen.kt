@@ -21,7 +21,6 @@ package cz.lastaapps.menza.features.settings.ui.screens
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -69,7 +68,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun ReorderMenzaScreen(
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     viewModel: ReorderMenzaViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -79,51 +78,51 @@ internal fun ReorderMenzaScreen(
     ReorderMenzaContent(
         state = state,
         onVisibilityClick = viewModel::toggleVisibility,
-        onOrderUpdated = viewModel::saveOrder,
+        onOrderUpdate = viewModel::saveOrder,
         onReverseOrder = viewModel::reverseOrder,
-        onDone = onDone,
+        onComplete = onComplete,
         modifier = modifier,
     )
 }
 
 @Composable
-private fun ReorderMenzaEffects(
-    viewModel: ReorderMenzaViewModel,
-) {
+private fun ReorderMenzaEffects(viewModel: ReorderMenzaViewModel) {
     HandleAppear(viewModel)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ReorderMenzaContent(
     state: ReorderMenzaState,
     onVisibilityClick: (Menza) -> Unit,
-    onOrderUpdated: (List<Pair<Menza, MenzaOrder>>) -> Unit,
+    onOrderUpdate: (List<Pair<Menza, MenzaOrder>>) -> Unit,
     onReverseOrder: () -> Unit,
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val menzaList = remember(state.menzaList) {
-        mutableStateListOf<Pair<Menza, MenzaOrder>>()
-            .also { list -> list.addAll(state.menzaList) }
-    }
+    val menzaList =
+        remember(state.menzaList) {
+            mutableStateListOf<Pair<Menza, MenzaOrder>>()
+                .also { list -> list.addAll(state.menzaList) }
+        }
     val localList = rememberUpdatedState(menzaList)
 
-    val draggableState = rememberDraggableLazyListState(
-        onMove = { from, to ->
-            val list = localList.value
-            val tmp = list[from]
-            list[from] = list[to]
-            list[to] = tmp
-        },
-        onMoveFinished = {
-            onOrderUpdated(localList.value)
-        },
-        reverse = !state.fromTop,
-    )
+    val draggableState =
+        rememberDraggableLazyListState(
+            onMove = { from, to ->
+                val list = localList.value
+                val tmp = list[from]
+                list[from] = list[to]
+                list[to] = tmp
+            },
+            onMoveFinish = {
+                onOrderUpdate(localList.value)
+            },
+            reverse = !state.fromTop,
+        )
 
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .padding(Padding.MidLarge)
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(Padding.Medium),
@@ -134,11 +133,12 @@ private fun ReorderMenzaContent(
             style = MaterialTheme.typography.headlineSmall,
         )
 
-        val animateFrom = if (state.fromTop) {
-            Alignment.TopEnd
-        } else {
-            Alignment.BottomStart
-        }
+        val animateFrom =
+            if (state.fromTop) {
+                Alignment.TopEnd
+            } else {
+                Alignment.BottomStart
+            }
         Box(
             modifier = Modifier.weight(1f),
             contentAlignment = animateFrom,
@@ -164,8 +164,9 @@ private fun ReorderMenzaContent(
                         menza = menza,
                         visible = order.visible,
                         onVisibilityClick = { onVisibilityClick(menza) },
-                        modifier = itemModifier
-                            .makeDraggableItem(draggableState, index),
+                        modifier =
+                            itemModifier
+                                .makeDraggableItem(draggableState, index),
                     )
                 }
             }
@@ -175,7 +176,7 @@ private fun ReorderMenzaContent(
             Text(stringResource(R.string.menza_order_button_align_top))
         }
 
-        Button(onClick = onDone) {
+        Button(onClick = onComplete) {
             Text(stringResource(R.string.button_done))
         }
 
@@ -203,10 +204,11 @@ private fun MenzaItem(
         Row(
             horizontalArrangement = Arrangement.spacedBy(Padding.Small),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(
-                horizontal = Padding.Medium,
-                vertical = Padding.Small,
-            ),
+            modifier =
+            Modifier.padding(
+                    horizontal = Padding.Medium,
+                    vertical = Padding.Small,
+                ),
         ) {
             MenzaLetter(menza)
             Text(
@@ -220,9 +222,10 @@ private fun MenzaItem(
             IconButton(onClick = onVisibilityClick) {
                 Icon(
                     if (visible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                    contentDescription = stringResource(
-                        if (visible) R.string.menza_order_button_hide_menza else R.string.menza_order_button_show_menza,
-                    ),
+                    contentDescription =
+                        stringResource(
+                            if (visible) R.string.menza_order_button_hide_menza else R.string.menza_order_button_show_menza,
+                        ),
                 )
             }
             Icon(
@@ -240,30 +243,34 @@ private fun MenzaItemPreview() {
         Surface {
             Column(Modifier.padding(Padding.Large)) {
                 MenzaItem(
-                    menza = Menza(
-                        Strahov,
-                        "Menza Strahov",
-                        isActive = true,
-                        isOpened = true,
-                        supportsDaily = true,
-                        supportsWeekly = true,
-                        isExperimental = false,
-                        videoLinks = persistentListOf(),
+                    menza =
+                        Menza(
+                            Strahov,
+                            "Menza Strahov",
+                            isActive = true,
+                            isOpened = true,
+                            supportsDaily = true,
+                            supportsWeekly = true,
+                            isExperimental = false,
+                            videoLinks = persistentListOf(),
                     ),
-                    visible = true, onVisibilityClick = {},
+                    visible = true,
+                    onVisibilityClick = {},
                 )
                 MenzaItem(
-                    menza = Menza(
-                        Strahov,
-                        "Restaurace Strahov",
-                        isActive = true,
-                        isOpened = true,
-                        supportsDaily = true,
-                        supportsWeekly = true,
-                        isExperimental = false,
-                        videoLinks = persistentListOf(),
+                    menza =
+                        Menza(
+                            Strahov,
+                            "Restaurace Strahov",
+                            isActive = true,
+                            isOpened = true,
+                            supportsDaily = true,
+                            supportsWeekly = true,
+                            isExperimental = false,
+                            videoLinks = persistentListOf(),
                     ),
-                    visible = false, onVisibilityClick = {},
+                    visible = false,
+                    onVisibilityClick = {},
                 )
             }
         }

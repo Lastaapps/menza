@@ -27,7 +27,8 @@ class SetBalanceWarningThresholdUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(threshold: Int) = launch {
-        repo.setBalanceWarningThreshold(threshold)
-    }
+    suspend operator fun invoke(threshold: Int) =
+        launch {
+            repo.setBalanceWarningThreshold(threshold)
+        }
 }

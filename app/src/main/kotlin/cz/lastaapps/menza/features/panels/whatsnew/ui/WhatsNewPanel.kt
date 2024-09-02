@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -92,10 +92,11 @@ private fun PanelContent(
         Button(
             onClick = onDismiss,
             modifier = Modifier.align(Alignment.End),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.tertiary,
-                contentColor = MaterialTheme.colorScheme.onTertiary,
-            ),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    contentColor = MaterialTheme.colorScheme.onTertiary,
+                ),
         ) {
             Text(stringResource(R.string.panel_whats_new_button))
         }
@@ -104,12 +105,16 @@ private fun PanelContent(
 
 @Preview
 @Composable
-private fun WhatsNewPanelPreview() = PreviewWrapper {
-    PanelContent(
-        info = WhatsNewInfo(
-            versionCode = 123456789L,
-            message = "There is a theory which states that if ever anyone discovers exactly what the Universe is for and why it is here, it will instantly disappear and be replaced by something even more bizarre and inexplicable. There is another theory which states that this has already happened.",
-        ),
-        onDismiss = {},
-    )
-}
+private fun WhatsNewPanelPreview() =
+    PreviewWrapper {
+        PanelContent(
+            info =
+                WhatsNewInfo(
+                    versionCode = 123456789L,
+                    message =
+                        @Suppress("ktlint:standard:max-line-length")
+                        "There is a theory which states that if ever anyone discovers exactly what the Universe is for and why it is here, it will instantly disappear and be replaced by something even more bizarre and inexplicable. There is another theory which states that this has already happened.",
+                ),
+            onDismiss = {},
+        )
+    }

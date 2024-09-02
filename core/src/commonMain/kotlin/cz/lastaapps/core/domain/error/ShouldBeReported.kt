@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,31 +28,34 @@ import cz.lastaapps.core.domain.error.NetworkError.SerializationError
 import cz.lastaapps.core.domain.error.NetworkError.Timeout
 
 val DomainError.shouldBeReported: Boolean
-    get() = when (this) {
-        is ApiError.WalletError.TotallyBroken -> true
-        is DomainError.Logic -> false
+    get() =
+        when (this) {
+            is ApiError.WalletError.TotallyBroken -> true
+            is DomainError.Logic -> false
 
-        is DomainError.Unknown -> true
-        is NetworkError -> shouldBeReported
-        is CommonError -> shouldBeReported
-        is ParsingError -> true
-    }
+            is DomainError.Unknown -> true
+            is NetworkError -> shouldBeReported
+            is CommonError -> shouldBeReported
+            is ParsingError -> true
+        }
 
 val NetworkError.shouldBeReported: Boolean
-    get() = when (this) {
-        ConnectionClosed,
-        NoInternet,
-        Timeout,
-        -> false
+    get() =
+        when (this) {
+            ConnectionClosed,
+            NoInternet,
+            Timeout,
+            -> false
 
-        is SerializationError,
-        -> true
-    }
+            is SerializationError,
+            -> true
+        }
 
 val CommonError.shouldBeReported: Boolean
-    get() = when (this) {
-        is WorkTimeout,
-        NotLoggedIn,
-        is AppNotFound,
-        -> false
-    }
+    get() =
+        when (this) {
+            is WorkTimeout,
+            NotLoggedIn,
+            is AppNotFound,
+            -> false
+        }

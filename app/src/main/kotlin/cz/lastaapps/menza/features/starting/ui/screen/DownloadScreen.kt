@@ -42,6 +42,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -56,12 +58,12 @@ import cz.lastaapps.menza.ui.util.HandleError
 
 @Composable
 internal fun DownloadScreen(
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     viewModel: DownloadViewModel,
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    DownloadEffects(viewModel, hostState, onDone)
+    DownloadEffects(viewModel, hostState, onComplete)
 
     DownloadContent(
         state = viewModel.flowState.value,
@@ -74,16 +76,17 @@ internal fun DownloadScreen(
 private fun DownloadEffects(
     viewModel: DownloadViewModel,
     hostState: SnackbarHostState,
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
 ) {
     HandleAppear(viewModel)
 
     HandleError(viewModel, hostState)
 
     val isDone = viewModel.flowState.value.isDone
+    val onCompleteLambda by rememberUpdatedState(onComplete)
     LaunchedEffect(isDone) {
         if (isDone) {
-            onDone()
+            onCompleteLambda()
             viewModel.dismissDone()
         }
     }
@@ -100,15 +103,17 @@ private fun DownloadContent(
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(
-                Padding.Medium,
-                Alignment.CenterVertically,
-            ),
-            modifier = Modifier
-                .sizeIn(maxWidth = DownloadUI.maxWidth)
-                .fillMaxWidth()
-                .padding(Padding.Small)
-                .animateContentSize(),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    Padding.Medium,
+                    Alignment.CenterVertically,
+                ),
+            modifier =
+                Modifier
+                    .sizeIn(maxWidth = DownloadUI.maxWidth)
+                    .fillMaxWidth()
+                    .padding(Padding.Small)
+                    .animateContentSize(),
         ) {
             Text(
                 stringResource(R.string.init_title),
@@ -124,11 +129,12 @@ private fun DownloadContent(
                 when {
                     isLoading && isReady -> {
                         Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
-                            val animatedProgress = animateFloatAsState(
-                                targetValue = state.downloadProgress.progress,
-                                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
-                                label = "download_progress",
-                            )
+                            val animatedProgress =
+                                animateFloatAsState(
+                                    targetValue = state.downloadProgress.progress,
+                                    animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                                    label = "download_progress",
+                                )
 
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(Padding.Small),

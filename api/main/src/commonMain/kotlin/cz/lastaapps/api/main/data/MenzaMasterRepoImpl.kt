@@ -39,33 +39,36 @@ import org.koin.core.component.KoinComponent
 
 internal class MenzaMasterRepoImpl(
     private val sources: List<MenzaRepo>,
-) : MenzaRepo, KoinComponent {
-
+) : MenzaRepo,
+    KoinComponent {
     override fun isReady(params: MenzaRepoParams): Flow<Boolean> =
-        sources.map { repo ->
-            repo.isReady(params)
-        }.foldBinary(true) { acu, isReady ->
-            acu && isReady
-        }
+        sources
+            .map { repo ->
+                repo.isReady(params)
+            }.foldBinary(true) { acu, isReady ->
+                acu && isReady
+            }
 
     override fun getData(params: MenzaRepoParams): Flow<ImmutableList<Menza>> =
         sources
             .map { repo ->
                 repo.getData(params).map { it.toPersistentList() }
-            }
-            .foldBinary(persistentListOf<Menza>()) { acu, item ->
+            }.foldBinary(persistentListOf<Menza>()) { acu, item ->
                 acu.addAll(item)
-            }
-            .map { it.toImmutableList() }
+            }.map { it.toImmutableList() }
 
-    override suspend fun sync(params: MenzaRepoParams, isForced: Boolean): SyncOutcome =
-        sources.parMap(concurrency = 2) {
-            it.sync(params)
-        }.let { res ->
-            res.firstOrNull { it is Either.Left<DomainError> }?.let { return it }
-            val updated = res.map { (it as Either.Right<SyncResult>).value }
-            updated.firstOrNull { it is SyncResult.Problem }?.let { return it.right() }
-            updated.firstOrNull { it is SyncResult.Updated }?.let { return it.right() }
-            return SyncResult.Skipped.right()
-        }
+    override suspend fun sync(
+        params: MenzaRepoParams,
+        isForced: Boolean,
+    ): SyncOutcome =
+        sources
+            .parMap(concurrency = 2) {
+                it.sync(params)
+            }.let { res ->
+                res.firstOrNull { it is Either.Left<DomainError> }?.let { return it }
+                val updated = res.map { (it as Either.Right<SyncResult>).value }
+                updated.firstOrNull { it is SyncResult.Problem }?.let { return it.right() }
+                updated.firstOrNull { it is SyncResult.Updated }?.let { return it.right() }
+                return SyncResult.Skipped.right()
+            }
 }

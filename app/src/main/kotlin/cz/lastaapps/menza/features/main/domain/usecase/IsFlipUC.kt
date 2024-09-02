@@ -30,15 +30,17 @@ import cz.lastaapps.core.util.extensions.localLogger
 class IsFlipUC internal constructor(
     context: UCContext,
 ) : UseCase(context) {
+    private val log = localLogger()
 
-        private val log = localLogger()
-
-    operator fun invoke() = run {
-        Build.MODEL.also {
-            log.d { "Device model: $it" }
-        }.let {
-            it.startsWith("SM-F711") // Z Flip 3
-                    || it.startsWith("SM-F721") // Z Flip 4
+    operator fun invoke() =
+        run {
+            Build.MODEL
+                .also {
+                    log.d { "Device model: $it" }
+                }.let {
+                    it.startsWith("SM-F711") ||
+                        // Z Flip 3
+                        it.startsWith("SM-F721") // Z Flip 4
+                }
         }
-    }
 }

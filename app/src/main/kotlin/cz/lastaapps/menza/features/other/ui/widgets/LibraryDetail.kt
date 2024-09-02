@@ -47,7 +47,6 @@ import com.mikepenz.aboutlibraries.entity.License
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.Padding
 
-
 @Composable
 fun NoLibrarySelected(modifier: Modifier = Modifier) {
     Box(
@@ -59,10 +58,12 @@ fun NoLibrarySelected(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LibraryDetail(library: Library, modifier: Modifier = Modifier) {
+fun LibraryDetail(
+    library: Library,
+    modifier: Modifier = Modifier,
+) {
     SelectionContainer(modifier.verticalScroll(rememberScrollState())) {
         Column(Modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-
             val titleStyle = MaterialTheme.typography.titleMedium
             val bodyStyle = MaterialTheme.typography.bodyMedium
 
@@ -149,11 +150,13 @@ private fun Uri(
 ) {
     val handler = LocalUriHandler.current
     Text(
-        link, textDecoration = TextDecoration.Underline,
+        link,
+        textDecoration = TextDecoration.Underline,
         style = style,
-        modifier = modifier.clickable {
-            Logger.withTag("UriComposable").i { "Opening $link" }
-            handler.openUri(link)
-        },
+        modifier =
+            modifier.clickable {
+                Logger.withTag("UriComposable").i { "Opening $link" }
+                handler.openUri(link)
+            },
     )
 }

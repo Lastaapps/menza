@@ -28,8 +28,9 @@ import cz.lastaapps.core.domain.UseCase
 internal class GetAddMoneyUrlUC(
     context: UCContext,
 ) : UseCase(context) {
-    operator fun invoke(type: BalanceAccountType) = when (type) {
-        CTU -> "https://agata.suz.cvut.cz/jidelnicky/stravnik.php"
-        Stravnik -> "https://stravnik.suz.cvut.cz/Transactions/NoSSO"
-    }
+    operator fun invoke(type: BalanceAccountType) =
+        when (type) {
+            CTU -> "https://agata.suz.cvut.cz/jidelnicky/stravnik.php"
+            Stravnik -> "https://stravnik.suz.cvut.cz/Transactions/NoSSO"
+        }
 }

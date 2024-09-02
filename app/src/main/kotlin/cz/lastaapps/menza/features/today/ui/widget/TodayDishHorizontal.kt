@@ -65,7 +65,7 @@ internal fun TodayDishHorizontal(
     onRefresh: () -> Unit,
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     onOliverRow: (Boolean) -> Unit,
@@ -82,7 +82,7 @@ internal fun TodayDishHorizontal(
         Surface(shape = MaterialTheme.shapes.large) {
             DishContent(
                 data = data,
-                onDishSelected = onDishSelected,
+                onDish = onDish,
                 onNoItems = onNoItems,
                 userSettings = userSettings,
                 isOnMetered = isOnMetered,
@@ -90,7 +90,8 @@ internal fun TodayDishHorizontal(
                 scroll = scroll,
                 header = header,
                 footer = footer,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(top = Padding.Smaller) // so text is not cut off
                     .fillMaxSize(),
             )
@@ -99,9 +100,10 @@ internal fun TodayDishHorizontal(
 }
 
 @Composable
+@Suppress("ktlint:compose:modifier-reused-check")
 private fun DishContent(
     data: ImmutableList<DishCategory>,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     onNoItems: () -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
@@ -111,8 +113,7 @@ private fun DishContent(
     footer: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-    //no data handling
+    // no data handling
     if (data.isEmpty()) {
         NoItems(modifier, onNoItems)
         return
@@ -142,49 +143,56 @@ private fun DishContent(
                     if (isOnlyItem) {
                         DishItem(
                             dish = category.dishList.first(),
-                            onDishSelected = onDishSelected,
+                            onDish = onDish,
                             userSettings = userSettings,
                             isOnMetered = isOnMetered,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItem(),
+                            modifier =
+                            Modifier
+                                    .fillMaxWidth()
+                                    .animateItem(),
                         )
                     } else {
-
                         @Composable
-                        fun dishItem(dish: Dish, modifier: Modifier) {
+                        fun DishItemWrapper(
+                            dish: Dish,
+                            modifier: Modifier = Modifier,
+                        ) {
                             DishItem(
                                 dish = dish,
-                                onDishSelected = onDishSelected,
+                                onDish = onDish,
                                 userSettings = userSettings,
                                 isOnMetered = isOnMetered,
-                                modifier = modifier.sizeIn(maxWidth = 256.dp),
+                                modifier = @Suppress("ktlint:compose:modifier-not-used-at-root")
+                                modifier.sizeIn(maxWidth = 256.dp),
                             )
                         }
 
-                        val horizontalArrangement = Arrangement.spacedBy(
-                            Padding.MidLarge,
-                            Alignment.CenterHorizontally,
-                        )
+                        val horizontalArrangement =
+                            Arrangement.spacedBy(
+                                Padding.MidLarge,
+                                Alignment.CenterHorizontally,
+                            )
                         if (userSettings.useOliverRow) {
                             Row(
                                 verticalAlignment = Alignment.Top,
                                 horizontalArrangement = horizontalArrangement,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .horizontalScroll(rememberScrollState())
-                                    .animateItem()
-                                    .animateContentSize(),
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .horizontalScroll(rememberScrollState())
+                                        .animateItem()
+                                        .animateContentSize(),
                             ) {
                                 category.dishList.forEach { dish ->
-                                    dishItem(dish, Modifier)
+                                    DishItemWrapper(dish, Modifier)
                                 }
                             }
                         } else {
                             LazyRow(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = horizontalArrangement,
-                                modifier = Modifier
+                                modifier =
+                                Modifier
                                     .fillMaxWidth()
                                     .animateItem()
                                     .animateContentSize(),
@@ -193,7 +201,7 @@ private fun DishContent(
                                     category.dishList,
                                     key = { "" + category.name + it.name },
                                 ) { dish ->
-                                    dishItem(dish, Modifier.animateItem())
+                                    DishItemWrapper(dish, Modifier.animateItem())
                                 }
                             }
                         }
@@ -208,7 +216,8 @@ private fun DishContent(
                 OliverRowSwitch(
                     useOliverRow = userSettings.useOliverRow,
                     onOliverRow = onOliverRow,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .animateItem(),
                 )
@@ -224,13 +233,13 @@ private fun DishContent(
 @Composable
 private fun DishItem(
     dish: Dish,
-    onDishSelected: (Dish) -> Unit,
+    onDish: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Card(
-        onClick = { onDishSelected(dish) },
+        onClick = { onDish(dish) },
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
         modifier = modifier,
@@ -240,7 +249,6 @@ private fun DishItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
-
             DishImageWithBadge(
                 dish = dish,
                 priceType = userSettings.priceType,
@@ -279,7 +287,8 @@ private fun DishImageWithBadge(
         DishImageOrSupplement(
             dish = dish,
             loadImmediately = loadImmediately(downloadOnMetered, isOnMetered),
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.Center)
                 .padding(Padding.Small),
         )
@@ -309,11 +318,12 @@ private fun OliverRowSwitch(
                 horizontalArrangement = Arrangement.spacedBy(Padding.Small),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val text = if (!amIOliver()) {
-                    stringResource(id = R.string.today_list_stable_row)
-                } else {
-                    "Oliver jméno mé. 😎"
-                }
+                val text =
+                    if (!amIOliver()) {
+                        stringResource(id = R.string.today_list_stable_row)
+                    } else {
+                        "Oliver jméno mé. 😎"
+                    }
                 Text(
                     text = text,
                     style = MaterialTheme.typography.labelLarge,

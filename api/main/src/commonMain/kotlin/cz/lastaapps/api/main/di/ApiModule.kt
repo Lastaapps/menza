@@ -54,44 +54,46 @@ import org.koin.core.scope.Scope
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val apiModule = module {
-    includes(
-        apiAgataModule,
-        apiBuffetModule,
-        apiCoreModule,
-    )
+val apiModule =
+    module {
+        includes(
+            apiAgataModule,
+            apiBuffetModule,
+            apiCoreModule,
+        )
 
-    val rootName = named<MenzaMasterRepoImpl>()
-    single(rootName) { MenzaMasterRepoImpl() } bind MenzaRepo::class
-    singleOf(::WalletMasterRepositoryImpl) bind WalletMasterRepository::class
+        val rootName = named<MenzaMasterRepoImpl>()
+        single(rootName) { menzaMasterRepoImpl() } bind MenzaRepo::class
+        singleOf(::WalletMasterRepositoryImpl) bind WalletMasterRepository::class
 
-    factory { GetMenzaListUC(get(), get(rootName), get()) }
-    factory { SyncMenzaListUC(get(), get(rootName), get(), get()) }
-    factoryOf(::GetInfoUC)
-    factoryOf(::SyncInfoUC)
-    factoryOf(::SyncAllInfoUC)
-    factoryOf(::GetTodayDishListUC)
-    factoryOf(::SyncTodayDishListUC)
-    factoryOf(::GetWeekDishListUC)
-    factoryOf(::SyncWeekDishListUC)
-    factoryOf(::OpenMenuUC)
-    factoryOf(::WalletGetBalanceUC)
-    factoryOf(::WalletLoginUC)
-    factoryOf(::WalletLogoutUC)
-    factoryOf(::WalletRefreshUC)
-    factoryOf(::GetImportantRequestParams)
+        factory { GetMenzaListUC(get(), get(rootName), get()) }
+        factory { SyncMenzaListUC(get(), get(rootName), get(), get()) }
+        factoryOf(::GetInfoUC)
+        factoryOf(::SyncInfoUC)
+        factoryOf(::SyncAllInfoUC)
+        factoryOf(::GetTodayDishListUC)
+        factoryOf(::SyncTodayDishListUC)
+        factoryOf(::GetWeekDishListUC)
+        factoryOf(::SyncWeekDishListUC)
+        factoryOf(::OpenMenuUC)
+        factoryOf(::WalletGetBalanceUC)
+        factoryOf(::WalletLoginUC)
+        factoryOf(::WalletLogoutUC)
+        factoryOf(::WalletRefreshUC)
+        factoryOf(::GetImportantRequestParams)
 
-    registerMenzaType<MenzaType.Testing.Kocourkov>(
-        menzaRepo = { KocourkovRepoImpl(get()) },
-        dishRepo = { TodayKocourkovDishRepoImpl },
-        infoRepo = { InfoKocourkovRepoImpl },
-        weekRepo = { WeekKocourkovRepoImpl },
-    )
-}
-
-private fun Scope.MenzaMasterRepoImpl() =
-    MenzaType.allNamed.map { name ->
-        get<MenzaRepo>(name)
-    }.let {
-        MenzaMasterRepoImpl(it)
+        registerMenzaType<MenzaType.Testing.Kocourkov>(
+            menzaRepo = { KocourkovRepoImpl(get()) },
+            dishRepo = { TodayKocourkovDishRepoImpl },
+            infoRepo = { InfoKocourkovRepoImpl },
+            weekRepo = { WeekKocourkovRepoImpl },
+        )
     }
+
+private fun Scope.menzaMasterRepoImpl() =
+    MenzaType.allNamed
+        .map { name ->
+            get<MenzaRepo>(name)
+        }.let {
+            MenzaMasterRepoImpl(it)
+        }

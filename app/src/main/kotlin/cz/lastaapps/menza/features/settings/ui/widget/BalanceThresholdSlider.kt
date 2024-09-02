@@ -58,9 +58,10 @@ internal fun BalanceThresholdSlider(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .padding(SettingsTokens.itemPadding)
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .padding(SettingsTokens.itemPadding)
+                .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(Padding.Small),
     ) {
         Row(
@@ -115,15 +116,16 @@ private fun Int.thresholdText() =
 
 @Preview
 @Composable
-private fun BalanceThresholdSliderPreview() = PreviewWrapper {
-    BalanceThresholdSlider(
-        title = stringResource(id = R.string.settings_balance_threshold_title),
-        threshold = 0,
-        {},
-    )
-    BalanceThresholdSlider(
-        title = stringResource(id = R.string.settings_balance_threshold_title),
-        threshold = 256,
-        {},
-    )
-}
+private fun BalanceThresholdSliderPreview() =
+    PreviewWrapper {
+        BalanceThresholdSlider(
+            title = stringResource(id = R.string.settings_balance_threshold_title),
+            threshold = 0,
+            {},
+        )
+        BalanceThresholdSlider(
+            title = stringResource(id = R.string.settings_balance_threshold_title),
+            threshold = 256,
+            {},
+        )
+    }

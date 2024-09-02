@@ -53,7 +53,7 @@ internal fun LinkList(
     ) {
         Text(
             text = stringResource(R.string.info_links_title),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
         )
         Column(
             verticalArrangement = Arrangement.spacedBy(Padding.Smaller),

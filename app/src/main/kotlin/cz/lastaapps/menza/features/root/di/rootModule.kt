@@ -22,13 +22,13 @@ package cz.lastaapps.menza.features.root.di
 import cz.lastaapps.menza.features.root.domain.usecase.AppSetupFinishedUC
 import cz.lastaapps.menza.features.root.domain.usecase.IsAppSetUpUC
 import cz.lastaapps.menza.features.root.ui.RootViewModel
-
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
-val rootModule = module {
-    factoryOf(::IsAppSetUpUC)
-    factoryOf(::AppSetupFinishedUC)
+val rootModule =
+    module {
+        factoryOf(::IsAppSetUpUC)
+        factoryOf(::AppSetupFinishedUC)
 
-    factoryOf(::RootViewModel)
-}
+        factoryOf(::RootViewModel)
+    }

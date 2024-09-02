@@ -52,13 +52,13 @@ import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
 internal fun DishLanguageScreen(
-    onDone: () -> Unit,
+    onComplete: () -> Unit,
     viewModel: DishLanguageViewModel,
     modifier: Modifier = Modifier,
 ) {
     DishLanguageEffects(
         viewModel,
-        onSelected = onDone,
+        onSelect = onComplete,
     )
 
     DishLanguageContent(
@@ -70,13 +70,13 @@ internal fun DishLanguageScreen(
 @Composable
 private fun DishLanguageEffects(
     viewModel: DishLanguageViewModel,
-    onSelected: () -> Unit,
+    onSelect: () -> Unit,
 ) {
     HandleDismiss(
         viewModel,
         DishLanguageState::isSelected,
         DishLanguageViewModel::dismissSelected,
-        onSelected,
+        onSelect,
     )
 }
 
@@ -93,13 +93,15 @@ private fun DishLanguageContent(
         color = MaterialTheme.colorScheme.primaryContainer,
     ) {
         Column(
-            modifier = Modifier
-                .padding(Padding.Medium),
+            modifier =
+                Modifier
+                    .padding(Padding.Medium),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(
-                Padding.Medium,
-                Alignment.CenterVertically,
-            ),
+            verticalArrangement =
+                Arrangement.spacedBy(
+                    Padding.Medium,
+                    Alignment.CenterVertically,
+                ),
         ) {
             Text(
                 text = stringResource(R.string.language_choose_title),
@@ -153,9 +155,10 @@ private fun LanguageButton(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
-        modifier = Modifier
-            .padding(Padding.MidSmall)
-            .fillMaxWidth(),
+        modifier =
+            Modifier
+                .padding(Padding.MidSmall)
+                .fillMaxWidth(),
     ) {
         Text(
             title,

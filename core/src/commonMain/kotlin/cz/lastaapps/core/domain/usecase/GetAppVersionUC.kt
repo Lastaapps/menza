@@ -21,6 +21,8 @@ package cz.lastaapps.core.domain.usecase
 
 import cz.lastaapps.core.data.AppInfoProvider
 
-class GetAppVersionUC internal constructor(private val appInfo: AppInfoProvider) {
+class GetAppVersionUC internal constructor(
+    private val appInfo: AppInfoProvider,
+) {
     operator fun invoke() = appInfo.getAppVersion()
 }
