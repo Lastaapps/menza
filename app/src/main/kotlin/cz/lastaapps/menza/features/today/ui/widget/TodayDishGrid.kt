@@ -23,7 +23,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,6 +59,7 @@ internal fun TodayDishGrid(
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
     onDish: (Dish) -> Unit,
+    onRating: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     header: @Composable (Modifier) -> Unit,
@@ -78,6 +78,7 @@ internal fun TodayDishGrid(
                 data = data,
                 onDish = onDish,
                 onNoItems = onNoItems,
+                onRating = onRating,
                 userSettings = userSettings,
                 isOnMetered = isOnMetered,
                 scroll = scrollGrid,
@@ -85,9 +86,9 @@ internal fun TodayDishGrid(
                 footer = footer,
                 widthSize = widthSize,
                 modifier =
-                Modifier
-                    .padding(top = Padding.Smaller) // so text is not cut off
-                    .fillMaxSize(),
+                    Modifier
+                        .padding(top = Padding.Smaller) // so text is not cut off
+                        .fillMaxSize(),
             )
         }
     }
@@ -99,6 +100,7 @@ private fun DishContent(
     data: ImmutableList<DishCategory>,
     onDish: (Dish) -> Unit,
     onNoItems: () -> Unit,
+    onRating: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     scroll: LazyStaggeredGridState,
@@ -153,6 +155,7 @@ private fun DishContent(
                         DishItem(
                             dish = dish,
                             onDish = onDish,
+                            onRating = onRating,
                             userSettings = userSettings,
                             isOnMetered = isOnMetered,
                             modifier = Modifier.fillMaxWidth(),
@@ -172,6 +175,7 @@ private fun DishContent(
 private fun DishItem(
     dish: Dish,
     onDish: (Dish) -> Unit,
+    onRating: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
@@ -189,30 +193,18 @@ private fun DishItem(
             if (dish.photoLink != null) {
                 DishImageWithBadge(
                     dish = dish,
+                    onRating = onRating,
                     priceType = userSettings.priceType,
                     downloadOnMetered = userSettings.downloadOnMetered,
                     isOnMetered = isOnMetered,
                 )
             }
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Padding.Small),
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(Padding.Smaller),
-                ) {
-                    DishNameRow(
-                        dish = dish,
-                        modifier = Modifier.weight(1f),
-                    )
-                    if (dish.photoLink == null) {
-                        DishBadge(dish = dish, priceType = userSettings.priceType)
-                    }
-                }
-
-                DishInfoRow(dish)
+            DishNameRow(dish, Modifier.fillMaxWidth())
+            if (dish.photoLink == null) {
+                DishBadgesRow(dish = dish, onRating = onRating, priceType = userSettings.priceType)
             }
+            DishInfoRow(dish)
         }
     }
 }
@@ -220,6 +212,7 @@ private fun DishItem(
 @Composable
 private fun DishImageWithBadge(
     dish: Dish,
+    onRating: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
     isOnMetered: Boolean,
@@ -230,12 +223,13 @@ private fun DishImageWithBadge(
             photoLink = dish.photoLink ?: "Impossible",
             loadImmediately = downloadOnMetered || !isOnMetered,
             modifier =
-            Modifier
+                Modifier
                     .align(Alignment.Center)
                     .padding(Padding.Small),
         )
-        DishBadge(
+        DishBadgesColumn(
             dish = dish,
+            onRating = onRating,
             priceType = priceType,
             modifier = Modifier.align(Alignment.BottomEnd),
         )

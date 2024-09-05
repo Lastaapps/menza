@@ -124,6 +124,13 @@ internal class MenzaSubsystemRepoImpl(
                                 "https://agata.suz.cvut.cz/jidelnicky/sd-cam-img.php",
                             ),
                     )
+                MenzaType.Agata.Subsystem(3) ->
+                    it.copy(
+                        videoLinks =
+                            persistentListOf(
+                                "https://agata.suz.cvut.cz/jidelnicky/tm-cam-img.php",
+                            ),
+                    )
 
                 else -> it
             }

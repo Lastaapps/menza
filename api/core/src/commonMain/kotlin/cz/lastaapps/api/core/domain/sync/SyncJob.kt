@@ -49,4 +49,4 @@ class SyncJobNoCache<T, R, Params>(
         fetchApi,
         convert,
         store,
-)
+    )

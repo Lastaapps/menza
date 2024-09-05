@@ -72,6 +72,7 @@ internal fun TodayDishCarousel(
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
     onDish: (Dish) -> Unit,
+    onRating: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     header: @Composable (Modifier) -> Unit,
@@ -89,15 +90,16 @@ internal fun TodayDishCarousel(
                 data = data,
                 onDish = onDish,
                 onNoItems = onNoItems,
+                onRating = onRating,
                 appSettings = userSettings,
                 isOnMetered = isOnMetered,
                 scroll = scroll,
                 header = header,
                 footer = footer,
                 modifier =
-                Modifier
-                    .padding(top = Padding.Smaller) // so text is not cut off
-                    .fillMaxSize(),
+                    Modifier
+                        .padding(top = Padding.Smaller) // so text is not cut off
+                        .fillMaxSize(),
             )
         }
     }
@@ -110,6 +112,7 @@ private fun DishContent(
     data: ImmutableList<DishCategory>,
     onDish: (Dish) -> Unit,
     onNoItems: () -> Unit,
+    onRating: (Dish) -> Unit,
     appSettings: TodayUserSettings,
     isOnMetered: Boolean,
     scroll: LazyListState,
@@ -154,10 +157,11 @@ private fun DishContent(
                             DishItem(
                                 dish = dish,
                                 onDish = onDish,
+                                onRating = onRating,
                                 appSettings = appSettings,
                                 isOnMetered = isOnMetered,
                                 modifier =
-                                Modifier
+                                    Modifier
                                         .height(preferredItemSize),
                             )
                         }
@@ -200,6 +204,7 @@ private fun DishContent(
                         DishItem(
                             dish = dish,
                             onDish = onDish,
+                            onRating = onRating,
                             appSettings = appSettings,
                             isOnMetered = isOnMetered,
                             modifier =
@@ -226,6 +231,7 @@ private fun DishContent(
 private fun DishItem(
     dish: Dish,
     onDish: (Dish) -> Unit,
+    onRating: (Dish) -> Unit,
     appSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
@@ -259,25 +265,26 @@ private fun DishItem(
         val useGradient = dish.photoLink != null
         Column(
             modifier =
-            Modifier
-                .align(Alignment.BottomStart)
-                .graphicsLayer { componentsGraphics(Alignment.Bottom) },
+                Modifier
+                    .align(Alignment.BottomStart)
+                    .graphicsLayer { componentsGraphics(Alignment.Bottom) },
             verticalArrangement = Arrangement.spacedBy(Padding.Small * -1),
         ) {
-            DishBadge(
+            DishBadgesColumn(
                 dish,
+                onRating = onRating,
                 priceType = appSettings.priceType,
                 modifier =
-                Modifier
-                    .zIndex(2f)
-                    .align(Alignment.End)
-                    .padding(horizontal = Padding.MidSmall),
+                    Modifier
+                        .zIndex(2f)
+                        .align(Alignment.End)
+                        .padding(horizontal = Padding.MidSmall),
             )
             Box(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .mapIf(useGradient) { it.gradient() },
+                    Modifier
+                        .fillMaxWidth()
+                        .mapIf(useGradient) { it.gradient() },
             ) {
                 // used to reset the marquee effect
                 val isVisible by remember { derivedStateOf { progress() > 0.2f } }
@@ -289,16 +296,16 @@ private fun DishItem(
                 Text(
                     dish.name,
                     modifier =
-                    Modifier
-                        .padding(Padding.MidSmall)
-                        .basicMarquee(
-                            initialDelayMillis = 500,
-                            iterations = Int.MAX_VALUE,
-                        ),
+                        Modifier
+                            .padding(Padding.MidSmall)
+                            .basicMarquee(
+                                initialDelayMillis = 500,
+                                iterations = Int.MAX_VALUE,
+                            ),
                     maxLines = 1,
                     color =
-                    TodayDishCarouselTokens.gradientForeground.takeIf { useGradient }
-                        ?: Color.Unspecified,
+                        TodayDishCarouselTokens.gradientForeground.takeIf { useGradient }
+                            ?: Color.Unspecified,
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
@@ -316,10 +323,10 @@ private fun DishItem(
                 shape = MaterialTheme.shapes.large,
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 modifier =
-                Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(Padding.MidSmall)
-                    .graphicsLayer { componentsGraphics(Alignment.Top) },
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(Padding.MidSmall)
+                        .graphicsLayer { componentsGraphics(Alignment.Top) },
             ) {
                 Text(
                     text = text,

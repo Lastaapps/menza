@@ -179,9 +179,9 @@ private fun AgataLoginDialogContent(
         SubtitleWidget(
             indexSelected = selectedIndex,
             modifier =
-            Modifier
-                .padding(vertical = Padding.Tiny)
-                .animateContentSize(),
+                Modifier
+                    .padding(vertical = Padding.Tiny)
+                    .animateContentSize(),
         )
 
         val modeType =
@@ -301,7 +301,7 @@ private fun LoginForm(
 ) {
     OutlinedTextField(
         modifier =
-        Modifier.withAutofill(
+            Modifier.withAutofill(
                 autofillTypes = persistentListOf(AutofillType.Username),
                 onFill = onUsername,
             ),
@@ -313,7 +313,7 @@ private fun LoginForm(
             KeyboardOptions(
                 keyboardType = KeyboardType.Ascii,
                 imeAction = ImeAction.Next,
-        ),
+            ),
     )
 
     var showPasswordInfo by rememberSaveable { mutableStateOf(false) }
@@ -323,23 +323,23 @@ private fun LoginForm(
             Modifier.withAutofill(
                 autofillTypes = persistentListOf(AutofillType.Password),
                 onFill = onPassword,
-        ),
+            ),
         enabled = !isLoading,
         value = password,
         onValueChange = onPassword,
         label = { Text(stringResource(R.string.wallet_login_password)) },
         visualTransformation = PasswordVisualTransformation(),
         keyboardActions =
-        KeyboardActions {
-            if (loginEnabled) {
-                onLogin(balanceType)
-            }
-        },
+            KeyboardActions {
+                if (loginEnabled) {
+                    onLogin(balanceType)
+                }
+            },
         keyboardOptions =
-        KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Go,
-        ),
+            KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Go,
+            ),
         trailingIcon = {
             IconButton(onClick = { showPasswordInfo = !showPasswordInfo }) {
                 Icon(

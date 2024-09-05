@@ -69,7 +69,7 @@ internal interface GeneralDataSource {
 
     suspend fun setImageScale(scale: Float)
 
-    fun getImageScale(): Flow<Float>
+    fun getImageScale(): Flow<Float?>
 
     suspend fun setImagesOnMetered(enabled: Boolean)
 
@@ -124,8 +124,7 @@ internal class GeneralDataSourceImpl(
 
     override suspend fun storeSettingsEverOpened() = settings.putBoolean(settingsEverOpenedKey, true)
 
-    override fun isSettingsEverOpened(): Flow<Boolean> =
-        settings.getBooleanFlow(settingsEverOpenedKey, false)
+    override fun isSettingsEverOpened(): Flow<Boolean> = settings.getBooleanFlow(settingsEverOpenedKey, false)
 
     override suspend fun setPriceType(type: PriceType) = settings.putInt(priceTypeKey, type.id)
 
@@ -154,24 +153,20 @@ internal class GeneralDataSourceImpl(
 
     override suspend fun setImageScale(scale: Float) = settings.putFloat(imageScaleKey, scale)
 
-    override fun getImageScale(): Flow<Float> = settings.getFloatFlow(imageScaleKey, 1f)
+    override fun getImageScale(): Flow<Float?> = settings.getFloatOrNullFlow(imageScaleKey)
 
-    override suspend fun setImagesOnMetered(enabled: Boolean) =
-        settings.putBoolean(imagesOnMeteredKey, enabled)
+    override suspend fun setImagesOnMetered(enabled: Boolean) = settings.putBoolean(imagesOnMeteredKey, enabled)
 
-    override fun getImagesOnMetered(): Flow<Boolean> =
-        settings.getBooleanFlow(imagesOnMeteredKey, true)
+    override fun getImagesOnMetered(): Flow<Boolean> = settings.getBooleanFlow(imagesOnMeteredKey, true)
 
-    override suspend fun setDishLanguage(language: DishLanguage) =
-        settings.putInt(dishLanguageKey, language.id)
+    override suspend fun setDishLanguage(language: DishLanguage) = settings.putInt(dishLanguageKey, language.id)
 
     override fun getDishLanguage(): Flow<DishLanguage?> =
         settings.getIntOrNullFlow(dishLanguageKey).map { id ->
             DishLanguage.entries.firstOrNull { it.id == id }
         }
 
-    override suspend fun setCompactTodayView(mode: DishListMode) =
-        settings.putInt(compactTodayViewKey, mode.id)
+    override suspend fun setCompactTodayView(mode: DishListMode) = settings.putInt(compactTodayViewKey, mode.id)
 
     override fun isCompactTodayView(): Flow<DishListMode?> =
         settings
@@ -184,15 +179,11 @@ internal class GeneralDataSourceImpl(
 
     override fun isOliverRow(): Flow<Boolean?> = settings.getBooleanOrNullFlow(oliverRowsKey)
 
-    override suspend fun setBalanceWarningThreshold(threshold: Int) =
-        settings.putInt(balanceWarningThresholdKey, threshold)
+    override suspend fun setBalanceWarningThreshold(threshold: Int) = settings.putInt(balanceWarningThresholdKey, threshold)
 
-    override fun getBalanceWarningThreshold(): Flow<Int?> =
-        settings.getIntOrNullFlow(balanceWarningThresholdKey)
+    override fun getBalanceWarningThreshold(): Flow<Int?> = settings.getIntOrNullFlow(balanceWarningThresholdKey)
 
-    override suspend fun setAlternativeNavigation(enabled: Boolean) =
-        settings.putBoolean(alternativeNavigationKey, enabled)
+    override suspend fun setAlternativeNavigation(enabled: Boolean) = settings.putBoolean(alternativeNavigationKey, enabled)
 
-    override fun getAlternativeNavigation(): Flow<Boolean?> =
-        settings.getBooleanOrNullFlow(alternativeNavigationKey)
+    override fun getAlternativeNavigation(): Flow<Boolean?> = settings.getBooleanOrNullFlow(alternativeNavigationKey)
 }

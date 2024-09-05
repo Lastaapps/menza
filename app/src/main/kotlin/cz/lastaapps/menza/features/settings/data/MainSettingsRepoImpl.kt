@@ -111,7 +111,7 @@ internal class MainSettingsRepoImpl(
 
     override suspend fun setImageScale(scale: Float) = general.setImageScale(scale)
 
-    override fun getImageScale(): Flow<Float> = general.getImageScale()
+    override fun getImageScale(): Flow<Float> = general.getImageScale().map { it ?: 1.3f }
 
     override suspend fun setImagesOnMetered(enabled: Boolean) = general.setImagesOnMetered(enabled)
 
@@ -119,8 +119,7 @@ internal class MainSettingsRepoImpl(
 
     override suspend fun setDishLanguage(language: DishLanguage) = general.setDishLanguage(language)
 
-    override fun getDishLanguage(): Flow<DishLanguage> =
-        general.getDishLanguage().map { it ?: defaults.defaultDishLanguage() }
+    override fun getDishLanguage(): Flow<DishLanguage> = general.getDishLanguage().map { it ?: defaults.defaultDishLanguage() }
 
     override suspend fun setCompactTodayView(mode: DishListMode) = general.setCompactTodayView(mode)
 
@@ -136,16 +135,14 @@ internal class MainSettingsRepoImpl(
             .isOliverRow()
             .map { it ?: true }
 
-    override suspend fun setBalanceWarningThreshold(threshold: Int) =
-        general.setBalanceWarningThreshold(threshold)
+    override suspend fun setBalanceWarningThreshold(threshold: Int) = general.setBalanceWarningThreshold(threshold)
 
     override fun getBalanceWarningThreshold(): Flow<Int> =
         general
             .getBalanceWarningThreshold()
             .map { it ?: 256 }
 
-    override suspend fun setAlternativeNavigation(enabled: Boolean) =
-        general.setAlternativeNavigation(enabled)
+    override suspend fun setAlternativeNavigation(enabled: Boolean) = general.setAlternativeNavigation(enabled)
 
     override fun getAlternativeNavigation(): Flow<Boolean> =
         general

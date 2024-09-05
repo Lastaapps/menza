@@ -20,7 +20,6 @@
 package cz.lastaapps.core.ui.vm
 
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -28,6 +27,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 @JvmInline
 value class VMContext(

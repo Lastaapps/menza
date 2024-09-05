@@ -68,6 +68,7 @@ internal fun TodayDishList(
     data: ImmutableList<DishCategory>,
     onNoItems: () -> Unit,
     onDish: (Dish) -> Unit,
+    onRating: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     header: @Composable (Modifier) -> Unit,
@@ -85,6 +86,7 @@ internal fun TodayDishList(
                 data = data,
                 onDish = onDish,
                 onNoItems = onNoItems,
+                onRating = onRating,
                 userSettings = userSettings,
                 isOnMetered = isOnMetered,
                 scroll = scroll,
@@ -103,6 +105,7 @@ private fun DishContent(
     data: ImmutableList<DishCategory>,
     onDish: (Dish) -> Unit,
     onNoItems: () -> Unit,
+    onRating: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     scroll: LazyListState,
@@ -142,6 +145,7 @@ private fun DishContent(
                 DishItem(
                     dish = dish,
                     onDish = onDish,
+                    onRating = onRating,
                     userSettings = userSettings,
                     isOnMetered = isOnMetered,
                     modifier =
@@ -179,6 +183,7 @@ private fun DishContent(
 private fun DishItem(
     dish: Dish,
     onDish: (Dish) -> Unit,
+    onRating: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
@@ -188,26 +193,35 @@ private fun DishItem(
         shape = MaterialTheme.shapes.large,
         modifier = modifier.clickable { onDish(dish) },
     ) {
-        Row(
-            Modifier.padding(Padding.MidSmall),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Padding.Small),
+        Column(
+            modifier = Modifier.padding(Padding.MidSmall),
+            verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
         ) {
-            DishImageWithBadge(
-                dish = dish,
-                priceType = userSettings.priceType,
-                downloadOnMetered = userSettings.downloadOnMetered,
-                imageScale =
-                    animateFloatAsState(
-                        targetValue = userSettings.imageScale,
-                        label = "image_scale",
-                    ).value,
-                isOnMetered = isOnMetered,
-            )
-            Column(verticalArrangement = Arrangement.spacedBy(Padding.Small)) {
+            if (dish.photoLink != null) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Padding.Small),
+                ) {
+                    DishImageWithBadge(
+                        dish = dish,
+                        onRating = onRating,
+                        priceType = userSettings.priceType,
+                        downloadOnMetered = userSettings.downloadOnMetered,
+                        imageScale =
+                            animateFloatAsState(
+                                targetValue = userSettings.imageScale,
+                                label = "image_scale",
+                            ).value,
+                        isOnMetered = isOnMetered,
+                    )
+
+                    DishNameRow(dish)
+                }
+            } else {
                 DishNameRow(dish)
-                DishInfoRow(dish)
+                DishBadgesRow(dish = dish, onRating = onRating, priceType = userSettings.priceType)
             }
+            DishInfoRow(dish)
         }
     }
 }
@@ -215,6 +229,7 @@ private fun DishItem(
 @Composable
 private fun DishImageWithBadge(
     dish: Dish,
+    onRating: (Dish) -> Unit,
     priceType: PriceType,
     downloadOnMetered: Boolean,
     imageScale: Float,
@@ -236,8 +251,9 @@ private fun DishImageWithBadge(
                         end = Padding.Small,
                     ),
         )
-        DishBadge(
+        DishBadgesColumn(
             dish = dish,
+            onRating = onRating,
             priceType = priceType,
             modifier = Modifier.align(Alignment.BottomEnd),
         )

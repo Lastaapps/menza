@@ -91,9 +91,9 @@ internal fun TodayDishHorizontal(
                 header = header,
                 footer = footer,
                 modifier =
-                Modifier
-                    .padding(top = Padding.Smaller) // so text is not cut off
-                    .fillMaxSize(),
+                    Modifier
+                        .padding(top = Padding.Smaller) // so text is not cut off
+                        .fillMaxSize(),
             )
         }
     }
@@ -147,7 +147,7 @@ private fun DishContent(
                             userSettings = userSettings,
                             isOnMetered = isOnMetered,
                             modifier =
-                            Modifier
+                                Modifier
                                     .fillMaxWidth()
                                     .animateItem(),
                         )
@@ -192,10 +192,10 @@ private fun DishContent(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = horizontalArrangement,
                                 modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .animateItem()
-                                    .animateContentSize(),
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .animateItem()
+                                        .animateContentSize(),
                             ) {
                                 items(
                                     category.dishList,
@@ -217,9 +217,9 @@ private fun DishContent(
                     useOliverRow = userSettings.useOliverRow,
                     onOliverRow = onOliverRow,
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
+                        Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
                 )
             }
 
@@ -288,13 +288,14 @@ private fun DishImageWithBadge(
             dish = dish,
             loadImmediately = loadImmediately(downloadOnMetered, isOnMetered),
             modifier =
-            Modifier
-                .align(Alignment.Center)
-                .padding(Padding.Small),
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(Padding.Small),
         )
 
-        DishBadge(
+        DishBadgesColumn(
             dish = dish,
+            onRating = {},
             priceType = priceType,
             modifier = Modifier.align(Alignment.BottomEnd),
         )

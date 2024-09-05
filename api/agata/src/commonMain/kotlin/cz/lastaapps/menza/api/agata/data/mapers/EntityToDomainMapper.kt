@@ -199,8 +199,8 @@ fun List<OpenTimeEntity>.toDomain() =
                                             )
                                         }.sortedBy { it.startDay }
                                         .toImmutableList(),
-                        )
-                    }.toImmutableList(),
+                            )
+                        }.toImmutableList(),
             )
         }
 
@@ -223,8 +223,8 @@ internal fun List<StrahovEntity>.toDomain() =
                 dishList =
                     values
                         .sortedBy { it.itemOrder }
-                    .map { it.toDomain() }
-                    .toImmutableList(),
+                        .map { it.toDomain() }
+                        .toImmutableList(),
             )
         }.toImmutableList()
 

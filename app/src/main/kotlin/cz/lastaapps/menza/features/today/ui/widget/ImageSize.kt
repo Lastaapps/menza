@@ -84,10 +84,10 @@ internal fun ImageSizeSetting(
             valueRange = IMAGE_SIZE_MIN..IMAGE_SIZE_MAX,
             steps = (10 * (IMAGE_SIZE_MAX - IMAGE_SIZE_MIN)).toInt() + -1,
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = Padding.Medium)
-                .semantics { this.contentDescription = contentDescription },
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Padding.Medium)
+                    .semantics { this.contentDescription = contentDescription },
             interactionSource = interactionSource,
             thumb = {
                 Label(

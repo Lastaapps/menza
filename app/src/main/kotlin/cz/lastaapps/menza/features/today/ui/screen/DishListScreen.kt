@@ -156,6 +156,8 @@ private fun DishListContent(
         }
     }
 
+    val onRating: (Dish) -> Unit = {}
+
     Crossfade(
         targetState = userSettings.dishListMode,
         label = "dish_list_mode_router",
@@ -175,6 +177,7 @@ private fun DishListContent(
                         data = state.items,
                         onNoItems = onNoItems,
                         onDish = onDish,
+                        onRating = onRating,
                         userSettings = userSettings,
                         isOnMetered = state.isOnMetered,
                         header = header,
@@ -201,6 +204,7 @@ private fun DishListContent(
                         data = state.items,
                         onNoItems = onNoItems,
                         onDish = onDish,
+                        onRating = onRating,
                         userSettings = userSettings,
                         isOnMetered = state.isOnMetered,
                         header = header,
@@ -242,6 +246,7 @@ private fun DishListContent(
                         data = state.items,
                         onNoItems = onNoItems,
                         onDish = onDish,
+                        onRating = onRating,
                         userSettings = userSettings,
                         isOnMetered = state.isOnMetered,
                         header = header,

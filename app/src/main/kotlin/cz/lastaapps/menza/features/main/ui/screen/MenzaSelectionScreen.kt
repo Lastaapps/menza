@@ -117,9 +117,9 @@ private fun MenzaSelectionListContent(
             lazyState = lazyState,
             accountBalance = accountBalance,
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .animateContentSize(),
+                Modifier
+                    .fillMaxWidth()
+                    .animateContentSize(),
         )
     }
 }
@@ -151,9 +151,9 @@ private fun MenzaList(
                 text = stringResource(R.string.app_name_long),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier =
-                Modifier
-                    .padding(vertical = Padding.Smaller)
-                    .padding(start = Padding.Medium),
+                    Modifier
+                        .padding(vertical = Padding.Smaller)
+                        .padding(start = Padding.Medium),
             )
         }
 
@@ -224,8 +224,8 @@ internal fun MenzaItem(
                 } else {
                     addRect(Rect(size.width, 0f, size.height / 2, size.height))
                     addOval(Rect(size.height, 0f, 0f, size.height))
-            }
-        },
+                }
+            },
         modifier = modifier.alpha(openedAlpha),
     )
 }

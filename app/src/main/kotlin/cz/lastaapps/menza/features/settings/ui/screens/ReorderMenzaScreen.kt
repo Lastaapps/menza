@@ -122,9 +122,9 @@ private fun ReorderMenzaContent(
 
     Column(
         modifier =
-        modifier
-            .padding(Padding.MidLarge)
-            .fillMaxSize(),
+            modifier
+                .padding(Padding.MidLarge)
+                .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(Padding.Medium),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -205,7 +205,7 @@ private fun MenzaItem(
             horizontalArrangement = Arrangement.spacedBy(Padding.Small),
             verticalAlignment = Alignment.CenterVertically,
             modifier =
-            Modifier.padding(
+                Modifier.padding(
                     horizontal = Padding.Medium,
                     vertical = Padding.Small,
                 ),
@@ -253,7 +253,7 @@ private fun MenzaItemPreview() {
                             supportsWeekly = true,
                             isExperimental = false,
                             videoLinks = persistentListOf(),
-                    ),
+                        ),
                     visible = true,
                     onVisibilityClick = {},
                 )
@@ -268,7 +268,7 @@ private fun MenzaItemPreview() {
                             supportsWeekly = true,
                             isExperimental = false,
                             videoLinks = persistentListOf(),
-                    ),
+                        ),
                     visible = false,
                     onVisibilityClick = {},
                 )

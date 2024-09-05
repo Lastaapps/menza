@@ -152,11 +152,11 @@ internal fun DishImage(
                             color = MaterialTheme.colorScheme.secondary,
                             shape = MaterialTheme.shapes.medium,
                             highlight =
-                            PlaceholderHighlight.fade(
-                                highlightColor = MaterialTheme.colorScheme.primary,
-                            ),
-                        )
-                        .clickable { retryHash++ },
+                                PlaceholderHighlight.fade(
+                                    highlightColor = MaterialTheme.colorScheme.primary,
+                                ),
+                        ),
+//                        .clickable { retryHash++ },
                 )
             },
             error = {
