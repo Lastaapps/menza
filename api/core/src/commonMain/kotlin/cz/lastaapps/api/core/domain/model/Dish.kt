@@ -20,7 +20,6 @@
 package cz.lastaapps.api.core.domain.model
 
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentMapOf
 
 data class DishCategory(
     val nameShort: String?,
@@ -46,7 +45,7 @@ data class Dish(
     val ingredients: ImmutableList<String>,
     val isActive: Boolean,
 ) {
-    val rating: Rating = Rating("", 4.321f, 420, persistentMapOf())
+    val rating: Rating = Rating.Mocked.valid
 }
 
 data class ServingPlace(

@@ -137,6 +137,7 @@ private fun TodayContent(
             currentDish?.let {
                 TodayInfo(
                     dish = currentDish,
+                    onRating = { }, // TODO
                     modifier = Modifier.fillMaxSize(),
                 )
             }

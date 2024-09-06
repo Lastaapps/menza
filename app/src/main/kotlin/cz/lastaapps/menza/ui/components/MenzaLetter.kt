@@ -30,14 +30,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.menza.ui.theme.colorForMenza
+import cz.lastaapps.menza.ui.theme.MenzaColors
 
 @Composable
 fun MenzaLetter(
     menza: Menza,
     modifier: Modifier = Modifier,
 ) {
-    val colors = colorForMenza(menza)
+    val colors = MenzaColors.colorForMenza(menza)
     val brush = Brush.horizontalGradient(colors)
     val size = 32.dp
 

@@ -211,6 +211,7 @@
     <string name="today_info_image_load_failed">Failed to load the image</string>
     <string name="today_info_unknown_allergen_title">Unknown allergen</string>
     <string name="today_info_unknown_allergen_description">Server returned invalid data</string>
+    <string name="today_info_rating_title">Rating</string>
     <string name="today_list_none">No data available 👨‍🍳</string>
     <string name="today_list_web">Check website</string>
     <string name="today_list_image_load_failed">Failed to load the image</string>
@@ -225,6 +226,10 @@
     <string name="today_list_video_fab_content_description">Live Camera feed</string>
     <string name="today_list_video_title">Live Camera feed</string>
     <string name="today_list_video_error">Failed to load the image</string>
+
+    <string name="rating_category_taste">Taste</string>
+    <string name="rating_category_portion_size">Portion size</string>
+    <string name="rating_category_worthiness">Good choice</string>
 
     <string name="week_list_none">No data available 👨‍🍳</string>
     <string name="week_list_web">Check website</string>
@@ -308,6 +313,5 @@
     <string name="wallet_login_cancel">Cancel</string>
     <string name="wallet_login_save">Save</string>
     <string name="wallet_low_balance">Your account balance is low! 🙉</string>
-
 
 </resources>

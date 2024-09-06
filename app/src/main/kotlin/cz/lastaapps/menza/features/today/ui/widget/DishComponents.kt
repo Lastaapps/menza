@@ -185,9 +185,9 @@ internal fun DishRatingBadge(
 @Composable
 private fun DishRatingBadgePreview() =
     PreviewWrapper {
-        DishRatingBadge(Rating("", 4.321f, 42, persistentMapOf()), {})
-        DishRatingBadge(Rating("", 4.0f, 42, persistentMapOf()), {})
-        DishRatingBadge(Rating("", 0.0f, 0, persistentMapOf()), {})
+        listOf(Rating.Mocked.valid, Rating.Mocked.noRatings).forEach {
+            DishRatingBadge(it, {})
+        }
     }
 
 @Composable

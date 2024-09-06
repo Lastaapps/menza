@@ -20,13 +20,41 @@
 package cz.lastaapps.api.core.domain.model
 
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 
 data class Rating(
     val dishID: String,
     val overallRating: Float,
     val ratingCount: Int,
     val ratingCategories: ImmutableMap<RatingCategory, Float>,
-)
+) {
+    object Mocked {
+        val valid =
+            Rating(
+                dishID = "",
+                overallRating = 4.321f,
+                ratingCount = 420,
+                ratingCategories =
+                    persistentMapOf(
+                        RatingCategory.TASTE to 3.4f,
+                        RatingCategory.WORTHINESS to 1.2f,
+                        RatingCategory.PORTION_SIZE to 5.0f,
+                    ),
+            )
+        val noRatings =
+            Rating(
+                dishID = "",
+                overallRating = 0.0f,
+                ratingCount = 0,
+                ratingCategories =
+                    persistentMapOf(
+                        RatingCategory.TASTE to 0.0f,
+                        RatingCategory.WORTHINESS to 0.0f,
+                        RatingCategory.PORTION_SIZE to 0.0f,
+                    ),
+            )
+    }
+}
 
 enum class RatingCategory {
     TASTE,

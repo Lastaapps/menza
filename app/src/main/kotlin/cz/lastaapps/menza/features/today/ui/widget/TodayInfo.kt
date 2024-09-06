@@ -19,38 +19,64 @@
 
 package cz.lastaapps.menza.features.today.ui.widget
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.StarRate
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.Rating
+import cz.lastaapps.api.core.domain.model.RatingCategory
+import cz.lastaapps.api.core.domain.model.RatingCategory.PORTION_SIZE
+import cz.lastaapps.api.core.domain.model.RatingCategory.TASTE
+import cz.lastaapps.api.core.domain.model.RatingCategory.WORTHINESS
 import cz.lastaapps.api.core.domain.model.ServingPlace
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.today.ui.util.allergenForId
 import cz.lastaapps.menza.features.today.ui.util.formatPrice
+import cz.lastaapps.menza.ui.theme.MenzaColors
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 import kotlin.math.max
 
 @Composable
 fun TodayInfo(
     dish: Dish,
+    onRating: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -66,6 +92,7 @@ fun TodayInfo(
         IssueLocationList(
             list = dish.servingPlaces,
         )
+        RatingOverview(rating = dish.rating, onRating = onRating)
         AllergenList(
             allergens = dish.allergens,
         )
@@ -136,6 +163,124 @@ private fun IssueLocationList(
         }
     }
 }
+
+@Composable
+private fun RatingOverview(
+    rating: Rating,
+    onRating: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier.clickable { onRating() },
+    ) {
+        Column(
+            modifier = Modifier.padding(Padding.MidSmall),
+            verticalArrangement = Arrangement.spacedBy(Padding.Small),
+        ) {
+            val icons =
+                remember {
+                    persistentMapOf(
+                        "star" to
+                            InlineTextContent(
+                                Placeholder(1.1.em, 1.1.em, PlaceholderVerticalAlign.TextTop),
+                            ) {
+                                Icon(Icons.Default.StarRate, contentDescription = null)
+                            },
+                        "person" to
+                            InlineTextContent(
+                                Placeholder(1.1.em, 1.1.em, PlaceholderVerticalAlign.TextCenter),
+                            ) {
+                                Icon(Icons.Default.Person, contentDescription = null)
+                            },
+                        "big_star" to
+                            InlineTextContent(
+                                Placeholder(1.5.em, 1.5.em, PlaceholderVerticalAlign.Center),
+                            ) {
+                                Icon(
+                                    Icons.Default.StarRate,
+                                    contentDescription = null,
+                                    tint = MenzaColors.gold,
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            },
+                    )
+                }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Padding.Smaller),
+            ) {
+                Text(
+                    text = stringResource(R.string.today_info_rating_title),
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.weight(1f).align(Alignment.Top),
+                )
+                Column(
+                    modifier = Modifier.align(Alignment.Bottom),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Bottom,
+                ) {
+                    if (rating.ratingCount != 0) {
+                        Text(
+                            text =
+                                buildAnnotatedString {
+                                    append("%.1f".format(rating.overallRating))
+                                    appendInlineContent("big_star")
+                                },
+                            style = MaterialTheme.typography.titleLarge,
+                            inlineContent = icons,
+                        )
+                    }
+                    Text(
+                        text =
+                            buildAnnotatedString {
+                                append(rating.ratingCount.toString())
+                                appendInlineContent("person")
+                            },
+                        style = MaterialTheme.typography.bodySmall,
+                        inlineContent = icons,
+                    )
+                }
+            }
+
+            (rating.ratingCategories as ImmutableMap<RatingCategory, Float>).forEach { (key, value) ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = key.toText(),
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    Text(
+                        buildAnnotatedString {
+                            append("%.1f".format(value))
+                            appendInlineContent("star")
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        inlineContent = icons,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RatingCategory.toText() =
+    when (this) {
+        TASTE -> R.string.rating_category_taste
+        PORTION_SIZE -> R.string.rating_category_portion_size
+        WORTHINESS -> R.string.rating_category_worthiness
+    }.let { stringResource(it) }
+
+@Preview
+@Composable
+private fun RatingOverviewPreview() =
+    PreviewWrapper {
+        RatingOverview(Rating.Mocked.valid, onRating = {})
+        RatingOverview(Rating.Mocked.noRatings, onRating = {})
+    }
 
 @Composable
 private fun AllergenList(
