@@ -22,6 +22,7 @@ package cz.lastaapps.api.core.domain.validity
 import arrow.core.right
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncResult
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Instant
 import kotlin.time.Duration
@@ -35,7 +36,7 @@ suspend inline fun ValidityChecker.withCheckRecent(
 suspend inline fun ValidityChecker.withCheckSince(
     key: ValidityKey,
     forced: Boolean,
-    date: Instant,
+    date: Flow<Instant>,
     block: () -> SyncOutcome,
 ): SyncOutcome = withCheck(key, forced, { isUpdatedSince(key, date).first() }, block)
 

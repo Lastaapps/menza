@@ -22,6 +22,7 @@ package cz.lastaapps.api.core.domain.validity
 import cz.lastaapps.core.util.extensions.CET
 import cz.lastaapps.core.util.extensions.atMidnight
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -36,25 +37,40 @@ interface ValidityChecker {
 
     suspend fun onDataUpdated(key: ValidityKey)
 
+    /**
+     * Returns true if data was updated recently
+     */
     fun isRecent(key: ValidityKey): Flow<Boolean>
 
+    /**
+     * Returns true if data were fetched today or later
+     */
     fun isFromToday(key: ValidityKey): Flow<Boolean>
 
+    /**
+     * Returns true if data was fetched this week or later
+     */
     fun isThisWeek(key: ValidityKey): Flow<Boolean>
 
+    /**
+     * Returns true if data was updated in the last [duration]
+     */
     fun isUpdatedSince(
         key: ValidityKey,
         duration: Duration,
     ): Flow<Boolean>
 
+    /**
+     * Checks if the data were updated since the [date] given
+     */
     fun isUpdatedSince(
         key: ValidityKey,
-        date: Instant,
+        date: Flow<Instant>,
     ): Flow<Boolean>
 }
 
 fun ValidityChecker.isUpdatedSince(
     key: ValidityKey,
-    date: LocalDate,
+    date: Flow<LocalDate>,
     zone: TimeZone = TimeZone.CET,
-): Flow<Boolean> = isUpdatedSince(key, date.atMidnight().toInstant(zone))
+): Flow<Boolean> = isUpdatedSince(key, date.map { it.atMidnight().toInstant(zone) })

@@ -19,6 +19,9 @@
 
 package cz.lastaapps.core.util.extensions
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -27,6 +30,8 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import java.time.DayOfWeek.MONDAY
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 val TimeZone.Companion.CET get() = TimeZone.of("Europe/Prague")
 val LocalTime.Companion.MIDNIGHT get() = LocalTime.fromSecondOfDay(0)
@@ -47,3 +52,14 @@ fun LocalDate.findDayOfWeek(dof: DayOfWeek) =
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun LocalDate.findMonday() = findDayOfWeek(MONDAY)
+
+/**
+ * Creates an inprecise ticker that sends now() every [duration]
+ */
+fun Clock.durationTicker(duration: Duration = 1.minutes) =
+    flow {
+        while (true) {
+            emit(now())
+            delay(duration)
+        }
+    }

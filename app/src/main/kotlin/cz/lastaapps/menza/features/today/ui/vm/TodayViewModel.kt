@@ -23,7 +23,6 @@ import arrow.core.Option
 import arrow.core.toOption
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -31,33 +30,31 @@ import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishLanguageUC
 import cz.lastaapps.menza.features.today.ui.model.DishForRating
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 internal class TodayViewModel(
     context: VMContext,
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getDishLanguageUC: GetDishLanguageUC,
-) : StateViewModel<TodayState>(TodayState(), context),
-    Appearing {
-    override var hasAppeared: Boolean = false
+) : StateViewModel<TodayState>(TodayState(), context) {
+    override suspend fun CoroutineScope.whileCollected() {
+        getSelectedMenza()
+            .onEach {
+                updateState {
+                    copy(
+                        selectedMenza = it.toOption(),
+                        selectedDish = null,
+                    )
+                }
+            }.launchIn(this)
 
-    override fun onAppeared() =
-        launchVM {
-            getSelectedMenza()
-                .onEach {
-                    updateState {
-                        copy(
-                            selectedMenza = it.toOption(),
-                            selectedDish = null,
-                        )
-                    }
-                }.launchInVM()
-
-            getDishLanguageUC()
-                .onEach {
-                    updateState { copy(language = it) }
-                }.launchInVM()
-        }
+        getDishLanguageUC()
+            .onEach {
+                updateState { copy(language = it) }
+            }.launchIn(this)
+    }
 
     fun selectDish(dish: Dish?) = updateState { copy(selectedDish = dish) }
 

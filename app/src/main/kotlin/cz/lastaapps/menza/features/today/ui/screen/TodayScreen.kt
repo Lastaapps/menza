@@ -52,7 +52,6 @@ import coil3.compose.SubcomposeAsyncImage
 import coil3.request.CachePolicy.DISABLED
 import coil3.request.ImageRequest.Builder
 import cz.lastaapps.api.core.domain.model.Dish
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.core.ui.vm.HandleDismiss
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
@@ -97,7 +96,6 @@ private fun TodayEffects(
     viewModel: TodayViewModel,
     onRating: (DishForRating) -> Unit,
 ) {
-    HandleAppear(viewModel)
     HandleDismiss(
         viewModel,
         TodayState::dishForRating,

@@ -24,6 +24,8 @@ import arrow.core.right
 import cz.lastaapps.core.domain.error.CommonError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -105,3 +107,21 @@ fun <T> List<Flow<T>>.foldBinary(
     initial: T,
     operation: (T, T) -> T,
 ): Flow<T> = foldBinary(initial, { it }, operation)
+
+/**
+ * Similar to onStart, but provides a coroutine scope
+ * with the same lifetime as the collected flow,
+ * eg. closed after onCompletion is called
+ */
+fun <T> Flow<T>.whileSubscribed(onStart: suspend CoroutineScope.() -> Unit) =
+    flow {
+        val scope = CoroutineScope(currentCoroutineContext())
+        onStart(scope)
+        try {
+            collect(this)
+        } catch (e: Throwable) {
+            scope.cancel()
+            throw e
+        }
+        scope.cancel()
+    }

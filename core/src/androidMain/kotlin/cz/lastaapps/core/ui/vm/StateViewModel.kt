@@ -24,9 +24,14 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import arrow.fx.coroutines.resource
 import arrow.fx.coroutines.resourceScope
+import cz.lastaapps.core.util.extensions.whileSubscribed
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.WhileSubscribed
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlin.time.Duration.Companion.seconds
 
 abstract class StateViewModel<State : VMState>(
     init: State,
@@ -38,10 +43,25 @@ abstract class StateViewModel<State : VMState>(
 
     protected fun updateState(block: State.() -> State) = myState.update(block)
 
-    val flow = myState.asStateFlow()
+    /**
+     * Is called once an external entity starts collecting local state.
+     * Provides a coroutine scope that is cancelled 5 seconds after
+     * there are no more collectors.
+     */
+    protected open suspend fun CoroutineScope.whileCollected() {}
+
+    val flow =
+        myState
+            .whileSubscribed { whileCollected() }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5.seconds),
+                myState.value,
+            )
+
     val flowState
         @Composable
-        get() = myState.collectAsStateWithLifecycle()
+        get() = flow.collectAsStateWithLifecycle()
 
     protected suspend fun <R> withLoading(
         loading: State.(isLoading: Boolean) -> State,

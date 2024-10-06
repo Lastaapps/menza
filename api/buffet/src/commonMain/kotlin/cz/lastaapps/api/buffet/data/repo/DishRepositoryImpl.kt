@@ -45,6 +45,7 @@ import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.core.domain.OutcomeIor
 import cz.lastaapps.core.util.extensions.CET
+import cz.lastaapps.core.util.extensions.durationTicker
 import cz.lastaapps.core.util.extensions.findDayOfWeek
 import cz.lastaapps.core.util.extensions.localLogger
 import kotlinx.collections.immutable.ImmutableList
@@ -73,17 +74,18 @@ internal class DishLogicImpl(
 ) {
     private val log = localLogger()
 
-    private val validFrom =
-        clock
-            .now()
-            .toLocalDateTime(TimeZone.CET)
-            .date
-            .findDayOfWeek(DayOfWeek.SATURDAY)
-            .let { LocalDateTime(it, LocalTime(12, 0)) }
-            .toInstant(TimeZone.CET)
+    private val validFrom get() =
+        clock.durationTicker().map {
+            it
+                .toLocalDateTime(TimeZone.CET)
+                .date
+                .findDayOfWeek(DayOfWeek.SATURDAY)
+                .let { LocalDateTime(it, LocalTime(12, 0)) }
+                .toInstant(TimeZone.CET)
+        }
 
     private val validityKey = ValidityKey.buffetDish()
-    private val hasValidData =
+    private val hasValidData get() =
         checker
             .isUpdatedSince(validityKey, validFrom)
             .onEach { log.i { "Validity changed to $it" } }

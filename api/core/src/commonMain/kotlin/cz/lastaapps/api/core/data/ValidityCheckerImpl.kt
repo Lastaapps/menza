@@ -26,9 +26,11 @@ import cz.lastaapps.api.core.domain.validity.isUpdatedSince
 import cz.lastaapps.core.util.extensions.CET
 import cz.lastaapps.core.util.extensions.atMidnight
 import cz.lastaapps.core.util.extensions.deserializeValueOrNullFlow
+import cz.lastaapps.core.util.extensions.durationTicker
 import cz.lastaapps.core.util.extensions.findMonday
 import cz.lastaapps.core.util.extensions.serializeValue
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
@@ -49,6 +51,7 @@ internal class ValidityCheckerImpl(
     validitySettings: ValiditySettings,
 ) : ValidityChecker {
     private val settings = validitySettings.settings
+    private val timeZone = TimeZone.CET
 
     companion object {
         private const val PREFIX = "validity_"
@@ -69,36 +72,44 @@ internal class ValidityCheckerImpl(
 
     override fun isFromToday(key: ValidityKey): Flow<Boolean> {
         val today =
-            clock
-                .now()
-                .toLocalDateTime(TimeZone.CET)
-                .date
-                .atMidnight()
-                .toInstant(TimeZone.CET)
+            clock.durationTicker().map {
+                it
+                    .toLocalDateTime(timeZone)
+                    .date
+                    .atMidnight()
+                    .toInstant(timeZone)
+            }
         return isUpdatedSince(key, today).distinctUntilChanged()
     }
 
     override fun isThisWeek(key: ValidityKey): Flow<Boolean> {
         val weekStart =
-            clock
-                .now()
-                .toLocalDateTime(TimeZone.CET)
-                .date
-                .findMonday()
-        return isUpdatedSince(key, weekStart, TimeZone.CET).distinctUntilChanged()
+            clock.durationTicker().map {
+                it
+                    .toLocalDateTime(timeZone)
+                    .date
+                    .findMonday()
+            }
+        return isUpdatedSince(key, weekStart, timeZone).distinctUntilChanged()
     }
 
     override fun isUpdatedSince(
         key: ValidityKey,
         duration: Duration,
-    ): Flow<Boolean> = isUpdatedSince(key, clock.now() - duration).distinctUntilChanged()
+    ): Flow<Boolean> =
+        isUpdatedSince(
+            key,
+            clock.durationTicker().map { it - duration },
+        ).distinctUntilChanged()
 
     override fun isUpdatedSince(
         key: ValidityKey,
-        date: Instant,
+        date: Flow<Instant>,
     ): Flow<Boolean> =
-        settings
-            .deserializeValueOrNullFlow(Instant.serializer(), key(key))
-            .map { it != null && it >= date }
-            .distinctUntilChanged()
+        combine(
+            settings.deserializeValueOrNullFlow(Instant.serializer(), key(key)).distinctUntilChanged(),
+            date.distinctUntilChanged(),
+        ) { saved, date ->
+            saved != null && saved >= date
+        }.distinctUntilChanged()
 }

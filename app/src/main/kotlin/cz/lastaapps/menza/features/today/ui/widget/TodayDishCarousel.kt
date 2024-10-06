@@ -278,14 +278,15 @@ private fun DishItem(
             ratio = null,
             modifier =
                 Modifier
-                    .fillMaxSize()
-                    // zoom in effect
-                    .graphicsLayer {
-                        val max = 0.1f
-                        val scale = 1f + (1f - progress()) * max
-                        scaleX = scale
-                        scaleY = scale
-                    },
+                    .fillMaxSize(),
+            // zoom in effect
+            // the carousel does not render correctly
+//                    .graphicsLayer {
+//                        val max = 0.1f
+//                        val scale = 1f + (1f - progress()) * max
+//                        scaleX = scale
+//                        scaleY = scale
+//                    },
         )
 
         val useGradient = dish.photoLink != null
