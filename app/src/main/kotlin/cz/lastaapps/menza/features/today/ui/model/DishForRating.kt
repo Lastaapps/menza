@@ -17,20 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.today.di
+package cz.lastaapps.menza.features.today.ui.model
 
-import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
-import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
-import cz.lastaapps.menza.features.today.ui.vm.RateDishViewModel
-import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
-import org.koin.core.module.dsl.factoryOf
-import org.koin.dsl.module
+import cz.lastaapps.api.core.domain.model.Dish
+import kotlinx.serialization.Serializable
 
-val todayModule =
-    module {
-        factoryOf(::DishListViewModel)
-        factoryOf(::TodayViewModel)
-        factoryOf(::RateDishViewModel)
-
-        factoryOf(::GetTodayUserSettingsUC)
+// This class exists because dish have no ID in the app and cannot be serialized
+// (they can be but it's a bad practise on this layer). This class is used in navigation.
+@Serializable
+data class DishForRating(
+    val name: String,
+    val ratingID: String,
+) {
+    companion object {
+        fun from(dish: Dish) = DishForRating(dish.name, "fake_id")
     }
+}

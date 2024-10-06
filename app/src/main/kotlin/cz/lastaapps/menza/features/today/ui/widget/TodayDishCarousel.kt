@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.today.ui.widget
 
 import android.content.res.Configuration
+import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
@@ -39,12 +40,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.carousel.CarouselState
 import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
-import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -168,7 +170,7 @@ private fun DishContent(
                         return@item
                     }
 
-                    val carouselState = rememberCarouselState { category.dishList.size }
+                    val carouselState = rememberCarouselStateSafe(itemCount = category.dishList.size)
                     HorizontalMultiBrowseCarousel(
                         state = carouselState,
                         preferredItemWidth = preferredItemSize,
@@ -227,6 +229,21 @@ private fun DishContent(
     }
 }
 
+// TODO remove once the bug is fixed
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun rememberCarouselStateSafe(
+    initialItem: Int = 0,
+    itemCount: Int,
+): CarouselState =
+    rememberSaveable(itemCount, saver = CarouselState.Saver) {
+        CarouselState(
+            currentItem = initialItem,
+            currentItemOffsetFraction = 0F,
+            itemCount = { itemCount },
+        )
+    }
+
 @Composable
 private fun DishItem(
     dish: Dish,
@@ -259,7 +276,16 @@ private fun DishItem(
             dish,
             loadImmediately = loadImmediately(appSettings.downloadOnMetered, isOnMetered),
             ratio = null,
-            modifier = Modifier.fillMaxSize(),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    // zoom in effect
+                    .graphicsLayer {
+                        val max = 0.1f
+                        val scale = 1f + (1f - progress()) * max
+                        scaleX = scale
+                        scaleY = scale
+                    },
         )
 
         val useGradient = dish.photoLink != null
@@ -299,8 +325,11 @@ private fun DishItem(
                         Modifier
                             .padding(Padding.MidSmall)
                             .basicMarquee(
-                                initialDelayMillis = 500,
+                                initialDelayMillis = 800,
+                                repeatDelayMillis = 800,
                                 iterations = Int.MAX_VALUE,
+                                velocity = 69.dp, // default: 30.dp
+                                spacing = MarqueeSpacing.fractionOfContainer(1f / 5f),
                             ),
                     maxLines = 1,
                     color =

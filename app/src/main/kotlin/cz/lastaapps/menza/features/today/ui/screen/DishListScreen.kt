@@ -73,6 +73,7 @@ import kotlinx.coroutines.flow.collectLatest
 internal fun DishListScreen(
     onDish: (Dish) -> Unit,
     onVideoLink: (String) -> Unit,
+    onRating: (Dish) -> Unit,
     viewModel: DishListViewModel,
     hostState: SnackbarHostState,
     scrollStates: ScrollStates,
@@ -98,6 +99,7 @@ internal fun DishListScreen(
         onImageScale = viewModel::setImageScale,
         onOliverRow = viewModel::setOliverRow,
         onDish = onDish,
+        onRating = onRating,
         scrollStates = scrollStates,
     )
 }
@@ -122,6 +124,7 @@ private fun DishListContent(
     onImageScale: (Float) -> Unit,
     onDish: (Dish) -> Unit,
     onOliverRow: (Boolean) -> Unit,
+    onRating: (Dish) -> Unit,
     scrollStates: ScrollStates,
     modifier: Modifier = Modifier,
 ) = Column {
@@ -155,8 +158,6 @@ private fun DishListContent(
             )
         }
     }
-
-    val onRating: (Dish) -> Unit = {}
 
     Crossfade(
         targetState = userSettings.dishListMode,

@@ -58,13 +58,11 @@ import androidx.compose.ui.unit.em
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.Rating
 import cz.lastaapps.api.core.domain.model.RatingCategory
-import cz.lastaapps.api.core.domain.model.RatingCategory.PORTION_SIZE
-import cz.lastaapps.api.core.domain.model.RatingCategory.TASTE
-import cz.lastaapps.api.core.domain.model.RatingCategory.WORTHINESS
 import cz.lastaapps.api.core.domain.model.ServingPlace
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.today.ui.util.allergenForId
 import cz.lastaapps.menza.features.today.ui.util.formatPrice
+import cz.lastaapps.menza.features.today.ui.util.toText
 import cz.lastaapps.menza.ui.theme.MenzaColors
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
@@ -76,7 +74,7 @@ import kotlin.math.max
 @Composable
 fun TodayInfo(
     dish: Dish,
-    onRating: () -> Unit,
+    onRating: (Dish) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -92,7 +90,7 @@ fun TodayInfo(
         IssueLocationList(
             list = dish.servingPlaces,
         )
-        RatingOverview(rating = dish.rating, onRating = onRating)
+        RatingOverview(rating = dish.rating, onRating = { onRating(dish) })
         AllergenList(
             allergens = dish.allergens,
         )
@@ -265,14 +263,6 @@ private fun RatingOverview(
         }
     }
 }
-
-@Composable
-private fun RatingCategory.toText() =
-    when (this) {
-        TASTE -> R.string.rating_category_taste
-        PORTION_SIZE -> R.string.rating_category_portion_size
-        WORTHINESS -> R.string.rating_category_worthiness
-    }.let { stringResource(it) }
 
 @Preview
 @Composable

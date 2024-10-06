@@ -20,12 +20,10 @@
 package cz.lastaapps.api.main.data
 
 import arrow.core.right
-import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.model.Info
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType
-import cz.lastaapps.api.core.domain.model.ServingPlace
 import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.repo.InfoRepoParams
@@ -98,185 +96,9 @@ internal class KocourkovRepoImpl(
 
 internal object TodayKocourkovDishRepoImpl : TodayDishRepo {
     private val dishLists =
-        listOf(
-            persistentListOf(
-                DishCategory(
-                    "Polévky",
-                    "Patoky všeho druhu",
-                    persistentListOf(
-                        Dish(
-                            amount = null,
-                            name = "Sekerková",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(1, 2, 3),
-                            photoLink = null,
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                        Dish(
-                            amount = null,
-                            name = "Ježečková",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(1, 2, 3),
-                            photoLink = "https://aa.ecn.cz/img_upload/e6ffb6c50bc1424ab10ecf09e063cd63/jezek.jpg",
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                    ),
-                ),
-                DishCategory(
-                    "Babica",
-                    "Mňamky Jirky Babici",
-                    persistentListOf(
-                        Dish(
-                            amount = null,
-                            name = "Univerzální hnědá omáčka s kedlíkem",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(1, 2, 3),
-                            photoLink = "https://agata.suz.cvut.cz/jidelnicky/showfotoG.php?clPodsystem=1&xFile=IMG-20240712075000098.jpg",
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                        Dish(
-                            amount = "1 kg",
-                            name = "Zalité kuřátko a hrany",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(),
-                            photoLink = "https://agata.suz.cvut.cz/jidelnicky/showfotoG.php?clPodsystem=1&xFile=IMG-20240712075130700.jpg",
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                        Dish(
-                            amount = null,
-                            name = "Moravsko-španělský ptáček",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(),
-                            photoLink = "https://agata.suz.cvut.cz/jidelnicky/showfotoG.php?clPodsystem=1&xFile=IMG-20240712075239254.jpg",
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                        Dish(
-                            amount = "12.5 ks",
-                            name = "Pelíškovské noky",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(1, 2, 3),
-                            photoLink = "https://agata.suz.cvut.cz/jidelnicky/showfotoG.php?clPodsystem=1&xFile=IMG-20240712075304557.jpg",
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                    ),
-                ),
-                DishCategory(
-                    "Chlálky",
-                    "Dlabance dne",
-                    persistentListOf(
-                        Dish(
-                            amount = null,
-                            name = "Tuxík na přírodno",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(1, 2, 3),
-                            photoLink = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/800px-Tux.svg.png",
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                        Dish(
-                            amount = "1 kg",
-                            name = "Strahovská kunda",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(1, 2, 3),
-                            photoLink = @Suppress("ktlint:standard:max-line-length")
-                            "https://www.bydlimekvalitne.cz/sites/default/files/styles/image_840x400/public/bigstock-czech-smelly-cheese-olomouck-86998046.jpg?itok=WzhMUZt2&c=291a4bb2386048f3eb113e3ec11ccfb2",
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                        Dish(
-                            amount = "200 g",
-                            name = "Štěkanátky z maxipsa Fíka",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(1, 2, 3),
-                            photoLink = "https://www.czecot.cz/results/zobrobr.php?w=ac&id=201171&orig=1",
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                    ),
-                ),
-                DishCategory(
-                    "Dezerty",
-                    "Sekce pro tlustá prasátka",
-                    persistentListOf(
-                        Dish(
-                            amount = null,
-                            name = "Krtkův dort",
-                            priceDiscounted = 42.0f,
-                            priceNormal = 69.0f,
-                            allergens = persistentListOf(1, 2, 3),
-                            photoLink = "https://1gr.cz/fotky/idnes/22/121/r7/JVE86eb72_32738_102382307.jpg",
-                            pictogram = persistentListOf(),
-                            servingPlaces =
-                                persistentListOf(
-                                    ServingPlace("Radnice", "R"),
-                                ),
-                            ingredients = persistentListOf(),
-                            isActive = true,
-                        ),
-                    ),
-                ),
-            ),
-            persistentListOf(),
+        persistentListOf(
+            DishCategory.Mock.allCathegories,
+            DishCategory.Mock.empty,
         )
 
     private val localNotifier = MutableStateFlow(0)

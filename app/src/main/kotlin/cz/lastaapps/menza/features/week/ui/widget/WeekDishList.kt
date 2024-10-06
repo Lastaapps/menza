@@ -42,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
@@ -49,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.model.WeekDish
 import cz.lastaapps.api.core.domain.model.WeekDishCategory
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.components.NoItems
@@ -57,10 +59,9 @@ import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.appCardColors
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toJavaLocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import java.util.Locale
+import kotlinx.datetime.format.DayOfWeekNames
+import kotlinx.datetime.format.Padding.NONE
+import kotlinx.datetime.format.char
 import kotlin.math.roundToInt
 
 @Composable
@@ -176,18 +177,30 @@ private fun ImmutableList<WeekDayDish>.longestAmountOrPrice(): Int =
 
 @Composable
 private fun rememberDateFormatter(): @Composable (LocalDate) -> String {
-    val locale = androidx.compose.ui.text.intl.Locale.current
-    return remember(locale) {
-        val javaLocale = Locale(locale.language, locale.region)
-        val dayOfWeekHeaderFormat = DateTimeFormatter.ofPattern("EEEE", javaLocale)
-        val dateHeaderFormat =
-            DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(javaLocale)
+    val context = LocalContext.current
+    return remember(context) {
+        val daysOfWeek =
+            DayOfWeekNames(
+                context.getString(R.string.week_day_monday),
+                context.getString(R.string.week_day_tuesday),
+                context.getString(R.string.week_day_wednesday),
+                context.getString(R.string.week_day_thursday),
+                context.getString(R.string.week_day_friday),
+                context.getString(R.string.week_day_saturday),
+                context.getString(R.string.week_day_sunday),
+            )
+        val format =
+            LocalDate.Format {
+                dayOfWeek(daysOfWeek)
+                char(' ')
+                dayOfMonth(padding = NONE)
+                char('.')
+                monthNumber()
+                char('.')
+            }
 
         val lambda: @Composable (LocalDate) -> String = { date: LocalDate ->
-            remember(date) {
-                val javaDate = date.toJavaLocalDate()
-                dayOfWeekHeaderFormat.format(javaDate) + " " + dateHeaderFormat.format(javaDate)
-            }
+            remember(format, date) { format.format(date) }
         }
         lambda
     }

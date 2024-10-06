@@ -21,7 +21,12 @@ package cz.lastaapps.menza.features.today.ui.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.RatingCategory
+import cz.lastaapps.api.core.domain.model.RatingCategory.PORTION_SIZE
+import cz.lastaapps.api.core.domain.model.RatingCategory.TASTE
+import cz.lastaapps.api.core.domain.model.RatingCategory.WORTHINESS
 import cz.lastaapps.api.core.domain.model.WeekDish
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
@@ -57,3 +62,11 @@ fun allergenForId(id: Int): Pair<String, String>? {
     if (id - 1 !in labels.indices) return null
     return labels[id - 1] to descriptions[id - 1]
 }
+
+@Composable
+fun RatingCategory.toText() =
+    when (this) {
+        TASTE -> R.string.rating_category_taste
+        PORTION_SIZE -> R.string.rating_category_portion_size
+        WORTHINESS -> R.string.rating_category_worthiness
+    }.let { stringResource(it) }

@@ -53,8 +53,10 @@ import coil3.request.CachePolicy.DISABLED
 import coil3.request.ImageRequest.Builder
 import cz.lastaapps.api.core.domain.model.Dish
 import cz.lastaapps.core.ui.vm.HandleAppear
+import cz.lastaapps.core.ui.vm.HandleDismiss
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
+import cz.lastaapps.menza.features.today.ui.model.DishForRating
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.features.today.ui.vm.TodayState
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
@@ -68,19 +70,21 @@ import cz.lastaapps.menza.ui.theme.Padding
 @Composable
 internal fun TodayScreen(
     onOsturak: () -> Unit,
+    onRating: (DishForRating) -> Unit,
     panels: @Composable (Modifier) -> Unit,
     viewModel: TodayViewModel,
     dishListViewModel: DishListViewModel,
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    TodayEffects(viewModel)
+    TodayEffects(viewModel, onRating)
 
     val state by viewModel.flowState
     TodayContent(
         state = state,
         onOsturak = onOsturak,
         onDish = viewModel::selectDish,
+        onRating = viewModel::convertDish,
         panels = panels,
         dishListViewModel = dishListViewModel,
         hostState = hostState,
@@ -89,8 +93,17 @@ internal fun TodayScreen(
 }
 
 @Composable
-private fun TodayEffects(viewModel: TodayViewModel) {
+private fun TodayEffects(
+    viewModel: TodayViewModel,
+    onRating: (DishForRating) -> Unit,
+) {
     HandleAppear(viewModel)
+    HandleDismiss(
+        viewModel,
+        TodayState::dishForRating,
+        TodayViewModel::dismissDishForRating,
+        onRating,
+    )
 
     val state by viewModel.flowState
     BackArrow(enabled = state.hasDish) {
@@ -103,6 +116,7 @@ private fun TodayContent(
     state: TodayState,
     onDish: (Dish) -> Unit,
     onOsturak: () -> Unit,
+    onRating: (Dish) -> Unit,
     panels: @Composable (Modifier) -> Unit,
     dishListViewModel: DishListViewModel,
     hostState: SnackbarHostState,
@@ -122,6 +136,7 @@ private fun TodayContent(
         DishListScreen(
             onDish = onDish,
             onVideoLink = { videoFeedUrl = it },
+            onRating = onRating,
             viewModel = dishListViewModel,
             modifier = Modifier.fillMaxSize(),
             hostState = hostState,
@@ -137,7 +152,7 @@ private fun TodayContent(
             currentDish?.let {
                 TodayInfo(
                     dish = currentDish,
-                    onRating = { }, // TODO
+                    onRating = onRating,
                     modifier = Modifier.fillMaxSize(),
                 )
             }

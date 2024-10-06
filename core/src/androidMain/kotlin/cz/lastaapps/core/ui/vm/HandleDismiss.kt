@@ -43,3 +43,21 @@ inline fun <State : Any, VM : StateViewModel<State>> HandleDismiss(
         }
     }
 }
+
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+inline fun <State : Any, VM : StateViewModel<State>, T : Any> HandleDismiss(
+    viewModel: VM,
+    getVal: KProperty1<State, T?>,
+    dismiss: KFunction1<VM, Unit>,
+    noinline launch: (T) -> Unit,
+) {
+    val state = getVal(viewModel.flowState.value)
+    val launchLambda by rememberUpdatedState(newValue = launch)
+    LaunchedEffect(state) {
+        if (state != null) {
+            dismiss(viewModel)
+            launchLambda(state)
+        }
+    }
+}

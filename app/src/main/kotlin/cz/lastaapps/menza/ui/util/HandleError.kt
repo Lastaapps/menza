@@ -39,6 +39,8 @@ import cz.lastaapps.menza.features.other.ui.dialog.sendReport
 
 private val errorLog = Logger.withTag("HandleError")
 
+// TODO consider reporting the errors when they are not handled using a snackbar
+
 @Composable
 fun HandleError(
     holder: ErrorHolder,

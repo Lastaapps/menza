@@ -230,9 +230,21 @@
     <string name="rating_category_taste">Taste</string>
     <string name="rating_category_portion_size">Portion size</string>
     <string name="rating_category_worthiness">Good choice</string>
+    <string name="rating_dialog_title">Rate your experience</string>
+    <string name="rating_dialog_submit">Submit</string>
+    <string name="rating_dialog_content_description_star_selected">Selected star %d</string>
+    <string name="rating_dialog_content_description_star_deselected">Deselected star %d</string>
 
     <string name="week_list_none">No data available 👨‍🍳</string>
     <string name="week_list_web">Check website</string>
+
+    <string name="week_day_monday">Monday</string>
+    <string name="week_day_tuesday">Tuesday</string>
+    <string name="week_day_wednesday">Wednesday</string>
+    <string name="week_day_thursday">Thursday</string>
+    <string name="week_day_friday">Friday</string>
+    <string name="week_day_saturday">Saturday</string>
+    <string name="week_day_sunday">Sunday</string>
 
     <string name="error_button_report">Report</string>
     <string name="error_week_not_supported">This menza doesn\'t support Week menu</string>

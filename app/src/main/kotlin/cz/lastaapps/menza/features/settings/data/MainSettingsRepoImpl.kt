@@ -126,7 +126,7 @@ internal class MainSettingsRepoImpl(
     override fun isCompactTodayView(): Flow<DishListMode> =
         general
             .isCompactTodayView()
-            .map { it ?: DishListMode.COMPACT }
+            .map { it ?: DishListMode.CAROUSEL }
 
     override suspend fun setOliverRows(useOliverRows: Boolean) = general.setOliverRow(useOliverRows)
 

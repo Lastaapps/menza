@@ -30,6 +30,7 @@ import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishLanguageUC
+import cz.lastaapps.menza.features.today.ui.model.DishForRating
 import kotlinx.coroutines.flow.onEach
 
 internal class TodayViewModel(
@@ -59,12 +60,21 @@ internal class TodayViewModel(
         }
 
     fun selectDish(dish: Dish?) = updateState { copy(selectedDish = dish) }
+
+    fun convertDish(dish: Dish) =
+        launchVM {
+            // TODO
+            updateState { copy(dishForRating = DishForRating(name = dish.name, ratingID = "")) }
+        }
+
+    fun dismissDishForRating() = updateState { copy(dishForRating = null) }
 }
 
 internal data class TodayState(
     val selectedMenza: Option<Menza>? = null,
     val selectedDish: Dish? = null,
     val language: DishLanguage = DishLanguage.Czech,
+    val dishForRating: DishForRating? = null,
 ) : VMState {
     val hasDish: Boolean get() = selectedDish != null
 }

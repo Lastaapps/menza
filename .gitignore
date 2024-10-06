@@ -13,3 +13,4 @@ local.properties
 /.idea/studiobot.xml
 /.idea/runConfigurations.xml
 /.idea/ktlint-plugin.xml
+/.idea/discord.xml

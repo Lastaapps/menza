@@ -55,10 +55,10 @@ sealed interface AppText {
         @StringRes private val resId: Int,
         private val args: Array<out Any>,
     ) : AppText {
-        override operator fun invoke(context: Context): String = context.getString(resId, args)
+        override operator fun invoke(context: Context): String = context.getString(resId, *args)
 
         @Composable
-        override operator fun invoke(): String = stringResource(resId, args)
+        override operator fun invoke(): String = stringResource(resId, *args)
     }
 }
 

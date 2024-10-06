@@ -19,12 +19,12 @@
 
 package cz.lastaapps.menza.features.today.ui.widget
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
@@ -110,7 +110,7 @@ internal fun DishPriceBadge(
 ) {
     dish.getPrice(priceType)?.let { price ->
         Surface(
-            modifier.shadow(4.dp),
+            modifier.shadow(4.dp, shape = CircleShape),
             color = MaterialTheme.colorScheme.tertiary,
             shape = MaterialTheme.shapes.medium,
         ) {
@@ -130,15 +130,16 @@ internal fun DishPriceBadge(
 @Composable
 internal fun DishRatingBadge(
     rating: Rating,
+    @Suppress("UNUSED_PARAMETER")
     onRating: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(
         modifier =
             modifier
-                .shadow(4.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .clickable { onRating() },
+                .shadow(4.dp, shape = CircleShape)
+                .clip(MaterialTheme.shapes.medium),
+//                .clickable { onRating() }
         color = MaterialTheme.colorScheme.inversePrimary,
     ) {
         val icons =
