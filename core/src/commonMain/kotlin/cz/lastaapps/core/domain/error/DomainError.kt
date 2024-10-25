@@ -25,6 +25,9 @@ sealed interface DomainError {
     val throwable: Throwable?
         get() = null
 
+    val extraMessage: String?
+        get() = null
+
     sealed interface Runtime : DomainError
 
     sealed interface Logic : DomainError

@@ -75,6 +75,7 @@ class JvmAppConvention :
                 testImplementation(libs.kotlin.test.annotation)
                 testImplementation(libs.kotlin.test.common)
                 testImplementation(libs.kotlin.test.core)
+                implementation(libs.kotest.arrow)
                 testImplementation(libs.kotest.assertion)
                 testImplementation(libs.kotlinx.coroutines.test)
                 testImplementation(libs.kotest.jUnit5runner)

@@ -240,7 +240,9 @@ private fun ReportDialog(
 fun sendReport(
     context: Context,
     mode: ReportMode,
-    throwable: Throwable? = null,
+    errorText: String,
+    extraMessage: String?,
+    throwable: Throwable?,
 ) {
     val text =
         """
@@ -251,6 +253,10 @@ fun sendReport(
         |
         |"Internal app problem"
         |${LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)}
+        |${errorText}
+        |
+        |${extraMessage ?: ""}
+        |
         |${throwable?.message ?: "Unknown error message"}
         |${throwable?.stackTraceToString() ?: ""}
         """.trimMargin()

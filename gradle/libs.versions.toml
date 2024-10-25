@@ -20,6 +20,7 @@ kermit = "2.0.4"
 koin = "4.0.0"
 koin-annotations = "1.0.3"
 kotest = "5.9.1"
+kotest-arrow = "1.4.0"
 kotlin = "2.0.20"
 # @keep
 kotlin-api = "2.0"
@@ -129,6 +130,7 @@ koin-ktorServer = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-ktorServer-logger = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
 koin-test-core = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin-test-jUnit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin" }
+kotest-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version.ref = "kotest-arrow" }
 kotest-assertion = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-jUnit5runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }

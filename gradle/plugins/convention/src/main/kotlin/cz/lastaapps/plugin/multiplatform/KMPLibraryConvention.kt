@@ -96,6 +96,7 @@ class KMPLibraryConvention :
 //                        implementation(libs.kotlin.test.common)
 //                        implementation(libs.kotlin.test.core)
 //                        implementation(libs.kotlin.test.jUnit5)
+                            implementation(libs.kotest.arrow)
                             implementation(libs.kotest.assertion)
                             implementation(libs.kotlinx.coroutines.test)
 //                    implementation(libs.koin.test.jUnit5)

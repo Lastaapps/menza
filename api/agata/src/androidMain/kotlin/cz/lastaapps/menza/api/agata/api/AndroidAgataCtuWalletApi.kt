@@ -188,6 +188,6 @@ internal class AndroidAgataCtuWalletApi(
                             .toFloatOrNull()
                             .bind()
                     }
-            }?.right() ?: WalletError.TotallyBroken.left()
+            }?.right() ?: WalletError.TotallyBroken().left()
         }.flatten()
 }

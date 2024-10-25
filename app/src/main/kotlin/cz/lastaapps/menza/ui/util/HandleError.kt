@@ -85,12 +85,20 @@ fun HandleError(
     }
 
     toReport?.let { errorToReport ->
+        val errorClass = errorToReport::class.qualifiedName
+        val errorText = errorToReport.text()
         ReportDialog(
             shown = true,
             reportsCrash = true,
             onDismissRequest = { toReport = null },
         ) {
-            sendReport(context, it, errorToReport.throwable)
+            sendReport(
+                context,
+                it,
+                "$errorText (class: $errorClass)",
+                errorToReport.extraMessage,
+                errorToReport.throwable,
+            )
         }
     }
 }

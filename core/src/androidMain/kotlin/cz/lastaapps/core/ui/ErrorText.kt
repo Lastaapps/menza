@@ -117,7 +117,7 @@ val ApiError.text: AppText
 
             is WalletError ->
                 when (this) {
-                    TotallyBroken -> E(R.string.error_wallet_login_failed_critical)
+                    is TotallyBroken -> E(R.string.error_wallet_login_failed_critical)
                     InvalidCredentials -> E(R.string.error_wallet_login_failed_credentials)
                 }
         }

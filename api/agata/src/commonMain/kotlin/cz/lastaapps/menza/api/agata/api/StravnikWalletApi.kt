@@ -139,7 +139,7 @@ internal class StravnikWalletApiImpl(
                         }
                     delay(42.milliseconds)
                 }
-                raise(ApiError.WalletError.TotallyBroken)
+                raise(ApiError.WalletError.TotallyBroken("Failed after all the iterations"))
             }
         }
 
@@ -185,7 +185,10 @@ internal class StravnikWalletApiImpl(
                         {
                             log.e(it) { "Finding regex failed" }
                             log.e { "The error body was:\n$this" }
-                            return ApiError.WalletError.TotallyBroken.left()
+                            return ApiError.WalletError.TotallyBroken(
+                                "Rexex did not match:\n" +
+                                this@processBody
+                            ).left()
                         },
                     )
             }?.replace(',', '.')
@@ -193,5 +196,8 @@ internal class StravnikWalletApiImpl(
             ?.replace("&#xA0;", "")
             ?.toFloatOrNull()
             ?.right()
-            ?: ApiError.WalletError.TotallyBroken.left()
+            ?: ApiError.WalletError.TotallyBroken(
+                "Failed to parse number:\n" +
+                    this@processBody
+            ).left()
 }
