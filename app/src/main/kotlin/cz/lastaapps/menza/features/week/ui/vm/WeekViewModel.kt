@@ -31,7 +31,6 @@ import cz.lastaapps.api.main.domain.usecase.GetWeekDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
 import cz.lastaapps.api.main.domain.usecase.SyncWeekDishListUC
 import cz.lastaapps.core.domain.error.DomainError
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
@@ -42,9 +41,11 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetPriceTypeUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -56,43 +57,38 @@ internal class WeekViewModel(
     private val openMenuLink: OpenMenuUC,
     private val getPriceType: GetPriceTypeUC,
 ) : StateViewModel<WeekState>(WeekState(), context),
-    Appearing,
     ErrorHolder {
-    override var hasAppeared: Boolean = false
-
     private val log = localLogger()
 
-    override fun onAppeared() =
-        launchVM {
-            launchVM {
-                getSelectedMenza().collectLatest {
-                    log.i { "Registered a new: $it" }
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        getSelectedMenza()
+            .onEach {
+                log.i { "Registered a new: $it" }
 
-                    updateState {
-                        copy(
-                            selectedMenza = it.toOption(),
-                            items = persistentListOf(),
-                        )
-                    }
-                    syncJob?.cancel()
-                    if (it != null) {
-                        coroutineScope {
-                            this.launch {
-                                load(it, false)
-                            }
-                            getWeekDish(it).collectLatest { items ->
-                                updateState { copy(items = items) }
-                            }
+                updateState {
+                    copy(
+                        selectedMenza = it.toOption(),
+                        items = persistentListOf(),
+                    )
+                }
+                syncJob?.cancel()
+                if (it != null) {
+                    coroutineScope {
+                        this.launch {
+                            load(it, false)
+                        }
+                        getWeekDish(it).collectLatest { items ->
+                            updateState { copy(items = items) }
                         }
                     }
                 }
-            }
+            }.launchIn(scope)
 
-            getPriceType()
-                .onEach {
-                    updateState { copy(priceType = it) }
-                }.launchInVM()
-        }
+        getPriceType()
+            .onEach {
+                updateState { copy(priceType = it) }
+            }.launchIn(scope)
+    }
 
     private var syncJob: Job? = null
 

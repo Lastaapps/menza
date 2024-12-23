@@ -53,7 +53,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionState
 import cz.lastaapps.menza.features.main.ui.vm.MenzaSelectionViewModel
@@ -86,7 +85,6 @@ internal fun MenzaSelectionScreen(
 
 @Composable
 private fun MenzaSelectionListEffects(viewModel: MenzaSelectionViewModel) {
-    HandleAppear(viewModel)
 }
 
 @Composable

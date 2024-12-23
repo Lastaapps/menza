@@ -22,6 +22,9 @@ package cz.lastaapps.core.util.extensions
 import arrow.core.left
 import arrow.core.right
 import cz.lastaapps.core.domain.error.CommonError
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.time.Duration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
@@ -33,7 +36,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withTimeout
-import kotlin.time.Duration
 
 fun <T1, T2, T3, T4, T5, T6, R> combine6(
     flow1: Flow<T1>,
@@ -113,15 +115,17 @@ fun <T> List<Flow<T>>.foldBinary(
  * with the same lifetime as the collected flow,
  * eg. closed after onCompletion is called
  */
-fun <T> Flow<T>.whileSubscribed(onStart: suspend CoroutineScope.() -> Unit) =
-    flow {
-        val scope = CoroutineScope(currentCoroutineContext())
-        onStart(scope)
-        try {
-            collect(this)
-        } catch (e: Throwable) {
-            scope.cancel()
-            throw e
-        }
+fun <T> Flow<T>.whileSubscribed(
+    context: CoroutineContext = EmptyCoroutineContext,
+    onStart: suspend CoroutineScope.() -> Unit,
+) = flow {
+    val scope = CoroutineScope(currentCoroutineContext() + context)
+    onStart(scope)
+    try {
+        this@whileSubscribed.collect(this)
+    } catch (e: Throwable) {
         scope.cancel()
+        throw e
     }
+    scope.cancel()
+}

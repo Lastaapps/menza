@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.root.ui
 
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -28,50 +27,46 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetAppThemeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetDarkModeUC
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 internal class RootViewModel(
     context: VMContext,
     private val isAppSetUp: IsAppSetUpUC,
     private val getAppTheme: GetAppThemeUC,
     private val getDarkMode: GetDarkModeUC,
-) : StateViewModel<RootState>(RootState(), context),
-    Appearing {
-    override var hasAppeared: Boolean = false
+) : StateViewModel<RootState>(RootState(), context) {
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        val isSetUp = isAppSetUp().first()
+        val appTheme = getAppTheme().first()
+        val darkMode = getDarkMode().first()
 
-    override fun onAppeared() =
-        launchVM {
-            val isSetUp = isAppSetUp().first()
-            val appTheme = getAppTheme().first()
-            val darkMode = getDarkMode().first()
-
-            updateState {
-                copy(
-                    isSetUp = isSetUp,
-                    appTheme = appTheme,
-                    darkMode = darkMode,
-                    isReady = true,
-                )
-            }
-
-            launchVM {
-                isAppSetUp().collectLatest {
-                    updateState { copy(isSetUp = it) }
-                }
-            }
-
-            launchVM {
-                getAppTheme().collectLatest {
-                    updateState { copy(appTheme = it) }
-                }
-            }
-            launchVM {
-                getDarkMode().collectLatest {
-                    updateState { copy(darkMode = it) }
-                }
-            }
+        updateState {
+            copy(
+                isSetUp = isSetUp,
+                appTheme = appTheme,
+                darkMode = darkMode,
+                isReady = true,
+            )
         }
+
+        isAppSetUp()
+            .onEach {
+                updateState { copy(isSetUp = it) }
+            }.launchIn(scope)
+
+        getAppTheme()
+            .onEach {
+                updateState { copy(appTheme = it) }
+            }.launchIn(scope)
+
+        getDarkMode()
+            .onEach {
+                updateState { copy(darkMode = it) }
+            }.launchIn(scope)
+    }
 }
 
 internal data class RootState(

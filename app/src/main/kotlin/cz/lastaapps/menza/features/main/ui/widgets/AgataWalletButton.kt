@@ -53,7 +53,6 @@ import arrow.core.Some
 import cz.lastaapps.api.core.domain.model.BalanceAccountType.CTU
 import cz.lastaapps.api.core.domain.model.UserBalance
 import cz.lastaapps.api.core.domain.model.formattedBalance
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.vm.AgataWalletViewModel
 import cz.lastaapps.menza.ui.theme.Padding
@@ -67,7 +66,6 @@ internal fun AgataWalletButton(
     onShowLoginDialog: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    HandleAppear(viewModel)
     HandleError(viewModel, hostState = snackbarHostState)
 
     val state by viewModel.flowState

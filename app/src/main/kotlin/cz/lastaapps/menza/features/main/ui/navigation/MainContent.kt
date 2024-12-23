@@ -45,7 +45,6 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.scale
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.essenty.backhandler.BackCallback
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.info.ui.component.InfoContent
 import cz.lastaapps.menza.features.main.ui.component.DrawerContent
@@ -77,7 +76,6 @@ internal fun MainContent(
     val mainViewModel: MainViewModel = component.viewModel
 
     val state by mainViewModel.flowState
-    HandleAppear(mainViewModel)
     if (!state.isReady) return
 
     val drawerInitial = if (state.selectedMenza == null) Open else Closed

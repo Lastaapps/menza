@@ -21,7 +21,6 @@ package cz.lastaapps.menza.features.panels.whatsnew.ui.vm
 
 import cz.lastaapps.core.data.DeviceLocalesProvider
 import cz.lastaapps.core.domain.usecase.GetAppVersionUC
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -29,9 +28,12 @@ import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
 import cz.lastaapps.menza.features.panels.whatsnew.domain.LoadWhatsNewUC
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel.State
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.onEach
 import java.util.Locale
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 internal class WhatsNewViewModel(
     context: VMContext,
@@ -39,12 +41,9 @@ internal class WhatsNewViewModel(
     private val store: WhatsNewDataStore,
     private val loadWhatsNewUC: LoadWhatsNewUC,
     private val getAppVersionUC: GetAppVersionUC,
-) : StateViewModel<State>(State(), context),
-    Appearing {
-    override var hasAppeared: Boolean = false
-
-    override fun onAppeared() {
-        launchVM {
+) : StateViewModel<State>(State(), context) {
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        scope.launch {
             val map = loadWhatsNewUC()
             val locale =
                 localesProvider.provideLocales().firstOrNull { map.containsKey(it) } ?: Locale.US
@@ -60,7 +59,7 @@ internal class WhatsNewViewModel(
                 updateState {
                     copy(shouldShow = getAppVersionUC() > lastViewed)
                 }
-            }.launchInVM()
+            }.launchIn(scope)
     }
 
     fun onDismiss() =

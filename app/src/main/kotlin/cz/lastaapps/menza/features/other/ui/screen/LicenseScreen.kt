@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.mikepenz.aboutlibraries.entity.Library
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.other.ui.vm.LicenseState
 import cz.lastaapps.menza.features.other.ui.vm.LicenseViewModel
 import cz.lastaapps.menza.features.other.ui.widgets.LibraryDetail
@@ -49,7 +48,6 @@ internal fun LicenseScreen(
 
 @Composable
 private fun LicenseEffects(viewModel: LicenseViewModel) {
-    HandleAppear(viewModel)
 }
 
 @Composable

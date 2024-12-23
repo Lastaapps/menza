@@ -35,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cz.lastaapps.core.domain.error.DomainError
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.info.ui.vm.InfoState
 import cz.lastaapps.menza.features.info.ui.vm.InfoViewModel
 import cz.lastaapps.menza.features.info.ui.widgets.AddressList
@@ -77,7 +76,6 @@ private fun InfoEffects(
     viewModel: InfoViewModel,
     hostState: SnackbarHostState,
 ) {
-    HandleAppear(viewModel)
     HandleError(viewModel, hostState)
 }
 

@@ -39,7 +39,7 @@ internal class TodayViewModel(
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getDishLanguageUC: GetDishLanguageUC,
 ) : StateViewModel<TodayState>(TodayState(), context) {
-    override suspend fun CoroutineScope.whileCollected() {
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
         getSelectedMenza()
             .onEach {
                 updateState {
@@ -48,12 +48,12 @@ internal class TodayViewModel(
                         selectedDish = null,
                     )
                 }
-            }.launchIn(this)
+            }.launchIn(scope)
 
         getDishLanguageUC()
             .onEach {
                 updateState { copy(language = it) }
-            }.launchIn(this)
+            }.launchIn(scope)
     }
 
     fun selectDish(dish: Dish?) = updateState { copy(selectedDish = dish) }

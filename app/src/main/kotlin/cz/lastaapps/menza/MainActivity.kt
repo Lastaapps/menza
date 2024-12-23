@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.arkivanov.decompose.defaultComponentContext
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.root.ui.navigation.DefaultRootComponent
 import cz.lastaapps.menza.features.root.ui.navigation.RootContent
 import cz.lastaapps.menza.ui.ApplyAppTheme
@@ -51,7 +50,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val viewModel = rootComponent.viewModel
-            HandleAppear(viewModel)
 
             ApplyProviders {
                 ApplyAppTheme(viewModel, this) {

@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.features.other.ui.vm
 
 import com.mikepenz.aboutlibraries.entity.Library
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -32,22 +31,18 @@ import kotlinx.collections.immutable.toImmutableList
 internal class LicenseViewModel(
     context: VMContext,
     private val getLibs: GetLibrariesUC,
-) : StateViewModel<LicenseState>(LicenseState(), context),
-    Appearing {
-    override var hasAppeared: Boolean = false
+) : StateViewModel<LicenseState>(LicenseState(), context) {
+    override suspend fun onFirstAppearance() {
+        val lib = getLibs()
 
-    override fun onAppeared() =
-        launchVM {
-            val lib = getLibs()
-
-            // to filter out wrongly named libraries
-            lib.libraries
-                .filter { !it.name.startsWith("$") }
-                .toImmutableList()
-                .let { libs ->
-                    updateState { copy(libs = libs) }
-                }
-        }
+        // to filter out wrongly named libraries
+        lib.libraries
+            .filter { !it.name.startsWith("$") }
+            .toImmutableList()
+            .let { libs ->
+                updateState { copy(libs = libs) }
+            }
+    }
 
     fun selectLibrary(library: Library?) {
         updateState { copy(selectedLibrary = library) }

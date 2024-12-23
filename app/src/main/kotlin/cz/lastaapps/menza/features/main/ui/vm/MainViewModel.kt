@@ -22,7 +22,6 @@ package cz.lastaapps.menza.features.main.ui.vm
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.main.domain.usecase.SyncMenzaListUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletRefreshUC
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -31,7 +30,11 @@ import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.main.domain.usecase.IsFlipUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetAppSettingsUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetSettingsEverOpenedUC
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 internal class MainViewModel(
     context: VMContext,
@@ -42,34 +45,36 @@ internal class MainViewModel(
     private val isFlip: IsFlipUC,
     private val checkLowBalanceUC: CheckLowBalanceUC,
     private val refreshWallet: WalletRefreshUC,
-) : StateViewModel<MainState>(MainState(), context),
-    Appearing {
-    override var hasAppeared: Boolean = false
+) : StateViewModel<MainState>(MainState(), context) {
+    override suspend fun onFirstAppearance() {
+        updateState { copy(isFlip = isFlip()) }
+    }
 
-    override fun onAppeared() {
-        launchVM {
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        scope.launch {
             syncMenzaListUC()
         }
-        launchVM {
-            getSelectedMenza().collectLatest {
+        getSelectedMenza()
+            .onEach {
                 updateState { copy(selectedMenza = it, isReady = true) }
-            }
-        }
-        launchVM {
-            getSettingsOpened().collectLatest {
+            }.launchIn(scope)
+
+        getSettingsOpened()
+            .onEach {
                 updateState { copy(settingsViewed = it) }
-            }
-        }
-        updateState { copy(isFlip = isFlip()) }
-        launchVM {
+            }.launchIn(scope)
+
+        scope.launch {
             refreshWallet(false)
             checkLowBalanceUC().collectLatest {
                 updateState { copy(showLowBalance = it) }
             }
         }
-        getAppSettings().collectLatestInVM {
-            updateState { copy(alternativeNavigation = it.alternativeNavigation) }
-        }
+
+        getAppSettings()
+            .onEach {
+                updateState { copy(alternativeNavigation = it.alternativeNavigation) }
+            }.launchIn(scope)
     }
 
     fun dismissLowBalance() = updateState { copy(showLowBalance = false) }

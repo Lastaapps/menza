@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.settings.ui.vm
 
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -32,7 +31,9 @@ import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetAppThemeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.SetDarkModeUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 internal class AppThemeViewModel(
     context: VMContext,
@@ -41,26 +42,23 @@ internal class AppThemeViewModel(
     private val getDarkMode: GetDarkModeUC,
     private val setAppTheme: SetAppThemeUC,
     private val setDarkMode: SetDarkModeUC,
-) : StateViewModel<AppThemeState>(AppThemeState(), context),
-    Appearing {
-    override var hasAppeared: Boolean = false
-
-    override fun onAppeared() =
-        launchVM {
-            launchVM {
-                getAppTheme().collectLatest { theme ->
-                    updateState { copy(theme = theme) }
-                }
-            }
-            launchVM {
-                getDarkMode().collectLatest { mode ->
-                    updateState { copy(darkMode = mode) }
-                }
-            }
-            getAppThemeList().let {
-                updateState { copy(availableThemes = it) }
-            }
+) : StateViewModel<AppThemeState>(AppThemeState(), context) {
+    override suspend fun onFirstAppearance() {
+        getAppThemeList().let {
+            updateState { copy(availableThemes = it) }
         }
+    }
+
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        getAppTheme()
+            .onEach { theme ->
+                updateState { copy(theme = theme) }
+            }.launchIn(scope)
+        getDarkMode()
+            .onEach { mode ->
+                updateState { copy(darkMode = mode) }
+            }.launchIn(scope)
+    }
 
     fun setAppTheme(theme: AppThemeType) = launchVM { setAppTheme.invoke(theme) }
 

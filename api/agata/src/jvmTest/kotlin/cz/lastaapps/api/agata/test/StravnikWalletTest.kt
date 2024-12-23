@@ -19,37 +19,31 @@
 
 package cz.lastaapps.api.agata.test
 
-import arrow.core.Either.Right
-import cz.lastaapps.menza.api.agata.api.CafeteriaApiImpl
 import cz.lastaapps.menza.api.agata.api.StravnikWalletApiImpl
-import cz.lastaapps.menza.api.agata.data.createAgataClient
-import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
-import cz.lastaapps.menza.api.agata.data.model.dto.DishTypeDto
-import cz.lastaapps.menza.api.agata.data.model.dto.ServingPlaceDto
-import cz.lastaapps.menza.api.agata.data.model.dto.SubsystemDto
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.logging.LogLevel.BODY
 import io.ktor.client.plugins.logging.Logging
 
-class StravnikWalletTest : StringSpec(
-    {
-        fun api() = StravnikWalletApiImpl(
-            HttpClient {
-                install(Logging) {
-                    level = BODY
-                }
-            },
-        )
+class StravnikWalletTest :
+    StringSpec(
+        {
+            fun api() =
+                StravnikWalletApiImpl(
+                    HttpClient {
+                        install(Logging) {
+                            level = BODY
+                        }
+                    },
+                )
 
-        "getBalance" {
-            val username = ""
-            val password = ""
-            api()
-                .getBalance(username, password)
-                .shouldBeRight()
-        }
-    },
-)
+            "getBalance" {
+                val username = ""
+                val password = ""
+                api()
+                    .getBalance(username, password)
+                    .shouldBeRight()
+            }
+        },
+    )

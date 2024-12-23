@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.core.ui.vm.HandleDismiss
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Discounted
@@ -70,8 +69,6 @@ private fun PriceTypeEffects(
     viewModel: PriceTypeViewModel,
     onSelect: () -> Unit,
 ) {
-    HandleAppear(viewModel)
-
     HandleDismiss(
         viewModel,
         PriceTypeState::isSelected,

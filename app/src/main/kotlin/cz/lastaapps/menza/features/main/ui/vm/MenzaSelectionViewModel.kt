@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.features.main.ui.vm
 
 import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -30,6 +29,8 @@ import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.GetOrdered
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.IsMenzaOrderFromTopUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 internal class MenzaSelectionViewModel(
@@ -38,25 +39,21 @@ internal class MenzaSelectionViewModel(
     private val isMenzaOrderFromTop: IsMenzaOrderFromTopUC,
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val selectMenza: SelectMenzaUC,
-) : StateViewModel<MenzaSelectionState>(MenzaSelectionState(), context),
-    Appearing {
-    override var hasAppeared: Boolean = false
-
-    override fun onAppeared() =
-        launchVM {
-            getSelectedMenza()
-                .onEach {
-                    updateState { copy(selectedMenza = it) }
-                }.launchInVM()
-            getMenzaList()
-                .onEach {
-                    updateState { copy(menzaList = it) }
-                }.launchInVM()
-            isMenzaOrderFromTop()
-                .onEach {
-                    updateState { copy(fromTop = it) }
-                }.launchInVM()
-        }
+) : StateViewModel<MenzaSelectionState>(MenzaSelectionState(), context) {
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        getSelectedMenza()
+            .onEach {
+                updateState { copy(selectedMenza = it) }
+            }.launchIn(scope)
+        getMenzaList()
+            .onEach {
+                updateState { copy(menzaList = it) }
+            }.launchIn(scope)
+        isMenzaOrderFromTop()
+            .onEach {
+                updateState { copy(fromTop = it) }
+            }.launchIn(scope)
+    }
 
     fun selectMenza(menza: Menza) =
         launchVM {

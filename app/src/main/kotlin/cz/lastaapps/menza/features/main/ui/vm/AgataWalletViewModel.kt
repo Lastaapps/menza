@@ -30,7 +30,6 @@ import cz.lastaapps.api.main.domain.usecase.wallet.WalletGetBalanceUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletLogoutUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletRefreshUC
 import cz.lastaapps.core.domain.error.DomainError
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
@@ -38,6 +37,8 @@ import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.core.util.providers.LinkOpener
 import cz.lastaapps.menza.features.main.domain.usecase.GetAddMoneyUrlUC
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 
 internal class AgataWalletViewModel(
@@ -48,22 +49,20 @@ internal class AgataWalletViewModel(
     private val getAddMoneyUrlUC: GetAddMoneyUrlUC,
     private val openLink: LinkOpener,
 ) : StateViewModel<AgataWalletState>(AgataWalletState(), vmContext),
-    Appearing,
     ErrorHolder {
-    override var hasAppeared: Boolean = false
-
     private val log = localLogger()
 
-    override fun onAppeared() =
-        launchVM {
-            walletGetBalanceUC()
-                .mapLatest { balance ->
-                    log.i { "New balance: $balance" }
-                    processBalance(balance)
-                }.launchInVM()
+    override suspend fun onFirstAppearance() {
+        launchVM { load(false) }
+    }
 
-            load(false)
-        }
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        walletGetBalanceUC()
+            .mapLatest { balance ->
+                log.i { "New balance: $balance" }
+                processBalance(balance)
+            }.launchIn(scope)
+    }
 
     private fun processBalance(balance: UserBalance?) =
         if (balance != null) {

@@ -25,7 +25,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.week.ui.vm.WeekState
 import cz.lastaapps.menza.features.week.ui.vm.WeekViewModel
@@ -56,7 +55,6 @@ private fun WeekEffects(
     viewModel: WeekViewModel,
     hostState: SnackbarHostState,
 ) {
-    HandleAppear(viewModel)
     HandleError(viewModel, hostState)
 }
 

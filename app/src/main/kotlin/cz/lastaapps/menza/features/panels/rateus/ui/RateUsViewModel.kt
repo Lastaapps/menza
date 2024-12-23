@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.model.AppSocial
 import cz.lastaapps.core.domain.usecase.OpenAppSocialUC
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
@@ -31,7 +30,10 @@ import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.panels.rateus.domain.usecase.DismissRateUsUC
 import cz.lastaapps.menza.features.panels.rateus.domain.usecase.RecordAppOpenedUC
 import cz.lastaapps.menza.features.panels.rateus.domain.usecase.ShouldShowRateUsUC
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 internal class RateUsViewModel(
     context: VMContext,
@@ -40,17 +42,14 @@ internal class RateUsViewModel(
     private val dismissRateUsUC: DismissRateUsUC,
     private val openSocialsUC: OpenAppSocialUC,
 ) : StateViewModel<RateUsViewModel.State>(State(), context),
-    Appearing,
     ErrorHolder {
-    override var hasAppeared: Boolean = false
-
-    override fun onAppeared() {
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
         shouldShowRateUsUC()
             .onEach {
                 updateState { copy(shouldShow = it) }
-            }.launchInVM()
+            }.launchIn(scope)
 
-        launchVM { appOpenedUC() }
+        scope.launch { appOpenedUC() }
     }
 
     fun ratePlayStore() =

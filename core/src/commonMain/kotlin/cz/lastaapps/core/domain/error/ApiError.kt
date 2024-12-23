@@ -38,7 +38,9 @@ sealed interface ApiError : DomainError.Logic {
 
     sealed interface WalletError : ApiError {
         @JvmInline
-        value class TotallyBroken(override val extraMessage: String? = null) : WalletError
+        value class TotallyBroken(
+            override val extraMessage: String? = null,
+        ) : WalletError
 
         data object InvalidCredentials : WalletError
     }

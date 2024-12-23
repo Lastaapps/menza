@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.features.settings.ui.vm
 
 import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -43,6 +42,8 @@ import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetPriceType
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetAppThemeUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 internal class SettingsViewModel(
@@ -59,29 +60,25 @@ internal class SettingsViewModel(
     val setPreferredMenzaUC: SetPreferredMenzaUC,
     val getMenzaListUC: GetOrderedVisibleMenzaListUC,
     val fullAppReloadUC: FullAppReloadUC,
-) : StateViewModel<SettingsState>(SettingsState(), vmContext),
-    Appearing {
-    override var hasAppeared: Boolean = false
-
-    override fun onAppeared() =
-        launchVM {
-            getAppSettingsUC()
-                .onEach {
-                    updateState { copy(appSettings = it) }
-                }.launchInVM()
-            getAppThemeUC()
-                .onEach {
-                    updateState { copy(appTheme = it) }
-                }.launchInVM()
-            getPreferredMenzaUC()
-                .onEach {
-                    updateState { copy(preferredMenza = it) }
-                }.launchInVM()
-            getMenzaListUC()
-                .onEach {
-                    updateState { copy(menzaList = it) }
-                }.launchInVM()
-        }
+) : StateViewModel<SettingsState>(SettingsState(), vmContext) {
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        getAppSettingsUC()
+            .onEach {
+                updateState { copy(appSettings = it) }
+            }.launchIn(scope)
+        getAppThemeUC()
+            .onEach {
+                updateState { copy(appTheme = it) }
+            }.launchIn(scope)
+        getPreferredMenzaUC()
+            .onEach {
+                updateState { copy(preferredMenza = it) }
+            }.launchIn(scope)
+        getMenzaListUC()
+            .onEach {
+                updateState { copy(menzaList = it) }
+            }.launchIn(scope)
+    }
 
     fun markAsViewed() =
         launchVM {

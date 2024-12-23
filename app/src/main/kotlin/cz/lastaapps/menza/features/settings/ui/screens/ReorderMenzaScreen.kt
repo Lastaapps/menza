@@ -52,7 +52,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.MenzaOrder
 import cz.lastaapps.menza.features.settings.ui.vm.ReorderMenzaState
@@ -87,7 +86,6 @@ internal fun ReorderMenzaScreen(
 
 @Composable
 private fun ReorderMenzaEffects(viewModel: ReorderMenzaViewModel) {
-    HandleAppear(viewModel)
 }
 
 @Composable

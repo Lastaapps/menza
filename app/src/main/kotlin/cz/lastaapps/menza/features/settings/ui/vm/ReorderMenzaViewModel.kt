@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.features.settings.ui.vm
 
 import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -32,6 +31,9 @@ import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.ToggleMenz
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.UpdateMenzaOrderUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 internal class ReorderMenzaViewModel(
     context: VMContext,
@@ -40,23 +42,17 @@ internal class ReorderMenzaViewModel(
     private val updateMenzaOrder: UpdateMenzaOrderUC,
     private val isMenzaOrderFromTop: IsMenzaOrderFromTopUC,
     private val setMenzaOrderFromTop: SetMenzaOrderFromTopUC,
-) : StateViewModel<ReorderMenzaState>(ReorderMenzaState(), context),
-    Appearing {
-    override var hasAppeared: Boolean = false
-
-    override fun onAppeared() =
-        launchVM {
-            launchVM {
-                getOrderedMenzaList().collect {
-                    updateState { copy(menzaList = it) }
-                }
-            }
-            launchVM {
-                isMenzaOrderFromTop().collect {
-                    updateState { copy(fromTop = it) }
-                }
-            }
-        }
+) : StateViewModel<ReorderMenzaState>(ReorderMenzaState(), context) {
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        getOrderedMenzaList()
+            .onEach {
+                updateState { copy(menzaList = it) }
+            }.launchIn(scope)
+        isMenzaOrderFromTop()
+            .onEach {
+                updateState { copy(fromTop = it) }
+            }.launchIn(scope)
+    }
 
     fun toggleVisibility(menza: Menza) =
         launchVM {

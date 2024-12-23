@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.starting.ui.vm
 
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -32,22 +31,18 @@ internal class PriceTypeViewModel internal constructor(
     context: VMContext,
     private val getPriceType: GetPriceTypeUC,
     private val setPriceType: SetPriceTypeUC,
-) : StateViewModel<PriceTypeState>(PriceTypeState(), context),
-    Appearing {
-    override var hasAppeared: Boolean = false
-
-    override fun onAppeared() =
-        launchVM {
-            getPriceType()
-                .first()
-                .let { type ->
-                    if (type != PriceType.Unset) {
-                        updateState { copy(isReady = true, isSelected = true) }
-                    } else {
-                        updateState { copy(isReady = true) }
-                    }
+) : StateViewModel<PriceTypeState>(PriceTypeState(), context) {
+    override suspend fun onFirstAppearance() {
+        getPriceType()
+            .first()
+            .let { type ->
+                if (type != PriceType.Unset) {
+                    updateState { copy(isReady = true, isSelected = true) }
+                } else {
+                    updateState { copy(isReady = true) }
                 }
-        }
+            }
+    }
 
     fun selectType(type: PriceType) =
         launchVM {

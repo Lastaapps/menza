@@ -48,7 +48,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.starting.ui.util.text
 import cz.lastaapps.menza.features.starting.ui.vm.DownloadDataState
@@ -78,8 +77,6 @@ private fun DownloadEffects(
     hostState: SnackbarHostState,
     onComplete: () -> Unit,
 ) {
-    HandleAppear(viewModel)
-
     HandleError(viewModel, hostState)
 
     val isDone = viewModel.flowState.value.isDone

@@ -31,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.panels.aprilfools.ui.AprilFools
 import cz.lastaapps.menza.features.panels.aprilfools.ui.shouldShowAprilFools
 import cz.lastaapps.menza.features.panels.crashreport.ui.CrashReport
@@ -51,8 +50,6 @@ internal fun Panels(
     rateUsViewModel: RateUsViewModel,
     modifier: Modifier = Modifier,
 ) {
-    HandleAppear(appearing = whatsNewViewModel)
-    HandleAppear(appearing = rateUsViewModel)
     HandleError(holder = rateUsViewModel, hostState = hostState)
 
     Box(modifier.animateContentSize()) {

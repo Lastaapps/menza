@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import arrow.core.Either.Left
 import arrow.core.Either.Right
 import cz.lastaapps.core.domain.error.DomainError
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
@@ -32,48 +31,46 @@ import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.starting.domain.model.DownloadProgress
 import cz.lastaapps.menza.features.starting.domain.usecase.CheckDataDownloadNeededUC
 import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
+import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlin.time.Duration.Companion.seconds
 
 internal class DownloadViewModel(
     private val checkDownloadNeeded: CheckDataDownloadNeededUC,
     private val downloadData: DownloadInitDataUC,
     context: VMContext,
 ) : StateViewModel<DownloadDataState>(DownloadDataState(), context),
-    ErrorHolder,
-    Appearing {
-    override var hasAppeared: Boolean = false
-
+    ErrorHolder {
     private val log = localLogger()
 
-    override fun onAppeared() =
-        launchVM {
-            log.i { "Appeared" }
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        log.i { "Appeared" }
 
-            checkDownloadNeeded()
-                .onEach {
-                    when (it) {
-                        true -> {
-                            log.i { "No data, starting" }
-                            updateState { copy(isReady = true) }
-                            startDownload()
-                        }
+        checkDownloadNeeded()
+            .onEach {
+                when (it) {
+                    true -> {
+                        log.i { "No data, starting" }
+                        updateState { copy(isReady = true) }
+                        startDownload()
+                    }
 
-                        false -> {
-                            log.i { "Already has data" }
-                            updateState {
-                                copy(
-                                    isReady = true,
-                                    isDone = true,
-                                    downloadProgress = DownloadProgress.DONE,
-                                )
-                            }
+                    false -> {
+                        log.i { "Already has data" }
+                        updateState {
+                            copy(
+                                isReady = true,
+                                isDone = true,
+                                downloadProgress = DownloadProgress.DONE,
+                            )
                         }
                     }
-                }.launchInVM()
-        }
+                }
+            }.launchIn(scope)
+    }
 
     private fun startDownload() =
         launchVM {

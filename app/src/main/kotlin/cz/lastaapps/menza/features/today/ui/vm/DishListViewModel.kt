@@ -32,7 +32,6 @@ import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
 import cz.lastaapps.api.main.domain.usecase.SyncTodayDishListUC
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.usecase.IsOnMeteredUC
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
@@ -45,17 +44,19 @@ import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetImageScal
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetOliverRow
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 internal class DishListViewModel(
     context: VMContext,
@@ -69,57 +70,59 @@ internal class DishListViewModel(
     private val getUserSettingsUC: GetTodayUserSettingsUC,
     private val openMenuLinkUC: OpenMenuUC,
 ) : StateViewModel<DishListState>(DishListState(), context),
-    Appearing,
     ErrorHolder {
-    override var hasAppeared: Boolean = false
-
     private val log = localLogger()
 
-    override fun onAppeared() =
-        launchVM {
-            getSelectedMenzaUC().collectLatestInVM { newMenza ->
-                log.i { "Registered a new: $newMenza" }
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        scope.launch {
+            getSelectedMenzaUC()
+                // this cannot be onEach
+                // the code runs blocking code inside
+                // and onEach waits for it's body to finish
+                .collectLatest { newMenza ->
+                    log.i { "Registered a new: $newMenza" }
 
-                updateState {
-                    copy(
-                        selectedMenza = newMenza.toOption(),
-                        items = persistentListOf(),
-                    )
-                }
-                syncJob?.cancel()
-                if (newMenza != null) {
-                    coroutineScope {
-                        this.launch {
-                            load(newMenza, false)
-                        }
-                        getTodayDishListUC(newMenza).collectLatest { items ->
-                            updateState { copy(items = items) }
-                        }
+                    updateState {
+                        copy(
+                            selectedMenza = newMenza.toOption(),
+                            items = persistentListOf(),
+                        )
                     }
-                }
-            }
-
-            getUserSettingsUC()
-                .onEach {
-                    updateState { copy(userSettings = it) }
-                }.launchInVM()
-            isOnMeteredUC()
-                .onEach {
-                    updateState { copy(isOnMetered = it) }
-                }.launchInVM()
-
-            // Refreshes the screen if user is looking at the data for at least 42 seconds
-            flow
-                .map {
-                    it.isResumed to it.selectedMenza?.getOrNull()
-                }.distinctUntilChanged()
-                .collectLatestInVM { (resumed, menza) ->
-                    while (resumed && menza != null) {
-                        delay(42.seconds)
-                        load(menza, true)
+                    syncJob?.cancel()
+                    if (newMenza != null) {
+                        coroutineScope {
+                            this.launch {
+                                load(newMenza, false)
+                            }
+                            getTodayDishListUC(newMenza).collectLatest { items ->
+                                updateState { copy(items = items) }
+                            }
+                        }
                     }
                 }
         }
+
+        getUserSettingsUC()
+            .onEach {
+                updateState { copy(userSettings = it) }
+            }.launchIn(scope)
+        isOnMeteredUC()
+            .onEach {
+                updateState { copy(isOnMetered = it) }
+            }.launchIn(scope)
+
+        // Refreshes the screen if user is looking at the data for at least 42 seconds
+        flow
+            .map {
+                it.isResumed to it.selectedMenza?.getOrNull()
+            }.distinctUntilChanged()
+            .onEach { (resumed, menza) ->
+                while (resumed && menza != null) {
+                    delay(42.seconds)
+                    load(menza, true)
+                }
+            }.launchIn(scope)
+    }
 
     private var syncJob: Job? = null
 

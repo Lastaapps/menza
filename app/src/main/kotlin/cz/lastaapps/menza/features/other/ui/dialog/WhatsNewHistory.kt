@@ -42,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.BuildConfig
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
@@ -53,9 +52,6 @@ internal fun WhatsNewDialog(
     viewModel: WhatsNewViewModel,
     onDismissRequest: () -> Unit,
 ) {
-    @Suppress("")
-    HandleAppear(appearing = viewModel)
-
     Dialog(onDismissRequest) {
         val source = remember { MutableInteractionSource() }
         Box(

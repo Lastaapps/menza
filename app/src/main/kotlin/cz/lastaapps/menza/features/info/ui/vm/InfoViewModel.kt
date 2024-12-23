@@ -30,16 +30,18 @@ import cz.lastaapps.api.core.domain.sync.mapSync
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.SyncInfoUC
 import cz.lastaapps.core.domain.error.DomainError
-import cz.lastaapps.core.ui.vm.Appearing
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 internal class InfoViewModel(
@@ -48,38 +50,33 @@ internal class InfoViewModel(
     private val getInfo: GetInfoUC,
     private val syncInfo: SyncInfoUC,
 ) : StateViewModel<InfoState>(InfoState(), context),
-    Appearing,
     ErrorHolder {
-    override var hasAppeared: Boolean = false
-
     private val log = localLogger()
 
-    override fun onAppeared() =
-        launchVM {
-            launchVM {
-                getSelectedMenza().collectLatest {
-                    log.i { "Registered a new: $it" }
+    override suspend fun whileSubscribed(scope: CoroutineScope) {
+        getSelectedMenza()
+            .onEach {
+                log.i { "Registered a new: $it" }
 
-                    updateState {
-                        copy(
-                            selectedMenza = it.toOption(),
-                            items = null,
-                        )
-                    }
-                    syncJob?.cancel()
-                    if (it != null) {
-                        coroutineScope {
-                            this.launch {
-                                load(it, false)
-                            }
-                            getInfo(it).collectLatest { items ->
-                                updateState { copy(items = items) }
-                            }
+                updateState {
+                    copy(
+                        selectedMenza = it.toOption(),
+                        items = null,
+                    )
+                }
+                syncJob?.cancel()
+                if (it != null) {
+                    coroutineScope {
+                        this.launch {
+                            load(it, false)
+                        }
+                        getInfo(it).collectLatest { items ->
+                            updateState { copy(items = items) }
                         }
                     }
                 }
-            }
-        }
+            }.launchIn(scope)
+    }
 
     private var syncJob: Job? = null
 

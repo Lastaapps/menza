@@ -41,10 +41,10 @@ import io.ktor.client.request.post
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.parameters
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlin.time.Duration.Companion.milliseconds
 
 interface StravnikWalletApi : WalletApi
 
@@ -185,10 +185,11 @@ internal class StravnikWalletApiImpl(
                         {
                             log.e(it) { "Finding regex failed" }
                             log.e { "The error body was:\n$this" }
-                            return ApiError.WalletError.TotallyBroken(
-                                "Rexex did not match:\n" +
-                                this@processBody
-                            ).left()
+                            return ApiError.WalletError
+                                .TotallyBroken(
+                                    "Rexex did not match:\n" +
+                                        this@processBody,
+                                ).left()
                         },
                     )
             }?.replace(',', '.')
@@ -196,8 +197,9 @@ internal class StravnikWalletApiImpl(
             ?.replace("&#xA0;", "")
             ?.toFloatOrNull()
             ?.right()
-            ?: ApiError.WalletError.TotallyBroken(
-                "Failed to parse number:\n" +
-                    this@processBody
-            ).left()
+            ?: ApiError.WalletError
+                .TotallyBroken(
+                    "Failed to parse number:\n" +
+                        this@processBody,
+                ).left()
 }

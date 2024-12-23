@@ -32,7 +32,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.features.other.ui.dialog.PrivacyDialog
 import cz.lastaapps.menza.features.other.ui.dialog.WhatsNewDialog
 import cz.lastaapps.menza.features.other.ui.widgets.CrashesDialog
@@ -76,8 +75,6 @@ internal fun SettingsContent(
     val crashesViewModel: CrashesViewModel = component.crashViewModel
     val whatsNewViewModel: WhatsNewViewModel = component.whatsNewViewModel
     val state by viewModel.flowState
-
-    HandleAppear(appearing = viewModel)
 
     // dismiss initial red dot
     LaunchedEffect(Unit) { viewModel.markAsViewed() }

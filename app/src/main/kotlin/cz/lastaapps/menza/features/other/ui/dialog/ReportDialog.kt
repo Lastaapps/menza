@@ -113,9 +113,9 @@ private fun ReportDialog(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier =
-                    Modifier
-                        .width(IntrinsicSize.Max)
-                        .padding(16.dp),
+                Modifier
+                    .width(IntrinsicSize.Max)
+                    .padding(16.dp),
             ) {
                 Text(
                     stringResource(cz.lastaapps.menza.R.string.report_title),
@@ -253,7 +253,7 @@ fun sendReport(
         |
         |"Internal app problem"
         |${LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)}
-        |${errorText}
+        |$errorText
         |
         |${extraMessage ?: ""}
         |

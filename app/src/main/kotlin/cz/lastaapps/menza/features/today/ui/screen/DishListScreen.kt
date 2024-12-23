@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import cz.lastaapps.api.core.domain.model.Dish
-import cz.lastaapps.core.ui.vm.HandleAppear
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.CAROUSEL
@@ -109,7 +108,6 @@ private fun DishListEffects(
     viewModel: DishListViewModel,
     hostState: SnackbarHostState,
 ) {
-    HandleAppear(viewModel)
     HandleError(viewModel, hostState)
 }
 
