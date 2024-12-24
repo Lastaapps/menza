@@ -24,7 +24,7 @@ import coil3.PlatformContext
 import coil3.disk.DiskCache.Builder
 import coil3.disk.directory
 import coil3.memory.MemoryCache
-import coil3.network.ktor2.KtorNetworkFetcherFactory
+import coil3.network.ktor3.KtorNetworkFetcherFactory
 import coil3.request.CachePolicy
 import coil3.size.Precision
 import coil3.util.DebugLogger
