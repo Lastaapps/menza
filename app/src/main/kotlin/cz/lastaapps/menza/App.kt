@@ -20,7 +20,21 @@
 package cz.lastaapps.menza
 
 import android.app.Application
+import cz.lastaapps.menza.di.appModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.androix.startup.KoinStartup
+import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.dsl.KoinConfiguration
 
+@OptIn(KoinExperimentalAPI::class)
 class App :
     Application(),
-    coil3.SingletonImageLoader.Factory by CoilSetup()
+    coil3.SingletonImageLoader.Factory by CoilSetup(),
+    KoinStartup {
+    override fun onKoinStartup(): KoinConfiguration = KoinConfiguration {
+        androidLogger()
+        androidContext(this@App.applicationContext)
+        modules(appModule)
+    }
+}

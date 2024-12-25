@@ -85,6 +85,8 @@ dependencies {
     implementation(libs.androidx.windowManager)
     implementation(libs.google.material)
 
+    implementation(libs.koin.android.startup)
+
     implementation(libs.aboutLibraries.core)
 
     implementation(libs.bundles.sqldelight)

@@ -70,9 +70,6 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="cz.lastaapps.menza.util.KoinStartupInit"
-                android:value="androidx.startup" />
-            <meta-data
                 android:name="cz.lastaapps.menza.util.ReEnableCrashInit"
                 android:value="androidx.startup" />
             <!-- Required koin, but cannot depend on root koin init task -->

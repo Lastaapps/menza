@@ -18,7 +18,7 @@ google-ksp = "2.1.20-Beta1-1.0.29"
 java-jvmTarget = "17"
 junit5-bom = "5.11.4"
 kermit = "2.0.5"
-koin = "4.0.0"
+koin = "4.0.1"
 koin-annotations = "1.0.3"
 kotest = "5.9.1"
 kotest-arrow = "2.0.0"
@@ -123,6 +123,7 @@ junit5-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 junit5-jupiter-runtime = { module = "org.junit.jupiter:junit-jupiter-engine" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 koin-android-core = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-android-startup = { module = "io.insert-koin:koin-androidx-startup", version.ref = "koin" }
 koin-android-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
 koin-annotations-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }

@@ -25,6 +25,7 @@ import androidx.startup.AppInitializer
 import androidx.startup.Initializer
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.crash.StartInit
+import org.koin.androix.startup.KoinInitializer
 
 @Keep
 @Suppress("unused")
@@ -38,5 +39,6 @@ internal class ReEnableCrashInit : Initializer<Unit> {
             .initializeComponent(StartInit::class.java)
     }
 
-    override fun dependencies(): List<Class<out Initializer<*>>> = listOf(KoinStartupInit::class.java)
+    override fun dependencies(): List<Class<out Initializer<*>>> =
+        listOf(KoinInitializer::class.java)
 }
