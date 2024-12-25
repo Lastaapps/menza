@@ -169,7 +169,7 @@ internal class BuffetScraperImpl : BuffetScraper {
 
                 val errors =
                     dishData.fold(
-                        (dayErrors as Sequence<DomainError>).toPersistentList(),
+                        dayErrors.toPersistentList<DomainError>(),
                     ) { acu, (errors, _) ->
                         when (errors) {
                             None -> acu
