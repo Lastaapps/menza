@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.starting.ui.navigation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -30,8 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.extensions.compose.pages.Pages
+import com.arkivanov.decompose.extensions.compose.pages.ChildPages
 import com.arkivanov.decompose.extensions.compose.pages.PagesScrollAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import cz.lastaapps.menza.features.settings.ui.component.AppThemeContent
@@ -49,7 +47,6 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Chil
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.OrderMenzaList
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.Policy
 
-@OptIn(ExperimentalDecomposeApi::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun StartingContent(
     component: StartingComponent,
@@ -69,7 +66,7 @@ internal fun StartingContent(
                 .padding(padding)
                 .fillMaxSize()
 
-        Pages(
+        ChildPages(
             pages = pager,
             onPageSelected = { /* TODO separate download and privacy policy, enable this after */ },
             scrollAnimation = PagesScrollAnimation.Default,

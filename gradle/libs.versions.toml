@@ -9,8 +9,7 @@ androidx-lifecycle = "2.8.7"
 androidx-security = "1.1.0-alpha06"
 androidx-test = "1.6.1"
 coil = "3.0.4"
-decompose = "3.1.0"
-# decompose = "3.2.2"
+decompose = "3.2.2"
 detekt = "1.23.7"
 espresso = "3.6.1"
 google-ksp = "2.1.20-Beta1-1.0.29"
@@ -100,6 +99,7 @@ coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.re
 coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
 coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" }
 decompose-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
+decompose-compose-experimental = { module = "com.arkivanov.decompose:extensions-compose-experimental", version.ref = "decompose" }
 decompose-core = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 detekt-kode-compose = "ru.kode:detekt-rules-compose:1.4.0"
 detekt-twitter-compose = "com.twitter.compose.rules:detekt:0.0.26"

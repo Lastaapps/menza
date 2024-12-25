@@ -70,7 +70,8 @@ class ComposeConvention :
                 implementation(libs.androidx.lifecycle.runtime.compose)
 
                 implementation(libs.decompose.core)
-                implementation(libs.decompose.compose)
+                implementation(libs.decompose.compose.asProvider())
+                implementation(libs.decompose.compose.experimental)
 
                 implementation(libs.coil.compose.complete)
             }
