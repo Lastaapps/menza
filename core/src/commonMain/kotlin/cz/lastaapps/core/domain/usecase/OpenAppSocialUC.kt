@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,13 +31,14 @@ import cz.lastaapps.core.domain.model.AppSocial.PLAY_STORE_APP
 import cz.lastaapps.core.domain.model.AppSocial.PLAY_STORE_DEVELOPER
 import cz.lastaapps.core.domain.model.AppSocial.TELEGRAM
 import cz.lastaapps.core.util.providers.LinkOpener
+import cz.lastaapps.core.util.providers.writeEmail
 
 class OpenAppSocialUC internal constructor(
     private val link: LinkOpener,
 ) {
     operator fun invoke(social: AppSocial) =
         when (social) {
-            EMAIL -> link.writeEmail("krasik.peta@seznam.cz")
+            EMAIL -> link.writeEmail("lastaappsdev@gmail.com", null, null)
             FACEBOOK -> link.openFacebookPage("https://www.facebook.com/lastaapps/")
             GITHUB_ISSUES -> link.openLink("https://github.com/Lastaapps/menza/issues")
             GITHUB_DEVELOPER -> link.openLink("https://github.com/lastaapps/")

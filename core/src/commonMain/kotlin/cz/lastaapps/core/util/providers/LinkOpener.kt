@@ -24,7 +24,7 @@ import cz.lastaapps.core.domain.Outcome
 interface LinkOpener {
     fun openLink(url: String): Outcome<Unit>
 
-    fun writeEmail(email: String): Outcome<Unit>
+    fun writeEmail(emails: List<String>, subject: String?, content: String?): Outcome<Unit>
 
     fun callPhoneNumber(number: String): Outcome<Unit>
 
@@ -39,3 +39,6 @@ interface LinkOpener {
 
     fun openFacebookPage(pageUrl: String): Outcome<Unit>
 }
+
+fun LinkOpener.writeEmail(email: String, subject: String?, content: String?) =
+    writeEmail(listOf(email), subject, content)

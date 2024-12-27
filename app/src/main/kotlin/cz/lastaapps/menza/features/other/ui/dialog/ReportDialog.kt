@@ -408,7 +408,7 @@ private fun sendEmail(
 ) {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = Uri.parse("mailto:")
-    intent.putExtra(Intent.EXTRA_EMAIL, "lastaappsdev@gmail.com")
+    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("lastaappsdev@gmail.com"))
     intent.putExtra(Intent.EXTRA_SUBJECT, "Menza problem report")
     intent.putExtra(Intent.EXTRA_TEXT, text)
     try {

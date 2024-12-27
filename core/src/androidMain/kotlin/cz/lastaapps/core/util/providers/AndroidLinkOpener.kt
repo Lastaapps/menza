@@ -43,19 +43,38 @@ internal class AndroidLinkOpener(
                 }
         }.mapLeft { CommonError.AppNotFound.Link }
 
-    override fun writeEmail(email: String): Outcome<Unit> =
+    override fun writeEmail(
+        emails: List<String>,
+        subject: String?,
+        content: String?,
+    ): Outcome<Unit> =
         runCatchingAppNotFound {
-            error("Not yet implemented")
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:")
+            intent.putExtra(Intent.EXTRA_EMAIL, emails.toTypedArray())
+            subject?.let {
+                intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+            }
+            content?.let {
+                intent.putExtra(Intent.EXTRA_TEXT, content)
+            }
+            context.startActivity(Intent.createChooser(intent, ""))
         }.mapLeft { CommonError.AppNotFound.Email }
 
     override fun callPhoneNumber(number: String): Outcome<Unit> =
         runCatchingAppNotFound {
-            error("Not yet implemented")
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:$number")
+            context.startActivity(Intent.createChooser(intent, ""))
         }.mapLeft { CommonError.AppNotFound.PhoneCall }
 
     override fun openAddress(address: String): Outcome<Unit> =
         runCatchingAppNotFound {
-            error("Not yet implemented")
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("geo:0,0?q=${Uri.encode(address)}")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(intent)
         }.mapLeft { CommonError.AppNotFound.Map }
 
     override fun openGeo(
@@ -63,7 +82,11 @@ internal class AndroidLinkOpener(
         long: Float,
     ): Outcome<Unit> =
         runCatchingAppNotFound {
-            error("Not yet implemented")
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("geo:${lat},${long}")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(intent)
         }.mapLeft { CommonError.AppNotFound.Map }
 
     override fun openTelegram(groupUrl: String): Outcome<Unit> =
