@@ -19,6 +19,7 @@
 
 package cz.lastaapps.api.core.domain.validity
 
+import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.RequestParams
 
 @JvmInline
@@ -26,6 +27,8 @@ value class ValidityKey private constructor(
     val name: String,
 ) {
     fun withLang(lang: String) = ValidityKey(lang + '_' + name)
+
+    fun withMenzaType(menzaType: MenzaType) = ValidityKey(menzaType.id + '_' + name)
 
     companion object {
         fun agataToday(subsystemId: Int) = ValidityKey("agata_today_$subsystemId")
@@ -41,6 +44,8 @@ value class ValidityKey private constructor(
         fun buffetDish() = ValidityKey("buffet_dish")
 
         fun agataCtuBalance() = ValidityKey("balance_agata_ctu")
+
+        fun rating() = ValidityKey("rating")
     }
 }
 

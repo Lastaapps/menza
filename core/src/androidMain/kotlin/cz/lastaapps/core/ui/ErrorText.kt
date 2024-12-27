@@ -26,6 +26,11 @@ import cz.lastaapps.core.domain.AppText.Formatted
 import cz.lastaapps.core.domain.AppText.Resource
 import cz.lastaapps.core.domain.AppText.Rich
 import cz.lastaapps.core.domain.error.ApiError
+import cz.lastaapps.core.domain.error.ApiError.RatingError
+import cz.lastaapps.core.domain.error.ApiError.RatingError.OldAppVersion
+import cz.lastaapps.core.domain.error.ApiError.RatingError.OtherProblem
+import cz.lastaapps.core.domain.error.ApiError.RatingError.TooManyRequests
+import cz.lastaapps.core.domain.error.ApiError.RatingError.Unauthorized
 import cz.lastaapps.core.domain.error.ApiError.SyncError
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Closed
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Problem
@@ -119,6 +124,14 @@ val ApiError.text: AppText
                 when (this) {
                     is TotallyBroken -> E(R.string.error_wallet_login_failed_critical)
                     InvalidCredentials -> E(R.string.error_wallet_login_failed_credentials)
+                }
+
+            is RatingError ->
+                when (this) {
+                    is OldAppVersion -> F(R.string.error_rating_old_app_version, this.reason)
+                    is OtherProblem -> F(R.string.error_rating_other_problem, this.code)
+                    is TooManyRequests -> F(R.string.error_rating_too_many_requests, this.reason)
+                    Unauthorized -> E(R.string.error_rating_unauthorized)
                 }
         }
 

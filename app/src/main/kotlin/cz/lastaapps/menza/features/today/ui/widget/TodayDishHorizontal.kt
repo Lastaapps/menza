@@ -48,8 +48,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.Dish
-import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
@@ -91,9 +91,9 @@ internal fun TodayDishHorizontal(
                 header = header,
                 footer = footer,
                 modifier =
-                    Modifier
-                        .padding(top = Padding.Smaller) // so text is not cut off
-                        .fillMaxSize(),
+                Modifier
+                    .padding(top = Padding.Smaller) // so text is not cut off
+                    .fillMaxSize(),
             )
         }
     }
@@ -147,9 +147,9 @@ private fun DishContent(
                             userSettings = userSettings,
                             isOnMetered = isOnMetered,
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .animateItem(),
+                            Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
                         )
                     } else {
                         @Composable
@@ -177,11 +177,11 @@ private fun DishContent(
                                 verticalAlignment = Alignment.Top,
                                 horizontalArrangement = horizontalArrangement,
                                 modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .horizontalScroll(rememberScrollState())
-                                        .animateItem()
-                                        .animateContentSize(),
+                                Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState())
+                                    .animateItem()
+                                    .animateContentSize(),
                             ) {
                                 category.dishList.forEach { dish ->
                                     DishItemWrapper(dish, Modifier)
@@ -192,10 +192,10 @@ private fun DishContent(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = horizontalArrangement,
                                 modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .animateItem()
-                                        .animateContentSize(),
+                                Modifier
+                                    .fillMaxWidth()
+                                    .animateItem()
+                                    .animateContentSize(),
                             ) {
                                 items(
                                     category.dishList,
@@ -217,9 +217,9 @@ private fun DishContent(
                     useOliverRow = userSettings.useOliverRow,
                     onOliverRow = onOliverRow,
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .animateItem(),
+                    Modifier
+                        .fillMaxWidth()
+                        .animateItem(),
                 )
             }
 
@@ -288,9 +288,9 @@ private fun DishImageWithBadge(
             dish = dish,
             loadImmediately = loadImmediately(downloadOnMetered, isOnMetered),
             modifier =
-                Modifier
-                    .align(Alignment.Center)
-                    .padding(Padding.Small),
+            Modifier
+                .align(Alignment.Center)
+                .padding(Padding.Small),
         )
 
         DishBadgesColumn(

@@ -51,7 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.CachePolicy.DISABLED
 import coil3.request.ImageRequest.Builder
-import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.core.ui.vm.HandleDismiss
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
@@ -173,9 +173,9 @@ private fun TodayContent(
                 detailNode = dishDetail,
                 emptyNode = dishNone,
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
             )
 
             panels(

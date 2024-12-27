@@ -47,3 +47,4 @@ include(
     ":lastaapps:common",
     ":lastaapps:crash",
 )
+include(":api:rating")

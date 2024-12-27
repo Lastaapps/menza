@@ -20,20 +20,29 @@
 package cz.lastaapps.menza.features.today.ui.vm
 
 import androidx.compose.runtime.Composable
-import cz.lastaapps.api.core.domain.model.RatingCategory
+import arrow.core.Either.Left
+import arrow.core.Either.Right
+import cz.lastaapps.api.core.domain.model.rating.RatingCategories
+import cz.lastaapps.api.core.domain.model.rating.RatingCategory
+import cz.lastaapps.api.rating.domain.model.UserRating
+import cz.lastaapps.api.rating.domain.usecase.RateDishUC
+import cz.lastaapps.core.data.AppInfoProvider
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
+import cz.lastaapps.menza.features.today.ui.model.DishForRating
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.toPersistentMap
-import kotlinx.coroutines.delay
-import kotlin.time.Duration.Companion.seconds
+import kotlin.random.Random
 
 internal class RateDishViewModel(
     vmContext: VMContext,
-) : StateViewModel<RatingState>(RatingState(), vmContext),
+    private val dishForRating: DishForRating,
+    private val rateDishUC: RateDishUC,
+    provider: AppInfoProvider,
+) : StateViewModel<RatingState>(RatingState(provider.isDebug()), vmContext),
     ErrorHolder {
     fun onStar(
         category: RatingCategory,
@@ -44,8 +53,19 @@ internal class RateDishViewModel(
         launchVM {
             withLoading({ copy(submitting = it) }) {
                 updateState { copy(error = null) }
-                delay(0.5.seconds)
-                updateState { copy(isSubmitted = true) }
+                val res =
+                    rateDishUC(
+                        UserRating(
+                            dishForRating.toDishRatingDescriptor(),
+                            it.toDomain(),
+                        ),
+                    )
+                updateState {
+                    when (res) {
+                        is Left -> copy(error = res.value)
+                        is Right -> copy(isSubmitted = true)
+                    }
+                }
             }
         }
 
@@ -58,9 +78,10 @@ internal class RateDishViewModel(
 }
 
 internal data class RatingState(
+    val isDebug: Boolean = false,
     val rating: PersistentMap<RatingCategory, Int> =
         RatingCategory.entries
-            .associateWith { 0 }
+            .associateWith { if (isDebug) Random.nextInt(1, 5) else 0 }
             .toPersistentMap(),
     val submitting: Boolean = false,
     val isSubmitted: Boolean = false,
@@ -68,4 +89,11 @@ internal data class RatingState(
 ) : VMState {
     val isValid: Boolean
         get() = rating.values.all { it in 1..5 }
+
+    fun toDomain() =
+        RatingCategories(
+            taste = rating[RatingCategory.TASTE]!!.toFloat(),
+            portionSize = rating[RatingCategory.PORTION_SIZE]!!.toFloat(),
+            worthiness = rating[RatingCategory.WORTHINESS]!!.toFloat(),
+        )
 }

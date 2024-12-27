@@ -19,17 +19,17 @@
 
 package cz.lastaapps.menza.features.settings.ui.vm
 
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetDishLanguageUC
 
 internal class DishLanguageViewModel(
     context: VMContext,
     private val setDishLanguageUC: SetDishLanguageUC,
 ) : StateViewModel<DishLanguageState>(DishLanguageState(), context) {
-    fun selectLanguage(language: DishLanguage) =
+    fun selectLanguage(language: DataLanguage) =
         launchVM {
             setDishLanguageUC(language)
             updateState { copy(isSelected = true) }

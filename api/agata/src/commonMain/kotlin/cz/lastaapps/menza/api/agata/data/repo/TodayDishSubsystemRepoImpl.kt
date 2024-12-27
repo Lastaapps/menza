@@ -30,7 +30,8 @@ import arrow.core.Tuple4
 import arrow.core.rightIor
 import co.touchlab.kermit.Logger
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.repo.TodayRepoParams
 import cz.lastaapps.api.core.domain.repo.WeekRepoParams
@@ -71,7 +72,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 internal class TodayDishSubsystemRepoImpl(
-    private val subsystemId: Int,
+    private val subsystem: MenzaType.Agata.Subsystem,
     private val cafeteriaApi: CafeteriaApi,
     private val dishApi: DishApi,
     private val db: AgataDatabase,
@@ -80,7 +81,8 @@ internal class TodayDishSubsystemRepoImpl(
     private val beConfig: AgataBEConfig,
     hashStore: HashStore,
 ) : TodayDishRepo {
-    private val log = Logger.withTag(this::class.simpleName + "($subsystemId)")
+    private val log = Logger.withTag(this::class.simpleName + "($subsystem)")
+    private inline val subsystemId get() = subsystem.subsystemId
 
     private val validityKey = ValidityKey.agataToday(subsystemId)
 
@@ -159,7 +161,13 @@ internal class TodayDishSubsystemRepoImpl(
                             .map { list ->
                                 list
                                     .map { (dish, type, pictogram, servingPlaces) ->
-                                        type to dish.toDomain(pictogram, servingPlaces)
+                                        type to
+                                            dish.toDomain(
+                                                subsystem,
+                                                params.language,
+                                                pictogram,
+                                                servingPlaces,
+                                            )
                                     }.groupBy { it.first }
                                     .entries
                                     .sortedBy { (key, _) -> key?.itemOrder ?: Long.MAX_VALUE }
@@ -186,13 +194,27 @@ internal class TodayDishSubsystemRepoImpl(
         SyncJobHash<List<DishDto>?, List<DishEntity>, TodayRepoParams>(
             hashStore = hashStore,
             hashType = { HashType.dishHash(subsystemId).withLang(it.language) },
-            getHashCode = { dishApi.getDishesHash(it.language.toDto(), subsystemId).bind() },
-            fetchApi = { dishApi.getDishes(it.language.toDto(), subsystemId).bind() },
+            getHashCode = {
+                dishApi
+                    .getDishesHash(
+                        it.language.toDto(),
+                        subsystemId,
+                    ).bind()
+            },
+            fetchApi = {
+                dishApi.getDishes(it.language.toDto(), subsystemId).bind()
+            },
             convert = { params, data ->
-                data?.map { it.toEntity(beConfig, params.language) }.orEmpty().rightIor()
+                data
+                    ?.map { it.toEntity(beConfig, params.language) }
+                    .orEmpty()
+                    .rightIor()
             },
             store = { params, data ->
-                db.dishQueries.deleteSubsytem(params.language.toDB(), subsystemId.toLong())
+                db.dishQueries.deleteSubsytem(
+                    params.language.toDB(),
+                    subsystemId.toLong(),
+                )
                 data.forEach {
                     db.dishQueries.insert(it)
                 }
@@ -203,16 +225,29 @@ internal class TodayDishSubsystemRepoImpl(
     private val dishTypeJob =
         SyncJobHash<List<DishTypeDto>?, List<DishTypeEntity>, TodayRepoParams>(
             hashStore = hashStore,
-            hashType = { HashType.typesHash(subsystemId).withLang(it.language) },
-            getHashCode = {
-                cafeteriaApi.getDishTypesHash(it.language.toDto(), subsystemId).bind()
+            hashType = {
+                HashType.typesHash(subsystemId).withLang(it.language)
             },
-            fetchApi = { cafeteriaApi.getDishTypes(it.language.toDto(), subsystemId).bind() },
+            getHashCode = {
+                cafeteriaApi
+                    .getDishTypesHash(it.language.toDto(), subsystemId)
+                    .bind()
+            },
+            fetchApi = {
+                cafeteriaApi
+                    .getDishTypes(
+                        it.language.toDto(),
+                        subsystemId,
+                    ).bind()
+            },
             convert = { params, data ->
                 data?.map { it.toEntity(params.language) }.orEmpty().rightIor()
             },
             store = { params, data ->
-                db.dishTypeQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
+                db.dishTypeQueries.deleteSubsystem(
+                    params.language.toDB(),
+                    subsystemId.toLong(),
+                )
                 data.forEach {
                     db.dishTypeQueries.insert(it)
                 }
@@ -224,9 +259,15 @@ internal class TodayDishSubsystemRepoImpl(
         SyncJobHash<List<PictogramDto>, List<PictogramEntity>, TodayRepoParams>(
             hashStore = hashStore,
             hashType = { HashType.pictogramHash().withLang(it.language) },
-            getHashCode = { dishApi.getPictogramHash(it.language.toDto()).bind() },
-            fetchApi = { dishApi.getPictogram(it.language.toDto()).bind().orEmpty() },
-            convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
+            getHashCode = {
+                dishApi.getPictogramHash(it.language.toDto()).bind()
+            },
+            fetchApi = {
+                dishApi.getPictogram(it.language.toDto()).bind().orEmpty()
+            },
+            convert = { params, data ->
+                data.map { it.toEntity(params.language) }.rightIor()
+            },
             store = { params, data ->
                 db.pictogramQueries.deleteAll(params.language.toDB())
                 data.forEach {
@@ -239,16 +280,30 @@ internal class TodayDishSubsystemRepoImpl(
     private val servingPlacesJob =
         SyncJobHash<List<ServingPlaceDto>, List<ServingPlaceEntity>, TodayRepoParams>(
             hashStore = hashStore,
-            hashType = { HashType.servingPacesHash(subsystemId).withLang(it.language) },
+            hashType = {
+                HashType.servingPacesHash(subsystemId).withLang(it.language)
+            },
             getHashCode = {
-                cafeteriaApi.getServingPlacesHash(it.language.toDto(), subsystemId).bind()
+                cafeteriaApi
+                    .getServingPlacesHash(
+                        it.language.toDto(),
+                        subsystemId,
+                    ).bind()
             },
             fetchApi = {
-                cafeteriaApi.getServingPlaces(it.language.toDto(), subsystemId).bind().orEmpty()
+                cafeteriaApi
+                    .getServingPlaces(it.language.toDto(), subsystemId)
+                    .bind()
+                    .orEmpty()
             },
-            convert = { params, data -> data.map { it.toEntity(params.language) }.rightIor() },
+            convert = { params, data ->
+                data.map { it.toEntity(params.language) }.rightIor()
+            },
             store = { params, data ->
-                db.servingPlaceQueries.deleteSubsystem(params.language.toDB(), subsystemId.toLong())
+                db.servingPlaceQueries.deleteSubsystem(
+                    params.language.toDB(),
+                    subsystemId.toLong(),
+                )
                 data.forEach {
                     db.servingPlaceQueries.insert(it)
                 }

@@ -26,6 +26,8 @@ import cz.lastaapps.api.buffet.domain.model.BuffetType.FEL
 import cz.lastaapps.api.buffet.domain.model.BuffetType.FS
 import cz.lastaapps.api.core.domain.model.Address
 import cz.lastaapps.api.core.domain.model.Contact
+import cz.lastaapps.api.core.domain.model.DataLanguage.Czech
+import cz.lastaapps.api.core.domain.model.DataLanguage.English
 import cz.lastaapps.api.core.domain.model.Email
 import cz.lastaapps.api.core.domain.model.Info
 import cz.lastaapps.api.core.domain.model.Link
@@ -34,8 +36,6 @@ import cz.lastaapps.api.core.domain.model.PhoneNumber
 import cz.lastaapps.api.core.domain.model.PlaceOpeningInfo
 import cz.lastaapps.api.core.domain.model.PlaceOpeningTime
 import cz.lastaapps.api.core.domain.model.PlaceOpeningType
-import cz.lastaapps.api.core.domain.model.RequestLanguage.CS
-import cz.lastaapps.api.core.domain.model.RequestLanguage.EN
 import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.repo.InfoRepoParams
 import cz.lastaapps.api.core.domain.repo.MenzaRepoParams
@@ -115,13 +115,13 @@ internal class InfoRepoImpl(
         params: MenzaRepoParams,
         type: BuffetType,
     ) = when (params.language) {
-        CS ->
+        Czech ->
             when (type) {
                 FS -> "FS Bufet"
                 FEL -> "FEL Bufet"
             }
 
-        EN ->
+        English ->
             when (type) {
                 FS -> "FS Buffet"
                 FEL -> "FEE Buffet"
@@ -132,13 +132,13 @@ internal class InfoRepoImpl(
         params: MenzaRepoParams,
         type: BuffetType,
     ) = when (params.language) {
-        CS ->
+        Czech ->
             when (type) {
                 FS -> "FS"
                 FEL -> "FEL"
             }
 
-        EN ->
+        English ->
             when (type) {
                 FS -> "FS"
                 FEL -> "FEE"
@@ -150,13 +150,13 @@ internal class InfoRepoImpl(
         params: InfoRepoParams,
         type: BuffetType,
     ) = when (params.language) {
-        CS ->
+        Czech ->
             when (type) {
                 FS -> "1. partro, Technická 1902/4, 160 00 Praha 6"
                 FEL -> "1. partro, Technická 1902/2, 160 00 Praha 6"
             }
 
-        EN ->
+        English ->
             when (type) {
                 FS -> "1st floor, Technická 1902/4, 160 00 Prague 6"
                 FEL -> "1st floor, Technická 1902/2, 160 00 Prague 6"

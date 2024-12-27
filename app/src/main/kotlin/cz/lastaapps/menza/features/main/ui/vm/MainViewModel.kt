@@ -67,7 +67,9 @@ internal class MainViewModel(
         scope.launch {
             refreshWallet(false)
             checkLowBalanceUC().collectLatest {
-                updateState { copy(showLowBalance = it) }
+                if (!lastState().lowBalanceShown) {
+                    updateState { copy(showLowBalance = it) }
+                }
             }
         }
 
@@ -77,7 +79,7 @@ internal class MainViewModel(
             }.launchIn(scope)
     }
 
-    fun dismissLowBalance() = updateState { copy(showLowBalance = false) }
+    fun dismissLowBalance() = updateState { copy(showLowBalance = false, lowBalanceShown = true) }
 }
 
 internal data class MainState(
@@ -87,4 +89,5 @@ internal data class MainState(
     val alternativeNavigation: Boolean = false,
     val isFlip: Boolean = false,
     val showLowBalance: Boolean = false,
+    val lowBalanceShown: Boolean = false,
 ) : VMState

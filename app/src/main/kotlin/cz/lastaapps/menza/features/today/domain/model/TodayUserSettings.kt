@@ -19,7 +19,7 @@
 
 package cz.lastaapps.menza.features.today.domain.model
 
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
@@ -29,6 +29,6 @@ internal data class TodayUserSettings(
     val useOliverRow: Boolean = false,
     val priceType: PriceType = Unset,
     val downloadOnMetered: Boolean = false,
-    val language: DishLanguage = DishLanguage.Czech,
+    val language: DataLanguage = DataLanguage.Czech,
     val imageScale: Float = 1f,
 )

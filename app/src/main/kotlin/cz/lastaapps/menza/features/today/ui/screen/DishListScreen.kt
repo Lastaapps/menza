@@ -48,7 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.CAROUSEL

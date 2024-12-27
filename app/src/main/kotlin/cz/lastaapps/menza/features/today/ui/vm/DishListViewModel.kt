@@ -24,8 +24,8 @@ import arrow.core.Either.Left
 import arrow.core.Either.Right
 import arrow.core.Option
 import arrow.core.toOption
-import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.api.core.domain.sync.mapSync
 import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
@@ -44,7 +44,6 @@ import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetImageScal
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetOliverRow
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -57,6 +56,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 internal class DishListViewModel(
     context: VMContext,

@@ -25,11 +25,11 @@ import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.right
 import arrow.core.rightIor
 import cz.lastaapps.api.agata.AgataDatabase
+import cz.lastaapps.api.core.domain.model.DataLanguage.Czech
+import cz.lastaapps.api.core.domain.model.DataLanguage.English
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
-import cz.lastaapps.api.core.domain.model.RequestLanguage.CS
-import cz.lastaapps.api.core.domain.model.RequestLanguage.EN
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.repo.MenzaRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
@@ -172,8 +172,8 @@ internal object MenzaStrahovRepoImpl : MenzaRepo {
 
     private fun getName(params: MenzaRepoParams) =
         when (params.language) {
-            CS -> "Restaurace Strahov"
-            EN -> "Restaurant Strahov"
+            Czech -> "Restaurace Strahov"
+            English -> "Restaurant Strahov"
         }
 
     override suspend fun sync(

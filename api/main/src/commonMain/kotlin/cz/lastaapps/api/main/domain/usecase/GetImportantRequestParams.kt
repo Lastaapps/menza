@@ -19,7 +19,7 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
-import cz.lastaapps.api.core.domain.model.RequestLanguage
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.api.core.domain.model.RequestParams
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
@@ -27,5 +27,5 @@ import cz.lastaapps.core.domain.UseCase
 class GetImportantRequestParams internal constructor(
     context: UCContext,
 ) : UseCase(context) {
-    operator fun invoke() = RequestLanguage.entries.map { RequestParams(it) }
+    operator fun invoke() = DataLanguage.entries.map { RequestParams(it) }
 }

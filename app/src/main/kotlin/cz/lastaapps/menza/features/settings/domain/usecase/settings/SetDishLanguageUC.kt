@@ -19,16 +19,16 @@
 
 package cz.lastaapps.menza.features.settings.domain.usecase.settings
 
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 
 class SetDishLanguageUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    suspend operator fun invoke(language: DishLanguage) =
+    suspend operator fun invoke(language: DataLanguage) =
         launch {
             repo.setDishLanguage(language)
         }

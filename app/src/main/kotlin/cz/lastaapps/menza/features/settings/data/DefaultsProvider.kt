@@ -21,16 +21,16 @@ package cz.lastaapps.menza.features.settings.data
 
 import android.content.Context
 import android.os.Build
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
+import cz.lastaapps.api.core.domain.model.DataLanguage
 
 internal interface DefaultsProvider {
-    fun defaultDishLanguage(): DishLanguage
+    fun defaultDishLanguage(): DataLanguage
 }
 
 internal class DefaultsProviderImpl(
     private val context: Context,
 ) : DefaultsProvider {
-    override fun defaultDishLanguage(): DishLanguage {
+    override fun defaultDishLanguage(): DataLanguage {
         val locates =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 context.resources.configuration.locales.let { list ->
@@ -44,9 +44,9 @@ internal class DefaultsProviderImpl(
         val slavic = listOf("cs", "sk", "uk", "ru", "pl", "sl", "hr")
 
         return if (locates.any { it in slavic }) {
-            DishLanguage.Czech
+            DataLanguage.Czech
         } else {
-            DishLanguage.English
+            DataLanguage.English
         }
     }
 }

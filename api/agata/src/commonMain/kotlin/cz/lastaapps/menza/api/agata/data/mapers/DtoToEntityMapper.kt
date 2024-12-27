@@ -31,8 +31,8 @@ import agata.PictogramEntity
 import agata.ServingPlaceEntity
 import agata.StrahovEntity
 import agata.SubsystemEntity
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.api.core.domain.model.LatLong
-import cz.lastaapps.api.core.domain.model.RequestLanguage
 import cz.lastaapps.core.util.extensions.takeIfNotBlack
 import cz.lastaapps.menza.api.agata.data.model.AgataBEConfig
 import cz.lastaapps.menza.api.agata.data.model.dto.AddressDto
@@ -51,7 +51,7 @@ import cz.lastaapps.menza.api.agata.data.model.toDB
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
 
-internal fun SubsystemDto.toEntity(lang: RequestLanguage) =
+internal fun SubsystemDto.toEntity(lang: DataLanguage) =
     SubsystemEntity(
         id = id.toLong(),
         name = name.trim(),
@@ -64,7 +64,7 @@ internal fun SubsystemDto.toEntity(lang: RequestLanguage) =
 
 internal fun DishDto.toEntity(
     beConfig: AgataBEConfig,
-    lang: RequestLanguage,
+    lang: DataLanguage,
 ) = DishEntity(
     id = id.toLong(),
     subsystemId = subsystemId.toLong(),
@@ -98,7 +98,7 @@ private fun String.trimDishName() =
         .replace("""\s*,\s*""".toRegex(), ", ")
         .replace("""\s+""".toRegex(), " ")
 
-internal fun DishTypeDto.toEntity(lang: RequestLanguage) =
+internal fun DishTypeDto.toEntity(lang: DataLanguage) =
     DishTypeEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -108,14 +108,14 @@ internal fun DishTypeDto.toEntity(lang: RequestLanguage) =
         language = lang.toDB(),
     )
 
-internal fun PictogramDto.toEntity(lang: RequestLanguage) =
+internal fun PictogramDto.toEntity(lang: DataLanguage) =
     PictogramEntity(
         id = id.toLong(),
         name = name?.trim() ?: "???",
         language = lang.toDB(),
     )
 
-internal fun ServingPlaceDto.toEntity(lang: RequestLanguage) =
+internal fun ServingPlaceDto.toEntity(lang: DataLanguage) =
     ServingPlaceEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -125,7 +125,7 @@ internal fun ServingPlaceDto.toEntity(lang: RequestLanguage) =
         language = lang.toDB(),
     )
 
-internal fun InfoDto.toEntity(lang: RequestLanguage) =
+internal fun InfoDto.toEntity(lang: DataLanguage) =
     InfoEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -135,7 +135,7 @@ internal fun InfoDto.toEntity(lang: RequestLanguage) =
 
 internal fun NewsDto.toEntity(
     subsystemId: Int,
-    lang: RequestLanguage,
+    lang: DataLanguage,
 ) = html.removeHtml().takeIfNotBlack()?.let { text ->
     NewsEntity(
         subsystemId = subsystemId.toLong(),
@@ -151,7 +151,7 @@ private fun String.removeHtml() =
         .replace("""<[^>]*>""".toRegex(), "")
         .trim()
 
-internal fun ContactDto.toEntity(lang: RequestLanguage) =
+internal fun ContactDto.toEntity(lang: DataLanguage) =
     ContactEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -163,7 +163,7 @@ internal fun ContactDto.toEntity(lang: RequestLanguage) =
         language = lang.toDB(),
     )
 
-internal fun OpenTimeDto.toEntity(lang: RequestLanguage) =
+internal fun OpenTimeDto.toEntity(lang: DataLanguage) =
     OpenTimeEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -201,7 +201,7 @@ private fun String.toLocalTime() =
         LocalTime(hours.toInt(), minutes.toInt())
     }
 
-internal fun LinkDto.toEntity(lang: RequestLanguage) =
+internal fun LinkDto.toEntity(lang: DataLanguage) =
     LinkEntity(
         id = id.toLong(),
         subsystemId = subsystemId.toLong(),
@@ -210,7 +210,7 @@ internal fun LinkDto.toEntity(lang: RequestLanguage) =
         language = lang.toDB(),
     )
 
-internal fun AddressDto.toEntity(lang: RequestLanguage) =
+internal fun AddressDto.toEntity(lang: DataLanguage) =
     run {
         val parsed = gps.toLatLong()
         AddressEntity(
@@ -236,7 +236,7 @@ private const val EMPTY_NAME_PLACEHOLDER = """"¯\(°_o)/¯"""
 
 internal fun StrahovDto.toEntity(
     beConfig: AgataBEConfig,
-    lang: RequestLanguage,
+    lang: DataLanguage,
 ) = StrahovEntity(
     id = id.toLong(),
     groupId = groupId.toLong(),

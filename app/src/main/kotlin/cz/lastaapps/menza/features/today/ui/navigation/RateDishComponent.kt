@@ -27,6 +27,7 @@ import cz.lastaapps.menza.features.today.ui.vm.RateDishViewModel
 import cz.lastaapps.menza.ui.components.BaseDialog
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import org.koin.core.component.KoinComponent
+import org.koin.core.parameter.parametersOf
 
 internal interface RateDishComponent {
     val viewModel: RateDishViewModel
@@ -42,7 +43,7 @@ internal class DefaultRateDishComponent(
 ) : RateDishComponent,
     KoinComponent,
     ComponentContext by componentContext {
-    override val viewModel: RateDishViewModel = getOrCreateKoin()
+    override val viewModel: RateDishViewModel = getOrCreateKoin { parametersOf(dish) }
 
     override fun dismiss() {
         onDismiss()

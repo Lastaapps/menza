@@ -24,7 +24,6 @@ import cz.lastaapps.api.main.domain.usecase.GetRequestParamsUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
-import cz.lastaapps.menza.features.settings.domain.model.toRequestLanguage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -39,8 +38,6 @@ internal class GetRequestParamsUCImpl(
             .getDishLanguage()
             .distinctUntilChanged()
             .map {
-                RequestParams(
-                    language = it.toRequestLanguage(),
-                )
+                RequestParams(language = it)
             }.distinctUntilChanged()
 }

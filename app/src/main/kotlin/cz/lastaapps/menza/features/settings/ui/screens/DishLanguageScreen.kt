@@ -40,11 +40,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import cz.lastaapps.api.core.domain.model.DataLanguage
+import cz.lastaapps.api.core.domain.model.DataLanguage.Czech
+import cz.lastaapps.api.core.domain.model.DataLanguage.English
 import cz.lastaapps.core.ui.vm.HandleDismiss
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage.Czech
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage.English
 import cz.lastaapps.menza.features.settings.ui.vm.DishLanguageState
 import cz.lastaapps.menza.features.settings.ui.vm.DishLanguageViewModel
 import cz.lastaapps.menza.ui.theme.AppTheme
@@ -82,7 +82,7 @@ private fun DishLanguageEffects(
 
 @Composable
 private fun DishLanguageContent(
-    onLanguage: (DishLanguage) -> Unit,
+    onLanguage: (DataLanguage) -> Unit,
     modifier: Modifier = Modifier,
 ) = Box(
     modifier = modifier.fillMaxSize(),
@@ -156,9 +156,9 @@ private fun LanguageButton(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
         modifier =
-            Modifier
-                .padding(Padding.MidSmall)
-                .fillMaxWidth(),
+        Modifier
+            .padding(Padding.MidSmall)
+            .fillMaxWidth(),
     ) {
         Text(
             title,

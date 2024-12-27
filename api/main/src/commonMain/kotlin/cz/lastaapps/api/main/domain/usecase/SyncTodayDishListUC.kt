@@ -19,11 +19,17 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
+import arrow.core.Either.Left
+import arrow.core.Either.Right
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
+import cz.lastaapps.api.core.domain.sync.SyncResult.Updated
 import cz.lastaapps.api.core.domain.sync.sync
+import cz.lastaapps.api.rating.domain.usecase.SyncDishRatingsUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
@@ -31,15 +37,42 @@ import org.koin.core.parameter.parametersOf
 class SyncTodayDishListUC(
     context: UCContext,
     private val getRequestParamsUC: GetRequestParamsUC,
+    private val syncDishRatingsUC: SyncDishRatingsUC,
 ) : UseCase(context),
     KoinComponent {
     suspend operator fun invoke(
         menza: Menza,
         isForced: Boolean,
     ) = launch {
-        get<TodayDishRepo> { parametersOf(menza.type) }.sync(
-            getRequestParamsUC(),
-            isForced = isForced,
-        )
+        coroutineScope {
+            val syncDish =
+                async {
+                    get<TodayDishRepo> { parametersOf(menza.type) }.sync(
+                        getRequestParamsUC(),
+                        isForced = isForced,
+                    )
+                }
+            val syncRating =
+                async {
+                    syncDishRatingsUC(menza.type, isForced)
+                }
+            val dish = syncDish.await()
+            val rating = syncRating.await()
+
+            when (dish) {
+                is Left -> dish
+                is Right -> {
+                    when (rating) {
+                        is Left -> rating
+                        is Right -> {
+                            when (dish.value) {
+                                Updated -> rating
+                                else -> dish
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

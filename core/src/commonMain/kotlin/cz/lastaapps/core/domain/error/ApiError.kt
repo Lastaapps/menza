@@ -44,4 +44,20 @@ sealed interface ApiError : DomainError.Logic {
 
         data object InvalidCredentials : WalletError
     }
+
+    sealed interface RatingError : ApiError {
+        data object Unauthorized : RatingError
+
+        data class TooManyRequests(
+            val reason: String,
+        ) : RatingError
+
+        data class OldAppVersion(
+            val reason: String,
+        ) : RatingError
+
+        data class OtherProblem(
+            val code: Int,
+        ) : RatingError
+    }
 }

@@ -19,17 +19,37 @@
 
 package cz.lastaapps.menza.features.today.ui.model
 
-import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.DataLanguage
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.dish.DishID
+import cz.lastaapps.api.rating.data.model.DishRatingDescriptor
 import kotlinx.serialization.Serializable
 
 // This class exists because dish have no ID in the app and cannot be serialized
 // (they can be but it's a bad practise on this layer). This class is used in navigation.
 @Serializable
-data class DishForRating(
+class DishForRating private constructor(
+    private val menza: MenzaType,
+    private val id: String,
+    private val language: DataLanguage,
     val name: String,
-    val ratingID: String,
 ) {
     companion object {
-        fun from(dish: Dish) = DishForRating(dish.name, "fake_id")
+        fun from(dish: Dish) =
+            DishForRating(
+                menza = dish.menza,
+                id = dish.id.value,
+                language = dish.language,
+                name = dish.name,
+            )
     }
+
+    fun toDishRatingDescriptor() =
+        DishRatingDescriptor(
+            menza = menza,
+            id = DishID(id),
+            language = language,
+            name = name,
+        )
 }

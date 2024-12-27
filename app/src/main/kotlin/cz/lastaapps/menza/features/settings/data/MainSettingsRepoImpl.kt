@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.features.settings.data
 
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.menza.features.settings.data.datasource.GeneralDataSource
 import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
@@ -26,7 +27,6 @@ import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.AppSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
@@ -69,7 +69,7 @@ internal class MainSettingsRepoImpl(
                 appTheme = arr[7] as AppThemeType?,
                 imageScale = arr[8] as Float,
                 imagesOnMetered = arr[9] as Boolean,
-                dishLanguage = arr[10] as DishLanguage,
+                dataLanguage = arr[10] as DataLanguage,
                 todayViewMode = arr[11] as DishListMode,
                 useOliverRows = arr[12] as Boolean,
                 balanceWarningThreshold = arr[13] as Int,
@@ -117,9 +117,10 @@ internal class MainSettingsRepoImpl(
 
     override fun getImagesOnMetered(): Flow<Boolean> = general.getImagesOnMetered()
 
-    override suspend fun setDishLanguage(language: DishLanguage) = general.setDishLanguage(language)
+    override suspend fun setDishLanguage(language: DataLanguage) = general.setDishLanguage(language)
 
-    override fun getDishLanguage(): Flow<DishLanguage> = general.getDishLanguage().map { it ?: defaults.defaultDishLanguage() }
+    override fun getDishLanguage(): Flow<DataLanguage> =
+        general.getDishLanguage().map { it ?: defaults.defaultDishLanguage() }
 
     override suspend fun setCompactTodayView(mode: DishListMode) = general.setCompactTodayView(mode)
 

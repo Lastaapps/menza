@@ -31,12 +31,12 @@ import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.starting.domain.model.DownloadProgress
 import cz.lastaapps.menza.features.starting.domain.usecase.CheckDataDownloadNeededUC
 import cz.lastaapps.menza.features.starting.domain.usecase.DownloadInitDataUC
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlin.time.Duration.Companion.seconds
 
 internal class DownloadViewModel(
     private val checkDownloadNeeded: CheckDataDownloadNeededUC,

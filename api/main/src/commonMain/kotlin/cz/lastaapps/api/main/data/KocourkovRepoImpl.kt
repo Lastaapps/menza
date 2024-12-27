@@ -20,11 +20,11 @@
 package cz.lastaapps.api.main.data
 
 import arrow.core.right
-import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.model.Info
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.WeekDayDish
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.api.core.domain.repo.InfoRepo
 import cz.lastaapps.api.core.domain.repo.InfoRepoParams
 import cz.lastaapps.api.core.domain.repo.MenzaRepo

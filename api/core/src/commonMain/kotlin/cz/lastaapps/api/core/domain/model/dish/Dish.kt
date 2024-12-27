@@ -17,67 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.domain.model
+package cz.lastaapps.api.core.domain.model.dish
 
+import cz.lastaapps.api.core.domain.model.DataLanguage
+import cz.lastaapps.api.core.domain.model.DataLanguage.Czech
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.rating.Rating
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-data class DishCategory(
-    val nameShort: String?,
-    val name: String?,
-    val dishList: ImmutableList<Dish>,
-) {
-    companion object {
-        fun other(dishList: ImmutableList<Dish>) = DishCategory(null, null, dishList)
-    }
-
-    @Suppress("SpellCheckingInspection")
-    object Mock {
-        val soups =
-            DishCategory(
-                "Polévky",
-                "Patoky všeho druhu",
-                persistentListOf(
-                    Dish.Mock.soupSekerkova,
-                    Dish.Mock.soupJezeckova,
-                ),
-            )
-        val babica =
-            DishCategory(
-                "Babica",
-                "Mňamky Jirky Babici",
-                persistentListOf(
-                    Dish.Mock.dishHnedaOmacka,
-                    Dish.Mock.dishKuratko,
-                    Dish.Mock.dishPtacek,
-                    Dish.Mock.dishNoky,
-                ),
-            )
-        val chalky =
-            DishCategory(
-                "Chlálky",
-                "Dlabance dne",
-                persistentListOf(
-                    Dish.Mock.dishTux,
-                    Dish.Mock.dishKunda,
-                    Dish.Mock.dishMaxipes,
-                ),
-            )
-        val dezerty =
-            DishCategory(
-                "Dezerty",
-                "Sekce pro tlustá prasátka",
-                persistentListOf(
-                    Dish.Mock.desertKrtkuvDort,
-                ),
-            )
-
-        val allCathegories = persistentListOf(soups, babica, chalky, dezerty)
-        val empty = persistentListOf<DishCategory>()
-    }
-}
-
 data class Dish(
+    val menza: MenzaType,
+    val id: DishID,
+    val language: DataLanguage,
     val amount: String?,
     val name: String,
     val priceDiscounted: Float?,
@@ -90,13 +42,15 @@ data class Dish(
     val servingPlaces: ImmutableList<ServingPlace>,
     val ingredients: ImmutableList<String>,
     val isActive: Boolean,
+    val rating: Rating = Rating.empty,
 ) {
-    val rating: Rating = Rating.Mocked.valid
-
     @Suppress("SpellCheckingInspection")
     object Mock {
         val soupSekerkova =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = null,
                 name = "Sekerková",
                 priceDiscounted = 42.0f,
@@ -113,6 +67,9 @@ data class Dish(
             )
         val soupJezeckova =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = null,
                 name = "Ježečková",
                 priceDiscounted = 42.0f,
@@ -129,6 +86,9 @@ data class Dish(
             )
         val dishHnedaOmacka =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = null,
                 name = "Univerzální hnědá omáčka s kedlíkem",
                 priceDiscounted = 42.0f,
@@ -145,6 +105,9 @@ data class Dish(
             )
         val dishKuratko =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = "1 kg",
                 name = "Zalité kuřátko a hrany",
                 priceDiscounted = 42.0f,
@@ -161,6 +124,9 @@ data class Dish(
             )
         val dishPtacek =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = null,
                 name = "Moravsko-španělský ptáček",
                 priceDiscounted = 42.0f,
@@ -177,6 +143,9 @@ data class Dish(
             )
         val dishNoky =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = "12.5 ks",
                 name = "Pelíškovské noky",
                 priceDiscounted = 42.0f,
@@ -193,6 +162,9 @@ data class Dish(
             )
         val dishTux =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = null,
                 name = "Tuxík na přírodno",
                 priceDiscounted = 42.0f,
@@ -209,6 +181,9 @@ data class Dish(
             )
         val dishKunda =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = "1 kg",
                 name = "Strahovská kunda",
                 priceDiscounted = 42.0f,
@@ -226,6 +201,9 @@ data class Dish(
             )
         val dishMaxipes =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = "200 g",
                 name = "Štěkanátky z maxipsa Fíka",
                 priceDiscounted = 42.0f,
@@ -242,6 +220,9 @@ data class Dish(
             )
         val desertKrtkuvDort =
             Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
                 amount = null,
                 name = "Krtkův dort",
                 priceDiscounted = 42.0f,

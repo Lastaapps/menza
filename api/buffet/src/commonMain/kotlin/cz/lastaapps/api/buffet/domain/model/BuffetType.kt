@@ -33,3 +33,9 @@ internal fun MenzaType.Buffet.toType(): BuffetType =
         FS -> BuffetType.FS
         FEL -> BuffetType.FEL
     }
+
+internal fun BuffetType.toMenzaType() =
+    when (this) {
+        BuffetType.FS -> FS
+        BuffetType.FEL -> FS
+    }

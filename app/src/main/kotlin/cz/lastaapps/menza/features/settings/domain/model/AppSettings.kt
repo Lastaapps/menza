@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.settings.domain.model
 
 import androidx.compose.runtime.Immutable
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.api.core.domain.model.MenzaType
 
 @Immutable
@@ -34,7 +35,7 @@ internal data class AppSettings(
     val appTheme: AppThemeType?,
     val imageScale: Float,
     val imagesOnMetered: Boolean,
-    val dishLanguage: DishLanguage,
+    val dataLanguage: DataLanguage,
     val todayViewMode: DishListMode,
     val useOliverRows: Boolean,
     val balanceWarningThreshold: Int,
@@ -54,7 +55,7 @@ internal data class AppSettings(
                 appTheme = AppThemeType.Agata,
                 imageScale = 1f,
                 imagesOnMetered = true,
-                dishLanguage = DishLanguage.Czech,
+                dataLanguage = DataLanguage.Czech,
                 todayViewMode = DishListMode.COMPACT,
                 useOliverRows = true,
                 balanceWarningThreshold = 256,

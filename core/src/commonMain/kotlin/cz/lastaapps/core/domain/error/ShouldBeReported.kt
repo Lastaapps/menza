@@ -31,6 +31,7 @@ val DomainError.shouldBeReported: Boolean
     get() =
         when (this) {
             is ApiError.WalletError.TotallyBroken -> true
+            is ApiError.RatingError -> false
             is DomainError.Logic -> false
 
             is DomainError.Unknown -> true

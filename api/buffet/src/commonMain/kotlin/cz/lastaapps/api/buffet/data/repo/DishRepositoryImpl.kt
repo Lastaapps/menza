@@ -31,8 +31,9 @@ import cz.lastaapps.api.buffet.data.mappers.toDomainWeek
 import cz.lastaapps.api.buffet.data.mappers.toEntity
 import cz.lastaapps.api.buffet.data.model.WebContentDto
 import cz.lastaapps.api.buffet.domain.model.BuffetType
-import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.api.buffet.domain.model.toMenzaType
 import cz.lastaapps.api.core.domain.model.WeekDayDish
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.repo.TodayRepoParams
 import cz.lastaapps.api.core.domain.repo.WeekDishRepo
@@ -102,7 +103,7 @@ internal class DishLogicImpl(
             .mapToList(Dispatchers.IO)
             .combine(hasValidData) { data, validity ->
                 data.takeIf { validity }.orEmpty()
-            }.map { it.toDomainDays() }
+            }.map { it.toDomainDays(type.toMenzaType()) }
             .map { it.firstOrNull()?.second ?: emptyList() }
             .map { it.toImmutableList() }
 

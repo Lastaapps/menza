@@ -46,6 +46,7 @@ import cz.lastaapps.api.main.domain.usecase.wallet.WalletGetBalanceUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletLoginUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletLogoutUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletRefreshUC
+import cz.lastaapps.api.rating.di.apiRatingDI
 import cz.lastaapps.menza.api.agata.di.apiAgataModule
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -59,6 +60,7 @@ val apiModule =
         includes(
             apiAgataModule,
             apiBuffetModule,
+            apiRatingDI,
             apiCoreModule,
         )
 

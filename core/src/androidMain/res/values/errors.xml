@@ -41,4 +41,8 @@
     <string name="error_no_app_facebook">Facebook not installed</string>
     <string name="error_wallet_login_failed_critical">App login process does not work anymore. Contact the developer, please. 🙏</string>
     <string name="error_wallet_login_failed_credentials">Invalid credentials 🤨</string>
+    <string name="error_rating_old_app_version">Update you app to use rating ⬆️\nBE response: %s</string>
+    <string name="error_rating_other_problem">Rating failed 💫 (code: %d)</string>
+    <string name="error_rating_too_many_requests">We are probably under DOS attack, rating does not work 🚽 (reason: %s) 😞</string>
+    <string name="error_rating_unauthorized">Rating request is not authorized, update the app </string>
 </resources>

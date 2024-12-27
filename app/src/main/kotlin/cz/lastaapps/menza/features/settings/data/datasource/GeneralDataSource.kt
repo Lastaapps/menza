@@ -25,9 +25,9 @@ import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ExperimentalSettingsImplementation
 import com.russhwolf.settings.coroutines.FlowSettings
 import com.russhwolf.settings.datastore.DataStoreSettings
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import kotlinx.coroutines.flow.Flow
@@ -75,9 +75,9 @@ internal interface GeneralDataSource {
 
     fun getImagesOnMetered(): Flow<Boolean>
 
-    suspend fun setDishLanguage(language: DishLanguage)
+    suspend fun setDishLanguage(language: DataLanguage)
 
-    fun getDishLanguage(): Flow<DishLanguage?>
+    fun getDishLanguage(): Flow<DataLanguage?>
 
     suspend fun setCompactTodayView(mode: DishListMode)
 
@@ -159,11 +159,12 @@ internal class GeneralDataSourceImpl(
 
     override fun getImagesOnMetered(): Flow<Boolean> = settings.getBooleanFlow(imagesOnMeteredKey, true)
 
-    override suspend fun setDishLanguage(language: DishLanguage) = settings.putInt(dishLanguageKey, language.id)
+    override suspend fun setDishLanguage(language: DataLanguage) =
+        settings.putInt(dishLanguageKey, language.id)
 
-    override fun getDishLanguage(): Flow<DishLanguage?> =
+    override fun getDishLanguage(): Flow<DataLanguage?> =
         settings.getIntOrNullFlow(dishLanguageKey).map { id ->
-            DishLanguage.entries.firstOrNull { it.id == id }
+            DataLanguage.entries.firstOrNull { it.id == id }
         }
 
     override suspend fun setCompactTodayView(mode: DishListMode) = settings.putInt(compactTodayViewKey, mode.id)

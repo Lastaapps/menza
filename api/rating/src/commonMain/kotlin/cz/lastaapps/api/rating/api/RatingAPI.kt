@@ -17,21 +17,23 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.settings.domain.model
+package cz.lastaapps.api.rating.api
 
-import cz.lastaapps.api.core.domain.model.RequestLanguage
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage.Czech
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage.English
+import cz.lastaapps.api.core.domain.model.DataLanguage
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.dish.DishID
+import cz.lastaapps.api.core.domain.model.rating.RatingCategories
+import cz.lastaapps.api.rating.data.model.RatingStateResponse
+import cz.lastaapps.core.domain.Outcome
 
-enum class DishLanguage(
-    val id: Int,
-) {
-    Czech(0),
-    English(1),
+internal interface RatingAPI {
+    suspend fun rate(
+        menza: MenzaType,
+        dishID: DishID,
+        name: String,
+        language: DataLanguage,
+        rating: RatingCategories,
+    ): Outcome<List<RatingStateResponse>>
+
+    suspend fun getRatings(menza: MenzaType): Outcome<List<RatingStateResponse>>
 }
-
-internal fun DishLanguage.toRequestLanguage() =
-    when (this) {
-        Czech -> RequestLanguage.CS
-        English -> RequestLanguage.EN
-    }

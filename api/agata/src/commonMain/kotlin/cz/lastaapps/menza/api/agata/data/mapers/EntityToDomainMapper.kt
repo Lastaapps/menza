@@ -33,21 +33,25 @@ import agata.StrahovEntity
 import agata.SubsystemEntity
 import cz.lastaapps.api.core.domain.model.Address
 import cz.lastaapps.api.core.domain.model.Contact
-import cz.lastaapps.api.core.domain.model.Dish
-import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.api.core.domain.model.Email
 import cz.lastaapps.api.core.domain.model.Info
 import cz.lastaapps.api.core.domain.model.LatLong
 import cz.lastaapps.api.core.domain.model.Link
 import cz.lastaapps.api.core.domain.model.LocationName
 import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.model.MenzaType
+import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Subsystem
 import cz.lastaapps.api.core.domain.model.Message
 import cz.lastaapps.api.core.domain.model.PhoneNumber
 import cz.lastaapps.api.core.domain.model.PlaceOpeningInfo
 import cz.lastaapps.api.core.domain.model.PlaceOpeningTime
 import cz.lastaapps.api.core.domain.model.PlaceOpeningType
-import cz.lastaapps.api.core.domain.model.ServingPlace
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
+import cz.lastaapps.api.core.domain.model.dish.DishID
+import cz.lastaapps.api.core.domain.model.dish.ServingPlace
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.DayOfWeek
@@ -70,10 +74,15 @@ private fun SubsystemEntity.toDomain() =
     )
 
 internal fun DishEntity.toDomain(
+    menza: MenzaType,
+    language: DataLanguage,
     pictograms: List<PictogramEntity>,
     servingPlaces: List<ServingPlaceEntity>,
 ) = let { dish ->
     Dish(
+        menza = menza,
+        id = DishID(dish.id),
+        language = language,
         amount = dish.amount,
         name = dish.fullName(),
         priceDiscounted = dish.priceDiscount?.toFloat(),
@@ -82,13 +91,13 @@ internal fun DishEntity.toDomain(
         photoLink = dish.photoLink,
         pictogram = pictograms.map(PictogramEntity::name).toImmutableList(),
         servingPlaces =
-            servingPlaces
-                .map { entity ->
-                    ServingPlace(
-                        name = entity.name,
-                        abbrev = entity.abbrev,
-                    )
-                }.toImmutableList(),
+        servingPlaces
+            .map { entity ->
+                ServingPlace(
+                    name = entity.name,
+                    abbrev = entity.abbrev,
+                )
+            }.toImmutableList(),
         ingredients = persistentListOf(),
         isActive = isActive,
     )
@@ -152,16 +161,16 @@ internal fun InfoEntity?.toDomain(
     openingTimes = openingTimes.toDomain().toImmutableList(),
     links = links.map { it.toDomain() }.toImmutableList(),
     address =
-        address?.let {
-            Address(
-                location = address.address.let(::LocationName),
-                gps =
-                    LatLong(
-                        lat = address.lat.toFloat(),
-                        long = address.long.toFloat(),
-                    ),
-            )
-        },
+    address?.let {
+        Address(
+            location = address.address.let(::LocationName),
+            gps =
+            LatLong(
+                lat = address.lat.toFloat(),
+                long = address.long.toFloat(),
+            ),
+        )
+    },
 )
 
 private fun ContactEntity.toDomain() =
@@ -182,25 +191,25 @@ fun List<OpenTimeEntity>.toDomain() =
                 name = one.servingPlaceName,
                 abbrev = one.servingPlaceAbbrev,
                 types =
-                    entities1
-                        .groupBy { it.description }
-                        .entries
-                        .map { (description, entities2) ->
-                            PlaceOpeningType(
-                                description = description,
-                                times =
-                                    entities2
-                                        .map {
-                                            PlaceOpeningTime(
-                                                startDay = it.dayFrom ?: DayOfWeek.MONDAY,
-                                                endDay = it.dayTo ?: it.dayFrom ?: DayOfWeek.MONDAY,
-                                                startTime = it.timeFrom,
-                                                endTime = it.timeTo,
-                                            )
-                                        }.sortedBy { it.startDay }
-                                        .toImmutableList(),
-                            )
-                        }.toImmutableList(),
+                entities1
+                    .groupBy { it.description }
+                    .entries
+                    .map { (description, entities2) ->
+                        PlaceOpeningType(
+                            description = description,
+                            times =
+                            entities2
+                                .map {
+                                    PlaceOpeningTime(
+                                        startDay = it.dayFrom ?: DayOfWeek.MONDAY,
+                                        endDay = it.dayTo ?: it.dayFrom ?: DayOfWeek.MONDAY,
+                                        startTime = it.timeFrom,
+                                        endTime = it.timeTo,
+                                    )
+                                }.sortedBy { it.startDay }
+                                .toImmutableList(),
+                        )
+                    }.toImmutableList(),
             )
         }
 
@@ -211,7 +220,7 @@ private fun LinkEntity.toDomain() =
     )
 
 @JvmName("javaIsFuckingStupidShit")
-internal fun List<StrahovEntity>.toDomain() =
+internal fun List<StrahovEntity>.toDomain(language: DataLanguage) =
     groupBy { it.groupId }
         .entries
         .sortedBy { it.value.first().groupOrder }
@@ -221,15 +230,18 @@ internal fun List<StrahovEntity>.toDomain() =
                 nameShort = null,
                 name = value.groupName.trim(),
                 dishList =
-                    values
-                        .sortedBy { it.itemOrder }
-                        .map { it.toDomain() }
-                        .toImmutableList(),
+                values
+                    .sortedBy { it.itemOrder }
+                    .map { it.toDomain(language) }
+                    .toImmutableList(),
             )
         }.toImmutableList()
 
-private fun StrahovEntity.toDomain() =
+private fun StrahovEntity.toDomain(language: DataLanguage) =
     Dish(
+        menza = Strahov,
+        id = DishID(id),
+        language = language,
         amount = amount,
         name = name,
         priceDiscounted = priceStudent.toFloat(),

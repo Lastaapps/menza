@@ -28,12 +28,12 @@ import cz.lastaapps.menza.features.other.data.WhatsNewDataStore
 import cz.lastaapps.menza.features.other.domain.model.WhatsNewInfo
 import cz.lastaapps.menza.features.panels.whatsnew.domain.LoadWhatsNewUC
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel.State
-import java.util.Locale
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 internal class WhatsNewViewModel(
     context: VMContext,

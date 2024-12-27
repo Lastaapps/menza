@@ -55,7 +55,7 @@ import coil3.Extras
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest.Builder
-import cz.lastaapps.api.core.domain.model.Dish
+import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.menza.R.string
 import cz.lastaapps.menza.ui.components.placeholders.PlaceholderHighlight
 import cz.lastaapps.menza.ui.components.placeholders.fade
@@ -235,9 +235,9 @@ private fun DishImageSupplementPreview() =
                     remember { Random.nextInt() },
                     color = it,
                     modifier =
-                        Modifier
-                            .padding(12.dp)
-                            .aspectRatio(DishImageTokens.ASPECT_RATIO),
+                    Modifier
+                        .padding(12.dp)
+                        .aspectRatio(DishImageTokens.ASPECT_RATIO),
                 )
             }
         }

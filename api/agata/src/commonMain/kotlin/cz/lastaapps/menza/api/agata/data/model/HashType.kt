@@ -19,13 +19,13 @@
 
 package cz.lastaapps.menza.api.agata.data.model
 
-import cz.lastaapps.api.core.domain.model.RequestLanguage
+import cz.lastaapps.api.core.domain.model.DataLanguage
 
 @JvmInline
 value class HashType(
     val func: String,
 ) {
-    fun withLang(lang: RequestLanguage) = HashType(lang.value + '_' + func)
+    fun withLang(lang: DataLanguage) = HashType(lang.value + '_' + func)
 
     companion object {
         fun subsystemHash() = HashType("subsystems")

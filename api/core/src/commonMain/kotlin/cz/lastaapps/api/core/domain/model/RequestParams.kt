@@ -21,5 +21,5 @@ package cz.lastaapps.api.core.domain.model
 
 @JvmInline
 value class RequestParams(
-    val language: RequestLanguage,
+    val language: DataLanguage,
 )

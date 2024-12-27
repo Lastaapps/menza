@@ -81,7 +81,7 @@ val apiAgataModule =
             menzaRepo = { MenzaStrahovRepoImpl },
             dishRepo = { menza ->
                 TodayDishSubsystemRepoImpl(
-                    menza.subsystemId,
+                    menza,
                     get(),
                     get(),
                     get(),

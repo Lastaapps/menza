@@ -49,8 +49,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.Dish
-import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.ui.components.NoItems
@@ -149,9 +149,9 @@ private fun DishContent(
                     userSettings = userSettings,
                     isOnMetered = isOnMetered,
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .animateItem(),
+                    Modifier
+                        .fillMaxWidth()
+                        .animateItem(),
                 )
             }
         }
@@ -243,13 +243,13 @@ private fun DishImageWithBadge(
             imageScale = imageScale,
             isOnMetered = isOnMetered,
             modifier =
-                Modifier
-                    .align(Alignment.Center)
-                    .padding(
-                        top = Padding.Small,
-                        bottom = Padding.Small,
-                        end = Padding.Small,
-                    ),
+            Modifier
+                .align(Alignment.Center)
+                .padding(
+                    top = Padding.Small,
+                    bottom = Padding.Small,
+                    end = Padding.Small,
+                ),
         )
         DishBadgesColumn(
             dish = dish,

@@ -17,11 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.core.domain.model
+package cz.lastaapps.api.rating.data.model
 
-enum class RequestLanguage(
-    val value: String,
-) {
-    CS("cs"),
-    EN("en"),
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+internal data class ErrorResponse(
+    val name: String,
+    val message: String,
+)

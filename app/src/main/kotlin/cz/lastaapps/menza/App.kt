@@ -32,9 +32,10 @@ class App :
     Application(),
     coil3.SingletonImageLoader.Factory by CoilSetup(),
     KoinStartup {
-    override fun onKoinStartup(): KoinConfiguration = KoinConfiguration {
-        androidLogger()
-        androidContext(this@App.applicationContext)
-        modules(appModule)
-    }
+    override fun onKoinStartup(): KoinConfiguration =
+        KoinConfiguration {
+            androidLogger()
+            androidContext(this@App.applicationContext)
+            modules(appModule)
+        }
 }

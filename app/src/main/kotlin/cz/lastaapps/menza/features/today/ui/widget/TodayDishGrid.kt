@@ -41,8 +41,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.Dish
-import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.ui.components.NoItems
@@ -86,9 +86,9 @@ internal fun TodayDishGrid(
                 footer = footer,
                 widthSize = widthSize,
                 modifier =
-                    Modifier
-                        .padding(top = Padding.Smaller) // so text is not cut off
-                        .fillMaxSize(),
+                Modifier
+                    .padding(top = Padding.Smaller) // so text is not cut off
+                    .fillMaxSize(),
             )
         }
     }
@@ -223,9 +223,9 @@ private fun DishImageWithBadge(
             photoLink = dish.photoLink ?: "Impossible",
             loadImmediately = downloadOnMetered || !isOnMetered,
             modifier =
-                Modifier
-                    .align(Alignment.Center)
-                    .padding(Padding.Small),
+            Modifier
+                .align(Alignment.Center)
+                .padding(Padding.Small),
         )
         DishBadgesColumn(
             dish = dish,

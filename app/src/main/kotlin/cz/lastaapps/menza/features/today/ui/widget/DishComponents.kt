@@ -48,9 +48,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import cz.lastaapps.api.core.domain.model.Dish
-import cz.lastaapps.api.core.domain.model.DishCategory
-import cz.lastaapps.api.core.domain.model.Rating
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
+import cz.lastaapps.api.core.domain.model.rating.Rating
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.ui.util.getPrice
@@ -136,9 +136,9 @@ internal fun DishRatingBadge(
 ) {
     Surface(
         modifier =
-            modifier
-                .shadow(4.dp, shape = CircleShape)
-                .clip(MaterialTheme.shapes.medium),
+        modifier
+            .shadow(4.dp, shape = CircleShape)
+            .clip(MaterialTheme.shapes.medium),
 //                .clickable { onRating() }
         color = MaterialTheme.colorScheme.inversePrimary,
     ) {
@@ -161,12 +161,12 @@ internal fun DishRatingBadge(
             }
         val text =
             buildAnnotatedString {
-                if (rating.ratingCount != 0) {
+                if (rating.audience != 0U) {
                     append("%.1f".format(rating.overallRating))
                     appendInlineContent("star")
                     append(' ')
                 }
-                append(rating.ratingCount.toString())
+                append(rating.audience.toString())
                 appendInlineContent("person")
             }
         Text(
@@ -186,7 +186,7 @@ internal fun DishRatingBadge(
 @Composable
 private fun DishRatingBadgePreview() =
     PreviewWrapper {
-        listOf(Rating.Mocked.valid, Rating.Mocked.noRatings).forEach {
+        listOf(Rating.Mocked.valid, Rating.empty).forEach {
             DishRatingBadge(it, {})
         }
     }

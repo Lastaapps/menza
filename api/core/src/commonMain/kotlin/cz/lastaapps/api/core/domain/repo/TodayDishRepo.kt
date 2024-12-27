@@ -19,8 +19,8 @@
 
 package cz.lastaapps.api.core.domain.repo
 
-import cz.lastaapps.api.core.domain.model.DishCategory
 import cz.lastaapps.api.core.domain.model.RequestParams
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.api.core.domain.sync.SyncSource
 import kotlinx.collections.immutable.ImmutableList
 

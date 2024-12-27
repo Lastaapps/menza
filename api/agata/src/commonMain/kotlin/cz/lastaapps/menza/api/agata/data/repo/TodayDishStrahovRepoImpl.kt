@@ -24,7 +24,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import arrow.core.rightIor
 import cz.lastaapps.api.agata.AgataDatabase
-import cz.lastaapps.api.core.domain.model.DishCategory
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.repo.TodayRepoParams
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
@@ -79,7 +79,7 @@ internal class TodayDishStrahovRepoImpl(
                 },
             ) { data, validity ->
                 data.takeIf { validity }.orEmpty()
-            }.map { it.toDomain() }
+            }.map { it.toDomain(params.language) }
             .onStart { log.d { "Starting collection" } }
             .onCompletion { log.d { "Completed collection" } }
 

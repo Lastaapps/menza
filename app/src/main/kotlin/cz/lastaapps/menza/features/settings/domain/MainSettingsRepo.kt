@@ -19,11 +19,11 @@
 
 package cz.lastaapps.menza.features.settings.domain
 
+import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.menza.features.settings.domain.model.AppSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
-import cz.lastaapps.menza.features.settings.domain.model.DishLanguage
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
@@ -72,9 +72,9 @@ internal interface MainSettingsRepo {
 
     fun getImagesOnMetered(): Flow<Boolean>
 
-    suspend fun setDishLanguage(language: DishLanguage)
+    suspend fun setDishLanguage(language: DataLanguage)
 
-    fun getDishLanguage(): Flow<DishLanguage>
+    fun getDishLanguage(): Flow<DataLanguage>
 
     suspend fun setCompactTodayView(mode: DishListMode)
 

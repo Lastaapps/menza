@@ -55,8 +55,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cz.lastaapps.api.core.domain.model.Dish
-import cz.lastaapps.api.core.domain.model.RatingCategory
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.rating.RatingCategory
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.text
 import cz.lastaapps.core.ui.vm.HandleDismiss
@@ -81,7 +81,9 @@ internal fun RateDishScreen(
 
     val state by viewModel.flowState
     LaunchedEffect(state.isSubmitted) {
-        viewModel.dismissDone()
+        if (state.isSubmitted) {
+            viewModel.dismissDone()
+        }
     }
 
     RateDishContent(
@@ -118,9 +120,9 @@ private fun RateDishContent(
 ) {
     Column(
         modifier =
-            modifier
-                .width(intrinsicSize = Min)
-                .animateContentSize(),
+        modifier
+            .width(intrinsicSize = Min)
+            .animateContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Padding.Small),
     ) {
@@ -271,12 +273,13 @@ private fun RateDishContentPreview() =
     PreviewWrapper {
         RateDishContent(
             state =
-                RatingState(
-                    RatingCategory.entries
-                        .mapIndexed { index, value -> value to index + 2 }
-                        .toMap()
-                        .toPersistentMap(),
-                ),
+            RatingState(
+                rating =
+                RatingCategory.entries
+                    .mapIndexed { index, value -> value to index + 2 }
+                    .toMap()
+                    .toPersistentMap(),
+            ),
             dish = Dish.Mock.dishKunda.let(DishForRating::from),
             onStar = { _, _ -> },
             onSubmit = {},

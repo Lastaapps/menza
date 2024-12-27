@@ -19,7 +19,7 @@
 
 package cz.lastaapps.menza.api.agata.data.model
 
-import cz.lastaapps.api.core.domain.model.RequestLanguage
+import cz.lastaapps.api.core.domain.model.DataLanguage
 
 enum class DBLang(
     val value: String,
@@ -28,14 +28,14 @@ enum class DBLang(
     EN("en"),
 }
 
-internal fun RequestLanguage.toDB() =
+internal fun DataLanguage.toDB() =
     when (this) {
-        RequestLanguage.CS -> DBLang.CS
-        RequestLanguage.EN -> DBLang.EN
+        DataLanguage.Czech -> DBLang.CS
+        DataLanguage.English -> DBLang.EN
     }
 
 internal fun DBLang.toDomain() =
     when (this) {
-        DBLang.CS -> RequestLanguage.CS
-        DBLang.EN -> RequestLanguage.EN
+        DBLang.CS -> DataLanguage.Czech
+        DBLang.EN -> DataLanguage.English
     }

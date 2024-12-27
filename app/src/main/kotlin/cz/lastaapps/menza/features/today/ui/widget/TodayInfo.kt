@@ -55,10 +55,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import cz.lastaapps.api.core.domain.model.Dish
-import cz.lastaapps.api.core.domain.model.Rating
-import cz.lastaapps.api.core.domain.model.RatingCategory
-import cz.lastaapps.api.core.domain.model.ServingPlace
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.dish.ServingPlace
+import cz.lastaapps.api.core.domain.model.rating.Rating
+import cz.lastaapps.api.core.domain.model.rating.RatingCategory
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.today.ui.util.allergenForId
 import cz.lastaapps.menza.features.today.ui.util.formatPrice
@@ -67,7 +67,6 @@ import cz.lastaapps.menza.ui.theme.MenzaColors
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlin.math.max
 
@@ -210,14 +209,17 @@ private fun RatingOverview(
                 Text(
                     text = stringResource(R.string.today_info_rating_title),
                     style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.weight(1f).align(Alignment.Top),
+                    modifier =
+                    Modifier
+                        .weight(1f)
+                        .align(Alignment.Top),
                 )
                 Column(
                     modifier = Modifier.align(Alignment.Bottom),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom,
                 ) {
-                    if (rating.ratingCount != 0) {
+                    if (rating.audience != 0U) {
                         Text(
                             text =
                                 buildAnnotatedString {
@@ -231,7 +233,7 @@ private fun RatingOverview(
                     Text(
                         text =
                             buildAnnotatedString {
-                                append(rating.ratingCount.toString())
+                                append(rating.audience.toString())
                                 appendInlineContent("person")
                             },
                         style = MaterialTheme.typography.bodySmall,
@@ -240,19 +242,19 @@ private fun RatingOverview(
                 }
             }
 
-            (rating.ratingCategories as ImmutableMap<RatingCategory, Float>).forEach { (key, value) ->
+            (RatingCategory.entries).forEach { category ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = key.toText(),
+                        text = category.toText(),
                         modifier = Modifier.weight(1f),
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Text(
                         buildAnnotatedString {
-                            append("%.1f".format(value))
+                            append("%.1f".format(rating.ratingCategories[category]))
                             appendInlineContent("star")
                         },
                         style = MaterialTheme.typography.bodyMedium,
@@ -269,7 +271,7 @@ private fun RatingOverview(
 private fun RatingOverviewPreview() =
     PreviewWrapper {
         RatingOverview(Rating.Mocked.valid, onRating = {})
-        RatingOverview(Rating.Mocked.noRatings, onRating = {})
+        RatingOverview(Rating.empty, onRating = {})
     }
 
 @Composable
