@@ -121,6 +121,12 @@ internal class StravnikWalletApiImpl(
                 // but without the account balance.
                 // It is usually fine for the second request,
                 // but I have seen cases when it skip trough 5 cycles with not troubles.
+                // ----------------------------------------------------------------
+                // So I also reproduced the behaviour in browser.
+                // If the server is overloaded or something (most often when I reload the page quickly),
+                // the web page may contain no balance data.
+                // Therefore, the retries should be more spaced out than tens of milliseconds.
+                // If the balance data are missing, the "Vklad na konto" button is also missing.
                 val iterations = 12
                 repeat(iterations) { i ->
                     getData()
@@ -137,8 +143,15 @@ internal class StravnikWalletApiImpl(
                                 raise(it)
                             }
                         }
-                    delay(42.milliseconds)
+                    delay(420.milliseconds)
                 }
+                getData()
+                    .bind()
+                    .bodyAsText()
+                    .takeIf { it.contains("Vklad na konto") }
+                    ?.let {
+                        raise(ApiError.WalletError.Unavailable)
+                    }
                 raise(ApiError.WalletError.TotallyBroken("Failed after all the iterations"))
             }
         }

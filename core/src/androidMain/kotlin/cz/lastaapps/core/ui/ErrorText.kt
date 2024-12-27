@@ -36,8 +36,6 @@ import cz.lastaapps.core.domain.error.ApiError.SyncError.Closed
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Problem
 import cz.lastaapps.core.domain.error.ApiError.SyncError.Unavailable
 import cz.lastaapps.core.domain.error.ApiError.WalletError
-import cz.lastaapps.core.domain.error.ApiError.WalletError.InvalidCredentials
-import cz.lastaapps.core.domain.error.ApiError.WalletError.TotallyBroken
 import cz.lastaapps.core.domain.error.ApiError.WeekNotAvailable
 import cz.lastaapps.core.domain.error.CommonError
 import cz.lastaapps.core.domain.error.CommonError.AppNotFound
@@ -122,8 +120,9 @@ val ApiError.text: AppText
 
             is WalletError ->
                 when (this) {
-                    is TotallyBroken -> E(R.string.error_wallet_login_failed_critical)
-                    InvalidCredentials -> E(R.string.error_wallet_login_failed_credentials)
+                    is WalletError.TotallyBroken -> E(R.string.error_wallet_login_failed_critical)
+                    WalletError.InvalidCredentials -> E(R.string.error_wallet_login_failed_credentials)
+                    WalletError.Unavailable -> E(R.string.error_wallet_unavailable)
                 }
 
             is RatingError ->

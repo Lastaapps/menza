@@ -41,6 +41,7 @@
     <string name="error_no_app_facebook">Facebook není nainstalován</string>
     <string name="error_wallet_login_failed_critical">Přihlašení přestalo fungovat. Prosím, kontaktujte vývojáře. 🙏</string>
     <string name="error_wallet_login_failed_credentials">Neplatné údaje 🤨</string>
+    <string name="error_wallet_unavailable">Server s kontem je přetížen 💸 (nejde o moji chybu)</string>
     <string name="error_rating_old_app_version">Aktualizojte si aplikaci, pokud chcete nadále hodnotit. ⬆️\nOdpověď serveru: %s</string>
     <string name="error_rating_other_problem">Hodnocení selhalo 💫 (kód: %d)</string>
     <string name="error_rating_too_many_requests">Asi nás někdo DOSí, hodnocení nefunguje 🚽 (důvod: %s) 😞</string>

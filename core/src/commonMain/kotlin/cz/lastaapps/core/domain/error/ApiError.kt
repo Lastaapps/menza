@@ -43,6 +43,8 @@ sealed interface ApiError : DomainError.Logic {
         ) : WalletError
 
         data object InvalidCredentials : WalletError
+
+        data object Unavailable : WalletError
     }
 
     sealed interface RatingError : ApiError {
