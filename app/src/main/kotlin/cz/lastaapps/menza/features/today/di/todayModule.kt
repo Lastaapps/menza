@@ -19,8 +19,10 @@
 
 package cz.lastaapps.menza.features.today.di
 
+import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
+import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.menza.features.today.domain.usecase.GetTodayUserSettingsUC
-import cz.lastaapps.menza.features.today.ui.model.DishForRating
+import cz.lastaapps.menza.features.today.ui.vm.DishDetailViewModel
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.features.today.ui.vm.RateDishViewModel
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
@@ -29,9 +31,17 @@ import org.koin.dsl.module
 
 val todayModule =
     module {
-        factoryOf(::DishListViewModel)
         factoryOf(::TodayViewModel)
-        factory { (dish: DishForRating) -> RateDishViewModel(get(), dish, get(), get()) }
+        factoryOf(::DishListViewModel)
+        factory { (dish: DishOriginDescriptor, dishInitial: Dish?) ->
+            DishDetailViewModel(
+                get(),
+                dish,
+                dishInitial,
+                get(),
+            )
+        }
+        factory { (dish: DishOriginDescriptor) -> RateDishViewModel(get(), dish, get(), get()) }
 
         factoryOf(::GetTodayUserSettingsUC)
     }

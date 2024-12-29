@@ -22,6 +22,7 @@ package cz.lastaapps.menza.features.today.ui.vm
 import androidx.compose.runtime.Composable
 import arrow.core.Either.Left
 import arrow.core.Either.Right
+import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
 import cz.lastaapps.api.core.domain.model.rating.RatingCategories
 import cz.lastaapps.api.core.domain.model.rating.RatingCategory
 import cz.lastaapps.api.rating.domain.model.UserRating
@@ -32,14 +33,13 @@ import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
-import cz.lastaapps.menza.features.today.ui.model.DishForRating
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.toPersistentMap
 import kotlin.random.Random
 
 internal class RateDishViewModel(
     vmContext: VMContext,
-    private val dishForRating: DishForRating,
+    private val dishForRating: DishOriginDescriptor,
     private val rateDishUC: RateDishUC,
     provider: AppInfoProvider,
 ) : StateViewModel<RatingState>(RatingState(provider.isDebug()), vmContext),
@@ -56,7 +56,7 @@ internal class RateDishViewModel(
                 val res =
                     rateDishUC(
                         UserRating(
-                            dishForRating.toDishRatingDescriptor(),
+                            dishForRating,
                             it.toDomain(),
                         ),
                     )

@@ -17,39 +17,37 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.today.ui.model
+package cz.lastaapps.api.core.domain.model
 
-import cz.lastaapps.api.core.domain.model.DataLanguage
-import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.dish.DishID
-import cz.lastaapps.api.rating.data.model.DishRatingDescriptor
 import kotlinx.serialization.Serializable
 
-// This class exists because dish have no ID in the app and cannot be serialized
-// (they can be but it's a bad practise on this layer). This class is used in navigation.
 @Serializable
-class DishForRating private constructor(
-    private val menza: MenzaType,
-    private val id: String,
-    private val language: DataLanguage,
+data class DishOriginDescriptor(
+    val menza: MenzaType,
+    val id: DishID,
+    val language: DataLanguage,
     val name: String,
 ) {
     companion object {
         fun from(dish: Dish) =
-            DishForRating(
+            DishOriginDescriptor(
                 menza = dish.menza,
-                id = dish.id.value,
+                id = dish.id,
                 language = dish.language,
                 name = dish.name,
             )
     }
 
-    fun toDishRatingDescriptor() =
-        DishRatingDescriptor(
-            menza = menza,
-            id = DishID(id),
-            language = language,
-            name = name,
-        )
+    @Suppress("SimplifyBooleanWithConstants")
+    fun conforms(dish: Dish) =
+        true &&
+            id == dish.id &&
+            name == dish.name &&
+            menza == dish.menza &&
+            language == dish.language &&
+            true
 }
+
+fun Dish.toOrigin() = DishOriginDescriptor.from(this)

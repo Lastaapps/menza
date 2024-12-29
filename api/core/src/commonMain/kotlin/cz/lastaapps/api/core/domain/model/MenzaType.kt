@@ -19,9 +19,11 @@
 
 package cz.lastaapps.api.core.domain.model
 
+import kotlinx.serialization.Serializable
 import org.koin.core.qualifier.named
 
 // All the types must have unique names, or the DI will break
+@Serializable
 sealed interface MenzaType {
     val id: String
 
@@ -36,29 +38,37 @@ sealed interface MenzaType {
             )
     }
 
+    @Serializable
     sealed interface Agata : MenzaType {
+        @Serializable
         data class Subsystem(
             val subsystemId: Int,
         ) : Agata {
             override val id: String = "agata_subsystem_$subsystemId"
         }
 
+        @Serializable
         data object Strahov : Agata {
             override val id: String = "agata_strahov"
         }
     }
 
+    @Serializable
     sealed interface Buffet : MenzaType {
+        @Serializable
         data object FS : Buffet {
             override val id: String = "buffet_fs"
         }
 
+        @Serializable
         data object FEL : Buffet {
             override val id: String = "buffet_fel"
         }
     }
 
+    @Serializable
     sealed interface Testing : MenzaType {
+        @Serializable
         data object Kocourkov : Testing {
             override val id: String = "kocourkov"
         }

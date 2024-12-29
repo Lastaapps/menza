@@ -71,7 +71,7 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlin.math.max
 
 @Composable
-fun TodayInfo(
+fun TodayDishDetail(
     dish: Dish,
     onRating: (Dish) -> Unit,
     modifier: Modifier = Modifier,
@@ -210,9 +210,9 @@ private fun RatingOverview(
                     text = stringResource(R.string.today_info_rating_title),
                     style = MaterialTheme.typography.headlineSmall,
                     modifier =
-                    Modifier
-                        .weight(1f)
-                        .align(Alignment.Top),
+                        Modifier
+                            .weight(1f)
+                            .align(Alignment.Top),
                 )
                 Column(
                     modifier = Modifier.align(Alignment.Bottom),

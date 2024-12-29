@@ -28,13 +28,12 @@ import cz.lastaapps.api.rating.data.repo.RatingRepositoryImpl
 import cz.lastaapps.api.rating.domain.usecase.GetDishRatingsUC
 import cz.lastaapps.api.rating.domain.usecase.RateDishUC
 import cz.lastaapps.api.rating.domain.usecase.SyncDishRatingsUC
-import cz.lastaapps.api.rating.domain.usecase.UpdateDishRatingUC
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val apiRatingDI =
+val apiRatingModule =
     module {
         single { RatingBEConfig.prod }
         single { RatingClient.create(get(), get()) }
@@ -44,5 +43,4 @@ val apiRatingDI =
         factoryOf(::GetDishRatingsUC)
         factoryOf(::RateDishUC)
         factoryOf(::SyncDishRatingsUC)
-        factoryOf(::UpdateDishRatingUC)
     }

@@ -19,6 +19,9 @@
 
 package cz.lastaapps.api.core.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class DataLanguage(
     val id: Int,
     val value: String,

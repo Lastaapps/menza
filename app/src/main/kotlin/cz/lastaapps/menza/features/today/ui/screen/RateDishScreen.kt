@@ -55,13 +55,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
 import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.rating.RatingCategory
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.text
 import cz.lastaapps.core.ui.vm.HandleDismiss
 import cz.lastaapps.menza.R
-import cz.lastaapps.menza.features.today.ui.model.DishForRating
 import cz.lastaapps.menza.features.today.ui.util.toText
 import cz.lastaapps.menza.features.today.ui.vm.RateDishViewModel
 import cz.lastaapps.menza.features.today.ui.vm.RatingState
@@ -73,7 +73,7 @@ import kotlinx.collections.immutable.toPersistentMap
 @Composable
 internal fun RateDishScreen(
     viewModel: RateDishViewModel,
-    dish: DishForRating,
+    dish: DishOriginDescriptor,
     onSubmit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -113,16 +113,16 @@ private fun RateDishEffects(
 @Composable
 private fun RateDishContent(
     state: RatingState,
-    dish: DishForRating,
+    dish: DishOriginDescriptor,
     onStar: (RatingCategory, Int) -> Unit,
     onSubmit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-        modifier
-            .width(intrinsicSize = Min)
-            .animateContentSize(),
+            modifier
+                .width(intrinsicSize = Min)
+                .animateContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Padding.Small),
     ) {
@@ -273,14 +273,14 @@ private fun RateDishContentPreview() =
     PreviewWrapper {
         RateDishContent(
             state =
-            RatingState(
-                rating =
-                RatingCategory.entries
-                    .mapIndexed { index, value -> value to index + 2 }
-                    .toMap()
-                    .toPersistentMap(),
-            ),
-            dish = Dish.Mock.dishKunda.let(DishForRating::from),
+                RatingState(
+                    rating =
+                        RatingCategory.entries
+                            .mapIndexed { index, value -> value to index + 2 }
+                            .toMap()
+                            .toPersistentMap(),
+                ),
+            dish = Dish.Mock.dishKunda.let(DishOriginDescriptor::from),
             onStar = { _, _ -> },
             onSubmit = {},
         )
@@ -292,7 +292,7 @@ private fun RateDishContentEmptyPreview() =
     PreviewWrapper {
         RateDishContent(
             state = RatingState(),
-            dish = Dish.Mock.dishKunda.let(DishForRating::from),
+            dish = Dish.Mock.dishKunda.let(DishOriginDescriptor::from),
             onStar = { _, _ -> },
             onSubmit = {},
         )
@@ -304,7 +304,7 @@ private fun RateDishContentSubmittingPreview() =
     PreviewWrapper {
         RateDishContent(
             state = RatingState(submitting = true),
-            dish = Dish.Mock.dishKunda.let(DishForRating::from),
+            dish = Dish.Mock.dishKunda.let(DishOriginDescriptor::from),
             onStar = { _, _ -> },
             onSubmit = {},
         )
@@ -316,7 +316,7 @@ private fun RateDishContentErrorPreview() =
     PreviewWrapper {
         RateDishContent(
             state = RatingState(error = DomainError.Unknown(Throwable("Lorem ipsum dolor sit amet"))),
-            dish = Dish.Mock.dishKunda.let(DishForRating::from),
+            dish = Dish.Mock.dishKunda.let(DishOriginDescriptor::from),
             onStar = { _, _ -> },
             onSubmit = {},
         )

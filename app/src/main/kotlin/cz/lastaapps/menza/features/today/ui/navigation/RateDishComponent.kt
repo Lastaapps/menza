@@ -21,7 +21,7 @@ package cz.lastaapps.menza.features.today.ui.navigation
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
-import cz.lastaapps.menza.features.today.ui.model.DishForRating
+import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
 import cz.lastaapps.menza.features.today.ui.screen.RateDishScreen
 import cz.lastaapps.menza.features.today.ui.vm.RateDishViewModel
 import cz.lastaapps.menza.ui.components.BaseDialog
@@ -31,14 +31,14 @@ import org.koin.core.parameter.parametersOf
 
 internal interface RateDishComponent {
     val viewModel: RateDishViewModel
-    val dish: DishForRating
+    val dish: DishOriginDescriptor
 
     fun dismiss()
 }
 
 internal class DefaultRateDishComponent(
     componentContext: ComponentContext,
-    override val dish: DishForRating,
+    override val dish: DishOriginDescriptor,
     private val onDismiss: () -> Unit,
 ) : RateDishComponent,
     KoinComponent,

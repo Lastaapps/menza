@@ -31,6 +31,7 @@ import cz.lastaapps.api.main.data.TodayKocourkovDishRepoImpl
 import cz.lastaapps.api.main.data.WalletMasterRepository
 import cz.lastaapps.api.main.data.WalletMasterRepositoryImpl
 import cz.lastaapps.api.main.data.WeekKocourkovRepoImpl
+import cz.lastaapps.api.main.domain.usecase.GetDishUC
 import cz.lastaapps.api.main.domain.usecase.GetImportantRequestParams
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
@@ -46,7 +47,7 @@ import cz.lastaapps.api.main.domain.usecase.wallet.WalletGetBalanceUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletLoginUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletLogoutUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletRefreshUC
-import cz.lastaapps.api.rating.di.apiRatingDI
+import cz.lastaapps.api.rating.di.apiRatingModule
 import cz.lastaapps.menza.api.agata.di.apiAgataModule
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -60,7 +61,7 @@ val apiModule =
         includes(
             apiAgataModule,
             apiBuffetModule,
-            apiRatingDI,
+            apiRatingModule,
             apiCoreModule,
         )
 
@@ -83,6 +84,7 @@ val apiModule =
         factoryOf(::WalletLogoutUC)
         factoryOf(::WalletRefreshUC)
         factoryOf(::GetImportantRequestParams)
+        factoryOf(::GetDishUC)
 
         registerMenzaType<MenzaType.Testing.Kocourkov>(
             menzaRepo = { KocourkovRepoImpl(get()) },

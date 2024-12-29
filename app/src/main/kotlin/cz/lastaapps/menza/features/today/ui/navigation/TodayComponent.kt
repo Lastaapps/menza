@@ -17,55 +17,67 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(ExperimentalDecomposeApi::class, ExperimentalSerializationApi::class)
+
 package cz.lastaapps.menza.features.today.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.arkivanov.decompose.router.slot.ChildSlot
-import com.arkivanov.decompose.router.slot.SlotNavigation
-import com.arkivanov.decompose.router.slot.activate
-import com.arkivanov.decompose.router.slot.childSlot
-import com.arkivanov.decompose.router.slot.dismiss
+import com.arkivanov.decompose.ExperimentalDecomposeApi
+import com.arkivanov.decompose.extensions.compose.experimental.panels.ChildPanels
+import com.arkivanov.decompose.extensions.compose.experimental.panels.ChildPanelsAnimators
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.PredictiveBackParams
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.scale
+import com.arkivanov.decompose.router.panels.ChildPanels
+import com.arkivanov.decompose.router.panels.ChildPanelsMode
+import com.arkivanov.decompose.router.panels.Panels
+import com.arkivanov.decompose.router.panels.PanelsNavigation
+import com.arkivanov.decompose.router.panels.activateDetails
+import com.arkivanov.decompose.router.panels.childPanels
+import com.arkivanov.decompose.router.panels.dismissDetails
+import com.arkivanov.decompose.router.panels.setMode
 import com.arkivanov.decompose.value.Value
-import cz.lastaapps.menza.features.panels.Panels
-import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel
-import cz.lastaapps.menza.features.panels.rateus.ui.RateUsViewModel
-import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel
-import cz.lastaapps.menza.features.today.ui.model.DishForRating
-import cz.lastaapps.menza.features.today.ui.navigation.DefaultTodayComponent.Config.RateDate
-import cz.lastaapps.menza.features.today.ui.navigation.TodayComponent.Child
-import cz.lastaapps.menza.features.today.ui.navigation.TodayComponent.Child.RateDish
-import cz.lastaapps.menza.features.today.ui.screen.TodayScreen
-import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
+import com.arkivanov.essenty.backhandler.BackHandlerOwner
+import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.toOrigin
+import cz.lastaapps.menza.features.today.ui.navigation.DefaultTodayComponent.Config.DetailsConfig
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.ChildPanelsModeEffect
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import kotlinx.serialization.builtins.serializer
 import org.koin.core.component.KoinComponent
 
-internal interface TodayComponent {
+internal interface TodayComponent : BackHandlerOwner {
     val viewModel: TodayViewModel
-    val dishListViewModel: DishListViewModel
-    val crashesViewModel: CrashesViewModel
-    val whatsNewViewModel: WhatsNewViewModel
-    val rageUsViewModel: RateUsViewModel
 
-    val content: Value<ChildSlot<*, Child>>
+    val content: Value<ChildPanels<*, DishListComponent, *, DishDetailComponent, Nothing, Nothing>>
 
-    fun onRateDish(dish: DishForRating)
+    fun setPanelMode(mode: ChildPanelsMode)
 
-    sealed interface Child {
-        @JvmInline
-        value class RateDish(
-            val component: RateDishComponent,
-        ) : Child
-    }
+    fun onBackClicked()
+
+//    sealed interface Child {
+//        @JvmInline
+//        value class DishList(
+//            val component: DishListComponent,
+//        ) : Child
+//
+//        @JvmInline
+//        value class Detail(
+//            val component: DetailComponent,
+//        ) : Child
+//    }
 }
 
 internal class DefaultTodayComponent(
@@ -74,39 +86,53 @@ internal class DefaultTodayComponent(
     KoinComponent,
     ComponentContext by componentContext {
     override val viewModel: TodayViewModel = getOrCreateKoin()
-    override val dishListViewModel: DishListViewModel = getOrCreateKoin()
-    override val crashesViewModel: CrashesViewModel = getOrCreateKoin()
-    override val whatsNewViewModel: WhatsNewViewModel = getOrCreateKoin()
-    override val rageUsViewModel: RateUsViewModel = getOrCreateKoin()
 
-    private val navigation = SlotNavigation<Config>()
-    override val content: Value<ChildSlot<*, Child>> =
-        childSlot(
-            navigation,
-            Config.serializer(),
-            initialConfiguration = { null },
-        ) { configuration, componentContext ->
-            when (configuration) {
-                is RateDate ->
-                    RateDish(
-                        DefaultRateDishComponent(
-                            componentContext,
-                            configuration.dish,
-                            navigation::dismiss,
-                        ),
-                    )
-            }
-        }
+    private val navigation = PanelsNavigation<Unit, Config, Nothing>()
+    override val content: Value<ChildPanels<*, DishListComponent, *, DishDetailComponent, Nothing, Nothing>> =
+        childPanels(
+            source = navigation,
+            serializers = Unit.serializer() to Config.serializer(),
+            initialPanels = { Panels(main = Unit) },
+            handleBackButton = true,
+            mainFactory = { _, ctx ->
+                DefaultDishListComponent(
+                    ctx,
+                    onDishSelected = { dish ->
+                        navigation.activateDetails(
+                            DetailsConfig(dish.toOrigin(), dish),
+                        )
+                    },
+                )
+            },
+            detailsFactory = { cfg, ctx ->
+                when (cfg) {
+                    is DetailsConfig -> {
+                        DefaultDishDetailComponent(
+                            componentContext = ctx,
+                            dishOrigin = cfg.dishDescriptor,
+                            dishInitial = cfg.initialDish,
+                        )
+                    }
+                }
+            },
+        )
 
-    override fun onRateDish(dish: DishForRating) {
-        navigation.activate(RateDate(dish))
+    override fun setPanelMode(mode: ChildPanelsMode) {
+        navigation.setMode(mode)
+    }
+
+    override fun onBackClicked() {
+        navigation.dismissDetails()
     }
 
     @Serializable
-    sealed interface Config {
+    private sealed interface Config {
         @Serializable
-        data class RateDate(
-            val dish: DishForRating,
+        data class DetailsConfig(
+            val dishDescriptor: DishOriginDescriptor,
+            // does not serialize the field
+            @Transient
+            val initialDish: Dish? = null,
         ) : Config
     }
 }
@@ -118,33 +144,35 @@ internal fun TodayContent(
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    val panels: @Composable (Modifier) -> Unit = {
-        Panels(
-            modifier = it,
-            hostState = hostState,
-            crashesViewModel = component.crashesViewModel,
-            whatsNewViewModel = component.whatsNewViewModel,
-            rateUsViewModel = component.rageUsViewModel,
-        )
-    }
+    ChildPanelsModeEffect(component::setPanelMode)
 
-    TodayScreen(
-        onOsturak = onOsturak,
-        panels = panels,
-        viewModel = component.viewModel,
-        dishListViewModel = component.dishListViewModel,
-        hostState = hostState,
-        onRating = component::onRateDish,
-        modifier =
-            modifier
-                .padding(Padding.More.Screen)
-                .fillMaxSize(),
+    ChildPanels(
+        modifier = modifier.padding(Padding.More.Screen),
+        panels = component.content,
+        mainChild = {
+            DishListContent(
+                it.instance,
+                onOsturak = onOsturak,
+                hostState = hostState,
+                modifier = Modifier.fillMaxSize(),
+            )
+        },
+        detailsChild = {
+            DishDetailContent(
+                it.instance,
+                modifier = Modifier.fillMaxSize(),
+            )
+        },
+        animators =
+            ChildPanelsAnimators(
+                single = fade() + scale(),
+                dual = fade() to fade(),
+            ),
+        predictiveBackParams = {
+            PredictiveBackParams(
+                backHandler = component.backHandler,
+                onBack = component::onBackClicked,
+            )
+        },
     )
-
-    // Dialogs
-    val slot by component.content.subscribeAsState()
-    when (val instance = slot.child?.instance) {
-        is RateDish -> RateDishContent(instance.component)
-        null -> {}
-    }
 }

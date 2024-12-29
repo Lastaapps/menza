@@ -19,10 +19,10 @@
 
 package cz.lastaapps.api.rating.domain.model
 
+import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
 import cz.lastaapps.api.core.domain.model.rating.RatingCategories
-import cz.lastaapps.api.rating.data.model.DishRatingDescriptor
 
 data class UserRating(
-    val dish: DishRatingDescriptor,
+    val dish: DishOriginDescriptor,
     val ratingCategories: RatingCategories,
 )

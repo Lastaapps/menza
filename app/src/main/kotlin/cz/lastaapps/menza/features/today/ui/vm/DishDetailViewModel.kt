@@ -19,42 +19,30 @@
 
 package cz.lastaapps.menza.features.today.ui.vm
 
-import arrow.core.Option
-import arrow.core.toOption
-import cz.lastaapps.api.core.domain.model.DataLanguage
-import cz.lastaapps.api.core.domain.model.Menza
+import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
+import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.main.domain.usecase.GetDishUC
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
-import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
-import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishLanguageUC
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-internal class TodayViewModel(
+internal class DishDetailViewModel(
     context: VMContext,
-    private val getSelectedMenza: GetSelectedMenzaUC,
-    private val getDishLanguageUC: GetDishLanguageUC,
-) : StateViewModel<TodayState>(TodayState(), context) {
+    private val dish: DishOriginDescriptor,
+    dishInitial: Dish?,
+    private val getDishUC: GetDishUC,
+) : StateViewModel<DishDetailState>(DishDetailState(dish = dishInitial), context) {
     override suspend fun whileSubscribed(scope: CoroutineScope) {
-        getSelectedMenza()
+        getDishUC(dish)
             .onEach {
-                updateState {
-                    copy(
-                        selectedMenza = it.toOption(),
-                    )
-                }
-            }.launchIn(scope)
-
-        getDishLanguageUC()
-            .onEach {
-                updateState { copy(language = it) }
+                updateState { copy(dish = it) }
             }.launchIn(scope)
     }
 }
 
-internal data class TodayState(
-    val selectedMenza: Option<Menza>? = null,
-    val language: DataLanguage = DataLanguage.Czech,
+internal data class DishDetailState(
+    val dish: Dish? = null,
 ) : VMState

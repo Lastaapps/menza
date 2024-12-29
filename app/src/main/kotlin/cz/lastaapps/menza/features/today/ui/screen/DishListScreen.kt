@@ -41,15 +41,20 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.State.RESUMED
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.CAROUSEL
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.COMPACT
@@ -60,6 +65,7 @@ import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.features.today.ui.widget.DishListViewModeSwitch
 import cz.lastaapps.menza.features.today.ui.widget.Experimental
 import cz.lastaapps.menza.features.today.ui.widget.ImageSizeSetting
+import cz.lastaapps.menza.features.today.ui.widget.NoDishSelected
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishCarousel
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishGrid
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishHorizontal
@@ -70,12 +76,12 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun DishListScreen(
-    onDish: (Dish) -> Unit,
-    onVideoLink: (String) -> Unit,
-    onRating: (Dish) -> Unit,
     viewModel: DishListViewModel,
+    panels: @Composable (Modifier) -> Unit,
+    onOsturak: () -> Unit,
+    onDish: (Dish) -> Unit,
+    onRating: (Dish) -> Unit,
     hostState: SnackbarHostState,
-    scrollStates: ScrollStates,
     modifier: Modifier = Modifier,
 ) {
     DishListEffects(viewModel, hostState)
@@ -83,14 +89,13 @@ internal fun DishListScreen(
     val lifecycle = LocalLifecycleOwner.current
     LaunchedEffect(lifecycle, viewModel) {
         lifecycle.lifecycle.currentStateFlow.collectLatest {
-            viewModel.setIsResumed(it == Lifecycle.State.RESUMED)
+            viewModel.setIsResumed(it == RESUMED)
         }
     }
 
     val state by viewModel.flowState
     DishListContent(
         state = state,
-        onVideoLink = onVideoLink,
         modifier = modifier,
         onRefresh = viewModel::reload,
         onNoItems = viewModel::openWebMenu,
@@ -99,7 +104,8 @@ internal fun DishListScreen(
         onOliverRow = viewModel::setOliverRow,
         onDish = onDish,
         onRating = onRating,
-        scrollStates = scrollStates,
+        panels = panels,
+        onOsturak = onOsturak,
     )
 }
 
@@ -114,6 +120,75 @@ private fun DishListEffects(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 private fun DishListContent(
+    state: DishListState,
+    panels: @Composable (Modifier) -> Unit,
+    onRefresh: () -> Unit,
+    onNoItems: () -> Unit,
+    onViewMode: (mode: DishListMode) -> Unit,
+    onImageScale: (Float) -> Unit,
+    onDish: (Dish) -> Unit,
+    onOliverRow: (Boolean) -> Unit,
+    onOsturak: () -> Unit,
+    onRating: (Dish) -> Unit,
+    modifier: Modifier = Modifier,
+    // resets scroll position when new menza is selected
+    scrollStates: ScrollStates =
+        rememberSaveable(
+            state.selectedMenza,
+            saver = ScrollStates.Saver,
+        ) { ScrollStates() },
+) {
+    var videoFeedUrl by remember(state.selectedMenza) {
+        mutableStateOf<String?>(null)
+    }
+
+    Column(
+        modifier = modifier,
+    ) {
+        WrapMenzaNotSelected(
+            menza = state.selectedMenza,
+            onOsturak = onOsturak,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+        ) {
+            if (state.items.isEmpty()) {
+                NoDishSelected(Modifier.fillMaxSize())
+            } else {
+                DishListComposing(
+                    state = state,
+                    onDish = onDish,
+                    onVideoLink = { videoFeedUrl = it },
+                    onRating = onRating,
+                    modifier = Modifier.fillMaxSize(),
+                    scrollStates = scrollStates,
+                    onRefresh = onRefresh,
+                    onNoItems = onNoItems,
+                    onViewMode = onViewMode,
+                    onImageScale = onImageScale,
+                    onOliverRow = onOliverRow,
+                )
+            }
+        }
+
+        panels(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = Padding.Medium),
+        )
+    }
+
+    videoFeedUrl?.let {
+        ImagePreviewDialog(videoFeedUrl = it) {
+            videoFeedUrl = null
+        }
+    }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+private fun DishListComposing(
     state: DishListState,
     onVideoLink: (String) -> Unit,
     onRefresh: () -> Unit,

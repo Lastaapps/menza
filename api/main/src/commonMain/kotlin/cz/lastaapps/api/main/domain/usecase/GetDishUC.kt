@@ -19,17 +19,13 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
-import cz.lastaapps.api.core.domain.model.Menza
-import cz.lastaapps.api.core.domain.model.MenzaType
-import cz.lastaapps.api.core.domain.model.dish.DishCategory
+import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
+import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.api.rating.domain.usecase.GetDishRatingsUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -37,50 +33,39 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
 
-class GetTodayDishListUC(
+class GetDishUC internal constructor(
     context: UCContext,
     private val getRequestParamsUC: GetRequestParamsUC,
     private val getDishRatingsUC: GetDishRatingsUC,
 ) : UseCase(context),
     KoinComponent {
-    suspend operator fun invoke(menza: Menza): Flow<ImmutableList<DishCategory>> = invoke(menza.type)
+    suspend operator fun invoke(dish: Dish) = invoke(DishOriginDescriptor.from(dish))
 
-    suspend operator fun invoke(menza: MenzaType): Flow<ImmutableList<DishCategory>> =
+    suspend operator fun invoke(dishOrigin: DishOriginDescriptor) =
         launch {
             val dishFlow =
-                get<TodayDishRepo> { parametersOf(menza) }
+                get<TodayDishRepo> { parametersOf(dishOrigin.menza) }
                     .getData(getRequestParamsUC())
-                    .map {
-                        it
-                            .map { category ->
-                                val newDishList = category.dishList.filter { dish -> dish.isActive }
-
-                                if (newDishList == category.dishList) {
-                                    category
-                                } else {
-                                    category.copy(dishList = newDishList.toImmutableList())
-                                }
-                            }.toImmutableList()
+                    .map { categories ->
+                        categories.forEach { category ->
+                            category.dishList
+                                .firstOrNull { dishOrigin.conforms(it) }
+                                ?.let { return@map it }
+                        }
+                        null
                     }
 
-            val ratingsFlow = getDishRatingsUC(menza)
+            val ratingsFlow = getDishRatingsUC(dishOrigin.menza)
 
             combine(
                 dishFlow.distinctUntilChanged(),
                 ratingsFlow.distinctUntilChanged(),
-            ) { dishList, ratings ->
-                dishList
-                    .map { category ->
-                        category.copy(
-                            dishList =
-                            category.dishList
-                                .map { dish ->
-                                    ratings[dish.id]?.let {
-                                        dish.copy(rating = it)
-                                    } ?: dish
-                                }.toImmutableList(),
-                        )
-                    }.toImmutableList()
-            }
+            ) { dish, ratings ->
+                dish?.let {
+                    ratings[it.id]?.let { rating ->
+                        dish.copy(rating = rating)
+                    }
+                } ?: dish
+            }.distinctUntilChanged()
         }
 }

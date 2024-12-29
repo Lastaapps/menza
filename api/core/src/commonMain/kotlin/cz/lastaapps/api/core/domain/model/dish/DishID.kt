@@ -19,7 +19,10 @@
 
 package cz.lastaapps.api.core.domain.model.dish
 
+import kotlinx.serialization.Serializable
+
 @JvmInline
+@Serializable
 value class DishID(
     val value: String,
 ) {
