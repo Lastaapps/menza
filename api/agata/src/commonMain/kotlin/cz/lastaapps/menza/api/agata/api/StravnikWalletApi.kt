@@ -148,7 +148,7 @@ internal class StravnikWalletApiImpl(
                 getData()
                     .bind()
                     .bodyAsText()
-                    .takeIf { it.contains("Vklad na konto") }
+                    .takeIf { it.contains("Os.") && !it.contains("Vklad na konto") }
                     ?.let {
                         raise(ApiError.WalletError.Unavailable)
                     }
