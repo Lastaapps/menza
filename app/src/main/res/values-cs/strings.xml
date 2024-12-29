@@ -213,6 +213,7 @@
     <string name="rating_category_taste">Chuť</string>
     <string name="rating_category_portion_size">Porce</string>
     <string name="rating_category_worthiness">Správná volba</string>
+    <string name="rating_click_to_rate">Kliknutím ohodnoťte</string>
     <string name="rating_dialog_title">Ohodnoťte svůj zážitek</string>
     <string name="rating_dialog_submit">Odeslat</string>
     <string name="rating_dialog_content_description_star_selected">Vybraná hvězda %d</string>

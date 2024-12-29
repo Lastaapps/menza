@@ -230,6 +230,7 @@
     <string name="rating_category_taste">Taste</string>
     <string name="rating_category_portion_size">Portion size</string>
     <string name="rating_category_worthiness">Good choice</string>
+    <string name="rating_click_to_rate">Click to rate</string>
     <string name="rating_dialog_title">Rate your experience</string>
     <string name="rating_dialog_submit">Submit</string>
     <string name="rating_dialog_content_description_star_selected">Selected star %d</string>

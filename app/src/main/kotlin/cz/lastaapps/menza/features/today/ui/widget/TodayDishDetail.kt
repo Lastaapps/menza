@@ -19,7 +19,6 @@
 
 package cz.lastaapps.menza.features.today.ui.widget
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -166,9 +166,10 @@ private fun RatingOverview(
     rating: Rating,
     onRating: () -> Unit,
     modifier: Modifier = Modifier,
-) {
+) = Column(modifier = modifier) {
     Card(
-        modifier = modifier.clickable { onRating() },
+        modifier = Modifier.fillMaxWidth(),
+        onClick = { onRating() },
     ) {
         Column(
             modifier = Modifier.padding(Padding.MidSmall),
@@ -264,6 +265,18 @@ private fun RatingOverview(
             }
         }
     }
+
+    Text(
+        stringResource(R.string.rating_click_to_rate),
+        modifier =
+            Modifier
+                .align(Alignment.End)
+                .padding(top = Padding.Tiny, end = Padding.MidSmall),
+        style =
+            MaterialTheme.typography.bodySmall
+                .run { copy(fontSize = fontSize * 0.9f) },
+        fontStyle = FontStyle.Italic,
+    )
 }
 
 @Preview
