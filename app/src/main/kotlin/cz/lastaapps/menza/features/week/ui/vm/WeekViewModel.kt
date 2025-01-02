@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -46,6 +46,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -62,7 +63,7 @@ internal class WeekViewModel(
 
     override suspend fun whileSubscribed(scope: CoroutineScope) {
         getSelectedMenza()
-            .onEach {
+            .mapLatest {
                 log.i { "Registered a new: $it" }
 
                 updateState {
