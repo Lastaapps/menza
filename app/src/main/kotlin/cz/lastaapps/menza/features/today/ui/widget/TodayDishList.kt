@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -115,7 +115,7 @@ private fun DishContent(
 ) {
     // no data handling
     if (data.isEmpty()) {
-        NoItems(modifier, onNoItems)
+        NoItems(onNoItems, modifier)
         return
     }
 
@@ -149,9 +149,9 @@ private fun DishContent(
                     userSettings = userSettings,
                     isOnMetered = isOnMetered,
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
+                        Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
                 )
             }
         }
@@ -243,13 +243,13 @@ private fun DishImageWithBadge(
             imageScale = imageScale,
             isOnMetered = isOnMetered,
             modifier =
-            Modifier
-                .align(Alignment.Center)
-                .padding(
-                    top = Padding.Small,
-                    bottom = Padding.Small,
-                    end = Padding.Small,
-                ),
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(
+                        top = Padding.Small,
+                        bottom = Padding.Small,
+                        end = Padding.Small,
+                    ),
         )
         DishBadgesColumn(
             dish = dish,

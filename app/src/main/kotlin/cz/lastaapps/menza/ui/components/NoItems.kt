@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -41,8 +41,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun NoItems(
-    modifier: Modifier = Modifier,
     onNoItems: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),

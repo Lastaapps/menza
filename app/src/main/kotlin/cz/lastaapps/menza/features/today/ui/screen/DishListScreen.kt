@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -65,7 +65,6 @@ import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
 import cz.lastaapps.menza.features.today.ui.widget.DishListViewModeSwitch
 import cz.lastaapps.menza.features.today.ui.widget.Experimental
 import cz.lastaapps.menza.features.today.ui.widget.ImageSizeSetting
-import cz.lastaapps.menza.features.today.ui.widget.NoDishSelected
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishCarousel
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishGrid
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishHorizontal
@@ -153,23 +152,19 @@ private fun DishListContent(
                     .fillMaxWidth()
                     .weight(1f),
         ) {
-            if (state.items.isEmpty()) {
-                NoDishSelected(Modifier.fillMaxSize())
-            } else {
-                DishListComposing(
-                    state = state,
-                    onDish = onDish,
-                    onVideoLink = { videoFeedUrl = it },
-                    onRating = onRating,
-                    modifier = Modifier.fillMaxSize(),
-                    scrollStates = scrollStates,
-                    onRefresh = onRefresh,
-                    onNoItems = onNoItems,
-                    onViewMode = onViewMode,
-                    onImageScale = onImageScale,
-                    onOliverRow = onOliverRow,
-                )
-            }
+            DishListComposing(
+                state = state,
+                onDish = onDish,
+                onVideoLink = { videoFeedUrl = it },
+                onRating = onRating,
+                modifier = Modifier.fillMaxSize(),
+                scrollStates = scrollStates,
+                onRefresh = onRefresh,
+                onNoItems = onNoItems,
+                onViewMode = onViewMode,
+                onImageScale = onImageScale,
+                onOliverRow = onOliverRow,
+            )
         }
 
         panels(

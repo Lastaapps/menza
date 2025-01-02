@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -99,9 +99,9 @@ internal fun TodayDishCarousel(
                 header = header,
                 footer = footer,
                 modifier =
-                Modifier
-                    .padding(top = Padding.Smaller) // so text is not cut off
-                    .fillMaxSize(),
+                    Modifier
+                        .padding(top = Padding.Smaller) // so text is not cut off
+                        .fillMaxSize(),
             )
         }
     }
@@ -124,7 +124,7 @@ private fun DishContent(
 ) {
     // no data handling
     if (data.isEmpty()) {
-        NoItems(modifier, onNoItems)
+        NoItems(onNoItems, modifier)
         return
     }
 
@@ -175,9 +175,9 @@ private fun DishContent(
                         state = carouselState,
                         preferredItemWidth = preferredItemSize,
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .animateItem(),
+                            Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
                         minSmallItemWidth = 64.dp,
                         maxSmallItemWidth = 128.dp,
                         itemSpacing = Padding.MidSmall,
@@ -210,9 +210,9 @@ private fun DishContent(
                             appSettings = appSettings,
                             isOnMetered = isOnMetered,
                             modifier =
-                            Modifier
-                                .height(preferredItemSize)
-                                .maskClip(MaterialTheme.shapes.extraLarge),
+                                Modifier
+                                    .height(preferredItemSize)
+                                    .maskClip(MaterialTheme.shapes.extraLarge),
                             progress = { progress },
                         )
                     }
@@ -292,9 +292,9 @@ private fun DishItem(
         val useGradient = dish.photoLink != null
         Column(
             modifier =
-            Modifier
-                .align(Alignment.BottomStart)
-                .graphicsLayer { componentsGraphics(Alignment.Bottom) },
+                Modifier
+                    .align(Alignment.BottomStart)
+                    .graphicsLayer { componentsGraphics(Alignment.Bottom) },
             verticalArrangement = Arrangement.spacedBy(Padding.Small * -1),
         ) {
             DishBadgesColumn(
@@ -302,16 +302,16 @@ private fun DishItem(
                 onRating = onRating,
                 priceType = appSettings.priceType,
                 modifier =
-                Modifier
-                    .zIndex(2f)
-                    .align(Alignment.End)
-                    .padding(horizontal = Padding.MidSmall),
+                    Modifier
+                        .zIndex(2f)
+                        .align(Alignment.End)
+                        .padding(horizontal = Padding.MidSmall),
             )
             Box(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .mapIf(useGradient) { it.gradient() },
+                    Modifier
+                        .fillMaxWidth()
+                        .mapIf(useGradient) { it.gradient() },
             ) {
                 // used to reset the marquee effect
                 val isVisible by remember { derivedStateOf { progress() > 0.2f } }
@@ -323,15 +323,15 @@ private fun DishItem(
                 Text(
                     dish.name,
                     modifier =
-                    Modifier
-                        .padding(Padding.MidSmall)
-                        .basicMarquee(
-                            initialDelayMillis = 800,
-                            repeatDelayMillis = 800,
-                            iterations = Int.MAX_VALUE,
-                            velocity = 69.dp, // default: 30.dp
-                            spacing = MarqueeSpacing.fractionOfContainer(1f / 5f),
-                        ),
+                        Modifier
+                            .padding(Padding.MidSmall)
+                            .basicMarquee(
+                                initialDelayMillis = 800,
+                                repeatDelayMillis = 800,
+                                iterations = Int.MAX_VALUE,
+                                velocity = 69.dp, // default: 30.dp
+                                spacing = MarqueeSpacing.fractionOfContainer(1f / 5f),
+                            ),
                     maxLines = 1,
                     color =
                         TodayDishCarouselTokens.gradientForeground.takeIf { useGradient }
@@ -353,10 +353,10 @@ private fun DishItem(
                 shape = MaterialTheme.shapes.large,
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 modifier =
-                Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(Padding.MidSmall)
-                    .graphicsLayer { componentsGraphics(Alignment.Top) },
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(Padding.MidSmall)
+                        .graphicsLayer { componentsGraphics(Alignment.Top) },
             ) {
                 Text(
                     text = text,

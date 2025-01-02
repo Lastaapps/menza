@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
@@ -49,6 +51,7 @@ import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.toOrigin
 import cz.lastaapps.menza.features.today.ui.navigation.DefaultTodayComponent.Config.DetailsConfig
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
+import cz.lastaapps.menza.features.today.ui.widget.NoDishSelected
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.ChildPanelsModeEffect
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
@@ -62,6 +65,8 @@ internal interface TodayComponent : BackHandlerOwner {
     val viewModel: TodayViewModel
 
     val content: Value<ChildPanels<*, DishListComponent, *, DishDetailComponent, Nothing, Nothing>>
+
+    fun dismissDetail()
 
     fun setPanelMode(mode: ChildPanelsMode)
 
@@ -121,6 +126,10 @@ internal class DefaultTodayComponent(
         navigation.setMode(mode)
     }
 
+    override fun dismissDetail() {
+        navigation.dismissDetails()
+    }
+
     override fun onBackClicked() {
         navigation.dismissDetails()
     }
@@ -144,23 +153,39 @@ internal fun TodayContent(
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
+    val state by component.viewModel.flowState
+    LaunchedEffect(state.selectedMenza) {
+        state.selectedMenza?.let {
+            component.dismissDetail()
+        }
+    }
+
     ChildPanelsModeEffect(component::setPanelMode)
 
+    val panelModifier =
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = Padding.More.Screen)
     ChildPanels(
-        modifier = modifier.padding(Padding.More.Screen),
+        modifier = modifier.padding(vertical = Padding.More.Screen),
         panels = component.content,
         mainChild = {
             DishListContent(
                 it.instance,
                 onOsturak = onOsturak,
                 hostState = hostState,
-                modifier = Modifier.fillMaxSize(),
+                modifier = panelModifier,
             )
         },
         detailsChild = {
             DishDetailContent(
                 it.instance,
-                modifier = Modifier.fillMaxSize(),
+                modifier = panelModifier,
+            )
+        },
+        secondPanelPlaceholder = {
+            NoDishSelected(
+                modifier = panelModifier,
             )
         },
         animators =

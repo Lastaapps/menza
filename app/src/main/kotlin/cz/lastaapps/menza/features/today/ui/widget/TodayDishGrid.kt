@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -86,9 +86,9 @@ internal fun TodayDishGrid(
                 footer = footer,
                 widthSize = widthSize,
                 modifier =
-                Modifier
-                    .padding(top = Padding.Smaller) // so text is not cut off
-                    .fillMaxSize(),
+                    Modifier
+                        .padding(top = Padding.Smaller) // so text is not cut off
+                        .fillMaxSize(),
             )
         }
     }
@@ -110,7 +110,7 @@ private fun DishContent(
     modifier: Modifier = Modifier,
 ) {
     if (data.isEmpty()) {
-        NoItems(modifier, onNoItems)
+        NoItems(onNoItems, modifier)
         return
     }
 
@@ -223,9 +223,9 @@ private fun DishImageWithBadge(
             photoLink = dish.photoLink ?: "Impossible",
             loadImmediately = downloadOnMetered || !isOnMetered,
             modifier =
-            Modifier
-                .align(Alignment.Center)
-                .padding(Padding.Small),
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(Padding.Small),
         )
         DishBadgesColumn(
             dish = dish,

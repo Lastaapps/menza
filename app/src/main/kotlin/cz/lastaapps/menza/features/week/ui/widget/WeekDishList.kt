@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -98,7 +98,7 @@ private fun WeekDishContent(
 ) {
     // no data handling
     if (data.isEmpty()) {
-        NoItems(modifier, noItems)
+        NoItems(noItems, modifier)
         return
     }
 
