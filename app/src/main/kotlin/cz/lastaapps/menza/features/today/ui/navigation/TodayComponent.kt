@@ -21,18 +21,33 @@
 
 package cz.lastaapps.menza.features.today.ui.navigation
 
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideIn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.experimental.panels.ChildPanels
 import com.arkivanov.decompose.extensions.compose.experimental.panels.ChildPanelsAnimators
-import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.PredictiveBackParams
 import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.plus
 import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.scale
@@ -49,10 +64,14 @@ import com.arkivanov.essenty.backhandler.BackHandlerOwner
 import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
 import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.toOrigin
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.today.ui.navigation.DefaultTodayComponent.Config.DetailsConfig
+import cz.lastaapps.menza.features.today.ui.screen.ImagePreviewDialog
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.features.today.ui.widget.NoDishSelected
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.theme.appPredictiveBackParams
+import cz.lastaapps.menza.ui.util.AnimatedAppearance
 import cz.lastaapps.menza.ui.util.ChildPanelsModeFoldingEffect
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import cz.lastaapps.menza.ui.util.rememberChildPanelsFoldingLayout
@@ -61,6 +80,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.builtins.serializer
 import org.koin.core.component.KoinComponent
+import kotlin.time.Duration.Companion.milliseconds
 
 internal interface TodayComponent : BackHandlerOwner {
     val viewModel: TodayViewModel
@@ -162,45 +182,98 @@ internal fun TodayContent(
         }
     }
 
+    var videoFeedUrl by remember(state.selectedMenza) {
+        mutableStateOf<String?>(null)
+    }
+
     ChildPanelsModeFoldingEffect(component::setPanelMode)
 
     val panelModifier =
         Modifier
             .fillMaxSize()
             .padding(Padding.More.Screen)
-    ChildPanels(
+    Scaffold(
         modifier = modifier,
-        panels = component.content,
-        layout = rememberChildPanelsFoldingLayout(),
-        mainChild = {
-            DishListContent(
-                it.instance,
-                onOsturak = onOsturak,
-                hostState = hostState,
-                modifier = panelModifier,
-            )
+        floatingActionButton = {
+            state.selectedMenza?.getOrNull()?.videoLinks?.firstOrNull()?.let { link ->
+                AnimatedAppearance(
+                    420.milliseconds,
+                    enter =
+                        slideIn {
+                            IntOffset(
+                                2 * it.width,
+                                it.height * 2,
+                            )
+                        } + fadeIn() + expandIn(),
+                ) {
+                    LiveVideoFeedFab(link = link, onVideoLink = { videoFeedUrl = it })
+                }
+            }
         },
-        detailsChild = {
-            DishDetailContent(
-                it.instance,
-                modifier = panelModifier,
-            )
-        },
-        secondPanelPlaceholder = {
-            NoDishSelected(
-                modifier = panelModifier,
-            )
-        },
-        animators =
-            ChildPanelsAnimators(
-                single = fade() + scale(),
-                dual = fade() to fade(),
-            ),
-        predictiveBackParams = {
-            PredictiveBackParams(
-                backHandler = component.backHandler,
-                onBack = component::onBackClicked,
-            )
-        },
-    )
+    ) { padding ->
+        ChildPanels(
+            modifier =
+                Modifier
+                    .padding(padding)
+                    .fillMaxSize(),
+            panels = component.content,
+            layout = rememberChildPanelsFoldingLayout(),
+            mainChild = {
+                DishListContent(
+                    it.instance,
+                    onOsturak = onOsturak,
+                    hostState = hostState,
+                    modifier = panelModifier,
+                )
+            },
+            detailsChild = {
+                DishDetailContent(
+                    it.instance,
+                    modifier = panelModifier,
+                )
+            },
+            secondPanelPlaceholder = {
+                NoDishSelected(
+                    modifier = panelModifier,
+                )
+            },
+            animators =
+                ChildPanelsAnimators(
+                    single = fade() + scale(),
+                    dual = fade() to fade(),
+                ),
+            predictiveBackParams = {
+                appPredictiveBackParams(
+                    backHandler = component.backHandler,
+                    onBack = component::onBackClicked,
+                )
+            },
+        )
+    }
+
+    videoFeedUrl?.let {
+        ImagePreviewDialog(videoFeedUrl = it) {
+            videoFeedUrl = null
+        }
+    }
+}
+
+@Composable
+private fun LiveVideoFeedFab(
+    link: String,
+    onVideoLink: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val size = 64.dp
+    FloatingActionButton(
+        onClick = { onVideoLink(link) },
+        modifier = modifier.size(size),
+        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+    ) {
+        Icon(
+            Icons.Default.Videocam,
+            stringResource(id = R.string.today_list_video_fab_content_description),
+            modifier = Modifier.size(size / 2),
+        )
+    }
 }

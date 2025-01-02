@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -65,7 +65,7 @@ internal fun MenzaSelectionScreen(
     onEdit: () -> Unit,
     onMenzaSelect: () -> Unit,
     viewModel: MenzaSelectionViewModel,
-    accountBalance: @Composable () -> Unit,
+    accountBalance: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     MenzaSelectionListEffects(viewModel)
@@ -92,7 +92,7 @@ private fun MenzaSelectionListContent(
     state: MenzaSelectionState,
     onEdit: () -> Unit,
     onMenzaSelect: (Menza) -> Unit,
-    accountBalance: @Composable () -> Unit,
+    accountBalance: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
     lazyState: LazyListState = rememberLazyListState(),
 ) {
@@ -130,7 +130,7 @@ private fun MenzaList(
     onMenzaSelect: (Menza) -> Unit,
     onEdit: () -> Unit,
     lazyState: LazyListState,
-    accountBalance: @Composable () -> Unit,
+    accountBalance: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -144,7 +144,7 @@ private fun MenzaList(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
-        item {
+        item("header") {
             Text(
                 text = stringResource(R.string.app_name_long),
                 style = MaterialTheme.typography.headlineMedium,
@@ -155,11 +155,11 @@ private fun MenzaList(
             )
         }
 
-        item {
-            accountBalance()
+        item("balance") {
+            accountBalance(Modifier.animateItem())
         }
 
-        items(menzaList) { menza ->
+        items(menzaList, key = { it.type.toString() }) { menza ->
             MenzaItem(
                 menza = menza,
                 selected = selectedMenza == menza,
@@ -168,7 +168,7 @@ private fun MenzaList(
             )
         }
 
-        item {
+        item("edit") {
             FilledTonalButton(
                 onClick = onEdit,
             ) {
@@ -182,7 +182,7 @@ private fun MenzaList(
             }
         }
 
-        item {
+        item("some_icon") {
             Icon(
                 painterResource(R.drawable.ic_launcher_foreground),
                 contentDescription = null,
@@ -194,7 +194,7 @@ private fun MenzaList(
             )
         }
 
-        item {
+        item("spacer") {
             Spacer(Modifier.height(32.dp))
         }
     }

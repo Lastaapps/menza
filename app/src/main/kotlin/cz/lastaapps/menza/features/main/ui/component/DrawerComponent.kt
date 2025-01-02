@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,13 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.extensions.compose.stack.Children
-import com.arkivanov.decompose.extensions.compose.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.stack.animation.plus
-import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatable
-import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.predictiveBackAnimation
-import com.arkivanov.decompose.extensions.compose.stack.animation.scale
-import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.experimental.stack.ChildStack
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.scale
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -46,6 +44,7 @@ import cz.lastaapps.menza.features.main.ui.component.DrawerComponent.Child
 import cz.lastaapps.menza.features.settings.ui.component.DefaultReorderMenzaComponent
 import cz.lastaapps.menza.features.settings.ui.component.ReorderMenzaComponent
 import cz.lastaapps.menza.features.settings.ui.component.ReorderMenzaContent
+import cz.lastaapps.menza.ui.theme.appPredictiveBackParams
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 
@@ -121,15 +120,18 @@ internal fun DrawerContent(
     modifier: Modifier = Modifier,
 ) {
     val content by component.content.subscribeAsState()
-    Children(
+    ChildStack(
         modifier = modifier,
         stack = content,
         animation =
-            predictiveBackAnimation(
-                backHandler = component.backHandler,
-                fallbackAnimation = stackAnimation(fade() + scale()),
-                selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
-                onBack = component::pop,
+            stackAnimation(
+                fade() + scale(),
+                predictiveBackParams = {
+                    appPredictiveBackParams(
+                        backHandler = component.backHandler,
+                        onBack = component::pop,
+                    )
+                },
             ),
     ) { item ->
         Surface {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,13 +36,11 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.extensions.compose.stack.Children
-import com.arkivanov.decompose.extensions.compose.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.stack.animation.plus
-import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatable
-import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.predictiveBackAnimation
-import com.arkivanov.decompose.extensions.compose.stack.animation.scale
-import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.experimental.stack.ChildStack
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.scale
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.essenty.backhandler.BackCallback
 import cz.lastaapps.menza.R
@@ -64,6 +62,7 @@ import cz.lastaapps.menza.features.starting.ui.component.PolicyContent
 import cz.lastaapps.menza.features.today.ui.navigation.TodayContent
 import cz.lastaapps.menza.features.week.ui.node.WeekContent
 import cz.lastaapps.menza.ui.locals.LocalMayBeFlipCover
+import cz.lastaapps.menza.ui.theme.appPredictiveBackParams
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalDecomposeApi::class)
@@ -123,14 +122,17 @@ internal fun MainContent(
                 onDispose { component.backHandler.unregister(alternativeCallback) }
             }
 
-            Children(
+            ChildStack(
                 stack = stack,
                 animation =
-                    predictiveBackAnimation(
-                        backHandler = component.backHandler,
-                        fallbackAnimation = stackAnimation(fade() + scale()),
-                        selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
-                        onBack = component::pop,
+                    stackAnimation(
+                        fade() + scale(),
+                        predictiveBackParams = {
+                            appPredictiveBackParams(
+                                backHandler = component.backHandler,
+                                onBack = component::pop,
+                            )
+                        },
                     ),
             ) {
                 val onOsturak = { component.push(MainNavTarget.Osturak) }

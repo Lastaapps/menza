@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -71,12 +71,12 @@ internal fun MenzaSelectionContent(
 
     var balanceLoginDialogShown by rememberSaveable { mutableStateOf(false) }
 
-    val accountBalance: @Composable () -> Unit = {
+    val accountBalance: @Composable (Modifier) -> Unit = { balanceModifier ->
         AgataWalletButton(
             viewModel = component.agataWalletViewModel,
             snackbarHostState = snackbarHostState,
             onShowLoginDialog = { balanceLoginDialogShown = true },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = balanceModifier.fillMaxWidth(),
         )
     }
 

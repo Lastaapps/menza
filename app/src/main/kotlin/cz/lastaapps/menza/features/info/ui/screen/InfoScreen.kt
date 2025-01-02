@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -105,9 +105,10 @@ private fun InfoContent(
                 // There is a bug that if an item is empty, the padding is still present
                 // But I don't want to waste my time fixing this, so sorry
                 val contactAndMessage: LazyListScope.() -> Unit = {
-                    item {
+                    item("messages") {
                         Box(
                             contentAlignment = Alignment.Center,
+                            modifier = Modifier.animateItem(),
                         ) {
                             MessageList(
                                 modifier = Modifier.fillMaxWidth(),
@@ -120,9 +121,10 @@ private fun InfoContent(
                         }
                     }
                     itemSpacer()
-                    item {
+                    item("openingHours") {
                         Box(
                             contentAlignment = Alignment.Center,
+                            modifier = Modifier.animateItem(),
                         ) {
                             OpeningHoursList(
                                 modifier = Modifier.fillMaxWidth(),
@@ -132,9 +134,10 @@ private fun InfoContent(
                     }
                 }
                 val openingAndAddress: LazyListScope.() -> Unit = {
-                    item {
+                    item("contacts") {
                         Box(
                             contentAlignment = Alignment.Center,
+                            modifier = Modifier.animateItem(),
                         ) {
                             ContactList(
                                 modifier = Modifier.fillMaxWidth(),
@@ -144,9 +147,10 @@ private fun InfoContent(
                         }
                     }
                     itemSpacer()
-                    item {
+                    item("addresses") {
                         Box(
                             contentAlignment = Alignment.Center,
+                            modifier = Modifier.animateItem(),
                         ) {
                             AddressList(
                                 modifier = Modifier.fillMaxWidth(),
@@ -156,9 +160,10 @@ private fun InfoContent(
                         }
                     }
                     itemSpacer()
-                    item {
+                    item("links") {
                         Box(
                             contentAlignment = Alignment.Center,
+                            modifier = Modifier.animateItem(),
                         ) {
                             LinkList(
                                 modifier = Modifier.fillMaxWidth(),

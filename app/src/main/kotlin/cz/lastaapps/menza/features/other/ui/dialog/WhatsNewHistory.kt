@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -86,8 +86,13 @@ internal fun WhatsNewHistory(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier,
         ) {
-            items(items) {
-                HistoryItem(it, Modifier.fillMaxWidth())
+            items(items, key = { it.versionCode }) {
+                HistoryItem(
+                    it,
+                    Modifier
+                        .fillMaxWidth()
+                        .animateItem(),
+                )
             }
         }
     }

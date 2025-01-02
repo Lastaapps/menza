@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -56,7 +56,12 @@ fun LibraryList(
             verticalArrangement = Arrangement.spacedBy(Padding.Small),
         ) {
             items(libraries, key = { it.artifactId }) { library ->
-                LicenseItem(library, Modifier.clickable { onLibrary(library) })
+                LicenseItem(
+                    library,
+                    Modifier
+                        .clickable { onLibrary(library) }
+                        .animateItem(),
+                )
             }
             item {
                 Spacer(modifier = Modifier.height(Padding.More.ScrollBottomSpace))

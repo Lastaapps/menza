@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -130,9 +130,11 @@ private fun ColumnScope.Content(
     Surface(shape = MaterialTheme.shapes.large) {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             items(crashes, key = { it.first }) {
-                CrashItem(it.second) {
-                    onItem(it)
-                }
+                CrashItem(
+                    it.second,
+                    onClick = { onItem(it) },
+                    modifier = Modifier.animateItem(),
+                )
             }
         }
     }
@@ -142,8 +144,12 @@ private fun ColumnScope.Content(
 private fun CrashItem(
     crash: Crash,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    ElevatedCard(onClick = onClick) {
+    ElevatedCard(
+        onClick = onClick,
+        modifier = modifier,
+    ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 crash.message ?: stringResource(R.string.crash_message_unknown),

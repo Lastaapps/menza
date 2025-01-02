@@ -28,32 +28,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Videocam
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle.State.RESUMED
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import cz.lastaapps.api.core.domain.model.dish.Dish
-import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.CAROUSEL
@@ -137,10 +125,6 @@ private fun DishListContent(
             saver = ScrollStates.Saver,
         ) { ScrollStates() },
 ) {
-    var videoFeedUrl by remember(state.selectedMenza) {
-        mutableStateOf<String?>(null)
-    }
-
     Column(
         modifier = modifier,
     ) {
@@ -155,7 +139,6 @@ private fun DishListContent(
             DishListComposing(
                 state = state,
                 onDish = onDish,
-                onVideoLink = { videoFeedUrl = it },
                 onRating = onRating,
                 modifier = Modifier.fillMaxSize(),
                 scrollStates = scrollStates,
@@ -173,19 +156,12 @@ private fun DishListContent(
                 .padding(top = Padding.Medium),
         )
     }
-
-    videoFeedUrl?.let {
-        ImagePreviewDialog(videoFeedUrl = it) {
-            videoFeedUrl = null
-        }
-    }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 private fun DishListComposing(
     state: DishListState,
-    onVideoLink: (String) -> Unit,
     onRefresh: () -> Unit,
     onNoItems: () -> Unit,
     onViewMode: (mode: DishListMode) -> Unit,
@@ -231,127 +207,99 @@ private fun DishListComposing(
         targetState = userSettings.dishListMode,
         label = "dish_list_mode_router",
     ) { dishListMode ->
-        Scaffold(
-            floatingActionButton = {
-                state.selectedMenza?.getOrNull()?.videoLinks?.firstOrNull()?.let { link ->
-                    LiveVideoFeedFab(link = link, onVideoLink = onVideoLink)
-                }
-            },
-        ) {
-            when (dishListMode) {
-                COMPACT ->
-                    TodayDishList(
-                        isLoading = state.isLoading,
-                        onRefresh = onRefresh,
-                        data = state.items,
-                        onNoItems = onNoItems,
-                        onDish = onDish,
-                        onRating = onRating,
-                        userSettings = userSettings,
-                        isOnMetered = state.isOnMetered,
-                        header = header,
-                        footer = { modifier: Modifier ->
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
-                                modifier = modifier.fillMaxWidth(),
-                            ) {
-                                gridSwitch()
+        when (dishListMode) {
+            COMPACT ->
+                TodayDishList(
+                    isLoading = state.isLoading,
+                    onRefresh = onRefresh,
+                    data = state.items,
+                    onNoItems = onNoItems,
+                    onDish = onDish,
+                    onRating = onRating,
+                    userSettings = userSettings,
+                    isOnMetered = state.isOnMetered,
+                    header = header,
+                    footer = { modifier: Modifier ->
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
+                            modifier = modifier.fillMaxWidth(),
+                        ) {
+                            gridSwitch()
 
-                                imageSizeSetting()
+                            imageSizeSetting()
 
-                                footerFabPadding()
-                            }
-                        },
-                        modifier = modifier.fillMaxSize(),
-                        scroll = scrollStates.list,
-                    )
+                            footerFabPadding()
+                        }
+                    },
+                    modifier = modifier.fillMaxSize(),
+                    scroll = scrollStates.list,
+                )
 
-                GRID ->
-                    TodayDishGrid(
-                        isLoading = state.isLoading,
-                        onRefresh = onRefresh,
-                        data = state.items,
-                        onNoItems = onNoItems,
-                        onDish = onDish,
-                        onRating = onRating,
-                        userSettings = userSettings,
-                        isOnMetered = state.isOnMetered,
-                        header = header,
-                        footer = {
-                            Column {
-                                gridSwitch()
-                                footerFabPadding()
-                            }
-                        },
-                        modifier = modifier.fillMaxSize(),
-                        scrollGrid = scrollStates.grid,
-                    )
+            GRID ->
+                TodayDishGrid(
+                    isLoading = state.isLoading,
+                    onRefresh = onRefresh,
+                    data = state.items,
+                    onNoItems = onNoItems,
+                    onDish = onDish,
+                    onRating = onRating,
+                    userSettings = userSettings,
+                    isOnMetered = state.isOnMetered,
+                    header = header,
+                    footer = {
+                        Column {
+                            gridSwitch()
+                            footerFabPadding()
+                        }
+                    },
+                    modifier = modifier.fillMaxSize(),
+                    scrollGrid = scrollStates.grid,
+                )
 
-                HORIZONTAL ->
-                    TodayDishHorizontal(
-                        isLoading = state.isLoading,
-                        onRefresh = onRefresh,
-                        data = state.items,
-                        onNoItems = onNoItems,
-                        onDish = onDish,
-                        userSettings = userSettings,
-                        isOnMetered = state.isOnMetered,
-                        onOliverRow = onOliverRow,
-                        header = header,
-                        footer = {
-                            Column {
-                                gridSwitch()
-                                footerFabPadding()
-                            }
-                        },
-                        modifier = modifier.fillMaxSize(),
-                        scroll = scrollStates.horizontal,
-                    )
+            HORIZONTAL ->
+                TodayDishHorizontal(
+                    isLoading = state.isLoading,
+                    onRefresh = onRefresh,
+                    data = state.items,
+                    onNoItems = onNoItems,
+                    onDish = onDish,
+                    userSettings = userSettings,
+                    isOnMetered = state.isOnMetered,
+                    onOliverRow = onOliverRow,
+                    header = header,
+                    footer = {
+                        Column {
+                            gridSwitch()
+                            footerFabPadding()
+                        }
+                    },
+                    modifier = modifier.fillMaxSize(),
+                    scroll = scrollStates.horizontal,
+                )
 
-                CAROUSEL ->
-                    TodayDishCarousel(
-                        isLoading = state.isLoading,
-                        onRefresh = onRefresh,
-                        data = state.items,
-                        onNoItems = onNoItems,
-                        onDish = onDish,
-                        onRating = onRating,
-                        userSettings = userSettings,
-                        isOnMetered = state.isOnMetered,
-                        header = header,
-                        footer = {
-                            Column {
-                                gridSwitch()
-                                footerFabPadding()
-                            }
-                        },
-                        modifier = modifier.fillMaxSize(),
-                        scroll = scrollStates.carousel,
-                    )
+            CAROUSEL ->
+                TodayDishCarousel(
+                    isLoading = state.isLoading,
+                    onRefresh = onRefresh,
+                    data = state.items,
+                    onNoItems = onNoItems,
+                    onDish = onDish,
+                    onRating = onRating,
+                    userSettings = userSettings,
+                    isOnMetered = state.isOnMetered,
+                    header = header,
+                    footer = {
+                        Column {
+                            gridSwitch()
+                            footerFabPadding()
+                        }
+                    },
+                    modifier = modifier.fillMaxSize(),
+                    scroll = scrollStates.carousel,
+                )
 
-                null -> {}
-            }
+            null -> {}
         }
-    }
-}
-
-@Composable
-private fun LiveVideoFeedFab(
-    link: String,
-    onVideoLink: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val size = 64.dp
-    FloatingActionButton(
-        onClick = { onVideoLink(link) },
-        modifier = modifier.size(size),
-        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-    ) {
-        Icon(
-            Icons.Default.Videocam,
-            stringResource(id = R.string.today_list_video_fab_content_description),
-            modifier = Modifier.size(size / 2),
-        )
     }
 }
 

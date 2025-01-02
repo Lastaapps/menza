@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -65,10 +65,12 @@ import cz.lastaapps.menza.features.today.ui.util.formatPrice
 import cz.lastaapps.menza.features.today.ui.util.toText
 import cz.lastaapps.menza.ui.theme.MenzaColors
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.AnimatedAppearance
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentMapOf
 import kotlin.math.max
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun TodayDishDetail(
@@ -80,22 +82,36 @@ fun TodayDishDetail(
         modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        DishImageInfo(
-            dish = dish,
-        )
+        AnimatedAppearance(100.milliseconds) {
+            DishImageInfo(
+                dish = dish,
+            )
+        }
 
-        Header(dish = dish)
-        PriceView(dish = dish)
-        IssueLocationList(
-            list = dish.servingPlaces,
-        )
-        RatingOverview(rating = dish.rating, onRating = { onRating(dish) })
-        AllergenList(
-            allergens = dish.allergens,
-        )
-        Ingredients(
-            ingredients = dish.ingredients,
-        )
+        AnimatedAppearance(250.milliseconds) {
+            Header(dish = dish)
+        }
+        AnimatedAppearance(250.milliseconds) {
+            PriceView(dish = dish)
+        }
+        AnimatedAppearance(250.milliseconds) {
+            IssueLocationList(
+                list = dish.servingPlaces,
+            )
+        }
+
+        AnimatedAppearance(350.milliseconds) {
+            RatingOverview(rating = dish.rating, onRating = { onRating(dish) })
+        }
+
+        AnimatedAppearance(400.milliseconds) {
+            AllergenList(
+                allergens = dish.allergens,
+            )
+            Ingredients(
+                ingredients = dish.ingredients,
+            )
+        }
     }
 }
 

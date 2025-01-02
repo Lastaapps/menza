@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,6 +19,9 @@
 
 package cz.lastaapps.menza.features.main.ui.screen
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -33,6 +36,8 @@ import cz.lastaapps.menza.features.main.ui.layout.MenzaTopBar
 import cz.lastaapps.menza.features.main.ui.layout.NavItem
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavTarget
+import cz.lastaapps.menza.ui.util.AnimatedAppearance
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun MainScreen(
@@ -54,31 +59,47 @@ internal fun MainScreen(
             currentDest?.toNavItem()
         }
 
+    val appearanceDelay = 200.milliseconds
     MenzaScaffold(
         drawerState = drawerState,
         alternativeNavigation = alternativeNavigation,
         snackbarHost = { SnackbarHost(hostState) },
         topBar = { topBarState ->
-            MenzaTopBar(
-                state = topBarState,
-                drawerState = drawerState,
-                menza = selectedMenza,
-                onAction = { onNavItemTopBar(it.toMainNavType()) },
-            )
+            AnimatedAppearance(
+                appearanceDelay,
+                enter = slideInVertically { -it } + fadeIn(),
+            ) {
+                MenzaTopBar(
+                    state = topBarState,
+                    drawerState = drawerState,
+                    menza = selectedMenza,
+                    onAction = { onNavItemTopBar(it.toMainNavType()) },
+                )
+            }
         },
         bottomBar = {
-            MenzaNavigationBar(
-                selectedItem = navItem,
-                onNavItem = { onNavItemRoot(it.toMainNavType()) },
-                settingsEverOpened = settingsEverOpened,
-            )
+            AnimatedAppearance(
+                appearanceDelay,
+                enter = slideInVertically { it } + fadeIn(),
+            ) {
+                MenzaNavigationBar(
+                    selectedItem = navItem,
+                    onNavItem = { onNavItemRoot(it.toMainNavType()) },
+                    settingsEverOpened = settingsEverOpened,
+                )
+            }
         },
         rail = {
-            MenzaRail(
-                selectedItem = navItem,
-                onNavItem = { onNavItemRoot(it.toMainNavType()) },
-                settingsEverOpened = settingsEverOpened,
-            )
+            AnimatedAppearance(
+                appearanceDelay,
+                enter = slideInHorizontally { -it } + fadeIn(),
+            ) {
+                MenzaRail(
+                    selectedItem = navItem,
+                    onNavItem = { onNavItemRoot(it.toMainNavType()) },
+                    settingsEverOpened = settingsEverOpened,
+                )
+            }
         },
         drawerContent = drawerContent,
         content = content,

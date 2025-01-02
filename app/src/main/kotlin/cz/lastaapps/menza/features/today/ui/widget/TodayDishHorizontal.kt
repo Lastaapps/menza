@@ -134,7 +134,10 @@ private fun DishContent(
                 item(key = category.name + "_cat_header") {
                     DishHeader(
                         courseType = category,
-                        modifier = Modifier.padding(bottom = Padding.Smaller),
+                        modifier =
+                            Modifier
+                                .padding(bottom = Padding.Smaller)
+                                .animateItem(),
                     )
                 }
                 item(key = category.name + "_content") {
