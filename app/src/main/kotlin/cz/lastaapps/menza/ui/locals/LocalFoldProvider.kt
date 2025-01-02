@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,19 +32,22 @@ import co.touchlab.kermit.Logger
 import cz.lastaapps.menza.ui.locals.FoldingClass.NotSupported
 import cz.lastaapps.menza.ui.locals.FoldingClass.Supported
 import cz.lastaapps.menza.ui.locals.FoldingClass.Unknown
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 val LocalFoldProvider = compositionLocalOf<FoldingClass> { Unknown }
 
 private val foldingLog = Logger.withTag(FoldingClass::class.simpleName!!)
 
-sealed class FoldingClass private constructor() {
-    class Supported(
+sealed interface FoldingClass {
+    @JvmInline
+    value class Supported(
         val foldingFeature: FoldingFeature,
-    ) : FoldingClass()
+    ) : FoldingClass
 
-    data object NotSupported : FoldingClass()
+    data object NotSupported : FoldingClass
 
-    data object Unknown : FoldingClass()
+    data object Unknown : FoldingClass
 }
 
 @Composable
@@ -81,4 +84,21 @@ private fun rememberFoldingFeature(activity: Activity): FoldingClass {
         foldingLog.i { "Folding not supported" }
         NotSupported
     }
+}
+
+// https://developer.android.com/develop/ui/compose/layouts/adaptive/foldables/make-your-app-fold-aware
+@OptIn(ExperimentalContracts::class)
+fun FoldingFeature?.isTableTopPosture(): Boolean {
+    contract { returns(true) implies (this@isTableTopPosture != null) }
+    return this != null &&
+        state == FoldingFeature.State.HALF_OPENED &&
+        orientation == FoldingFeature.Orientation.HORIZONTAL
+}
+
+@OptIn(ExperimentalContracts::class)
+fun FoldingFeature?.isBookPosture(): Boolean {
+    contract { returns(true) implies (this@isBookPosture != null) }
+    return this != null &&
+        state == FoldingFeature.State.HALF_OPENED &&
+        orientation == FoldingFeature.Orientation.VERTICAL
 }

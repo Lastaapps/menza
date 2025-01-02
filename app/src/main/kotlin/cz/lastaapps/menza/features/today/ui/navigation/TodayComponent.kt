@@ -53,8 +53,9 @@ import cz.lastaapps.menza.features.today.ui.navigation.DefaultTodayComponent.Con
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.features.today.ui.widget.NoDishSelected
 import cz.lastaapps.menza.ui.theme.Padding
-import cz.lastaapps.menza.ui.util.ChildPanelsModeEffect
+import cz.lastaapps.menza.ui.util.ChildPanelsModeFoldingEffect
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
+import cz.lastaapps.menza.ui.util.rememberChildPanelsFoldingLayout
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -92,6 +93,7 @@ internal class DefaultTodayComponent(
     ComponentContext by componentContext {
     override val viewModel: TodayViewModel = getOrCreateKoin()
 
+    @OptIn(ExperimentalDecomposeApi::class)
     private val navigation = PanelsNavigation<Unit, Config, Nothing>()
     override val content: Value<ChildPanels<*, DishListComponent, *, DishDetailComponent, Nothing, Nothing>> =
         childPanels(
@@ -160,15 +162,16 @@ internal fun TodayContent(
         }
     }
 
-    ChildPanelsModeEffect(component::setPanelMode)
+    ChildPanelsModeFoldingEffect(component::setPanelMode)
 
     val panelModifier =
         Modifier
             .fillMaxSize()
-            .padding(horizontal = Padding.More.Screen)
+            .padding(Padding.More.Screen)
     ChildPanels(
-        modifier = modifier.padding(vertical = Padding.More.Screen),
+        modifier = modifier,
         panels = component.content,
+        layout = rememberChildPanelsFoldingLayout(),
         mainChild = {
             DishListContent(
                 it.instance,
