@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -140,7 +140,8 @@ internal class StravnikWalletApiImpl(
                         }.onLeft {
                             if (i == iterations - 1) {
                                 log.e { "Failed to fetch data: $it" }
-                                raise(it)
+                                // raise(it)
+                                return@repeat
                             }
                         }
                     delay(420.milliseconds)
