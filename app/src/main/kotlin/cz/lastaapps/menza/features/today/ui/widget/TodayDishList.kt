@@ -126,7 +126,10 @@ private fun DishContent(
         state = scroll,
     ) {
         item(key = "header") {
-            header(Modifier.animateItem())
+            header(
+                Modifier,
+//                Modifier.animateItem(),
+            )
         }
 
         data.forEach { category ->
@@ -150,14 +153,17 @@ private fun DishContent(
                     isOnMetered = isOnMetered,
                     modifier =
                         Modifier
-                            .fillMaxWidth()
-                            .animateItem(),
+                            .fillMaxWidth(),
+                    // .animateItem(),
                 )
             }
         }
 
         item(key = "footer") {
-            footer(Modifier.animateItem())
+            footer(
+                Modifier,
+                // Modifier.animateItem(),
+            )
         }
     }
 

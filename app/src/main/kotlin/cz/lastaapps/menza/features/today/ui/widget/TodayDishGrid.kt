@@ -137,7 +137,10 @@ private fun DishContent(
             }
 
             item(key = "header") {
-                header(Modifier.animateItem())
+                header(
+                    Modifier,
+//                    Modifier.animateItem(),
+                )
             }
 
             data.forEach { category ->
@@ -147,7 +150,7 @@ private fun DishContent(
                 ) { index, dish ->
                     Column(
                         verticalArrangement = Arrangement.spacedBy(Padding.Medium),
-                        modifier = Modifier.animateItem(),
+                        // modifier = Modifier.animateItem(),
                     ) {
                         if (index == 0) {
                             DishHeader(courseType = category)
@@ -165,7 +168,10 @@ private fun DishContent(
             }
 
             item(key = "footer") {
-                footer(Modifier.animateItem())
+                footer(
+                    Modifier,
+//                    Modifier.animateItem(),
+                )
             }
         }
     }

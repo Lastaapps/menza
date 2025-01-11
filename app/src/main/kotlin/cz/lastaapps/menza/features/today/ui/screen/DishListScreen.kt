@@ -32,15 +32,12 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle.State.RESUMED
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
@@ -59,7 +56,6 @@ import cz.lastaapps.menza.features.today.ui.widget.TodayDishHorizontal
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishList
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.HandleError
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun DishListScreen(
@@ -73,14 +69,15 @@ internal fun DishListScreen(
 ) {
     DishListEffects(viewModel, hostState)
 
-    val lifecycle = LocalLifecycleOwner.current
-    LaunchedEffect(lifecycle, viewModel) {
-        lifecycle.lifecycle.currentStateFlow.collectLatest {
-            viewModel.setIsResumed(it == RESUMED)
-        }
-    }
-
     val state by viewModel.flowState
+
+    // resets scroll position when new menza is selected
+    val scrollStates: ScrollStates =
+        rememberSaveable(
+            state.selectedMenza?.getOrNull(),
+            saver = ScrollStates.Saver,
+        ) { ScrollStates().also { println("Created new state: ${it.carousel.hashCode()}") } }
+
     DishListContent(
         state = state,
         modifier = modifier,
@@ -93,6 +90,7 @@ internal fun DishListScreen(
         onRating = onRating,
         panels = panels,
         onOsturak = onOsturak,
+        scrollStates = scrollStates,
     )
 }
 
@@ -117,13 +115,8 @@ private fun DishListContent(
     onOliverRow: (Boolean) -> Unit,
     onOsturak: () -> Unit,
     onRating: (Dish) -> Unit,
+    scrollStates: ScrollStates,
     modifier: Modifier = Modifier,
-    // resets scroll position when new menza is selected
-    scrollStates: ScrollStates =
-        rememberSaveable(
-            state.selectedMenza,
-            saver = ScrollStates.Saver,
-        ) { ScrollStates() },
 ) {
     Column(
         modifier = modifier,

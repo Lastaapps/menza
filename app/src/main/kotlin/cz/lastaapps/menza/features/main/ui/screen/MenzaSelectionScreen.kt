@@ -162,7 +162,7 @@ private fun MenzaList(
         items(menzaList, key = { it.type.toString() }) { menza ->
             MenzaItem(
                 menza = menza,
-                selected = selectedMenza == menza,
+                selected = selectedMenza?.type == menza.type,
                 onClick = onMenzaSelect,
                 modifier = Modifier.fillMaxWidth(),
             )

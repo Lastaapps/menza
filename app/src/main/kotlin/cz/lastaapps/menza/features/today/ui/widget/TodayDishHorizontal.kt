@@ -119,116 +119,120 @@ private fun DishContent(
         return
     }
 
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(Padding.Medium)) {
-        // showing items
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
-            state = scroll,
-        ) {
-            item(key = "header") {
-                header(Modifier.animateItem())
-            }
+    // showing items
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
+        state = scroll,
+    ) {
+        item(key = "header") {
+            header(
+                Modifier,
+//                    Modifier.animateItem(),
+            )
+        }
 
-            data.forEach { category ->
-                item(key = category.name + "_cat_header") {
-                    DishHeader(
-                        courseType = category,
+        data.forEach { category ->
+            item(key = category.name + "_cat_header") {
+                DishHeader(
+                    courseType = category,
+                    modifier =
+                        Modifier
+                            .padding(bottom = Padding.Smaller),
+//                                .animateItem(),
+                )
+            }
+            item(key = category.name + "_content") {
+                val isOnlyItem = category.dishList.size == 1
+
+                if (isOnlyItem) {
+                    DishItem(
+                        dish = category.dishList.first(),
+                        onDish = onDish,
+                        userSettings = userSettings,
+                        isOnMetered = isOnMetered,
                         modifier =
                             Modifier
-                                .padding(bottom = Padding.Smaller)
-                                .animateItem(),
+                                .fillMaxWidth(),
+//                                    .animateItem(),
                     )
-                }
-                item(key = category.name + "_content") {
-                    val isOnlyItem = category.dishList.size == 1
-
-                    if (isOnlyItem) {
+                } else {
+                    @Composable
+                    fun DishItemWrapper(
+                        dish: Dish,
+                        modifier: Modifier = Modifier,
+                    ) {
                         DishItem(
-                            dish = category.dishList.first(),
+                            dish = dish,
                             onDish = onDish,
                             userSettings = userSettings,
                             isOnMetered = isOnMetered,
+                            modifier = @Suppress("ktlint:compose:modifier-not-used-at-root")
+                            modifier.sizeIn(maxWidth = 256.dp),
+                        )
+                    }
+
+                    val horizontalArrangement =
+                        Arrangement.spacedBy(
+                            Padding.MidLarge,
+                            Alignment.CenterHorizontally,
+                        )
+                    if (userSettings.useOliverRow) {
+                        Row(
+                            verticalAlignment = Alignment.Top,
+                            horizontalArrangement = horizontalArrangement,
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
-                                    .animateItem(),
-                        )
-                    } else {
-                        @Composable
-                        fun DishItemWrapper(
-                            dish: Dish,
-                            modifier: Modifier = Modifier,
+                                    .horizontalScroll(rememberScrollState())
+                                    .animateContentSize(),
+//                                        .animateItem(),
                         ) {
-                            DishItem(
-                                dish = dish,
-                                onDish = onDish,
-                                userSettings = userSettings,
-                                isOnMetered = isOnMetered,
-                                modifier = @Suppress("ktlint:compose:modifier-not-used-at-root")
-                                modifier.sizeIn(maxWidth = 256.dp),
-                            )
-                        }
-
-                        val horizontalArrangement =
-                            Arrangement.spacedBy(
-                                Padding.MidLarge,
-                                Alignment.CenterHorizontally,
-                            )
-                        if (userSettings.useOliverRow) {
-                            Row(
-                                verticalAlignment = Alignment.Top,
-                                horizontalArrangement = horizontalArrangement,
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .horizontalScroll(rememberScrollState())
-                                        .animateItem()
-                                        .animateContentSize(),
-                            ) {
-                                category.dishList.forEach { dish ->
-                                    DishItemWrapper(dish, Modifier)
-                                }
+                            category.dishList.forEach { dish ->
+                                DishItemWrapper(dish, Modifier)
                             }
-                        } else {
-                            LazyRow(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = horizontalArrangement,
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .animateItem()
-                                        .animateContentSize(),
-                            ) {
-                                items(
-                                    category.dishList,
-                                    key = { "" + category.name + it.name },
-                                ) { dish ->
-                                    DishItemWrapper(dish, Modifier.animateItem())
-                                }
+                        }
+                    } else {
+                        LazyRow(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = horizontalArrangement,
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .animateContentSize(),
+//                                        .animateItem(),
+                        ) {
+                            items(
+                                category.dishList,
+                                key = { "" + category.name + it.name },
+                            ) { dish ->
+                                DishItemWrapper(dish, Modifier.animateItem())
                             }
                         }
                     }
                 }
-                item(key = category.name + "_spacer") {
-                    Spacer(Modifier.height(Padding.Small))
-                }
             }
+            item(key = category.name + "_spacer") {
+                Spacer(Modifier.height(Padding.Small))
+            }
+        }
 
-            item(key = "oliver") {
-                OliverRowSwitch(
-                    useOliverRow = userSettings.useOliverRow,
-                    onOliverRow = onOliverRow,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .animateItem(),
-                )
-            }
+        item(key = "oliver") {
+            OliverRowSwitch(
+                useOliverRow = userSettings.useOliverRow,
+                onOliverRow = onOliverRow,
+                modifier =
+                Modifier
+                    .fillMaxWidth(),
+//                            .animateItem(),
+            )
+        }
 
-            item(key = "footer") {
-                footer(Modifier.animateItem())
-            }
+        item(key = "footer") {
+            footer(
+                Modifier,
+//                    Modifier.animateItem(),
+            )
         }
     }
 }
