@@ -1,5 +1,5 @@
 <!--
-  ~    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -216,6 +216,7 @@
     <string name="today_list_web">Check website</string>
     <string name="today_list_image_load_failed">Failed to load the image</string>
     <string name="today_list_image_metered">The image not downloaded, metered network</string>
+    <string name="today_list_mode_title">List mode</string>
     <string name="today_list_mode_compact">Compact</string>
     <string name="today_list_mode_grid">Large</string>
     <string name="today_list_mode_horizontal">Rows</string>

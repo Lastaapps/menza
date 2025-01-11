@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -200,10 +200,11 @@
     <string name="today_list_web">Otevřít web</string>
     <string name="today_list_image_load_failed">Nepodařilo se načíst obrázek</string>
     <string name="today_list_image_metered">Obrázek nebyl stažen, placená síť</string>
-    <string name="today_list_mode_compact">Klasika</string>
+    <string name="today_list_mode_title">Způsob zobrazení</string>
+    <string name="today_list_mode_compact">Seznam</string>
     <string name="today_list_mode_grid">Velké</string>
     <string name="today_list_mode_horizontal">Řádky</string>
-    <string name="today_list_mode_carousel">Kolotoč</string>
+    <string name="today_list_mode_carousel">Pásy</string>
     <string name="today_list_stable_row">Stabilní výška řádky</string>
     <string name="today_list_category_other">Další (server odeslal špatná data)</string>
     <string name="today_experimental_cafeteria">Experimentální menza - nemusí fungovat správně. Prosím, hlašte chyby v nastavení.</string>

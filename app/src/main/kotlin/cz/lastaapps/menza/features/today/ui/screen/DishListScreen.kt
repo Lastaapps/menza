@@ -76,7 +76,7 @@ internal fun DishListScreen(
         rememberSaveable(
             state.selectedMenza?.getOrNull(),
             saver = ScrollStates.Saver,
-        ) { ScrollStates().also { println("Created new state: ${it.carousel.hashCode()}") } }
+        ) { ScrollStates() }
 
     DishListContent(
         state = state,

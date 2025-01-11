@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -176,9 +176,9 @@ class DraggableLazyListState(
                     }
                 else -> null
             }.also {
-                if (it != null) {
-                    println("Scrolling: $it")
-                }
+//                if (it != null) {
+//                    println("Scrolling: $it")
+//                }
             }
         } ?: 0f
 }
