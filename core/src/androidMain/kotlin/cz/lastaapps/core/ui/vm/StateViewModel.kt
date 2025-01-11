@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,6 +24,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import arrow.fx.coroutines.resource
 import arrow.fx.coroutines.resourceScope
+import cz.lastaapps.core.BuildConfig
 import cz.lastaapps.core.util.extensions.whileSubscribed
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +63,9 @@ abstract class StateViewModel<State : VMState>(
     private var didAppear: Boolean = false
     val flow =
         myState
-            .whileSubscribed(Dispatchers.Main) {
+            .whileSubscribed(Dispatchers.Default) {
+                check(Thread.currentThread().name == "main" || !BuildConfig.DEBUG)
+
                 if (!didAppear) {
                     didAppear = true
                     onFirstAppearance()
