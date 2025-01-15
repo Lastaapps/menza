@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,6 +30,7 @@ import cz.lastaapps.menza.features.panels.rateus.ui.RateUsViewModel
 import cz.lastaapps.menza.features.panels.whatsnew.ui.vm.WhatsNewViewModel
 import cz.lastaapps.menza.features.today.ui.screen.DishListScreen
 import cz.lastaapps.menza.features.today.ui.vm.DishListViewModel
+import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import org.koin.core.component.KoinComponent
 
@@ -59,6 +60,7 @@ internal fun DishListContent(
     component: DishListComponent,
     onOsturak: () -> Unit,
     hostState: SnackbarHostState,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     val panels: @Composable (Modifier) -> Unit = {
@@ -78,6 +80,7 @@ internal fun DishListContent(
         onDish = component.onDishSelected,
         onRating = { error("Not supported") },
         hostState = hostState,
+        scopes = scopes,
         modifier = modifier,
     )
 }

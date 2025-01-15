@@ -25,9 +25,12 @@
 
 package cz.lastaapps.menza.ui.theme
 
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.PredictiveBackParams
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.PredictiveBackAnimatable
+import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.predictiveBackAnimatable
 import com.arkivanov.essenty.backhandler.BackEvent
 import com.arkivanov.essenty.backhandler.BackHandler
 
@@ -46,4 +49,25 @@ fun appPredictiveBackParams(
     backHandler = backHandler,
     onBack = onBack,
     animatable = appPredictiveBackAnimatable,
+)
+
+fun fadingPredictiveBackParams(
+    backHandler: BackHandler,
+    onBack: () -> Unit,
+) = PredictiveBackParams(
+    backHandler = backHandler,
+    onBack = onBack,
+    animatable = {
+        @Suppress("UNUSED_ANONYMOUS_PARAMETER")
+        predictiveBackAnimatable(
+            initialBackEvent = it,
+            exitModifier = { progress: Float, edge: BackEvent.SwipeEdge ->
+                Modifier
+                    .graphicsLayer {
+                        alpha = (1f - 2 * progress).coerceAtLeast(0f)
+                    }
+            },
+            enterModifier = { progress: Float, edge: BackEvent.SwipeEdge -> Modifier },
+        )
+    },
 )

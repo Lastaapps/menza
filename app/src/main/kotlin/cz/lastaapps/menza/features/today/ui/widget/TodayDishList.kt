@@ -17,8 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package cz.lastaapps.menza.features.today.ui.widget
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope.ResizeMode
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -33,7 +37,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.Card
@@ -53,10 +56,17 @@ import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
+import cz.lastaapps.menza.features.today.ui.util.dishContainerKey
+import cz.lastaapps.menza.features.today.ui.util.dishImageKey
+import cz.lastaapps.menza.features.today.ui.util.dishTitleKey
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.appCardColors
+import cz.lastaapps.menza.ui.util.sharedBounds
+import cz.lastaapps.menza.ui.util.sharedContainer
+import cz.lastaapps.menza.ui.util.sharedElement
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
@@ -73,15 +83,26 @@ internal fun TodayDishList(
     isOnMetered: Boolean,
     header: @Composable (Modifier) -> Unit,
     footer: @Composable (Modifier) -> Unit,
+    scroll: LazyListState,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
-    scroll: LazyListState = rememberLazyListState(),
 ) {
     PullToRefreshWrapper(
         isRefreshing = isLoading,
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize(),
     ) {
-        Surface(shape = MaterialTheme.shapes.large) {
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            modifier =
+                Modifier
+                    // required so the individual items are properly clipped
+                    .sharedContainer(
+                        scopes,
+                        "today_dish_list",
+                        clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                    ),
+        ) {
             DishContent(
                 data = data,
                 onDish = onDish,
@@ -92,6 +113,7 @@ internal fun TodayDishList(
                 scroll = scroll,
                 header = header,
                 footer = footer,
+                scopes = scopes,
                 modifier = Modifier.fillMaxSize(),
             )
         }
@@ -111,6 +133,7 @@ private fun DishContent(
     scroll: LazyListState,
     header: @Composable (Modifier) -> Unit,
     footer: @Composable (Modifier) -> Unit,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     // no data handling
@@ -121,7 +144,6 @@ private fun DishContent(
 
     // showing items
     LazyColumn(
-        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
         state = scroll,
     ) {
@@ -133,8 +155,14 @@ private fun DishContent(
         }
 
         data.forEach { category ->
-            stickyHeader {
-                Surface(Modifier.fillMaxWidth()) {
+            // TODO I'm not sure how to implement this while supporting shared element animations
+            // stickyHeader(
+            item(
+                key = "header_" + category.someName,
+            ) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
                     DishHeader(
                         courseType = category,
                         modifier = Modifier.padding(bottom = Padding.Smaller),
@@ -143,7 +171,7 @@ private fun DishContent(
             }
             items(
                 category.dishList,
-                key = { "" + category.name + it.name },
+                key = { "" + category.someName + it.name },
             ) { dish ->
                 DishItem(
                     dish = dish,
@@ -151,6 +179,7 @@ private fun DishContent(
                     onRating = onRating,
                     userSettings = userSettings,
                     isOnMetered = isOnMetered,
+                    scopes = scopes,
                     modifier =
                         Modifier
                             .fillMaxWidth(),
@@ -192,16 +221,25 @@ private fun DishItem(
     onRating: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     Card(
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
-        modifier = modifier.clickable { onDish(dish) },
+        modifier =
+            modifier
+                .clickable { onDish(dish) }
+                .sharedContainer(
+                    scopes,
+                    dishContainerKey(dish.id),
+                    resizeMode = ResizeMode.RemeasureToBounds,
+                    clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                ),
     ) {
         Column(
-            modifier = Modifier.padding(Padding.MidSmall),
             verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
+            modifier = Modifier.padding(Padding.MidSmall),
         ) {
             if (dish.photoLink != null) {
                 Row(
@@ -219,13 +257,24 @@ private fun DishItem(
                                 label = "image_scale",
                             ).value,
                         isOnMetered = isOnMetered,
+                        scopes = scopes,
                     )
 
-                    DishNameRow(dish)
+                    DishNameRow(
+                        dish,
+                        modifier = Modifier.sharedBounds(scopes, dishTitleKey(dish.id)),
+                    )
                 }
             } else {
-                DishNameRow(dish)
-                DishBadgesRow(dish = dish, onRating = onRating, priceType = userSettings.priceType)
+                DishNameRow(
+                    dish,
+                    modifier = Modifier.sharedBounds(scopes, dishTitleKey(dish.id)),
+                )
+                DishBadgesRow(
+                    dish = dish,
+                    onRating = onRating,
+                    priceType = userSettings.priceType,
+                )
             }
             DishInfoRow(dish)
         }
@@ -240,9 +289,12 @@ private fun DishImageWithBadge(
     downloadOnMetered: Boolean,
     imageScale: Float,
     isOnMetered: Boolean,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier) {
+    Box(
+        modifier = modifier.sharedElement(scopes, key = dishImageKey(dish.id)),
+    ) {
         DishImageWithPlaceholder(
             photoLink = dish.photoLink,
             downloadOnMetered = downloadOnMetered,

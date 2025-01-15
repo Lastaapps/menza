@@ -22,11 +22,8 @@ package cz.lastaapps.menza.ui.util
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,7 +39,6 @@ fun AnimatedAppearance(
     delay: Duration,
     modifier: Modifier = Modifier,
     enter: EnterTransition = fadeIn() + expandIn(),
-    exit: ExitTransition = shrinkOut() + fadeOut(),
     label: String = "AnimatedAppearance",
     content: @Composable AnimatedVisibilityScope.() -> Unit,
 ) {
@@ -57,7 +53,6 @@ fun AnimatedAppearance(
         visible = isVisible,
         modifier = modifier,
         enter = enter,
-        exit = exit,
         label = label,
         content = content,
     )

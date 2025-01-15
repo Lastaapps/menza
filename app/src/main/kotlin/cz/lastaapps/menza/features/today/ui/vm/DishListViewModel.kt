@@ -116,7 +116,7 @@ internal class DishListViewModel(
             }.launchIn(scope)
 
         // Refreshes the screen if user is looking at the data for at least 42 seconds
-        if (appInfoProvider.isDebug()) {
+        if (!appInfoProvider.isDebug()) {
             flow
                 .map { it.selectedMenza?.getOrNull() }
                 .distinctUntilChanged()

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,6 +36,7 @@ import cz.lastaapps.menza.features.today.ui.navigation.DefaultDishDetailComponen
 import cz.lastaapps.menza.features.today.ui.navigation.DishDetailComponent.Child
 import cz.lastaapps.menza.features.today.ui.screen.DishDetailScreen
 import cz.lastaapps.menza.features.today.ui.vm.DishDetailViewModel
+import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
@@ -101,11 +102,13 @@ internal class DefaultDishDetailComponent(
 @Composable
 internal fun DishDetailContent(
     component: DishDetailComponent,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     DishDetailScreen(
         component.viewModel,
         onRating = component::onRateDish,
+        scopes = scopes,
         modifier = modifier,
     )
 

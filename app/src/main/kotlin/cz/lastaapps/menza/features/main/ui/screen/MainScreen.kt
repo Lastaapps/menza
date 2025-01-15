@@ -59,7 +59,7 @@ internal fun MainScreen(
             currentDest?.toNavItem()
         }
 
-    val appearanceDelay = 200.milliseconds
+    val appearanceDelay = 0.milliseconds
     MenzaScaffold(
         drawerState = drawerState,
         alternativeNavigation = alternativeNavigation,

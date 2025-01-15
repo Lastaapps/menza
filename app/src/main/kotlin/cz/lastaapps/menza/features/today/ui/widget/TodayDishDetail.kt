@@ -17,8 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package cz.lastaapps.menza.features.today.ui.widget
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -61,12 +64,19 @@ import cz.lastaapps.api.core.domain.model.rating.Rating
 import cz.lastaapps.api.core.domain.model.rating.RatingCategory
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.today.ui.util.allergenForId
+import cz.lastaapps.menza.features.today.ui.util.dishContainerKey
+import cz.lastaapps.menza.features.today.ui.util.dishImageKey
+import cz.lastaapps.menza.features.today.ui.util.dishTitleKey
 import cz.lastaapps.menza.features.today.ui.util.formatPrice
 import cz.lastaapps.menza.features.today.ui.util.toText
 import cz.lastaapps.menza.ui.theme.MenzaColors
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.AnimatedAppearance
+import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.PreviewWrapper
+import cz.lastaapps.menza.ui.util.sharedBounds
+import cz.lastaapps.menza.ui.util.sharedContainer
+import cz.lastaapps.menza.ui.util.sharedElement
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentMapOf
 import kotlin.math.max
@@ -76,41 +86,44 @@ import kotlin.time.Duration.Companion.milliseconds
 fun TodayDishDetail(
     dish: Dish,
     onRating: (Dish) -> Unit,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier =
+            modifier
+                .sharedContainer(
+                    scopes,
+                    dishContainerKey(dish.id),
+                ).verticalScroll(rememberScrollState()),
     ) {
-        AnimatedAppearance(100.milliseconds) {
-            DishImageInfo(
-                dish = dish,
-            )
-        }
+        DishImageInfo(
+            dish = dish,
+            modifier = Modifier.sharedElement(scopes, dishImageKey(dish.id)),
+        )
 
-        AnimatedAppearance(250.milliseconds) {
-            Header(dish = dish)
-        }
-        AnimatedAppearance(250.milliseconds) {
-            PriceView(dish = dish)
-        }
-        AnimatedAppearance(250.milliseconds) {
-            IssueLocationList(
-                list = dish.servingPlaces,
-            )
-        }
+        Header(
+            dish = dish,
+            modifier = Modifier.sharedBounds(scopes, dishTitleKey(dish.id)),
+        )
+        PriceView(
+            dish = dish,
+        )
+        IssueLocationList(
+            list = dish.servingPlaces,
+        )
 
-        AnimatedAppearance(350.milliseconds) {
-            RatingOverview(rating = dish.rating, onRating = { onRating(dish) })
-        }
+        RatingOverview(rating = dish.rating, onRating = { onRating(dish) })
+
+        AllergenList(
+            allergens = dish.allergens,
+        )
+        Ingredients(
+            ingredients = dish.ingredients,
+        )
 
         AnimatedAppearance(400.milliseconds) {
-            AllergenList(
-                allergens = dish.allergens,
-            )
-            Ingredients(
-                ingredients = dish.ingredients,
-            )
         }
     }
 }

@@ -17,10 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-@file:OptIn(ExperimentalDecomposeApi::class, ExperimentalSerializationApi::class)
+@file:OptIn(
+    ExperimentalDecomposeApi::class,
+    ExperimentalSerializationApi::class,
+    ExperimentalSharedTransitionApi::class,
+)
 
 package cz.lastaapps.menza.features.today.ui.navigation
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideIn
@@ -70,8 +76,9 @@ import cz.lastaapps.menza.features.today.ui.screen.ImagePreviewDialog
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.features.today.ui.widget.NoDishSelected
 import cz.lastaapps.menza.ui.theme.Padding
-import cz.lastaapps.menza.ui.theme.appPredictiveBackParams
+import cz.lastaapps.menza.ui.theme.fadingPredictiveBackParams
 import cz.lastaapps.menza.ui.util.AnimatedAppearance
+import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.ChildPanelsModeFoldingEffect
 import cz.lastaapps.menza.ui.util.getOrCreateKoin
 import cz.lastaapps.menza.ui.util.rememberChildPanelsFoldingLayout
@@ -211,44 +218,47 @@ internal fun TodayContent(
             }
         },
     ) { padding ->
-        ChildPanels(
-            modifier =
-                Modifier
-                    .padding(padding)
-                    .fillMaxSize(),
-            panels = component.content,
-            layout = rememberChildPanelsFoldingLayout(),
-            mainChild = {
-                DishListContent(
-                    it.instance,
-                    onOsturak = onOsturak,
-                    hostState = hostState,
-                    modifier = panelModifier,
-                )
-            },
-            detailsChild = {
-                DishDetailContent(
-                    it.instance,
-                    modifier = panelModifier,
-                )
-            },
-            secondPanelPlaceholder = {
-                NoDishSelected(
-                    modifier = panelModifier,
-                )
-            },
-            animators =
-                ChildPanelsAnimators(
-                    single = fade() + scale(),
-                    dual = fade() to fade(),
-                ),
-            predictiveBackParams = {
-                appPredictiveBackParams(
-                    backHandler = component.backHandler,
-                    onBack = component::onBackClicked,
-                )
-            },
-        )
+        SharedTransitionLayout(
+            modifier = Modifier.padding(padding),
+        ) {
+            ChildPanels(
+                modifier = Modifier.fillMaxSize(),
+                panels = component.content,
+                layout = rememberChildPanelsFoldingLayout(),
+                mainChild = {
+                    DishListContent(
+                        it.instance,
+                        onOsturak = onOsturak,
+                        hostState = hostState,
+                        scopes = AnimationScopes(),
+                        modifier = panelModifier,
+                    )
+                },
+                detailsChild = {
+                    DishDetailContent(
+                        it.instance,
+                        scopes = AnimationScopes(),
+                        modifier = panelModifier,
+                    )
+                },
+                secondPanelPlaceholder = {
+                    NoDishSelected(
+                        modifier = panelModifier,
+                    )
+                },
+                animators =
+                    ChildPanelsAnimators(
+                        single = fade() + scale(),
+                        dual = fade() to fade(),
+                    ),
+                predictiveBackParams = {
+                    fadingPredictiveBackParams(
+                        backHandler = component.backHandler,
+                        onBack = component::onBackClicked,
+                    )
+                },
+            )
+        }
     }
 
     videoFeedUrl?.let {

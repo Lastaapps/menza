@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,6 +19,8 @@
 
 package cz.lastaapps.menza.features.today.ui.screen
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -26,11 +28,13 @@ import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
 import cz.lastaapps.menza.features.today.ui.vm.DishDetailState
 import cz.lastaapps.menza.features.today.ui.vm.DishDetailViewModel
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishDetail
+import cz.lastaapps.menza.ui.util.AnimationScopes
 
 @Composable
 internal fun DishDetailScreen(
     viewModel: DishDetailViewModel,
     onRating: (DishOriginDescriptor) -> Unit,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     DishDetailEffects(viewModel)
@@ -39,6 +43,7 @@ internal fun DishDetailScreen(
     DishDetailContent(
         state = state,
         onRating = onRating,
+        scopes = scopes,
         modifier = modifier,
     )
 }
@@ -52,13 +57,19 @@ private fun DishDetailEffects(viewModel: DishDetailViewModel) {
 private fun DishDetailContent(
     state: DishDetailState,
     onRating: (DishOriginDescriptor) -> Unit,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
-    state.dish?.let { dish ->
-        TodayDishDetail(
-            dish = dish,
-            onRating = { onRating(DishOriginDescriptor.from(it)) },
-            modifier = modifier,
-        )
+    Surface(
+        modifier = modifier,
+    ) {
+        state.dish?.let { dish ->
+            TodayDishDetail(
+                dish = dish,
+                onRating = { onRating(DishOriginDescriptor.from(it)) },
+                scopes = scopes,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
     }
 }

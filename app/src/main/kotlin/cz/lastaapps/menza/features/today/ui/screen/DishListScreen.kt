@@ -55,6 +55,7 @@ import cz.lastaapps.menza.features.today.ui.widget.TodayDishGrid
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishHorizontal
 import cz.lastaapps.menza.features.today.ui.widget.TodayDishList
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.HandleError
 
 @Composable
@@ -65,6 +66,7 @@ internal fun DishListScreen(
     onDish: (Dish) -> Unit,
     onRating: (Dish) -> Unit,
     hostState: SnackbarHostState,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     DishListEffects(viewModel, hostState)
@@ -91,6 +93,7 @@ internal fun DishListScreen(
         panels = panels,
         onOsturak = onOsturak,
         scrollStates = scrollStates,
+        scopes = scopes,
     )
 }
 
@@ -116,6 +119,7 @@ private fun DishListContent(
     onOsturak: () -> Unit,
     onRating: (Dish) -> Unit,
     scrollStates: ScrollStates,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -140,6 +144,7 @@ private fun DishListContent(
                 onViewMode = onViewMode,
                 onImageScale = onImageScale,
                 onOliverRow = onOliverRow,
+                scopes = scopes,
             )
         }
 
@@ -163,6 +168,7 @@ private fun DishListComposing(
     onOliverRow: (Boolean) -> Unit,
     onRating: (Dish) -> Unit,
     scrollStates: ScrollStates,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) = Column {
     val userSettings = state.userSettings
@@ -226,6 +232,7 @@ private fun DishListComposing(
                     },
                     modifier = modifier.fillMaxSize(),
                     scroll = scrollStates.list,
+                    scopes = scopes,
                 )
 
             GRID ->
