@@ -166,8 +166,8 @@ private fun DishContent(
                 DishHeader(
                     courseType = category,
                     modifier =
-                    Modifier
-                        .padding(bottom = Padding.Smaller),
+                        Modifier
+                            .padding(bottom = Padding.Smaller),
 //                                .animateItem(),
                 )
             }
@@ -177,8 +177,8 @@ private fun DishContent(
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier =
-                        Modifier
-                            .fillMaxWidth(),
+                            Modifier
+                                .fillMaxWidth(),
 //                                    .animateItem(),
                     ) {
                         DishItem(
@@ -188,8 +188,8 @@ private fun DishContent(
                             appSettings = appSettings,
                             isOnMetered = isOnMetered,
                             modifier =
-                            Modifier
-                                .height(preferredItemSize),
+                                Modifier
+                                    .height(preferredItemSize),
                         )
                     }
                     return@item
@@ -215,7 +215,7 @@ private fun DishContent(
                     // even if progress is called multiple times
                     val progress by remember {
                         derivedStateOf {
-                            carouselItemInfo.let {
+                            carouselItemDrawInfo.let {
                                 // breakpoints
                                 val visible = 0.9f
                                 val hidden = 0.5f

@@ -141,9 +141,8 @@ fun Modifier.sharedElement(
     zIndexInOverlay: Float = 0f,
 ): Modifier =
     with(scopes.sharedTransitionScope) {
-        this@sharedElement.renderInSharedTransitionScopeOverlay()
         this@sharedElement.sharedElement(
-            state = rememberSharedContentState(key),
+            sharedContentState = rememberSharedContentState(key),
             animatedVisibilityScope = scopes.animatedVisibilityScope,
             placeHolderSize = placeHolderSize,
             renderInOverlayDuringTransition = renderInOverlayDuringTransition,
@@ -170,12 +169,12 @@ fun OverlayParentClip(shape: Shape): OverlayClip =
         private val shapedPath = Path()
 
         override fun getClipPath(
-            state: SharedContentState,
+            sharedContentState: SharedContentState,
             bounds: Rect,
             layoutDirection: LayoutDirection,
             density: Density,
         ): Path {
-            val parentPath = state.parentSharedContentState?.clipPathInOverlay
+            val parentPath = sharedContentState.parentSharedContentState?.clipPathInOverlay
 
             shapedPath.reset()
             shapedPath.addOutline(

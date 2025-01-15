@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,92 +31,95 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
 
-
-class AndroidAppConvention : BasePlugin(
-    {
-        pluginManager {
-            alias(libs.plugins.android.application)
-            alias(libs.plugins.kotlin.android)
-        }
-
-        extensions.configure<BaseAppModuleExtension> {
-            configureKotlinAndroid(this)
-
-            defaultConfig {
-                targetSdk = libs.versions.sdk.target.get().toInt()
-                multiDexEnabled = true
-
-                resourceConfigurations += setOf("en", "cs")
+class AndroidAppConvention :
+    BasePlugin(
+        {
+            pluginManager {
+                alias(libs.plugins.android.application)
+                alias(libs.plugins.kotlin.android)
             }
 
-            buildFeatures {
-                buildConfig = true
-            }
+            extensions.configure<BaseAppModuleExtension> {
+                configureKotlinAndroid(this)
 
-            buildTypes {
-                debug {
-                    applicationIdSuffix = ".debug"
-                    isMinifyEnabled = false
+                defaultConfig {
+                    targetSdk =
+                        libs.versions.sdk.target
+                            .get()
+                            .toInt()
+                    multiDexEnabled = true
+                }
 
-                    extra.set("alwaysUpdateBuildId", false)
+                androidResources.localeFilters += setOf("en", "cs")
+
+                buildFeatures {
+                    buildConfig = true
                 }
-                release {
-                    isMinifyEnabled = true
-                    isShrinkResources = true
-                    proguardFiles(
-                        getDefaultProguardFile("proguard-android-optimize.txt"),
-                        "proguard-rules.pro",
-                    )
-                }
+
+                buildTypes {
+                    debug {
+                        applicationIdSuffix = ".debug"
+                        isMinifyEnabled = false
+
+                        extra.set("alwaysUpdateBuildId", false)
+                    }
+                    release {
+                        isMinifyEnabled = true
+                        isShrinkResources = true
+                        proguardFiles(
+                            getDefaultProguardFile("proguard-android-optimize.txt"),
+                            "proguard-rules.pro",
+                        )
+                    }
 
                 /* Used for release testing without explicit signing.
                  * This is required to make sure that release variants of the libraries are used,
                  * as they can differ (Compose, Lifecycle, ...)
                  * You can set if minification is on (useful for debugging)
                  */
-                create("fakeRelease") {
-                    initWith(getByName("release"))
-                    matchingFallbacks += listOf("release")
+                    create("fakeRelease") {
+                        initWith(getByName("release"))
+                        matchingFallbacks += listOf("release")
 
-                    val debug = getByName("debug")
-                    applicationIdSuffix = debug.applicationIdSuffix
-                    signingConfig = debug.signingConfig
-                    isDebuggable = true
+                        val debug = getByName("debug")
+                        applicationIdSuffix = debug.applicationIdSuffix
+                        signingConfig = debug.signingConfig
+                        isDebuggable = true
 
-                    val minify = true
-                    isMinifyEnabled = minify
-                    isShrinkResources = minify
+                        val minify = true
+                        isMinifyEnabled = minify
+                        isShrinkResources = minify
 
-                    run {
-                        if (minify) {
-                            arrayOf(
-                                getDefaultProguardFile("proguard-android-optimize.txt"),
-                                "proguard-rules.pro",
-                            )
-                        } else {
-                            emptyArray()
+                        run {
+                            if (minify) {
+                                arrayOf(
+                                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                                    "proguard-rules.pro",
+                                )
+                            } else {
+                                emptyArray()
+                            }
+                        }.let { rules ->
+                            proguardFiles(*rules)
                         }
-                    }.let { rules ->
-                        proguardFiles(*rules)
+                    }
+                }
+
+                packaging {
+                    resources {
+                        // TODO Remove after skrape-it is removed
+                        excludes.add("META-INF/INDEX.LIST")
                     }
                 }
             }
 
-            packaging {
-                resources {
-                    // TODO Remove after skrape-it is removed
-                    excludes.add("META-INF/INDEX.LIST")
-                }
+            apply<AndroidBaseConvention>()
+
+            dependencies {
+                implementation(libs.google.material)
+                implementation(libs.androidx.splashscreen)
+                implementation(libs.androidx.startup)
+                implementation(libs.androidx.vectorDrawables)
             }
-        }
-
-        apply<AndroidBaseConvention>()
-
-        dependencies {
-            implementation(libs.google.material)
-            implementation(libs.androidx.splashscreen)
-            implementation(libs.androidx.startup)
-            implementation(libs.androidx.vectorDrawables)
-        }
-    },
-)
+        },
+    )
