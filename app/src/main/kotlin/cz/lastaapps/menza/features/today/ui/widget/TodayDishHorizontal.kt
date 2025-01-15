@@ -17,9 +17,13 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package cz.lastaapps.menza.features.today.ui.widget
 
 import android.os.Build
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope.ResizeMode
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -53,10 +57,17 @@ import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
+import cz.lastaapps.menza.features.today.ui.util.dishContainerKey
+import cz.lastaapps.menza.features.today.ui.util.dishImageKey
+import cz.lastaapps.menza.features.today.ui.util.dishTitleKey
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.appCardColors
+import cz.lastaapps.menza.ui.util.sharedBounds
+import cz.lastaapps.menza.ui.util.sharedContainer
+import cz.lastaapps.menza.ui.util.sharedElement
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -72,6 +83,7 @@ internal fun TodayDishHorizontal(
     header: @Composable (Modifier) -> Unit,
     footer: @Composable (Modifier) -> Unit,
     scroll: LazyListState,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     PullToRefreshWrapper(
@@ -79,7 +91,17 @@ internal fun TodayDishHorizontal(
         onRefresh = onRefresh,
         modifier = modifier.fillMaxWidth(),
     ) {
-        Surface(shape = MaterialTheme.shapes.large) {
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            modifier =
+                Modifier
+                    // required so the individual items are properly clipped
+                    .sharedContainer(
+                        scopes,
+                        "today_dish_list",
+                        clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                    ),
+        ) {
             DishContent(
                 data = data,
                 onDish = onDish,
@@ -90,10 +112,8 @@ internal fun TodayDishHorizontal(
                 scroll = scroll,
                 header = header,
                 footer = footer,
-                modifier =
-                    Modifier
-                        .padding(top = Padding.Smaller) // so text is not cut off
-                        .fillMaxSize(),
+                scopes = scopes,
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }
@@ -111,6 +131,7 @@ private fun DishContent(
     scroll: LazyListState,
     header: @Composable (Modifier) -> Unit,
     footer: @Composable (Modifier) -> Unit,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     // no data handling
@@ -151,6 +172,7 @@ private fun DishContent(
                         onDish = onDish,
                         userSettings = userSettings,
                         isOnMetered = isOnMetered,
+                        scopes = scopes,
                         modifier =
                             Modifier
                                 .fillMaxWidth(),
@@ -167,6 +189,7 @@ private fun DishContent(
                             onDish = onDish,
                             userSettings = userSettings,
                             isOnMetered = isOnMetered,
+                            scopes = scopes,
                             modifier = @Suppress("ktlint:compose:modifier-not-used-at-root")
                             modifier.sizeIn(maxWidth = 256.dp),
                         )
@@ -243,13 +266,21 @@ private fun DishItem(
     onDish: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     Card(
         onClick = { onDish(dish) },
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
-        modifier = modifier,
+        modifier =
+        modifier
+            .sharedContainer(
+                scopes,
+                dishContainerKey(dish.id),
+                resizeMode = ResizeMode.RemeasureToBounds,
+                clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+            ),
     ) {
         Column(
             modifier = Modifier.padding(Padding.MidSmall),
@@ -261,20 +292,16 @@ private fun DishItem(
                 priceType = userSettings.priceType,
                 downloadOnMetered = userSettings.downloadOnMetered,
                 isOnMetered = isOnMetered,
+                modifier = Modifier.sharedElement(scopes, key = dishImageKey(dish.id)),
             )
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(Padding.Small),
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(Padding.Smaller),
-                ) {
-                    DishNameRow(
-                        dish = dish,
-                        modifier = Modifier.weight(1f),
-                    )
-                }
+                DishNameRow(
+                    dish = dish,
+                    modifier = Modifier.sharedBounds(scopes, dishTitleKey(dish.id)),
+                )
 
                 DishInfoRow(dish)
             }

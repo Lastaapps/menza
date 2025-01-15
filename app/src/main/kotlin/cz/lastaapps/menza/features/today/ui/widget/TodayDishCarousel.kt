@@ -17,9 +17,15 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package cz.lastaapps.menza.features.today.ui.widget
 
 import android.content.res.Configuration
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope.OverlayClip
+import androidx.compose.animation.SharedTransitionScope.ResizeMode
+import androidx.compose.animation.SharedTransitionScope.SharedContentState
 import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -50,13 +56,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.GraphicsLayerScope
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.zIndex
@@ -64,10 +75,19 @@ import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.core.util.extensions.mapIf
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
+import cz.lastaapps.menza.features.today.ui.util.dishContainerKey
+import cz.lastaapps.menza.features.today.ui.util.dishImageKey
+import cz.lastaapps.menza.features.today.ui.util.dishTitleKey
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.AnimationScopes
+import cz.lastaapps.menza.ui.util.OverlayParentClip
 import cz.lastaapps.menza.ui.util.PreviewWrapper
+import cz.lastaapps.menza.ui.util.sharedBounds
+import cz.lastaapps.menza.ui.util.sharedContainer
+import cz.lastaapps.menza.ui.util.sharedElement
+import cz.lastaapps.menza.ui.util.skipToLookaheadSize
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -83,6 +103,7 @@ internal fun TodayDishCarousel(
     header: @Composable (Modifier) -> Unit,
     footer: @Composable (Modifier) -> Unit,
     scroll: LazyListState,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     PullToRefreshWrapper(
@@ -90,7 +111,17 @@ internal fun TodayDishCarousel(
         onRefresh = onRefresh,
         modifier = modifier.fillMaxWidth(),
     ) {
-        Surface(shape = MaterialTheme.shapes.large) {
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            modifier =
+                Modifier
+                    // required so the individual items are properly clipped
+                    .sharedContainer(
+                        scopes,
+                        "today_dish_list",
+                        clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                    ),
+        ) {
             DishContent(
                 data = data,
                 onDish = onDish,
@@ -101,6 +132,7 @@ internal fun TodayDishCarousel(
                 scroll = scroll,
                 header = header,
                 footer = footer,
+                scopes = scopes,
                 modifier =
                     Modifier
                         .padding(top = Padding.Smaller) // so text is not cut off
@@ -123,6 +155,7 @@ private fun DishContent(
     scroll: LazyListState,
     header: @Composable (Modifier) -> Unit,
     footer: @Composable (Modifier) -> Unit,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     var maxWidth by remember { mutableIntStateOf(0) }
@@ -187,6 +220,8 @@ private fun DishContent(
                             onRating = onRating,
                             appSettings = appSettings,
                             isOnMetered = isOnMetered,
+                            scopes = scopes,
+                            size = null,
                             modifier =
                                 Modifier
                                     .height(preferredItemSize),
@@ -201,8 +236,11 @@ private fun DishContent(
                 HorizontalMultiBrowseCarousel(
                     state = carouselState,
                     preferredItemWidth = preferredItemSize,
-                    minSmallItemWidth = 64.dp,
-                    maxSmallItemWidth = 128.dp,
+                    // TODO revert
+//                    minSmallItemWidth = 64.dp,
+//                    maxSmallItemWidth = 128.dp,
+                    minSmallItemWidth = 20.dp,
+                    maxSmallItemWidth = 40.dp,
                     itemSpacing = Padding.MidSmall,
                     modifier =
                     Modifier
@@ -236,11 +274,13 @@ private fun DishContent(
                         onRating = onRating,
                         appSettings = appSettings,
                         isOnMetered = isOnMetered,
+                        scopes = scopes,
+                        size = { carouselItemDrawInfo.size },
+                        progress = { progress },
                         modifier =
                             Modifier
                                 .height(preferredItemSize)
                                 .maskClip(MaterialTheme.shapes.extraLarge),
-                        progress = { progress },
                     )
                 }
             }
@@ -283,6 +323,8 @@ private fun DishItem(
     onRating: (Dish) -> Unit,
     appSettings: TodayUserSettings,
     isOnMetered: Boolean,
+    scopes: AnimationScopes,
+    size: (() -> Float)?,
     modifier: Modifier = Modifier,
     progress: () -> Float = { 1f },
 ) {
@@ -301,8 +343,53 @@ private fun DishItem(
         scaleY = prog / 2f + 0.5f
     }
 
+    val shape = MaterialTheme.shapes.extraLarge
     Box(
-        modifier = modifier.clickable { onDish(dish) },
+        modifier =
+        modifier
+            .clickable { onDish(dish) }
+            .also {
+                // this is ignored for now
+                it
+                    .sharedContainer(
+                        scopes,
+                        dishContainerKey(dish.id),
+                        // resizeMode = ResizeMode.RemeasureToBounds,
+                        resizeMode =
+                        ResizeMode.ScaleToBounds(
+                            contentScale = ContentScale.Crop,
+                            alignment = Alignment.CenterStart,
+                        ),
+                        clipInOverlayDuringTransition =
+                        object : OverlayClip {
+                            override fun getClipPath(
+                                sharedContentState: SharedContentState,
+                                bounds: Rect,
+                                layoutDirection: LayoutDirection,
+                                density: Density,
+                            ): Path? {
+                                val newRect =
+                                    size?.let {
+                                        bounds.copy(
+                                            left = bounds.center.x - size() / 2f,
+                                            right = bounds.center.x + size() / 2f,
+                                        )
+                                        bounds.copy(
+                                            right = bounds.left + size(),
+                                        )
+                                    } ?: bounds
+                                return OverlayParentClip(shape)
+                                    .getClipPath(
+                                        sharedContentState,
+                                        newRect,
+                                        layoutDirection,
+                                        density,
+                                    )
+                            }
+                        },
+                    )
+                    .sharedElement(scopes, key = dishImageKey(dish.id))
+            },
     ) {
         DishImageOrSupplement(
             dish,
@@ -311,6 +398,7 @@ private fun DishItem(
             modifier =
                 Modifier
                     .fillMaxSize(),
+            // .sharedElement(scopes, key = dishImageKey(dish.id)),
             // zoom in effect
             // the carousel does not render correctly
 //                    .graphicsLayer {
@@ -363,7 +451,12 @@ private fun DishItem(
                             iterations = Int.MAX_VALUE,
                             velocity = 69.dp, // default: 30.dp
                             spacing = MarqueeSpacing.fractionOfContainer(1f / 5f),
-                        ),
+                        )
+                        .also {
+                            it
+                                .sharedBounds(scopes, dishTitleKey(dish.id))
+                                .skipToLookaheadSize(scopes)
+                        },
                     maxLines = 1,
                     color =
                         TodayDishCarouselTokens.gradientForeground.takeIf { useGradient }

@@ -17,8 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package cz.lastaapps.menza.features.today.ui.widget
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope.ResizeMode
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,11 +49,18 @@ import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
+import cz.lastaapps.menza.features.today.ui.util.dishContainerKey
+import cz.lastaapps.menza.features.today.ui.util.dishImageKey
+import cz.lastaapps.menza.features.today.ui.util.dishTitleKey
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
 import cz.lastaapps.menza.ui.theme.Padding
+import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.appCardColors
+import cz.lastaapps.menza.ui.util.sharedBounds
+import cz.lastaapps.menza.ui.util.sharedContainer
+import cz.lastaapps.menza.ui.util.sharedElement
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -64,6 +75,7 @@ internal fun TodayDishGrid(
     isOnMetered: Boolean,
     header: @Composable (Modifier) -> Unit,
     footer: @Composable (Modifier) -> Unit,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
     scrollGrid: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     widthSize: WindowWidthSizeClass = LocalWindowWidth.current,
@@ -73,7 +85,17 @@ internal fun TodayDishGrid(
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize(),
     ) {
-        Surface(shape = MaterialTheme.shapes.large) {
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            modifier =
+                Modifier
+                    // required so the individual items are properly clipped
+                    .sharedContainer(
+                        scopes,
+                        "today_dish_list",
+                        clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                    ),
+        ) {
             DishContent(
                 data = data,
                 onDish = onDish,
@@ -85,10 +107,8 @@ internal fun TodayDishGrid(
                 header = header,
                 footer = footer,
                 widthSize = widthSize,
-                modifier =
-                    Modifier
-                        .padding(top = Padding.Smaller) // so text is not cut off
-                        .fillMaxSize(),
+                scopes = scopes,
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }
@@ -107,6 +127,7 @@ private fun DishContent(
     header: @Composable (Modifier) -> Unit,
     footer: @Composable (Modifier) -> Unit,
     widthSize: WindowWidthSizeClass,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     if (data.isEmpty()) {
@@ -161,6 +182,7 @@ private fun DishContent(
                             onRating = onRating,
                             userSettings = userSettings,
                             isOnMetered = isOnMetered,
+                            scopes = scopes,
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
@@ -184,12 +206,21 @@ private fun DishItem(
     onRating: (Dish) -> Unit,
     userSettings: TodayUserSettings,
     isOnMetered: Boolean,
+    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     Card(
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
-        modifier = modifier.clickable { onDish(dish) },
+        modifier =
+        modifier
+            .clickable { onDish(dish) }
+            .sharedContainer(
+                scopes,
+                dishContainerKey(dish.id),
+                resizeMode = ResizeMode.RemeasureToBounds,
+                clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+            ),
     ) {
         Column(
             modifier = Modifier.padding(Padding.MidSmall),
@@ -203,10 +234,16 @@ private fun DishItem(
                     priceType = userSettings.priceType,
                     downloadOnMetered = userSettings.downloadOnMetered,
                     isOnMetered = isOnMetered,
+                    modifier = Modifier.sharedElement(scopes, key = dishImageKey(dish.id)),
                 )
             }
 
-            DishNameRow(dish, Modifier.fillMaxWidth())
+            DishNameRow(
+                dish = dish,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .sharedBounds(scopes, dishTitleKey(dish.id)),
+            )
             if (dish.photoLink == null) {
                 DishBadgesRow(dish = dish, onRating = onRating, priceType = userSettings.priceType)
             }

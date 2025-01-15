@@ -257,7 +257,7 @@ private fun DishItem(
                                 label = "image_scale",
                             ).value,
                         isOnMetered = isOnMetered,
-                        scopes = scopes,
+                        modifier = Modifier.sharedElement(scopes, key = dishImageKey(dish.id)),
                     )
 
                     DishNameRow(
@@ -289,11 +289,10 @@ private fun DishImageWithBadge(
     downloadOnMetered: Boolean,
     imageScale: Float,
     isOnMetered: Boolean,
-    scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.sharedElement(scopes, key = dishImageKey(dish.id)),
+        modifier = modifier,
     ) {
         DishImageWithPlaceholder(
             photoLink = dish.photoLink,

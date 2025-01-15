@@ -254,6 +254,7 @@ private fun DishListComposing(
                     },
                     modifier = modifier.fillMaxSize(),
                     scrollGrid = scrollStates.grid,
+                    scopes = scopes,
                 )
 
             HORIZONTAL ->
@@ -275,6 +276,7 @@ private fun DishListComposing(
                     },
                     modifier = modifier.fillMaxSize(),
                     scroll = scrollStates.horizontal,
+                    scopes = scopes,
                 )
 
             CAROUSEL ->
@@ -296,6 +298,7 @@ private fun DishListComposing(
                     },
                     modifier = modifier.fillMaxSize(),
                     scroll = scrollStates.carousel,
+                    scopes = scopes,
                 )
 
             null -> {}

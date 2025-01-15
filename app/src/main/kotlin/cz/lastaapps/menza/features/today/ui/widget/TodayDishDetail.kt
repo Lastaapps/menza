@@ -22,6 +22,8 @@
 package cz.lastaapps.menza.features.today.ui.widget
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -100,7 +102,8 @@ fun TodayDishDetail(
     ) {
         DishImageInfo(
             dish = dish,
-            modifier = Modifier.sharedElement(scopes, dishImageKey(dish.id)),
+            modifier =
+                Modifier.sharedElement(scopes, dishImageKey(dish.id)),
         )
 
         Header(
@@ -110,20 +113,31 @@ fun TodayDishDetail(
         PriceView(
             dish = dish,
         )
-        IssueLocationList(
-            list = dish.servingPlaces,
-        )
+        AnimatedAppearance(
+            200.milliseconds,
+            enter = fadeIn(),
+        ) {
+            IssueLocationList(
+                list = dish.servingPlaces,
+            )
+        }
 
-        RatingOverview(rating = dish.rating, onRating = { onRating(dish) })
+        AnimatedAppearance(
+            250.milliseconds,
+            enter = slideInVertically { it } + fadeIn(),
+        ) {
+            RatingOverview(rating = dish.rating, onRating = { onRating(dish) })
+        }
 
-        AllergenList(
-            allergens = dish.allergens,
-        )
-        Ingredients(
-            ingredients = dish.ingredients,
-        )
-
-        AnimatedAppearance(400.milliseconds) {
+        AnimatedAppearance(350.milliseconds, enter = slideInVertically { it } + fadeIn()) {
+            AllergenList(
+                allergens = dish.allergens,
+            )
+        }
+        AnimatedAppearance(350.milliseconds, enter = slideInVertically { it } + fadeIn()) {
+            Ingredients(
+                ingredients = dish.ingredients,
+            )
         }
     }
 }

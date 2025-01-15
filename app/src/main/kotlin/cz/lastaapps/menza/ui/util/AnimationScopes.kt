@@ -162,6 +162,11 @@ fun Modifier.renderInSharedTransitionScopeOverlay(
         )
     }
 
+fun Modifier.skipToLookaheadSize(scopes: AnimationScopes): Modifier =
+    with(scopes.sharedTransitionScope) {
+        this@skipToLookaheadSize.skipToLookaheadSize()
+    }
+
 fun OverlayParentClip(roundedCorner: Dp = 0.dp): OverlayClip = OverlayParentClip(RoundedCornerShape(roundedCorner))
 
 fun OverlayParentClip(shape: Shape): OverlayClip =
