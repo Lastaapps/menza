@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,40 +29,46 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 
-internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
-) = with(commonExtension) {
+internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, *, *, *, *, *>) =
+    with(commonExtension) {
+        compileSdk =
+            libs.versions.sdk.compile
+                .get()
+                .toInt()
 
-    compileSdk = libs.versions.sdk.compile.get().toInt()
+        defaultConfig {
+            minSdk =
+                libs.versions.sdk.min
+                    .get()
+                    .toInt()
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
 
-    defaultConfig {
-        minSdk = libs.versions.sdk.min.get().toInt()
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        compilerOptions {
+            // Treat all Kotlin warnings as errors (disabled by default)
+            allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
+
+            freeCompilerArgs.addAll(
+                listOf(
+                    "-opt-in=kotlin.RequiresOptIn",
+                ),
+            )
+        }
+
+        compileOptions {
+            val versionCode =
+                libs.versions.java.jvmTarget
+                    .get()
+                    .toInt()
+            val version = JavaVersion.toVersion(versionCode)
+            sourceCompatibility = version
+            targetCompatibility = version
+            isCoreLibraryDesugaringEnabled = true
+        }
+
+        dependencies {
+            coreLibraryDesugaring(libs.android.desugaring)
+
+            implementation(platform(libs.kotlin.bom))
+        }
     }
-
-    compilerOptions {
-        // Treat all Kotlin warnings as errors (disabled by default)
-        allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
-
-        freeCompilerArgs.addAll(
-            listOf(
-                "-opt-in=kotlin.RequiresOptIn",
-                "-Xcontext-receivers",
-            ),
-        )
-    }
-
-    compileOptions {
-        val versionCode = libs.versions.java.jvmTarget.get().toInt()
-        val version = JavaVersion.toVersion(versionCode)
-        sourceCompatibility = version
-        targetCompatibility = version
-        isCoreLibraryDesugaringEnabled = true
-    }
-
-    dependencies {
-        coreLibraryDesugaring(libs.android.desugaring)
-
-        implementation(platform(libs.kotlin.bom))
-    }
-}

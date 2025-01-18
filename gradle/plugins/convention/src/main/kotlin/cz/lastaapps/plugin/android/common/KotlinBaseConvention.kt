@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -35,48 +35,67 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 private typealias KV = org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
-class KotlinBaseConvention : BasePlugin(
-    {
-        pluginManager {
-            alias(libs.plugins.kotlin.serialization)
-        }
-
-        apply<CoroutinesConvention>()
-
-        java {
-            val versionCode = libs.versions.java.jvmTarget.get().toInt()
-            val version = JavaVersion.toVersion(versionCode)
-            sourceCompatibility = version
-            targetCompatibility = version
-            toolchain {
-                languageVersion.set(JavaLanguageVersion.of(versionCode))
+class KotlinBaseConvention :
+    BasePlugin(
+        {
+            pluginManager {
+                alias(libs.plugins.kotlin.serialization)
             }
-        }
 
-        android { }
+            apply<CoroutinesConvention>()
 
-        compilerOptions(
-            {
-                val versionCode = libs.versions.java.jvmTarget.get().toInt()
+            java {
+                val versionCode =
+                    libs.versions.java.jvmTarget
+                        .get()
+                        .toInt()
                 val version = JavaVersion.toVersion(versionCode)
-                jvmTarget.set(JvmTarget.fromTarget(version.toString()))
-            },
-        ) {
-            languageVersion.set(KV.fromVersion(libs.versions.kotlin.language.get()))
-            apiVersion.set(KV.fromVersion(libs.versions.kotlin.api.get()))
+                sourceCompatibility = version
+                targetCompatibility = version
+                toolchain {
+                    languageVersion.set(JavaLanguageVersion.of(versionCode))
+                }
+            }
 
-            freeCompilerArgs.addAll(
-                listOf(
-                    "-opt-in=kotlin.ExperimentalStdlibApi",
-                ),
-            )
-        }
+            android { }
 
-        dependencies {
-            implementation(libs.kotlinx.dateTime)
-            implementation(libs.kotlinx.collection)
-            implementation(libs.kermit)
-            implementation(libs.fluidLocale)
-        }
-    },
-)
+            compilerOptions(
+                {
+                    val versionCode =
+                        libs.versions.java.jvmTarget
+                            .get()
+                            .toInt()
+                    val version = JavaVersion.toVersion(versionCode)
+                    jvmTarget.set(JvmTarget.fromTarget(version.toString()))
+                },
+            ) {
+                languageVersion.set(
+                    KV.fromVersion(
+                        libs.versions.kotlin.language
+                            .get(),
+                    ),
+                )
+                apiVersion.set(
+                    KV.fromVersion(
+                        libs.versions.kotlin.api
+                            .get(),
+                    ),
+                )
+
+                freeCompilerArgs.addAll(
+                    listOf(
+                        "-opt-in=kotlin.ExperimentalStdlibApi",
+                        "-Xwhen-guards",
+                        "-Xcontext-receivers",
+                    ),
+                )
+            }
+
+            dependencies {
+                implementation(libs.kotlinx.dateTime)
+                implementation(libs.kotlinx.collection)
+                implementation(libs.kermit)
+                implementation(libs.fluidLocale)
+            }
+        },
+    )

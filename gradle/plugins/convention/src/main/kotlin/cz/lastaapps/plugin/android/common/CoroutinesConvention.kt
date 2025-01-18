@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,21 +26,22 @@ import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.kotlin.dsl.dependencies
 
-class CoroutinesConvention : BasePlugin(
-    {
-        compilerOptions {
-            freeCompilerArgs.addAll(
-                listOf(
-                    "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                    "-opt-in=kotlinx.coroutines.FlowPreview",
-                ),
-            )
-        }
+class CoroutinesConvention :
+    BasePlugin(
+        {
+            compilerOptions {
+                freeCompilerArgs.addAll(
+                    listOf(
+                        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                        "-opt-in=kotlinx.coroutines.FlowPreview",
+                    ),
+                )
+            }
 
-        dependencies {
-            implementation(libs.kotlinx.coroutines.common)
-            implementation(libs.kotlinx.coroutines.android)
-            testImplementation(libs.kotlinx.coroutines.test)
-        }
-    },
-)
+            dependencies {
+                implementation(libs.kotlinx.coroutines.common)
+                implementation(libs.kotlinx.coroutines.android)
+                testImplementation(libs.kotlinx.coroutines.test)
+            }
+        },
+    )
