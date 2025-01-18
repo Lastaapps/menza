@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -51,7 +51,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.Extras
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest.Builder
@@ -125,7 +124,7 @@ internal fun DishImage(
         with(Builder(LocalContext.current)) {
             diskCacheKey(photoLink)
             memoryCacheKey(photoLink)
-            extras[Extras.Key("retry_hash")] = retryHash
+            memoryCacheKeyExtra("retry_hash", retryHash.toString())
 
             // if user is not on a metered network, images are going to be loaded from cache
             if (!canDownload) {
@@ -235,9 +234,9 @@ private fun DishImageSupplementPreview() =
                     remember { Random.nextInt() },
                     color = it,
                     modifier =
-                    Modifier
-                        .padding(12.dp)
-                        .aspectRatio(DishImageTokens.ASPECT_RATIO),
+                        Modifier
+                            .padding(12.dp)
+                            .aspectRatio(DishImageTokens.ASPECT_RATIO),
                 )
             }
         }

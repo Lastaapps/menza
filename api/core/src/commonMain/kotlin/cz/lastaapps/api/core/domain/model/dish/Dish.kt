@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -214,6 +214,25 @@ data class Dish(
                 servingPlaces =
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
+                    ),
+                ingredients = persistentListOf(),
+                isActive = true,
+            )
+        val dishMisterious =
+            Dish(
+                menza = MenzaType.Testing.Kocourkov,
+                id = DishID.testing(),
+                language = Czech,
+                amount = "??? g",
+                name = "Záludnost",
+                priceDiscounted = 42.0f,
+                priceNormal = 69.0f,
+                allergens = persistentListOf(1, 2, 3),
+                photoLink = "https://blbost.kravina.haha",
+                pictogram = persistentListOf(),
+                servingPlaces =
+                    persistentListOf(
+                        ServingPlace("Magistrát", "J"),
                     ),
                 ingredients = persistentListOf(),
                 isActive = true,

@@ -63,6 +63,7 @@ data class DishCategory(
                     Dish.Mock.dishTux,
                     Dish.Mock.dishKunda,
                     Dish.Mock.dishMaxipes,
+                    Dish.Mock.dishMisterious,
                 ),
             )
         val dezerty =

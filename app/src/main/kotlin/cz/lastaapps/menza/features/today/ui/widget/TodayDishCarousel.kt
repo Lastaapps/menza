@@ -236,15 +236,12 @@ private fun DishContent(
                 HorizontalMultiBrowseCarousel(
                     state = carouselState,
                     preferredItemWidth = preferredItemSize,
-                    // TODO revert
-//                    minSmallItemWidth = 64.dp,
-//                    maxSmallItemWidth = 128.dp,
-                    minSmallItemWidth = 20.dp,
-                    maxSmallItemWidth = 40.dp,
+                    minSmallItemWidth = 64.dp,
+                    maxSmallItemWidth = 128.dp,
                     itemSpacing = Padding.MidSmall,
                     modifier =
-                    Modifier
-                        .fillMaxWidth(),
+                        Modifier
+                            .fillMaxWidth(),
 //                            .animateItem(),
                 ) { index ->
                     val dish = category.dishList[index]
@@ -346,49 +343,48 @@ private fun DishItem(
     val shape = MaterialTheme.shapes.extraLarge
     Box(
         modifier =
-        modifier
-            .clickable { onDish(dish) }
-            .also {
-                // this is ignored for now
-                it
-                    .sharedContainer(
-                        scopes,
-                        dishContainerKey(dish.id),
-                        // resizeMode = ResizeMode.RemeasureToBounds,
-                        resizeMode =
-                        ResizeMode.ScaleToBounds(
-                            contentScale = ContentScale.Crop,
-                            alignment = Alignment.CenterStart,
-                        ),
-                        clipInOverlayDuringTransition =
-                        object : OverlayClip {
-                            override fun getClipPath(
-                                sharedContentState: SharedContentState,
-                                bounds: Rect,
-                                layoutDirection: LayoutDirection,
-                                density: Density,
-                            ): Path? {
-                                val newRect =
-                                    size?.let {
-                                        bounds.copy(
-                                            left = bounds.center.x - size() / 2f,
-                                            right = bounds.center.x + size() / 2f,
-                                        )
-                                        bounds.copy(
-                                            right = bounds.left + size(),
-                                        )
-                                    } ?: bounds
-                                return OverlayParentClip(shape)
-                                    .getClipPath(
-                                        sharedContentState,
-                                        newRect,
-                                        layoutDirection,
+            modifier
+                .clickable { onDish(dish) }
+                .also {
+                    // this is ignored for now
+                    it
+                        .sharedContainer(
+                            scopes,
+                            dishContainerKey(dish.id),
+                            // resizeMode = ResizeMode.RemeasureToBounds,
+                            resizeMode =
+                                ResizeMode.ScaleToBounds(
+                                    contentScale = ContentScale.Crop,
+                                    alignment = Alignment.CenterStart,
+                                ),
+                            clipInOverlayDuringTransition =
+                                object : OverlayClip {
+                                    override fun getClipPath(
+                                        sharedContentState: SharedContentState,
+                                        bounds: Rect,
+                                        layoutDirection: LayoutDirection,
+                                        density: Density,
+                                    ): Path? {
+                                        val newRect =
+                                            size?.let {
+                                                bounds.copy(
+                                                    left = bounds.center.x - size() / 2f,
+                                                    right = bounds.center.x + size() / 2f,
+                                                )
+                                                bounds.copy(
+                                                    right = bounds.left + size(),
+                                                )
+                                            } ?: bounds
+                                        return OverlayParentClip(shape)
+                                            .getClipPath(
+                                                sharedContentState,
+                                                newRect,
+                                                layoutDirection,
                                         density,
                                     )
                             }
                         },
-                    )
-                    .sharedElement(scopes, key = dishImageKey(dish.id))
+                    ).sharedElement(scopes, key = dishImageKey(dish.id))
             },
     ) {
         DishImageOrSupplement(
