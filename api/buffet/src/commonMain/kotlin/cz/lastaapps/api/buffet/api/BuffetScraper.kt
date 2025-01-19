@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -81,7 +81,7 @@ internal class BuffetScraperImpl : BuffetScraper {
         // Matches dishes
         // type name price contains
         private val dishesRegex =
-            """([^/]*):([^●]*)●\s*(\d+)[^(]*\(([^).]*)"""
+            """([^/]*):([^●]*)●\s*(\d+)"""
                 .toRegex(regexOptions)
     }
 
@@ -187,14 +187,19 @@ internal class BuffetScraperImpl : BuffetScraper {
         dishesRegex
             .findAll(this)
             .mapIndexed { index, match ->
+                println("------------------------------------------")
+                println(match.groupValues.drop(1).joinToString(" ||| "))
+                println("------------------------------------------")
+
                 Either
                     .catch {
-                        val (type, name, price, contains) = match.destructured
+                        val (type, name, price) = match.destructured
+                        println("$type $name $price")
                         DishDto(
                             type = type.removeHtml(),
                             name = name.removeHtml(),
                             price = price.toInt(),
-                            ingredients = contains.split(",").map { it.removeHtml() },
+                            ingredients = emptyList(),
                             order = index,
                         )
                     }.mapLeft {

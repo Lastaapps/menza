@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,6 +31,7 @@ import cz.lastaapps.api.core.domain.model.dish.DishID
 import cz.lastaapps.core.util.extensions.findDayOfWeek
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
@@ -45,31 +46,34 @@ internal fun List<DishEntity>.toDomainDays(menzaType: MenzaType.Buffet): List<Pa
         .sortedBy { it.key }
         .map { (dayOfWeek, dayDishList) ->
             dayOfWeek to
-                dayDishList.map { dish ->
-                    DishCategory(
-                        nameShort = null,
-                        name = dish.type,
-                        dishList =
-                        persistentListOf(
-                            // each dish has it's own category
-                            Dish(
-                                menzaType,
-                                id = DishID(dish.name),
-                                language = Czech,
-                                amount = null,
-                                name = dish.name,
-                                priceDiscounted = null,
-                                priceNormal = dish.price.toFloat(),
-                                allergens = null,
-                                photoLink = null,
-                                pictogram = persistentListOf(),
-                                servingPlaces = persistentListOf(),
-                                ingredients = dish.ingredients.toImmutableList(),
-                                isActive = true,
-                            ),
-                        ),
-                    )
-                }
+                dayDishList
+                    .groupBy { it.type }
+                    .map { (type, dishes) ->
+                        DishCategory(
+                            nameShort = null,
+                            name = type,
+                            dishList =
+                                dishes
+                                    .map { dish ->
+                                        // each dish has it's own category
+                                        Dish(
+                                            menzaType,
+                                            id = DishID(dish.name),
+                                            language = Czech,
+                                            amount = null,
+                                            name = dish.name,
+                                            priceDiscounted = null,
+                                            priceNormal = dish.price.toFloat(),
+                                            allergens = null,
+                                            photoLink = null,
+                                            pictogram = persistentListOf(),
+                                            servingPlaces = persistentListOf(),
+                                            ingredients = dish.ingredients.toImmutableList(),
+                                            isActive = true,
+                                        )
+                                    }.toPersistentList(),
+                        )
+                    }
         }
 
 internal fun List<DishEntity>.toDomainWeek(
@@ -93,22 +97,24 @@ internal fun List<DishEntity>.toDomainWeek(
         WeekDayDish(
             date = date,
             categories =
-            dayDishList
-                .map { dish ->
-                    WeekDishCategory(
-                        name = dish.type,
-                        dishList =
-                        persistentListOf(
-                            // each dish has it's own category
-                            WeekDish(
-                                name = dish.name,
-                                amount = null,
-                                priceNormal = dish.price.toFloat(),
-                                priceDiscounted = null,
-                                ingredients = dish.ingredients.toImmutableList(),
-                            ),
-                        ),
-                    )
-                }.toImmutableList(),
+                dayDishList
+                    .groupBy { it.type }
+                    .map { (type, dishes) ->
+                        WeekDishCategory(
+                            name = type,
+                            dishList =
+                                dishes
+                                    .map { dish ->
+                                        // each dish has it's own category
+                                        WeekDish(
+                                            name = dish.name,
+                                            amount = null,
+                                            priceNormal = dish.price.toFloat(),
+                                            priceDiscounted = null,
+                                            ingredients = dish.ingredients.toImmutableList(),
+                                        )
+                                    }.toPersistentList(),
+                        )
+                    }.toImmutableList(),
         )
     }.toImmutableList()
