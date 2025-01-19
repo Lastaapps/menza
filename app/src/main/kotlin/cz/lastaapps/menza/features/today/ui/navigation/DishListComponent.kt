@@ -74,7 +74,7 @@ internal fun DishListContent(
     }
 
     DishListScreen(
-        component.dishListViewModel,
+        viewModel = component.dishListViewModel,
         panels = panels,
         onOsturak = onOsturak,
         onDish = component.onDishSelected,

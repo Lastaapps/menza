@@ -159,9 +159,7 @@ private fun DishContent(
     modifier: Modifier = Modifier,
 ) {
     var maxWidth by remember { mutableIntStateOf(0) }
-    val modifierWithPlacing =
-        modifier
-            .onPlaced { maxWidth = it.size.width }
+    val modifierWithPlacing = modifier.onPlaced { maxWidth = it.size.width }
 
     // no data handling
     if (data.isEmpty()) {
@@ -175,45 +173,98 @@ private fun DishContent(
             (196 + 32).dp,
         )
 
-    // showing items
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
-        state = scroll,
-        modifier =
-            modifierWithPlacing
-                .fillMaxSize(),
+    // Prevents the lazy column from having wrong size before the screen size is resolved
+    Box(
+        modifier = modifierWithPlacing.fillMaxSize(),
     ) {
         if (maxWidth == 0) {
-            return@LazyColumn
+            return@Box
         }
 
-        item(key = "header") {
-            header(
-                Modifier,
+        // showing items
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
+            state = scroll,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            item(key = "header") {
+                header(
+                    Modifier,
 //                    Modifier.animateItem(),
-            )
-        }
-
-        data.forEach { category ->
-            item(key = category.name + "_cat_header") {
-                DishHeader(
-                    courseType = category,
-                    modifier =
-                        Modifier
-                            .padding(bottom = Padding.Smaller),
-//                                .animateItem(),
                 )
             }
-            item(key = category.name + "_content") {
-                if (category.dishList.size == 1) {
-                    val dish = category.dishList.first()
-                    Box(
-                        contentAlignment = Alignment.Center,
+
+            data.forEach { category ->
+                item(key = category.name + "_cat_header") {
+                    DishHeader(
+                        courseType = category,
+                        modifier =
+                            Modifier
+                                .padding(bottom = Padding.Smaller),
+//                                .animateItem(),
+                    )
+                }
+                item(key = category.name + "_content") {
+                    if (category.dishList.size == 1) {
+                        val dish = category.dishList.first()
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(),
+//                                    .animateItem(),
+                        ) {
+                            DishItem(
+                                dish = dish,
+                                onDish = onDish,
+                                onRating = onRating,
+                                appSettings = appSettings,
+                                isOnMetered = isOnMetered,
+                                scopes = scopes,
+                                size = null,
+                                modifier =
+                                    Modifier
+                                        .height(preferredItemSize),
+                            )
+                        }
+                        return@item
+                    }
+
+                    val carouselState =
+                        rememberCarouselStateSafe(itemCount = category.dishList.size)
+
+                    HorizontalMultiBrowseCarousel(
+                        state = carouselState,
+                        preferredItemWidth = preferredItemSize,
+                        minSmallItemWidth = 64.dp,
+                        maxSmallItemWidth = 128.dp,
+                        itemSpacing = Padding.MidSmall,
                         modifier =
                             Modifier
                                 .fillMaxWidth(),
-//                                    .animateItem(),
-                    ) {
+//                            .animateItem(),
+                    ) { index ->
+                        val dish = category.dishList[index]
+
+                        // outside so the computation is run one only
+                        // even if progress is called multiple times
+                        val progress by remember {
+                            derivedStateOf {
+                                carouselItemDrawInfo.let {
+                                    // breakpoints
+                                    val visible = 0.9f
+                                    val hidden = 0.5f
+
+                                    when (val ratio = it.size / it.maxSize) {
+                                        in visible..1f -> 1f
+                                        in hidden..visible -> (ratio - hidden) / (visible - hidden)
+                                        in 0.0f..hidden -> 0f
+                                        else -> 1f
+                                    }.coerceAtLeast(0f)
+                                }
+                            }
+                        }
+
                         DishItem(
                             dish = dish,
                             onDish = onDish,
@@ -221,79 +272,29 @@ private fun DishContent(
                             appSettings = appSettings,
                             isOnMetered = isOnMetered,
                             scopes = scopes,
-                            size = null,
+                            size = { carouselItemDrawInfo.size },
+                            progress = { progress },
                             modifier =
                                 Modifier
-                                    .height(preferredItemSize),
+                                    .height(preferredItemSize)
+                                    .maskClip(MaterialTheme.shapes.extraLarge),
                         )
                     }
-                    return@item
                 }
-
-                val carouselState =
-                    rememberCarouselStateSafe(itemCount = category.dishList.size)
-
-                HorizontalMultiBrowseCarousel(
-                    state = carouselState,
-                    preferredItemWidth = preferredItemSize,
-                    minSmallItemWidth = 64.dp,
-                    maxSmallItemWidth = 128.dp,
-                    itemSpacing = Padding.MidSmall,
-                    modifier =
+                item(key = category.name + "_spacer") {
+                    Spacer(
                         Modifier
-                            .fillMaxWidth(),
+                            .height(Padding.Small),
 //                            .animateItem(),
-                ) { index ->
-                    val dish = category.dishList[index]
-
-                    // outside so the computation is run one only
-                    // even if progress is called multiple times
-                    val progress by remember {
-                        derivedStateOf {
-                            carouselItemDrawInfo.let {
-                                // breakpoints
-                                val visible = 0.9f
-                                val hidden = 0.5f
-
-                                when (val ratio = it.size / it.maxSize) {
-                                    in visible..1f -> 1f
-                                    in hidden..visible -> (ratio - hidden) / (visible - hidden)
-                                    in 0.0f..hidden -> 0f
-                                    else -> 1f
-                                }.coerceAtLeast(0f)
-                            }
-                        }
-                    }
-
-                    DishItem(
-                        dish = dish,
-                        onDish = onDish,
-                        onRating = onRating,
-                        appSettings = appSettings,
-                        isOnMetered = isOnMetered,
-                        scopes = scopes,
-                        size = { carouselItemDrawInfo.size },
-                        progress = { progress },
-                        modifier =
-                            Modifier
-                                .height(preferredItemSize)
-                                .maskClip(MaterialTheme.shapes.extraLarge),
                     )
                 }
             }
-            item(key = category.name + "_spacer") {
-                Spacer(
-                    Modifier
-                        .height(Padding.Small),
-//                            .animateItem(),
+
+            item(key = "footer") {
+                footer(
+                    Modifier,
                 )
             }
-        }
-
-        item(key = "footer") {
-            footer(
-                Modifier,
-            )
         }
     }
 }
@@ -380,12 +381,12 @@ private fun DishItem(
                                                 sharedContentState,
                                                 newRect,
                                                 layoutDirection,
-                                        density,
-                                    )
-                            }
-                        },
-                    ).sharedElement(scopes, key = dishImageKey(dish.id))
-            },
+                                                density,
+                                            )
+                                    }
+                                },
+                        ).sharedElement(scopes, key = dishImageKey(dish.id))
+                },
     ) {
         DishImageOrSupplement(
             dish,
@@ -408,9 +409,9 @@ private fun DishItem(
         val useGradient = dish.photoLink != null
         Column(
             modifier =
-            Modifier
-                .align(Alignment.BottomStart)
-                .graphicsLayer { componentsGraphics(Alignment.Bottom) },
+                Modifier
+                    .align(Alignment.BottomStart)
+                    .graphicsLayer { componentsGraphics(Alignment.Bottom) },
             verticalArrangement = Arrangement.spacedBy(Padding.Small * -1),
         ) {
             DishBadgesColumn(
@@ -418,16 +419,16 @@ private fun DishItem(
                 onRating = onRating,
                 priceType = appSettings.priceType,
                 modifier =
-                Modifier
-                    .zIndex(2f)
-                    .align(Alignment.End)
-                    .padding(horizontal = Padding.MidSmall),
+                    Modifier
+                        .zIndex(2f)
+                        .align(Alignment.End)
+                        .padding(horizontal = Padding.MidSmall),
             )
             Box(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .mapIf(useGradient) { it.gradient() },
+                    Modifier
+                        .fillMaxWidth()
+                        .mapIf(useGradient) { it.gradient() },
             ) {
                 // used to reset the marquee effect
                 val isVisible by remember { derivedStateOf { progress() > 0.2f } }
@@ -439,20 +440,19 @@ private fun DishItem(
                 Text(
                     dish.name,
                     modifier =
-                    Modifier
-                        .padding(Padding.MidSmall)
-                        .basicMarquee(
-                            initialDelayMillis = 800,
-                            repeatDelayMillis = 800,
-                            iterations = Int.MAX_VALUE,
-                            velocity = 69.dp, // default: 30.dp
-                            spacing = MarqueeSpacing.fractionOfContainer(1f / 5f),
-                        )
-                        .also {
-                            it
-                                .sharedBounds(scopes, dishTitleKey(dish.id))
-                                .skipToLookaheadSize(scopes)
-                        },
+                        Modifier
+                            .padding(Padding.MidSmall)
+                            .basicMarquee(
+                                initialDelayMillis = 800,
+                                repeatDelayMillis = 800,
+                                iterations = Int.MAX_VALUE,
+                                velocity = 69.dp, // default: 30.dp
+                                spacing = MarqueeSpacing.fractionOfContainer(1f / 5f),
+                            ).also {
+                                it
+                                    .sharedBounds(scopes, dishTitleKey(dish.id))
+                                    .skipToLookaheadSize(scopes)
+                            },
                     maxLines = 1,
                     color =
                         TodayDishCarouselTokens.gradientForeground.takeIf { useGradient }
@@ -474,10 +474,10 @@ private fun DishItem(
                 shape = MaterialTheme.shapes.large,
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 modifier =
-                Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(Padding.MidSmall)
-                    .graphicsLayer { componentsGraphics(Alignment.Top) },
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(Padding.MidSmall)
+                        .graphicsLayer { componentsGraphics(Alignment.Top) },
             ) {
                 Text(
                     text = text,
