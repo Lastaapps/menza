@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,6 +36,7 @@ import cz.lastaapps.api.main.domain.usecase.GetImportantRequestParams
 import cz.lastaapps.api.main.domain.usecase.GetInfoUC
 import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
 import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
+import cz.lastaapps.api.main.domain.usecase.GetTodayRawDishListUC
 import cz.lastaapps.api.main.domain.usecase.GetWeekDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
 import cz.lastaapps.api.main.domain.usecase.SyncAllInfoUC
@@ -74,7 +75,7 @@ val apiModule =
         factoryOf(::GetInfoUC)
         factoryOf(::SyncInfoUC)
         factoryOf(::SyncAllInfoUC)
-        factoryOf(::GetTodayDishListUC)
+        singleOf(::GetTodayDishListUC)
         factoryOf(::SyncTodayDishListUC)
         factoryOf(::GetWeekDishListUC)
         factoryOf(::SyncWeekDishListUC)
@@ -84,7 +85,8 @@ val apiModule =
         factoryOf(::WalletLogoutUC)
         factoryOf(::WalletRefreshUC)
         factoryOf(::GetImportantRequestParams)
-        factoryOf(::GetDishUC)
+        singleOf(::GetDishUC)
+        singleOf(::GetTodayRawDishListUC)
 
         registerMenzaType<MenzaType.Testing.Kocourkov>(
             menzaRepo = { KocourkovRepoImpl(get()) },

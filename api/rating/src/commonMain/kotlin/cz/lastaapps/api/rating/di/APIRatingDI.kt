@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -40,7 +40,7 @@ val apiRatingModule =
         factoryOf(::RatingAPIImpl) bind RatingAPI::class
         singleOf(::RatingRepositoryImpl) bind RatingRepository::class
 
-        factoryOf(::GetDishRatingsUC)
+        singleOf(::GetDishRatingsUC)
         factoryOf(::RateDishUC)
         factoryOf(::SyncDishRatingsUC)
     }

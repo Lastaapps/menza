@@ -19,11 +19,10 @@
 
 package cz.lastaapps.api.main.domain.usecase
 
+import cz.lastaapps.api.core.domain.FlowParametrizedCache
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.dish.DishCategory
-import cz.lastaapps.api.core.domain.repo.TodayDishRepo
-import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.api.rating.domain.usecase.GetDishRatingsUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
@@ -34,23 +33,23 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
-import org.koin.core.parameter.parametersOf
 
-class GetTodayDishListUC(
+class GetTodayDishListUC internal constructor(
     context: UCContext,
-    private val getRequestParamsUC: GetRequestParamsUC,
+    private val getRawDishList: GetTodayRawDishListUC,
     private val getDishRatingsUC: GetDishRatingsUC,
 ) : UseCase(context),
     KoinComponent {
+    private val cache =
+        FlowParametrizedCache<ImmutableList<DishCategory>, MenzaType>()
+
     suspend operator fun invoke(menza: Menza): Flow<ImmutableList<DishCategory>> = invoke(menza.type)
 
     suspend operator fun invoke(menza: MenzaType): Flow<ImmutableList<DishCategory>> =
         launch {
-            val dishFlow =
-                get<TodayDishRepo> { parametersOf(menza) }
-                    .getData(getRequestParamsUC())
-                    .map {
+            cache(menza) { menza ->
+                val dishFlow =
+                    getRawDishList(menza).map {
                         it
                             .map { category ->
                                 val newDishList = category.dishList.filter { dish -> dish.isActive }
@@ -63,24 +62,25 @@ class GetTodayDishListUC(
                             }.toImmutableList()
                     }
 
-            val ratingsFlow = getDishRatingsUC(menza)
+                val ratingsFlow = getDishRatingsUC(menza)
 
-            combine(
-                dishFlow.distinctUntilChanged(),
-                ratingsFlow.distinctUntilChanged(),
-            ) { dishList, ratings ->
-                dishList
-                    .map { category ->
-                        category.copy(
-                            dishList =
-                                category.dishList
-                                    .map { dish ->
-                                        ratings[dish.id]?.let {
-                                            dish.copy(rating = it)
-                                        } ?: dish
-                                    }.toImmutableList(),
-                        )
-                    }.toImmutableList()
+                combine(
+                    dishFlow.distinctUntilChanged(),
+                    ratingsFlow.distinctUntilChanged(),
+                ) { dishList, ratings ->
+                    dishList
+                        .map { category ->
+                            category.copy(
+                                dishList =
+                                    category.dishList
+                                        .map { dish ->
+                                            ratings[dish.id]?.let {
+                                                dish.copy(rating = it)
+                                            } ?: dish
+                                        }.toImmutableList(),
+                            )
+                        }.toImmutableList()
+                }
             }
         }
 }

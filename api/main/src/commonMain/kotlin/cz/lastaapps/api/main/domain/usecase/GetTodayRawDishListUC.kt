@@ -17,29 +17,33 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.rating.domain.usecase
+package cz.lastaapps.api.main.domain.usecase
 
 import cz.lastaapps.api.core.domain.FlowParametrizedCache
 import cz.lastaapps.api.core.domain.model.MenzaType
-import cz.lastaapps.api.core.domain.model.dish.DishID
-import cz.lastaapps.api.core.domain.model.rating.Rating
-import cz.lastaapps.api.rating.data.repo.RatingRepository
-import cz.lastaapps.api.rating.data.repo.RatingRepository.Params
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
+import cz.lastaapps.api.core.domain.repo.TodayDishRepo
+import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
-class GetDishRatingsUC internal constructor(
+internal class GetTodayRawDishListUC internal constructor(
     context: UCContext,
-    private val ratingRepository: RatingRepository,
-) : UseCase(context) {
-    private val cache = FlowParametrizedCache<ImmutableMap<DishID, Rating>, MenzaType>()
+    private val getRequestParamsUC: GetRequestParamsUC,
+) : UseCase(context),
+    KoinComponent {
+    private val cache = FlowParametrizedCache<ImmutableList<DishCategory>, MenzaType>()
 
-    suspend operator fun invoke(menza: MenzaType): Flow<ImmutableMap<DishID, Rating>> =
+    suspend operator fun invoke(menza: MenzaType): Flow<ImmutableList<DishCategory>> =
         launch {
             cache(menza) { menza ->
-                ratingRepository.getData(Params(menza))
+                get<TodayDishRepo> { parametersOf(menza) }
+                    .getData(getRequestParamsUC())
             }
         }
 }

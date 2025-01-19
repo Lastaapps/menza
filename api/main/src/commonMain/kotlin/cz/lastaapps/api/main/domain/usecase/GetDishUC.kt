@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,8 +21,6 @@ package cz.lastaapps.api.main.domain.usecase
 
 import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
 import cz.lastaapps.api.core.domain.model.dish.Dish
-import cz.lastaapps.api.core.domain.repo.TodayDishRepo
-import cz.lastaapps.api.core.domain.sync.getData
 import cz.lastaapps.api.rating.domain.usecase.GetDishRatingsUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
@@ -30,12 +28,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
-import org.koin.core.parameter.parametersOf
 
 class GetDishUC internal constructor(
     context: UCContext,
-    private val getRequestParamsUC: GetRequestParamsUC,
+    private val getRawDishList: GetTodayRawDishListUC,
     private val getDishRatingsUC: GetDishRatingsUC,
 ) : UseCase(context),
     KoinComponent {
@@ -44,8 +40,7 @@ class GetDishUC internal constructor(
     suspend operator fun invoke(dishOrigin: DishOriginDescriptor) =
         launch {
             val dishFlow =
-                get<TodayDishRepo> { parametersOf(dishOrigin.menza) }
-                    .getData(getRequestParamsUC())
+                getRawDishList(dishOrigin.menza)
                     .map { categories ->
                         categories.forEach { category ->
                             category.dishList

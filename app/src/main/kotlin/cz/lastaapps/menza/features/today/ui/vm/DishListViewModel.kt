@@ -87,10 +87,14 @@ internal class DishListViewModel(
                     log.i { "Registered a new: $newMenza" }
 
                     updateState {
-                        copy(
-                            selectedMenza = newMenza.toOption(),
-                            items = persistentListOf(),
-                        )
+                        if (selectedMenza?.getOrNull()?.type != newMenza?.type) {
+                            copy(
+                                selectedMenza = newMenza.toOption(),
+                                items = persistentListOf(),
+                            )
+                        } else {
+                            this
+                        }
                     }
                     syncJob?.cancel()
                     if (newMenza != null) {
