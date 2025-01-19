@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -44,6 +45,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -116,6 +118,14 @@ private fun ReorderMenzaContent(
                 onOrderUpdate(localList.value)
             },
             reverse = !state.fromTop,
+            // if the first item is changed the list would scroll down to the bottom
+            // and the viewport would follow. And I really want to avoid reflections.
+            // https://medium.com/@gregkorossy/hacking-lazylist-in-android-jetpack-compose-38afacb3df67
+            lazyListState =
+                rememberSaveable(
+                    state.menzaList.count { it.second.visible },
+                    saver = LazyListState.Saver,
+                ) { LazyListState() },
         )
 
     Column(
