@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,6 +29,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
@@ -92,7 +93,12 @@ fun AppTheme(
                 } else {
                     KittyDarkColors
                 }
-        }.animated()
+        }
+            // This somehow magically fixes switching between system and app theme.
+            // If this is not present, the whole underlying UI is recomposed in a destructive way
+            // for some reason. And this fixes if for some reason... Wtf, Google?
+            .also { DisposableEffect(it) { onDispose { } } }
+            .animated()
 
     MaterialTheme(
         colorScheme = colorScheme,
