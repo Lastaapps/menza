@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -136,9 +136,9 @@ internal fun DishRatingBadge(
 ) {
     Surface(
         modifier =
-        modifier
-            .shadow(4.dp, shape = CircleShape)
-            .clip(MaterialTheme.shapes.medium),
+            modifier
+                .shadow(4.dp, shape = CircleShape)
+                .clip(MaterialTheme.shapes.medium),
 //                .clickable { onRating() }
         color = MaterialTheme.colorScheme.inversePrimary,
     ) {
@@ -225,14 +225,6 @@ internal fun DishInfoRow(
                     textAlign = TextAlign.End,
                 )
             }
-        }
-        dish.ingredients.takeIf { it.isNotEmpty() }?.let { ingredients ->
-            Text(
-                text = ingredients.joinToString(separator = ", "),
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.End,
-                style = MaterialTheme.typography.bodySmall,
-            )
         }
     }
 }

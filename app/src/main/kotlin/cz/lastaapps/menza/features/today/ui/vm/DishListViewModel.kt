@@ -87,7 +87,7 @@ internal class DishListViewModel(
                     log.i { "Registered a new: $newMenza" }
 
                     updateState {
-                        if (selectedMenza?.getOrNull()?.type != newMenza?.type) {
+                        if (selectedMenza?.getOrNull()?.type != newMenza?.type || newMenza == null) {
                             copy(
                                 selectedMenza = newMenza.toOption(),
                                 items = persistentListOf(),

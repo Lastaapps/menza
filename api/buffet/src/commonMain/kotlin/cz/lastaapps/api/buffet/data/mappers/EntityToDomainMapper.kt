@@ -68,7 +68,6 @@ internal fun List<DishEntity>.toDomainDays(menzaType: MenzaType.Buffet): List<Pa
                                             photoLink = null,
                                             pictogram = persistentListOf(),
                                             servingPlaces = persistentListOf(),
-                                            ingredients = dish.ingredients.toImmutableList(),
                                             isActive = true,
                                         )
                                     }.toPersistentList(),
@@ -111,7 +110,6 @@ internal fun List<DishEntity>.toDomainWeek(
                                             amount = null,
                                             priceNormal = dish.price.toFloat(),
                                             priceDiscounted = null,
-                                            ingredients = dish.ingredients.toImmutableList(),
                                         )
                                     }.toPersistentList(),
                         )

@@ -134,11 +134,6 @@ fun TodayDishDetail(
                 allergens = dish.allergens,
             )
         }
-        AnimatedAppearance(350.milliseconds, enter = slideInVertically { it } + fadeIn()) {
-            Ingredients(
-                ingredients = dish.ingredients,
-            )
-        }
     }
 }
 
@@ -425,27 +420,6 @@ private fun AllergenIdBadge(
                     (h - placeable.height) / 2,
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun Ingredients(
-    ingredients: ImmutableList<String>,
-    modifier: Modifier = Modifier,
-) {
-    if (ingredients.isEmpty()) return
-
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
-    ) {
-        Text(
-            text = stringResource(R.string.today_info_ingredients_title),
-            style = MaterialTheme.typography.titleLarge,
-        )
-        ingredients.forEach { ingredient ->
-            Text(text = ingredient)
         }
     }
 }

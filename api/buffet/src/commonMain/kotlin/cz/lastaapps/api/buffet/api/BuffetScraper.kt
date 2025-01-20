@@ -199,7 +199,6 @@ internal class BuffetScraperImpl : BuffetScraper {
                             type = type.removeHtml(),
                             name = name.removeHtml(),
                             price = price.toInt(),
-                            ingredients = emptyList(),
                             order = index,
                         )
                     }.mapLeft {

@@ -195,7 +195,7 @@ private fun rememberDateFormatter(): @Composable (LocalDate) -> String {
                 char(' ')
                 dayOfMonth(padding = NONE)
                 char('.')
-                monthNumber()
+                monthNumber(padding = NONE)
                 char('.')
             }
 

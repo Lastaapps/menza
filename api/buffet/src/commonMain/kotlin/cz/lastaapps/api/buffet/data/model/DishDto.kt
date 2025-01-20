@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,6 +30,5 @@ internal data class DishDto(
     val type: String,
     val name: String,
     val price: Int,
-    val ingredients: List<String>,
     val order: Int,
 )

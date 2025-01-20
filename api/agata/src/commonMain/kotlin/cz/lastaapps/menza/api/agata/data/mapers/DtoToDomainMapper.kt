@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,7 +23,6 @@ import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.model.WeekDish
 import cz.lastaapps.api.core.domain.model.WeekDishCategory
 import cz.lastaapps.menza.api.agata.data.model.dto.WeekDishDto
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
 
@@ -64,5 +63,4 @@ private fun WeekDishDto.toDomain() =
         amount = amount?.trim(),
         priceNormal = null,
         priceDiscounted = null,
-        ingredients = persistentListOf(),
     )

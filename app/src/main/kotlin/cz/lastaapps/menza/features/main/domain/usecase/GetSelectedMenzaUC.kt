@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,10 +19,12 @@
 
 package cz.lastaapps.menza.features.main.domain.usecase
 
+import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.main.domain.usecase.GetMenzaListUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.main.domain.SelectedMenzaRepo
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -31,7 +33,7 @@ class GetSelectedMenzaUC internal constructor(
     private val repo: SelectedMenzaRepo,
     private val getMenzaList: GetMenzaListUC,
 ) : UseCase(context) {
-    suspend operator fun invoke() =
+    suspend operator fun invoke(): Flow<Menza?> =
         combine(
             repo.getSelectedMenza(),
             getMenzaList(),

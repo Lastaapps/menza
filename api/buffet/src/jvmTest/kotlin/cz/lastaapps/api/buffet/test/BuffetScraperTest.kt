@@ -96,8 +96,6 @@ class BuffetScraperTest :
                     type shouldBe "Hlavní jídlo 2"
                     name shouldBe "Kuřecí steak s pikantní omáčkou, hranolky"
                     price shouldBe 139
-                    ingredients shouldBe
-                        listOf()
                 }
 
                 commonTest(fel, listOf(4, 4, 3, 3, 5))
@@ -106,8 +104,6 @@ class BuffetScraperTest :
                     type shouldBe "Hlavní jídlo 1"
                     name shouldBe "Plněný paprikový lusk, houskové knedlíky (rýže )"
                     price shouldBe 138
-                    ingredients shouldBe
-                        listOf()
                 }
             }
 
@@ -136,8 +132,6 @@ class BuffetScraperTest :
                     type shouldBe "Hlavní jídlo 2"
                     name shouldBe "Smažený květák, vařené brambory, tatarská omáčka"
                     price shouldBe 139
-                    ingredients shouldBe
-                        listOf()
                 }
 
                 commonTest(fel, listOf(4, 4, 3, 3, 5))
@@ -146,8 +140,6 @@ class BuffetScraperTest :
                     type shouldBe "Hlavní jídlo 1"
                     name shouldBe "Smažená aljašská treska, bramborová kaše"
                     price shouldBe 136
-                    ingredients shouldBe
-                        listOf()
                 }
             }
 
@@ -190,7 +182,7 @@ private fun commonTest(
     // checks if all the html parts were successfully removed
     buffet
         .map { day ->
-            day.dishList.map { listOf(it.name, it.type, it.ingredients.toString()) }
+            day.dishList.map { listOf(it.name, it.type) }
         }.flatten()
         .flatten()
         .forEach {

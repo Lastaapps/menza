@@ -191,7 +191,6 @@
     <string name="today_info_allergens_title">Alergeny</string>
     <string name="today_info_allergens_none">Jídlo bez alergenů</string>
     <string name="today_info_allergens_unknown">Alergeny nejsou dostupné</string>
-    <string name="today_info_ingredients_title">Ingredience</string>
     <string name="today_info_image_load_failed">Nepodařilo se načíst obrázek</string>
     <string name="today_info_unknown_allergen_title">Neznámý alergen</string>
     <string name="today_info_unknown_allergen_description">Server vrátil neplatná data</string>

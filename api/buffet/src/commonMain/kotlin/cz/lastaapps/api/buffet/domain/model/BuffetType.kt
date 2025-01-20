@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -37,5 +37,5 @@ internal fun MenzaType.Buffet.toType(): BuffetType =
 internal fun BuffetType.toMenzaType() =
     when (this) {
         BuffetType.FS -> FS
-        BuffetType.FEL -> FS
+        BuffetType.FEL -> FEL
     }

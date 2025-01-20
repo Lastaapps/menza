@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -37,5 +37,4 @@ data class WeekDish(
     val amount: String?,
     val priceNormal: Float?,
     val priceDiscounted: Float?,
-    val ingredients: ImmutableList<String>,
 )

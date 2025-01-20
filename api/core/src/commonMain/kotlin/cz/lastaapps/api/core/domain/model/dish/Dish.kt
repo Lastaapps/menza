@@ -40,7 +40,6 @@ data class Dish(
     val photoLink: String?,
     val pictogram: ImmutableList<String>,
     val servingPlaces: ImmutableList<ServingPlace>,
-    val ingredients: ImmutableList<String>,
     val isActive: Boolean,
     val rating: Rating = Rating.empty,
 ) {
@@ -62,7 +61,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val soupJezeckova =
@@ -81,7 +79,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val dishHnedaOmacka =
@@ -100,7 +97,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val dishKuratko =
@@ -119,7 +115,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val dishPtacek =
@@ -138,7 +133,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val dishNoky =
@@ -157,7 +151,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val dishTux =
@@ -176,7 +169,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val dishKunda =
@@ -196,7 +188,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val dishMaxipes =
@@ -215,7 +206,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val dishMisterious =
@@ -234,7 +224,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Magistrát", "J"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
         val desertKrtkuvDort =
@@ -253,7 +242,6 @@ data class Dish(
                     persistentListOf(
                         ServingPlace("Radnice", "R"),
                     ),
-                ingredients = persistentListOf(),
                 isActive = true,
             )
     }

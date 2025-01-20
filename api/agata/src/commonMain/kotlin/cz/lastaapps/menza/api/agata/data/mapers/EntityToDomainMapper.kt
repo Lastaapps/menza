@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -91,14 +91,13 @@ internal fun DishEntity.toDomain(
         photoLink = dish.photoLink,
         pictogram = pictograms.map(PictogramEntity::name).toImmutableList(),
         servingPlaces =
-        servingPlaces
-            .map { entity ->
-                ServingPlace(
-                    name = entity.name,
-                    abbrev = entity.abbrev,
-                )
-            }.toImmutableList(),
-        ingredients = persistentListOf(),
+            servingPlaces
+                .map { entity ->
+                    ServingPlace(
+                        name = entity.name,
+                        abbrev = entity.abbrev,
+                    )
+                }.toImmutableList(),
         isActive = isActive,
     )
 }
@@ -161,16 +160,16 @@ internal fun InfoEntity?.toDomain(
     openingTimes = openingTimes.toDomain().toImmutableList(),
     links = links.map { it.toDomain() }.toImmutableList(),
     address =
-    address?.let {
-        Address(
-            location = address.address.let(::LocationName),
-            gps =
-            LatLong(
-                lat = address.lat.toFloat(),
-                long = address.long.toFloat(),
-            ),
-        )
-    },
+        address?.let {
+            Address(
+                location = address.address.let(::LocationName),
+                gps =
+                    LatLong(
+                        lat = address.lat.toFloat(),
+                        long = address.long.toFloat(),
+                    ),
+            )
+        },
 )
 
 private fun ContactEntity.toDomain() =
@@ -191,25 +190,25 @@ fun List<OpenTimeEntity>.toDomain() =
                 name = one.servingPlaceName,
                 abbrev = one.servingPlaceAbbrev,
                 types =
-                entities1
-                    .groupBy { it.description }
-                    .entries
-                    .map { (description, entities2) ->
-                        PlaceOpeningType(
-                            description = description,
-                            times =
-                            entities2
-                                .map {
-                                    PlaceOpeningTime(
-                                        startDay = it.dayFrom ?: DayOfWeek.MONDAY,
-                                        endDay = it.dayTo ?: it.dayFrom ?: DayOfWeek.MONDAY,
-                                        startTime = it.timeFrom,
-                                        endTime = it.timeTo,
-                                    )
-                                }.sortedBy { it.startDay }
-                                .toImmutableList(),
-                        )
-                    }.toImmutableList(),
+                    entities1
+                        .groupBy { it.description }
+                        .entries
+                        .map { (description, entities2) ->
+                            PlaceOpeningType(
+                                description = description,
+                                times =
+                                    entities2
+                                        .map {
+                                            PlaceOpeningTime(
+                                                startDay = it.dayFrom ?: DayOfWeek.MONDAY,
+                                                endDay = it.dayTo ?: it.dayFrom ?: DayOfWeek.MONDAY,
+                                                startTime = it.timeFrom,
+                                                endTime = it.timeTo,
+                                            )
+                                        }.sortedBy { it.startDay }
+                                        .toImmutableList(),
+                            )
+                        }.toImmutableList(),
             )
         }
 
@@ -230,10 +229,10 @@ internal fun List<StrahovEntity>.toDomain(language: DataLanguage) =
                 nameShort = null,
                 name = value.groupName.trim(),
                 dishList =
-                values
-                    .sortedBy { it.itemOrder }
-                    .map { it.toDomain(language) }
-                    .toImmutableList(),
+                    values
+                        .sortedBy { it.itemOrder }
+                        .map { it.toDomain(language) }
+                        .toImmutableList(),
             )
         }.toImmutableList()
 
@@ -250,6 +249,5 @@ private fun StrahovEntity.toDomain(language: DataLanguage) =
         photoLink = photoLink,
         pictogram = persistentListOf(),
         servingPlaces = persistentListOf(),
-        ingredients = persistentListOf(),
         isActive = true,
     )

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -46,7 +46,15 @@ fun BaseDialog(
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = properties,
+        // TODO remove when fixed
+        // If a predictive back gesture is started, the dialog is dismissed right away,
+        // because uses clicks outside
+        properties =
+            DialogProperties(
+                dismissOnBackPress = properties.dismissOnBackPress,
+                dismissOnClickOutside = false,
+                usePlatformDefaultWidth = properties.usePlatformDefaultWidth,
+            ),
     ) {
         val sourceBackground = remember { MutableInteractionSource() }
         val sourceSurface = remember { MutableInteractionSource() }

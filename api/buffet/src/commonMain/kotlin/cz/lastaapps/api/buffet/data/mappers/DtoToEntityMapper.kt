@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -38,7 +38,6 @@ private fun List<DishDayDto>.toEntity(buffet: BuffetType) =
                 type = dish.type,
                 name = dish.name,
                 price = dish.price.toLong(),
-                ingredients = dish.ingredients,
                 itemOrder = dish.order.toLong(),
             )
         }
