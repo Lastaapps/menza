@@ -98,6 +98,6 @@ dependencies {
 
     implementation(libs.ktor.client.core)
     // required by ktor internally (release only)
-    //noinspection UseTomlInstead
-    implementation("org.slf4j:slf4j-simple:2.0.6")
+    // noinspection UseTomlInstead
+    implementation("org.slf4j:slf4j-simple:2.0.16")
 }
