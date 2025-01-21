@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -40,10 +40,11 @@ internal data class AppSettings(
     val useOliverRows: Boolean,
     val balanceWarningThreshold: Int,
     val alternativeNavigation: Boolean,
+    val isDishListModeChosen: Boolean,
 ) {
     companion object {
         // Used for previews
-        fun default() =
+        val default =
             AppSettings(
                 initialMenzaMode = InitialSelectionBehaviour.Specific,
                 latestMenza = MenzaType.Testing.Kocourkov,
@@ -59,7 +60,8 @@ internal data class AppSettings(
                 todayViewMode = DishListMode.COMPACT,
                 useOliverRows = true,
                 balanceWarningThreshold = 256,
-                alternativeNavigation = false,
+                alternativeNavigation = true,
+                isDishListModeChosen = false,
             )
     }
 }

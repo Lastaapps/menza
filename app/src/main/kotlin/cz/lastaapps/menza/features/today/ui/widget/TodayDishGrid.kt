@@ -213,13 +213,13 @@ private fun DishItem(
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
         modifier =
-        modifier
-            .clickable { onDish(dish) }
-            .sharedContainer(
-                scopes,
-                dishContainerKey(dish.id),
-                resizeMode = ResizeMode.RemeasureToBounds,
-                clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+            modifier
+                .clickable { onDish(dish) }
+                .sharedContainer(
+                    scopes,
+                    dishContainerKey(dish.id),
+                    resizeMode = ResizeMode.RemeasureToBounds,
+                    clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
             ),
     ) {
         Column(
@@ -240,7 +240,8 @@ private fun DishItem(
 
             DishNameRow(
                 dish = dish,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .align(Alignment.Start)
                     .sharedBounds(scopes, dishTitleKey(dish.id)),
             )

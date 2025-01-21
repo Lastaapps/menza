@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -91,4 +91,8 @@ internal interface MainSettingsRepo {
     suspend fun setAlternativeNavigation(enabled: Boolean)
 
     fun getAlternativeNavigation(): Flow<Boolean>
+
+    suspend fun dismissDishListModeChosen()
+
+    fun isDishListModeChosen(): Flow<Boolean>
 }

@@ -372,7 +372,7 @@ private fun IconAndText(
 private fun SettingsScreenPreview() =
     PreviewWrapper {
         SettingsScreen(
-            appSettings = AppSettings.default(),
+            appSettings = AppSettings.default,
             appTheme = Agata,
             onChooseTheme = {},
             onChooseDishLanguage = {},

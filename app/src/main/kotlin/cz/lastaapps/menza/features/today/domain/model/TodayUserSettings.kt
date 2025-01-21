@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,4 +31,5 @@ internal data class TodayUserSettings(
     val downloadOnMetered: Boolean = false,
     val language: DataLanguage = DataLanguage.Czech,
     val imageScale: Float = 1f,
+    val isDishListModeChosen: Boolean = true,
 )

@@ -144,7 +144,7 @@ internal class StravnikWalletApiImpl(
                                 return@repeat
                             }
                         }
-                    delay(420.milliseconds)
+                    delay(690.milliseconds)
                 }
                 getData()
                     .bind()

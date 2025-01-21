@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,65 +21,27 @@ package cz.lastaapps.menza.features.today.domain.usecase
 
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
-import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishLanguageUC
-import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishListModeUC
-import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetImageScaleUC
-import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetImagesOnMeteredUC
-import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetOliverRowUC
-import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetPriceTypeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetAppSettingsUC
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 internal class GetTodayUserSettingsUC(
     context: UCContext,
-    private val getOliverRowUC: GetOliverRowUC,
-    private val getPriceTypeUC: GetPriceTypeUC,
-    private val getImagesOnMeteredUC: GetImagesOnMeteredUC,
-    private val getImageScaleUC: GetImageScaleUC,
-    private val getDishLanguageUC: GetDishLanguageUC,
-    private val getDishListModeUC: GetDishListModeUC,
+    private val getAppSettingsUC: GetAppSettingsUC,
 ) : UseCase(context) {
     operator fun invoke(): Flow<TodayUserSettings> =
-        channelFlow {
-            val state = MutableStateFlow(TodayUserSettings())
-
-            fun updateState(block: TodayUserSettings.() -> TodayUserSettings) = state.update(block)
-
-            getPriceTypeUC()
-                .onEach {
-                    updateState { copy(priceType = it) }
-                }.launchIn(this)
-
-            getImagesOnMeteredUC()
-                .onEach {
-                    updateState { copy(downloadOnMetered = it) }
-                }.launchIn(this)
-
-            getImageScaleUC()
-                .onEach {
-                    updateState { copy(imageScale = it) }
-                }.launchIn(this)
-
-            getDishLanguageUC()
-                .onEach {
-                    updateState { copy(language = it) }
-                }.launchIn(this)
-
-            getDishListModeUC()
-                .onEach {
-                    updateState { copy(dishListMode = it) }
-                }.launchIn(this)
-
-            getOliverRowUC()
-                .onEach {
-                    updateState { copy(useOliverRow = it) }
-                }.launchIn(this)
-
-            state.collect { send(it) }
-        }
+        getAppSettingsUC()
+            .map {
+                TodayUserSettings(
+                    priceType = it.priceType,
+                    downloadOnMetered = it.imagesOnMetered,
+                    imageScale = it.imageScale,
+                    language = it.dataLanguage,
+                    dishListMode = it.todayViewMode,
+                    useOliverRow = it.useOliverRows,
+                    isDishListModeChosen = it.isDishListModeChosen,
+                )
+            }.distinctUntilChanged()
 }

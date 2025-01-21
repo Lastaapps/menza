@@ -22,12 +22,13 @@ package cz.lastaapps.menza.features.settings.domain.usecase.settings
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
-import cz.lastaapps.menza.features.settings.domain.model.AppSettings
-import kotlinx.coroutines.flow.Flow
 
-internal class GetAppSettingsUC internal constructor(
+class DismissDishListModeChooserUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    operator fun invoke(): Flow<AppSettings> = repo.getAllSettings()
+    suspend operator fun invoke() =
+        launch {
+            repo.dismissDishListModeChosen()
+        }
 }

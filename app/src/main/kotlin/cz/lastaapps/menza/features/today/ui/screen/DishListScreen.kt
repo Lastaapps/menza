@@ -20,7 +20,7 @@
 package cz.lastaapps.menza.features.today.ui.screen
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.Crossfade
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -90,6 +90,7 @@ internal fun DishListScreen(
         onOliverRow = viewModel::setOliverRow,
         onDish = onDish,
         onRating = onRating,
+        onDismissDishListModeChooser = viewModel::dismissListModeChosen,
         panels = panels,
         onOsturak = onOsturak,
         scrollStates = scrollStates,
@@ -118,6 +119,7 @@ private fun DishListContent(
     onOliverRow: (Boolean) -> Unit,
     onOsturak: () -> Unit,
     onRating: (Dish) -> Unit,
+    onDismissDishListModeChooser: () -> Unit,
     scrollStates: ScrollStates,
     scopes: AnimationScopes,
     modifier: Modifier = Modifier,
@@ -144,6 +146,7 @@ private fun DishListContent(
                 onViewMode = onViewMode,
                 onImageScale = onImageScale,
                 onOliverRow = onOliverRow,
+                onDismissDishListModeChooser = onDismissDishListModeChooser,
                 scopes = scopes,
             )
         }
@@ -167,17 +170,22 @@ private fun DishListComposing(
     onDish: (Dish) -> Unit,
     onOliverRow: (Boolean) -> Unit,
     onRating: (Dish) -> Unit,
+    onDismissDishListModeChooser: () -> Unit,
     scrollStates: ScrollStates,
     scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) = Column {
     val userSettings = state.userSettings
-    val gridSwitch: @Composable () -> Unit = {
-        DishListViewModeSwitch(
-            currentMode = userSettings.dishListMode,
-            onModeChange = onViewMode,
-            modifier = Modifier.fillMaxWidth(),
-        )
+    val gridSwitch: @Composable (isInHeader: Boolean) -> Unit = { isInHeader ->
+        AnimatedVisibility(isInHeader != userSettings.isDishListModeChosen) {
+            DishListViewModeSwitch(
+                currentMode = userSettings.dishListMode,
+                onModeChange = onViewMode,
+                isDismissibleVisible = !userSettings.isDishListModeChosen,
+                onDismiss = onDismissDishListModeChooser,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
     val imageSizeSetting: @Composable () -> Unit = {
         ImageSizeSetting(
@@ -192,7 +200,7 @@ private fun DishListComposing(
         }
     }
 
-    val header: @Composable (Modifier) -> Unit = { modifier ->
+    val experimentalWarning: @Composable (Modifier) -> Unit = { modifier ->
         if (state.showExperimentalWarning) {
             Experimental(
                 modifier
@@ -202,10 +210,21 @@ private fun DishListComposing(
         }
     }
 
-    Crossfade(
-        targetState = userSettings.dishListMode,
-        label = "dish_list_mode_router",
-    ) { dishListMode ->
+    val header: @Composable (Modifier) -> Unit = { modifier: Modifier ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
+            modifier = modifier.fillMaxWidth(),
+        ) {
+            experimentalWarning(Modifier)
+            gridSwitch(true)
+        }
+    }
+
+//    Crossfade(
+//        targetState = userSettings.dishListMode,
+//        label = "dish_list_mode_router",
+//    ) { dishListMode ->
+    userSettings.dishListMode.let { dishListMode ->
         when (dishListMode) {
             COMPACT ->
                 TodayDishList(
@@ -223,7 +242,7 @@ private fun DishListComposing(
                             verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
                             modifier = modifier.fillMaxWidth(),
                         ) {
-                            gridSwitch()
+                            gridSwitch(false)
 
                             imageSizeSetting()
 
@@ -248,7 +267,7 @@ private fun DishListComposing(
                     header = header,
                     footer = {
                         Column {
-                            gridSwitch()
+                            gridSwitch(false)
                             footerFabPadding()
                         }
                     },
@@ -270,7 +289,7 @@ private fun DishListComposing(
                     header = header,
                     footer = {
                         Column {
-                            gridSwitch()
+                            gridSwitch(false)
                             footerFabPadding()
                         }
                     },
@@ -292,7 +311,7 @@ private fun DishListComposing(
                     header = header,
                     footer = {
                         Column {
-                            gridSwitch()
+                            gridSwitch(false)
                             footerFabPadding()
                         }
                     },

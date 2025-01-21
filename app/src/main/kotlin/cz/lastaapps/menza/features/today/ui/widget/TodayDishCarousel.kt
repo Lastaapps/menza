@@ -133,10 +133,7 @@ internal fun TodayDishCarousel(
                 header = header,
                 footer = footer,
                 scopes = scopes,
-                modifier =
-                    Modifier
-                        .padding(top = Padding.Smaller) // so text is not cut off
-                        .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }

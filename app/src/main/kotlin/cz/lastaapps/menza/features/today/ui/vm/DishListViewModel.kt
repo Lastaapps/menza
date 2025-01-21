@@ -41,6 +41,7 @@ import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.DismissDishListModeChooserUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetImageScaleUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetOliverRow
@@ -70,6 +71,7 @@ internal class DishListViewModel(
     private val setImageScaleUC: SetImageScaleUC,
     private val setDishListModeUC: SetDishListModeUC,
     private val isOnMeteredUC: IsOnMeteredUC,
+    private val dismissDishListModeChooserUC: DismissDishListModeChooserUC,
     private val getUserSettingsUC: GetTodayUserSettingsUC,
     private val openMenuLinkUC: OpenMenuUC,
     private val appInfoProvider: AppInfoProvider,
@@ -163,6 +165,11 @@ internal class DishListViewModel(
     fun setOliverRow(used: Boolean) =
         launchVM {
             setOliverRowUC(used)
+        }
+
+    fun dismissListModeChosen() =
+        launchVM {
+            dismissDishListModeChooserUC()
         }
 
     private suspend fun load(

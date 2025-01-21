@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -57,6 +57,7 @@ internal class MainSettingsRepoImpl(
             isOliverRow().distinctUntilChanged(),
             getBalanceWarningThreshold().distinctUntilChanged(),
             getAlternativeNavigation().distinctUntilChanged(),
+            isDishListModeChosen().distinctUntilChanged(),
         ) { arr ->
             AppSettings(
                 initialMenzaMode = arr[0] as InitialSelectionBehaviour,
@@ -74,6 +75,7 @@ internal class MainSettingsRepoImpl(
                 useOliverRows = arr[12] as Boolean,
                 balanceWarningThreshold = arr[13] as Int,
                 alternativeNavigation = arr[14] as Boolean,
+                isDishListModeChosen = arr[15] as Boolean,
             )
         }.distinctUntilChanged()
 
@@ -119,34 +121,38 @@ internal class MainSettingsRepoImpl(
 
     override suspend fun setDishLanguage(language: DataLanguage) = general.setDishLanguage(language)
 
-    override fun getDishLanguage(): Flow<DataLanguage> =
-        general.getDishLanguage().map { it ?: defaults.defaultDishLanguage() }
+    override fun getDishLanguage(): Flow<DataLanguage> = general.getDishLanguage().map { it ?: defaults.defaultDishLanguage() }
 
     override suspend fun setCompactTodayView(mode: DishListMode) = general.setCompactTodayView(mode)
 
     override fun isCompactTodayView(): Flow<DishListMode> =
         general
             .isCompactTodayView()
-            .map { it ?: DishListMode.CAROUSEL }
+            .map { it ?: AppSettings.default.todayViewMode }
 
     override suspend fun setOliverRows(useOliverRows: Boolean) = general.setOliverRow(useOliverRows)
 
     override fun isOliverRow(): Flow<Boolean> =
         general
             .isOliverRow()
-            .map { it ?: true }
+            .map { it ?: AppSettings.default.useOliverRows }
 
     override suspend fun setBalanceWarningThreshold(threshold: Int) = general.setBalanceWarningThreshold(threshold)
 
     override fun getBalanceWarningThreshold(): Flow<Int> =
         general
             .getBalanceWarningThreshold()
-            .map { it ?: 256 }
+            .map { it ?: AppSettings.default.balanceWarningThreshold }
 
     override suspend fun setAlternativeNavigation(enabled: Boolean) = general.setAlternativeNavigation(enabled)
 
     override fun getAlternativeNavigation(): Flow<Boolean> =
         general
             .getAlternativeNavigation()
-            .map { it ?: false }
+            .map { it ?: AppSettings.default.alternativeNavigation }
+
+    override suspend fun dismissDishListModeChosen() = general.setDishListModeChosen(true)
+
+    override fun isDishListModeChosen(): Flow<Boolean> =
+        general.getDishListModeChosen().map { it ?: AppSettings.default.isDishListModeChosen }
 }

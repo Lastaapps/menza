@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -94,6 +94,10 @@ internal interface GeneralDataSource {
     suspend fun setAlternativeNavigation(enabled: Boolean)
 
     fun getAlternativeNavigation(): Flow<Boolean?>
+
+    suspend fun setDishListModeChosen(isChosen: Boolean)
+
+    fun getDishListModeChosen(): Flow<Boolean?>
 }
 
 @OptIn(ExperimentalSettingsApi::class)
@@ -116,6 +120,7 @@ internal class GeneralDataSourceImpl(
         private const val oliverRowsKey = "oliver_row"
         private const val balanceWarningThresholdKey = "balance_warning_threshold"
         private const val alternativeNavigationKey = "alternative_navigation"
+        private const val dishListModeChosenKey = "dish_list_mode_chosen"
     }
 
     override suspend fun storeAppSetupFinished() = settings.putBoolean(appSetupFinishedKey, true)
@@ -159,8 +164,7 @@ internal class GeneralDataSourceImpl(
 
     override fun getImagesOnMetered(): Flow<Boolean> = settings.getBooleanFlow(imagesOnMeteredKey, true)
 
-    override suspend fun setDishLanguage(language: DataLanguage) =
-        settings.putInt(dishLanguageKey, language.id)
+    override suspend fun setDishLanguage(language: DataLanguage) = settings.putInt(dishLanguageKey, language.id)
 
     override fun getDishLanguage(): Flow<DataLanguage?> =
         settings.getIntOrNullFlow(dishLanguageKey).map { id ->
@@ -187,4 +191,8 @@ internal class GeneralDataSourceImpl(
     override suspend fun setAlternativeNavigation(enabled: Boolean) = settings.putBoolean(alternativeNavigationKey, enabled)
 
     override fun getAlternativeNavigation(): Flow<Boolean?> = settings.getBooleanOrNullFlow(alternativeNavigationKey)
+
+    override suspend fun setDishListModeChosen(isChosen: Boolean) = settings.putBoolean(dishListModeChosenKey, isChosen)
+
+    override fun getDishListModeChosen(): Flow<Boolean?> = settings.getBooleanOrNullFlow(dishListModeChosenKey)
 }

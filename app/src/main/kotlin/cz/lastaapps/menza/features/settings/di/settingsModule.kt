@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -47,6 +47,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.IsMenzaOrd
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.SetMenzaOrderFromTopUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.ToggleMenzaVisibilityUC
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.UpdateMenzaOrderUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.DismissDishListModeChooserUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetAppSettingsUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetBalanceWarningThresholdUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetDishLanguageUC
@@ -148,6 +149,7 @@ val settingsModule =
         factoryOf(::SetDishLanguageUC)
         factoryOf(::GetDishListModeUC)
         factoryOf(::SetDishListModeUC)
+        factoryOf(::DismissDishListModeChooserUC)
 
         // Menza order
         factoryOf(::ReorderMenzaViewModel)
