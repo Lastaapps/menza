@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,8 +21,6 @@ package cz.lastaapps.menza.features.main.ui.layout
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.DismissibleDrawerSheet
 import androidx.compose.material3.DismissibleNavigationDrawer
 import androidx.compose.material3.DrawerState
@@ -33,7 +31,6 @@ import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
-import cz.lastaapps.menza.ui.theme.Padding
 
 @Composable
 internal fun MenzaModalDrawer(
@@ -50,12 +47,10 @@ internal fun MenzaModalDrawer(
             if (!alternativeNavigation) {
                 // handles predictive back gesture
                 ModalDrawerSheet(drawerState) {
-                    Spacer(Modifier.height(Padding.MidSmall))
                     drawerContent()
                 }
             } else {
                 ModalDrawerSheet {
-                    Spacer(Modifier.height(Padding.MidSmall))
                     drawerContent()
                 }
             }

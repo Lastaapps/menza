@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,7 +32,7 @@ inline fun <State : Any, VM : StateViewModel<State>> HandleDismiss(
     viewModel: VM,
     getVal: KProperty1<State, Boolean>,
     dismiss: KFunction1<VM, Unit>,
-    noinline launch: () -> Unit,
+    noinline launch: () -> Unit = {},
 ) {
     val isSelected = getVal(viewModel.flowState.value)
     val launchLambda by rememberUpdatedState(newValue = launch)

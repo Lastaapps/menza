@@ -51,10 +51,12 @@ import androidx.compose.ui.unit.dp
 data class AnimationScopes(
     val sharedTransitionScope: SharedTransitionScope,
     val animatedVisibilityScope: AnimatedVisibilityScope,
+    val isEnabled: Boolean,
 )
 
 context(AnimatedVisibilityScope)
-fun SharedTransitionScope.AnimationScopes() = AnimationScopes(this, this@AnimatedVisibilityScope)
+fun SharedTransitionScope.AnimationScopes(isEnabled: Boolean = true) =
+    AnimationScopes(this, this@AnimatedVisibilityScope, isEnabled = isEnabled)
 
 @Composable
 fun Modifier.sharedBounds(
@@ -68,6 +70,10 @@ fun Modifier.sharedBounds(
     zIndexInOverlay: Float = 0f,
 ): Modifier =
     with(scopes.sharedTransitionScope) {
+        if (!scopes.isEnabled) {
+            return@with this@sharedBounds
+        }
+
         this@sharedBounds
             .sharedBounds(
                 sharedContentState = rememberSharedContentState(key),
@@ -118,6 +124,10 @@ fun Modifier.sharedContainer(
     clipInOverlayDuringTransition: OverlayClip = OverlayParentClip(),
 ): Modifier =
     with(scopes.sharedTransitionScope) {
+        if (!scopes.isEnabled) {
+            return@with this@sharedContainer
+        }
+
         this@sharedContainer
             .sharedBounds(
                 sharedContentState = rememberSharedContentState(key),
@@ -141,6 +151,10 @@ fun Modifier.sharedElement(
     zIndexInOverlay: Float = 0f,
 ): Modifier =
     with(scopes.sharedTransitionScope) {
+        if (!scopes.isEnabled) {
+            return@with this@sharedElement
+        }
+
         this@sharedElement.sharedElement(
             sharedContentState = rememberSharedContentState(key),
             animatedVisibilityScope = scopes.animatedVisibilityScope,
@@ -156,6 +170,10 @@ fun Modifier.renderInSharedTransitionScopeOverlay(
     zIndexInOverlay: Float = 0f,
 ): Modifier =
     with(scopes.sharedTransitionScope) {
+        if (!scopes.isEnabled) {
+            return@with this@renderInSharedTransitionScopeOverlay
+        }
+
         this@renderInSharedTransitionScopeOverlay.renderInSharedTransitionScopeOverlay(
             renderInOverlay = renderInOverlay,
             zIndexInOverlay = zIndexInOverlay,
@@ -164,6 +182,10 @@ fun Modifier.renderInSharedTransitionScopeOverlay(
 
 fun Modifier.skipToLookaheadSize(scopes: AnimationScopes): Modifier =
     with(scopes.sharedTransitionScope) {
+        if (!scopes.isEnabled) {
+            return@with this@skipToLookaheadSize
+        }
+
         this@skipToLookaheadSize.skipToLookaheadSize()
     }
 

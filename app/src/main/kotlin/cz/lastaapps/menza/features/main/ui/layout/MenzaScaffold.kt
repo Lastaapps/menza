@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -32,6 +31,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import cz.lastaapps.menza.ui.locals.FoldingClass
@@ -57,8 +57,6 @@ fun MenzaScaffold(
     foldingFeature: FoldingClass = LocalFoldProvider.current,
     content: @Composable () -> Unit,
 ) {
-    val modifier = modifier.safeDrawingPadding()
-
     when (windowWidth) {
         WindowWidthSizeClass.Compact ->
             AppLayoutCompact(
@@ -199,8 +197,10 @@ private fun AppLayoutMedium(
         MenzaDismissibleDrawerWithRailLayout(
             modifier =
                 Modifier
-                    .padding(insets)
-                    .fillMaxSize(),
+                    .padding(
+                        top = insets.calculateTopPadding(),
+                        bottom = insets.calculateBottomPadding(),
+                    ).fillMaxSize(),
             rail = rail,
         ) {
             MenzaDismissibleDrawer(
@@ -210,7 +210,11 @@ private fun AppLayoutMedium(
                 drawerContent = drawerContent,
             ) {
                 BoxWithConstraints(
-                    Modifier.fillMaxSize(),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(
+                            end = insets.calculateRightPadding(LocalLayoutDirection.current),
+                        ),
                 ) {
                     val padding = Padding.More.Screen
                     val totalWidthAvailable = maxWidth - padding
@@ -292,7 +296,10 @@ private fun AppLayoutExpandedNoFold(
         MenzaDismissibleDrawerWithRailLayout(
             modifier =
                 Modifier
-                    .padding(insets)
+                    .padding(
+                        top = insets.calculateTopPadding(),
+                        bottom = insets.calculateBottomPadding(),
+                    )
                     .fillMaxSize(),
             rail = rail,
         ) {
@@ -302,7 +309,11 @@ private fun AppLayoutExpandedNoFold(
                 drawerContent = drawerContent,
             ) {
                 BoxWithConstraints(
-                    Modifier.fillMaxSize(),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(
+                            end = insets.calculateRightPadding(LocalLayoutDirection.current),
+                        ),
                 ) {
                     val padding = Padding.More.Screen
                     val totalWidthAvailable = maxWidth - padding
@@ -347,8 +358,11 @@ private fun AppLayoutExpandedFold(
         MenzaDismissibleDrawerWithRailLayout(
             modifier =
                 Modifier
-                    .padding(insets)
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(
+                        top = insets.calculateTopPadding(),
+                        bottom = insets.calculateBottomPadding(),
+                    ),
             rail = rail,
         ) {
             val density = LocalDensity.current
@@ -370,7 +384,11 @@ private fun AppLayoutExpandedFold(
                 drawerContent = drawerContent,
             ) {
                 BoxWithConstraints(
-                    Modifier.fillMaxSize(),
+                    Modifier
+                        .padding(
+                            end = insets.calculateRightPadding(LocalLayoutDirection.current),
+                        )
+                        .fillMaxSize(),
                 ) {
                     val totalWidthAvailable = maxWidth - spacesWidth + railWidth
                     val startWidth = totalWidthAvailable * weightStart - railWidth

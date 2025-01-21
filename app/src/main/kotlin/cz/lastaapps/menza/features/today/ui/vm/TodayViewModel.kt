@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -43,6 +43,7 @@ internal class TodayViewModel(
                 updateState {
                     copy(
                         selectedMenza = it.toOption(),
+                        menzaChanged = true,
                     )
                 }
             }.launchIn(scope)
@@ -52,9 +53,12 @@ internal class TodayViewModel(
                 updateState { copy(language = it) }
             }.launchIn(scope)
     }
+
+    fun dismissMenzaChanged(): Unit = updateState { copy(menzaChanged = false) }
 }
 
 internal data class TodayState(
     val selectedMenza: Option<Menza>? = null,
     val language: DataLanguage = DataLanguage.Czech,
+    val menzaChanged: Boolean = false,
 ) : VMState

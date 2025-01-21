@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest.Builder
+import coil3.size.SizeResolver
 import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.menza.R.string
 import cz.lastaapps.menza.ui.components.placeholders.PlaceholderHighlight
@@ -131,6 +132,7 @@ internal fun DishImage(
                 networkCachePolicy(CachePolicy.DISABLED)
             }
 
+            size(SizeResolver.ORIGINAL)
             data(photoLink)
             build()
         }

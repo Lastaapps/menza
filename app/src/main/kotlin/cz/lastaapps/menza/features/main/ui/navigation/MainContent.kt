@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.features.main.ui.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerValue.Closed
 import androidx.compose.material3.DrawerValue.Open
@@ -34,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.experimental.stack.ChildStack
@@ -104,6 +106,7 @@ internal fun MainContent(
                 component = component.drawerComponent,
                 drawerState = drawerState,
                 snackbarHostState = hostState,
+                modifier = Modifier.background(Color.Red),
             )
         },
         content = {

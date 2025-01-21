@@ -41,7 +41,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -70,9 +69,11 @@ import com.arkivanov.essenty.backhandler.BackHandlerOwner
 import cz.lastaapps.api.core.domain.model.DishOriginDescriptor
 import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.toOrigin
+import cz.lastaapps.core.ui.vm.HandleDismiss
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.today.ui.navigation.DefaultTodayComponent.Config.DetailsConfig
 import cz.lastaapps.menza.features.today.ui.screen.ImagePreviewDialog
+import cz.lastaapps.menza.features.today.ui.vm.TodayState
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.features.today.ui.widget.NoDishSelected
 import cz.lastaapps.menza.ui.theme.Padding
@@ -183,11 +184,13 @@ internal fun TodayContent(
     modifier: Modifier = Modifier,
 ) {
     val state by component.viewModel.flowState
-    LaunchedEffect(state.selectedMenza) {
-        state.selectedMenza?.let {
-            component.dismissDetail()
-        }
-    }
+
+    HandleDismiss(
+        component.viewModel,
+        TodayState::menzaChanged,
+        TodayViewModel::dismissMenzaChanged,
+        component::dismissDetail,
+    )
 
     var videoFeedUrl by remember(state.selectedMenza) {
         mutableStateOf<String?>(null)
@@ -221,6 +224,10 @@ internal fun TodayContent(
         SharedTransitionLayout(
             modifier = Modifier.padding(padding),
         ) {
+            // If this is enabled in split pane mode, the shared element overlay breaks and shows
+            // items over each other
+            val sharedElementEnabled = component.content.value.mode == ChildPanelsMode.SINGLE
+
             ChildPanels(
                 modifier = Modifier.fillMaxSize(),
                 panels = component.content,
@@ -230,14 +237,14 @@ internal fun TodayContent(
                         it.instance,
                         onOsturak = onOsturak,
                         hostState = hostState,
-                        scopes = AnimationScopes(),
+                        scopes = AnimationScopes(sharedElementEnabled),
                         modifier = panelModifier,
                     )
                 },
                 detailsChild = {
                     DishDetailContent(
                         it.instance,
-                        scopes = AnimationScopes(),
+                        scopes = AnimationScopes(sharedElementEnabled),
                         modifier = panelModifier,
                     )
                 },
