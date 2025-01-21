@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -39,6 +39,8 @@ class GetAppThemeUC internal constructor(
                     } else {
                         AppThemeType.Agata
                     }
+
+                    AppThemeType.Agata
                 }
             }
         }
