@@ -1,0 +1,11 @@
+Rating added
+Video feeds from supported cafeterias
+Proper English names support
+New Carousel dish view mode
+
+Internal refactor - more observable approach used
+UI updates, shared element and predictive back support, ...
+Improve Stravnik wallet handling
+Remove Strahov Restaurant
+Updated FEL/FS menu parsing (again)
+Update libs, Android 15 support

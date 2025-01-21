@@ -1,0 +1,11 @@
+Hodnocení jídel
+Videa z podporovaných menz
+Podpora angličtiny
+Přidán nový režim pro zobrazení jídel
+
+Interní refaktor - vše je více observable
+Vylepšení UI, shared element a predictive back gesture
+Vylepšení práce se Strávník kontem
+Odstranění restaurace Strahov
+Aktualizace parsování jídel v FEL/FS bufetu (znovu)
+Aktualizace knihoven, podpora pro Android 15
