@@ -37,8 +37,8 @@ android {
         applicationId = "cz.lastaapps.menza"
 
         // have to be specified explicitly for FDroid to work
-        versionCode = 1040000 // 1x major . 2x minor . 2x path . 2x build diff
-        versionName = "1.4.0"
+        versionCode = 1040100 // 1x major . 2x minor . 2x path . 2x build diff
+        versionName = "1.4.1"
 
         minSdk =
             libs.versions.sdk.min
