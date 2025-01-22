@@ -39,14 +39,10 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.System
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.shouldUseDark
-import cz.lastaapps.menza.ui.theme.generated.agata.AgataDarkColors
-import cz.lastaapps.menza.ui.theme.generated.agata.AgataLightColors
-import cz.lastaapps.menza.ui.theme.generated.ctu.CtuDarkColors
-import cz.lastaapps.menza.ui.theme.generated.ctu.CtuLightColors
-import cz.lastaapps.menza.ui.theme.generated.kitty.KittyDarkColors
-import cz.lastaapps.menza.ui.theme.generated.kitty.KittyLightColors
-import cz.lastaapps.menza.ui.theme.generated.uwu.UwuDarkColors
-import cz.lastaapps.menza.ui.theme.generated.uwu.UwuLightColors
+import cz.lastaapps.menza.ui.theme.generated.NAME.UwUSchemeFamily
+import cz.lastaapps.menza.ui.theme.generated.agata.AgataSchemeFamily
+import cz.lastaapps.menza.ui.theme.generated.ctu.CTUSchemeFamily
+import cz.lastaapps.menza.ui.theme.generated.kitty.KittySchemeFamily
 
 @SuppressLint("NewApi")
 @Composable
@@ -66,33 +62,10 @@ fun AppTheme(
                     dynamicDarkColorScheme(LocalContext.current)
                 }
 
-            Agata ->
-                if (isLightMode) {
-                    AgataLightColors
-                } else {
-                    AgataDarkColors
-                }
-
-            CTU ->
-                if (isLightMode) {
-                    CtuLightColors
-                } else {
-                    CtuDarkColors
-                }
-
-            Uwu ->
-                if (isLightMode) {
-                    UwuLightColors
-                } else {
-                    UwuDarkColors
-                }
-
-            Kitty ->
-                if (isLightMode) {
-                    KittyLightColors
-                } else {
-                    KittyDarkColors
-                }
+            Agata -> AgataSchemeFamily.getSchema(isLightMode)
+            CTU -> CTUSchemeFamily.getSchema(isLightMode)
+            Uwu -> UwUSchemeFamily.getSchema(isLightMode)
+            Kitty -> KittySchemeFamily.getSchema(isLightMode)
         }
             // This somehow magically fixes switching between system and app theme.
             // If this is not present, the whole underlying UI is recomposed in a destructive way
@@ -113,11 +86,11 @@ fun AppTheme(
 
 private val Shapes =
     Shapes(
-    /*extraSmall = ShapeTokens.CornerExtraSmall
-    small = ShapeTokens.CornerSmall,
-    medium = ShapeTokens.CornerMedium,
-    large = ShapeTokens.CornerLarge,
-    extraLarge = ShapeTokens.CornerExtraLarge,*/
+        /*extraSmall = ShapeTokens.CornerExtraSmall
+        small = ShapeTokens.CornerSmall,
+        medium = ShapeTokens.CornerMedium,
+        large = ShapeTokens.CornerLarge,
+        extraLarge = ShapeTokens.CornerExtraLarge,*/
     )
 
 @Suppress("AnimateAsStateLabel")
