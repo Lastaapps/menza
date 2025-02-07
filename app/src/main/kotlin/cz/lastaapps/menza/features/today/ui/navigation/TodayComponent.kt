@@ -77,7 +77,6 @@ import cz.lastaapps.menza.features.today.ui.vm.TodayState
 import cz.lastaapps.menza.features.today.ui.vm.TodayViewModel
 import cz.lastaapps.menza.features.today.ui.widget.NoDishSelected
 import cz.lastaapps.menza.ui.theme.Padding
-import cz.lastaapps.menza.ui.theme.fadingPredictiveBackParams
 import cz.lastaapps.menza.ui.util.AnimatedAppearance
 import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.ChildPanelsModeFoldingEffect
@@ -258,12 +257,15 @@ internal fun TodayContent(
                         single = fade() + scale(),
                         dual = fade() to fade(),
                     ),
-                predictiveBackParams = {
-                    fadingPredictiveBackParams(
-                        backHandler = component.backHandler,
-                        onBack = component::onBackClicked,
-                    )
-                },
+                // This caused problems on some Oppo devices and generally did not look any good
+                // as the fading is ignored by items in overlay,
+                // or so I think, the alpha transition just did not work properly
+//                predictiveBackParams = {
+//                    fadingPredictiveBackParams(
+//                        backHandler = component.backHandler,
+//                        onBack = component::onBackClicked,
+//                    )
+//                },
             )
         }
     }
