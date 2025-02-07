@@ -1,15 +1,15 @@
 [versions]
-aboutLibraries = "11.4.0"
+aboutLibraries = "11.5.0"
 android-gradle = "8.8.0"
 androidx-activity = "1.10.0"
-androidx-compose = "1.8.0-alpha08"
-androidx-compose-icons = "1.7.6"
-androidx-compose-material3 = "1.4.0-alpha06"
+androidx-compose = "1.8.0-beta01"
+androidx-compose-icons = "1.7.7"
+androidx-compose-material3 = "1.4.0-alpha07"
 androidx-lifecycle = "2.8.7"
 androidx-security = "1.1.0-alpha06"
 androidx-test = "1.6.1"
-coil = "3.0.4"
-decompose = "3.3.0-alpha03"
+coil = "3.1.0"
+decompose = "3.3.0-beta01"
 detekt = "1.23.7"
 espresso = "3.6.1"
 google-ksp = "2.1.20-Beta1-1.0.29"
@@ -25,9 +25,9 @@ kotest = "5.9.1"
 kotest-arrow = "2.0.0"
 kotlin = "2.1.20-Beta1"
 # @keep
-kotlin-api = "2.0"
+kotlin-api = "2.1"
 # @keep
-kotlin-language = "2.0"
+kotlin-language = "2.1"
 kotlinx-atomicfu = "0.27.0"
 kotlinx-coroutines = "1.10.1"
 # https://mrmans0n.github.io/compose-rules/
@@ -89,7 +89,7 @@ androidx-tracing = "androidx.tracing:tracing-ktx:1.2.0"
 androidx-vectorDrawables = "androidx.vectordrawable:vectordrawable:1.2.0"
 androidx-windowManager = "androidx.window:window:1.4.0-beta01"
 androidx-work = "androidx.work:work-runtime-ktx:2.10.0"
-arrowkt-bom = "io.arrow-kt:arrow-stack:2.0.0"
+arrowkt-bom = "io.arrow-kt:arrow-stack:2.0.1"
 arrowkt-core = { module = "io.arrow-kt:arrow-core" }
 arrowkt-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
 arrowkt-fx-stm = { module = "io.arrow-kt:arrow-fx-stm" }
@@ -235,7 +235,7 @@ sqldelight = [
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library = { id = "com.android.library", version.ref = "android-gradle" }
-benNamesVersions = "com.github.ben-manes.versions:0.51.0"
+benNamesVersions = "com.github.ben-manes.versions:0.52.0"
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 java-kotlin = { id = "kotlin" }
