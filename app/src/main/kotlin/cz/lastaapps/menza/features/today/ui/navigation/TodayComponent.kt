@@ -48,6 +48,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
@@ -219,7 +220,11 @@ internal fun TodayContent(
         },
     ) { padding ->
         SharedTransitionLayout(
-            modifier = Modifier.padding(padding),
+            modifier =
+                Modifier.padding(
+                    start = padding.calculateLeftPadding(LayoutDirection.Ltr),
+                    end = padding.calculateRightPadding(LayoutDirection.Ltr),
+                ),
         ) {
             // If this is enabled in split pane mode, the shared element overlay breaks and shows
             // items over each other
