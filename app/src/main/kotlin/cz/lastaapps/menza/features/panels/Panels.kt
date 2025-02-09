@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.features.panels
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -52,44 +51,40 @@ internal fun Panels(
 ) {
     HandleError(holder = rateUsViewModel, hostState = hostState)
 
-    Box(modifier.animateContentSize()) {
-        val showCrash = crashesViewModel.flowState.value.hasUnreported
-        val showWhatsNew = whatsNewViewModel.flowState.value.shouldShow
-        val showRateUs = rateUsViewModel.flowState.value.shouldShow
-        val showAprils = shouldShowAprilFools()
+    val showCrash = crashesViewModel.flowState.value.hasUnreported
+    val showWhatsNew = whatsNewViewModel.flowState.value.shouldShow
+    val showRateUs = rateUsViewModel.flowState.value.shouldShow
+    val showAprils = shouldShowAprilFools()
 
-        val items =
-            remember(showCrash, showWhatsNew, showRateUs, showAprils) {
-                persistentListOf(
-                    PanelItem(showCrash) {
-                        CrashReport(
-                            crashesViewModel.flowState.value,
-                            crashesViewModel::makeReported,
-                            it,
-                        )
-                    },
-                    PanelItem(showWhatsNew) { WhatsNewPanel(whatsNewViewModel, it) },
-                    PanelItem(showRateUs) { RateUsPanel(rateUsViewModel, it) },
-                    PanelItem(showAprils) { AprilFools(it) },
-                )
-            }
-
-        Card(
-            colors = CardDefaults.cardColors(),
-            shape = MaterialTheme.shapes.large,
-            modifier = Modifier.animateContentSize(),
-        ) {
-            items
-                .firstOrNull { it.shouldShow }
-                ?.content
-                ?.let { content ->
-                    content(
-                        Modifier
-                            .padding(12.dp)
-                            .fillMaxWidth(),
+    val items =
+        remember(showCrash, showWhatsNew, showRateUs, showAprils) {
+            persistentListOf(
+                PanelItem(showCrash) {
+                    CrashReport(
+                        crashesViewModel.flowState.value,
+                        crashesViewModel::makeReported,
+                        it,
                     )
-                }
+                },
+                PanelItem(showWhatsNew) { WhatsNewPanel(whatsNewViewModel, it) },
+                PanelItem(showRateUs) { RateUsPanel(rateUsViewModel, it) },
+                PanelItem(showAprils) { AprilFools(it) },
+            )
         }
+
+    val content = items.firstOrNull { it.shouldShow }?.content ?: return
+
+    // there can be an animation
+    Card(
+        colors = CardDefaults.cardColors(),
+        shape = MaterialTheme.shapes.large,
+        modifier = modifier.animateContentSize(),
+    ) {
+        content(
+            Modifier
+                .padding(12.dp)
+                .fillMaxWidth(),
+        )
     }
 }
 
