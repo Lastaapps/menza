@@ -1,0 +1,8 @@
+Minor UI fixes
+Libraries updated
+
+1.4.0
+Rating added
+Video feeds from supported cafeterias
+Proper English names support
+New Carousel dish view mode

@@ -1,0 +1,8 @@
+Drobné opravy chyb v UI
+Aktualizace knihoven
+
+1.4.0
+Hodnocení jídel
+Videa z podporovaných menz
+Podpora angličtiny
+Přidán nový režim pro zobrazení jídel
