@@ -34,19 +34,17 @@ import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.Sca
 import androidx.compose.animation.SharedTransitionScope.SharedContentState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.addOutline
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 
 data class AnimationScopes(
     val sharedTransitionScope: SharedTransitionScope,
@@ -189,9 +187,7 @@ fun Modifier.skipToLookaheadSize(scopes: AnimationScopes): Modifier =
         this@skipToLookaheadSize.skipToLookaheadSize()
     }
 
-fun OverlayParentClip(roundedCorner: Dp = 0.dp): OverlayClip = OverlayParentClip(RoundedCornerShape(roundedCorner))
-
-fun OverlayParentClip(shape: Shape): OverlayClip =
+fun OverlayParentClip(shape: Shape = RectangleShape): OverlayClip =
     object : OverlayClip {
         private val shapedPath = Path()
 
@@ -200,7 +196,7 @@ fun OverlayParentClip(shape: Shape): OverlayClip =
             bounds: Rect,
             layoutDirection: LayoutDirection,
             density: Density,
-        ): Path {
+        ): Path? {
             val parentPath = sharedContentState.parentSharedContentState?.clipPathInOverlay
 
             shapedPath.reset()
@@ -213,6 +209,7 @@ fun OverlayParentClip(shape: Shape): OverlayClip =
             )
             shapedPath.translate(bounds.topLeft)
 
+            // fun Rect.strBounds() = "$size, $topLeft - $bottomRight"
             // return shapedPath
             // println("--- Me - ${state.key}, Parent - ${state.parentSharedContentState?.key} ---")
             // println("Parent path: ${parentPath?.getBounds()?.let { it.top to it.bottom }}")

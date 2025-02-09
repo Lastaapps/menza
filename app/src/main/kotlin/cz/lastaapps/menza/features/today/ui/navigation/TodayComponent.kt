@@ -54,8 +54,6 @@ import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.experimental.panels.ChildPanels
 import com.arkivanov.decompose.extensions.compose.experimental.panels.ChildPanelsAnimators
 import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.plus
-import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.scale
 import com.arkivanov.decompose.router.panels.ChildPanels
 import com.arkivanov.decompose.router.panels.ChildPanelsMode
 import com.arkivanov.decompose.router.panels.Panels
@@ -254,7 +252,13 @@ internal fun TodayContent(
                 },
                 animators =
                     ChildPanelsAnimators(
-                        single = fade() + scale(),
+                        // I spent ~10 hours trying to debug visual glitches
+                        // in shared element transition caused by the fact that
+                        // scale was enabled and therefore shared element was clipping content
+                        // at wrong coordinates as transition was in progress.
+                        // Content was clipped at wrong coordinates and wrong sizes.
+                        // E.g. NEVER use scale with shared element transition!!!
+                        single = fade(), // + scale(),
                         dual = fade() to fade(),
                     ),
                 // This caused problems on some Oppo devices and generally did not look any good
