@@ -25,7 +25,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope.ResizeMode
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -225,17 +224,16 @@ private fun DishItem(
     modifier: Modifier = Modifier,
 ) {
     Card(
+        onClick = { onDish(dish) },
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
         modifier =
-            modifier
-                .clickable { onDish(dish) }
-                .sharedContainer(
-                    scopes,
-                    dishContainerKey(dish.id),
-                    resizeMode = ResizeMode.RemeasureToBounds,
-                    clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
-                ),
+            modifier.sharedContainer(
+                scopes,
+                dishContainerKey(dish.id),
+                resizeMode = ResizeMode.RemeasureToBounds,
+                clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+            ),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Padding.Tiny),

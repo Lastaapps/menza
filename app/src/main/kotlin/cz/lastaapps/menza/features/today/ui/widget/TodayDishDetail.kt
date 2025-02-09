@@ -50,6 +50,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
@@ -75,6 +76,7 @@ import cz.lastaapps.menza.ui.theme.MenzaColors
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.AnimatedAppearance
 import cz.lastaapps.menza.ui.util.AnimationScopes
+import cz.lastaapps.menza.ui.util.OverlayParentClip
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import cz.lastaapps.menza.ui.util.sharedBounds
 import cz.lastaapps.menza.ui.util.sharedContainer
@@ -92,12 +94,14 @@ fun TodayDishDetail(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(Padding.Medium),
         modifier =
             modifier
+                .clip(MaterialTheme.shapes.large)
                 .sharedContainer(
                     scopes,
                     dishContainerKey(dish.id),
+                    clipInOverlayDuringTransition = OverlayParentClip(MaterialTheme.shapes.large),
                 ).verticalScroll(rememberScrollState()),
     ) {
         DishImageInfo(
