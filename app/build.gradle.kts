@@ -37,8 +37,8 @@ android {
         applicationId = "cz.lastaapps.menza"
 
         // have to be specified explicitly for FDroid to work
-        versionCode = 1040200 // 1x major . 2x minor . 2x path . 2x build diff
-        versionName = "1.4.2"
+        versionCode = 1040300 // 1x major . 2x minor . 2x path . 2x build diff
+        versionName = "1.4.3"
 
         minSdk =
             libs.versions.sdk.min
@@ -99,5 +99,5 @@ dependencies {
     implementation(libs.ktor.client.core)
     // required by ktor internally (release only)
     // noinspection UseTomlInstead
-    implementation("org.slf4j:slf4j-simple:2.0.16")
+    implementation("org.slf4j:slf4j-simple:2.0.17")
 }

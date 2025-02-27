@@ -1,0 +1,9 @@
+Drobné opravy chyb v UI (škálování obrázků)
+Odstranění fotek polévek na Strahově
+Aktualizace knihoven
+
+1.4.0
+Hodnocení jídel
+Videa z podporovaných menz
+Podpora angličtiny
+Přidán nový režim pro zobrazení jídel
