@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,13 +28,11 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.PluginManager
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.findByType
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.the
 import org.gradle.plugin.use.PluginDependency
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompilerOptions
-import org.jetbrains.kotlin.gradle.dsl.KotlinCommonProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -69,7 +67,6 @@ fun Project.androidLibrary(block: LibraryExtension.() -> Unit) {
     extension("android", block)
 }
 
-
 fun Project.java(block: JavaPluginExtension.() -> Unit) {
     extension("java", block)
 }
@@ -81,44 +78,43 @@ fun Project.compilerOptions(
 ) {
     var anySucceed = false
 
-    extensions.findByType<KotlinAndroidProjectExtension>()?.apply {
-        compilerOptions {
-            common()
-            jvmAndroid()
-        }
-    }?.also { anySucceed = true }
-
-    extensions.findByType<KotlinJvmProjectExtension>()?.apply {
-        compilerOptions {
-            common()
-            jvmAndroid()
-        }
-    }?.also { anySucceed = true }
-
-    extensions.findByType<KotlinMultiplatformExtension>()?.apply {
-        compilerOptions {
-            common()
-        }
-    }?.also { anySucceed = true }
-
-    extensions.findByType<KotlinCommonProjectExtension>()?.apply {
-        target {
-            compilerOptions {
+    extensions
+        .findByType<KotlinAndroidProjectExtension>()
+        ?.apply {
+            this.compilerOptions {
                 common()
                 jvmAndroid()
             }
-        }
-    }?.also { anySucceed = true }
+        }?.also { anySucceed = true }
+
+    extensions
+        .findByType<KotlinJvmProjectExtension>()
+        ?.apply {
+            this.compilerOptions {
+                common()
+                jvmAndroid()
+            }
+        }?.also { anySucceed = true }
+
+    extensions
+        .findByType<KotlinMultiplatformExtension>()
+        ?.apply {
+            this.compilerOptions {
+                common()
+            }
+        }?.also { anySucceed = true }
 
     if (!anySucceed) {
         // this will crash
-        extensions.getByType<KotlinCommonProjectExtension>()
+        error("No available Kotlin extension found")
     }
 }
 
-inline fun <reified T : Any> Project.extension(name: String, block: Action<T>) {
+inline fun <reified T : Any> Project.extension(
+    name: String,
+    block: Action<T>,
+) {
     extensions.configure(name, block)
 //    extensions.findByName(name)?.let { it as? T }?.apply(block)
 //        ?: error("Extension $name missing")
 }
-
