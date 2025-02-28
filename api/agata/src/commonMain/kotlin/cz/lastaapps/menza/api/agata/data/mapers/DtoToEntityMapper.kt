@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -78,9 +78,13 @@ internal fun DishDto.toEntity(
     priceDiscount = priceDiscount.toDouble(),
     allergens = allergens,
     photoLink =
-        photoLink?.let {
-            beConfig.photoLinkForAgataSubsystem(subsystemId, it)
-        },
+        photoLink
+            ?.let {
+                beConfig.photoLinkForAgataSubsystem(subsystemId, it)
+            }
+            // Removes pictures from soups on Strahov as they are only placeholders
+            // with no additional useful information
+            .takeUnless { subsystemId == 1 && typeId == 1 },
     pictogram = pictogram,
     isActive = isActive,
     language = lang.toDB(),
