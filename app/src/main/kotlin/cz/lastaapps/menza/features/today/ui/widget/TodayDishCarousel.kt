@@ -241,7 +241,12 @@ private fun DishContent(
                                 .fillMaxWidth(),
 //                            .animateItem(),
                     ) { index ->
-                        val dish = category.dishList[index]
+                        // As the carousel component is broken in almost every way,
+                        // higher index from previous dish list is provided to new items
+                        // therefore we need to check if the index is valid
+                        val dish =
+                            category.dishList.getOrNull(index)
+                                ?: return@HorizontalMultiBrowseCarousel
 
                         // outside so the computation is run one only
                         // even if progress is called multiple times
