@@ -201,7 +201,8 @@
     <string name="today_list_image_metered">Obrázek nebyl stažen, placená síť</string>
     <string name="today_list_mode_title_chose">Zvolte nejepší mód zobrazení</string>
     <string name="today_list_mode_title_normal">Způsob zobrazení</string>
-    <string name="today_list_mode_button_dismiss">Mám vybráno, přesuň dolů</string>
+    <string name="today_list_mode_button_dismiss">Skrýt</string>
+    <string name="today_list_mode_dismiss_explain">Přesunout na konec seznamu</string>
     <string name="today_list_mode_compact">Seznam</string>
     <string name="today_list_mode_grid">Velké</string>
     <string name="today_list_mode_horizontal">Řádky</string>

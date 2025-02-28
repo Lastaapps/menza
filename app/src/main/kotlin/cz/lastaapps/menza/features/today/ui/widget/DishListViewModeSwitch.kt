@@ -120,6 +120,7 @@ internal fun DishListViewModeSwitch(
         if (!isDismissibleVisible) {
             return@Card
         }
+
         Button(
             onClick = onDismiss,
             modifier =
@@ -136,8 +137,17 @@ internal fun DishListViewModeSwitch(
                     stringResource(R.string.today_list_mode_button_dismiss),
                     textAlign = TextAlign.Center,
                 )
+                Icon(Icons.Default.ArrowDownward, null)
             }
         }
+        Text(
+            stringResource(R.string.today_list_mode_dismiss_explain),
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center,
+            modifier =
+                Modifier
+                    .align(Alignment.CenterHorizontally),
+        )
         Spacer(Modifier.height(padding))
     }
 }
