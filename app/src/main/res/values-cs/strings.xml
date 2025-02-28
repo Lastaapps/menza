@@ -250,7 +250,7 @@
     <string name="ui_top_bar_action_license">Použité knihovny</string>
     <string name="ui_top_bar_action_web_agata">Web Agáty</string>
     <string name="ui_top_bar_action_web_buffet">Web bufetů</string>
-    <string name="ui_top_bar_action_web_vscht">Web Zíkova</string>
+    <string name="ui_top_bar_action_web_vscht">Web Zikova</string>
     <string name="menza_none_selected">Není vybrána žádná menza</string>
     <string name="menza_none_osturak">Seznamte se s ošťurákem</string>
     <string name="menza_none_swipe">Přejetím vyberete Menzu</string>

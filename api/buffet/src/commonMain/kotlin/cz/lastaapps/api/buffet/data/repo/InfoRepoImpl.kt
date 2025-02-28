@@ -152,8 +152,8 @@ internal class InfoRepoImpl(
     ) = when (params.language) {
         Czech ->
             when (type) {
-                FS -> "1. partro, Technická 1902/4, 160 00 Praha 6"
-                FEL -> "1. partro, Technická 1902/2, 160 00 Praha 6"
+                FS -> "1. patro, Technická 1902/4, 160 00 Praha 6"
+                FEL -> "1. patro, Technická 1902/2, 160 00 Praha 6"
             }
 
         English ->
