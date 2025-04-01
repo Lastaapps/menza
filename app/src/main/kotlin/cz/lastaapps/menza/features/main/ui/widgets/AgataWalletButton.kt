@@ -50,7 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
-import cz.lastaapps.api.core.domain.model.BalanceAccountType.CTU
+import cz.lastaapps.api.core.domain.model.BalanceAccountType.Stravnik
 import cz.lastaapps.api.core.domain.model.UserBalance
 import cz.lastaapps.api.core.domain.model.formattedBalance
 import cz.lastaapps.menza.R
@@ -244,7 +244,7 @@ private fun AgataWalletButtonLogInPreview() =
 private fun AgataWalletButtonPreview() =
     PreviewWrapper {
         AgataWalletButton(
-            balance = Some(UserBalance("Jára", 420f, CTU)),
+            balance = Some(UserBalance("Jára", 420f, Stravnik)),
             isLoading = true,
             isWarning = true,
             onShowLoginDialog = {},

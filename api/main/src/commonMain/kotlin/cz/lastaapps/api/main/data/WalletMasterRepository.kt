@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -28,7 +28,6 @@ import cz.lastaapps.api.core.data.model.LoginCredentialsSett
 import cz.lastaapps.api.core.data.model.toDomain
 import cz.lastaapps.api.core.data.model.toSett
 import cz.lastaapps.api.core.domain.model.BalanceAccountType
-import cz.lastaapps.api.core.domain.model.BalanceAccountType.CTU
 import cz.lastaapps.api.core.domain.model.BalanceAccountType.Stravnik
 import cz.lastaapps.api.core.domain.model.UserBalance
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
@@ -40,7 +39,6 @@ import cz.lastaapps.api.core.domain.validity.withCheckRecent
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.core.util.extensions.localLogger
-import cz.lastaapps.menza.api.agata.api.AgataCtuWalletApi
 import cz.lastaapps.menza.api.agata.api.StravnikWalletApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -59,7 +57,6 @@ internal interface WalletMasterRepository : SyncSource<UserBalance?, Unit> {
 }
 
 internal class WalletMasterRepositoryImpl(
-    private val ctuApi: AgataCtuWalletApi,
     private val stravnikApi: StravnikWalletApi,
     private val credentialsProvider: WalletCredentialsProvider,
     private val simpleProperties: SimpleProperties,
@@ -71,7 +68,6 @@ internal class WalletMasterRepositoryImpl(
 
     private fun selectApi(type: BalanceAccountType) =
         when (type) {
-            CTU -> ctuApi
             Stravnik -> stravnikApi
         }
 

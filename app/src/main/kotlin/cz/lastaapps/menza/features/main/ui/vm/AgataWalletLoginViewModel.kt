@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,10 +29,12 @@ import cz.lastaapps.core.ui.vm.ErrorHolder
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
+import cz.lastaapps.core.util.providers.LinkOpener
 
 internal class AgataWalletLoginViewModel(
     vmContext: VMContext,
     private val walletLoginUC: WalletLoginUC,
+    private val linkOpener: LinkOpener,
 ) : StateViewModel<AgataWalletLoginState>(AgataWalletLoginState(), vmContext),
     ErrorHolder {
     fun logIn(method: BalanceAccountType) =
@@ -62,6 +64,10 @@ internal class AgataWalletLoginViewModel(
 
     fun dismissLoginDone() {
         updateState { AgataWalletLoginState() }
+    }
+
+    fun setup() {
+        linkOpener.openLink("https://stravnik.suz.cvut.cz/Identity/Account/ForgotPassword?disableSSO=False")
     }
 
     @Composable

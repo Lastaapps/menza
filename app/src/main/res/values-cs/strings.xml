@@ -299,13 +299,12 @@
     <string name="wallet_login_tab_stravnik">Strávník</string>
     <string name="wallet_login_tab_ctu">ČVUT</string>
     <string name="wallet_login_tab_uct">VŠCHT</string>
-    <string name="wallet_login_subtitle_stravnik">Doporučená možnost. Použijte své údaje do portálu Strávník. Helso si můžete nastavit na webu Strávníka.</string>
-    <string name="wallet_login_subtitle_ctu">Pro zvýšenou bezpečnost použijte přihlášení přes Strávníka.\nPoužij svoje ČVUT údaje.</string>
-    <string name="wallet_login_subtitle_uct">Jsi z VŠCHT? Kontaktuj vývojáře v nastavení a pomož přidat tvoji metodu přihlášení! Prozatím použij přihlášení přes Strávníka.</string>
+    <string name="wallet_login_subtitle_stravnik">Použijte své údaje do portálu Strávník. Heslo získáte pomocí funkce obnovy hesla. Viz tlačíko nastavení níže.</string>
     <string name="wallet_login_username">Uživatelské jmeno</string>
     <string name="wallet_login_password">Velmi tajné heslo</string>
     <string name="wallet_login_password_policy_hint">Uložení hesla</string>
-    <string name="wallet_login_password_policy">Heslo je uložené zašifrované, pouze na tomto zařízení a je použito pouze v rámci zabezpečené komunikace.</string>
+    <string name="wallet_login_password_policy">Heslo je uložené zašifrované pouze na tomto zařízení a je použito pouze v rámci zabezpečené komunikace.</string>
+    <string name="wallet_login_setup">Nastavit</string>
     <string name="wallet_login_cancel">Zrušit</string>
     <string name="wallet_login_save">Uložit</string>
     <string name="wallet_low_balance">Dochází ti penízky! 🙉</string>

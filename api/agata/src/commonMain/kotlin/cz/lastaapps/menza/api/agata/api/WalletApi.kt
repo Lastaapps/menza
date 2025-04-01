@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,5 +27,3 @@ interface WalletApi {
         password: String,
     ): Outcome<Float>
 }
-
-interface AgataCtuWalletApi : WalletApi

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -27,12 +27,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.outlined.Architecture
 import androidx.compose.material.icons.outlined.RestaurantMenu
 import androidx.compose.material.icons.outlined.Science
@@ -40,14 +42,19 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,8 +66,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -76,8 +85,6 @@ import cz.lastaapps.menza.ui.components.BaseDialog
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import cz.lastaapps.menza.ui.util.appCardColors
-import cz.lastaapps.menza.ui.util.withAutofill
-import kotlinx.collections.immutable.persistentListOf
 
 /**
  * @author Marekkon5 (base implementation, rewritten by me)
@@ -109,6 +116,7 @@ internal fun AgataLoginDialog(
         },
         isLoading = state.isLoading,
         loginEnabled = state.enabled,
+        onSetupRequest = viewModel::setup,
         onLogin = viewModel::logIn,
         error = state.error,
     )
@@ -124,6 +132,7 @@ private fun AgataLoginDialog(
     isLoading: Boolean,
     loginEnabled: Boolean,
     error: DomainError?,
+    onSetupRequest: () -> Unit,
     onLogin: (BalanceAccountType) -> Unit,
 ) {
     BaseDialog(onDismissRequest = onDismissRequest) {
@@ -140,6 +149,7 @@ private fun AgataLoginDialog(
             isLoading = isLoading,
             loginEnabled = loginEnabled,
             error = error,
+            onSetupRequest = onSetupRequest,
             onLogin = onLogin,
         )
     }
@@ -156,14 +166,15 @@ private fun AgataLoginDialogContent(
     onDismissRequest: () -> Unit,
     isLoading: Boolean,
     loginEnabled: Boolean,
+    onSetupRequest: () -> Unit,
     onLogin: (BalanceAccountType) -> Unit,
     error: DomainError?,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.animateContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Padding.Small),
+        verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
     ) {
         Text(
             text = stringResource(R.string.wallet_login_title),
@@ -171,10 +182,31 @@ private fun AgataLoginDialogContent(
             style = MaterialTheme.typography.headlineMedium,
         )
 
-        BalanceTypesTabs(
-            selectedIndex = selectedIndex,
-            onSelectIndex = onSelectIndex,
+        if (false) {
+            BalanceTypesTabs(
+                selectedIndex = selectedIndex,
+                onSelectIndex = onSelectIndex,
+            )
+        }
+
+        val modeType: BalanceAccountType =
+            when (selectedIndex) {
+                0 -> BalanceAccountType.Stravnik
+                else -> error("Mode index out of range: $selectedIndex")
+            }
+
+        TextFields(
+            balanceType = modeType,
+            username = username,
+            password = password,
+            onUsername = onUsername,
+            onPassword = onPassword,
+            isLoading = isLoading,
+            loginEnabled = loginEnabled,
+            onLogin = onLogin,
         )
+
+        HorizontalDivider()
 
         SubtitleWidget(
             indexSelected = selectedIndex,
@@ -184,29 +216,16 @@ private fun AgataLoginDialogContent(
                     .animateContentSize(),
         )
 
-        val modeType =
-            when (selectedIndex) {
-                0 -> BalanceAccountType.Stravnik
-                1 -> BalanceAccountType.CTU
-                2 -> null
-                else -> error("Mode index out of range: $selectedIndex")
-            }
-        Box(Modifier.animateContentSize()) {
-            modeType?.let {
-                LoginForm(
-                    balanceType = modeType,
-                    username = username,
-                    password = password,
-                    onUsername = onUsername,
-                    onPassword = onPassword,
-                    onDismissRequest = onDismissRequest,
-                    isLoading = isLoading,
-                    loginEnabled = loginEnabled,
-                    onLogin = onLogin,
-                    error = error,
-                )
-            }
-        }
+        Error(error)
+
+        ActionButtons(
+            onDismissRequest = onDismissRequest,
+            isLoading = isLoading,
+            loginEnabled = loginEnabled,
+            onLogin = onLogin,
+            onSetupRequest = onSetupRequest,
+            balanceType = modeType,
+        )
     }
 }
 
@@ -268,8 +287,6 @@ private fun SubtitleWidget(
     val subtitleText =
         when (indexSelected) {
             0 -> stringResource(R.string.wallet_login_subtitle_stravnik)
-            1 -> stringResource(R.string.wallet_login_subtitle_ctu)
-            2 -> stringResource(R.string.wallet_login_subtitle_uct)
             else -> error("Mode index out of range: $indexSelected")
         }
     Text(
@@ -280,31 +297,27 @@ private fun SubtitleWidget(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun LoginForm(
+private fun TextFields(
     balanceType: BalanceAccountType,
     username: String,
     password: String,
     onUsername: (String) -> Unit,
     onPassword: (String) -> Unit,
-    onDismissRequest: () -> Unit,
     isLoading: Boolean,
     loginEnabled: Boolean,
     onLogin: (BalanceAccountType) -> Unit,
-    error: DomainError?,
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = modifier,
     horizontalAlignment = Alignment.CenterHorizontally,
-    verticalArrangement = Arrangement.spacedBy(Padding.Small),
+    verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
 ) {
     OutlinedTextField(
         modifier =
-            Modifier.withAutofill(
-                autofillTypes = persistentListOf(AutofillType.Username),
-                onFill = onUsername,
-            ),
+            Modifier.semantics {
+                contentType = ContentType.Username
+            },
         enabled = !isLoading,
         value = username,
         onValueChange = onUsername,
@@ -320,10 +333,9 @@ private fun LoginForm(
 
     OutlinedTextField(
         modifier =
-            Modifier.withAutofill(
-                autofillTypes = persistentListOf(AutofillType.Password),
-                onFill = onPassword,
-            ),
+            Modifier.semantics {
+                contentType = ContentType.Password
+            },
         enabled = !isLoading,
         value = password,
         onValueChange = onPassword,
@@ -350,19 +362,6 @@ private fun LoginForm(
         },
     )
 
-    error?.let {
-        Card(
-            colors = appCardColors(MaterialTheme.colorScheme.errorContainer),
-        ) {
-            Text(
-                text = error.text(),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(Padding.Medium),
-            )
-        }
-    }
-
     AnimatedVisibility(showPasswordInfo) {
         Text(
             text = stringResource(id = R.string.wallet_login_password_policy),
@@ -370,27 +369,80 @@ private fun LoginForm(
             textAlign = TextAlign.Center,
         )
     }
+}
 
-    Crossfade(targetState = isLoading, label = "isLoading_login_switch") { isLoading ->
+@Composable
+private fun Error(
+    error: DomainError?,
+    modifier: Modifier = Modifier,
+) = Box(modifier = modifier.animateContentSize()) {
+    if (error == null) return@Box
+
+    Card(
+        colors = appCardColors(MaterialTheme.colorScheme.errorContainer),
+        modifier = modifier,
+    ) {
+        Text(
+            text = error.text(),
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(Padding.Medium),
+        )
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@Composable
+private fun ActionButtons(
+    balanceType: BalanceAccountType,
+    onDismissRequest: () -> Unit,
+    isLoading: Boolean,
+    loginEnabled: Boolean,
+    onSetupRequest: () -> Unit,
+    onLogin: (BalanceAccountType) -> Unit,
+    modifier: Modifier = Modifier,
+) = Crossfade(
+    targetState = isLoading,
+    label = "isLoading_login_switch",
+    modifier = modifier,
+) { isLoading ->
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(Padding.Small, Alignment.CenterHorizontally),
+    ) {
         if (isLoading) {
-            CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
+            CircularProgressIndicator(Modifier.align(Alignment.CenterVertically))
         } else {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Padding.Small, Alignment.End),
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+                tooltip = {
+                    PlainTooltip {
+                        Text(text = stringResource(R.string.wallet_login_setup))
+                    }
+                },
+                state = rememberTooltipState(isPersistent = true),
             ) {
-                TextButton(
-                    onClick = { onDismissRequest() },
-                ) {
-                    Text(stringResource(R.string.wallet_login_cancel))
+                IconButton(onClick = onSetupRequest) {
+                    Icon(
+                        Icons.Default.ManageAccounts,
+                        contentDescription = stringResource(R.string.wallet_login_setup),
+                    )
                 }
+            }
 
-                Button(
-                    onClick = { onLogin(balanceType) },
-                    enabled = loginEnabled,
-                ) {
-                    Text(stringResource(R.string.wallet_login_save))
-                }
+            Spacer(Modifier.weight(1f))
+
+            TextButton(
+                onClick = { onDismissRequest() },
+            ) {
+                Text(stringResource(R.string.wallet_login_cancel))
+            }
+
+            Button(
+                onClick = { onLogin(balanceType) },
+                enabled = loginEnabled,
+            ) {
+                Text(stringResource(R.string.wallet_login_save))
             }
         }
     }
@@ -410,6 +462,7 @@ private fun AgataLoginDialogPreview() =
             onDismissRequest = {},
             isLoading = false,
             loginEnabled = true,
+            onSetupRequest = {},
             onLogin = { },
             error = WalletError.InvalidCredentials,
         )
@@ -429,6 +482,7 @@ private fun AgataLoginDialogNotSupportedPreview() =
             onDismissRequest = {},
             isLoading = false,
             loginEnabled = true,
+            onSetupRequest = {},
             onLogin = { },
             error = WalletError.InvalidCredentials,
         )

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,7 +20,6 @@
 package cz.lastaapps.menza.features.main.domain.usecase
 
 import cz.lastaapps.api.core.domain.model.BalanceAccountType
-import cz.lastaapps.api.core.domain.model.BalanceAccountType.CTU
 import cz.lastaapps.api.core.domain.model.BalanceAccountType.Stravnik
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
@@ -30,7 +29,6 @@ internal class GetAddMoneyUrlUC(
 ) : UseCase(context) {
     operator fun invoke(type: BalanceAccountType) =
         when (type) {
-            CTU -> "https://agata.suz.cvut.cz/jidelnicky/stravnik.php"
             Stravnik -> "https://stravnik.suz.cvut.cz/Transactions/NoSSO"
         }
 }
