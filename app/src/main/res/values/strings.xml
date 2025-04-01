@@ -187,18 +187,22 @@
         <item>Sure I do…</item>
         <item>Why are you doing it?</item>
         <item>I don\'t know, I love it I guess</item>
-        <item>Do you want to die in your 30\'s?</item>
+        <item>Then it seams all right</item>
+        <item>Exactly</item>
+        <item>Anyways, do you want to die in your 30\'s?</item>
         <item>No, please, no</item>
         <item>Well bad for you</item>
         <item>Go away</item>
         <item>Only if you promise that you wouldn\'t eat anymore</item>
         <item>I do, I promise</item>
-        <item>Right, good for you</item>
+        <item>Great, good for you</item>
         <item>Totally agree</item>
-        <item>And now, image all the foods you can\'t eat</item>
+        <item>And now, image all your favorite dishes</item>
         <item>They all smell amazing</item>
         <item>Just perfect</item>
         <item>Totally agree</item>
+        <item>Such a tasty dishes</item>
+        <item>I\'m getting hungry</item>
     </string-array>
 
     <string name="today_no_dish">No dish selected</string>

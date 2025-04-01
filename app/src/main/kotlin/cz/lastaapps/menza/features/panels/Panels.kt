@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.features.panels
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -78,13 +79,15 @@ internal fun Panels(
     Card(
         colors = CardDefaults.cardColors(),
         shape = MaterialTheme.shapes.large,
-        modifier = modifier.animateContentSize(),
+        modifier = modifier,
     ) {
-        content(
-            Modifier
-                .padding(12.dp)
-                .fillMaxWidth(),
-        )
+        Box(Modifier.animateContentSize()) {
+            content(
+                Modifier
+                    .padding(12.dp)
+                    .fillMaxWidth(),
+            )
+        }
     }
 }
 
