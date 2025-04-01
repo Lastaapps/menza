@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,6 +21,7 @@ package cz.lastaapps.api.main.domain.usecase
 
 import arrow.core.Either.Left
 import arrow.core.Either.Right
+import arrow.core.left
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.core.domain.repo.TodayDishRepo
 import cz.lastaapps.api.core.domain.sync.SyncResult.Updated
@@ -28,6 +29,7 @@ import cz.lastaapps.api.core.domain.sync.sync
 import cz.lastaapps.api.rating.domain.usecase.SyncDishRatingsUC
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.core.domain.error.ApiError.RatingError
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.koin.core.component.KoinComponent
@@ -63,7 +65,7 @@ class SyncTodayDishListUC(
                 is Left -> dish
                 is Right -> {
                     when (rating) {
-                        is Left -> rating
+                        is Left -> RatingError.wrap(rating.value).left()
                         is Right -> {
                             when (dish.value) {
                                 Updated -> rating

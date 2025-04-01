@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -61,5 +61,21 @@ sealed interface ApiError : DomainError.Logic {
         data class OtherProblem(
             val code: Int,
         ) : RatingError
+
+        data class Unrelated(
+            val cause: DomainError,
+        ) : RatingError {
+            override val throwable: Throwable?
+                get() = cause.throwable
+        }
+
+        companion object {
+            fun wrap(cause: DomainError): RatingError {
+                if (cause is RatingError) {
+                    return cause
+                }
+                return Unrelated(cause)
+            }
+        }
     }
 }

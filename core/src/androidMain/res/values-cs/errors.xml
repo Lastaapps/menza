@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -19,7 +19,7 @@
 
 <resources>
     <string name="error_unknown">Nečekaná chyba: %s 🥸</string>
-    <string name="error_network_connection_closed">Spojení ukončeno 🗡️</string>
+    <string name="error_network_unreachable">Nelze se připojit 🗡️</string>
     <string name="error_network_no_internet">Internet nedorazil 🙎‍♀️</string>
     <string name="error_network_timeout">Limit spojení vypršel 🌧️</string>
     <string name="error_network_serialization">Menza API poslala neplatná data 💀</string>
@@ -45,5 +45,6 @@
     <string name="error_rating_old_app_version">Aktualizojte si aplikaci, pokud chcete nadále hodnotit. ⬆️\nOdpověď serveru: %s</string>
     <string name="error_rating_other_problem">Hodnocení selhalo 💫 (kód: %d)</string>
     <string name="error_rating_too_many_requests">Asi nás někdo DOSí, hodnocení nefunguje 🚽 (důvod: %s) 😞</string>
-    <string name="error_rating_unauthorized">Hodnotící požadavek odmítnut, aktualizujte aplikaci.</string>
+    <string name="error_rating_unauthorized">Hodnotící požadavek odmítnut, aktualizujte aplikaci. ⬆️</string>
+    <string name="error_rating_unrelated">⭐ Chyba hodnotícího serveru: %s</string>
 </resources>

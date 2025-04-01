@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,32 +24,44 @@ import co.touchlab.kermit.Logger
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.NetworkError
+import java.io.IOException
+import java.net.SocketException
 
 suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
-    Either.catch { block() }.mapLeft {
-        Logger.withTag("catchingNetwork").e(it) { "Failed network call" }
+    Either.catch { block() }.mapLeft { exception ->
+        Logger.withTag("catchingNetwork").e(exception) { "Failed network call" }
 
-        when (it::class.simpleName) {
+        when (exception::class.simpleName) {
             "TimeoutException",
             "HttpRequestTimeoutException",
             "SocketTimeoutException",
             "OutOfSpaceException", // somehow thrown inside the KTor HttpRequestTimeoutException constructor
             -> NetworkError.Timeout
 
-            "ConnectException",
-            -> NetworkError.ConnectionClosed
-
             "UnknownHostException",
             "NoRouteToHostException",
-            "IOException",
             "SSLException",
             "SocketException",
             -> NetworkError.NoInternet
 
             "JsonConvertException",
             "JsonDecodingException",
-            -> NetworkError.SerializationError(it)
+            -> NetworkError.SerializationError(exception)
 
-            else -> DomainError.Unknown(it)
-        }
+            else -> null
+        }?.let { return@mapLeft it }
+
+        when (exception) {
+//            "ConnectException",
+//            "ConnectTimeoutException", // when host in unreachable, but DNS succeeded
+            is SocketException,
+            -> NetworkError.Unreachable
+
+            is IOException,
+            -> NetworkError.NoInternet
+
+            else -> null
+        }?.let { return@mapLeft it }
+
+        DomainError.Unknown(exception)
     }

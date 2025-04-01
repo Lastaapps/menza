@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -51,10 +51,10 @@ import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.error.DomainError.Unknown
 import cz.lastaapps.core.domain.error.NetworkError
-import cz.lastaapps.core.domain.error.NetworkError.ConnectionClosed
 import cz.lastaapps.core.domain.error.NetworkError.NoInternet
 import cz.lastaapps.core.domain.error.NetworkError.SerializationError
 import cz.lastaapps.core.domain.error.NetworkError.Timeout
+import cz.lastaapps.core.domain.error.NetworkError.Unreachable
 import cz.lastaapps.core.domain.error.ParsingError
 import cz.lastaapps.core.domain.error.ParsingError.Buffet.DateRangeCannotBeParsed
 import cz.lastaapps.core.domain.error.ParsingError.Buffet.DayCannotBeParsed
@@ -92,7 +92,7 @@ val DomainError.text: AppText
 val NetworkError.text: AppText
     get() =
         when (this) {
-            ConnectionClosed -> E(R.string.error_network_connection_closed)
+            Unreachable -> E(R.string.error_network_unreachable)
             NoInternet -> E(R.string.error_network_no_internet)
             Timeout -> E(R.string.error_network_timeout)
             is SerializationError -> E(R.string.error_network_serialization)
@@ -131,6 +131,7 @@ val ApiError.text: AppText
                     is OtherProblem -> F(R.string.error_rating_other_problem, this.code)
                     is TooManyRequests -> F(R.string.error_rating_too_many_requests, this.reason)
                     Unauthorized -> E(R.string.error_rating_unauthorized)
+                    is RatingError.Unrelated -> F(R.string.error_rating_unrelated, this.cause.text)
                 }
         }
 

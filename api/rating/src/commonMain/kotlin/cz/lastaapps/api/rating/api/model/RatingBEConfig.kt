@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,6 +30,7 @@ internal data class RatingBEConfig(
     companion object {
         val prod =
             RatingBEConfig(
+                // Testing cannot connect -> 10.255.255.1
                 host = "lastope2.sh.cvut.cz",
                 protocol = URLProtocol.HTTPS,
                 path = "menza/api/",

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,7 +24,7 @@ sealed interface NetworkError : DomainError.Runtime {
 
     data object NoInternet : NetworkError
 
-    data object ConnectionClosed : NetworkError
+    data object Unreachable : NetworkError
 
     data class SerializationError(
         override val throwable: Throwable,

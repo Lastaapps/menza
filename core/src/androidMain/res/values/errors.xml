@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -19,7 +19,7 @@
 
 <resources>
     <string name="error_unknown">Unknown error: %s 🥸</string>
-    <string name="error_network_connection_closed">Connection closed 🗡️</string>
+    <string name="error_network_unreachable">Connection unreachable 🗡️</string>
     <string name="error_network_no_internet">No internet 🙎‍♀️</string>
     <string name="error_network_timeout">Timeout 🌧️</string>
     <string name="error_network_serialization">Failed to process API content 💀</string>
@@ -45,5 +45,6 @@
     <string name="error_rating_old_app_version">Update you app to use rating ⬆️\nBE response: %s</string>
     <string name="error_rating_other_problem">Rating failed 💫 (code: %d)</string>
     <string name="error_rating_too_many_requests">We are probably under DOS attack, rating does not work 🚽 (reason: %s) 😞</string>
-    <string name="error_rating_unauthorized">Rating request is not authorized, update the app </string>
+    <string name="error_rating_unauthorized">Rating request is not authorized, update the app ⬆️</string>
+    <string name="error_rating_unrelated">⭐ Rating server error: %s</string>
 </resources>
