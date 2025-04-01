@@ -1,0 +1,8 @@
+Remove CTU wallet login option as the uni switches to MFA
+Fix exceptions caused by rating server being unavailable
+
+1.4.0
+Rating added
+Video feeds from supported cafeterias
+Proper English names support
+New Carousel dish view mode

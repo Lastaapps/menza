@@ -1,0 +1,8 @@
+Odebrání přihlášení do peněženky přes ČVUT login kvůli přechodu na MFA
+Ošetření chyby při nedostupnosti hodnotícího serveru
+
+1.4.0
+Hodnocení jídel
+Videa z podporovaných menz
+Podpora angličtiny
+Přidán nový režim pro zobrazení jídel
