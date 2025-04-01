@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,7 +17,6 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
@@ -36,7 +35,6 @@ plugins {
     alias(libs.plugins.google.ksp) apply false
     alias(libs.plugins.detekt) apply false
 
-    alias(libs.plugins.benNamesVersions)
     alias(libs.plugins.versionCatalogUpdate)
     alias(libs.plugins.ktlint)
 }
@@ -52,14 +50,6 @@ versionCatalogUpdate {
     // keeps entry - wouldn't be deleted when unused
     keep {
         keepUnusedVersions.set(true)
-        keepUnusedLibraries.set(true)
-        keepUnusedPlugins.set(true)
-    }
-}
-
-tasks.withType<DependencyUpdatesTask> {
-    rejectVersionIf {
-        isNonStable(candidate.version) && !isNonStable(currentVersion)
     }
 }
 

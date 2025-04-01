@@ -8,10 +8,5 @@
 .cxx
 local.properties
 /gradle/libs.versions.updates.toml
-/.idea/other.xml
 .kotlin
-/.idea/studiobot.xml
-/.idea/runConfigurations.xml
-/.idea/ktlint-plugin.xml
-/.idea/discord.xml
 /kls_database.db

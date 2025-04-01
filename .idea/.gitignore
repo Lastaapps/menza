@@ -17,3 +17,9 @@
 /appInsightsSettings.xml
 /deploymentTargetSelector.xml
 /git_toolbox_blame.xml
+/other.xml
+/studiobot.xml
+/runConfigurations.xml
+/ktlint-plugin.xml
+/discord.xml
+/AndroidProjectSystem.xml
