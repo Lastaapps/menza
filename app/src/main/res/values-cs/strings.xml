@@ -166,7 +166,7 @@
     <string name="panel_whats_new_title">Co je nového</string>
     <string name="panel_whats_new_button">Skrýt</string>
     <string-array name="panel_april_items">
-        <item>To už chceš zase žerát?</item>
+        <item>To už chceš zase žrát?</item>
         <item>Už to tak asi bude</item>
         <item>Ale víš přece, že pak budeš tlustý prase?</item>
         <item>No, vim no…</item>
