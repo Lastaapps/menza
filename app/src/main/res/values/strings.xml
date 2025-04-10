@@ -323,8 +323,8 @@
     <string name="wallet_login_tab_stravnik">Stravnik</string>
     <string name="wallet_login_tab_ctu">CTU</string>
     <string name="wallet_login_tab_uct">UCT</string>
-    <string name="wallet_login_subtitle_stravnik">Use your Stravnik credentials. Use the forgotten password page to register. Click the setup button bellow.</string>
-    <string name="wallet_login_username">Username</string>
+    <string name="wallet_login_subtitle_stravnik">Use your Stravnik credentials - the personal number and password, not your university credentials. You can set you password by following the tutorial (the setup button bellow).</string>
+    <string name="wallet_login_username">Personal number</string>
     <string name="wallet_login_password">Password</string>
     <string name="wallet_login_password_policy_hint">Password storage</string>
     <string name="wallet_login_password_policy">Password is stored encrypted, only on this device and is used only for secured communication with university servers.</string>

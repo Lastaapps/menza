@@ -67,7 +67,7 @@ internal class AgataWalletLoginViewModel(
     }
 
     fun setup() {
-        linkOpener.openLink("https://stravnik.suz.cvut.cz/Identity/Account/ForgotPassword?disableSSO=False")
+        linkOpener.openLink("https://github.com/Lastaapps/menza/blob/main/docs/STRAVNIK_SIGNUP.md")
     }
 
     @Composable

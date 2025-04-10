@@ -299,9 +299,9 @@
     <string name="wallet_login_tab_stravnik">Strávník</string>
     <string name="wallet_login_tab_ctu">ČVUT</string>
     <string name="wallet_login_tab_uct">VŠCHT</string>
-    <string name="wallet_login_subtitle_stravnik">Použijte své údaje do portálu Strávník. Heslo získáte pomocí funkce obnovy hesla. Viz tlačíko nastavení níže.</string>
-    <string name="wallet_login_username">Uživatelské jmeno</string>
-    <string name="wallet_login_password">Velmi tajné heslo</string>
+    <string name="wallet_login_subtitle_stravnik">Použijte své údaje do portálu Strávník - osobní číslo a heslo, ne údaje sloužící k přihlašování k univerzitnímu účtu. Heslo získáte pomocí návodu níže (tlačítko nastavit).</string>
+    <string name="wallet_login_username">Osobní číslo</string>
+    <string name="wallet_login_password">Heslo</string>
     <string name="wallet_login_password_policy_hint">Uložení hesla</string>
     <string name="wallet_login_password_policy">Heslo je uložené zašifrované pouze na tomto zařízení a je použito pouze v rámci zabezpečené komunikace.</string>
     <string name="wallet_login_setup">Nastavit</string>
