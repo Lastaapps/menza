@@ -1,6 +1,7 @@
 # Tutorial - Strávník signup
 
 *TODO - Czech translation*.
+
 For now you can use the automated translation from Google
 [here](https://github-com.translate.goog/Lastaapps/menza/blob/main/docs/STRAVNIK_SIGNUP.md?_x_tr_sl=en&_x_tr_tl=cs&_x_tr_hl=en&_x_tr_pto=wapp).
 
@@ -18,13 +19,25 @@ The original discussion can be found in
 
 ## Steps
 
-- Go to [Agata - Info page](https://agata.suz.cvut.cz/jidelnicky/stravnik.php) site.
+- Go to [Agáta - Info page](https://agata.suz.cvut.cz/jidelnicky/stravnik.php) site.
 - Log in using EduID.
 - You should get into the Strávník portal.
-  If not, follow the steps in the *forgotten password* section.
+  See example from web
+
+  <img src="assets/Stravnik_pc.png" alt="Strávník on a PC" style="width:42%;"/>
+
+  or from a phone.
+
+  <img src="assets/Stravnik_phone.png" alt="Strávník portal on a phone" style="width:30%;"/>
+
+  It may happen that you get redirected to Agáta Secure page.
+  In this case click on the GoPay button that will redirect you to the Strávník portal.
+
+  <img src="./assets/Agata_secure_pc.png" alt="Agáta secure portal" style="width:42%;"/>
+
 - Once you are in the Strávník portal, click on your name to open the account options.
 - In the password section, set a new password.
-  It is also recommended to set your private email so you can access
+  It is also recommended to set your private email, so you can access
   your account even when you finish your studies.
 - Got back to the main page and note the personal number (showed next to your balance).
   If the balance nor the personal number is shown, reload the page few times or
@@ -36,7 +49,7 @@ The original discussion can be found in
 
 Follow this section of the tutorial only in case
 the login using EduID does not lead to directly to the Strávník portal,
-but to this url: `https://agata.suz.cvut.cz/secure/index.php`.
+but to this URL: `https://agata.suz.cvut.cz/secure/index.php`.
 
 - Got to the Strávník
   portal [forgotten password](https://stravnik.suz.cvut.cz/Identity/Account/ForgotPassword) page.
