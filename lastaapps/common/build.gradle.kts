@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,7 +17,8 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import java.time.LocalDate
+import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
 import java.time.format.DateTimeFormatter
 
@@ -31,8 +32,12 @@ android {
     namespace = "cz.lastaapps.common"
 
     defaultConfig {
-        val buildDateTime = LocalDate.now(UTC).format(DateTimeFormatter.ISO_DATE)
-        buildConfigField("java.lang.String", "BUILD_DATE", "\"$buildDateTime\"")
+        buildConfigField("java.lang.String", "BUILD_DATE", "\"${formatDate(modificationTime())}\"")
+    }
+    buildTypes {
+        debug {
+            buildConfigField("java.lang.String", "BUILD_DATE", "\"${formatDate()}\"")
+        }
     }
     buildFeatures {
         buildConfig = true
@@ -42,3 +47,31 @@ android {
 dependencies {
     implementation(libs.google.material)
 }
+
+private fun formatDate(instant: Instant = Instant.now()) =
+    LocalDateTime
+        .ofInstant(instant, UTC)
+        .format(DateTimeFormatter.ISO_DATE)
+
+// https://reproducible-builds.org/docs/source-date-epoch/
+// Set based on the current commit that is being built.
+private fun modificationTime() =
+    (
+        System
+            .getenv("SOURCE_DATE_EPOCH")
+            ?.takeIf { it.isNotBlank() }
+            ?.toLong()
+            ?: ProcessBuilder("git", "log", "-1", "--format=%ct")
+                .directory(rootDir)
+                .redirectErrorStream(true)
+                .start()
+                .let { process ->
+                    check(process.waitFor() == 0) { "git log failed" }
+                    process.inputStream
+                        .bufferedReader()
+                        .use { it.readText() }
+                        .trim()
+                        .also { check(it.isNotBlank()) { "git log did not return a timestamp" } }
+                        .toLong()
+                }
+    ).let(Instant::ofEpochSecond)
