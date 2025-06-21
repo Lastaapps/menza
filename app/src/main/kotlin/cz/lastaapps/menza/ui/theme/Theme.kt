@@ -39,10 +39,10 @@ import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.System
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Uwu
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.shouldUseDark
-import cz.lastaapps.menza.ui.theme.generated.NAME.UwUSchemeFamily
 import cz.lastaapps.menza.ui.theme.generated.agata.AgataSchemeFamily
 import cz.lastaapps.menza.ui.theme.generated.ctu.CTUSchemeFamily
 import cz.lastaapps.menza.ui.theme.generated.kitty.KittySchemeFamily
+import cz.lastaapps.menza.ui.theme.generated.uwu.UwUSchemeFamily
 
 @SuppressLint("NewApi")
 @Composable
@@ -97,33 +97,33 @@ private val Shapes =
 @Composable
 private fun ColorScheme.animated(): ColorScheme =
     ColorScheme(
-        background = animateColorAsState(background).value,
-        error = animateColorAsState(error).value,
-        errorContainer = animateColorAsState(errorContainer).value,
-        inverseOnSurface = animateColorAsState(inverseOnSurface).value,
-        inversePrimary = animateColorAsState(inversePrimary).value,
-        inverseSurface = animateColorAsState(inverseSurface).value,
-        onBackground = animateColorAsState(onBackground).value,
-        onError = animateColorAsState(onError).value,
-        onErrorContainer = animateColorAsState(onErrorContainer).value,
-        onPrimary = animateColorAsState(onPrimary).value,
-        onPrimaryContainer = animateColorAsState(onPrimaryContainer).value,
-        onSecondary = animateColorAsState(onSecondary).value,
-        onSecondaryContainer = animateColorAsState(onSecondaryContainer).value,
-        onSurface = animateColorAsState(onSurface).value,
-        onSurfaceVariant = animateColorAsState(onSurfaceVariant).value,
-        onTertiary = animateColorAsState(onTertiary).value,
-        onTertiaryContainer = animateColorAsState(onTertiaryContainer).value,
-        outline = animateColorAsState(outline).value,
         primary = animateColorAsState(primary).value,
+        onPrimary = animateColorAsState(onPrimary).value,
         primaryContainer = animateColorAsState(primaryContainer).value,
+        onPrimaryContainer = animateColorAsState(onPrimaryContainer).value,
+        inversePrimary = animateColorAsState(inversePrimary).value,
         secondary = animateColorAsState(secondary).value,
+        onSecondary = animateColorAsState(onSecondary).value,
         secondaryContainer = animateColorAsState(secondaryContainer).value,
-        surface = animateColorAsState(surface).value,
-        surfaceVariant = animateColorAsState(surfaceVariant).value,
-        surfaceTint = animateColorAsState(surfaceTint).value,
+        onSecondaryContainer = animateColorAsState(onSecondaryContainer).value,
         tertiary = animateColorAsState(tertiary).value,
+        onTertiary = animateColorAsState(onTertiary).value,
         tertiaryContainer = animateColorAsState(tertiaryContainer).value,
+        onTertiaryContainer = animateColorAsState(onTertiaryContainer).value,
+        background = animateColorAsState(background).value,
+        onBackground = animateColorAsState(onBackground).value,
+        surface = animateColorAsState(surface).value,
+        onSurface = animateColorAsState(onSurface).value,
+        surfaceVariant = animateColorAsState(surfaceVariant).value,
+        onSurfaceVariant = animateColorAsState(onSurfaceVariant).value,
+        surfaceTint = animateColorAsState(surfaceTint).value,
+        inverseSurface = animateColorAsState(inverseSurface).value,
+        inverseOnSurface = animateColorAsState(inverseOnSurface).value,
+        error = animateColorAsState(error).value,
+        onError = animateColorAsState(onError).value,
+        errorContainer = animateColorAsState(errorContainer).value,
+        onErrorContainer = animateColorAsState(onErrorContainer).value,
+        outline = animateColorAsState(outline).value,
         outlineVariant = animateColorAsState(outlineVariant).value,
         scrim = animateColorAsState(scrim).value,
         surfaceBright = animateColorAsState(surfaceBright).value,
@@ -133,4 +133,16 @@ private fun ColorScheme.animated(): ColorScheme =
         surfaceContainerHighest = animateColorAsState(surfaceContainerHighest).value,
         surfaceContainerLow = animateColorAsState(surfaceContainerLow).value,
         surfaceContainerLowest = animateColorAsState(surfaceContainerLowest).value,
+        primaryFixed = animateColorAsState(primaryFixed).value,
+        primaryFixedDim = animateColorAsState(primaryFixedDim).value,
+        onPrimaryFixed = animateColorAsState(onPrimaryFixed).value,
+        onPrimaryFixedVariant = animateColorAsState(onPrimaryFixedVariant).value,
+        secondaryFixed = animateColorAsState(secondaryFixed).value,
+        secondaryFixedDim = animateColorAsState(secondaryFixedDim).value,
+        onSecondaryFixed = animateColorAsState(onSecondaryFixed).value,
+        onSecondaryFixedVariant = animateColorAsState(onSecondaryFixedVariant).value,
+        tertiaryFixed = animateColorAsState(tertiaryFixed).value,
+        tertiaryFixedDim = animateColorAsState(tertiaryFixedDim).value,
+        onTertiaryFixed = animateColorAsState(onTertiaryFixed).value,
+        onTertiaryFixedVariant = animateColorAsState(onTertiaryFixedVariant).value,
     )
