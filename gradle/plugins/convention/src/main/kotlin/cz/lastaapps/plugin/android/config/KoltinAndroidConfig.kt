@@ -51,6 +51,9 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
             freeCompilerArgs.addAll(
                 listOf(
                     "-opt-in=kotlin.RequiresOptIn",
+                    // enforce Java nullability
+                    "-Xjspecify-annotations=strict",
+                    "-Xtype-enhancement-improvements-strict-mode",
                 ),
             )
         }
