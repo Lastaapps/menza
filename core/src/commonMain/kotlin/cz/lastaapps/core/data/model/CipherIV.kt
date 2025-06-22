@@ -17,32 +17,11 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.domain.error
+package cz.lastaapps.core.data.model
 
-sealed interface CommonError : DomainError.Runtime {
-    data class WorkTimeout(
-        override val throwable: Throwable,
-    ) : CommonError
-
-    data object NotLoggedIn : CommonError
-
-    sealed interface AppNotFound : CommonError {
-        data object PhoneCall : AppNotFound
-
-        data object Email : AppNotFound
-
-        data object AddContact : AppNotFound
-
-        data object Map : AppNotFound
-
-        data object Link : AppNotFound
-
-        data object Facebook : AppNotFound
-
-        data object Telegram : AppNotFound
-    }
-
-    data class CryptoError(
-        override val throwable: Throwable,
-    ) : CommonError
+@JvmInline
+value class CipherIV(
+    val value: ByteArray,
+) {
+    override fun toString(): String = value.toHexString(format = HexFormat.UpperCase)
 }

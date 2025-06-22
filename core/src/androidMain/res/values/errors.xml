@@ -47,4 +47,5 @@
     <string name="error_rating_too_many_requests">We are probably under DOS attack, rating does not work 🚽 (reason: %s) 😞</string>
     <string name="error_rating_unauthorized">Rating request is not authorized, update the app ⬆️</string>
     <string name="error_rating_unrelated">⭐ Rating server error: %s</string>
+    <string name="error_crypto">🔑 Cryptographic error: %s</string>
 </resources>

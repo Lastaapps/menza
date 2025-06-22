@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,9 +22,12 @@ package cz.lastaapps.core.di
 import cz.lastaapps.core.data.AndroidAssetsProvider
 import cz.lastaapps.core.data.AndroidDeviceLocalesProvider
 import cz.lastaapps.core.data.AssetsProvider
+import cz.lastaapps.core.data.CryptoProvider
 import cz.lastaapps.core.data.DeviceLocalesProvider
+import cz.lastaapps.core.data.DummyCryptoProvider
 import cz.lastaapps.core.data.IsOnMeteredNetworkProvider
 import cz.lastaapps.core.data.IsOnMeteredNetworkProviderImpl
+import cz.lastaapps.core.data.JavaXCryptoProvider
 import cz.lastaapps.core.data.createSettings
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.util.providers.AndroidLinkOpener
@@ -39,6 +42,14 @@ internal actual val platform: Module =
     module {
         single { createSettings(get()) }
         single { VMContext(Dispatchers.Default) }
+
+        factory<CryptoProvider> {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                JavaXCryptoProvider()
+            } else {
+                DummyCryptoProvider()
+            }
+        }
 
         factoryOf(::IsOnMeteredNetworkProviderImpl) bind IsOnMeteredNetworkProvider::class
         factoryOf(::AndroidLinkOpener) bind LinkOpener::class

@@ -150,4 +150,5 @@ val CommonError.text: AppText
                     PhoneCall -> E(R.string.error_no_app_dial)
                     Telegram -> E(R.string.error_no_app_telegram)
                 }
+            is CommonError.CryptoError -> F(R.string.error_crypto, throwable.localizedMessage)
         }

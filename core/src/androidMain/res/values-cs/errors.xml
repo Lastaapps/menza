@@ -47,4 +47,5 @@
     <string name="error_rating_too_many_requests">Asi nás někdo DOSí, hodnocení nefunguje 🚽 (důvod: %s) 😞</string>
     <string name="error_rating_unauthorized">Hodnotící požadavek odmítnut, aktualizujte aplikaci. ⬆️</string>
     <string name="error_rating_unrelated">⭐ Chyba hodnotícího serveru: %s</string>
+    <string name="error_crypto">🔑 Chyba kryptografie: %s</string>
 </resources>

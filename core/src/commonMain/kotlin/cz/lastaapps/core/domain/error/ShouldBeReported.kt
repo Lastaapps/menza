@@ -60,4 +60,5 @@ val CommonError.shouldBeReported: Boolean
             NotLoggedIn,
             is AppNotFound,
             -> false
+            is CommonError.CryptoError -> true
         }
