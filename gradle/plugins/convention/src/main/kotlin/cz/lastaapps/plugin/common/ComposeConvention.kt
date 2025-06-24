@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,6 @@ import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 
 class ComposeConvention :
     BasePlugin(
@@ -45,7 +44,7 @@ class ComposeConvention :
 
                 featureFlags =
                     setOf(
-                        ComposeFeatureFlag.OptimizeNonSkippingGroups,
+                        // ComposeFeatureFlag.
                     )
             }
 

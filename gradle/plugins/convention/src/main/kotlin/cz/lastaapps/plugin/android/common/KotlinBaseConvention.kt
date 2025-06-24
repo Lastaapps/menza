@@ -86,7 +86,10 @@ class KotlinBaseConvention :
                     listOf(
                         "-opt-in=kotlin.ExperimentalStdlibApi",
                         "-Xwhen-guards",
-                        "-Xcontext-receivers",
+                        "-Xcontext-parameters",
+                        "-Xcontext-sensitive-resolution",
+                        "-Xannotation-target-all",
+                        "-Xnested-type-aliases",
                     ),
                 )
             }

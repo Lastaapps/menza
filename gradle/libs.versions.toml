@@ -1,6 +1,6 @@
 [versions]
-aboutLibraries = "11.6.3"
-android-gradle = "8.9.3"
+aboutLibraries = "12.2.3"
+android-gradle = "8.10.1"
 androidx-activity = "1.10.1"
 androidx-compose = "1.8.3"
 androidx-compose-icons = "1.7.8"
@@ -8,36 +8,36 @@ androidx-compose-material3 = "1.4.0-alpha16"
 androidx-lifecycle = "2.9.1"
 androidx-security = "1.1.0-beta01"
 androidx-test = "1.6.1"
-coil = "3.1.0"
+coil = "3.2.0"
 decompose = "3.3.0"
 detekt = "1.23.8"
 espresso = "3.6.1"
-google-ksp = "2.1.20-1.0.32"
+google-ksp = "2.2.0-2.0.2"
 # @keep
 java-jvmTarget = "17"
 junit = "4.13.2"
-junit5-bom = "5.12.1"
+junit5-bom = "5.13.2"
 junitVersion = "1.2.1"
-kermit = "2.0.5"
-koin = "4.1.0-Beta6"
-koin-annotations = "1.0.3"
+kermit = "2.0.6"
+koin = "4.1.0"
+koin-annotations = "2.1.0"
 kotest = "5.9.1"
 kotest-arrow = "2.0.0"
-kotlin = "2.1.21"
+kotlin = "2.2.0"
 # @keep
-kotlin-api = "2.1"
+kotlin-api = "2.2"
 # @keep
-kotlin-language = "2.1"
-kotlinx-atomicfu = "0.27.0"
+kotlin-language = "2.2"
+kotlinx-atomicfu = "0.29.0"
 kotlinx-coroutines = "1.10.2"
 # https://mrmans0n.github.io/compose-rules/
 ktlintComposeRules = "0.4.22"
 # https://github.com/JLLeitschuh/ktlint-gradle
-ktlintGradle = "12.2.0"
+ktlintGradle = "12.3.0"
 # https://pinterest.github.io/ktlint/latest/
 # @keep
 ktlintJar = "1.3.1"
-ktor = "3.1.3"
+ktor = "3.1.3" # TODO 3.2.0 Causes proguard issues
 org-jetbrains-kotlin = "2.1.10"
 russhwolf-settings = "1.3.0"
 sdk-compile = "35"
@@ -148,12 +148,12 @@ kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common" }
 kotlin-test-core = { module = "org.jetbrains.kotlin:kotlin-test" }
 kotlin-test-jUnit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlinx-atomicfu" }
-kotlinx-collection = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
+kotlinx-collection = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.6.2"
+kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.6.2" # TODO migrate
 kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1"
 ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlintComposeRules" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
@@ -181,7 +181,7 @@ ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor"
 ktor-server-partialContent = { module = "io.ktor:ktor-server-partial-content", version.ref = "ktor" }
 ktor-server-sesstions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktor" }
 ktor-server-statusPages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
-ktor-server-unofficial-apiKeyAuth = "dev.forst:ktor-api-key:2.1.0"
+ktor-server-unofficial-apiKeyAuth = "dev.forst:ktor-api-key:2.2.4"
 russhwolf-settings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "russhwolf-settings" }
 russhwolf-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "russhwolf-settings" }
 russhwolf-settings-datastore = { module = "com.russhwolf:multiplatform-settings-datastore", version.ref = "russhwolf-settings" }

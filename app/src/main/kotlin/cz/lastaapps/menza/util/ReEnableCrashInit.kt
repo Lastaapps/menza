@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,6 +26,7 @@ import androidx.startup.Initializer
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.crash.StartInit
 import org.koin.androix.startup.KoinInitializer
+import org.koin.core.annotation.KoinExperimentalAPI
 
 @Keep
 @Suppress("unused")
@@ -39,6 +40,6 @@ internal class ReEnableCrashInit : Initializer<Unit> {
             .initializeComponent(StartInit::class.java)
     }
 
-    override fun dependencies(): List<Class<out Initializer<*>>> =
-        listOf(KoinInitializer::class.java)
+    @OptIn(KoinExperimentalAPI::class)
+    override fun dependencies(): List<Class<out Initializer<*>>> = listOf(KoinInitializer::class.java)
 }

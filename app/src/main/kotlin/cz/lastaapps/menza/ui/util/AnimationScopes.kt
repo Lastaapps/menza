@@ -52,9 +52,9 @@ data class AnimationScopes(
     val isEnabled: Boolean,
 )
 
-context(AnimatedVisibilityScope)
+context(animatedVisibilityScope : AnimatedVisibilityScope)
 fun SharedTransitionScope.AnimationScopes(isEnabled: Boolean = true) =
-    AnimationScopes(this, this@AnimatedVisibilityScope, isEnabled = isEnabled)
+    AnimationScopes(this, animatedVisibilityScope, isEnabled = isEnabled)
 
 @Composable
 fun Modifier.sharedBounds(
