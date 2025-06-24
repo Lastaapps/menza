@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -21,10 +21,16 @@
         <exclude
             domain="sharedpref"
             path="balance_credentials.xml" />
+        <exclude
+            domain="sharedpref"
+            path="balance_credentials_v02.xml" />
     </cloud-backup>
     <device-transfer>
         <exclude
             domain="sharedpref"
             path="balance_credentials.xml" />
+        <exclude
+            domain="sharedpref"
+            path="balance_credentials_v02.xml" />
     </device-transfer>
 </data-extraction-rules>

@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.core.data
+package cz.lastaapps.core.data.crypto
 
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
@@ -27,9 +27,12 @@ import arrow.core.Either
 import arrow.core.flatten
 import arrow.core.raise.Raise
 import arrow.core.raise.either
+import cz.lastaapps.core.data.CryptoOutcome
+import cz.lastaapps.core.data.CryptoProvider
 import cz.lastaapps.core.data.model.CipherIV
 import cz.lastaapps.core.domain.error.CommonError
 import cz.lastaapps.core.util.extensions.localLogger
+import java.security.GeneralSecurityException
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -154,8 +157,8 @@ class JavaXCryptoProvider(
 
     private fun <T> cryptoCatch(block: Raise<CommonError.CryptoError>.() -> T): CryptoOutcome<T> =
         either {
-            Either
-                .catchOrThrow<java.security.GeneralSecurityException, T> {
+            Either.Companion
+                .catchOrThrow<GeneralSecurityException, T> {
                     block()
                 }.onLeft {
                     log.e(it) { "Encryption error" }

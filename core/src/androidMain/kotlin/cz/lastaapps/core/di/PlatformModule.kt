@@ -27,8 +27,8 @@ import cz.lastaapps.core.data.DeviceLocalesProvider
 import cz.lastaapps.core.data.DummyCryptoProvider
 import cz.lastaapps.core.data.IsOnMeteredNetworkProvider
 import cz.lastaapps.core.data.IsOnMeteredNetworkProviderImpl
-import cz.lastaapps.core.data.JavaXCryptoProvider
 import cz.lastaapps.core.data.createSettings
+import cz.lastaapps.core.data.crypto.JavaXCryptoProvider
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.util.providers.AndroidLinkOpener
 import cz.lastaapps.core.util.providers.LinkOpener
