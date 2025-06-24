@@ -21,6 +21,7 @@ package cz.lastaapps.core.data.crypto
 
 import android.content.SharedPreferences
 import arrow.core.raise.either
+import cz.lastaapps.core.data.CryptoProvider
 import cz.lastaapps.core.data.decryptString
 import cz.lastaapps.core.data.encryptString
 import cz.lastaapps.core.data.model.CipherIV
@@ -30,7 +31,10 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 private const val IV_KEY_SUFFIX = "_iv"
 
-context(provider:CryptoProvider)
+// TODO remove once AS supports Kotlin 2.2
+private typealias Idk = CryptoProvider
+
+context(provider: CryptoProvider)
 fun SharedPreferences.Editor.putEncryptedString(
     key: String,
     value: String,
@@ -41,7 +45,7 @@ fun SharedPreferences.Editor.putEncryptedString(
         putByteArray(key + IV_KEY_SUFFIX, iv.value)
     }
 
-context(provider:CryptoProvider)
+context(provider: CryptoProvider)
 fun SharedPreferences.getEncryptedString(key: String): Outcome<String?> =
     either {
         val ciphertext = getByteArray(key) ?: return@either null

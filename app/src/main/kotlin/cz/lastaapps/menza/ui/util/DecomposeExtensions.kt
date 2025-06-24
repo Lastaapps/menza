@@ -22,7 +22,11 @@ package cz.lastaapps.menza.ui.util
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.instancekeeper.getOrCreate
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+
+// TODO remove once AS supports Kotlin 2.2
+private typealias Idk = KoinComponent
 
 context(component: KoinComponent)
 inline fun <reified T : InstanceKeeper.Instance> InstanceKeeper.getOrCreateKoin(
