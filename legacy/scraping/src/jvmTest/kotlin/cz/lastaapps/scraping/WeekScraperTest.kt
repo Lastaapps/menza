@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,43 +34,44 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.ktor.client.statement.bodyAsText
-import java.time.Month
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.todayIn
 import org.junit.jupiter.api.Test
+import java.time.Month
+import kotlin.time.Clock
 
 @ExperimentalCoroutinesApi
 class WeekScraperTest {
+    @Test
+    fun scrapeWeekOnline() =
+        runTest {
+            val date = Clock.System.todayIn(CET)
+            val weekNumber = WeekNumber.of(date)
+            println("Loading for $date, weekNumber is ${weekNumber.week}")
+
+            shouldThrow<WeekNotAvailable> {
+                val result = WeekScraperImpl.createRequest(MenzaId(15), weekNumber).bodyAsText()
+                WeekScraperImpl.scrape(result)
+            }
+            val result = WeekScraperImpl.createRequest(MenzaId(1), weekNumber).bodyAsText()
+            val weekDishSet = WeekScraperImpl.scrape(result)
+
+            weekDishSet.forEach {
+                println(it)
+            }
+
+            weekDishSet.shouldNotBeNull()
+            weekDishSet.shouldNotBeEmpty()
+            weekDishSet.map { it.courseType.type } shouldContain "Polévky"
+            weekDishSet.map { it.courseType.type } shouldContain "Specialita dne"
+        }
 
     @Test
-    fun scrapeWeekOnline() = runTest {
-        val date = Clock.System.todayIn(CET)
-        val weekNumber = WeekNumber.of(date)
-        println("Loading for $date, weekNumber is ${weekNumber.week}")
-
-        shouldThrow<WeekNotAvailable> {
-            val result = WeekScraperImpl.createRequest(MenzaId(15), weekNumber).bodyAsText()
-            WeekScraperImpl.scrape(result)
-        }
-        val result = WeekScraperImpl.createRequest(MenzaId(1), weekNumber).bodyAsText()
-        val weekDishSet = WeekScraperImpl.scrape(result)
-
-        weekDishSet.forEach {
-            println(it)
-        }
-
-        weekDishSet.shouldNotBeNull()
-        weekDishSet.shouldNotBeEmpty()
-        weekDishSet.map { it.courseType.type } shouldContain "Polévky"
-        weekDishSet.map { it.courseType.type } shouldContain "Specialita dne"
-    }
-
-    @Test
-    fun scrapeWeek() = runTest {
-        val toTest = """<body><input type='hidden' id='PodsysActive' value='1'></body>
+    fun scrapeWeek() =
+        runTest {
+            val toTest = """<body><input type='hidden' id='PodsysActive' value='1'></body>
             <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
@@ -555,19 +556,20 @@ class WeekScraperTest {
   </noscript>
 </div>"""
 
-        val result = WeekScraperImpl.scrape(toTest)
+            val result = WeekScraperImpl.scrape(toTest)
 
-        result shouldHaveSize 40
-        result.map { it.courseType }.toSet() shouldHaveSize 5
-        result.map { it.date } shouldContain LocalDate(2022, Month.JANUARY, 4)
-        result shouldContain WeekDish(
-            MenzaId(1),
-            LocalDate(2022, Month.JANUARY, 6),
-            CourseType("Specialita dne", 1),
-            Amount("150 g"),
-            "Kuřecí steak se šunkou a sýrem, smažené hranolky",
-        )
-    }
+            result shouldHaveSize 40
+            result.map { it.courseType }.toSet() shouldHaveSize 5
+            result.map { it.date } shouldContain LocalDate(2022, Month.JANUARY, 4)
+            result shouldContain
+                WeekDish(
+                    MenzaId(1),
+                    LocalDate(2022, Month.JANUARY, 6),
+                    CourseType("Specialita dne", 1),
+                    Amount("150 g"),
+                    "Kuřecí steak se šunkou a sýrem, smažené hranolky",
+                )
+        }
 
     @Test
     fun scrapeWeekDisabled() {
@@ -901,9 +903,10 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
     }
 
     @Test
-    fun malformed() = runTest {
-        val emptyList =
-            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+    fun malformed() =
+        runTest {
+            val emptyList =
+                """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
@@ -916,8 +919,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
     </table>
   </div>
 </div>"""
-        val noDishName =
-            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+            val noDishName =
+                """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
@@ -939,8 +942,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
     </table>
   </div>
 </div>"""
-        val noDate =
-            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+            val noDate =
+                """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
@@ -962,8 +965,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
     </table>
   </div>
 </div>"""
-        val noFoodType =
-            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+            val noFoodType =
+                """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
@@ -983,8 +986,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
     </table>
   </div>
 </div>"""
-        val missingLine =
-            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+            val missingLine =
+                """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
@@ -1005,8 +1008,8 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
     </table>
   </div>
 </div>"""
-        val malformedDate =
-            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+            val malformedDate =
+                """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
   <div class='data' style="display:none;" >
     Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target="_blank" style="padding-left:5px;" title="Alergeny">Seznam všech alergenů <img src="files/Alergeny16.png" alt="Al"></a>
@@ -1029,37 +1032,38 @@ Výběr dle aktuální nabídky na provozovně. <a href="alergenyall.php" target
   </div>
 </div>"""
 
-        WeekScraperImpl.scrape(emptyList).shouldBeEmpty()
-        shouldThrowAny { WeekScraperImpl.scrape("") }
-        WeekScraperImpl.scrape(noDishName).shouldBeEmpty()
-        shouldThrowAny { WeekScraperImpl.scrape(noDate) }
-        shouldThrowAny { WeekScraperImpl.scrape(noFoodType) }
-        shouldThrowAny { WeekScraperImpl.scrape(missingLine) }
-        shouldThrowAny { WeekScraperImpl.scrape(malformedDate) }
-    }
+            WeekScraperImpl.scrape(emptyList).shouldBeEmpty()
+            shouldThrowAny { WeekScraperImpl.scrape("") }
+            WeekScraperImpl.scrape(noDishName).shouldBeEmpty()
+            shouldThrowAny { WeekScraperImpl.scrape(noDate) }
+            shouldThrowAny { WeekScraperImpl.scrape(noFoodType) }
+            shouldThrowAny { WeekScraperImpl.scrape(missingLine) }
+            shouldThrowAny { WeekScraperImpl.scrape(malformedDate) }
+        }
 
     @Test
-    fun malformedWeekNotSupported() = runTest {
-        val noMessage =
-            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+    fun malformedWeekNotSupported() =
+        runTest {
+            val noMessage =
+                """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 <div class='data'>
 </div>
 </div>"""
-        val wrongMessage =
-            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+            val wrongMessage =
+                """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 <div class='data'>
 Tato provozovna ABC nevystavuje týdenní jídelní lístek.
 </div>
 </div>"""
-        val noElement =
-            """<body><input type='hidden' id='PodsysActive' value='1'></body>
+            val noElement =
+                """<body><input type='hidden' id='PodsysActive' value='1'></body>
  <div id="jidelnicek" style="display:block; max-width:800px; padding-left:10px;">
 </div>"""
 
-        shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(noMessage) } }
-        shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(wrongMessage) } }
-        shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(noElement) } }
-    }
+            shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(noMessage) } }
+            shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(wrongMessage) } }
+            shouldThrowAny { shouldNotThrow<WeekNotAvailable> { WeekScraperImpl.scrape(noElement) } }
+        }
 }

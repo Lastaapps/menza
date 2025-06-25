@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -38,6 +38,7 @@ import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.data.model.DBLang
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.isoDayNumber
 
 @JvmInline
 internal value class AgataDatabaseSqlDriver(
@@ -123,9 +124,9 @@ private object LongListAdapter : ColumnAdapter<List<Long>, String> {
 }
 
 private object DayOfWeekAdapter : ColumnAdapter<DayOfWeek, Long> {
-    override fun decode(databaseValue: Long): DayOfWeek = DayOfWeek.of(databaseValue.toInt())
+    override fun decode(databaseValue: Long): DayOfWeek = DayOfWeek(databaseValue.toInt())
 
-    override fun encode(value: DayOfWeek): Long = value.value.toLong()
+    override fun encode(value: DayOfWeek): Long = value.isoDayNumber.toLong()
 }
 
 private object LocalTimeAdapter : ColumnAdapter<LocalTime, Long> {

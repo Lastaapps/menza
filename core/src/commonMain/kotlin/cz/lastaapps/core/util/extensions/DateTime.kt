@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,7 +21,6 @@ package cz.lastaapps.core.util.extensions
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -29,7 +28,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
-import java.time.DayOfWeek.MONDAY
+import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
@@ -42,7 +41,7 @@ fun LocalDate.atMidnight() = LocalDateTime(this, LocalTime.MIDNIGHT)
  * Finds the first day with the type given before this date
  */
 fun LocalDate.findDayOfWeek(dof: DayOfWeek) =
-    (this.dayOfWeek.value - dof.value).let {
+    (this.dayOfWeek.ordinal - dof.ordinal).let {
         when {
             it == 0 -> this
             it < 0 -> this.minus(it + 7, DateTimeUnit.DAY)
@@ -51,7 +50,7 @@ fun LocalDate.findDayOfWeek(dof: DayOfWeek) =
     }
 
 @Suppress("NOTHING_TO_INLINE")
-inline fun LocalDate.findMonday() = findDayOfWeek(MONDAY)
+inline fun LocalDate.findMonday() = findDayOfWeek(DayOfWeek.MONDAY)
 
 /**
  * Creates an inprecise ticker that sends now() every [duration]

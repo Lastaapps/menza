@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -81,7 +81,7 @@ internal class WeekDishRepoImpl(
 //        if (isEmpty()) return null
 //        if (size == 1 && first().id == 0) return null
 //        val now = clock.now().toLocalDateTime(timeZone).date
-//        return if (now.dayOfWeek <= FRIDAY) first() else last()
+//        return if (now.day <= FRIDAY) first() else last()
 //    }
 
     private val syncJob =

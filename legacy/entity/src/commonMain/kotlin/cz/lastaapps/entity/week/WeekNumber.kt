@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,18 +19,20 @@
 
 package cz.lastaapps.entity.week
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Instant
 
 /**
  * Represents week number used in fetching a week menu
  * Id's aren't stable on the server side, so Week number is disabled fo now
  */
 @JvmInline
-value class WeekNumber private constructor(val week: Int) {
+value class WeekNumber private constructor(
+    val week: Int,
+) {
     init {
         require(week >= 0) { "Week number is negative" }
     }

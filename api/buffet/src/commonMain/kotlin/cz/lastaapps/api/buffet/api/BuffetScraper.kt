@@ -228,7 +228,7 @@ internal class BuffetScraperImpl : BuffetScraper {
     private fun String.toDayOfWeek(): DayOfWeek {
         val index = daysOfWeek.indexOf(this.trim().lowercase())
         if (index < 0) error("Day of week name invalid: $this")
-        return DayOfWeek.of(index + 1)
+        return DayOfWeek(index + 1)
     }
 
     private val toRemove =

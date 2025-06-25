@@ -194,7 +194,7 @@ private fun String.toDayOfWeek() =
                 .indexOf(this)
                 .takeUnless { it < 0 }
                 ?: englishDaysOfWeek.indexOf(this)
-        DayOfWeek.of(index + 1)
+        DayOfWeek(index + 1)
     }
 
 private val timeRegex = """(\d+):(\d+)""".toRegex()

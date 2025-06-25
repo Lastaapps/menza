@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -47,6 +47,7 @@ import cz.lastaapps.api.core.domain.model.PlaceOpeningInfo
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.theme.Padding
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.datetime.toJavaDayOfWeek
 import kotlinx.datetime.toJavaLocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -139,10 +140,14 @@ private fun OpeningHoursLocationUI(
                                     modifier = Modifier.fillMaxWidth(),
                                 ) {
                                     val startDate =
-                                        time.startDay.getDisplayName(TextStyle.SHORT, locale)
+                                        time.startDay
+                                            .toJavaDayOfWeek()
+                                            .getDisplayName(TextStyle.SHORT, locale)
                                     if (time.startDay != time.endDay) {
                                         val end =
-                                            time.endDay.getDisplayName(TextStyle.SHORT, locale)
+                                            time.endDay
+                                                .toJavaDayOfWeek()
+                                                .getDisplayName(TextStyle.SHORT, locale)
                                         Text("$startDate - $end")
                                     } else {
                                         Text(startDate)

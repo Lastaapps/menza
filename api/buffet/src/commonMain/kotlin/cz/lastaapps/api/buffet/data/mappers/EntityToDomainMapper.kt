@@ -32,13 +32,13 @@ import cz.lastaapps.core.util.extensions.findDayOfWeek
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
-import java.time.DayOfWeek.SATURDAY
+import kotlin.time.Clock
 
 internal fun List<DishEntity>.toDomainDays(menzaType: MenzaType.Buffet): List<Pair<DayOfWeek, List<DishCategory>>> =
     groupBy { it.dayOfWeek }
@@ -87,10 +87,10 @@ internal fun List<DishEntity>.toDomainWeek(
                 .now()
                 .toLocalDateTime(timeZone)
                 .date
-                .findDayOfWeek(SATURDAY)
+                .findDayOfWeek(DayOfWeek.SATURDAY)
                 .plus(2, DateTimeUnit.DAY)
 
-        val offset = dayOfWeek.value - DayOfWeek.MONDAY.value
+        val offset = dayOfWeek.isoDayNumber - DayOfWeek.MONDAY.isoDayNumber
         val date = monday.plus(offset, DateTimeUnit.DAY)
 
         WeekDayDish(

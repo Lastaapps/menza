@@ -25,6 +25,7 @@ import buffet.DishEntity
 import cz.lastaapps.api.buffet.BuffetDatabase
 import cz.lastaapps.api.buffet.domain.model.BuffetType
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.isoDayNumber
 
 @JvmInline
 internal value class BuffetDatabaseSqlDriver(
@@ -58,7 +59,7 @@ private object StringListAdapter : ColumnAdapter<List<String>, String> {
 }
 
 private object DayOfWeekAdapter : ColumnAdapter<DayOfWeek, Long> {
-    override fun decode(databaseValue: Long): DayOfWeek = DayOfWeek.of(databaseValue.toInt())
+    override fun decode(databaseValue: Long): DayOfWeek = DayOfWeek(databaseValue.toInt())
 
-    override fun encode(value: DayOfWeek): Long = value.value.toLong()
+    override fun encode(value: DayOfWeek): Long = value.isoDayNumber.toLong()
 }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,7 @@ import cz.lastaapps.menza.features.starting.data.PrivacyStore
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 
 internal class PolicyViewModel(
     private val store: PrivacyStore,

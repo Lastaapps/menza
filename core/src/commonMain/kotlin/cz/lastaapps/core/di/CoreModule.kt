@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,11 +25,11 @@ import cz.lastaapps.core.domain.usecase.GetAppVersionUC
 import cz.lastaapps.core.domain.usecase.IsOnMeteredUC
 import cz.lastaapps.core.domain.usecase.OpenAppSocialUC
 import kotlinx.coroutines.Dispatchers
-import kotlinx.datetime.Clock
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import kotlin.time.Clock
 
 internal expect val platform: Module
 

@@ -153,7 +153,7 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.6.2" # TODO migrate
+kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.7.0"
 kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1"
 ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlintComposeRules" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }

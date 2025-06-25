@@ -32,6 +32,7 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
 private typealias KV = org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -43,6 +44,10 @@ class KotlinBaseConvention :
             }
 
             apply<CoroutinesConvention>()
+
+            kotlinExtension.sourceSets.all {
+                languageSettings.optIn("kotlin.time.ExperimentalTime")
+            }
 
             java {
                 val versionCode =

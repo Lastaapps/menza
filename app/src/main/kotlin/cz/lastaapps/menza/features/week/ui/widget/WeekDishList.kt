@@ -193,7 +193,7 @@ private fun rememberDateFormatter(): @Composable (LocalDate) -> String {
             LocalDate.Format {
                 dayOfWeek(daysOfWeek)
                 char(' ')
-                dayOfMonth(padding = NONE)
+                day(padding = NONE)
                 char('.')
                 monthNumber(padding = NONE)
                 char('.')
