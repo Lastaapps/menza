@@ -17,6 +17,8 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import java.io.ByteArrayOutputStream
+import java.nio.charset.Charset
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
@@ -28,15 +30,26 @@ plugins {
     `maven-publish`
 }
 
+val buildVersionProvider = providers.of(BuildDateValueSource::class) {}
+
 android {
     namespace = "cz.lastaapps.common"
 
     defaultConfig {
-        buildConfigField("java.lang.String", "BUILD_DATE", "\"${formatDate(modificationTime())}\"")
+        val modificationTime =
+            buildVersionProvider
+                .map(Instant::ofEpochSecond)
+                .map(::formatDate)
+                .map { "\"$it\"" }
+        buildConfigField("java.lang.String", "BUILD_DATE", modificationTime.get())
     }
     buildTypes {
         debug {
-            buildConfigField("java.lang.String", "BUILD_DATE", "\"${formatDate()}\"")
+            val nowProvider =
+                providers
+                    .provider { formatDate() }
+                    .map { "\"$it\"" }
+            buildConfigField("java.lang.String", "BUILD_DATE", nowProvider.get())
         }
     }
     buildFeatures {
@@ -54,24 +67,30 @@ private fun formatDate(instant: Instant = Instant.now()) =
         .format(DateTimeFormatter.ISO_DATE)
 
 // https://reproducible-builds.org/docs/source-date-epoch/
+// https://docs.gradle.org/8.14.2/userguide/configuration_cache.html#config_cache:requirements:external_processes
 // Set based on the current commit that is being built.
-private fun modificationTime() =
-    (
+abstract class BuildDateValueSource : ValueSource<Long, ValueSourceParameters.None> {
+    @get:Inject
+    abstract val execOperations: ExecOperations
+
+    override fun obtain(): Long {
         System
             .getenv("SOURCE_DATE_EPOCH")
             ?.takeIf { it.isNotBlank() }
             ?.toLong()
-            ?: ProcessBuilder("git", "log", "-1", "--format=%ct")
-                .directory(rootDir)
-                .redirectErrorStream(true)
-                .start()
-                .let { process ->
-                    check(process.waitFor() == 0) { "git log failed" }
-                    process.inputStream
-                        .bufferedReader()
-                        .use { it.readText() }
-                        .trim()
-                        .also { check(it.isNotBlank()) { "git log did not return a timestamp" } }
-                        .toLong()
-                }
-    ).let(Instant::ofEpochSecond)
+            ?.let { return it }
+
+        val output = ByteArrayOutputStream()
+        execOperations.exec {
+            commandLine("git", "log", "-1", "--format=%ct")
+            standardOutput = output
+        }
+        return String(
+            output.toByteArray(),
+            Charset
+                .defaultCharset(),
+        ).trim()
+            .also { check(it.isNotBlank()) { "git log did not return a timestamp" } }
+            .toLong()
+    }
+}
