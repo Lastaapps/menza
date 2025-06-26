@@ -31,7 +31,6 @@ import cz.lastaapps.api.core.domain.sync.mapSync
 import cz.lastaapps.api.main.domain.usecase.GetTodayDishListUC
 import cz.lastaapps.api.main.domain.usecase.OpenMenuUC
 import cz.lastaapps.api.main.domain.usecase.SyncTodayDishListUC
-import cz.lastaapps.core.data.AppInfoProvider
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.usecase.IsOnMeteredUC
 import cz.lastaapps.core.ui.vm.ErrorHolder
@@ -52,15 +51,10 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 internal class DishListViewModel(
     context: VMContext,
@@ -74,7 +68,6 @@ internal class DishListViewModel(
     private val dismissDishListModeChooserUC: DismissDishListModeChooserUC,
     private val getUserSettingsUC: GetTodayUserSettingsUC,
     private val openMenuLinkUC: OpenMenuUC,
-    private val appInfoProvider: AppInfoProvider,
 ) : StateViewModel<DishListState>(DishListState(), context),
     ErrorHolder {
     private val log = localLogger()
@@ -120,19 +113,6 @@ internal class DishListViewModel(
             .onEach {
                 updateState { copy(isOnMetered = it) }
             }.launchIn(scope)
-
-        // Refreshes the screen if user is looking at the data for at least 42 seconds
-        if (!appInfoProvider.isDebug()) {
-            flow
-                .map { it.selectedMenza?.getOrNull() }
-                .distinctUntilChanged()
-                .mapLatest { menza ->
-                    while (menza != null) {
-                        delay(42.seconds)
-                        load(menza, true)
-                    }
-                }.launchIn(scope)
-        }
     }
 
     private var syncJob: Job? = null
