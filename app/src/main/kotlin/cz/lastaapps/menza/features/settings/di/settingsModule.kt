@@ -61,6 +61,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetSettingsE
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.OnSettingsOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetAlternativeNavigationUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetBalanceWarningThresholdUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetCurrencyUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetDishLanguageUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetDishListModeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetImageScaleUC
@@ -150,6 +151,7 @@ val settingsModule =
         factoryOf(::GetDishListModeUC)
         factoryOf(::SetDishListModeUC)
         factoryOf(::DismissDishListModeChooserUC)
+        factoryOf(::SetCurrencyUC)
 
         // Menza order
         factoryOf(::ReorderMenzaViewModel)

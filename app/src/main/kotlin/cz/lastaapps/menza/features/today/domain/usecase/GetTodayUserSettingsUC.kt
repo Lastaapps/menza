@@ -36,6 +36,7 @@ internal class GetTodayUserSettingsUC(
             .map {
                 TodayUserSettings(
                     priceType = it.priceType,
+                    currency = it.currency,
                     downloadOnMetered = it.imagesOnMetered,
                     imageScale = it.imageScale,
                     language = it.dataLanguage,

@@ -421,6 +421,7 @@ private fun DishItem(
                 dish,
                 onRating = onRating,
                 priceType = appSettings.priceType,
+                currency = appSettings.currency,
                 modifier =
                     Modifier
                         .zIndex(2f)

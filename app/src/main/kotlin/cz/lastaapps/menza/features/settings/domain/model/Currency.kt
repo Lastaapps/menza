@@ -17,21 +17,14 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.today.domain.model
+package cz.lastaapps.menza.features.settings.domain.model
 
-import cz.lastaapps.api.core.domain.model.DataLanguage
-import cz.lastaapps.menza.features.settings.domain.model.Currency
-import cz.lastaapps.menza.features.settings.domain.model.DishListMode
-import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
-
-internal data class TodayUserSettings(
-    val dishListMode: DishListMode? = null,
-    val useOliverRow: Boolean = false,
-    val priceType: PriceType = Unset,
-    val currency: Currency = Currency.NONE,
-    val downloadOnMetered: Boolean = false,
-    val language: DataLanguage = DataLanguage.Czech,
-    val imageScale: Float = 1f,
-    val isDishListModeChosen: Boolean = true,
-)
+enum class Currency(
+    val id: Int,
+) {
+    NONE(0),
+    CZK(1),
+    BEER(2),
+    EUR(3),
+    USD(4),
+}

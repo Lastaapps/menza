@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.dish.DishCategory
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.ui.util.dishContainerKey
@@ -230,6 +231,7 @@ private fun DishItem(
                     dish = dish,
                     onRating = onRating,
                     priceType = userSettings.priceType,
+                    currency = userSettings.currency,
                     downloadOnMetered = userSettings.downloadOnMetered,
                     isOnMetered = isOnMetered,
                     modifier = Modifier.sharedElement(scopes, key = dishImageKey(dish.id)),
@@ -244,7 +246,12 @@ private fun DishItem(
                         .sharedBounds(scopes, dishTitleKey(dish.id)),
             )
             if (dish.photoLink == null) {
-                DishBadgesRow(dish = dish, onRating = onRating, priceType = userSettings.priceType)
+                DishBadgesRow(
+                    dish = dish,
+                    onRating = onRating,
+                    priceType = userSettings.priceType,
+                    currency = userSettings.currency,
+                )
             }
             DishInfoRow(dish)
         }
@@ -256,6 +263,7 @@ private fun DishImageWithBadge(
     dish: Dish,
     onRating: (Dish) -> Unit,
     priceType: PriceType,
+    currency: Currency,
     downloadOnMetered: Boolean,
     isOnMetered: Boolean,
     modifier: Modifier = Modifier,
@@ -273,6 +281,7 @@ private fun DishImageWithBadge(
             dish = dish,
             onRating = onRating,
             priceType = priceType,
+            currency = currency,
             modifier = Modifier.align(Alignment.BottomEnd),
         )
     }

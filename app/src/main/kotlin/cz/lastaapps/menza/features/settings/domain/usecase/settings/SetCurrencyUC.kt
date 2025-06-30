@@ -17,21 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.features.today.domain.model
+package cz.lastaapps.menza.features.settings.domain.usecase.settings
 
-import cz.lastaapps.api.core.domain.model.DataLanguage
+import cz.lastaapps.core.domain.UCContext
+import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.Currency
-import cz.lastaapps.menza.features.settings.domain.model.DishListMode
-import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
 
-internal data class TodayUserSettings(
-    val dishListMode: DishListMode? = null,
-    val useOliverRow: Boolean = false,
-    val priceType: PriceType = Unset,
-    val currency: Currency = Currency.NONE,
-    val downloadOnMetered: Boolean = false,
-    val language: DataLanguage = DataLanguage.Czech,
-    val imageScale: Float = 1f,
-    val isDishListModeChosen: Boolean = true,
-)
+class SetCurrencyUC internal constructor(
+    context: UCContext,
+    private val repo: MainSettingsRepo,
+) : UseCase(context) {
+    suspend operator fun invoke(currency: Currency) =
+        launch {
+            repo.setCurrency(currency)
+        }
+}

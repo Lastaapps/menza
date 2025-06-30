@@ -26,6 +26,7 @@ import cz.lastaapps.menza.features.settings.data.datasource.InitMenzaDataSource
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 import cz.lastaapps.menza.features.settings.domain.model.AppSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
@@ -58,6 +59,7 @@ internal class MainSettingsRepoImpl(
             getBalanceWarningThreshold().distinctUntilChanged(),
             getAlternativeNavigation().distinctUntilChanged(),
             isDishListModeChosen().distinctUntilChanged(),
+            getCurrency().distinctUntilChanged(),
         ) { arr ->
             AppSettings(
                 initialMenzaMode = arr[0] as InitialSelectionBehaviour,
@@ -76,6 +78,7 @@ internal class MainSettingsRepoImpl(
                 balanceWarningThreshold = arr[13] as Int,
                 alternativeNavigation = arr[14] as Boolean,
                 isDishListModeChosen = arr[15] as Boolean,
+                currency = arr[16] as Currency,
             )
         }.distinctUntilChanged()
 
@@ -155,4 +158,8 @@ internal class MainSettingsRepoImpl(
 
     override fun isDishListModeChosen(): Flow<Boolean> =
         general.getDishListModeChosen().map { it ?: AppSettings.default.isDishListModeChosen }
+
+    override suspend fun setCurrency(currency: Currency) = general.setCurrency(currency)
+
+    override fun getCurrency(): Flow<Currency> = general.getCurrency().map { it ?: AppSettings.default.currency }
 }

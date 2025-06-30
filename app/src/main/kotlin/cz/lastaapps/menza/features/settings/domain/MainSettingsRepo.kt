@@ -23,6 +23,7 @@ import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.menza.features.settings.domain.model.AppSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
@@ -95,4 +96,8 @@ internal interface MainSettingsRepo {
     suspend fun dismissDishListModeChosen()
 
     fun isDishListModeChosen(): Flow<Boolean>
+
+    suspend fun setCurrency(currency: Currency)
+
+    fun getCurrency(): Flow<Currency>
 }

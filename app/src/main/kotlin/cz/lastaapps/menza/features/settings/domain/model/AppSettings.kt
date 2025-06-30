@@ -41,6 +41,7 @@ internal data class AppSettings(
     val balanceWarningThreshold: Int,
     val alternativeNavigation: Boolean,
     val isDishListModeChosen: Boolean,
+    val currency: Currency,
 ) {
     companion object {
         // Used for previews
@@ -62,6 +63,7 @@ internal data class AppSettings(
                 balanceWarningThreshold = 256,
                 alternativeNavigation = true,
                 isDishListModeChosen = false,
+                currency = Currency.CZK,
             )
     }
 }

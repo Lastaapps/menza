@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,17 +29,31 @@ import cz.lastaapps.api.core.domain.model.rating.RatingCategory.PORTION_SIZE
 import cz.lastaapps.api.core.domain.model.rating.RatingCategory.TASTE
 import cz.lastaapps.api.core.domain.model.rating.RatingCategory.WORTHINESS
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Discounted
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Normal
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
 
-fun Dish.getPrice(type: PriceType) =
-    when (type) {
-        Discounted -> priceDiscounted ?: priceNormal
-        Normal -> priceNormal
-        Unset -> priceNormal
-    }?.formatPrice()
+fun Dish.getPrice(
+    type: PriceType,
+    currency: Currency = Currency.CZK,
+) = when (type) {
+    Discounted -> priceDiscounted ?: priceNormal
+    Normal -> priceNormal
+    Unset -> priceNormal
+}?.let {
+    when (currency) {
+        Currency.NONE -> null
+        Currency.CZK -> it
+        // based on Strahov Bar 10 - check for price update once a week at least
+        Currency.BEER -> it / 45f
+        // TODO update me every year
+        // based on Czech National Bank: https://www.kurzy.cz/kurzy-men/jednotny-kurz/
+        Currency.EUR -> it / 25.160f
+        Currency.USD -> it / 23.280f
+    }
+}?.formatPrice()
 
 fun WeekDish.getPrice(type: PriceType) =
     when (type) {

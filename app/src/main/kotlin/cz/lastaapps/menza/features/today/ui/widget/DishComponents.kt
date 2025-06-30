@@ -29,6 +29,7 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.SportsBar
 import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +41,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
@@ -52,6 +55,7 @@ import cz.lastaapps.api.core.domain.model.dish.Dish
 import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.api.core.domain.model.rating.Rating
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.ui.util.getPrice
 import cz.lastaapps.menza.ui.theme.Padding
@@ -77,13 +81,14 @@ internal fun DishBadgesColumn(
     dish: Dish,
     onRating: (Dish) -> Unit,
     priceType: PriceType,
+    currency: Currency,
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = modifier,
     horizontalAlignment = Alignment.End,
     verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
 ) {
-    DishPriceBadge(dish = dish, priceType = priceType)
+    DishPriceBadge(dish = dish, priceType = priceType, currency = currency)
     DishRatingBadge(rating = dish.rating, onRating = { onRating(dish) })
 }
 
@@ -92,6 +97,7 @@ internal fun DishBadgesRow(
     dish: Dish,
     onRating: (Dish) -> Unit,
     priceType: PriceType,
+    currency: Currency,
     modifier: Modifier = Modifier,
 ) = Row(
     modifier = modifier.fillMaxWidth(),
@@ -99,24 +105,46 @@ internal fun DishBadgesRow(
     horizontalArrangement = Arrangement.spacedBy(Padding.Small, Alignment.End),
 ) {
     DishRatingBadge(rating = dish.rating, onRating = { onRating(dish) })
-    DishPriceBadge(dish = dish, priceType = priceType)
+    DishPriceBadge(dish = dish, priceType = priceType, currency = currency)
 }
 
 @Composable
 internal fun DishPriceBadge(
     dish: Dish,
     priceType: PriceType,
+    currency: Currency,
     modifier: Modifier = Modifier,
 ) {
-    dish.getPrice(priceType)?.let { price ->
+    dish.getPrice(priceType, currency)?.let { price ->
         Surface(
             modifier.shadow(4.dp, shape = CircleShape),
             color = MaterialTheme.colorScheme.tertiary,
             shape = MaterialTheme.shapes.medium,
         ) {
+            val icons =
+                remember {
+                    persistentMapOf(
+                        "beer" to InlineIcon(Icons.Default.SportsBar),
+                    )
+                }
+            val text =
+                when (currency) {
+                    Currency.NONE -> "".let(::AnnotatedString)
+                    Currency.CZK -> "$price Kč".let(::AnnotatedString)
+                    Currency.BEER ->
+                        buildAnnotatedString {
+                            append(price)
+                            append(' ')
+                            appendInlineContent("beer")
+                        }
+
+                    Currency.EUR -> "€$price".let(::AnnotatedString)
+                    Currency.USD -> "$$price".let(::AnnotatedString)
+                }
             Text(
-                text = "$price Kč",
+                text = text,
                 style = MaterialTheme.typography.bodySmall,
+                inlineContent = icons,
                 modifier =
                     Modifier.padding(
                         vertical = Padding.Tiny,
@@ -126,6 +154,17 @@ internal fun DishPriceBadge(
         }
     }
 }
+
+@Preview
+@Composable
+private fun DishPriceBadgePreview() =
+    PreviewWrapper {
+        listOf(Dish.Mock.dishKunda).forEach {
+            Currency.entries.forEach { currency ->
+                DishPriceBadge(it, PriceType.Normal, currency)
+            }
+        }
+    }
 
 @Composable
 internal fun DishRatingBadge(
@@ -145,18 +184,8 @@ internal fun DishRatingBadge(
         val icons =
             remember {
                 persistentMapOf(
-                    "star" to
-                        InlineTextContent(
-                            Placeholder(1.1.em, 1.1.em, PlaceholderVerticalAlign.TextCenter),
-                        ) {
-                            Icon(Icons.Default.StarRate, contentDescription = null)
-                        },
-                    "person" to
-                        InlineTextContent(
-                            Placeholder(1.1.em, 1.1.em, PlaceholderVerticalAlign.TextCenter),
-                        ) {
-                            Icon(Icons.Default.Person, contentDescription = null)
-                        },
+                    "star" to InlineIcon(Icons.Default.StarRate),
+                    "person" to InlineIcon(Icons.Default.Person),
                 )
             }
         val text =
@@ -181,6 +210,13 @@ internal fun DishRatingBadge(
         )
     }
 }
+
+fun InlineIcon(imageVector: ImageVector) =
+    InlineTextContent(
+        Placeholder(1.1.em, 1.1.em, PlaceholderVerticalAlign.TextCenter),
+    ) {
+        Icon(imageVector, contentDescription = null)
+    }
 
 @Preview
 @Composable

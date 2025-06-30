@@ -27,6 +27,7 @@ import com.russhwolf.settings.coroutines.FlowSettings
 import com.russhwolf.settings.datastore.DataStoreSettings
 import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.DarkMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
@@ -98,6 +99,10 @@ internal interface GeneralDataSource {
     suspend fun setDishListModeChosen(isChosen: Boolean)
 
     fun getDishListModeChosen(): Flow<Boolean?>
+
+    suspend fun setCurrency(currency: Currency)
+
+    fun getCurrency(): Flow<Currency?>
 }
 
 @OptIn(ExperimentalSettingsApi::class)
@@ -121,6 +126,7 @@ internal class GeneralDataSourceImpl(
         private const val balanceWarningThresholdKey = "balance_warning_threshold"
         private const val alternativeNavigationKey = "alternative_navigation"
         private const val dishListModeChosenKey = "dish_list_mode_chosen"
+        private const val currencyKey = "currency"
     }
 
     override suspend fun storeAppSetupFinished() = settings.putBoolean(appSetupFinishedKey, true)
@@ -195,4 +201,11 @@ internal class GeneralDataSourceImpl(
     override suspend fun setDishListModeChosen(isChosen: Boolean) = settings.putBoolean(dishListModeChosenKey, isChosen)
 
     override fun getDishListModeChosen(): Flow<Boolean?> = settings.getBooleanOrNullFlow(dishListModeChosenKey)
+
+    override suspend fun setCurrency(currency: Currency) = settings.putInt(currencyKey, currency.id)
+
+    override fun getCurrency(): Flow<Currency?> =
+        settings.getIntOrNullFlow(currencyKey).map { id ->
+            Currency.entries.firstOrNull { type -> type.id == id }
+        }
 }
