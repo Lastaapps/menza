@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -206,7 +206,8 @@ private fun ColumnScope.InitialBehaviourSelector(
     SettingsItem(
         title = stringResource(id = R.string.settings_init_menza_title),
         subtitle = initialMenzaBehaviour.name(),
-    ) { initDialogVisible = true }
+        onClick = { initDialogVisible = true },
+    )
 
     if (initDialogVisible) {
         val items =
@@ -232,7 +233,8 @@ private fun ColumnScope.InitialBehaviourSelector(
             subtitle =
                 selectedMenza?.name
                     ?: stringResource(id = R.string.settings_init_menza_select_placeholder),
-        ) { selectDialogVisible = true }
+            onClick = { selectDialogVisible = true },
+        )
     }
 
     if (selectDialogVisible) {

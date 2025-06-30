@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -113,9 +113,9 @@ private fun ReportDialog(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier =
-                Modifier
-                    .width(IntrinsicSize.Max)
-                    .padding(16.dp),
+                    Modifier
+                        .width(IntrinsicSize.Max)
+                        .padding(16.dp),
             ) {
                 Text(
                     stringResource(cz.lastaapps.menza.R.string.report_title),

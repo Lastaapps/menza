@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -156,9 +156,9 @@ private fun LanguageButton(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
         modifier =
-        Modifier
-            .padding(Padding.MidSmall)
-            .fillMaxWidth(),
+            Modifier
+                .padding(Padding.MidSmall)
+                .fillMaxWidth(),
     ) {
         Text(
             title,

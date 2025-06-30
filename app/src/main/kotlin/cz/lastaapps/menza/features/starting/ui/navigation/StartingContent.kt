@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -50,8 +50,8 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Chil
 @Composable
 internal fun StartingContent(
     component: StartingComponent,
-    modifier: Modifier = Modifier,
     onComplete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val hostState = remember { SnackbarHostState() }
 
@@ -82,13 +82,13 @@ internal fun StartingContent(
         ) { _, page ->
             val next = component::next
             when (page) {
-                is AllSet -> AllSetContent(page.component, childModifier, onComplete)
-                is ChoosePrice -> PriceTypeContent(page.component, childModifier, next)
+                is AllSet -> AllSetContent(page.component, onComplete, childModifier)
+                is ChoosePrice -> PriceTypeContent(page.component, next, childModifier)
                 is ChooseDishLanguage -> DishLanguageContent(page.component, next, childModifier)
                 is ChooseTheme -> AppThemeContent(page.component, next, childModifier)
-                is DownloadData -> DownloadContent(page.component, hostState, childModifier, next)
-                is OrderMenzaList -> ReorderMenzaContent(page.component, childModifier, next)
-                is Policy -> PolicyContent(page.component, childModifier, next)
+                is DownloadData -> DownloadContent(page.component, hostState, next, childModifier)
+                is OrderMenzaList -> ReorderMenzaContent(page.component, next, childModifier)
+                is Policy -> PolicyContent(page.component, next, childModifier)
             }
         }
     }

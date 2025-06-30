@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,11 +34,11 @@ data class Rating(
                 overallRating = 4.321f,
                 audience = 420U,
                 ratingCategories =
-                RatingCategories(
-                    3.4f,
-                    1.2f,
-                    5.0f,
-                ),
+                    RatingCategories(
+                        3.4f,
+                        1.2f,
+                        5.0f,
+                    ),
             )
     }
 }

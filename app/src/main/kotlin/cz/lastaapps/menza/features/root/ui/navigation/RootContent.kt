@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,8 +36,8 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingContent
 @Composable
 internal fun RootContent(
     component: RootComponent,
-    modifier: Modifier = Modifier,
     onReady: () -> Unit,
+    modifier: Modifier = Modifier,
 ) = Surface {
     val viewModel: RootViewModel = component.viewModel
     val state by viewModel.flowState
@@ -63,8 +63,9 @@ internal fun RootContent(
             is AppSetup ->
                 StartingContent(
                     instance.component,
+                    component::toAppContent,
                     modifier,
-                ) { component.toAppContent() }
+                )
 
             null -> Surface(modifier) {}
         }

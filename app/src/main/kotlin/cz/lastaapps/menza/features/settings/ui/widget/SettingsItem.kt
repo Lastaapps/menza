@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,8 +36,8 @@ import cz.lastaapps.menza.ui.util.WrapClick
 internal fun SettingsItem(
     title: String,
     subtitle: String,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) = WrapClick(
     onClick = onClick,
     modifier = modifier,
@@ -54,8 +54,8 @@ internal fun SettingsSwitch(
     title: String,
     subtitle: String,
     isChecked: Boolean,
-    modifier: Modifier = Modifier,
     onCheck: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) = WrapClick(
     onClick = { onCheck(!isChecked) },
     modifier = modifier,

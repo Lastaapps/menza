@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,6 +32,7 @@ import cz.lastaapps.menza.R
 import cz.lastaapps.menza.ui.components.BaseDialog
 import cz.lastaapps.menza.ui.theme.Padding
 
+@Suppress("ktlint:compose:modifier-missing-check")
 @Composable
 fun FullReloadDialog(
     onDismissRequest: () -> Unit,

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -43,8 +43,8 @@ internal class DefaultReorderMenzaComponent(
 @Composable
 internal fun ReorderMenzaContent(
     component: ReorderMenzaComponent,
-    modifier: Modifier = Modifier,
     onComplete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ReorderMenzaScreen(
         modifier = modifier.padding(),

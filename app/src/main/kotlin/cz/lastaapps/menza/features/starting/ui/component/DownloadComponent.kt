@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -47,8 +47,8 @@ internal class DefaultDownloadComponent(
 internal fun DownloadContent(
     component: DownloadComponent,
     hostState: SnackbarHostState,
-    modifier: Modifier = Modifier,
     onNext: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     DownloadScreen(
         modifier =

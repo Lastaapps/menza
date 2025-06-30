@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -81,9 +81,11 @@ internal fun DarkThemeChooser(
         content = {
             items.forEach { item ->
                 val isSelected = item.mode == selected
-                DarkThemeItem(item = item, isSelected = isSelected) {
-                    onSelect(item.mode)
-                }
+                DarkThemeItem(
+                    item = item,
+                    isSelected = isSelected,
+                    onItem = { onSelect(item.mode) },
+                )
             }
         },
     ) { measurable, constrains ->
@@ -133,8 +135,8 @@ internal fun DarkThemeChooser(
 private fun DarkThemeItem(
     item: DarkThemeItem,
     isSelected: Boolean,
-    modifier: Modifier = Modifier,
     onItem: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val color =
         if (isSelected) {

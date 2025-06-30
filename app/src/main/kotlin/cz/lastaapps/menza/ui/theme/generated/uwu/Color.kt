@@ -17,7 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.menza.ui.theme.generated.NAME
+package cz.lastaapps.menza.ui.theme.generated.uwu
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF8D4A5B)

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -53,9 +53,9 @@ internal fun RatingStateResponse.toDomain(): Rating =
         overallRating = combined.average,
         audience = combined.audience,
         ratingCategories =
-        RatingCategories(
-            taste = taste?.average,
-            portionSize = portion?.average,
-            worthiness = worthiness?.average,
-        ),
+            RatingCategories(
+                taste = taste?.average,
+                portionSize = portion?.average,
+                worthiness = worthiness?.average,
+            ),
     )

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -54,12 +54,12 @@ internal class CrashesViewModel(
         launchVM {
             database.crashQueries
                 .getCrashes {
-                        id: Long,
-                        date: ZonedDateTime,
-                        severity: ErrorSeverity,
-                        message: String?,
-                        trace: String,
-                        reported: ReportState,
+                    id: Long,
+                    date: ZonedDateTime,
+                    severity: ErrorSeverity,
+                    message: String?,
+                    trace: String,
+                    reported: ReportState,
                     ->
                     id to Crash(date, severity, message, trace, reported)
                 }.asFlow()
@@ -76,12 +76,12 @@ internal class CrashesViewModel(
         launchVM {
             database.crashQueries
                 .getUnreported {
-                        id: Long,
-                        date: ZonedDateTime,
-                        severity: ErrorSeverity,
-                        message: String?,
-                        trace: String,
-                        reported: ReportState,
+                    id: Long,
+                    date: ZonedDateTime,
+                    severity: ErrorSeverity,
+                    message: String?,
+                    trace: String,
+                    reported: ReportState,
                     ->
                     id to Crash(date, severity, message, trace, reported)
                 }.asFlow()

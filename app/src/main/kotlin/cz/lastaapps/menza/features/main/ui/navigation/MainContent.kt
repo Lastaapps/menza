@@ -141,7 +141,7 @@ internal fun MainContent(
                         is Info -> InfoContent(instance.component, onOsturak, hostState)
                         is LicenseNotices -> LicenseContent(instance.component)
                         is Osturak -> OsturakContent(instance.component)
-                        is PrivacyPolicy -> PolicyContent(instance.component) { component.pop() }
+                        is PrivacyPolicy -> PolicyContent(instance.component, component::pop)
                         is Settings -> SettingsHubContent(instance.component)
                         is Today -> TodayContent(instance.component, onOsturak, hostState)
                         is Week -> WeekContent(instance.component, onOsturak, hostState)

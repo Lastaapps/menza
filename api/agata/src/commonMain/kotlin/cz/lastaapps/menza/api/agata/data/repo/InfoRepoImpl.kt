@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -217,7 +217,7 @@ internal class InfoRepoImpl(
 
 internal object InfoStrahovRepoImpl : InfoRepo, KoinComponent {
     private val strahovInfoRepo: InfoRepo by
-    inject<InfoRepo> { parametersOf(MenzaType.Agata.Subsystem(1)) }
+        inject<InfoRepo> { parametersOf(MenzaType.Agata.Subsystem(1)) }
 
     override fun getData(params: InfoRepoParams): Flow<Info> = strahovInfoRepo.getData(params)
 

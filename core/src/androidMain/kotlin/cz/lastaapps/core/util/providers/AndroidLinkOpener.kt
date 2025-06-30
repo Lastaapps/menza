@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -70,10 +70,11 @@ internal class AndroidLinkOpener(
 
     override fun openAddress(address: String): Outcome<Unit> =
         runCatchingAppNotFound {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("geo:0,0?q=${Uri.encode(address)}")
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
+            val intent =
+                Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("geo:0,0?q=${Uri.encode(address)}")
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
             context.startActivity(intent)
         }.mapLeft { CommonError.AppNotFound.Map }
 
@@ -82,10 +83,11 @@ internal class AndroidLinkOpener(
         long: Float,
     ): Outcome<Unit> =
         runCatchingAppNotFound {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("geo:${lat},${long}")
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
+            val intent =
+                Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("geo:$lat,$long")
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
             context.startActivity(intent)
         }.mapLeft { CommonError.AppNotFound.Map }
 

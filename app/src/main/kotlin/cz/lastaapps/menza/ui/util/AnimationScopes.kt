@@ -52,9 +52,8 @@ data class AnimationScopes(
     val isEnabled: Boolean,
 )
 
-context(animatedVisibilityScope : AnimatedVisibilityScope)
-fun SharedTransitionScope.AnimationScopes(isEnabled: Boolean = true) =
-    AnimationScopes(this, animatedVisibilityScope, isEnabled = isEnabled)
+context(animatedVisibilityScope: AnimatedVisibilityScope)
+fun SharedTransitionScope.AnimationScopes(isEnabled: Boolean = true) = AnimationScopes(this, animatedVisibilityScope, isEnabled = isEnabled)
 
 @Composable
 fun Modifier.sharedBounds(
@@ -187,6 +186,7 @@ fun Modifier.skipToLookaheadSize(scopes: AnimationScopes): Modifier =
         this@skipToLookaheadSize.skipToLookaheadSize()
     }
 
+@Suppress("FunctionName")
 fun OverlayParentClip(shape: Shape = RectangleShape): OverlayClip =
     object : OverlayClip {
         private val shapedPath = Path()

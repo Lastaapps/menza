@@ -245,8 +245,8 @@ private fun DishContent(
                 useOliverRow = userSettings.useOliverRow,
                 onOliverRow = onOliverRow,
                 modifier =
-                Modifier
-                    .fillMaxWidth(),
+                    Modifier
+                        .fillMaxWidth(),
 //                            .animateItem(),
             )
         }
@@ -274,13 +274,13 @@ private fun DishItem(
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
         modifier =
-        modifier
-            .sharedContainer(
-                scopes,
-                dishContainerKey(dish.id),
-                resizeMode = ResizeMode.RemeasureToBounds,
-                clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
-            ),
+            modifier
+                .sharedContainer(
+                    scopes,
+                    dishContainerKey(dish.id),
+                    resizeMode = ResizeMode.RemeasureToBounds,
+                    clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                ),
     ) {
         Column(
             modifier = Modifier.padding(Padding.MidSmall),

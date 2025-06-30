@@ -304,6 +304,7 @@ private fun DishContent(
 // TODO remove once the bug is fixed
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Suppress("ktlint:compose:param-order-check")
 private fun rememberCarouselStateSafe(
     initialItem: Int = 0,
     itemCount: Int,
