@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,6 +26,7 @@ import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.menza.features.settings.domain.model.AppSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.usecase.FullAppReloadUC
@@ -37,6 +38,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetAppSettin
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.OnSettingsOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetAlternativeNavigationUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetBalanceWarningThresholdUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetCurrencyUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetImagesOnMeteredUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.theme.GetAppThemeUC
@@ -53,6 +55,7 @@ internal class SettingsViewModel(
     val getAppThemeUC: GetAppThemeUC,
     val getPreferredMenzaUC: GetPreferredMenzaUC,
     val setPriceTypeUC: SetPriceTypeUC,
+    val setCurrencyUC: SetCurrencyUC,
     val setImagesOnMeteredUC: SetImagesOnMeteredUC,
     val setAlternativeNavigationUC: SetAlternativeNavigationUC,
     val setBalanceWarningThresholdUC: SetBalanceWarningThresholdUC,
@@ -88,6 +91,11 @@ internal class SettingsViewModel(
     fun setPriceType(type: PriceType) =
         launchVM {
             setPriceTypeUC(type)
+        }
+
+    fun setCurrency(currency: Currency) =
+        launchVM {
+            setCurrencyUC(currency)
         }
 
     fun setDownloadOnMetered(enable: Boolean) =

@@ -66,6 +66,7 @@ import cz.lastaapps.menza.features.other.ui.dialog.sendReport
 import cz.lastaapps.menza.features.settings.domain.model.AppSettings
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType
 import cz.lastaapps.menza.features.settings.domain.model.AppThemeType.Agata
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.InitialSelectionBehaviour
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.ui.util.name
@@ -89,6 +90,7 @@ internal fun SettingsScreen(
     onChooseTheme: () -> Unit,
     onChooseDishLanguage: () -> Unit,
     onDiscounterPrices: (PriceType) -> Unit,
+    onCurrency: (Currency) -> Unit,
     onImagesOnMetered: (Boolean) -> Unit,
     onAlternativeNavigation: (Boolean) -> Unit,
     onBalanceThreshold: (Int) -> Unit,
@@ -137,6 +139,12 @@ internal fun SettingsScreen(
             title = stringResource(id = R.string.settings_language_title),
             subtitle = stringResource(id = R.string.settings_language_subtitle),
             onClick = onChooseDishLanguage,
+        )
+
+        // Currency
+        CurrencySelector(
+            currentCurrency = appSettings.currency,
+            onCurrency = onCurrency,
         )
 
         // Metered networks
@@ -247,6 +255,68 @@ private fun ColumnScope.InitialBehaviourSelector(
         )
     }
 }
+
+@Composable
+@Suppress("UnusedReceiverParameter")
+private fun CurrencySelector(
+    currentCurrency: Currency,
+    onCurrency: (Currency) -> Unit,
+) {
+    var dialogVisible by remember { mutableStateOf(false) }
+
+    // Behaviour
+    SettingsItem(
+        title = stringResource(id = R.string.settings_currency_title),
+        subtitle =
+            currentCurrency
+                .name()
+                .let { name ->
+                    currentCurrency.disclaimer()?.let { "$name – $it" } ?: name
+                },
+        onClick = { dialogVisible = true },
+    )
+
+    if (dialogVisible) {
+        val items =
+            Currency.entries
+                .drop(1)
+                .map { it to it.name() }
+                .toImmutableList()
+
+        ChooseFromDialog(
+            title = stringResource(id = R.string.settings_init_menza_title),
+            items = items,
+            onItemSelect = { onCurrency(it.first) },
+            onDismiss = { dialogVisible = false },
+            toString = Pair<Currency, String>::second,
+        )
+    }
+}
+
+@Composable
+private fun Currency.name() =
+    when (this) {
+        Currency.NONE -> ""
+        Currency.CZK -> stringResource(id = R.string.settings_currency_name_czech)
+        Currency.BEER -> stringResource(id = R.string.settings_currency_name_beer)
+        Currency.EUR -> stringResource(id = R.string.settings_currency_name_eur)
+        Currency.USD -> stringResource(id = R.string.settings_currency_name_usd)
+    }
+
+@Composable
+private fun Currency.disclaimer() =
+    when (this) {
+        Currency.NONE,
+        Currency.CZK,
+        -> null
+
+        Currency.BEER,
+        -> stringResource(id = R.string.settings_currency_disclaimer_desitka)
+
+        Currency.EUR,
+        Currency.USD,
+        -> stringResource(id = R.string.settings_currency_disclaimer_conversion)
+    }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -379,6 +449,7 @@ private fun SettingsScreenPreview() =
             onChooseTheme = {},
             onChooseDishLanguage = {},
             onDiscounterPrices = {},
+            onCurrency = {},
             onImagesOnMetered = {},
             onAlternativeNavigation = {},
             onBalanceThreshold = {},

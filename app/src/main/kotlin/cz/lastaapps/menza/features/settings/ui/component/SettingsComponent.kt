@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -98,6 +98,7 @@ internal fun SettingsContent(
             onChooseTheme = onChooseTheme,
             onChooseDishLanguage = onChooseDishLanguage,
             onDiscounterPrices = viewModel::setPriceType,
+            onCurrency = viewModel::setCurrency,
             onImagesOnMetered = viewModel::setDownloadOnMetered,
             onAlternativeNavigation = viewModel::setAlternativeNavigation,
             onBalanceThreshold = viewModel::setBalanceWarningThreshold,

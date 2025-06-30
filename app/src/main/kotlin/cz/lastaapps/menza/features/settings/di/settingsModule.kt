@@ -109,6 +109,7 @@ val settingsModule =
                 get(),
                 get(),
                 get(),
+                get(),
             )
             // @formatter:on
         }

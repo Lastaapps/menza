@@ -146,6 +146,13 @@
     <string name="settings_init_menza_specific">Let me choose</string>
     <string name="settings_init_menza_select_title">Menza to open</string>
     <string name="settings_init_menza_select_placeholder">None so far</string>
+    <string name="settings_currency_title">Currency</string>
+    <string name="settings_currency_name_czech">Czech Koruna CZK</string>
+    <string name="settings_currency_name_beer">Czech Beer</string>
+    <string name="settings_currency_name_eur">Euro EUR</string>
+    <string name="settings_currency_name_usd">American Dollar USD</string>
+    <string name="settings_currency_disclaimer_desitka">price of Radegast 12° at Desítka Strahov (45 Kč)</string>
+    <string name="settings_currency_disclaimer_conversion">last year\'s exchange rates of Czech National Bank</string>
     <string name="settings_reload_title">Full data reload</string>
     <string name="settings_reload_text">
         This operation clears local data like menza\'s name, location, contacts, etc.
