@@ -51,8 +51,10 @@ import cz.lastaapps.api.core.domain.model.WeekDayDish
 import cz.lastaapps.api.core.domain.model.WeekDish
 import cz.lastaapps.api.core.domain.model.WeekDishCategory
 import cz.lastaapps.menza.R
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.today.ui.util.getPrice
+import cz.lastaapps.menza.features.today.ui.widget.DishPriceText
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
@@ -68,6 +70,7 @@ import kotlin.math.roundToInt
 fun WeekDishList(
     data: ImmutableList<WeekDayDish>,
     priceType: PriceType,
+    currency: Currency,
     isLoading: Boolean,
     onRefresh: () -> Unit,
     noItems: () -> Unit,
@@ -81,6 +84,7 @@ fun WeekDishList(
         WeekDishContent(
             data = data,
             priceType = priceType,
+            currency = currency,
             noItems = noItems,
             modifier = Modifier.fillMaxSize(),
         )
@@ -93,6 +97,7 @@ fun WeekDishList(
 private fun WeekDishContent(
     data: ImmutableList<WeekDayDish>,
     priceType: PriceType,
+    currency: Currency,
     noItems: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -144,6 +149,7 @@ private fun WeekDishContent(
                     WeekDishItem(
                         dish = dish,
                         priceType = priceType,
+                        currency = currency,
                         amountWidth = amountWidth,
                         modifier =
                             Modifier
@@ -247,6 +253,7 @@ private fun CourseHeader(
 private fun WeekDishItem(
     dish: WeekDish,
     priceType: PriceType,
+    currency: Currency,
     amountWidth: Dp,
     modifier: Modifier = Modifier,
 ) {
@@ -265,7 +272,7 @@ private fun WeekDishItem(
                 verticalArrangement = Arrangement.spacedBy(Padding.Small),
             ) {
                 dish.amount?.let { Text(it) }
-                dish.getPrice(priceType)?.let { Text("$it Kč") }
+                dish.getPrice(priceType, currency)?.let { DishPriceText(it, currency) }
             }
 
             SelectionContainer {

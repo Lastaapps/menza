@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -79,6 +79,7 @@ private fun WeekContent(
             WeekDishList(
                 data = items,
                 priceType = state.priceType,
+                currency = state.currency,
                 isLoading = state.isLoading,
                 onRefresh = onRefresh,
                 noItems = noItems,

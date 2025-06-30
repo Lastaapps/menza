@@ -42,25 +42,29 @@ fun Dish.getPrice(
     Discounted -> priceDiscounted ?: priceNormal
     Normal -> priceNormal
     Unset -> priceNormal
-}?.let {
+}?.applyExchangeRate(currency)
+    ?.formatPrice()
+
+fun WeekDish.getPrice(
+    type: PriceType,
+    currency: Currency,
+) = when (type) {
+    Discounted -> priceDiscounted ?: priceNormal
+    Normal -> priceNormal
+    Unset -> priceNormal
+}?.applyExchangeRate(currency)?.formatPrice()
+
+fun Float.applyExchangeRate(currency: Currency) =
     when (currency) {
         Currency.NONE -> null
-        Currency.CZK -> it
+        Currency.CZK -> this
         // based on Strahov Bar 10 - check for price update once a week at least
-        Currency.BEER -> it / 45f
+        Currency.BEER -> this / 45f
         // TODO update me every year
         // based on Czech National Bank: https://www.kurzy.cz/kurzy-men/jednotny-kurz/
-        Currency.EUR -> it / 25.160f
-        Currency.USD -> it / 23.280f
+        Currency.EUR -> this / 25.160f
+        Currency.USD -> this / 23.280f
     }
-}?.formatPrice()
-
-fun WeekDish.getPrice(type: PriceType) =
-    when (type) {
-        Discounted -> priceDiscounted ?: priceNormal
-        Normal -> priceNormal
-        Unset -> priceNormal
-    }?.formatPrice()
 
 fun Float.formatPrice() =
     if (this.mod(1f) == 0f) {

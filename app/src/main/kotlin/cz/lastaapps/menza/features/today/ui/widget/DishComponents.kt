@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.SportsBar
 import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -46,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -121,30 +123,10 @@ internal fun DishPriceBadge(
             color = MaterialTheme.colorScheme.tertiary,
             shape = MaterialTheme.shapes.medium,
         ) {
-            val icons =
-                remember {
-                    persistentMapOf(
-                        "beer" to InlineIcon(Icons.Default.SportsBar),
-                    )
-                }
-            val text =
-                when (currency) {
-                    Currency.NONE -> "".let(::AnnotatedString)
-                    Currency.CZK -> "$price Kč".let(::AnnotatedString)
-                    Currency.BEER ->
-                        buildAnnotatedString {
-                            append(price)
-                            append(' ')
-                            appendInlineContent("beer")
-                        }
-
-                    Currency.EUR -> "€$price".let(::AnnotatedString)
-                    Currency.USD -> "$$price".let(::AnnotatedString)
-                }
-            Text(
-                text = text,
+            DishPriceText(
+                price,
+                currency,
                 style = MaterialTheme.typography.bodySmall,
-                inlineContent = icons,
                 modifier =
                     Modifier.padding(
                         vertical = Padding.Tiny,
@@ -153,6 +135,41 @@ internal fun DishPriceBadge(
             )
         }
     }
+}
+
+@Composable
+fun DishPriceText(
+    resolvedPrice: String,
+    currency: Currency,
+    modifier: Modifier = Modifier,
+    style: TextStyle = LocalTextStyle.current,
+) {
+    val icons =
+        remember {
+            persistentMapOf(
+                "beer" to InlineIcon(Icons.Default.SportsBar),
+            )
+        }
+    val text =
+        when (currency) {
+            Currency.NONE -> "".let(::AnnotatedString)
+            Currency.CZK -> "$resolvedPrice Kč".let(::AnnotatedString)
+            Currency.BEER ->
+                buildAnnotatedString {
+                    append(resolvedPrice)
+                    append(' ')
+                    appendInlineContent("beer")
+                }
+
+            Currency.EUR -> "€$resolvedPrice".let(::AnnotatedString)
+            Currency.USD -> "$$resolvedPrice".let(::AnnotatedString)
+        }
+    Text(
+        text = text,
+        style = style,
+        inlineContent = icons,
+        modifier = modifier,
+    )
 }
 
 @Preview

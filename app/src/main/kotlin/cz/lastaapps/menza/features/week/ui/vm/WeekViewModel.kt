@@ -37,8 +37,9 @@ import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
+import cz.lastaapps.menza.features.settings.domain.model.Currency
 import cz.lastaapps.menza.features.settings.domain.model.PriceType
-import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetPriceTypeUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetAppSettingsUC
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -56,7 +57,7 @@ internal class WeekViewModel(
     private val getWeekDish: GetWeekDishListUC,
     private val syncWeekDish: SyncWeekDishListUC,
     private val openMenuLink: OpenMenuUC,
-    private val getPriceType: GetPriceTypeUC,
+    private val getAppSettingsUC: GetAppSettingsUC,
 ) : StateViewModel<WeekState>(WeekState(), context),
     ErrorHolder {
     private val log = localLogger()
@@ -85,9 +86,14 @@ internal class WeekViewModel(
                 }
             }.launchIn(scope)
 
-        getPriceType()
+        getAppSettingsUC()
             .onEach {
-                updateState { copy(priceType = it) }
+                updateState {
+                    copy(
+                        priceType = it.priceType,
+                        currency = it.currency,
+                    )
+                }
             }.launchIn(scope)
     }
 
@@ -129,6 +135,7 @@ internal class WeekViewModel(
 internal data class WeekState(
     val selectedMenza: Option<Menza>? = null,
     val priceType: PriceType = PriceType.Unset,
+    val currency: Currency = Currency.NONE,
     val isLoading: Boolean = false,
     val error: DomainError? = null,
     val items: ImmutableList<WeekDayDish> = persistentListOf(),
