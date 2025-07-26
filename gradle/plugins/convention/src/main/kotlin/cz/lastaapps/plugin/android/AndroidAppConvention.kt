@@ -92,12 +92,12 @@ class AndroidAppConvention :
 
                         run {
                             if (minify) {
-                                arrayOf(
+                                arrayOf<Any>(
                                     getDefaultProguardFile("proguard-android-optimize.txt"),
                                     "proguard-rules.pro",
                                 )
                             } else {
-                                emptyArray()
+                                emptyArray<Any>()
                             }
                         }.let { rules ->
                             proguardFiles(*rules)

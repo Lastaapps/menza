@@ -12,7 +12,7 @@
         <list>
           <option value="wrapper" />
           <option value="--gradle-version" />
-          <option value="8.14.2" />
+          <option value="9.0.0-rc-3" />
           <option value="--distribution-type" />
           <option value="all" />
         </list>
