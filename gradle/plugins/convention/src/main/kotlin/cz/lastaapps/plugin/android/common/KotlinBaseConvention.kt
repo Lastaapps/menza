@@ -95,6 +95,7 @@ class KotlinBaseConvention :
                         "-Xcontext-sensitive-resolution",
                         "-Xannotation-target-all",
                         "-Xnested-type-aliases",
+                        "-Xannotation-default-target=param-property",
                     ),
                 )
             }

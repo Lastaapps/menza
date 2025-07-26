@@ -23,7 +23,7 @@ import com.russhwolf.settings.ObservableSettings
 import cz.lastaapps.api.core.domain.validity.ValidityChecker
 import cz.lastaapps.api.core.domain.validity.ValidityKey
 import cz.lastaapps.api.core.domain.validity.isUpdatedSince
-import cz.lastaapps.core.domain.util.InstantSerializer
+import cz.lastaapps.core.domain.util.InstantAsStringSerializer
 import cz.lastaapps.core.util.extensions.CET
 import cz.lastaapps.core.util.extensions.atMidnight
 import cz.lastaapps.core.util.extensions.deserializeValueOrNullFlow
@@ -67,7 +67,7 @@ internal class ValidityCheckerImpl
         }
 
         override suspend fun onDataUpdated(key: ValidityKey) {
-            settings.serializeValue(InstantSerializer, key(key), clock.now())
+            settings.serializeValue(InstantAsStringSerializer, key(key), clock.now())
         }
 
         override fun isRecent(key: ValidityKey): Flow<Boolean> = isUpdatedSince(key, recentThreshold).distinctUntilChanged()
@@ -110,7 +110,7 @@ internal class ValidityCheckerImpl
         ): Flow<Boolean> =
             combine(
                 settings
-                    .deserializeValueOrNullFlow(InstantSerializer, key(key))
+                    .deserializeValueOrNullFlow(InstantAsStringSerializer, key(key))
                     .distinctUntilChanged(),
                 date.distinctUntilChanged(),
             ) { saved, date ->
