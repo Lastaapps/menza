@@ -1,0 +1,10 @@
+Currencies support - Beer, EUR, USD
+Fix the app auto-refreshing menus and ratings in the background, oops
+Rewrite encryption module
+Updated libraries
+
+1.4.0
+Rating added
+Video feeds from supported cafeterias
+Proper English names support
+New Carousel dish view mode

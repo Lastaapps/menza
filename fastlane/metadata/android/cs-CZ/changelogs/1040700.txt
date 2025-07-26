@@ -1,0 +1,10 @@
+Podpora měn - pivo, EUR, USD
+Oprava automatického obnovování menu a hodnocení na pozadí, jejda
+Přepsání modulu pro šifrování
+Aktualizace knihoven
+
+1.4.0
+Hodnocení jídel
+Videa z podporovaných menz
+Podpora angličtiny
+Přidán nový režim pro zobrazení jídel
