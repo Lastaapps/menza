@@ -52,6 +52,7 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
@@ -414,8 +415,11 @@ private fun ActionButtons(
             CircularProgressIndicator(Modifier.align(Alignment.CenterVertically))
         } else {
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
-                tooltip = {
+                positionProvider =
+                    TooltipDefaults.rememberTooltipPositionProvider(
+                        TooltipAnchorPosition.Above,
+                    ),
+                    tooltip = {
                     PlainTooltip {
                         Text(text = stringResource(R.string.wallet_login_setup))
                     }

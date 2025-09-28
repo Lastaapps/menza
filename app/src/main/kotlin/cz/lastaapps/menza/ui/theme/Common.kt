@@ -39,7 +39,7 @@ val appPredictiveBackAnimatable: (
 ) -> PredictiveBackAnimatable = {
     com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback
         // .materialPredictiveBackAnimatable(it)
-        .androidPredictiveBackAnimatable(it)
+        .androidPredictiveBackAnimatableV1(it)
 }
 
 fun appPredictiveBackParams(

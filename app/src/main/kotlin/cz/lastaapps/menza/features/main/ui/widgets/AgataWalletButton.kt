@@ -38,6 +38,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
@@ -184,7 +185,10 @@ private fun ColumnScope.ButtonContent(
         }
 
         TooltipBox(
-            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+            positionProvider =
+                TooltipDefaults.rememberTooltipPositionProvider(
+                    TooltipAnchorPosition.Above,
+                ),
             tooltip = {
                 PlainTooltip {
                     Text(text = stringResource(id = R.string.wallet_web))
@@ -201,7 +205,10 @@ private fun ColumnScope.ButtonContent(
         }
 
         TooltipBox(
-            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+            positionProvider =
+                TooltipDefaults.rememberTooltipPositionProvider(
+                    TooltipAnchorPosition.Above,
+                ),
             tooltip = {
                 PlainTooltip {
                     Text(text = stringResource(id = R.string.wallet_logout))

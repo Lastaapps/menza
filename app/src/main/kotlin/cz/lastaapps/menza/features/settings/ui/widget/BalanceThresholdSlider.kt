@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -34,7 +34,6 @@ import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -87,7 +86,6 @@ internal fun BalanceThresholdSlider(
                 Label(
                     label = {
                         PlainTooltip(
-                            caretSize = TooltipDefaults.caretSize,
                             modifier = Modifier.wrapContentWidth(),
                             shape = CircleShape,
                         ) {
