@@ -1,0 +1,10 @@
+Oprava načtení nového seznamu menz při změně jazyka
+Oprava špatného nadpisu při výběru měny
+Podpora pro Android 16, odstranění podpory pro Android 5 & 5.1
+Aktulizace knihoven
+
+1.4.0
+Hodnocení jídel
+Videa z podporovaných menz
+Podpora angličtiny
+Přidán nový režim pro zobrazení jídel

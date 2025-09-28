@@ -1,0 +1,10 @@
+Fix new menza list not being fetched after changing language
+Fix wrong title when selecting currency
+Android 16 support, deprecated Android 5 & 5.1
+Bumped libraries versions
+
+1.4.0
+Rating added
+Video feeds from supported cafeterias
+Proper English names support
+New Carousel dish view mode
