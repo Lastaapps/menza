@@ -258,7 +258,7 @@ private fun ColumnScope.InitialBehaviourSelector(
 
 @Composable
 @Suppress("UnusedReceiverParameter")
-private fun CurrencySelector(
+private fun ColumnScope.CurrencySelector(
     currentCurrency: Currency,
     onCurrency: (Currency) -> Unit,
 ) {
@@ -284,7 +284,7 @@ private fun CurrencySelector(
                 .toImmutableList()
 
         ChooseFromDialog(
-            title = stringResource(id = R.string.settings_init_menza_title),
+            title = stringResource(id = R.string.settings_currency_dialog_title),
             items = items,
             onItemSelect = { onCurrency(it.first) },
             onDismiss = { dialogVisible = false },

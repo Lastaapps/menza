@@ -147,6 +147,7 @@
     <string name="settings_init_menza_select_title">Menza to open</string>
     <string name="settings_init_menza_select_placeholder">None so far</string>
     <string name="settings_currency_title">Currency</string>
+    <string name="settings_currency_dialog_title">Choose currency</string>
     <string name="settings_currency_name_czech">Czech Koruna CZK</string>
     <string name="settings_currency_name_beer">Czech Beer</string>
     <string name="settings_currency_name_eur">Euro EUR</string>

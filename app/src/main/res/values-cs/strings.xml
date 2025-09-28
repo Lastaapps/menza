@@ -134,6 +134,7 @@
     <string name="settings_init_menza_select_title">Menza k otevření</string>
     <string name="settings_init_menza_select_placeholder">Zatím prázdno</string>
     <string name="settings_currency_title">Měna</string>
+    <string name="settings_currency_dialog_title">Zvolte měnu</string>
     <string name="settings_currency_name_czech">Česká koruna CZK</string>
     <string name="settings_currency_name_beer">Pivečko</string>
     <string name="settings_currency_name_eur">Euro EUR</string>
