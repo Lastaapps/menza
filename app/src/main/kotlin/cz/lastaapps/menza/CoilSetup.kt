@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,9 +21,11 @@ package cz.lastaapps.menza
 
 import coil3.ImageLoader
 import coil3.PlatformContext
+import coil3.annotation.ExperimentalCoilApi
 import coil3.disk.DiskCache.Builder
 import coil3.disk.directory
 import coil3.memory.MemoryCache
+import coil3.memoryCacheMaxSizePercentWhileInBackground
 import coil3.network.ktor3.KtorNetworkFetcherFactory
 import coil3.request.CachePolicy
 import coil3.size.Precision
@@ -31,6 +33,7 @@ import coil3.util.DebugLogger
 import io.ktor.client.HttpClient
 
 internal class CoilSetup : coil3.SingletonImageLoader.Factory {
+    @OptIn(ExperimentalCoilApi::class)
     override fun newImageLoader(context: PlatformContext): ImageLoader =
         with(ImageLoader.Builder(context)) {
             diskCachePolicy(CachePolicy.ENABLED)
@@ -56,7 +59,8 @@ internal class CoilSetup : coil3.SingletonImageLoader.Factory {
             memoryCache {
                 with(MemoryCache.Builder()) {
                     maxSizeBytes(1024 * 1024 * 32)
-                    weakReferencesEnabled(true)
+                    // idk, I just want to by fancy by using every feature available
+                    memoryCacheMaxSizePercentWhileInBackground(0.69)
                     build()
                 }
             }
