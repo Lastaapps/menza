@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,17 +19,31 @@
 
 package cz.lastaapps.menza.features.settings.domain.usecase.settings
 
+import arrow.core.right
 import cz.lastaapps.api.core.domain.model.DataLanguage
+import cz.lastaapps.api.main.domain.usecase.SyncMenzaListUC
+import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
+import kotlinx.coroutines.flow.first
 
 class SetDishLanguageUC internal constructor(
     context: UCContext,
     private val repo: MainSettingsRepo,
+    private val syncMenzaListUC: SyncMenzaListUC,
 ) : UseCase(context) {
-    suspend operator fun invoke(language: DataLanguage) =
+    suspend operator fun invoke(language: DataLanguage): Outcome<Unit> =
         launch {
+            val oldLang = repo.getDishLanguage().first()
+            if (oldLang == language) return@launch Unit.right()
+
             repo.setDishLanguage(language)
+            syncMenzaListUC(
+                isForced = false,
+                allSpecs = false,
+            ).onLeft {
+                repo.setDishLanguage(oldLang)
+            }.map { }
         }
 }

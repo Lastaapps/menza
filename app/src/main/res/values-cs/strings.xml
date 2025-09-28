@@ -43,6 +43,8 @@
     <string name="language_choose_english_title">🇬🇧 Angliky</string>
     <string name="language_choose_english_description">Se všemi kreativními překlady</string>
     <string name="language_choose_disclaimer">Přeloženy jsou pouze denní menu a pouze v některých menzách. Žádný text nebyl přeložen aplikací samotnou.</string>
+    <string name="language_choose_refreshing">Přenačítám seznam menz…</string>
+    <string name="language_choose_cannot_refresh">Nelze získat seznam menz</string>
     <string name="privacy_title">Zásady ochrany osobních údajů</string>
     <string name="privacy_text">
         Tato aplikace neshromažďuje žádná (osobní) data.

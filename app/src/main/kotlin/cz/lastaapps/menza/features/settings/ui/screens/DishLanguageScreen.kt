@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.features.settings.ui.screens
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,21 +29,30 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.DataLanguage
 import cz.lastaapps.api.core.domain.model.DataLanguage.Czech
 import cz.lastaapps.api.core.domain.model.DataLanguage.English
+import cz.lastaapps.core.domain.error.DomainError
+import cz.lastaapps.core.domain.error.NetworkError
+import cz.lastaapps.core.ui.text
 import cz.lastaapps.core.ui.vm.HandleDismiss
 import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.settings.ui.vm.DishLanguageState
@@ -61,7 +71,10 @@ internal fun DishLanguageScreen(
         onSelect = onComplete,
     )
 
+    val state by viewModel.flowState
+
     DishLanguageContent(
+        state = state,
         onLanguage = { viewModel.selectLanguage(it) },
         modifier = modifier,
     )
@@ -75,13 +88,14 @@ private fun DishLanguageEffects(
     HandleDismiss(
         viewModel,
         DishLanguageState::isSelected,
-        DishLanguageViewModel::dismissSelected,
+        DishLanguageViewModel::dismiss,
         onSelect,
     )
 }
 
 @Composable
 private fun DishLanguageContent(
+    state: DishLanguageState,
     onLanguage: (DataLanguage) -> Unit,
     modifier: Modifier = Modifier,
 ) = Box(
@@ -115,24 +129,35 @@ private fun DishLanguageContent(
                 textAlign = TextAlign.Center,
             )
 
-            Column(
-                modifier = Modifier.width(IntrinsicSize.Max),
-                verticalArrangement = Arrangement.spacedBy(Padding.Small),
+            Box(
+                Modifier
+                    .width(IntrinsicSize.Max)
+                    .animateContentSize(),
+                contentAlignment = Alignment.Center,
             ) {
-                LanguageButton(
-                    stringResource(R.string.language_choose_czech_title),
-                    stringResource(R.string.language_choose_czech_description),
-                    onClick = { onLanguage(Czech) },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                LanguageButton(
-                    stringResource(R.string.language_choose_english_title),
-                    stringResource(R.string.language_choose_english_description),
-                    onClick = { onLanguage(English) },
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                if (state.loading) {
+                    Column(
+                        modifier = Modifier.sizeIn(maxWidth = 128.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
+                    ) {
+                        CircularProgressIndicator()
+                        Text(
+                            text = stringResource(id = R.string.language_choose_refreshing),
+                            style = MaterialTheme.typography.bodySmall,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                } else {
+                    LanguageSelector(
+                        onLanguage = onLanguage,
+                    )
+                }
             }
 
+            state.error?.let {
+                ErrorCard(it)
+            }
             Spacer(Modifier.height(Padding.Medium))
 
             Text(
@@ -140,6 +165,61 @@ private fun DishLanguageContent(
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
                 fontStyle = FontStyle.Italic,
+            )
+        }
+    }
+}
+
+@Composable
+private fun LanguageSelector(
+    onLanguage: (DataLanguage) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(Padding.Small),
+    ) {
+        LanguageButton(
+            stringResource(R.string.language_choose_czech_title),
+            stringResource(R.string.language_choose_czech_description),
+            onClick = { onLanguage(Czech) },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        LanguageButton(
+            stringResource(R.string.language_choose_english_title),
+            stringResource(R.string.language_choose_english_description),
+            onClick = { onLanguage(English) },
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Composable
+private fun ErrorCard(
+    error: DomainError,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+            ),
+        modifier = modifier,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Padding.Smaller),
+            modifier = Modifier.padding(Padding.MidSmall),
+        ) {
+            Text(
+                text = stringResource(id = R.string.language_choose_cannot_refresh),
+                style = MaterialTheme.typography.titleSmall,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                text = error.text(),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
             )
         }
     }
@@ -177,6 +257,24 @@ private fun LanguageButton(
 @Composable
 private fun DishLanguagePreview() {
     AppTheme {
-        DishLanguageContent(onLanguage = {})
+        DishLanguageContent(
+            DishLanguageState(
+                error = NetworkError.Timeout,
+            ),
+            onLanguage = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DishLanguageLoadingPreview() {
+    AppTheme {
+        DishLanguageContent(
+            DishLanguageState(
+                loading = true,
+            ),
+            onLanguage = {},
+        )
     }
 }

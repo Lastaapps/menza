@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -63,7 +63,7 @@ internal class MenzaMasterRepoImpl(
     ): SyncOutcome =
         sources
             .parMap(concurrency = 2) {
-                it.sync(params)
+                it.sync(params, isForced = isForced)
             }.let { res ->
                 res.firstOrNull { it is Either.Left<DomainError> }?.let { return it }
                 val updated = res.map { (it as Either.Right<SyncResult>).value }

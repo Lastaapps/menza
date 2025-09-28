@@ -46,7 +46,9 @@
     <string name="language_choose_czech_description">the native\'s version</string>
     <string name="language_choose_english_title">🇬🇧 English</string>
     <string name="language_choose_english_description">(creative) translations</string>
-    <string name="language_choose_disclaimer">Translations are provided only for daily menus and in some cafeterias. None of the translations are done by the app itself.</string>
+    <string name="language_choose_disclaimer">Translations are provided only for daily menus and only in some cafeterias. None of the translations are done by the app itself.</string>
+    <string name="language_choose_refreshing">Refreshing menza list…</string>
+    <string name="language_choose_cannot_refresh">Cannot obtain new menza list</string>
 
     <string name="privacy_title">Privacy Policy</string>
     <string name="privacy_text">

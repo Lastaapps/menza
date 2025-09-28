@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,9 @@
 
 package cz.lastaapps.menza.features.settings.ui.vm
 
+import arrow.core.Either
 import cz.lastaapps.api.core.domain.model.DataLanguage
+import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -31,15 +33,24 @@ internal class DishLanguageViewModel(
 ) : StateViewModel<DishLanguageState>(DishLanguageState(), context) {
     fun selectLanguage(language: DataLanguage) =
         launchVM {
-            setDishLanguageUC(language)
-            updateState { copy(isSelected = true) }
+            withLoading({ copy(loading = it) }) {
+                val res = setDishLanguageUC(language)
+                updateState {
+                    when (res) {
+                        is Either.Left -> copy(error = res.value)
+                        is Either.Right -> copy(isSelected = true)
+                    }
+                }
+            }
         }
 
-    fun dismissSelected() {
-        updateState { copy(isSelected = false) }
+    fun dismiss() {
+        updateState { DishLanguageState() }
     }
 }
 
 internal data class DishLanguageState(
+    val loading: Boolean = false,
+    val error: DomainError? = null,
     val isSelected: Boolean = false,
 ) : VMState

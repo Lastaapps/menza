@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -43,7 +43,7 @@ internal class DownloadInitDataUC(
             emit(DownloadProgress.MENZA_LIST.right())
             log.i { "Starting menza download" }
 
-            syncMenzaListUC(isForced = true, all = true)
+            syncMenzaListUC(isForced = true, allSpecs = true)
                 .onLeft {
                     emit(it.left())
                     return@flow
