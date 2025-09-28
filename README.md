@@ -7,10 +7,6 @@ and [studentcatering.cz](http://studentcatering.cz/jidelni-listek/) websites
 in a much more pleasant and usable way for phones.
 It shows today's and this week's menu, opening hours, contacts, announcements and addresses for all canteens.
 
-Core parts are written in Kotlin Multiplatform, support for JVM target can be added right away. Other targets require more work (non-JVM web scraping library required), but it still may be manageable for somebody to port this codebase to native or js platforms.
-
-See **contributing** below.
-
 ##### What does 'Menza' mean?
 
 Menza is the Czech word for school cafeteria.
@@ -21,7 +17,29 @@ Menza is the Czech word for school cafeteria.
 - [Menza CLI (LastaApps)](https://github.com/Lastaapps/menza-cli)
 - [Menza BE (LastaApps)](https://github.com/Lastaapps/menza-backend)
 
-## Libraries
+
+## Features
+
+- Today's menu + dish details
+- Account balance along with low balance warning,
+  see [tutorial](docs/STRAVNIK_SIGNUP.md) for setup instructions.
+- This week's menu
+- Menza opening hours, contacts, announcements and addresses
+
+
+## User experience
+
+- Dark theme
+- Many themes along with support for Android 12 Material You dynamic theming
+- Image caching
+- Images download switch on metered networks (~0.7 MB per image)
+- No private data collection
+- Proper landscape mode and large screen device support
+
+## Code, Libraries
+
+Core parts are written in Kotlin Multiplatform,
+UI is written using Jetpack Compose (Android).
 
 - AndroidX (Compose, ...)
 - ArrowKt
@@ -30,26 +48,8 @@ Menza is the Czech word for school cafeteria.
 - Koin
 - Coil-kt
 - Ktor
+- Ktlint
 - And more
-
-The core of the all in written in Kotlin Multiplatform!
-
-## Features
-
-- Today's menu + dish details
-- This week's menu
-- Menza opening hours, contacts, announcements and addresses
-- Account balance, for setup see [tutorial](docs/STRAVNIK_SIGNUP.md)
-
-## User experience
-
-- Dark theme
-- Many themes along with support for Android 12 Material You dynamic theming
-- Images download switch on metered networks (~0.7 MB per image)
-- Image caching
-- No private data collection
-- Proper landscape mode and large screen device support
-
 
 ## Screenshots
 
@@ -59,14 +59,22 @@ The core of the all in written in Kotlin Multiplatform!
 
 ## Contributing and project structure
 
-See [CONTRIBUTING.md](docs/CONTRIBUTING.md).
+In case you want to help or implement your own feature,
+please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) first.
+I think this is a great project to lear how does
+a simple yet corporate-like app look like,
+how code should (should not?) be structured
+and how functional approaches can be nicely used in an "imperative" language.
 
 #### Data sources
 
-Most of the data is obtained from the official Agata API, see the documentation [here](https://agata.suz.cvut.cz/jidelnicky/JAPIV2/JAPI-popis.html).
-To get your API key, please contact the IT center and don't steal mine, they will be more than happy to give you one.
+Most of the data is obtained from the official Agata API,
+see the documentation [here](https://agata.suz.cvut.cz/jidelnicky/JAPIV2/JAPI-popis.html).
+To get your API key, please contact the IT center and don't steal mine,
+they will be more than happy to give you one.
 
-To get FS and FEL buffet data I do scrape their webpages/hardcode info.
+To get FS and FEL buffet data,
+their webpages are scraped or hardcoded values are used.
 
 ## License
 
