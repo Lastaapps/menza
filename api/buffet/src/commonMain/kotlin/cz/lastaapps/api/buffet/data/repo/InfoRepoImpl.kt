@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -174,8 +174,8 @@ internal class InfoRepoImpl(
             ),
             Contact(
                 role = "jednatel",
-                name = "Ing. Michal Janča",
-                phone = "+420 602 447 080".let(::PhoneNumber),
+                name = "Ing. Aleš Faltys",
+                phone = "+420 602 238 146".let(::PhoneNumber),
                 email = null,
             ),
         )
