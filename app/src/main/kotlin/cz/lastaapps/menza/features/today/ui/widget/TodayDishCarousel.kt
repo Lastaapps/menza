@@ -78,6 +78,7 @@ import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.ui.util.dishContainerKey
 import cz.lastaapps.menza.features.today.ui.util.dishImageKey
 import cz.lastaapps.menza.features.today.ui.util.dishTitleKey
+import cz.lastaapps.menza.features.today.ui.util.key
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
@@ -192,7 +193,7 @@ private fun DishContent(
             }
 
             data.forEach { category ->
-                item(key = category.name + "_cat_header") {
+                item(key = category.key() + "_cat_header") {
                     DishHeader(
                         courseType = category,
                         modifier =
@@ -201,7 +202,7 @@ private fun DishContent(
 //                                .animateItem(),
                     )
                 }
-                item(key = category.name + "_content") {
+                item(key = category.key() + "_content") {
                     if (category.dishList.size == 1) {
                         val dish = category.dishList.first()
                         Box(
@@ -283,7 +284,7 @@ private fun DishContent(
                         )
                     }
                 }
-                item(key = category.name + "_spacer") {
+                item(key = category.key() + "_spacer") {
                     Spacer(
                         Modifier
                             .height(Padding.Small),
@@ -388,7 +389,8 @@ private fun DishItem(
                                             )
                                     }
                                 },
-                        ).sharedElement(scopes, key = dishImageKey(dish.id))
+                        )
+                        .sharedElement(scopes, key = dishImageKey(dish.id))
                 },
     ) {
         DishImageOrSupplement(

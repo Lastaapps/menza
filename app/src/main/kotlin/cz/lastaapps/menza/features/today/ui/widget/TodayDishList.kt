@@ -59,6 +59,7 @@ import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.ui.util.dishContainerKey
 import cz.lastaapps.menza.features.today.ui.util.dishImageKey
 import cz.lastaapps.menza.features.today.ui.util.dishTitleKey
+import cz.lastaapps.menza.features.today.ui.util.key
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.theme.Padding
@@ -158,7 +159,7 @@ private fun DishContent(
             // TODO I'm not sure how to implement this while supporting shared element animations
             // stickyHeader(
             item(
-                key = "header_" + category.someName,
+                key = "header_" + category.key(),
             ) {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
@@ -171,7 +172,7 @@ private fun DishContent(
             }
             items(
                 category.dishList,
-                key = { "" + category.someName + it.name },
+                key = { it.key(category) },
             ) { dish ->
                 DishItem(
                     dish = dish,

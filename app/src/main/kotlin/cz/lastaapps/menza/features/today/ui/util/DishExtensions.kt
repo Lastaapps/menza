@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import cz.lastaapps.api.core.domain.model.WeekDish
 import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.api.core.domain.model.dish.DishCategory
 import cz.lastaapps.api.core.domain.model.rating.RatingCategory
 import cz.lastaapps.api.core.domain.model.rating.RatingCategory.PORTION_SIZE
 import cz.lastaapps.api.core.domain.model.rating.RatingCategory.TASTE
@@ -34,6 +35,23 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Discounted
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Normal
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun DishCategory.key() =
+    buildString {
+        append(nameShort)
+        append(name)
+    }
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Dish.key(category: DishCategory?) =
+    buildString {
+        category?.let { append(it.someName) }
+        append(name)
+        append(amount)
+        append(priceNormal)
+        append(priceDiscounted)
+    }
 
 fun Dish.getPrice(
     type: PriceType,

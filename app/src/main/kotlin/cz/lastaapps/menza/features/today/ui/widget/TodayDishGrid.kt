@@ -52,6 +52,7 @@ import cz.lastaapps.menza.features.today.domain.model.TodayUserSettings
 import cz.lastaapps.menza.features.today.ui.util.dishContainerKey
 import cz.lastaapps.menza.features.today.ui.util.dishImageKey
 import cz.lastaapps.menza.features.today.ui.util.dishTitleKey
+import cz.lastaapps.menza.features.today.ui.util.key
 import cz.lastaapps.menza.ui.components.NoItems
 import cz.lastaapps.menza.ui.components.PullToRefreshWrapper
 import cz.lastaapps.menza.ui.locals.LocalWindowWidth
@@ -167,7 +168,7 @@ private fun DishContent(
             data.forEach { category ->
                 itemsIndexed(
                     category.dishList,
-                    key = { _, dish -> "" + category.name + dish.name },
+                    key = { _, dish -> dish.key(category) },
                 ) { index, dish ->
                     Column(
                         verticalArrangement = Arrangement.spacedBy(Padding.Medium),
