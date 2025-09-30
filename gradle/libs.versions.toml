@@ -1,6 +1,6 @@
 [versions]
 aboutLibraries = "12.2.4"
-android-gradle = "8.13.0"
+android-gradle = "8.11.1"
 androidx-activity = "1.11.0"
 androidx-compose = "1.9.2"
 androidx-compose-icons = "1.7.8"
