@@ -141,7 +141,7 @@
     <string name="settings_currency_name_beer">Pivečko</string>
     <string name="settings_currency_name_eur">Euro EUR</string>
     <string name="settings_currency_name_usd">Americký dolar USD</string>
-    <string name="settings_currency_disclaimer_desitka">cena Radegasta 12° na Strahovské Desítce (50 Kč)</string>
+    <string name="settings_currency_disclaimer_desitka">cena Radegasta 12° na Strahovské Desítce (49 Kč)</string>
     <string name="settings_currency_disclaimer_conversion">dle kurzů České národní banky minulého roku</string>
     <string name="settings_reload_title">Kompletní přenačtení dat</string>
     <string name="settings_reload_text">

@@ -78,7 +78,7 @@ fun Float.applyExchangeRate(currency: Currency) =
         Currency.CZK -> this
         // based on Strahov Bar 10 - check for price update once a week at least
         // last updated 29th September
-        Currency.BEER -> this / 50f
+        Currency.BEER -> this / 49f
         // TODO update me every year
         // based on Czech National Bank: https://www.kurzy.cz/kurzy-men/jednotny-kurz/
         // date from 2024
