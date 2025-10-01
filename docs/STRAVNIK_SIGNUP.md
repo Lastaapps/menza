@@ -31,7 +31,7 @@ The original discussion can be found in
   <img src="assets/Stravnik_phone.png" alt="Strávník portal on a phone" style="width:30%;"/>
 
   It may happen that you get redirected to Agáta Secure page.
-  In this case click on the GoPay button that will redirect you to the Strávník portal.
+  In this case click on the <b style="color:green;">GoPay</b> button that will redirect you to the Strávník portal.
 
   <img src="./assets/Agata_secure_pc.png" alt="Agáta secure portal" style="width:42%;"/>
 
