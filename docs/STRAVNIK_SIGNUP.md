@@ -35,7 +35,8 @@ The original discussion can be found in
 
   <img src="./assets/Agata_secure_pc.png" alt="Agáta secure portal" style="width:42%;"/>
 
-- Once you are in the Strávník portal, click on your name to open the account options.
+- Once you are in the Strávník portal, click on your name to open the account options. (Right menu)
+  - If you cannot click it, try going to this URL [https://stravnik.suz.cvut.cz/Identity/Account/Manage](https://stravnik.suz.cvut.cz/Identity/Account/Manage)
 - In the password section, set a new password.
   It is also recommended to set your private email, so you can access
   your account even when you finish your studies.
