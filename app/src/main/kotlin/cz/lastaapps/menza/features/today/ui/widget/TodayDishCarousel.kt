@@ -358,7 +358,7 @@ private fun DishItem(
                             dishContainerKey(dish.id),
                             // resizeMode = ResizeMode.RemeasureToBounds,
                             resizeMode =
-                                ResizeMode.ScaleToBounds(
+                                ResizeMode.scaleToBounds(
                                     contentScale = ContentScale.Crop,
                                     alignment = Alignment.CenterStart,
                                 ),

@@ -1,28 +1,28 @@
 [versions]
-aboutLibraries = "12.2.4"
-android-gradle = "8.11.1"
-androidx-activity = "1.11.0"
-androidx-compose = "1.9.2"
+aboutLibraries = "13.2.1"
+android-gradle = "8.13.2"
+androidx-activity = "1.12.2"
+androidx-compose = "1.10.0"
 androidx-compose-icons = "1.7.8"
 androidx-compose-material3 = "1.4.0"
-androidx-lifecycle = "2.9.4"
+androidx-lifecycle = "2.10.0"
 androidx-test = "1.7.0"
 coil = "3.3.0"
 decompose = "3.4.0"
 detekt = "1.23.8"
 espresso = "3.7.0"
-google-ksp = "2.2.20-2.0.3"
+google-ksp = "2.3.4"
 # @keep
 java-jvmTarget = "17"
 junit = "4.13.2"
-junit5-bom = "5.13.4"
+junit5-bom = "6.0.1"
 junitVersion = "1.3.0"
 kermit = "2.0.8"
 koin = "4.1.1"
-koin-annotations = "2.1.0"
-kotest = "6.0.3"
+koin-annotations = "2.3.1"
+kotest = "6.0.7"
 kotest-arrow = "2.0.0"
-kotlin = "2.2.20"
+kotlin = "2.3.0"
 # @keep
 kotlin-api = "2.2"
 # @keep
@@ -30,20 +30,20 @@ kotlin-language = "2.2"
 kotlinx-atomicfu = "0.29.0"
 kotlinx-coroutines = "1.10.2"
 # https://mrmans0n.github.io/compose-rules/
-ktlintComposeRules = "0.4.27"
+ktlintComposeRules = "0.5.3"
 # https://github.com/JLLeitschuh/ktlint-gradle
-ktlintGradle = "13.1.0"
+ktlintGradle = "14.0.1"
 # https://pinterest.github.io/ktlint/latest/
 # @keep
 ktlintJar = "1.7.1"
-ktor = "3.3.0"
+ktor = "3.3.3"
 org-jetbrains-kotlin = "2.1.10"
 russhwolf-settings = "1.3.0"
 sdk-compile = "36"
 sdk-min = "23"
 sdk-target = "36"
 shadow = "8.1.1"
-sqldelight = "2.1.0"
+sqldelight = "2.2.1"
 
 [libraries]
 aboutLibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutLibraries" }
@@ -69,7 +69,7 @@ androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.1.1"
 androidx-constraintlayout-views = "androidx.constraintlayout:constraintlayout:2.2.1"
 androidx-core = "androidx.core:core-ktx:1.17.0"
-androidx-datastore = "androidx.datastore:datastore-preferences:1.1.7"
+androidx-datastore = "androidx.datastore:datastore-preferences:1.2.0"
 androidx-documentFile = "androidx.documentfile:documentfile:1.1.0"
 androidx-emoji2-core = "androidx.emoji2:emoji2:1.6.0"
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
@@ -77,7 +77,7 @@ androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-kt
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "androidx-lifecycle" }
 androidx-security = "androidx.security:security-crypto-ktx:1.1.0"
-androidx-splashscreen = "androidx.core:core-splashscreen:1.2.0-rc01"
+androidx-splashscreen = "androidx.core:core-splashscreen:1.2.0"
 androidx-startup = "androidx.startup:startup-runtime:1.2.0"
 androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
 androidx-test-junit = "androidx.test.ext-ktx:junit:1.1.3"
@@ -86,9 +86,9 @@ androidx-test-runner = { module = "androidx.test:runner-ktx", version.ref = "and
 androidx-test-truth = { module = "androidx.test.ext:truth-ktx", version.ref = "androidx-test" }
 androidx-tracing = "androidx.tracing:tracing-ktx:1.3.0"
 androidx-vectorDrawables = "androidx.vectordrawable:vectordrawable:1.2.0"
-androidx-windowManager = "androidx.window:window:1.5.0"
-androidx-work = "androidx.work:work-runtime-ktx:2.10.5"
-arrowkt-bom = "io.arrow-kt:arrow-stack:2.1.2"
+androidx-windowManager = "androidx.window:window:1.5.1"
+androidx-work = "androidx.work:work-runtime-ktx:2.11.0"
+arrowkt-bom = "io.arrow-kt:arrow-stack:2.2.1.1"
 arrowkt-core = { module = "io.arrow-kt:arrow-core" }
 arrowkt-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
 arrowkt-fx-stm = { module = "io.arrow-kt:arrow-fx-stm" }

@@ -27,10 +27,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.SharedTransitionScope.OverlayClip
-import androidx.compose.animation.SharedTransitionScope.PlaceHolderSize
-import androidx.compose.animation.SharedTransitionScope.PlaceHolderSize.Companion.contentSize
 import androidx.compose.animation.SharedTransitionScope.ResizeMode
-import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.ScaleToBounds
 import androidx.compose.animation.SharedTransitionScope.SharedContentState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -61,8 +58,8 @@ fun Modifier.sharedBounds(
     key: Any,
     enter: EnterTransition = fadeIn(),
     exit: ExitTransition = fadeOut(),
-    resizeMode: ResizeMode = ScaleToBounds(ContentScale.FillWidth, Center),
-    placeHolderSize: PlaceHolderSize = contentSize,
+    resizeMode: ResizeMode = ResizeMode.scaleToBounds(ContentScale.FillWidth, Center),
+    placeholderSize: SharedTransitionScope.PlaceholderSize = ContentSize,
     renderInOverlayDuringTransition: Boolean = true,
     zIndexInOverlay: Float = 0f,
 ): Modifier =
@@ -78,7 +75,7 @@ fun Modifier.sharedBounds(
                 enter = enter,
                 exit = exit,
                 resizeMode = resizeMode,
-                placeHolderSize = placeHolderSize,
+                placeholderSize = placeholderSize,
                 renderInOverlayDuringTransition = renderInOverlayDuringTransition,
                 zIndexInOverlay = zIndexInOverlay,
             )
@@ -91,8 +88,8 @@ fun Modifier.sharedContainer(
     clipInOverlayDuringTransitionShape: Shape,
     enter: EnterTransition = fadeIn(),
     exit: ExitTransition = fadeOut(),
-    resizeMode: ResizeMode = ScaleToBounds(ContentScale.FillWidth, Center),
-    placeHolderSize: PlaceHolderSize = contentSize,
+    resizeMode: ResizeMode = ResizeMode.scaleToBounds(ContentScale.FillWidth, Center),
+    placeholderSize: SharedTransitionScope.PlaceholderSize = ContentSize,
     renderInOverlayDuringTransition: Boolean = true,
     zIndexInOverlay: Float = 0f,
 ): Modifier =
@@ -102,7 +99,7 @@ fun Modifier.sharedContainer(
         enter,
         exit,
         resizeMode,
-        placeHolderSize,
+        placeholderSize,
         renderInOverlayDuringTransition,
         zIndexInOverlay,
         OverlayParentClip(clipInOverlayDuringTransitionShape),
@@ -114,8 +111,8 @@ fun Modifier.sharedContainer(
     key: Any,
     enter: EnterTransition = fadeIn(),
     exit: ExitTransition = fadeOut(),
-    resizeMode: ResizeMode = ScaleToBounds(ContentScale.FillWidth, Center),
-    placeHolderSize: PlaceHolderSize = contentSize,
+    resizeMode: ResizeMode = ResizeMode.scaleToBounds(ContentScale.FillWidth, Center),
+    placeholderSize: SharedTransitionScope.PlaceholderSize = ContentSize,
     renderInOverlayDuringTransition: Boolean = true,
     zIndexInOverlay: Float = 0f,
     clipInOverlayDuringTransition: OverlayClip = OverlayParentClip(),
@@ -132,7 +129,7 @@ fun Modifier.sharedContainer(
                 enter = enter,
                 exit = exit,
                 resizeMode = resizeMode,
-                placeHolderSize = placeHolderSize,
+                placeholderSize = placeholderSize,
                 renderInOverlayDuringTransition = renderInOverlayDuringTransition,
                 zIndexInOverlay = zIndexInOverlay,
                 clipInOverlayDuringTransition = clipInOverlayDuringTransition,
@@ -143,7 +140,7 @@ fun Modifier.sharedContainer(
 fun Modifier.sharedElement(
     scopes: AnimationScopes,
     key: Any,
-    placeHolderSize: PlaceHolderSize = contentSize,
+    placeholderSize: SharedTransitionScope.PlaceholderSize = ContentSize,
     renderInOverlayDuringTransition: Boolean = true,
     zIndexInOverlay: Float = 0f,
 ): Modifier =
@@ -155,7 +152,7 @@ fun Modifier.sharedElement(
         this@sharedElement.sharedElement(
             sharedContentState = rememberSharedContentState(key),
             animatedVisibilityScope = scopes.animatedVisibilityScope,
-            placeHolderSize = placeHolderSize,
+            placeholderSize = placeholderSize,
             renderInOverlayDuringTransition = renderInOverlayDuringTransition,
             zIndexInOverlay = zIndexInOverlay,
         )
