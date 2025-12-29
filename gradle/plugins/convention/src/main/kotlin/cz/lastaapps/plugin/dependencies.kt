@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,23 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.plugin.common
+package cz.lastaapps.plugin
 
-import cz.lastaapps.extensions.java
 import cz.lastaapps.extensions.libs
-import cz.lastaapps.plugin.BasePlugin
-import org.gradle.api.JavaVersion
-import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
-
-class JavaConvention : BasePlugin({
-    java {
-        val versionCode = libs.versions.java.jvmTarget.get().toInt()
-        val version = JavaVersion.toVersion(versionCode)
-        sourceCompatibility = version
-        targetCompatibility = version
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(versionCode))
-        }
-    }
-})
+context(p: Project)
+fun KotlinDependencyHandler.dependenciesArrowKt() {
+    implementation(p.project.dependencies.platform(p.libs.arrowkt.bom))
+    implementation(p.libs.arrowkt.core)
+    implementation(p.libs.arrowkt.fx.coroutines)
+    implementation(p.libs.arrowkt.fx.stm)
+}

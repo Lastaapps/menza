@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -16,6 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+private typealias KV = org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     `kotlin-dsl`
@@ -38,8 +40,35 @@ java {
 }
 
 kotlin {
-    kotlinDslPluginOptions { }
+    compilerOptions {
+        languageVersion.set(
+            KV.fromVersion(
+                libs.versions.kotlin.language
+                    .get(),
+            ),
+        )
+        apiVersion.set(
+            KV.fromVersion(
+                libs.versions.kotlin.api
+                    .get(),
+            ),
+        )
+
+        freeCompilerArgs.addAll(
+            listOf(
+                "-opt-in=kotlin.ExperimentalStdlibApi",
+                "-Xwhen-guards",
+                "-Xcontext-parameters",
+                "-Xcontext-sensitive-resolution",
+                "-Xannotation-target-all",
+                "-Xnested-type-aliases",
+                "-Xannotation-default-target=param-property",
+            ),
+        )
+    }
 }
+
+kotlinDslPluginOptions { }
 
 dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
@@ -63,7 +92,7 @@ gradlePlugin {
         )
         plugin(
             ids.common.compose,
-            pkg("common.ComposeConvention"),
+            pkg("common.ComposeUIConvention"),
         )
         plugin(
             ids.common.coil,

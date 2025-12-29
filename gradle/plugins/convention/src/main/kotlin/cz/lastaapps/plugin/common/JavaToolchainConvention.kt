@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,23 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.plugin.android
+package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.alias
+import cz.lastaapps.extensions.java
 import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
-import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
+import org.gradle.api.JavaVersion
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 
-@Suppress("unused")
-class AndroidKspConvention : BasePlugin({
-    pluginManager {
-        alias(libs.plugins.google.ksp)
-    }
-
-    kotlinExtension.apply {
-        sourceSets.all {
-            kotlin.srcDir("build/generated/ksp/$name/kotlin")
-        }
-    }
-})
+class JavaToolchainConvention :
+    BasePlugin(
+        {
+            java {
+                val versionCode =
+                    libs.versions.java.jvmTarget
+                        .get()
+                        .toInt()
+                val version = JavaVersion.toVersion(versionCode)
+                sourceCompatibility = version
+                targetCompatibility = version
+                toolchain {
+                    languageVersion.set(JavaLanguageVersion.of(versionCode))
+                }
+            }
+        },
+    )

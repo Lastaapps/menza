@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -18,7 +18,7 @@
  */
 
 plugins {
-    alias(libs.plugins.lastaapps.android.library)
+    alias(libs.plugins.lastaapps.kmp.library)
     alias(libs.plugins.lastaapps.common.compose)
     alias(libs.plugins.sqldelight)
 }
@@ -33,14 +33,15 @@ sqldelight {
     }
 }
 
-android {
-    namespace = "cz.lastaapps.crash"
-}
+kotlin {
+    androidLibrary {
+        namespace = "cz.lastaapps.crash"
+    }
+    sourceSets.commonMain.dependencies {
+        implementation(libs.androidx.startup)
 
-dependencies {
-    implementation(libs.androidx.startup)
-
-    implementation(libs.sqldelight.android)
-    implementation(libs.sqldelight.runtime)
-    implementation(libs.sqldelight.coroutines)
+        implementation(libs.sqldelight.android)
+        implementation(libs.sqldelight.runtime)
+        implementation(libs.sqldelight.coroutines)
+    }
 }

@@ -19,16 +19,14 @@
 
 package cz.lastaapps.plugin.android
 
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.api.dsl.ApplicationExtension
 import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.android.config.configureKotlinAndroid
+import cz.lastaapps.plugin.android.config.configureAndroidOnlyModule
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
 
 class AndroidAppConvention :
@@ -36,11 +34,12 @@ class AndroidAppConvention :
         {
             pluginManager {
                 alias(libs.plugins.android.application)
-                alias(libs.plugins.kotlin.android)
             }
 
-            extensions.configure<BaseAppModuleExtension> {
-                configureKotlinAndroid(this)
+            apply<AndroidBaseConvention>()
+
+            extensions.configure<ApplicationExtension> {
+                configureAndroidOnlyModule(this)
 
                 defaultConfig {
                     targetSdk =
@@ -113,13 +112,15 @@ class AndroidAppConvention :
                 }
             }
 
-            apply<AndroidBaseConvention>()
-
-            dependencies {
-                implementation(libs.google.material)
-                implementation(libs.androidx.splashscreen)
-                implementation(libs.androidx.startup)
-                implementation(libs.androidx.vectorDrawables)
-            }
+//            kotlinAndroid {
+//                sourceSets.all {
+//                    dependencies {
+//                        implementation(libs.google.material)
+//                        implementation(libs.androidx.splashscreen)
+//                        implementation(libs.androidx.startup)
+//                        implementation(libs.androidx.vectorDrawables)
+//                    }
+//                }
+//            }
         },
     )

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,39 +20,36 @@
 package cz.lastaapps.plugin.android
 
 import com.android.build.api.dsl.LibraryExtension
+// import com.android.build.gradle.LibraryExtension
 import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.android.config.configureKotlinAndroid
+import cz.lastaapps.plugin.android.config.configureAndroidOnlyModule
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
+class AndroidLibraryConvention :
+    BasePlugin(
+        {
+            pluginManager {
+                alias(libs.plugins.android.library.platform)
+            }
 
-class AndroidLibraryConvention : BasePlugin({
-    pluginManager {
-        alias(libs.plugins.android.library)
+            apply<AndroidBaseConvention>()
 
-        // to prevent conflicts with the KMP plugin
-        if (extensions.findByName("kotlin") == null)
-            alias(libs.plugins.kotlin.android)
-    }
-
-    extensions.configure<LibraryExtension> {
-        configureKotlinAndroid(this)
-        defaultConfig {
-            multiDexEnabled = true
-        }
-
-        buildFeatures {
-            buildConfig = false
-        }
-    }
-    dependencies {
-        implementation(libs.androidx.compose.runtime)
-    }
-
-    apply<AndroidBaseConvention>()
-})
+            extensions.configure<LibraryExtension> {
+                configureAndroidOnlyModule(this)
+                defaultConfig {
+                    multiDexEnabled = true
+                }
+                buildFeatures {
+                    buildConfig = false
+                }
+            }
+            dependencies {
+                "implementation"(libs.androidx.compose.runtime)
+            }
+        },
+    )

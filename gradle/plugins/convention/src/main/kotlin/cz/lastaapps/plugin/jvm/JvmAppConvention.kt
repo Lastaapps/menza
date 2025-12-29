@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,7 +26,6 @@ import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.android.common.KotlinBaseConvention
-import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
 import cz.lastaapps.plugin.common.KtLintConvention
 import org.gradle.api.tasks.testing.Test
@@ -49,7 +48,6 @@ class JvmAppConvention :
             apply<KtLintConvention>()
             apply<DetektConvention>()
             apply<KotlinBaseConvention>()
-            apply<ArrowKtConvention>()
 
             tasks.withType<Test> {
                 useJUnitPlatform()

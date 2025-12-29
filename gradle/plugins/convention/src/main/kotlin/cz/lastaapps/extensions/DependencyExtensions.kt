@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,6 +24,12 @@ package cz.lastaapps.extensions
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+
+fun <T : Any> DependencyHandlerScope.generalImplementation(
+    dependency: Provider<T>,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) {
+}
 
 fun DependencyHandlerScope.implementation(
     dependency: String,
@@ -55,8 +61,6 @@ fun <T : Any> DependencyHandlerScope.api(
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
 ) = Constants.API(dependency, dependencyConfiguration)
 
-fun DependencyHandlerScope.coreLibraryDesugaring(dependencyNotation: Any) =
-    add(Constants.DESUGARING, dependencyNotation)
+fun DependencyHandlerScope.coreLibraryDesugaring(dependencyNotation: Any) = add(Constants.DESUGARING, dependencyNotation)
 
-fun DependencyHandlerScope.ksp(dependencyNotation: Any) =
-    add(Constants.KSP, dependencyNotation)
+fun DependencyHandlerScope.ksp(dependencyNotation: Any) = add(Constants.KSP, dependencyNotation)

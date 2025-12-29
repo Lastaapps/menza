@@ -19,9 +19,14 @@
 
 package cz.lastaapps.extensions
 
-import com.android.build.api.dsl.CommonExtension
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.api.dsl.ApplicationAndroidResources
+import com.android.build.api.dsl.ApplicationBuildFeatures
+import com.android.build.api.dsl.ApplicationBuildType
+import com.android.build.api.dsl.ApplicationDefaultConfig
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.ApplicationInstallation
+import com.android.build.api.dsl.ApplicationProductFlavor
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
@@ -38,6 +43,15 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
+typealias CommonExtension = com.android.build.api.dsl.CommonExtension<
+    ApplicationBuildFeatures,
+    ApplicationBuildType,
+    ApplicationDefaultConfig,
+    ApplicationProductFlavor,
+    ApplicationAndroidResources,
+    ApplicationInstallation,
+>
+
 val Project.libs get() = the<org.gradle.accessors.dm.LibrariesForLibs>()
 
 fun PluginManager.alias(plugin: Provider<PluginDependency>) {
@@ -51,19 +65,26 @@ fun Project.multiplatform(block: KotlinMultiplatformExtension.() -> Unit) {
     multiplatform.apply(block)
 }
 
+val Project.kotlinAndroid: KotlinAndroidProjectExtension
+    get() = kotlinExtension as KotlinAndroidProjectExtension
+
+fun Project.kotlinAndroid(block: KotlinAndroidProjectExtension.() -> Unit) {
+    kotlinAndroid.apply(block)
+}
+
 fun Project.pluginManager(block: PluginManager.() -> Unit) {
     pluginManager.apply(block)
 }
 
-fun Project.android(block: CommonExtension<*, *, *, *, *, *>.() -> Unit) {
+fun Project.android(block: CommonExtension.() -> Unit) {
     extension("android", block)
 }
 
-fun Project.androidApp(block: BaseAppModuleExtension.() -> Unit) {
+fun Project.androidApp(block: ApplicationExtension.() -> Unit) {
     extension("android", block)
 }
 
-fun Project.androidLibrary(block: LibraryExtension.() -> Unit) {
+fun Project.androidPlatformLibrary(block: LibraryExtension.() -> Unit) {
     extension("android", block)
 }
 

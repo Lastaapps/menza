@@ -25,40 +25,43 @@ import java.time.ZoneOffset.UTC
 import java.time.format.DateTimeFormatter
 
 plugins {
-    alias(libs.plugins.lastaapps.android.library)
+    alias(libs.plugins.lastaapps.kmp.library)
     alias(libs.plugins.lastaapps.common.compose)
     `maven-publish`
 }
 
 val buildVersionProvider = providers.of(BuildDateValueSource::class) {}
 
-android {
-    namespace = "cz.lastaapps.common"
+kotlin {
+    androidLibrary {
+        namespace = "cz.lastaapps.common"
 
-    defaultConfig {
-        val modificationTime =
-            buildVersionProvider
-                .map(Instant::ofEpochSecond)
-                .map(::formatDate)
-                .map { "\"$it\"" }
-        buildConfigField("java.lang.String", "BUILD_DATE", modificationTime.get())
+        // ?????
+//        defaultConfig {
+//            val modificationTime =
+//                buildVersionProvider
+//                    .map(Instant::ofEpochSecond)
+//                    .map(::formatDate)
+//                    .map { "\"$it\"" }
+//            buildConfigField("java.lang.String", "BUILD_DATE", modificationTime.get())
+//        }
+//        buildTypes {
+//            debug {
+//                val nowProvider =
+//                    providers
+//                        .provider { formatDate() }
+//                        .map { "\"$it\"" }
+//                buildConfigField("java.lang.String", "BUILD_DATE", nowProvider.get())
+//            }
+//        }
+//        buildFeatures {
+//            buildConfig = true
+//        }
     }
-    buildTypes {
-        debug {
-            val nowProvider =
-                providers
-                    .provider { formatDate() }
-                    .map { "\"$it\"" }
-            buildConfigField("java.lang.String", "BUILD_DATE", nowProvider.get())
-        }
-    }
-    buildFeatures {
-        buildConfig = true
-    }
-}
 
-dependencies {
-    implementation(libs.google.material)
+    sourceSets.commonMain.dependencies {
+        implementation(libs.google.material)
+    }
 }
 
 private fun formatDate(instant: Instant = Instant.now()) =

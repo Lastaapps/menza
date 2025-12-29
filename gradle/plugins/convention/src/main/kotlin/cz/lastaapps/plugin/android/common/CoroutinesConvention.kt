@@ -20,11 +20,11 @@
 package cz.lastaapps.plugin.android.common
 
 import cz.lastaapps.extensions.compilerOptions
-import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.testImplementation
+import cz.lastaapps.extensions.multiplatform
 import cz.lastaapps.plugin.BasePlugin
-import org.gradle.kotlin.dsl.dependencies
+import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
 class CoroutinesConvention :
     BasePlugin(
@@ -38,10 +38,35 @@ class CoroutinesConvention :
                 )
             }
 
-            dependencies {
-                implementation(libs.kotlinx.coroutines.common)
-                implementation(libs.kotlinx.coroutines.android)
-                testImplementation(libs.kotlinx.coroutines.test)
+            multiplatform {
+                with(sourceSets) {
+                    commonMain.dependencies {
+                        dependenciesCoroutines()
+                    }
+                    commonTest.dependencies {
+                        dependenciesCoroutinesTest()
+                    }
+                    androidMain.dependencies {
+                        dependenciesCoroutinesAndroid()
+                    }
+                }
             }
         },
-    )
+    ) {
+    companion object {
+        context(p: Project)
+        fun KotlinDependencyHandler.dependenciesCoroutines() {
+            implementation(p.libs.kotlinx.coroutines.common)
+        }
+
+        context(p: Project)
+        fun KotlinDependencyHandler.dependenciesCoroutinesAndroid() {
+            implementation(p.libs.kotlinx.coroutines.android)
+        }
+
+        context(p: Project)
+        fun KotlinDependencyHandler.dependenciesCoroutinesTest() {
+            implementation(p.libs.kotlinx.coroutines.test)
+        }
+    }
+}

@@ -19,59 +19,66 @@
 
 package cz.lastaapps.plugin.android.config
 
-import com.android.build.api.dsl.CommonExtension
-import cz.lastaapps.extensions.compilerOptions
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import cz.lastaapps.extensions.coreLibraryDesugaring
-import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 
-internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, *, *, *, *, *>) =
+typealias CommonExtension = com.android.build.api.dsl.CommonExtension<
+    *,
+    *,
+    *,
+    *,
+    *,
+    *,
+>
+
+internal fun Project.configureAndroidOnlyModule(commonExtension: CommonExtension) =
     with(commonExtension) {
-        compileSdk =
-            libs.versions.sdk.compile
-                .get()
-                .toInt()
-
-        defaultConfig {
-            minSdk =
-                libs.versions.sdk.min
-                    .get()
-                    .toInt()
-            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        }
-
-        compilerOptions {
-            // Treat all Kotlin warnings as errors (disabled by default)
-            allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
-
-            freeCompilerArgs.addAll(
-                listOf(
-                    "-opt-in=kotlin.RequiresOptIn",
-                    // enforce Java nullability
-                    "-Xjspecify-annotations=strict",
-                    "-Xtype-enhancement-improvements-strict-mode",
-                ),
-            )
-        }
-
-        compileOptions {
-            val versionCode =
-                libs.versions.java.jvmTarget
-                    .get()
-                    .toInt()
-            val version = JavaVersion.toVersion(versionCode)
-            sourceCompatibility = version
-            targetCompatibility = version
-            isCoreLibraryDesugaringEnabled = true
-        }
+//        compileSdk = getCompileSdk()
+//
+//        defaultConfig {
+//            minSdk = getMinSdk()
+//            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//        }
+//
+//        compileOptions {
+//            val versionCode =
+//                libs.versions.java.jvmTarget
+//                    .get()
+//                    .toInt()
+//            val version = JavaVersion.toVersion(versionCode)
+//            sourceCompatibility = version
+//            targetCompatibility = version
+//            isCoreLibraryDesugaringEnabled = true
+//        }
 
         dependencies {
             coreLibraryDesugaring(libs.android.desugaring)
-
-            implementation(platform(libs.kotlin.bom))
         }
     }
+
+context(p: Project)
+internal fun KotlinMultiplatformAndroidLibraryTarget.configureAndroidKMPModule() {
+    compileSdk = p.getCompileSdk()
+    minSdk = p.getMinSdk()
+
+    // TODO determine how does this behave in release/debug
+    // optimization { minify = true }
+
+    enableCoreLibraryDesugaring = true
+    p.dependencies {
+        coreLibraryDesugaring(p.libs.android.desugaring)
+    }
+}
+
+private fun Project.getCompileSdk() =
+    libs.versions.sdk.compile
+        .get()
+        .toInt()
+
+private fun Project.getMinSdk() =
+    libs.versions.sdk.min
+        .get()
+        .toInt()

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,17 +22,21 @@ plugins {
     alias(libs.plugins.kotlin.atomicfu)
 }
 
-android {
-    namespace = "cz.lastaapps.api.core"
-}
+kotlin {
+    androidLibrary {
+        namespace = "cz.lastaapps.api.core"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core)
 
-dependencies {
-    commonMainImplementation(projects.core)
-
-    commonMainImplementation(libs.kotlinx.atomicfu)
-    commonMainImplementation(libs.sqldelight.runtime)
-    commonMainImplementation(libs.bundles.russhwolf.settings)
-
-    androidMainImplementation(libs.androidx.security)
-    androidMainImplementation(libs.androidx.datastore)
+            implementation(libs.kotlinx.atomicfu)
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.bundles.russhwolf.settings)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.security)
+            implementation(libs.androidx.datastore)
+        }
+    }
 }

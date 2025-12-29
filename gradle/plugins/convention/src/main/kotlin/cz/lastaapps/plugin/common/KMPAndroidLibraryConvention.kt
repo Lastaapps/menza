@@ -19,20 +19,37 @@
 
 package cz.lastaapps.plugin.common
 
+import com.android.build.api.dsl.androidLibrary
+import com.android.build.api.variant.KotlinMultiplatformAndroidComponentsExtension
+import cz.lastaapps.extensions.alias
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.multiplatform
+import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.android.config.configureAndroidKMPModule
+import org.gradle.kotlin.dsl.configure
 
-class CoilConvention :
+class KMPAndroidLibraryConvention :
     BasePlugin(
         {
+            pluginManager {
+                alias(libs.plugins.android.library.kmp)
+            }
+
+            extensions.configure<KotlinMultiplatformAndroidComponentsExtension> {
+                @Suppress("unused")
+                onVariants { variant -> }
+            }
+
             multiplatform {
-                sourceSets.commonMain.dependencies {
-                    implementation(libs.coil.complete)
-                    implementation(libs.coil.gif)
-                    implementation(libs.coil.network.ktor)
-                    implementation(libs.coil.svg)
+                androidLibrary {
+                    configureAndroidKMPModule()
                 }
             }
+            // build.gradle.kts
+            // TODO 9.0
+//        dependencies {
+//            "androidRuntimeClasspath"(libs.androidx.compose.ui.tooling)
+//        }
         },
     )

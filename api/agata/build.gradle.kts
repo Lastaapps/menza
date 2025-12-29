@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,20 +22,22 @@ plugins {
     alias(libs.plugins.lastaapps.kmp.sqldelight)
 }
 
-android {
-    namespace = "cz.lastaapps.api.agata"
-}
+kotlin {
+    androidLibrary {
+        namespace = "cz.lastaapps.api.agata"
+    }
 
-dependencies {
-    commonMainImplementation(projects.core)
-    commonMainImplementation(projects.api.core)
+    sourceSets.commonMain.dependencies {
+        implementation(projects.core)
+        implementation(projects.api.core)
 
-    commonMainImplementation(libs.ktor.client.core)
-    commonMainImplementation(libs.ktor.client.contentNegotiation)
-    commonMainImplementation(libs.ktor.client.logging)
-    commonMainImplementation(libs.ktor.client.serialization)
+        implementation(libs.ktor.client.core)
+        implementation(libs.ktor.client.contentNegotiation)
+        implementation(libs.ktor.client.logging)
+        implementation(libs.ktor.client.serialization)
 
-    commonMainImplementation(libs.bundles.russhwolf.settings)
+        implementation(libs.bundles.russhwolf.settings)
+    }
 }
 
 sqldelight {

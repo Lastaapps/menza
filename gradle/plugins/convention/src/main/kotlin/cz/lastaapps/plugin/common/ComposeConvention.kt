@@ -20,18 +20,19 @@
 package cz.lastaapps.plugin.common
 
 import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.debugImplementation
-import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
+import cz.lastaapps.extensions.multiplatform
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
+import org.gradle.api.Project
 import org.gradle.kotlin.dsl.assign
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
-class ComposeConvention :
-    BasePlugin(
+abstract class ComposeConvention(
+    specificDependencies: (KotlinDependencyHandler).(Project) -> Unit,
+) : BasePlugin(
         {
             pluginManager {
                 alias(libs.plugins.kotlin.compose.compiler)
@@ -41,38 +42,49 @@ class ComposeConvention :
 
             with(extensions.getByType<ComposeCompilerGradlePluginExtension>()) {
                 includeSourceInformation = true
-
-                featureFlags =
-                    setOf(
-                        // ComposeFeatureFlag.
-                    )
+                featureFlags = setOf()
             }
 
-            dependencies {
-                implementation(libs.google.material)
-
-                implementation(libs.androidx.activity.compose)
-                implementation(libs.androidx.constraintlayout.compose)
-                implementation(libs.androidx.compose.material3)
-                implementation(libs.androidx.compose.material3WindowSizeClass)
-                implementation(libs.androidx.compose.iconsCore)
-                implementation(libs.androidx.compose.iconsExtended)
-                implementation(libs.androidx.compose.animation)
-                implementation(libs.androidx.compose.ui.util)
-                debugImplementation(libs.androidx.compose.tooling)
-                implementation(libs.androidx.compose.toolingPreview)
-
-                implementation(
-                    libs.androidx.lifecycle.runtime
-                        .asProvider(),
-                )
-                implementation(libs.androidx.lifecycle.runtime.compose)
-
-                implementation(libs.decompose.core)
-                implementation(libs.decompose.compose.asProvider())
-                implementation(libs.decompose.compose.experimental)
-
-                implementation(libs.coil.compose.complete)
+            multiplatform {
+                sourceSets.commonMain.dependencies {
+                    specificDependencies(project)
+                }
             }
         },
     )
+
+class ComposeUIConvention : ComposeConvention({ with(it) { dependenciesComposeUI() } })
+
+class ComposeRuntimeConvention : ComposeConvention({ with(it) { implementation(libs.androidx.compose.runtime) } })
+
+context(p: Project)
+private fun KotlinDependencyHandler.dependenciesComposeUI() {
+    implementation(p.libs.google.material)
+
+    implementation(p.libs.androidx.activity.compose)
+    implementation(p.libs.androidx.constraintlayout.compose)
+    implementation(p.libs.androidx.compose.material3)
+    implementation(p.libs.androidx.compose.material3WindowSizeClass)
+    implementation(p.libs.androidx.compose.iconsCore)
+    implementation(p.libs.androidx.compose.iconsExtended)
+    implementation(p.libs.androidx.compose.animation)
+    implementation(p.libs.androidx.compose.ui.util)
+    // TODO debug code exclude
+    implementation(p.libs.androidx.compose.tooling)
+    implementation(p.libs.androidx.compose.toolingPreview)
+
+    implementation(
+        p.libs.androidx.lifecycle.runtime
+            .asProvider(),
+    )
+    implementation(p.libs.androidx.lifecycle.runtime.compose)
+
+    implementation(p.libs.decompose.core)
+    implementation(
+        p.libs.decompose.compose
+            .asProvider(),
+    )
+    implementation(p.libs.decompose.compose.experimental)
+
+    implementation(p.libs.coil.compose.complete)
+}

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,14 +21,16 @@ plugins {
     alias(libs.plugins.lastaapps.kmp.library)
 }
 
-android {
-    namespace = "cz.lastaapps.api.main"
-}
+kotlin {
+    androidLibrary {
+        namespace = "cz.lastaapps.api.main"
+    }
 
-dependencies {
-    commonMainImplementation(projects.core)
-    commonMainImplementation(projects.api.agata)
-    commonMainImplementation(projects.api.buffet)
-    commonMainApi(projects.api.rating)
-    commonMainApi(projects.api.core)
+    sourceSets.commonMain.dependencies {
+        implementation(projects.core)
+        implementation(projects.api.agata)
+        implementation(projects.api.buffet)
+        api(projects.api.rating)
+        api(projects.api.core)
+    }
 }

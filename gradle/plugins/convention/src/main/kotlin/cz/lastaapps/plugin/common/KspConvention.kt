@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,16 +19,24 @@
 
 package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.implementation
+import cz.lastaapps.extensions.alias
 import cz.lastaapps.extensions.libs
+import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
-import org.gradle.kotlin.dsl.dependencies
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
-class ArrowKtConvention : BasePlugin({
-    dependencies {
-        implementation(project.dependencies.platform(libs.arrowkt.bom))
-        implementation(libs.arrowkt.core)
-        implementation(libs.arrowkt.fx.coroutines)
-        implementation(libs.arrowkt.fx.stm)
-    }
-})
+@Suppress("unused")
+class KspConvention :
+    BasePlugin(
+        {
+            pluginManager {
+                alias(libs.plugins.google.ksp)
+            }
+
+            kotlinExtension.apply {
+                sourceSets.all {
+                    kotlin.srcDir("build/generated/ksp/$name/kotlin")
+                }
+            }
+        },
+    )

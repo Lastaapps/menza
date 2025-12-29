@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -42,11 +42,16 @@ plugins {
     alias(libs.plugins.lastaapps.kmp.library)
 }
 
-android {
-    namespace = "cz.lastaapps.core"
+kotlin {
+    androidLibrary {
+        namespace = "cz.lastaapps.core"
 
-    buildFeatures {
-        buildConfig = true
+        androidResources {
+            enable = true
+        }
+//    buildFeatures {
+//        buildConfig = true
+//    }
     }
 }
 

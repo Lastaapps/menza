@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,33 +19,32 @@
 
 package cz.lastaapps.plugin.android
 
-import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.libs
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.android.common.KotlinBaseConvention
-import cz.lastaapps.plugin.common.ArrowKtConvention
-import cz.lastaapps.plugin.common.DetektConvention
-import cz.lastaapps.plugin.common.JavaConvention
-import cz.lastaapps.plugin.common.KtLintConvention
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.dependencies
 
 class AndroidBaseConvention :
     BasePlugin(
         {
-            apply<KtLintConvention>()
-            apply<DetektConvention>()
-            apply<JavaConvention>()
-            apply<KotlinBaseConvention>()
-            apply<AndroidKoinConvention>()
-            apply<ArrowKtConvention>()
+//            apply<KotlinBaseConvention>()
+//            apply<ComposeRuntimeConvention>()
+//            apply<KoinConvention>()
+//
+//            apply<KtLintConvention>()
+//            apply<DetektConvention>()
+//            apply<JavaToolchainConvention>()
 
-            dependencies {
-                implementation(libs.androidx.appcompat)
-                implementation(
-                    libs.androidx.lifecycle.runtime
-                        .asProvider(),
-                )
-            }
+//            kotlinAndroid {
+//                sourceSets.getByName("main").dependencies {
+//                    dependenciesKotlinBase()
+//                    dependenciesCoroutines()
+//                    dependenciesCoroutinesAndroid()
+//                    dependenciesArrowKt()
+//
+//                    implementation(libs.androidx.appcompat)
+//                    implementation(
+//                        libs.androidx.lifecycle.runtime
+//                            .asProvider(),
+//                    )
+//                }
+//            }
         },
     )
