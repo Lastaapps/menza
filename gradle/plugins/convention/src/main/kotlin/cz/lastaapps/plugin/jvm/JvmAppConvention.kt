@@ -54,12 +54,6 @@ class JvmAppConvention :
             }
 
             (kotlinExtension as KotlinJvmProjectExtension).apply {
-                sourceSets.all {
-                    languageSettings.apply {
-                        optIn("kotlin.RequiresOptIn")
-                        optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-                    }
-                }
             }
 
             dependencies {

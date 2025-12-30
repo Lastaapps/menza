@@ -19,7 +19,18 @@
 
 package cz.lastaapps.plugin.android
 
+import cz.lastaapps.extensions.implementation
+import cz.lastaapps.extensions.libs
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.android.common.CoroutinesConvention.Companion.dependenciesCoroutines
+import cz.lastaapps.plugin.android.common.CoroutinesConvention.Companion.dependenciesCoroutinesAndroid
+import cz.lastaapps.plugin.android.common.KotlinBaseConvention.Companion.dependenciesKotlinBase
+import cz.lastaapps.plugin.common.DetektConvention
+import cz.lastaapps.plugin.common.JavaToolchainConvention
+import cz.lastaapps.plugin.common.KtLintConvention
+import cz.lastaapps.plugin.dependenciesArrowKt
+import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.dependencies
 
 class AndroidBaseConvention :
     BasePlugin(
@@ -28,23 +39,24 @@ class AndroidBaseConvention :
 //            apply<ComposeRuntimeConvention>()
 //            apply<KoinConvention>()
 //
-//            apply<KtLintConvention>()
-//            apply<DetektConvention>()
-//            apply<JavaToolchainConvention>()
+            apply<KtLintConvention>()
+            apply<DetektConvention>()
+            apply<JavaToolchainConvention>()
 
-//            kotlinAndroid {
-//                sourceSets.getByName("main").dependencies {
-//                    dependenciesKotlinBase()
-//                    dependenciesCoroutines()
-//                    dependenciesCoroutinesAndroid()
-//                    dependenciesArrowKt()
-//
-//                    implementation(libs.androidx.appcompat)
-//                    implementation(
-//                        libs.androidx.lifecycle.runtime
-//                            .asProvider(),
-//                    )
-//                }
-//            }
+            dependencies {
+                sequenceOf(
+                    dependenciesKotlinBase(),
+                    dependenciesArrowKt(),
+                    dependenciesCoroutines(),
+                    dependenciesCoroutinesAndroid(),
+                ).flatten()
+                    .forEach(::implementation)
+
+                implementation(libs.androidx.appcompat)
+                implementation(
+                    libs.androidx.lifecycle.runtime
+                        .asProvider(),
+                )
+            }
         },
     )

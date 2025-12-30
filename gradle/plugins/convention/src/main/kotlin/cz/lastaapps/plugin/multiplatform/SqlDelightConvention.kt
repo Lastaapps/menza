@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,33 +26,31 @@ import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 
 @Suppress("unused")
-class SqlDelightConvention : BasePlugin({
-    pluginManager {
-        alias(libs.plugins.kotlin.multiplatform)
-        alias(libs.plugins.sqldelight)
-    }
-
-    multiplatform {
-
-        sourceSets.apply {
-            getByName("commonMain") {
-                dependencies {
-                    implementation(libs.sqldelight.runtime)
-                    implementation(libs.sqldelight.coroutines)
-                }
+class SqlDelightConvention :
+    BasePlugin(
+        {
+            pluginManager {
+                alias(libs.plugins.kotlin.multiplatform)
+                alias(libs.plugins.sqldelight)
             }
 
-            getByName("androidMain") {
-                dependencies {
-                    implementation(libs.sqldelight.android)
-                }
-            }
+            multiplatform {
+                sourceSets.apply {
+                    commonMain.dependencies {
+                        implementation(libs.sqldelight.runtime)
+                        implementation(libs.sqldelight.coroutines)
+                    }
 
-            getByName("jvmMain") {
-                dependencies {
-                    implementation(libs.sqldelight.jvm)
+                    androidMain.dependencies {
+                        implementation(libs.sqldelight.android)
+                    }
+
+                    if (false) {
+                        jvmMain.dependencies {
+                            implementation(libs.sqldelight.jvm)
+                        }
+                    }
                 }
             }
-        }
-    }
-})
+        },
+    )

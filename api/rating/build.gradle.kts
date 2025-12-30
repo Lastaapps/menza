@@ -22,7 +22,7 @@ plugins {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "cz.lastaapps.api.rating"
     }
 

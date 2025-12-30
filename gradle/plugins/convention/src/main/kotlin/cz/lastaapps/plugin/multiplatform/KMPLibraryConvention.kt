@@ -26,6 +26,7 @@ import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.android.common.CoroutinesConvention
 import cz.lastaapps.plugin.android.common.KotlinBaseConvention
+import cz.lastaapps.plugin.android.common.KotlinBaseConvention.Companion.dependenciesKotlinBase
 import cz.lastaapps.plugin.common.ComposeRuntimeConvention
 import cz.lastaapps.plugin.common.DetektConvention
 import cz.lastaapps.plugin.common.JavaToolchainConvention
@@ -35,7 +36,6 @@ import cz.lastaapps.plugin.common.KtLintConvention
 import cz.lastaapps.plugin.dependenciesArrowKt
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
 @Suppress("unused")
@@ -62,11 +62,15 @@ class KMPLibraryConvention :
 
             multiplatform {
                 targets.all {}
-                jvm {}
+                // This line for some reason includes additional dependencies to various source sets???
+                // Why tf does this include com.google.android.material:material
+                // jvm {}
 
                 sourceSets.apply {
                     commonMain.dependencies {
-                        dependenciesArrowKt()
+                        dependenciesKotlinBase().forEach(::implementation)
+                        dependenciesArrowKt().forEach(::implementation)
+
                         implementation(libs.koin.core)
 //                    implementation(libs.koin.annotations)
                         implementation(libs.kermit)
@@ -93,27 +97,19 @@ class KMPLibraryConvention :
 //                        }
 //                    }
 
-                    jvmMain.dependencies {
-                        implementation(libs.kotlinx.coroutines.swing)
-                    }
+                    if (false) {
+                        jvmMain.dependencies {
+                            implementation(libs.kotlinx.coroutines.swing)
+                        }
 
-                    jvmTest.dependencies {
-                        implementation(libs.kotlinx.coroutines.test)
-                        implementation(libs.kotest.jUnit5runner)
-                        implementation(project.dependencies.platform(libs.junit5.bom))
-                        implementation(libs.junit5.jupiter.api)
-                        implementation(libs.junit5.jupiter.runtime)
+                        jvmTest.dependencies {
+                            implementation(libs.kotlinx.coroutines.test)
+                            implementation(libs.kotest.jUnit5runner)
+                            implementation(project.dependencies.platform(libs.junit5.bom))
+                            implementation(libs.junit5.jupiter.api)
+                            implementation(libs.junit5.jupiter.runtime)
+                        }
                     }
-                }
-            }
-
-            dependencies {
-                try {
-                    // TODO KoinConvention
-//                    add("kspCommonMainMetadata", libs.koin.annotations.compiler)
-//                    add("kspAndroid", libs.koin.annotations.compiler)
-//                    add("kspJvm", libs.koin.annotations.compiler)
-                } catch (_: Exception) {
                 }
             }
         },

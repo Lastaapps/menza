@@ -43,7 +43,7 @@ plugins {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "cz.lastaapps.core"
 
         androidResources {
@@ -53,28 +53,28 @@ kotlin {
 //        buildConfig = true
 //    }
     }
-}
 
-dependencies {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.bundles.russhwolf.settings)
+            implementation(libs.bundles.ktor.client)
+            implementation(libs.decompose.core)
+        }
+        androidMain.dependencies {
+            implementation(
+                libs.androidx.compose.ui
+                    .asProvider(),
+            )
 
-    // Compose base
-    androidMainImplementation(
-        libs.androidx.compose.ui
-            .asProvider(),
-    )
+            implementation(libs.ktor.client.okhttp)
 
-    // Settings
-    commonMainImplementation(libs.bundles.russhwolf.settings)
-
-    // Ktor
-    commonMainImplementation(libs.bundles.ktor.client)
-    androidMainImplementation(libs.ktor.client.okhttp)
-    jvmMainImplementation(libs.ktor.client.okhttp)
-
-    // Decompose navigation
-    commonMainImplementation(libs.decompose.core)
-
-    // Lifecycle
-    androidMainImplementation(libs.androidx.lifecycle.runtime)
-    androidMainImplementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.lifecycle.runtime)
+            implementation(libs.androidx.lifecycle.runtime.compose)
+        }
+        if (false) {
+            jvmMain.dependencies {
+                implementation(libs.ktor.client.okhttp)
+            }
+        }
+    }
 }

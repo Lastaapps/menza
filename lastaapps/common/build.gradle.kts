@@ -33,10 +33,10 @@ plugins {
 val buildVersionProvider = providers.of(BuildDateValueSource::class) {}
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "cz.lastaapps.common"
 
-        // ?????
+        // Refactor to BuildKonfig
 //        defaultConfig {
 //            val modificationTime =
 //                buildVersionProvider

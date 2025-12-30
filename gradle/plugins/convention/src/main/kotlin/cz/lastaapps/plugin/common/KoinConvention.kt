@@ -37,7 +37,6 @@ class KoinConvention :
             multiplatform {
                 sourceSets.commonMain.dependencies {
                     implementation(libs.koin.core)
-                    implementation(libs.koin.android.core)
 
                     if (enableAnnotations) {
                         implementation(libs.koin.annotations)

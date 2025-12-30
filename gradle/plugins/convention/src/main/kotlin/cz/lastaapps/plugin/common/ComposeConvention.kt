@@ -31,7 +31,8 @@ import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginE
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
 abstract class ComposeConvention(
-    specificDependencies: (KotlinDependencyHandler).(Project) -> Unit,
+    mainDependencies: (KotlinDependencyHandler).(Project) -> Unit,
+    androidDependencies: (KotlinDependencyHandler).(Project) -> Unit,
 ) : BasePlugin(
         {
             pluginManager {
@@ -47,37 +48,45 @@ abstract class ComposeConvention(
 
             multiplatform {
                 sourceSets.commonMain.dependencies {
-                    specificDependencies(project)
+                    mainDependencies(project)
+                }
+                sourceSets.androidMain.dependencies {
+                    androidDependencies(project)
                 }
             }
         },
     )
 
-class ComposeUIConvention : ComposeConvention({ with(it) { dependenciesComposeUI() } })
+class ComposeUIConvention :
+    ComposeConvention(
+        { with(it) { dependenciesComposeUI() } },
+        {
+            with(it) {
+                dependenciesAndroidComposeUI()
+            }
+        },
+    )
 
-class ComposeRuntimeConvention : ComposeConvention({ with(it) { implementation(libs.androidx.compose.runtime) } })
+class ComposeRuntimeConvention :
+    ComposeConvention(
+        {},
+        { with(it) { implementation(libs.androidx.compose.runtime) } },
+    )
 
 context(p: Project)
 private fun KotlinDependencyHandler.dependenciesComposeUI() {
-    implementation(p.libs.google.material)
-
-    implementation(p.libs.androidx.activity.compose)
-    implementation(p.libs.androidx.constraintlayout.compose)
     implementation(p.libs.androidx.compose.material3)
     implementation(p.libs.androidx.compose.material3WindowSizeClass)
     implementation(p.libs.androidx.compose.iconsCore)
     implementation(p.libs.androidx.compose.iconsExtended)
     implementation(p.libs.androidx.compose.animation)
     implementation(p.libs.androidx.compose.ui.util)
-    // TODO debug code exclude
+    // TODO 9.0
+    //    dependencies {
+    //        "androidRuntimeClasspath"(libs.androidx.compose.ui.tooling)
+    //    }
     implementation(p.libs.androidx.compose.tooling)
     implementation(p.libs.androidx.compose.toolingPreview)
-
-    implementation(
-        p.libs.androidx.lifecycle.runtime
-            .asProvider(),
-    )
-    implementation(p.libs.androidx.lifecycle.runtime.compose)
 
     implementation(p.libs.decompose.core)
     implementation(
@@ -87,4 +96,15 @@ private fun KotlinDependencyHandler.dependenciesComposeUI() {
     implementation(p.libs.decompose.compose.experimental)
 
     implementation(p.libs.coil.compose.complete)
+}
+
+context(p: Project)
+private fun KotlinDependencyHandler.dependenciesAndroidComposeUI() {
+    implementation(p.libs.androidx.activity.compose)
+
+    implementation(
+        p.libs.androidx.lifecycle.runtime
+            .asProvider(),
+    )
+    implementation(p.libs.androidx.lifecycle.runtime.compose)
 }

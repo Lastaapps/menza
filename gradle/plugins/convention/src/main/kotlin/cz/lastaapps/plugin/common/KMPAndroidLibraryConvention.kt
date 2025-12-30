@@ -19,7 +19,7 @@
 
 package cz.lastaapps.plugin.common
 
-import com.android.build.api.dsl.androidLibrary
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import com.android.build.api.variant.KotlinMultiplatformAndroidComponentsExtension
 import cz.lastaapps.extensions.alias
 import cz.lastaapps.extensions.libs
@@ -27,6 +27,7 @@ import cz.lastaapps.extensions.multiplatform
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.android.config.configureAndroidKMPModule
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.configure
 
 class KMPAndroidLibraryConvention :
@@ -42,14 +43,11 @@ class KMPAndroidLibraryConvention :
             }
 
             multiplatform {
-                androidLibrary {
-                    configureAndroidKMPModule()
-                }
+                (
+                    (this as ExtensionAware).extensions.findByType(
+                        KotlinMultiplatformAndroidLibraryTarget::class.java,
+                    ) ?: error("KMP Android lib plugin not applied")
+                ).configureAndroidKMPModule()
             }
-            // build.gradle.kts
-            // TODO 9.0
-//        dependencies {
-//            "androidRuntimeClasspath"(libs.androidx.compose.ui.tooling)
-//        }
         },
     )

@@ -40,7 +40,7 @@ class AndroidLibraryConvention :
             apply<AndroidBaseConvention>()
 
             extensions.configure<LibraryExtension> {
-                configureAndroidOnlyModule(this)
+                configureAndroidOnlyModule()
                 defaultConfig {
                     multiDexEnabled = true
                 }

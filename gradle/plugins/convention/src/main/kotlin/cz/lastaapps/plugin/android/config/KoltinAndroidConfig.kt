@@ -19,48 +19,64 @@
 
 package cz.lastaapps.plugin.android.config
 
-import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
+import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryExtension
 import cz.lastaapps.extensions.coreLibraryDesugaring
 import cz.lastaapps.extensions.libs
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
 
-typealias CommonExtension = com.android.build.api.dsl.CommonExtension<
-    *,
-    *,
-    *,
-    *,
-    *,
-    *,
->
+fun printFields(instance: Any) {
+    val kClass = instance::class
 
-internal fun Project.configureAndroidOnlyModule(commonExtension: CommonExtension) =
-    with(commonExtension) {
-//        compileSdk = getCompileSdk()
-//
-//        defaultConfig {
-//            minSdk = getMinSdk()
-//            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//        }
-//
-//        compileOptions {
-//            val versionCode =
-//                libs.versions.java.jvmTarget
-//                    .get()
-//                    .toInt()
-//            val version = JavaVersion.toVersion(versionCode)
-//            sourceCompatibility = version
-//            targetCompatibility = version
-//            isCoreLibraryDesugaringEnabled = true
-//        }
+    // memberProperties returns KProperty1<T, *> instances
+    kClass.memberProperties
+        .map { prop ->
+            // bypass JVM access checks for private members
+            prop.isAccessible = true
 
-        dependencies {
-            coreLibraryDesugaring(libs.android.desugaring)
-        }
-    }
+            val value =
+                try {
+                    prop.call(instance)
+                } catch (e: Exception) {
+                    "Unreadable"
+                }
+
+            "${prop.name}: ${prop.returnType} = $value"
+        }.joinToString(",\n") { it }
+        .let { error(it) }
+}
 
 context(p: Project)
-internal fun KotlinMultiplatformAndroidLibraryTarget.configureAndroidKMPModule() {
+internal fun CommonExtension.configureAndroidOnlyModule() {
+    compileSdk = p.getCompileSdk()
+
+//    defaultConfig {
+//        minSdk = getMinSdk()
+//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//    }
+//
+//    compileOptions {
+//        val versionCode =
+//            libs.versions.java.jvmTarget
+//                .get()
+//                .toInt()
+//        val version = JavaVersion.toVersion(versionCode)
+//        sourceCompatibility = version
+//        targetCompatibility = version
+//        isCoreLibraryDesugaringEnabled = true
+//    }
+
+//    dependencies {
+//        coreLibraryDesugaring(libs.android.desugaring)
+//    }
+//    printFields(this)
+}
+
+context(p: Project)
+internal fun KotlinMultiplatformAndroidLibraryExtension.configureAndroidKMPModule() {
     compileSdk = p.getCompileSdk()
     minSdk = p.getMinSdk()
 

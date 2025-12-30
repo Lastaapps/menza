@@ -19,8 +19,8 @@
 
 plugins {
     alias(libs.plugins.lastaapps.kmp.library)
+    alias(libs.plugins.lastaapps.kmp.sqldelight)
     alias(libs.plugins.lastaapps.common.compose)
-    alias(libs.plugins.sqldelight)
 }
 
 sqldelight {
@@ -34,14 +34,10 @@ sqldelight {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "cz.lastaapps.crash"
     }
-    sourceSets.commonMain.dependencies {
+    sourceSets.androidMain.dependencies {
         implementation(libs.androidx.startup)
-
-        implementation(libs.sqldelight.android)
-        implementation(libs.sqldelight.runtime)
-        implementation(libs.sqldelight.coroutines)
     }
 }

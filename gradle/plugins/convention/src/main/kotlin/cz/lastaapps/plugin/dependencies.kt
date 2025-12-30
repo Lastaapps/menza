@@ -21,12 +21,11 @@ package cz.lastaapps.plugin
 
 import cz.lastaapps.extensions.libs
 import org.gradle.api.Project
-import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
-context(p: Project)
-fun KotlinDependencyHandler.dependenciesArrowKt() {
-    implementation(p.project.dependencies.platform(p.libs.arrowkt.bom))
-    implementation(p.libs.arrowkt.core)
-    implementation(p.libs.arrowkt.fx.coroutines)
-    implementation(p.libs.arrowkt.fx.stm)
-}
+fun Project.dependenciesArrowKt() =
+    listOf(
+        (project.dependencies.platform(libs.arrowkt.bom)),
+        (libs.arrowkt.core),
+        (libs.arrowkt.fx.coroutines),
+        (libs.arrowkt.fx.stm),
+    )
