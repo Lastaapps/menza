@@ -17,6 +17,7 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.time.Instant
@@ -27,6 +28,7 @@ import java.time.format.DateTimeFormatter
 plugins {
     alias(libs.plugins.lastaapps.kmp.library)
     alias(libs.plugins.lastaapps.common.compose)
+    alias(libs.plugins.buildKonfig)
     `maven-publish`
 }
 
@@ -35,32 +37,31 @@ val buildVersionProvider = providers.of(BuildDateValueSource::class) {}
 kotlin {
     android {
         namespace = "cz.lastaapps.common"
-
-        // Refactor to BuildKonfig
-//        defaultConfig {
-//            val modificationTime =
-//                buildVersionProvider
-//                    .map(Instant::ofEpochSecond)
-//                    .map(::formatDate)
-//                    .map { "\"$it\"" }
-//            buildConfigField("java.lang.String", "BUILD_DATE", modificationTime.get())
-//        }
-//        buildTypes {
-//            debug {
-//                val nowProvider =
-//                    providers
-//                        .provider { formatDate() }
-//                        .map { "\"$it\"" }
-//                buildConfigField("java.lang.String", "BUILD_DATE", nowProvider.get())
-//            }
-//        }
-//        buildFeatures {
-//            buildConfig = true
-//        }
     }
 
     sourceSets.commonMain.dependencies {
         implementation(libs.google.material)
+    }
+}
+
+buildkonfig {
+    packageName = "cz.lastaapps.common"
+
+    defaultConfigs {
+        val modificationTime =
+            buildVersionProvider
+                .map(Instant::ofEpochSecond)
+                .map(::formatDate)
+                .map { "\"$it\"" }
+
+        @Suppress("unused")
+        val nowProvider =
+            providers
+                .provider { formatDate() }
+                .map { "\"$it\"" }
+
+        // TODO resolve how to determine whether the build is debug
+        buildConfigField(STRING, "BUILD_DATE", modificationTime.get())
     }
 }
 

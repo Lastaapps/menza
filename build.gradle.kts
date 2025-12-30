@@ -30,6 +30,7 @@ plugins {
     alias(libs.plugins.android.library.platform) apply false
     alias(libs.plugins.android.library.kmp) apply false
     alias(libs.plugins.aboutLibraries) apply false
+    alias(libs.plugins.buildKonfig) apply false
     alias(libs.plugins.sqldelight) apply false
     alias(libs.plugins.shadow) apply false
     alias(libs.plugins.google.ksp) apply false

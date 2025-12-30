@@ -49,9 +49,6 @@ kotlin {
         androidResources {
             enable = true
         }
-//    buildFeatures {
-//        buildConfig = true
-//    }
     }
 
     sourceSets {

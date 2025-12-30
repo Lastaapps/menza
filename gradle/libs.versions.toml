@@ -235,11 +235,11 @@ aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "abo
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library-platform = { id = "com.android.library", version.ref = "android-gradle" }
 android-library-kmp = { id = "com.android.kotlin.multiplatform.library", version.ref = "android-gradle" }
+buildKonfig = "com.codingfeline.buildkonfig:0.17.1"
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 java-kotlin = { id = "kotlin" }
 java-library = { id = "java-library" }
-kapt = "org.jetbrains.kotlin:kotlin-kapt"
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-atomicfu = { id = "org.jetbrains.kotlin.plugin.atomicfu", version.ref = "kotlin" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
