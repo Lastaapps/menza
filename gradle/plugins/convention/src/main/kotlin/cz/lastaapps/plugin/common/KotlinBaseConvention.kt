@@ -17,24 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.plugin.android.common
+package cz.lastaapps.plugin.common
 
 import cz.lastaapps.extensions.alias
 import cz.lastaapps.extensions.compilerOptions
+import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
+import cz.lastaapps.extensions.multiplatform
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.assign
+import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
-private typealias KV = org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+private typealias KV = KotlinVersion
 
 class KotlinBaseConvention :
     BasePlugin(
-        {
+        configuration = {
             pluginManager {
                 alias(libs.plugins.kotlin.serialization)
             }
@@ -86,15 +90,43 @@ class KotlinBaseConvention :
                 )
             }
         },
+        kmpConfiguration = {
+            multiplatform {
+                sourceSets.commonMain.dependencies {
+                    dependenciesKotlinBase().forEach(::implementation)
+                    dependenciesGeneral().forEach(::implementation)
+                    dependenciesArrowKt().forEach(::implementation)
+                }
+            }
+        },
+        androidConfiguration = {
+            dependencies {
+                dependenciesKotlinBase().forEach(::implementation)
+                dependenciesGeneral().forEach(::implementation)
+                dependenciesArrowKt().forEach(::implementation)
+            }
+        },
     ) {
     companion object {
-        fun Project.dependenciesKotlinBase() =
+        private fun Project.dependenciesKotlinBase() =
             listOf(
                 project.dependencies.platform(libs.kotlin.bom),
                 libs.kotlinx.dateTime,
                 libs.kotlinx.collection,
+            )
+
+        private fun Project.dependenciesGeneral() =
+            listOf(
                 libs.kermit,
                 libs.fluidLocale,
+            )
+
+        fun Project.dependenciesArrowKt() =
+            listOf(
+                (project.dependencies.platform(libs.arrowkt.bom)),
+                (libs.arrowkt.core),
+                (libs.arrowkt.fx.coroutines),
+                (libs.arrowkt.fx.stm),
             )
     }
 }

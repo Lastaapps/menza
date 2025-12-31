@@ -17,17 +17,20 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.plugin.android.common
+package cz.lastaapps.plugin.common
 
 import cz.lastaapps.extensions.compilerOptions
+import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.multiplatform
+import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.dependencies
 
 class CoroutinesConvention :
     BasePlugin(
-        {
+        configuration = {
             compilerOptions {
                 freeCompilerArgs.addAll(
                     listOf(
@@ -36,7 +39,8 @@ class CoroutinesConvention :
                     ),
                 )
             }
-
+        },
+        kmpConfiguration = {
             multiplatform {
                 sourceSets.all {
                     languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
@@ -54,12 +58,19 @@ class CoroutinesConvention :
                 }
             }
         },
+        androidConfiguration = {
+            dependencies {
+                dependenciesCoroutines().forEach(::implementation)
+                dependenciesCoroutinesAndroid().forEach(::implementation)
+                dependenciesCoroutinesTest().forEach(::testImplementation)
+            }
+        },
     ) {
     companion object {
-        fun Project.dependenciesCoroutines() = listOf(libs.kotlinx.coroutines.common)
+        private fun Project.dependenciesCoroutines() = listOf(libs.kotlinx.coroutines.common)
 
-        fun Project.dependenciesCoroutinesAndroid() = listOf(libs.kotlinx.coroutines.android)
+        private fun Project.dependenciesCoroutinesAndroid() = listOf(libs.kotlinx.coroutines.android)
 
-        fun Project.dependenciesCoroutinesTest() = listOf(libs.kotlinx.coroutines.test)
+        private fun Project.dependenciesCoroutinesTest() = listOf(libs.kotlinx.coroutines.test)
     }
 }

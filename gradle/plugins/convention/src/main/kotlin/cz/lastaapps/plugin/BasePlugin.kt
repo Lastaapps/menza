@@ -1,5 +1,5 @@
 /*
- *    Copyright 2022, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,10 +21,31 @@ package cz.lastaapps.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
-
-abstract class BasePlugin(private val configuration: Project.() -> Unit) : Plugin<Project> {
+abstract class BasePlugin(
+    private val configuration: Project.() -> Unit,
+    private val kmpConfiguration: Project.() -> Unit = {},
+    private val androidConfiguration: Project.() -> Unit = {},
+) : Plugin<Project> {
     final override fun apply(project: Project) {
         configuration(project)
+
+        when (project.extensions.findByName("kotlin")) {
+            is KotlinMultiplatformExtension -> {
+                kmpConfiguration(project)
+            }
+
+            is KotlinAndroidExtension,
+            // null, // The base AGP does not provide propper kotlin extension
+            -> {
+                androidConfiguration(project)
+            }
+
+            else -> {}
+        }
     }
 }

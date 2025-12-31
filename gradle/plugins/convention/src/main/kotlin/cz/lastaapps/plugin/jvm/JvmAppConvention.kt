@@ -25,8 +25,8 @@ import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.android.common.KotlinBaseConvention
 import cz.lastaapps.plugin.common.DetektConvention
+import cz.lastaapps.plugin.common.KotlinBaseConvention
 import cz.lastaapps.plugin.common.KtLintConvention
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply

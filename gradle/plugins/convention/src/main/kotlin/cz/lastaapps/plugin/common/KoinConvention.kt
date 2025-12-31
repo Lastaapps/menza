@@ -19,27 +19,30 @@
 
 package cz.lastaapps.plugin.common
 
+import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.multiplatform
+import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 
+private const val ENABLE_ANNOTATIONS = true
+
 class KoinConvention :
     BasePlugin(
-        {
-            val enableAnnotations = true
-
-            if (enableAnnotations) {
+        configuration = {
+            if (ENABLE_ANNOTATIONS) {
                 apply<KspConvention>()
             }
-
+        },
+        kmpConfiguration = {
             multiplatform {
                 sourceSets.commonMain.dependencies {
                     implementation(libs.koin.core)
 
-                    if (enableAnnotations) {
-                        implementation(libs.koin.annotations)
+                    if (ENABLE_ANNOTATIONS) {
+                        implementation(libs.koin.annotations.asProvider())
                     }
                 }
                 sourceSets.androidMain.dependencies {
@@ -50,7 +53,7 @@ class KoinConvention :
                 }
             }
             dependencies {
-                if (enableAnnotations) {
+                if (ENABLE_ANNOTATIONS) {
                     // apply KSP compiler plugin on all possible targets
                     configurations
                         .filter { it.name.startsWith("ksp") && it.name != "ksp" }
@@ -58,6 +61,21 @@ class KoinConvention :
                             // "ksp" for Android, "kspCommonMainMetadata", "kspAndroid", "kspJvm"
                             add(it.name, libs.koin.annotations.compiler)
                         }
+                }
+            }
+        },
+        androidConfiguration = {
+            dependencies {
+                implementation(libs.koin.core)
+
+                if (ENABLE_ANNOTATIONS) {
+                    implementation(libs.koin.annotations.asProvider())
+                }
+                implementation(libs.koin.android.core)
+                testImplementation(libs.koin.test.jUnit5)
+
+                if (ENABLE_ANNOTATIONS) {
+                    add("ksp", libs.koin.annotations.compiler)
                 }
             }
         },

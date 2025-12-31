@@ -35,7 +35,7 @@ ktlintComposeRules = "0.5.3"
 ktlintGradle = "14.0.1"
 # https://pinterest.github.io/ktlint/latest/
 # @keep
-ktlintJar = "1.7.1"
+ktlintJar = "1.8.0"
 ktor = "3.3.3"
 org-jetbrains-kotlin = "2.1.10"
 russhwolf-settings = "1.3.0"
@@ -250,7 +250,6 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
 lastaapps-android-app = "android-app-convention:none"
 lastaapps-android-library = "android-library-convention:none"
-lastaapps-common-coil = "common-coil-convention:none"
 lastaapps-common-compose = "common-compose-convention:none"
 lastaapps-jvm-app = "jvm-app-convention:none"
 lastaapps-kmp-library = "kmp-library-convention:none"

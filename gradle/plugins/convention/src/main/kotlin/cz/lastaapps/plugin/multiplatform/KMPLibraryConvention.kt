@@ -24,16 +24,7 @@ import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.multiplatform
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.android.common.CoroutinesConvention
-import cz.lastaapps.plugin.android.common.KotlinBaseConvention
-import cz.lastaapps.plugin.android.common.KotlinBaseConvention.Companion.dependenciesKotlinBase
-import cz.lastaapps.plugin.common.ComposeRuntimeConvention
-import cz.lastaapps.plugin.common.DetektConvention
-import cz.lastaapps.plugin.common.JavaToolchainConvention
-import cz.lastaapps.plugin.common.KMPAndroidLibraryConvention
-import cz.lastaapps.plugin.common.KoinConvention
-import cz.lastaapps.plugin.common.KtLintConvention
-import cz.lastaapps.plugin.dependenciesArrowKt
+import cz.lastaapps.plugin.common.applyCommonConventions
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.withType
@@ -48,13 +39,7 @@ class KMPLibraryConvention :
             }
 
             apply<KMPAndroidLibraryConvention>()
-            apply<ComposeRuntimeConvention>()
-            apply<CoroutinesConvention>()
-            apply<DetektConvention>()
-            apply<JavaToolchainConvention>()
-            apply<KotlinBaseConvention>()
-            apply<KtLintConvention>()
-            apply<KoinConvention>()
+            applyCommonConventions()
 
             tasks.withType<Test> {
                 useJUnitPlatform()
@@ -68,16 +53,11 @@ class KMPLibraryConvention :
 
                 sourceSets.apply {
                     commonMain.dependencies {
-                        dependenciesKotlinBase().forEach(::implementation)
-                        dependenciesArrowKt().forEach(::implementation)
-
-                        implementation(libs.koin.core)
-//                    implementation(libs.koin.annotations)
-                        implementation(libs.kermit)
                         implementation(libs.androidx.annotation)
                     }
 
                     commonTest.dependencies {
+                        // TODO move to kotlin base convention
 //                        implementation(libs.kotlin.test.annotation)
 //                        implementation(libs.kotlin.test.common)
 //                        implementation(libs.kotlin.test.core)

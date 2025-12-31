@@ -20,19 +20,24 @@
 package cz.lastaapps.plugin.common
 
 import cz.lastaapps.extensions.alias
+import cz.lastaapps.extensions.debugImplementation
+import cz.lastaapps.extensions.implementation
 import cz.lastaapps.extensions.libs
 import cz.lastaapps.extensions.multiplatform
 import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.MinimalExternalModuleDependency
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.assign
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
 abstract class ComposeConvention(
-    mainDependencies: (KotlinDependencyHandler).(Project) -> Unit,
-    androidDependencies: (KotlinDependencyHandler).(Project) -> Unit,
+    mainDependencies: Project.() -> List<Provider<MinimalExternalModuleDependency>>,
+    androidMainDependencies: Project.() -> List<Provider<MinimalExternalModuleDependency>>,
+    androidDebugDependencies: Project.() -> List<Provider<MinimalExternalModuleDependency>>,
 ) : BasePlugin(
         {
             pluginManager {
@@ -45,66 +50,74 @@ abstract class ComposeConvention(
                 includeSourceInformation = true
                 featureFlags = setOf()
             }
-
+        },
+        {
             multiplatform {
                 sourceSets.commonMain.dependencies {
-                    mainDependencies(project)
+                    mainDependencies().forEach(::implementation)
                 }
                 sourceSets.androidMain.dependencies {
-                    androidDependencies(project)
+                    androidMainDependencies().forEach(::implementation)
+                    androidDebugDependencies().forEach(::implementation)
                 }
+            }
+        },
+        {
+            dependencies {
+                mainDependencies().forEach(::implementation)
+                androidMainDependencies().forEach(::implementation)
+                androidDebugDependencies().forEach(::debugImplementation)
             }
         },
     )
 
 class ComposeUIConvention :
     ComposeConvention(
-        { with(it) { dependenciesComposeUI() } },
-        {
-            with(it) {
-                dependenciesAndroidComposeUI()
-            }
-        },
+        { dependenciesComposeUI() },
+        { dependenciesAndroidComposeUI() },
+        { dependenciesDebug() },
     )
 
 class ComposeRuntimeConvention :
     ComposeConvention(
-        {},
-        { with(it) { implementation(libs.androidx.compose.runtime) } },
+        { emptyList() },
+        { listOf(libs.androidx.compose.runtime) },
+        { emptyList() },
     )
 
-context(p: Project)
-private fun KotlinDependencyHandler.dependenciesComposeUI() {
-    implementation(p.libs.androidx.compose.material3)
-    implementation(p.libs.androidx.compose.material3WindowSizeClass)
-    implementation(p.libs.androidx.compose.iconsCore)
-    implementation(p.libs.androidx.compose.iconsExtended)
-    implementation(p.libs.androidx.compose.animation)
-    implementation(p.libs.androidx.compose.ui.util)
-    // TODO 9.0
-    //    dependencies {
-    //        "androidRuntimeClasspath"(libs.androidx.compose.ui.tooling)
-    //    }
-    implementation(p.libs.androidx.compose.tooling)
-    implementation(p.libs.androidx.compose.toolingPreview)
-
-    implementation(p.libs.decompose.core)
-    implementation(
-        p.libs.decompose.compose
+private fun Project.dependenciesComposeUI(): List<Provider<MinimalExternalModuleDependency>> =
+    listOf(
+        libs.androidx.compose.material3,
+        libs.androidx.compose.material3WindowSizeClass,
+        libs.androidx.compose.iconsCore,
+        libs.androidx.compose.iconsExtended,
+        libs.androidx.compose.animation,
+        libs.androidx.compose.ui.util,
+        libs.androidx.compose.toolingPreview,
+        libs.decompose.core,
+        libs.decompose.compose
             .asProvider(),
+        libs.decompose.compose.experimental,
+        libs.coil.compose.complete,
+        libs.coil.complete,
+        libs.coil.gif,
+        libs.coil.network.ktor,
+        libs.coil.svg,
     )
-    implementation(p.libs.decompose.compose.experimental)
 
-    implementation(p.libs.coil.compose.complete)
-}
+private fun Project.dependenciesDebug(): List<Provider<MinimalExternalModuleDependency>> =
+    listOf(
+        // TODO 9.0
+        //    dependencies {
+        //        "androidRuntimeClasspath"(libs.androidx.compose.ui.tooling)
+        //    }
+        libs.androidx.compose.tooling,
+    )
 
-context(p: Project)
-private fun KotlinDependencyHandler.dependenciesAndroidComposeUI() {
-    implementation(p.libs.androidx.activity.compose)
-
-    implementation(
-        p.libs.androidx.lifecycle.runtime
+private fun Project.dependenciesAndroidComposeUI(): List<Provider<MinimalExternalModuleDependency>> =
+    listOf(
+        libs.androidx.activity.compose,
+        libs.androidx.lifecycle.runtime
             .asProvider(),
+        libs.androidx.lifecycle.runtime.compose,
     )
-    implementation(p.libs.androidx.lifecycle.runtime.compose)
-}

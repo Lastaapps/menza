@@ -19,20 +19,17 @@
 
 package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.multiplatform
-import cz.lastaapps.plugin.BasePlugin
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 
-class CoilConvention :
-    BasePlugin(
-        {
-            multiplatform {
-                sourceSets.commonMain.dependencies {
-                    implementation(libs.coil.complete)
-                    implementation(libs.coil.gif)
-                    implementation(libs.coil.network.ktor)
-                    implementation(libs.coil.svg)
-                }
-            }
-        },
-    )
+fun Project.applyCommonConventions() {
+    apply<KotlinBaseConvention>()
+    apply<CoroutinesConvention>()
+    apply<KoinConvention>()
+    apply<ComposeRuntimeConvention>()
+
+    apply<JavaToolchainConvention>()
+
+    apply<DetektConvention>()
+    apply<KtLintConvention>()
+}
