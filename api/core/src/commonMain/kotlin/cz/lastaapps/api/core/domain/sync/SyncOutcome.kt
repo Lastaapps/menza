@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -58,8 +58,16 @@ fun SyncOutcome.mapSync() =
                 }.left()
             }
 
-            Unavailable -> SyncError.Unavailable.left()
-            Skipped -> it.right()
-            Updated -> it.right()
+            Unavailable -> {
+                SyncError.Unavailable.left()
+            }
+
+            Skipped -> {
+                it.right()
+            }
+
+            Updated -> {
+                it.right()
+            }
         }
     }.flatten()

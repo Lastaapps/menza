@@ -99,7 +99,10 @@ internal class WalletMasterRepositoryImpl(
         channelFlow {
             credentialsProvider.get().collectLatest { credentials ->
                 when (credentials) {
-                    is Left -> send(null)
+                    is Left -> {
+                        send(null)
+                    }
+
                     is Right -> {
                         simpleProperties
                             .getBalance()
@@ -139,11 +142,15 @@ internal class WalletMasterRepositoryImpl(
 
             credentialsProvider.get().first().let { credentials ->
                 when (credentials) {
-                    is Left -> SyncResult.Unavailable.right()
-                    is Right ->
+                    is Left -> {
+                        SyncResult.Unavailable.right()
+                    }
+
+                    is Right -> {
                         checker.withCheckRecent(validityKey, isForced) {
                             syncImpl()
                         }
+                    }
                 }
             }
         }

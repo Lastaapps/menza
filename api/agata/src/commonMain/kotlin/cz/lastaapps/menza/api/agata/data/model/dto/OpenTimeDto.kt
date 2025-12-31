@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -21,10 +21,10 @@ package cz.lastaapps.menza.api.agata.data.model.dto
 
 import kotlinx.serialization.SerialName
 
-@kotlinx.serialization.Serializable
 /**
  * TOtDoba
  */
+@kotlinx.serialization.Serializable
 internal data class OpenTimeDto(
     @SerialName("id")
     val id: Int,

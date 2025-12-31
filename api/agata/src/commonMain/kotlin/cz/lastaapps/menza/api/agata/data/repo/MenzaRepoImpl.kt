@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -117,22 +117,27 @@ internal class MenzaSubsystemRepoImpl(
     private fun Collection<Menza>.provideVideoLinks() =
         map {
             when (it.type) {
-                MenzaType.Agata.Subsystem(2) ->
+                MenzaType.Agata.Subsystem(2) -> {
                     it.copy(
                         videoLinks =
                             persistentListOf(
                                 "https://agata.suz.cvut.cz/jidelnicky/sd-cam-img.php",
                             ),
                     )
-                MenzaType.Agata.Subsystem(3) ->
+                }
+
+                MenzaType.Agata.Subsystem(3) -> {
                     it.copy(
                         videoLinks =
                             persistentListOf(
                                 "https://agata.suz.cvut.cz/jidelnicky/tm-cam-img.php",
                             ),
                     )
+                }
 
-                else -> it
+                else -> {
+                    it
+                }
             }
         }
 

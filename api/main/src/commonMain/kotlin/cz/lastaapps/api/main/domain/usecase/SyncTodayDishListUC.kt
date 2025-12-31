@@ -62,10 +62,16 @@ class SyncTodayDishListUC(
             val rating = syncRating.await()
 
             when (dish) {
-                is Left -> dish
+                is Left -> {
+                    dish
+                }
+
                 is Right -> {
                     when (rating) {
-                        is Left -> RatingError.wrap(rating.value).left()
+                        is Left -> {
+                            RatingError.wrap(rating.value).left()
+                        }
+
                         is Right -> {
                             when (dish.value) {
                                 Updated -> rating

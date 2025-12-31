@@ -34,7 +34,6 @@ val DomainError.shouldBeReported: Boolean
             is ApiError.RatingError.Unrelated -> cause.shouldBeReported
             is ApiError.RatingError -> false
             is DomainError.Logic -> false
-
             is DomainError.Unknown -> true
             is NetworkError -> shouldBeReported
             is CommonError -> shouldBeReported
@@ -60,5 +59,6 @@ val CommonError.shouldBeReported: Boolean
             NotLoggedIn,
             is AppNotFound,
             -> false
+
             is CommonError.CryptoError -> true
         }
