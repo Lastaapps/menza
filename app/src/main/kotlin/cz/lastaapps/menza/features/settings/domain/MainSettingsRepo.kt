@@ -100,4 +100,8 @@ internal interface MainSettingsRepo {
     suspend fun setCurrency(currency: Currency)
 
     fun getCurrency(): Flow<Currency>
+
+    suspend fun setAIMode(enabled: Boolean)
+
+    fun getAIMode(): Flow<Boolean>
 }

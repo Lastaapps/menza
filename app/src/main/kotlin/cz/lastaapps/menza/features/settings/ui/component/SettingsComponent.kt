@@ -102,6 +102,7 @@ internal fun SettingsContent(
             onImagesOnMetered = viewModel::setDownloadOnMetered,
             onAlternativeNavigation = viewModel::setAlternativeNavigation,
             onBalanceThreshold = viewModel::setBalanceWarningThreshold,
+            onAIMode = viewModel::setAIMode,
             onInitialMenzaBehaviour = viewModel::setInitMenzaBehaviour,
             menzaList = state.menzaList,
             onSelectedMenza = viewModel::setSelectedMenza,

@@ -17,15 +17,18 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.api.main.domain.usecase
+package cz.lastaapps.menza.features.settings.domain.usecase.settings
 
-import cz.lastaapps.api.core.domain.model.DataLanguage
-import cz.lastaapps.api.core.domain.model.RequestParams
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
+import cz.lastaapps.menza.features.settings.domain.MainSettingsRepo
 
-class GetImportantRequestParams internal constructor(
+class SetAIMode internal constructor(
     context: UCContext,
+    private val repo: MainSettingsRepo,
 ) : UseCase(context) {
-    operator fun invoke() = DataLanguage.entries.map { RequestParams(it, false) }
+    suspend operator fun invoke(enabled: Boolean) =
+        launch {
+            repo.setAIMode(enabled)
+        }
 }

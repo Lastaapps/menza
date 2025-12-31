@@ -59,6 +59,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetOliverRow
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetPriceTypeUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetSettingsEverOpenedUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.OnSettingsOpenedUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetAIMode
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetAlternativeNavigationUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetBalanceWarningThresholdUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetCurrencyUC
@@ -110,6 +111,7 @@ val settingsModule =
                 get(),
                 get(),
                 get(),
+                get(),
             )
             // @formatter:on
         }
@@ -147,6 +149,7 @@ val settingsModule =
         factoryOf(::GetImageScaleRangeUC)
         factoryOf(::SetImagesOnMeteredUC)
         factoryOf(::SetOliverRow)
+        factoryOf(::SetAIMode)
         factoryOf(::SetPriceTypeUC)
         factoryOf(::SetDishLanguageUC)
         factoryOf(::GetDishListModeUC)

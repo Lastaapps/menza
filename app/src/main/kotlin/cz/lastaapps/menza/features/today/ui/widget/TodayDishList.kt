@@ -91,6 +91,7 @@ internal fun TodayDishList(
     PullToRefreshWrapper(
         isRefreshing = isLoading,
         onRefresh = onRefresh,
+        useAIMode = userSettings.useAIMode,
         modifier = modifier.fillMaxSize(),
     ) {
         Surface(

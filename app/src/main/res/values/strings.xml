@@ -127,6 +127,8 @@
     <string name="settings_switch_metered_subtitle">Each image takes ~0.7 MB</string>
     <string name="settings_alternative_navigation_title">Alternative controls</string>
     <string name="settings_alternative_navigation_subtitle">Back button &amp; menza selection</string>
+    <string name="settings_ai_mode_title">AI mode</string>
+    <string name="settings_ai_mode_subtitle">Let me think about that…</string>
     <string name="settings_balance_threshold_title">Balance warning</string>
     <string name="settings_balance_threshold_disabled">Disabled</string>
     <string name="settings_image_size_title">Image scaling</string>
@@ -287,6 +289,7 @@
     <string name="ui_top_bar_action_web_agata">Website Agáta</string>
     <string name="ui_top_bar_action_web_buffet">Website buffets</string>
     <string name="ui_top_bar_action_web_vscht">Website Zikova</string>
+    <string name="ui_pull_to_refresh_thinking">Thinking…</string>
 
     <string name="menza_none_selected">No menza selected</string>
     <string name="menza_none_osturak">Find out about ošťurák</string>

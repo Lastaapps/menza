@@ -114,6 +114,8 @@
     <string name="settings_switch_metered_subtitle">Každý obrázek spotřebuje ~0.7 MB</string>
     <string name="settings_alternative_navigation_title">Alternativní navigace</string>
     <string name="settings_alternative_navigation_subtitle">Tlačítka zpět a výběr menz</string>
+    <string name="settings_ai_mode_title">AI mode</string>
+    <string name="settings_ai_mode_subtitle">Přemýšlení jak od Přemysla</string>
     <string name="settings_balance_threshold_title">Varování konta</string>
     <string name="settings_balance_threshold_disabled">Vypnuto</string>
     <string name="settings_image_size_title">Škálování obrázků</string>
@@ -265,6 +267,7 @@
     <string name="ui_top_bar_action_web_agata">Web Agáty</string>
     <string name="ui_top_bar_action_web_buffet">Web bufetů</string>
     <string name="ui_top_bar_action_web_vscht">Web Zikova</string>
+    <string name="ui_pull_to_refresh_thinking">Dumám…</string>
     <string name="menza_none_selected">Není vybrána žádná menza</string>
     <string name="menza_none_osturak">Seznamte se s ošťurákem</string>
     <string name="menza_none_swipe">Přejetím vyberete Menzu</string>

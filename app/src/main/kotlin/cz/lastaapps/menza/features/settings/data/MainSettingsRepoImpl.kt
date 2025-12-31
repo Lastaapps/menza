@@ -60,6 +60,7 @@ internal class MainSettingsRepoImpl(
             getAlternativeNavigation().distinctUntilChanged(),
             isDishListModeChosen().distinctUntilChanged(),
             getCurrency().distinctUntilChanged(),
+            getAIMode().distinctUntilChanged(),
         ) { arr ->
             AppSettings(
                 initialMenzaMode = arr[0] as InitialSelectionBehaviour,
@@ -79,6 +80,7 @@ internal class MainSettingsRepoImpl(
                 alternativeNavigation = arr[14] as Boolean,
                 isDishListModeChosen = arr[15] as Boolean,
                 currency = arr[16] as Currency,
+                aiMode = arr[17] as Boolean,
             )
         }.distinctUntilChanged()
 
@@ -162,4 +164,8 @@ internal class MainSettingsRepoImpl(
     override suspend fun setCurrency(currency: Currency) = general.setCurrency(currency)
 
     override fun getCurrency(): Flow<Currency> = general.getCurrency().map { it ?: AppSettings.default.currency }
+
+    override suspend fun setAIMode(enabled: Boolean) = general.setAIMode(enabled)
+
+    override fun getAIMode(): Flow<Boolean> = general.getAIMode().map { it ?: AppSettings.default.aiMode }
 }

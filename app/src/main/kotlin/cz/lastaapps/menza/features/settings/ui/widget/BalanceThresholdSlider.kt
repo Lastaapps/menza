@@ -52,6 +52,7 @@ import kotlin.math.roundToInt
 @Composable
 internal fun BalanceThresholdSlider(
     title: String,
+    // TODO implemen currency
     threshold: Int,
     onThreshold: (Int) -> Unit,
     modifier: Modifier = Modifier,

@@ -110,6 +110,7 @@ internal fun TodayDishCarousel(
     PullToRefreshWrapper(
         isRefreshing = isLoading,
         onRefresh = onRefresh,
+        useAIMode = userSettings.useAIMode,
         modifier = modifier.fillMaxWidth(),
     ) {
         Surface(

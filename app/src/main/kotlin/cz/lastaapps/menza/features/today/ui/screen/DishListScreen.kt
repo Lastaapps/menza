@@ -226,7 +226,7 @@ private fun DishListComposing(
 //    ) { dishListMode ->
     userSettings.dishListMode.let { dishListMode ->
         when (dishListMode) {
-            COMPACT ->
+            COMPACT -> {
                 TodayDishList(
                     isLoading = state.isLoading,
                     onRefresh = onRefresh,
@@ -253,8 +253,9 @@ private fun DishListComposing(
                     scroll = scrollStates.list,
                     scopes = scopes,
                 )
+            }
 
-            GRID ->
+            GRID -> {
                 TodayDishGrid(
                     isLoading = state.isLoading,
                     onRefresh = onRefresh,
@@ -275,8 +276,9 @@ private fun DishListComposing(
                     scrollGrid = scrollStates.grid,
                     scopes = scopes,
                 )
+            }
 
-            HORIZONTAL ->
+            HORIZONTAL -> {
                 TodayDishHorizontal(
                     isLoading = state.isLoading,
                     onRefresh = onRefresh,
@@ -297,8 +299,9 @@ private fun DishListComposing(
                     scroll = scrollStates.horizontal,
                     scopes = scopes,
                 )
+            }
 
-            CAROUSEL ->
+            CAROUSEL -> {
                 TodayDishCarousel(
                     isLoading = state.isLoading,
                     onRefresh = onRefresh,
@@ -319,6 +322,7 @@ private fun DishListComposing(
                     scroll = scrollStates.carousel,
                     scopes = scopes,
                 )
+            }
 
             null -> {}
         }

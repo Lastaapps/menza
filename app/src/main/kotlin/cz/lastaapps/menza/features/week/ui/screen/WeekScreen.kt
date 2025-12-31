@@ -80,6 +80,7 @@ private fun WeekContent(
                 data = items,
                 priceType = state.priceType,
                 currency = state.currency,
+                useAIMode = state.useAIMode,
                 isLoading = state.isLoading,
                 onRefresh = onRefresh,
                 noItems = noItems,

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -35,9 +35,11 @@ internal class GetRequestParamsUCImpl(
     GetRequestParamsUC {
     override fun invoke(): Flow<RequestParams> =
         setting
-            .getDishLanguage()
-            .distinctUntilChanged()
+            .getAllSettings()
             .map {
-                RequestParams(language = it)
+                RequestParams(
+                    language = it.dataLanguage,
+                    aiMode = it.aiMode,
+                )
             }.distinctUntilChanged()
 }

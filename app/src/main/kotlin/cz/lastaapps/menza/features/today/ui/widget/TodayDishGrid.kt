@@ -84,6 +84,7 @@ internal fun TodayDishGrid(
     PullToRefreshWrapper(
         isRefreshing = isLoading,
         onRefresh = onRefresh,
+        useAIMode = userSettings.useAIMode,
         modifier = modifier.fillMaxSize(),
     ) {
         Surface(

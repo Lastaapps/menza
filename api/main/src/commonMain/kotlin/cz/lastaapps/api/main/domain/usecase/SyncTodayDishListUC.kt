@@ -32,9 +32,13 @@ import cz.lastaapps.core.domain.UseCase
 import cz.lastaapps.core.domain.error.ApiError.RatingError
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
+import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 
 class SyncTodayDishListUC(
     context: UCContext,
@@ -49,8 +53,15 @@ class SyncTodayDishListUC(
         coroutineScope {
             val syncDish =
                 async {
+                    val params = getRequestParamsUC()
+
+                    // It takes a while to think...
+                    if (params.first().aiMode) {
+                        delay(Random.nextInt(2000).milliseconds)
+                    }
+
                     get<TodayDishRepo> { parametersOf(menza.type) }.sync(
-                        getRequestParamsUC(),
+                        params,
                         isForced = isForced,
                     )
                 }

@@ -34,4 +34,5 @@ internal data class TodayUserSettings(
     val language: DataLanguage = DataLanguage.Czech,
     val imageScale: Float = 1f,
     val isDishListModeChosen: Boolean = true,
+    val useAIMode: Boolean = false,
 )

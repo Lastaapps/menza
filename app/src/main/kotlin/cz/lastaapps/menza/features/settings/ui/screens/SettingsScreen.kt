@@ -92,6 +92,7 @@ internal fun SettingsScreen(
     onDiscounterPrices: (PriceType) -> Unit,
     onCurrency: (Currency) -> Unit,
     onImagesOnMetered: (Boolean) -> Unit,
+    onAIMode: (Boolean) -> Unit,
     onAlternativeNavigation: (Boolean) -> Unit,
     onBalanceThreshold: (Int) -> Unit,
     onInitialMenzaBehaviour: (InitialSelectionBehaviour) -> Unit,
@@ -147,6 +148,21 @@ internal fun SettingsScreen(
             onCurrency = onCurrency,
         )
 
+        // Balance warning threshold
+        BalanceThresholdSlider(
+            title = stringResource(id = R.string.settings_balance_threshold_title),
+            threshold = appSettings.balanceWarningThreshold,
+            onThreshold = onBalanceThreshold,
+        )
+
+        // AI Mode
+        SettingsSwitch(
+            title = stringResource(id = R.string.settings_ai_mode_title),
+            subtitle = stringResource(id = R.string.settings_ai_mode_subtitle),
+            isChecked = appSettings.aiMode,
+            onCheck = onAIMode,
+        )
+
         // Metered networks
         SettingsSwitch(
             title = stringResource(id = R.string.settings_switch_metered_title),
@@ -161,13 +177,6 @@ internal fun SettingsScreen(
             subtitle = stringResource(id = R.string.settings_alternative_navigation_subtitle),
             isChecked = appSettings.alternativeNavigation,
             onCheck = onAlternativeNavigation,
-        )
-
-        // Balance warning threshold
-        BalanceThresholdSlider(
-            title = stringResource(id = R.string.settings_balance_threshold_title),
-            threshold = appSettings.balanceWarningThreshold,
-            onThreshold = onBalanceThreshold,
         )
 
         // Behaviour at startup
@@ -452,6 +461,7 @@ private fun SettingsScreenPreview() =
             onCurrency = {},
             onImagesOnMetered = {},
             onAlternativeNavigation = {},
+            onAIMode = {},
             onBalanceThreshold = {},
             onInitialMenzaBehaviour = {},
             menzaList = persistentListOf(),
