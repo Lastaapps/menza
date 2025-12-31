@@ -17,31 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-    alias(libs.plugins.lastaapps.common.compose)
-}
+package cz.lastaapps.crash
 
-sqldelight {
-    databases {
-        create("CrashDatabase") {
-            packageName.set("cz.lastaapps.crash")
-            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
-            verifyMigrations.set(true)
-        }
-    }
-}
+import android.content.Context
+import androidx.annotation.Keep
+import androidx.startup.Initializer
+import co.touchlab.kermit.Logger
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
-kotlin {
-    android {
-        namespace = "cz.lastaapps.crash"
+@Keep
+class StartInit :
+    Initializer<Unit>,
+    KoinComponent {
+    companion object {
+        private val log = Logger.withTag(this::class.simpleName!!)
+    }
 
-        androidResources {
-            enable = true
-        }
+    override fun create(context: Context) {
+        log.i { "Initializing crash storage" }
+
+        Catcher.register(get())
     }
-    sourceSets.androidMain.dependencies {
-        implementation(libs.androidx.startup)
-    }
+
+    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }

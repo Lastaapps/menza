@@ -17,31 +17,19 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-    alias(libs.plugins.lastaapps.common.compose)
-}
+package cz.lastaapps.common
 
-sqldelight {
-    databases {
-        create("CrashDatabase") {
-            packageName.set("cz.lastaapps.crash")
-            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
-            verifyMigrations.set(true)
-        }
-    }
-}
+import android.content.Context
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-kotlin {
-    android {
-        namespace = "cz.lastaapps.crash"
+object DeveloperInfo {
+    fun getName(context: Context): String = context.getString(R.string.developer_name)
 
-        androidResources {
-            enable = true
-        }
-    }
-    sourceSets.androidMain.dependencies {
-        implementation(libs.androidx.startup)
+    fun getNameAndBuildYear(context: Context): String {
+        val date = LocalDate.parse(BuildKonfig.BUILD_DATE)
+        val formatted = date.format(DateTimeFormatter.ofPattern("yyyy"))
+
+        return context.getString(R.string.developer_name_date, formatted)
     }
 }

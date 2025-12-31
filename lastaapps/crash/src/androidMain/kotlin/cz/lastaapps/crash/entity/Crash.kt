@@ -17,31 +17,28 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-    alias(libs.plugins.lastaapps.common.compose)
-}
+package cz.lastaapps.crash.entity
 
-sqldelight {
-    databases {
-        create("CrashDatabase") {
-            packageName.set("cz.lastaapps.crash")
-            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
-            verifyMigrations.set(true)
-        }
-    }
-}
+import java.time.ZonedDateTime
 
-kotlin {
-    android {
-        namespace = "cz.lastaapps.crash"
-
-        androidResources {
-            enable = true
-        }
-    }
-    sourceSets.androidMain.dependencies {
-        implementation(libs.androidx.startup)
+data class Crash(
+    val date: ZonedDateTime,
+    val severity: ErrorSeverity,
+    val message: String?,
+    val trace: String,
+    val reported: ReportState,
+) {
+    companion object {
+        fun fromError(
+            error: Throwable,
+            severity: ErrorSeverity,
+        ): Crash =
+            Crash(
+                date = ZonedDateTime.now(),
+                severity = severity,
+                message = error.message,
+                trace = error.stackTraceToString(),
+                reported = ReportState.UNREPORTED,
+            )
     }
 }

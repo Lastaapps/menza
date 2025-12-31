@@ -17,31 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-    alias(libs.plugins.lastaapps.common.compose)
-}
+package cz.lastaapps.crash.entity
 
-sqldelight {
-    databases {
-        create("CrashDatabase") {
-            packageName.set("cz.lastaapps.crash")
-            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
-            verifyMigrations.set(true)
-        }
-    }
-}
-
-kotlin {
-    android {
-        namespace = "cz.lastaapps.crash"
-
-        androidResources {
-            enable = true
-        }
-    }
-    sourceSets.androidMain.dependencies {
-        implementation(libs.androidx.startup)
-    }
+enum class ReportState(
+    val id: Byte,
+) {
+    UNREPORTED(0),
+    DISMISSED(1),
+    REPORTED(2),
 }

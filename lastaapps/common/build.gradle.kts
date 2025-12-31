@@ -37,6 +37,10 @@ val buildVersionProvider = providers.of(BuildDateValueSource::class) {}
 kotlin {
     android {
         namespace = "cz.lastaapps.common"
+
+        androidResources {
+            enable = true
+        }
     }
 
     sourceSets.commonMain.dependencies {

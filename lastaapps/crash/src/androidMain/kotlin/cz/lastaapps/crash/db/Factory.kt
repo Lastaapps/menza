@@ -17,31 +17,27 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
-    alias(libs.plugins.lastaapps.common.compose)
-}
+package cz.lastaapps.crash.db
 
-sqldelight {
-    databases {
-        create("CrashDatabase") {
-            packageName.set("cz.lastaapps.crash")
-            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
-            verifyMigrations.set(true)
-        }
-    }
-}
+import android.content.Context
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import crash.Crashes
+import cz.lastaapps.crash.CrashDatabase
 
-kotlin {
-    android {
-        namespace = "cz.lastaapps.crash"
+internal data class CrashDatabaseDriver(
+    val driver: SqlDriver,
+)
 
-        androidResources {
-            enable = true
-        }
-    }
-    sourceSets.androidMain.dependencies {
-        implementation(libs.androidx.startup)
-    }
-}
+internal fun createCrashDriver(context: Context) = CrashDatabaseDriver(AndroidSqliteDriver(CrashDatabase.Schema, context, "crash.db"))
+
+internal fun createDatabase(driver: CrashDatabaseDriver): CrashDatabase =
+    CrashDatabase(
+        driver.driver,
+        crashesAdapter =
+            Crashes.Adapter(
+                CrashAdapter.dateAdapter,
+                CrashAdapter.severityAdapter,
+                CrashAdapter.reportedAdapter,
+            ),
+    )
