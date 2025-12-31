@@ -65,9 +65,11 @@ import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Facebook
 import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.GitHub
 import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Matrix
 import cz.lastaapps.menza.features.other.ui.dialog.ReportMode.Telegram
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 sealed class ReportMode {
     data object Matrix : ReportMode()
@@ -252,7 +254,10 @@ fun sendReport(
         |${getPhoneInfo(context)}
         |
         |"Internal app problem"
-        |${LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)}
+        |${
+            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                .format(LocalDateTime.Formats.ISO)
+        }
         |$errorText
         |
         |${extraMessage ?: ""}
@@ -281,7 +286,10 @@ fun sendReport(
                 ErrorSeverity.HANDLED -> "Internal app problem"
             }
         }
-        |${crash.date.format(DateTimeFormatter.ISO_DATE_TIME)}
+        |${
+            crash.date.toLocalDateTime(TimeZone.currentSystemDefault())
+                .format(LocalDateTime.Formats.ISO)
+        }
         |${crash.message}
         |${crash.trace}
         """.trimMargin()
@@ -296,12 +304,30 @@ private fun doSend(
     copyToClipboard(context, text)
 
     when (mode) {
-        Matrix -> sendMatrix(context, text)
-        Telegram -> sendTelegram(context, text)
-        GitHub -> sendGitHub(context, text)
-        Discord -> sendDiscord(context, text)
-        Facebook -> sendFacebook(context, text)
-        Email -> sendEmail(context, text)
+        Matrix -> {
+            sendMatrix(context, text)
+        }
+
+        Telegram -> {
+            sendTelegram(context, text)
+        }
+
+        GitHub -> {
+            sendGitHub(context, text)
+        }
+
+        Discord -> {
+            sendDiscord(context, text)
+        }
+
+        Facebook -> {
+            sendFacebook(context, text)
+        }
+
+        Email -> {
+            sendEmail(context, text)
+        }
+
         Clipboard -> {}
     }
 }
@@ -314,7 +340,7 @@ private fun getPhoneInfo(context: Context): String {
         |App version code:   ${BuildConfig.VERSION_CODE}
         |Phone model:        ${Build.MODEL}
         |Phone manufacturer: ${Build.MANUFACTURER} 
-        |Date and Time:      ${ZonedDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)}
+        |Date and Time:      ${Clock.System.now()}
         |Screen size:        ${metrics.widthPixels} x ${metrics.heightPixels} px
         """.trimMargin()
 }

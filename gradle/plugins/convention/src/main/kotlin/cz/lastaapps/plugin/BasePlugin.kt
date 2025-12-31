@@ -22,9 +22,8 @@ package cz.lastaapps.plugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
 abstract class BasePlugin(
     private val configuration: Project.() -> Unit,
@@ -34,18 +33,22 @@ abstract class BasePlugin(
     final override fun apply(project: Project) {
         configuration(project)
 
-        when (project.extensions.findByName("kotlin")) {
+        when (val ext = project.extensions.findByName("kotlin")) {
             is KotlinMultiplatformExtension -> {
                 kmpConfiguration(project)
             }
 
-            is KotlinAndroidExtension,
-            // null, // The base AGP does not provide propper kotlin extension
-            -> {
+            is KotlinAndroidExtension -> {
                 androidConfiguration(project)
             }
 
-            else -> {}
+            is KotlinJvmExtension -> {
+                error("JVM not implemented yet")
+            }
+
+            else -> {
+                error("Unknown Kotlin extension: ${if (ext == null) "null" else ext::class.simpleName}")
+            }
         }
     }
 }

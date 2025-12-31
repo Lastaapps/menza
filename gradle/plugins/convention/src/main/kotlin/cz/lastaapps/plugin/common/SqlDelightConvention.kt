@@ -17,23 +17,25 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.plugin.multiplatform
+package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.multiplatform
-import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.implementation
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.multiplatform
+import cz.lastaapps.plugin.extensions.pluginManager
+import org.gradle.kotlin.dsl.dependencies
 
 @Suppress("unused")
 class SqlDelightConvention :
     BasePlugin(
         {
             pluginManager {
-                alias(libs.plugins.kotlin.multiplatform)
                 alias(libs.plugins.sqldelight)
             }
-
+        },
+        {
             multiplatform {
                 sourceSets.apply {
                     commonMain.dependencies {
@@ -51,6 +53,13 @@ class SqlDelightConvention :
                         }
                     }
                 }
+            }
+        },
+        {
+            dependencies {
+                implementation(libs.sqldelight.runtime)
+                implementation(libs.sqldelight.coroutines)
+                implementation(libs.sqldelight.android)
             }
         },
     )

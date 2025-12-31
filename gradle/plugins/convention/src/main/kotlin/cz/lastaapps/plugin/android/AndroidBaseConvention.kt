@@ -19,18 +19,10 @@
 
 package cz.lastaapps.plugin.android
 
-import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.libs
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.common.ComposeRuntimeConvention
-import cz.lastaapps.plugin.common.CoroutinesConvention
-import cz.lastaapps.plugin.common.DetektConvention
-import cz.lastaapps.plugin.common.JavaToolchainConvention
-import cz.lastaapps.plugin.common.KoinConvention
-import cz.lastaapps.plugin.common.KotlinBaseConvention
-import cz.lastaapps.plugin.common.KtLintConvention
 import cz.lastaapps.plugin.common.applyCommonConventions
-import org.gradle.kotlin.dsl.apply
+import cz.lastaapps.plugin.extensions.implementation
+import cz.lastaapps.plugin.extensions.libs
 import org.gradle.kotlin.dsl.dependencies
 
 class AndroidBaseConvention :

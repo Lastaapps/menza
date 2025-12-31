@@ -17,28 +17,16 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.crash.entity
+package cz.lastaapps.crash
 
-import java.time.ZonedDateTime
+import cz.lastaapps.crash.db.createDatabase
+import org.koin.core.module.Module
+import org.koin.dsl.module
 
-data class Crash(
-    val date: ZonedDateTime,
-    val severity: ErrorSeverity,
-    val message: String?,
-    val trace: String,
-    val reported: ReportState,
-) {
-    companion object {
-        fun fromError(
-            error: Throwable,
-            severity: ErrorSeverity,
-        ): Crash =
-            Crash(
-                date = ZonedDateTime.now(),
-                severity = severity,
-                message = error.message,
-                trace = error.stackTraceToString(),
-                reported = ReportState.UNREPORTED,
-            )
+internal expect val platformModule: Module
+
+val crashModule =
+    module {
+        includes(platformModule)
+        single { createDatabase(get()) }
     }
-}

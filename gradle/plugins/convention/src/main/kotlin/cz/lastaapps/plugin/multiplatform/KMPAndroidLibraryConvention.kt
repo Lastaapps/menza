@@ -21,12 +21,12 @@ package cz.lastaapps.plugin.multiplatform
 
 import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import com.android.build.api.variant.KotlinMultiplatformAndroidComponentsExtension
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.multiplatform
-import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.android.config.configureAndroidKMPModule
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.multiplatform
+import cz.lastaapps.plugin.extensions.pluginManager
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.configure
 
@@ -39,7 +39,8 @@ class KMPAndroidLibraryConvention :
 
             extensions.configure<KotlinMultiplatformAndroidComponentsExtension> {
                 @Suppress("unused")
-                onVariants { variant -> }
+                onVariants { variant -> // e.g. variant.name = "androidMain"
+                }
             }
 
             multiplatform {
@@ -47,7 +48,19 @@ class KMPAndroidLibraryConvention :
                     (this as ExtensionAware).extensions.findByType(
                         KotlinMultiplatformAndroidLibraryTarget::class.java,
                     ) ?: error("KMP Android lib plugin not applied")
-                ).configureAndroidKMPModule()
+                ).apply {
+                    configureAndroidKMPModule()
+                    // withHostTestBuilder {}.configure {}
+                }
+
+                // in case tests are enabled, add required dependencies
+                sourceSets.findByName("androidHostTest")?.dependencies {
+                    implementation(libs.kotest.jUnit5runner)
+                    implementation(project.dependencies.platform(libs.junit5.bom))
+                    implementation(libs.junit5.jupiter.api)
+                    implementation(libs.junit5.jupiter.runtime)
+                }
+                sourceSets.findByName("androidDeviceTest")?.dependencies {}
             }
         },
     )

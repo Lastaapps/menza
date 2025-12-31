@@ -19,12 +19,12 @@
 
 package cz.lastaapps.plugin.multiplatform
 
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.multiplatform
-import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.common.applyCommonConventions
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.multiplatform
+import cz.lastaapps.plugin.extensions.pluginManager
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.withType
@@ -47,35 +47,16 @@ class KMPLibraryConvention :
 
             multiplatform {
                 targets.all {}
-                // This line for some reason includes additional dependencies to various source sets???
+                // TODO This line for some reason includes additional dependencies to various source sets???
                 // Why tf does this include com.google.android.material:material
                 // jvm {}
 
-                sourceSets.apply {
+                with(sourceSets) {
                     commonMain.dependencies {
                         implementation(libs.androidx.annotation)
                     }
 
-                    commonTest.dependencies {
-                        // TODO move to kotlin base convention
-//                        implementation(libs.kotlin.test.annotation)
-//                        implementation(libs.kotlin.test.common)
-//                        implementation(libs.kotlin.test.core)
-//                        implementation(libs.kotlin.test.jUnit5)
-                        implementation(libs.kotest.arrow)
-                        implementation(libs.kotest.assertion)
-//                    implementation(libs.koin.test.jUnit5)
-                    }
-
-//                    getByName("androidUnitTest") {
-//                        dependencies {
-//                            implementation(libs.kotlinx.coroutines.test)
-//                            implementation(libs.kotest.jUnit5runner)
-//                            implementation(project.dependencies.platform(libs.junit5.bom))
-//                            implementation(libs.junit5.jupiter.api)
-//                            implementation(libs.junit5.jupiter.runtime)
-//                        }
-//                    }
+                    commonTest.dependencies {}
 
                     if (false) {
                         jvmMain.dependencies {

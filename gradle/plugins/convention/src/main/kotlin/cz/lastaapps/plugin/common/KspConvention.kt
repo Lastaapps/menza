@@ -19,13 +19,12 @@
 
 package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.pluginManager
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
-@Suppress("unused")
 class KspConvention :
     BasePlugin(
         {

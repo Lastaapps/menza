@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -57,7 +57,7 @@ internal class OrderRepoImpl(
     override suspend fun toggleVisible(menza: MenzaType) =
         lock.withLock {
             val (newVisible, newHidden) = getHighestKeys()
-            val current = source.getMenzaOrder(toKey(menza)) ?: return
+            val current = source.getMenzaOrder(toKey(menza)) ?: return@withLock
 
             if (current.visible) {
                 MenzaOrder(newHidden + 1, false)
@@ -72,8 +72,8 @@ internal class OrderRepoImpl(
         m1: MenzaType,
         m2: MenzaType,
     ) = lock.withLock {
-        val o1 = source.getMenzaOrder(toKey(m1)) ?: return
-        val o2 = source.getMenzaOrder(toKey(m2)) ?: return
+        val o1 = source.getMenzaOrder(toKey(m1)) ?: return@withLock
+        val o2 = source.getMenzaOrder(toKey(m2)) ?: return@withLock
         source.putMenzaOrder(toKey(m1), o2)
         source.putMenzaOrder(toKey(m2), o1)
     }

@@ -17,11 +17,12 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.extensions
+package cz.lastaapps.plugin.extensions
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
@@ -38,7 +39,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
-val Project.libs get() = the<org.gradle.accessors.dm.LibrariesForLibs>()
+val Project.libs get() = the<LibrariesForLibs>()
 
 fun PluginManager.alias(plugin: Provider<PluginDependency>) {
     apply(plugin.get().pluginId)

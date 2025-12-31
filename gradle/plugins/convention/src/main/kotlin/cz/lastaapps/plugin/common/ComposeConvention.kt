@@ -19,13 +19,13 @@
 
 package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.debugImplementation
-import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.multiplatform
-import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.debugImplementation
+import cz.lastaapps.plugin.extensions.implementation
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.multiplatform
+import cz.lastaapps.plugin.extensions.pluginManager
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.provider.Provider
@@ -34,6 +34,10 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
+/**
+ * Provide base common compose configuration for module.
+ * Dependencies depend on the way Compose is used.
+ */
 abstract class ComposeConvention(
     mainDependencies: Project.() -> List<Provider<MinimalExternalModuleDependency>>,
     androidMainDependencies: Project.() -> List<Provider<MinimalExternalModuleDependency>>,
@@ -61,6 +65,11 @@ abstract class ComposeConvention(
                     androidDebugDependencies().forEach(::implementation)
                 }
             }
+            dependencies {
+                // Removes tooling package from the release variant
+                "androidRuntimeClasspath"(libs.androidx.compose.tooling)
+                "androidRuntimeClasspath"(libs.androidx.compose.toolingPreview)
+            }
         },
         {
             dependencies {
@@ -71,6 +80,9 @@ abstract class ComposeConvention(
         },
     )
 
+/**
+ * Provides dependencies to use compose as a regular UI framework.
+ */
 class ComposeUIConvention :
     ComposeConvention(
         { dependenciesComposeUI() },
@@ -78,6 +90,9 @@ class ComposeUIConvention :
         { dependenciesDebug() },
     )
 
+/**
+ * Provides base dependencies mostly for @Stable and @Immutable annotations
+ */
 class ComposeRuntimeConvention :
     ComposeConvention(
         { emptyList() },
@@ -93,7 +108,6 @@ private fun Project.dependenciesComposeUI(): List<Provider<MinimalExternalModule
         libs.androidx.compose.iconsExtended,
         libs.androidx.compose.animation,
         libs.androidx.compose.ui.util,
-        libs.androidx.compose.toolingPreview,
         libs.decompose.core,
         libs.decompose.compose
             .asProvider(),
@@ -107,11 +121,8 @@ private fun Project.dependenciesComposeUI(): List<Provider<MinimalExternalModule
 
 private fun Project.dependenciesDebug(): List<Provider<MinimalExternalModuleDependency>> =
     listOf(
-        // TODO 9.0
-        //    dependencies {
-        //        "androidRuntimeClasspath"(libs.androidx.compose.ui.tooling)
-        //    }
         libs.androidx.compose.tooling,
+        libs.androidx.compose.toolingPreview,
     )
 
 private fun Project.dependenciesAndroidComposeUI(): List<Provider<MinimalExternalModuleDependency>> =

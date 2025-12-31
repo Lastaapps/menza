@@ -139,7 +139,7 @@ kotest-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", versio
 kotest-assertion = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-jUnit5runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
-kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom" }
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-standardLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 kotlin-test-annotation = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common" }
@@ -251,9 +251,9 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
 lastaapps-android-app = "android-app-convention:none"
 lastaapps-android-library = "android-library-convention:none"
 lastaapps-common-compose = "common-compose-convention:none"
+lastaapps-common-sqldelight = "common-sqldelight-convention:none"
 lastaapps-jvm-app = "jvm-app-convention:none"
 lastaapps-kmp-library = "kmp-library-convention:none"
-lastaapps-kmp-sqldelight = "kmp-sqldelight-convention:none"
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 versionCatalogUpdate = "nl.littlerobots.version-catalog-update:1.0.1"

@@ -20,12 +20,12 @@
 package cz.lastaapps.plugin.android
 
 import com.android.build.api.dsl.ApplicationExtension
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.android.config.configureAndroidOnlyModule
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.implementation
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.pluginManager
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies

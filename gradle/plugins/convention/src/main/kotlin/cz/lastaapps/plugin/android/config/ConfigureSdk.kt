@@ -21,14 +21,18 @@ package cz.lastaapps.plugin.android.config
 
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryExtension
-import cz.lastaapps.extensions.coreLibraryDesugaring
-import cz.lastaapps.extensions.libs
+import cz.lastaapps.plugin.extensions.coreLibraryDesugaring
+import cz.lastaapps.plugin.extensions.libs
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
 context(p: Project)
 internal fun CommonExtension.configureAndroidOnlyModule() {
     compileSdk = p.getCompileSdk()
+
+    compileOptions.isCoreLibraryDesugaringEnabled = true
+    defaultConfig.minSdk = p.getMinSdk()
+    defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     p.dependencies {
         coreLibraryDesugaring(p.libs.android.desugaring)
@@ -40,8 +44,7 @@ internal fun KotlinMultiplatformAndroidLibraryExtension.configureAndroidKMPModul
     compileSdk = p.getCompileSdk()
     minSdk = p.getMinSdk()
 
-    // TODO determine how does this behave in release/debug
-    // optimization { minify = true }
+    // minification is not enabled as it's the responsibility of the app module
 
     enableCoreLibraryDesugaring = true
     p.dependencies {

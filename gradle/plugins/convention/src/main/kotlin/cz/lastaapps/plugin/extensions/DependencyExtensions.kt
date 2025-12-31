@@ -19,48 +19,36 @@
 
 @file:Suppress("UnstableApiUsage")
 
-package cz.lastaapps.extensions
+package cz.lastaapps.plugin.extensions
 
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 
-fun <T : Any> DependencyHandlerScope.generalImplementation(
-    dependency: Provider<T>,
-    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) {
-}
-
-fun DependencyHandlerScope.implementation(
-    dependency: String,
-    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) = Constants.IMPLEMENTATION(dependency, dependencyConfiguration)
+/*
+ * Provide save call interface in project.dependencies { } block
+ */
 
 fun <T : Any> DependencyHandlerScope.implementation(
     dependency: Provider<T>,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) = Constants.IMPLEMENTATION(dependency, dependencyConfiguration)
-
-fun <T : Any> DependencyHandlerScope.commonImplementation(
-    dependency: Provider<T>,
-    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) = Constants.COMMON_IMPLEMENTATION(dependency, dependencyConfiguration)
+) = "implementation"(dependency, dependencyConfiguration)
 
 fun <T : Any> DependencyHandlerScope.testImplementation(
     dependency: Provider<T>,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) = Constants.TEST_IMPLEMENTATION(dependency, dependencyConfiguration)
+) = "testImplementation"(dependency, dependencyConfiguration)
 
 fun <T : Any> DependencyHandlerScope.debugImplementation(
     dependency: Provider<T>,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) = Constants.DEBUG_IMPLEMENTATION(dependency, dependencyConfiguration)
+) = "debugImplementation"(dependency, dependencyConfiguration)
 
 fun <T : Any> DependencyHandlerScope.api(
     dependency: Provider<T>,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) = Constants.API(dependency, dependencyConfiguration)
+) = "api"(dependency, dependencyConfiguration)
 
-fun DependencyHandlerScope.coreLibraryDesugaring(dependencyNotation: Any) = add(Constants.DESUGARING, dependencyNotation)
+fun DependencyHandlerScope.coreLibraryDesugaring(dependencyNotation: Any) = add("coreLibraryDesugaring", dependencyNotation)
 
-fun DependencyHandlerScope.ksp(dependencyNotation: Any) = add(Constants.KSP, dependencyNotation)
+fun DependencyHandlerScope.ksp(dependencyNotation: Any) = add("ksp", dependencyNotation)

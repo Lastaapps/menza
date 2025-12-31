@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,14 +17,29 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.crash
+package cz.lastaapps.crash.entity
 
-import cz.lastaapps.crash.db.createCrashDriver
-import cz.lastaapps.crash.db.createDatabase
-import org.koin.dsl.module
+import kotlin.time.Clock
+import kotlin.time.Instant
 
-val crashModule =
-    module {
-        factory { createCrashDriver(get()) }
-        single { createDatabase(get()) }
+data class Crash(
+    val date: Instant,
+    val severity: ErrorSeverity,
+    val message: String?,
+    val trace: String,
+    val reported: ReportState,
+) {
+    companion object {
+        fun fromError(
+            error: Throwable,
+            severity: ErrorSeverity,
+        ): Crash =
+            Crash(
+                date = Clock.System.now(),
+                severity = severity,
+                message = error.message,
+                trace = error.stackTraceToString(),
+                reported = ReportState.UNREPORTED,
+            )
     }
+}

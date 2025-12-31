@@ -24,20 +24,25 @@ package cz.lastaapps.crash.db
 import app.cash.sqldelight.ColumnAdapter
 import cz.lastaapps.crash.entity.ErrorSeverity
 import cz.lastaapps.crash.entity.ReportState
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Instant
 
 object CrashAdapter {
     val dateAdapter =
-        object : ColumnAdapter<ZonedDateTime, String> {
-            private val format = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+        object : ColumnAdapter<Instant, String> {
+            // private val format = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
-            override fun decode(databaseValue: String): ZonedDateTime =
-                ZonedDateTime.of(LocalDateTime.parse(databaseValue, format), ZoneId.of("UTC"))
+            override fun decode(databaseValue: String): Instant =
+                LocalDateTime.Formats.ISO
+                    .parse(databaseValue)
+                    .toInstant(TimeZone.UTC)
+            // ZonedDateTime.of(LocalDateTime.parse(databaseValue, format), ZoneId.of("UTC"))
 
-            override fun encode(value: ZonedDateTime): String = value.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(format)
+            override fun encode(value: Instant): String = LocalDateTime.Formats.ISO.format(value.toLocalDateTime(TimeZone.UTC))
+            // value.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(format)
         }
     val severityAdapter =
         object : ColumnAdapter<ErrorSeverity, Long> {

@@ -56,15 +56,10 @@ buildkonfig {
             buildVersionProvider
                 .map(Instant::ofEpochSecond)
                 .map(::formatDate)
-                .map { "\"$it\"" }
 
         @Suppress("unused")
-        val nowProvider =
-            providers
-                .provider { formatDate() }
-                .map { "\"$it\"" }
+        val nowProvider = providers.provider { formatDate() }
 
-        // TODO resolve how to determine whether the build is debug
         buildConfigField(STRING, "BUILD_DATE", modificationTime.get())
     }
 }

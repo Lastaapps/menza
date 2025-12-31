@@ -94,17 +94,13 @@ gradlePlugin {
             ids.common.compose,
             pkg("common.ComposeUIConvention"),
         )
-//        plugin(
-//            ids.common.coil,
-//            pkg("common.CoilConvention"),
-//        )
+        plugin(
+            ids.common.sqldelight,
+            pkg("common.SqlDelightConvention"),
+        )
         plugin(
             ids.kmp.library,
             pkg("multiplatform.KMPLibraryConvention"),
-        )
-        plugin(
-            ids.kmp.sqldelight,
-            pkg("multiplatform.SqlDelightConvention"),
         )
         plugin(
             ids.jvm.app,

@@ -19,12 +19,12 @@
 
 package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.compilerOptions
-import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.multiplatform
-import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.extensions.compilerOptions
+import cz.lastaapps.plugin.extensions.implementation
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.multiplatform
+import cz.lastaapps.plugin.extensions.testImplementation
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
@@ -45,6 +45,7 @@ class CoroutinesConvention :
                 sourceSets.all {
                     languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
                 }
+
                 with(sourceSets) {
                     commonMain.dependencies {
                         dependenciesCoroutines().forEach(::implementation)

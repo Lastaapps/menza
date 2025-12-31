@@ -19,7 +19,7 @@
 
 plugins {
     alias(libs.plugins.lastaapps.kmp.library)
-    alias(libs.plugins.lastaapps.kmp.sqldelight)
+    alias(libs.plugins.lastaapps.common.sqldelight)
 }
 
 kotlin {
@@ -41,7 +41,7 @@ sqldelight {
     databases {
         create("BuffetDatabase") {
             packageName.set("cz.lastaapps.api.buffet")
-            schemaOutputDirectory.set(file("src/main/sqldelight/databases"))
+            schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases"))
             verifyMigrations.set(true)
         }
     }

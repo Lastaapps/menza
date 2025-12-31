@@ -19,9 +19,9 @@
 
 package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.java
-import cz.lastaapps.extensions.libs
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.extensions.java
+import cz.lastaapps.plugin.extensions.libs
 import org.gradle.api.JavaVersion
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 

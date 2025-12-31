@@ -69,7 +69,6 @@ android {
 }
 
 dependencies {
-
     implementation(projects.api.agata)
     implementation(projects.api.main)
     implementation(projects.core)

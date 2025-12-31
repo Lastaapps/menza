@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -17,14 +17,10 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.extensions
+package cz.lastaapps.crash.db
 
-object Constants {
-    const val IMPLEMENTATION = "implementation"
-    const val COMMON_IMPLEMENTATION = "commonMainImplementation"
-    const val TEST_IMPLEMENTATION = "testImplementation"
-    const val DEBUG_IMPLEMENTATION = "debugImplementation"
-    const val API = "api"
-    const val DESUGARING = "coreLibraryDesugaring"
-    const val KSP = "ksp"
-}
+import android.content.Context
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import cz.lastaapps.crash.CrashDatabase
+
+internal fun createCrashDriver(context: Context) = CrashDatabaseDriver(AndroidSqliteDriver(CrashDatabase.Schema, context, "crash.db"))

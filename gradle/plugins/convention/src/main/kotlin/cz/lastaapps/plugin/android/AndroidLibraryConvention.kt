@@ -20,15 +20,13 @@
 package cz.lastaapps.plugin.android
 
 import com.android.build.api.dsl.LibraryExtension
-// import com.android.build.gradle.LibraryExtension
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
 import cz.lastaapps.plugin.android.config.configureAndroidOnlyModule
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.pluginManager
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 
 class AndroidLibraryConvention :
     BasePlugin(
@@ -41,15 +39,13 @@ class AndroidLibraryConvention :
 
             extensions.configure<LibraryExtension> {
                 configureAndroidOnlyModule()
+
                 defaultConfig {
                     multiDexEnabled = true
                 }
                 buildFeatures {
                     buildConfig = false
                 }
-            }
-            dependencies {
-                "implementation"(libs.androidx.compose.runtime)
             }
         },
     )

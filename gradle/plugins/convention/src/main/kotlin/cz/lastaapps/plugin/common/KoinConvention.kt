@@ -19,15 +19,15 @@
 
 package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.multiplatform
-import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.extensions.implementation
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.multiplatform
+import cz.lastaapps.plugin.extensions.testImplementation
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 
-private const val ENABLE_ANNOTATIONS = true
+private const val ENABLE_ANNOTATIONS = false
 
 class KoinConvention :
     BasePlugin(
@@ -38,18 +38,20 @@ class KoinConvention :
         },
         kmpConfiguration = {
             multiplatform {
-                sourceSets.commonMain.dependencies {
-                    implementation(libs.koin.core)
+                with(sourceSets) {
+                    commonMain.dependencies {
+                        implementation(libs.koin.core)
 
-                    if (ENABLE_ANNOTATIONS) {
-                        implementation(libs.koin.annotations.asProvider())
+                        if (ENABLE_ANNOTATIONS) {
+                            implementation(libs.koin.annotations.asProvider())
+                        }
                     }
-                }
-                sourceSets.androidMain.dependencies {
-                    implementation(libs.koin.android.core)
-                }
-                sourceSets.commonTest.dependencies {
-                    implementation(libs.koin.test.jUnit5)
+                    androidMain.dependencies {
+                        implementation(libs.koin.android.core)
+                    }
+                    commonTest.dependencies {
+                        implementation(libs.koin.test.jUnit5)
+                    }
                 }
             }
             dependencies {
@@ -58,7 +60,7 @@ class KoinConvention :
                     configurations
                         .filter { it.name.startsWith("ksp") && it.name != "ksp" }
                         .forEach {
-                            // "ksp" for Android, "kspCommonMainMetadata", "kspAndroid", "kspJvm"
+                            // "ksp" for Android, "kspCommonMainMetadata", "kspAndroid", "kspJvm" for KMP
                             add(it.name, libs.koin.annotations.compiler)
                         }
                 }
@@ -67,14 +69,11 @@ class KoinConvention :
         androidConfiguration = {
             dependencies {
                 implementation(libs.koin.core)
-
-                if (ENABLE_ANNOTATIONS) {
-                    implementation(libs.koin.annotations.asProvider())
-                }
                 implementation(libs.koin.android.core)
                 testImplementation(libs.koin.test.jUnit5)
 
                 if (ENABLE_ANNOTATIONS) {
+                    implementation(libs.koin.annotations.asProvider())
                     add("ksp", libs.koin.annotations.compiler)
                 }
             }

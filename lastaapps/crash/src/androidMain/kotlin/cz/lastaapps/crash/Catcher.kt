@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -42,7 +42,7 @@ class Catcher(
     ) {
         try {
             runBlocking(Dispatchers.IO) {
-                with(Crash.fromError(e, ErrorSeverity.CRASH)) {
+                with(Crash.Companion.fromError(e, ErrorSeverity.CRASH)) {
                     database.crashQueries.saveCrash(
                         date,
                         severity,

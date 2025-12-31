@@ -17,27 +17,13 @@
  *     along with Menza.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package cz.lastaapps.crash.db
+package cz.lastaapps.crash
 
-import android.content.Context
-import app.cash.sqldelight.db.SqlDriver
-import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import crash.Crashes
-import cz.lastaapps.crash.CrashDatabase
+import cz.lastaapps.crash.db.createCrashDriver
+import org.koin.core.module.Module
+import org.koin.dsl.module
 
-internal data class CrashDatabaseDriver(
-    val driver: SqlDriver,
-)
-
-internal fun createCrashDriver(context: Context) = CrashDatabaseDriver(AndroidSqliteDriver(CrashDatabase.Schema, context, "crash.db"))
-
-internal fun createDatabase(driver: CrashDatabaseDriver): CrashDatabase =
-    CrashDatabase(
-        driver.driver,
-        crashesAdapter =
-            Crashes.Adapter(
-                CrashAdapter.dateAdapter,
-                CrashAdapter.severityAdapter,
-                CrashAdapter.reportedAdapter,
-            ),
-    )
+internal actual val platformModule: Module =
+    module {
+        factory { createCrashDriver(get()) }
+    }

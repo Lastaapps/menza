@@ -20,15 +20,15 @@
 package cz.lastaapps.common
 
 import android.content.Context
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.format
 
 object DeveloperInfo {
     fun getName(context: Context): String = context.getString(R.string.developer_name)
 
     fun getNameAndBuildYear(context: Context): String {
-        val date = LocalDate.parse(BuildKonfig.BUILD_DATE)
-        val formatted = date.format(DateTimeFormatter.ofPattern("yyyy"))
+        val date = LocalDate.Formats.ISO.parse(BuildKonfig.BUILD_DATE)
+        val formatted = date.format(LocalDate.Format { year() })
 
         return context.getString(R.string.developer_name_date, formatted)
     }

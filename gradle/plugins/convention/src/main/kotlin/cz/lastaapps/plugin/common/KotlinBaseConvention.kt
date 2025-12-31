@@ -19,13 +19,14 @@
 
 package cz.lastaapps.plugin.common
 
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.compilerOptions
-import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.multiplatform
-import cz.lastaapps.extensions.pluginManager
 import cz.lastaapps.plugin.BasePlugin
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.compilerOptions
+import cz.lastaapps.plugin.extensions.implementation
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.multiplatform
+import cz.lastaapps.plugin.extensions.pluginManager
+import cz.lastaapps.plugin.extensions.testImplementation
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.assign
@@ -36,6 +37,9 @@ import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
 private typealias KV = KotlinVersion
 
+/**
+ * Set up Kotlin Compiler and dependencies necessary for developer's sanity preservation
+ */
 class KotlinBaseConvention :
     BasePlugin(
         configuration = {
@@ -92,41 +96,49 @@ class KotlinBaseConvention :
         },
         kmpConfiguration = {
             multiplatform {
-                sourceSets.commonMain.dependencies {
-                    dependenciesKotlinBase().forEach(::implementation)
-                    dependenciesGeneral().forEach(::implementation)
-                    dependenciesArrowKt().forEach(::implementation)
+                with(sourceSets) {
+                    commonMain.dependencies {
+                        dependenciesKotlinMain().forEach(::implementation)
+                    }
+                    commonTest.dependencies {
+                        dependenciesKotlinTest().forEach(::implementation)
+                    }
                 }
             }
         },
         androidConfiguration = {
             dependencies {
-                dependenciesKotlinBase().forEach(::implementation)
-                dependenciesGeneral().forEach(::implementation)
-                dependenciesArrowKt().forEach(::implementation)
+                dependenciesKotlinMain().forEach(::implementation)
+                dependenciesKotlinTest().forEach(::testImplementation)
             }
         },
     ) {
     companion object {
-        private fun Project.dependenciesKotlinBase() =
+        private fun Project.dependenciesKotlinMain() =
             listOf(
                 project.dependencies.platform(libs.kotlin.bom),
                 libs.kotlinx.dateTime,
                 libs.kotlinx.collection,
-            )
-
-        private fun Project.dependenciesGeneral() =
-            listOf(
+                // Essential libraries
                 libs.kermit,
                 libs.fluidLocale,
+                // ArrowKt
+                project.dependencies.platform(libs.arrowkt.bom),
+                libs.arrowkt.core,
+                libs.arrowkt.fx.coroutines,
+                libs.arrowkt.fx.stm,
             )
 
-        fun Project.dependenciesArrowKt() =
+        private fun Project.dependenciesKotlinTest() =
             listOf(
-                (project.dependencies.platform(libs.arrowkt.bom)),
-                (libs.arrowkt.core),
-                (libs.arrowkt.fx.coroutines),
-                (libs.arrowkt.fx.stm),
+                // Kotlin test
+                libs.kotlin.test.annotation,
+                libs.kotlin.test.common,
+                libs.kotlin.test.core,
+                libs.kotlin.test.jUnit5,
+                // Kotest
+                libs.kotest.arrow,
+                libs.kotest.assertion,
             )
     }
 }
