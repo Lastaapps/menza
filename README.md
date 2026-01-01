@@ -13,6 +13,13 @@ Menza is the Czech word for school cafeteria.
 
 [<img alt='Now on Google Play' height="80px" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>](https://play.google.com/store/apps/details?id=cz.lastaapps.menza&utm_source=github)[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/cz.lastaapps.menza)
 
+##### Public acknowledgements
+
+- Faculty
+  news [Život na FIT](https://fit.cvut.cz/cs/zivot-na-fit/aktualne/zpravy/19105-aplikace-studentu-fit-cvut-usnadni-vyber-z-jidelnicku-menz-cvut).
+- [Officially](https://agata.suz.cvut.cz/jidelnicky/aplikace.php) recommended app for Agáta system
+  at CTU.
+
 ## Related projects
 - [Menza CLI (LastaApps)](https://github.com/Lastaapps/menza-cli)
 - [Menza BE (LastaApps)](https://github.com/Lastaapps/menza-backend)
