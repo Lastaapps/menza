@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,9 +30,6 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 private const val IV_KEY_SUFFIX = "_iv"
-
-// TODO remove once AS supports Kotlin 2.2
-private typealias Idk = CryptoProvider
 
 context(provider: CryptoProvider)
 fun SharedPreferences.Editor.putEncryptedString(
