@@ -1,5 +1,5 @@
 <!--
-  ~    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -330,6 +330,10 @@
     <string name="wallet_login">Login</string>
     <string name="wallet_logged_in_as">Logged in as: %s</string>
     <string name="wallet_logout">Logout</string>
+    <string name="wallet_logout_dialog_title">Logout</string>
+    <string name="wallet_logout_dialog_text">Are you sure you want to log out?</string>
+    <string name="wallet_logout_dialog_confirm">Log out</string>
+    <string name="wallet_logout_dialog_cancel">Cancel</string>
     <string name="wallet_web">Open web</string>
     <string name="wallet_update_error">Failed to update balance 💀</string>
     <string name="wallet_login_title">Login to Agata</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -306,6 +306,10 @@
     <string name="wallet_login">Přihlásit</string>
     <string name="wallet_logged_in_as">Přihlášen jako: %s</string>
     <string name="wallet_logout">Odhlásit</string>
+    <string name="wallet_logout_dialog_title">Odhlášení</string>
+    <string name="wallet_logout_dialog_text">Opravdu se chcete odhlásit?</string>
+    <string name="wallet_logout_dialog_confirm">Odhlásit se</string>
+    <string name="wallet_logout_dialog_cancel">Zrušit</string>
     <string name="wallet_web">Otevřít web</string>
     <string name="wallet_update_error">Něco se nám pokakalo 💩</string>
     <string name="wallet_login_title">Přihlášení do Agáty</string>
