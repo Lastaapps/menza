@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -69,7 +69,7 @@ internal class BuffetScraperImpl : BuffetScraper {
         // Split buffets
         // fs, fel
         private val splitMainRegex =
-            """(.*)</td>\s*<td(.*)"""
+            """(.*)</div>\s*<div(.*)"""
                 .toRegex(regexOptions)
 
         // Matches days

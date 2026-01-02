@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -71,45 +71,9 @@ class BuffetScraperTest :
                 }
             }
 
-            "Scrape 2025-01-06" {
-                val log = Logger.withTag("2025-01-06")
-                val html = loadPage("2025-01-06.html")
-                val scraper = scraper()
-                val date = scraper.matchValidity(html)
-                val content = scraper.matchContent(html)
-
-                log.i { date.toString() }
-                log.i { content.toString() }
-
-                dateRangeTest(
-                    date,
-                    LocalDate(2025, 1, 6),
-                    LocalDate(2025, 1, 10),
-                )
-
-                val (fs, fel) = testDeconstruct(content)
-
-                commonTest(fs, listOf(4, 3, 3, 3, 3))
-                commonTest(fel, listOf(3, 3, 3, 4, 4))
-                @Suppress("SpellCheckingInspection")
-                fs[1].dishList[2].run {
-                    type shouldBe "Hlavní jídlo 2"
-                    name shouldBe "Kuřecí steak s pikantní omáčkou, hranolky"
-                    price shouldBe 139
-                }
-
-                commonTest(fel, listOf(4, 4, 3, 3, 5))
-                @Suppress("SpellCheckingInspection")
-                fel[4].dishList[1].run {
-                    type shouldBe "Hlavní jídlo 1"
-                    name shouldBe "Plněný paprikový lusk, houskové knedlíky (rýže )"
-                    price shouldBe 138
-                }
-            }
-
-            "Scrape 2025-01-13" {
-                val log = Logger.withTag("2025-01-13")
-                val html = loadPage("2025-01-13.html")
+            "Scrape 2025-12-15" {
+                val log = Logger.withTag("2025-12-15")
+                val html = loadPage("2025-12-15.html")
                 val scraper = scraper()
                 val date = scraper.matchValidity(html)
                 val content = scraper.matchContent(html)
@@ -125,21 +89,32 @@ class BuffetScraperTest :
 
                 val (fs, fel) = testDeconstruct(content)
 
-                commonTest(fs, listOf(4, 3, 3, 3, 3))
-                commonTest(fel, listOf(3, 3, 3, 4, 4))
+                commonTest(fs, listOf(3, 3, 3, 3, 3))
+                commonTest(fel, listOf(3, 3, 4, 4, 3))
                 @Suppress("SpellCheckingInspection")
                 fs[1].dishList[2].run {
                     type shouldBe "Hlavní jídlo 2"
-                    name shouldBe "Smažený květák, vařené brambory, tatarská omáčka"
-                    price shouldBe 139
+                    name shouldBe "Kuřecí steak s mexickou salsou, hranolky"
+                    price shouldBe 149
                 }
+                fs[1].dishList[0].run {
+                    type shouldBe "Polévka"
+                    name shouldBe "Gulášová"
+                    price shouldBe 40
+                }
+                // A "mistake" is present on the website where a label exists twice
+                fs[4].dishList[1].type shouldBe fs[4].dishList[2].type
 
-                commonTest(fel, listOf(4, 4, 3, 3, 5))
                 @Suppress("SpellCheckingInspection")
-                fel[4].dishList[1].run {
+                fel[0].dishList[1].run {
                     type shouldBe "Hlavní jídlo 1"
-                    name shouldBe "Smažená aljašská treska, bramborová kaše"
-                    price shouldBe 136
+                    name shouldBe "Segedínský guláš, houskové knedlíky"
+                    price shouldBe 144
+                }
+                fel[4].dishList[2].run {
+                    type shouldBe "Hlavní jídlo 2"
+                    name shouldBe "Smažený kuřecí řízek, domácí bramborový salát"
+                    price shouldBe 149
                 }
             }
 
