@@ -81,9 +81,9 @@ fun Float.applyExchangeRate(currency: Currency) =
         Currency.BEER -> this / 49f
         // TODO update me every year
         // based on Czech National Bank: https://www.kurzy.cz/kurzy-men/jednotny-kurz/
-        // date from 2024
-        Currency.EUR -> this / 25.160f
-        Currency.USD -> this / 23.280f
+        // data from 2025
+        Currency.EUR -> this / 24.660f
+        Currency.USD -> this / 21.840f
     }
 
 fun Float.formatPrice() =
