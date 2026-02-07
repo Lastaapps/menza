@@ -76,7 +76,8 @@ and how functional approaches can be nicely used in an "imperative" language.
 #### Data sources
 
 Most of the data is obtained from the official Agata API,
-see the documentation [here](https://agata.suz.cvut.cz/jidelnicky/JAPIV2/JAPI-popis.html).
+see the documentation [here](https://agata.suz.cvut.cz/jidelnicky/JAPIV2/JAPI-popis.html),
+or my Postman collection [here](https://www.postman.com/lastaapps-team/workspace/agata-api).
 To get your API key, please contact the IT center and don't steal mine,
 they will be more than happy to give you one.
 
