@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,6 +24,11 @@ pluginManagement {
         google()
         gradlePluginPortal()
     }
+}
+
+plugins {
+    // Gradle toolchain detection
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 @Suppress("UnstableApiUsage")
