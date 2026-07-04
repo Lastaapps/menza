@@ -173,7 +173,7 @@ internal class BuffetScraperImpl : BuffetScraper {
                     ) { acu, (errors, _) ->
                         when (errors) {
                             None -> acu
-                            is Some -> acu.addAll(errors.value)
+                            is Some -> acu.addingAll(errors.value)
                         }
                     }
 

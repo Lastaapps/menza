@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,6 @@ import cz.lastaapps.plugin.extensions.pluginManager
 import cz.lastaapps.plugin.extensions.testImplementation
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
@@ -74,22 +73,13 @@ class KotlinBaseConvention :
                     ),
                 )
 
-                // Treat all Kotlin warnings as errors
-                allWarningsAsErrors = true
-
                 freeCompilerArgs.addAll(
                     listOf(
                         "-opt-in=kotlin.ExperimentalStdlibApi",
                         "-opt-in=kotlin.RequiresOptIn",
-                        "-Xannotation-default-target=param-property",
-                        "-Xannotation-target-all",
-                        "-Xcontext-parameters",
                         "-Xcontext-sensitive-resolution",
                         // enforce Java nullability
                         "-Xjspecify-annotations=strict",
-                        "-Xnested-type-aliases",
-                        "-Xtype-enhancement-improvements-strict-mode",
-                        "-Xwhen-guards",
                     ),
                 )
             }

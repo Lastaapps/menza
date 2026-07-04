@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -118,7 +118,7 @@ class StateFlowSettings(
     ): SettingsListener {
         map.update {
             if (!map.value.containsKey(key)) {
-                it.put(key, settings.get<T>(key))
+                it.putting(key, settings.get<T>(key))
             } else {
                 it
             }
@@ -138,7 +138,7 @@ class StateFlowSettings(
     ): SettingsListener {
         map.update {
             if (!map.value.containsKey(key)) {
-                it.put(key, settings.get<T>(key))
+                it.putting(key, settings.get<T>(key))
             } else {
                 it
             }
@@ -215,7 +215,7 @@ class StateFlowSettings(
     ) {
         map.update {
             settings.putBoolean(key, value)
-            it.put(key, value)
+            it.putting(key, value)
         }
     }
 
@@ -225,7 +225,7 @@ class StateFlowSettings(
     ) {
         map.update {
             settings.putDouble(key, value)
-            it.put(key, value)
+            it.putting(key, value)
         }
     }
 
@@ -235,7 +235,7 @@ class StateFlowSettings(
     ) {
         map.update {
             settings.putFloat(key, value)
-            it.put(key, value)
+            it.putting(key, value)
         }
     }
 
@@ -245,7 +245,7 @@ class StateFlowSettings(
     ) {
         map.update {
             settings.putInt(key, value)
-            it.put(key, value)
+            it.putting(key, value)
         }
     }
 
@@ -255,7 +255,7 @@ class StateFlowSettings(
     ) {
         map.update {
             settings.putLong(key, value)
-            it.put(key, value)
+            it.putting(key, value)
         }
     }
 
@@ -265,12 +265,12 @@ class StateFlowSettings(
     ) {
         map.update {
             settings.putString(key, value)
-            it.put(key, value)
+            it.putting(key, value)
         }
     }
 
     override fun remove(key: String) {
-        map.update { it.remove(key) }
+        map.update { it.removing(key) }
         settings.remove(key)
     }
 }

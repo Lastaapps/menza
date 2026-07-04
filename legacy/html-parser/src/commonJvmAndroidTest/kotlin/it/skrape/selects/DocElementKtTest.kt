@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -30,7 +30,6 @@ import it.skrape.selects.html5.b
 import it.skrape.selects.html5.div
 import it.skrape.selects.html5.img
 import it.skrape.selects.html5.link
-import javax.management.Query.div
 import org.intellij.lang.annotations.Language
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
@@ -38,27 +37,29 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.api.expectThrows
+import javax.management.Query.div
 
 class DocElementKtTest {
-
     @Language("HTML")
-    private val aValidMarkup = """
+    private val aValidMarkup =
+        """
         <h2 class='welcome' disabled>headline</h2>
         <p class='fancy'>paragraph
             <span>foo <b>bar</b></span>
             <span>fizz <b id="xxx">buzz</b></span>
         </p>
-    """.trimMargin()
+        """.trimMargin()
 
-    private val anElement = Element("div").apply {
-        prependText("divs text")
-        addClass("clazz")
-        addClass("klass")
-        attr("foo", "bar")
-        attr("fizz", "buzz")
-        attr("data-foo", "foobar")
-        append(aValidMarkup)
-    }
+    private val anElement =
+        Element("div").apply {
+            prependText("divs text")
+            addClass("clazz")
+            addClass("klass")
+            attr("foo", "bar")
+            attr("fizz", "buzz")
+            attr("data-foo", "foobar")
+            append(aValidMarkup)
+        }
 
     val aValidElement = DocElement(anElement)
 
@@ -169,11 +170,12 @@ class DocElementKtTest {
 
     @Test
     fun `can find all elements within this element (including itself) and invoke them to a lambda`() {
-        val text = aValidElement.findAll {
-            expectThat(size).isEqualTo(7)
-            expectThat(get(1).outerHtml).isEqualTo("""<h2 class="welcome" disabled>headline</h2>""")
-            get(1).text
-        }
+        val text =
+            aValidElement.findAll {
+                expectThat(size).isEqualTo(7)
+                expectThat(get(1).outerHtml).isEqualTo("""<h2 class="welcome" disabled>headline</h2>""")
+                get(1).text
+            }
         expectThat(text).isEqualTo("headline")
     }
 
@@ -186,18 +188,20 @@ class DocElementKtTest {
 
     @Test
     fun `can find all elements within this element by selector and invoke them to lambda that will return generic value`() {
-        val text = aValidElement.findAll(".welcome") {
-            expectThat(this).hasSize(1)
-            text
-        }
+        val text =
+            aValidElement.findAll(".welcome") {
+                expectThat(this).hasSize(1)
+                text
+            }
         expectThat(text).isEqualTo("headline")
     }
 
     @Test
     fun `can find first element within this element by selector and invoke them to lambda that will return generic value`() {
-        val text = aValidElement.findFirst(".welcome") {
-            text
-        }
+        val text =
+            aValidElement.findFirst(".welcome") {
+                text
+            }
         expectThat(text).isEqualTo("headline")
     }
 
@@ -225,12 +229,13 @@ class DocElementKtTest {
 
     @Test
     fun `can get ownCssSelector`() {
-        val elementWithId = DocElement(
-            anElement.apply {
-                attr("id", "bazinga")
-                attr("key-only-attr", "")
-            },
-        )
+        val elementWithId =
+            DocElement(
+                anElement.apply {
+                    attr("id", "bazinga")
+                    attr("key-only-attr", "")
+                },
+            )
         expectThat(elementWithId.ownCssSelector).isEqualTo(
             "div#bazinga.clazz.klass['key-only-attr'][foo='bar'][fizz='buzz'][data-foo='foobar']",
         )
@@ -353,25 +358,27 @@ class DocElementKtTest {
 
     @Test
     fun `can invoke a css-selector as string to search children of given element`() {
-        val markup = """
+        val markup =
+            """
             <div class="foo">xxx<span>yyy</span></div>
             <div>zzz<h1>aaa</h1></div>
             <div class="my-class"><h1 class="welcome">first headline</h1></div>
             <div class="my-class"><h1 class="welcome">second headline</h1></div>
-        """.trimIndent()
+            """.trimIndent()
 
-        val text = htmlDocument(markup) {
-            div {
-                withClass = "my-class"
-                findAll {
-                    expectThat(size).isEqualTo(2)
-                    "h1" {
-                        withClass = "welcome"
-                        findFirst { text }
+        val text =
+            htmlDocument(markup) {
+                div {
+                    withClass = "my-class"
+                    findAll {
+                        expectThat(size).isEqualTo(2)
+                        "h1" {
+                            withClass = "welcome"
+                            findFirst { text }
+                        }
                     }
                 }
             }
-        }
         expectThat(text).isEqualTo("first headline")
     }
 
@@ -469,13 +476,14 @@ class DocElementKtTest {
 
     @Test
     fun `can conveniently get all links as map of text and href from list of DocElement`() {
-        val links = aValidDocument(aValidMarkupWithLinks) {
-            a {
-                findAll {
-                    eachLink
+        val links =
+            aValidDocument(aValidMarkupWithLinks) {
+                a {
+                    findAll {
+                        eachLink
+                    }
                 }
             }
-        }
 
         expectThat(links).isEqualTo(
             mapOf(
@@ -491,14 +499,15 @@ class DocElementKtTest {
     @Test
     @Disabled("TODO: make eachLink also filter child notes")
     fun `can conveniently get all links as map of text and href from list of DocElement and its children`() {
-        val links = aValidDocument(aValidMarkupWithLinks) {
-            div {
-                findAll {
-                    println(toString())
-                    eachLink
+        val links =
+            aValidDocument(aValidMarkupWithLinks) {
+                div {
+                    findAll {
+                        println(toString())
+                        eachLink
+                    }
                 }
             }
-        }
 
         expectThat(links).isEqualTo(
             mapOf(
@@ -513,22 +522,24 @@ class DocElementKtTest {
 
     @Test
     fun `can conveniently get all links as map of text and href from DocElement`() {
-        val links = aValidDocument(aValidMarkupWithLinks) {
-            a {
-                findFirst {
-                    eachLink
+        val links =
+            aValidDocument(aValidMarkupWithLinks) {
+                a {
+                    findFirst {
+                        eachLink
+                    }
                 }
             }
-        }
 
         expectThat(links).isEqualTo(mapOf("foobar" to "http://foo.bar"))
     }
 
     @Test
     fun `can conveniently get all links as map of text and href from Doc`() {
-        val links = aValidDocument(aValidMarkupWithLinks) {
-            eachLink
-        }
+        val links =
+            aValidDocument(aValidMarkupWithLinks) {
+                eachLink
+            }
 
         expectThat(links).isEqualTo(
             mapOf(
@@ -549,7 +560,7 @@ class DocElementKtTest {
             img {
                 findAll {
                     forEachImage { altText, url ->
-                        images.put(altText, url)
+                        images.putting(altText, url)
                     }
                 }
             }
@@ -635,13 +646,14 @@ class DocElementKtTest {
 
     @Test
     fun `can conveniently get all images as map of alt-text and src from list of DocElement`() {
-        val pictures = aValidDocument(aValidMarkupWithPictures) {
-            img {
-                findAll {
-                    eachImage
+        val pictures =
+            aValidDocument(aValidMarkupWithPictures) {
+                img {
+                    findAll {
+                        eachImage
+                    }
                 }
             }
-        }
 
         expectThat(pictures).isEqualTo(
             mapOf(
@@ -656,13 +668,14 @@ class DocElementKtTest {
     @Test
     @Disabled("TODO: make eachImage also filter child notes")
     fun `can conveniently get all images as map of alt-text and src from list of DocElement and its children`() {
-        val pictures = aValidDocument(aValidMarkupWithPictures) {
-            div {
-                findAll {
-                    eachImage
+        val pictures =
+            aValidDocument(aValidMarkupWithPictures) {
+                div {
+                    findAll {
+                        eachImage
+                    }
                 }
             }
-        }
 
         expectThat(pictures).isEqualTo(
             mapOf(
@@ -676,22 +689,24 @@ class DocElementKtTest {
 
     @Test
     fun `can conveniently get all images as map of alt-text and src from DocElement`() {
-        val pictures = aValidDocument(aValidMarkupWithPictures) {
-            img {
-                findFirst {
-                    eachImage
+        val pictures =
+            aValidDocument(aValidMarkupWithPictures) {
+                img {
+                    findFirst {
+                        eachImage
+                    }
                 }
             }
-        }
 
         expectThat(pictures).isEqualTo(mapOf("foobar" to "http://foo.bar"))
     }
 
     @Test
     fun `can conveniently get all pictures as map of alt-text and src from Doc`() {
-        val pictures = aValidDocument(aValidMarkupWithPictures) {
-            eachImage
-        }
+        val pictures =
+            aValidDocument(aValidMarkupWithPictures) {
+                eachImage
+            }
 
         expectThat(pictures).isEqualTo(
             mapOf(

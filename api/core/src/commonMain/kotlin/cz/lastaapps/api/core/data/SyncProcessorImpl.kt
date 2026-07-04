@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -93,7 +93,7 @@ internal class SyncProcessorImpl<Params> : SyncProcessor<Params> {
                 // collect noncritical errors
                 .map(Pair<IorNel<DomainError, *>, *>::first)
                 .foldRight(persistentListOf<DomainError>()) { item, acu ->
-                    acu.addAll(
+                    acu.addingAll(
                         // defeated male leaves
                         when (item) {
                             is Both -> item.leftValue

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -150,7 +150,7 @@ internal class TodayDishSubsystemRepoImpl(
                             // used to filter placeholder dishes with names like ".  "
                             // and dishes with null names
                             if (data.first.name?.any { it.isLetter() } == true) {
-                                list.add(data)
+                                list.adding(data)
                             } else {
                                 list
                             }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -65,7 +65,7 @@ internal class RatingRepositoryImpl(
         menza: MenzaType,
         data: Entry,
     ) {
-        state.update { it.put(menza, data) }
+        state.update { it.putting(menza, data) }
     }
 
     override suspend fun rate(rating: UserRating): Outcome<Unit> =

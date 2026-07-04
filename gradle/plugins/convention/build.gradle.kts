@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -57,7 +57,6 @@ kotlin {
         freeCompilerArgs.addAll(
             listOf(
                 "-opt-in=kotlin.ExperimentalStdlibApi",
-                "-Xwhen-guards",
                 "-Xcontext-parameters",
                 "-Xcontext-sensitive-resolution",
                 "-Xannotation-target-all",

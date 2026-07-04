@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -54,7 +54,7 @@ internal class MenzaMasterRepoImpl(
             .map { repo ->
                 repo.getData(params).map { it.toPersistentList() }
             }.foldBinary(persistentListOf<Menza>()) { acu, item ->
-                acu.addAll(item)
+                acu.addingAll(item)
             }.map { it.toImmutableList() }
 
     override suspend fun sync(

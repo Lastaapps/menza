@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -47,7 +47,7 @@ internal class RateDishViewModel(
     fun onStar(
         category: RatingCategory,
         stars: Int,
-    ) = updateState { copy(rating = rating.put(category, stars)) }
+    ) = updateState { copy(rating = rating.putting(category, stars)) }
 
     fun submit() =
         launchVM {

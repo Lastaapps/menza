@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -90,7 +90,7 @@ internal class OrderRepoImpl(
             .map {
                 source.getMenzaOrderFlow(toKey(it))
             }.fold(flow { emit(persistentListOf<MenzaOrder>()) }) { acu, item ->
-                combine(acu, item) { a, i -> a.add(i) }
+                combine(acu, item) { a, i -> a.adding(i) }
             }.mapLatest { data ->
                 data.zip(list) { o, m -> m to o }
             }.map { data ->
