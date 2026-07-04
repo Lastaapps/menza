@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -208,6 +208,7 @@ fun OverlayParentClip(shape: Shape = RectangleShape): OverlayClip =
 
             // fun Rect.strBounds() = "$size, $topLeft - $bottomRight"
             // return shapedPath
+            // val state = sharedContentState
             // println("--- Me - ${state.key}, Parent - ${state.parentSharedContentState?.key} ---")
             // println("Parent path: ${parentPath?.getBounds()?.let { it.top to it.bottom }}")
             // println("Parent path: ${parentPath?.iterator()?.asSequence()?.toList()}")

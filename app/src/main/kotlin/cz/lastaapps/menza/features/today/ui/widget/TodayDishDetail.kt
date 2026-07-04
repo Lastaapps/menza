@@ -76,7 +76,6 @@ import cz.lastaapps.menza.ui.theme.MenzaColors
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.AnimatedAppearance
 import cz.lastaapps.menza.ui.util.AnimationScopes
-import cz.lastaapps.menza.ui.util.OverlayParentClip
 import cz.lastaapps.menza.ui.util.PreviewWrapper
 import cz.lastaapps.menza.ui.util.sharedBounds
 import cz.lastaapps.menza.ui.util.sharedContainer
@@ -97,11 +96,16 @@ fun TodayDishDetail(
         verticalArrangement = Arrangement.spacedBy(Padding.Medium),
         modifier =
             modifier
-                .clip(MaterialTheme.shapes.large)
                 .sharedContainer(
                     scopes,
+                    "today_dish_list",
+                    clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                ).sharedContainer(
+                    scopes,
                     dishContainerKey(dish.id),
-                    clipInOverlayDuringTransition = OverlayParentClip(MaterialTheme.shapes.large),
+                    clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                ).clip(
+                    MaterialTheme.shapes.large,
                 ).verticalScroll(rememberScrollState()),
     ) {
         DishImageInfo(

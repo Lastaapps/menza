@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -97,13 +97,13 @@ internal fun TodayDishList(
         Surface(
             shape = MaterialTheme.shapes.large,
             modifier =
-                Modifier
-                    // required so the individual items are properly clipped
-                    .sharedContainer(
-                        scopes,
-                        "today_dish_list",
-                        clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
-                    ),
+            Modifier,
+            // required so the individual items are properly clipped
+//                    .sharedContainer(
+//                        scopes,
+//                        "today_dish_list",
+//                        clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+//                    ),
         ) {
             DishContent(
                 data = data,
@@ -148,6 +148,14 @@ private fun DishContent(
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(Padding.MidSmall),
         state = scroll,
+        modifier =
+            modifier
+                // required so the individual items are properly clipped
+                .sharedContainer(
+                    scopes,
+                    "today_dish_list",
+                    clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                ),
     ) {
         item(key = "header") {
             header(
@@ -231,11 +239,11 @@ private fun DishItem(
         colors = appCardColors(MaterialTheme.colorScheme.primaryContainer),
         shape = MaterialTheme.shapes.large,
         modifier =
-            modifier.sharedContainer(
+            modifier.sharedBounds(
                 scopes,
                 dishContainerKey(dish.id),
                 resizeMode = ResizeMode.RemeasureToBounds,
-                clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
+                // clipInOverlayDuringTransitionShape = MaterialTheme.shapes.large,
             ),
     ) {
         Column(
