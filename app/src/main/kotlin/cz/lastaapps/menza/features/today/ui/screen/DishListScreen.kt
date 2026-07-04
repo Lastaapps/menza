@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -33,12 +33,15 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cz.lastaapps.api.core.domain.model.dish.Dish
+import cz.lastaapps.menza.R
 import cz.lastaapps.menza.features.main.ui.widgets.WrapMenzaNotSelected
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode
 import cz.lastaapps.menza.features.settings.domain.model.DishListMode.CAROUSEL
@@ -57,6 +60,7 @@ import cz.lastaapps.menza.features.today.ui.widget.TodayDishList
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.AnimationScopes
 import cz.lastaapps.menza.ui.util.HandleError
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun DishListScreen(
@@ -69,6 +73,9 @@ internal fun DishListScreen(
     scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
+    val scope = rememberCoroutineScope()
+    val dismissModeSelectionSnackbarText = stringResource(R.string.today_list_mode_dismiss_explain)
+
     DishListEffects(viewModel, hostState)
 
     val state by viewModel.flowState
@@ -90,7 +97,12 @@ internal fun DishListScreen(
         onOliverRow = viewModel::setOliverRow,
         onDish = onDish,
         onRating = onRating,
-        onDismissDishListModeChooser = viewModel::dismissListModeChosen,
+        onDismissDishListModeChooser = {
+            viewModel.dismissListModeChosen()
+            scope.launch {
+                hostState.showSnackbar(dismissModeSelectionSnackbarText)
+            }
+        },
         panels = panels,
         onOsturak = onOsturak,
         scrollStates = scrollStates,
@@ -124,6 +136,7 @@ private fun DishListContent(
     scopes: AnimationScopes,
     modifier: Modifier = Modifier,
 ) {
+    val scope = rememberCoroutineScope()
     Column(
         modifier = modifier,
     ) {
@@ -146,7 +159,11 @@ private fun DishListContent(
                 onViewMode = onViewMode,
                 onImageScale = onImageScale,
                 onOliverRow = onOliverRow,
-                onDismissDishListModeChooser = onDismissDishListModeChooser,
+                onDismissDishListModeChooser = {
+                    onDismissDishListModeChooser()
+                    scope.launch {
+                    }
+                },
                 scopes = scopes,
             )
         }

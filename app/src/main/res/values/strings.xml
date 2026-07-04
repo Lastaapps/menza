@@ -231,10 +231,10 @@
     <string name="today_list_web">Check website</string>
     <string name="today_list_image_load_failed">Failed to load the image</string>
     <string name="today_list_image_metered">The image not downloaded, metered network</string>
-    <string name="today_list_mode_title_chose">Choose your favorite mode</string>
-    <string name="today_list_mode_title_normal">List mode</string>
-    <string name="today_list_mode_button_dismiss">Hide</string>
-    <string name="today_list_mode_dismiss_explain">Move to the end of the list</string>
+    <string name="today_list_mode_title_chose">Choose your style</string>
+    <string name="today_list_mode_title_normal">Menu style</string>
+    <string name="today_list_mode_button_dismiss">I choose</string>
+    <string name="today_list_mode_dismiss_explain">Style changer has been moved to the bottom ⏬</string>
     <string name="today_list_mode_compact">Compact</string>
     <string name="today_list_mode_grid">Large</string>
     <string name="today_list_mode_horizontal">Rows</string>
