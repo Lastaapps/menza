@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -89,13 +89,15 @@ fun PullToRefreshWrapper(
                 state = state,
                 isRefreshing = isRefreshing,
                 onRefresh = onRefresh,
-            ).onKeyEvent {
+            )
+            .onKeyEvent {
                 if ((it.isCtrlPressed && it.key == Key.R) || it.key == Key.Refresh) {
                     onRefresh()
                     return@onKeyEvent true
                 }
                 false
-            }.clipToBounds(),
+            }
+            .clipToBounds(),
     ) {
         content()
 
@@ -148,7 +150,7 @@ private fun AIIndicator(
             label = "Refresh state",
         ) { refreshing ->
             val textModifier: Modifier = Modifier.textFading(state, refreshing)
-            val iconModifier: Modifier = Modifier.iconRotation(state)
+            val iconModifier: Modifier = Modifier // .iconRotation(state)
 
             Row(
                 modifier =
@@ -184,8 +186,8 @@ private fun Modifier.textFading(
     val infiniteTransition = rememberInfiniteTransition(label = "pulse")
     if (refreshing) {
         val alpha by infiniteTransition.animateFloat(
-            initialValue = 0f,
-            targetValue = 1f,
+            initialValue = 1f,
+            targetValue = 0f,
             animationSpec =
                 infiniteRepeatable(
                     animation = tween(800, easing = FastOutLinearInEasing),
@@ -255,7 +257,8 @@ private fun IndicatorBox(
                     ) {
                         this@drawWithContent.drawContent()
                     }
-                }.layout { measurable, constraints ->
+                }
+                .layout { measurable, constraints ->
                     val placeable = measurable.measure(constraints)
                     layout(placeable.width, placeable.height) {
                         placeable.placeWithLayer(
@@ -265,14 +268,15 @@ private fun IndicatorBox(
                                 val showElevation = state.distanceFraction > 0f || isRefreshing
                                 translationY =
                                     state.distanceFraction * maxDistance.roundToPx() -
-                                    size.height
+                                        size.height
                                 shadowElevation = if (showElevation) elevation.toPx() else 0f
                                 this.shape = shape
                                 clip = true
                             },
                         )
                     }
-                }.background(color = containerColor, shape = shape),
+                }
+                .background(color = containerColor, shape = shape),
         contentAlignment = Alignment.Center,
         content = content,
     )
