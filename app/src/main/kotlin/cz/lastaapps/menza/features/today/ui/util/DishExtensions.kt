@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -75,14 +75,18 @@ fun WeekDish.getPrice(
 fun Float.applyExchangeRate(currency: Currency) =
     when (currency) {
         Currency.NONE -> null
+
         Currency.CZK -> this
+
         // based on Strahov Bar 10 - check for price update once a week at least
         // last updated 29th September
         Currency.BEER -> this / 49f
+
         // TODO update me every year
         // based on Czech National Bank: https://www.kurzy.cz/kurzy-men/jednotny-kurz/
         // data from 2025
         Currency.EUR -> this / 24.660f
+
         Currency.USD -> this / 21.840f
     }
 

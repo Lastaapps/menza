@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -158,7 +158,10 @@ internal class DishListViewModel(
     ) {
         withLoading({ copy(isLoading = it) }) {
             when (val res = syncTodayDishListUC(menza, isForced = isForced).mapSync()) {
-                is Left -> updateState { copy(error = res.value) }
+                is Left -> {
+                    updateState { copy(error = res.value) }
+                }
+
                 is Right -> {}
             }
         }

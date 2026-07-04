@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -55,17 +55,29 @@ fun AppTheme(
 
     val colorScheme =
         when (theme) {
-            System ->
+            System -> {
                 if (isLightMode) {
                     dynamicLightColorScheme(LocalContext.current)
                 } else {
                     dynamicDarkColorScheme(LocalContext.current)
                 }
+            }
 
-            Agata -> AgataSchemeFamily.getSchema(isLightMode)
-            CTU -> CTUSchemeFamily.getSchema(isLightMode)
-            Uwu -> UwUSchemeFamily.getSchema(isLightMode)
-            Kitty -> KittySchemeFamily.getSchema(isLightMode)
+            Agata -> {
+                AgataSchemeFamily.getSchema(isLightMode)
+            }
+
+            CTU -> {
+                CTUSchemeFamily.getSchema(isLightMode)
+            }
+
+            Uwu -> {
+                UwUSchemeFamily.getSchema(isLightMode)
+            }
+
+            Kitty -> {
+                KittySchemeFamily.getSchema(isLightMode)
+            }
         }
             // This somehow magically fixes switching between system and app theme.
             // If this is not present, the whole underlying UI is recomposed in a destructive way

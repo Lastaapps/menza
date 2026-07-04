@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -38,23 +38,25 @@ fun TwoPaneLayout(
     widthClass: WindowWidthSizeClass = LocalWindowWidth.current,
 ) {
     when (widthClass) {
-        WindowWidthSizeClass.Compact ->
+        WindowWidthSizeClass.Compact -> {
             TwoPaneLayoutCompact(
                 showDetail = showDetail,
                 listNode = listNode,
                 detailNode = detailNode,
                 modifier = modifier,
             )
+        }
 
-        WindowWidthSizeClass.Medium ->
+        WindowWidthSizeClass.Medium -> {
             TwoPaneLayoutMedium(
                 showDetail = showDetail,
                 listNode = listNode,
                 detailNode = detailNode,
                 modifier = modifier,
             )
+        }
 
-        WindowWidthSizeClass.Expanded ->
+        WindowWidthSizeClass.Expanded -> {
             TwoPaneLayoutExpanded(
                 showDetail = showDetail,
                 listNode = listNode,
@@ -62,6 +64,7 @@ fun TwoPaneLayout(
                 emptyNode = emptyNode,
                 modifier = modifier,
             )
+        }
     }
 }
 

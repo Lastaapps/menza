@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -58,7 +58,7 @@ fun MenzaScaffold(
     content: @Composable () -> Unit,
 ) {
     when (windowWidth) {
-        WindowWidthSizeClass.Compact ->
+        WindowWidthSizeClass.Compact -> {
             AppLayoutCompact(
                 drawerState = drawerState,
                 alternativeNavigation = alternativeNavigation,
@@ -70,8 +70,9 @@ fun MenzaScaffold(
                 isFlip = isFlip,
                 modifier = modifier,
             )
+        }
 
-        WindowWidthSizeClass.Medium ->
+        WindowWidthSizeClass.Medium -> {
             AppLayoutMedium(
                 drawerState = drawerState,
                 alternativeNavigation = alternativeNavigation,
@@ -82,8 +83,9 @@ fun MenzaScaffold(
                 content = content,
                 modifier = modifier,
             )
+        }
 
-        WindowWidthSizeClass.Expanded ->
+        WindowWidthSizeClass.Expanded -> {
             AppLayoutExpanded(
                 drawerState = drawerState,
                 alternativeNavigation = alternativeNavigation,
@@ -95,6 +97,7 @@ fun MenzaScaffold(
                 modifier = modifier,
                 foldingFeature = foldingFeature,
             )
+        }
     }
 }
 
@@ -200,8 +203,7 @@ private fun AppLayoutMedium(
                     .padding(
                         top = insets.calculateTopPadding(),
                         bottom = insets.calculateBottomPadding(),
-                    )
-                    .fillMaxSize(),
+                    ).fillMaxSize(),
             rail = rail,
         ) {
             MenzaDismissibleDrawer(
@@ -300,7 +302,8 @@ private fun AppLayoutExpandedNoFold(
                     .padding(
                         top = insets.calculateTopPadding(),
                         bottom = insets.calculateBottomPadding(),
-                    ).fillMaxSize(),
+                    )
+                    .fillMaxSize(),
             rail = rail,
         ) {
             MenzaDismissibleDrawer(

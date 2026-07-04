@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -75,14 +75,18 @@ internal class DefaultRootComponent(
             Config.serializer(),
         ) { config, componentContext ->
             when (config) {
-                AppContentConfig ->
+                AppContentConfig -> {
                     AppContent(
                         DefaultMainComponent(
                             componentContext,
                             navigation::dismiss,
                         ),
                     )
-                AppSetupConfig -> AppSetup(DefaultStartingComponent(componentContext))
+                }
+
+                AppSetupConfig -> {
+                    AppSetup(DefaultStartingComponent(componentContext))
+                }
             }
         }
 

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -152,17 +152,29 @@ fun DishPriceText(
         }
     val text =
         when (currency) {
-            Currency.NONE -> "".let(::AnnotatedString)
-            Currency.CZK -> "$resolvedPrice Kč".let(::AnnotatedString)
-            Currency.BEER ->
+            Currency.NONE -> {
+                "".let(::AnnotatedString)
+            }
+
+            Currency.CZK -> {
+                "$resolvedPrice Kč".let(::AnnotatedString)
+            }
+
+            Currency.BEER -> {
                 buildAnnotatedString {
                     append(resolvedPrice)
                     append(' ')
                     appendInlineContent("beer")
                 }
+            }
 
-            Currency.EUR -> "€$resolvedPrice".let(::AnnotatedString)
-            Currency.USD -> "$$resolvedPrice".let(::AnnotatedString)
+            Currency.EUR -> {
+                "€$resolvedPrice".let(::AnnotatedString)
+            }
+
+            Currency.USD -> {
+                "$$resolvedPrice".let(::AnnotatedString)
+            }
         }
     Text(
         text = text,

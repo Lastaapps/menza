@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -419,7 +419,7 @@ private fun ActionButtons(
                     TooltipDefaults.rememberTooltipPositionProvider(
                         TooltipAnchorPosition.Above,
                     ),
-                    tooltip = {
+                tooltip = {
                     PlainTooltip {
                         Text(text = stringResource(R.string.wallet_login_setup))
                     }

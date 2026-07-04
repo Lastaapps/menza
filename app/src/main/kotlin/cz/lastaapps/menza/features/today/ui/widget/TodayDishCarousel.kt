@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -390,8 +390,7 @@ private fun DishItem(
                                             )
                                     }
                                 },
-                        )
-                        .sharedElement(scopes, key = dishImageKey(dish.id))
+                        ).sharedElement(scopes, key = dishImageKey(dish.id))
                 },
     ) {
         DishImageOrSupplement(

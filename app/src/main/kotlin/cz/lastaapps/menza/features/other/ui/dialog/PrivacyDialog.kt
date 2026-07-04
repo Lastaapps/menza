@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -58,7 +58,7 @@ internal fun PrivacyDialogDest(
     val onNotNeededLambda by rememberUpdatedState(onNotNeeded)
 
     when (state?.or(!isRequired)) {
-        true ->
+        true -> {
             PrivacyDialog(
                 onDismissRequest = {
                     if (!isRequired) {
@@ -68,9 +68,11 @@ internal fun PrivacyDialogDest(
                 showAccept = isRequired,
                 onAccept = viewModel::onApprove,
             )
+        }
 
-        false ->
+        false -> {
             LaunchedEffect(Unit) { onNotNeededLambda() }
+        }
 
         null -> {}
     }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -131,7 +131,10 @@ internal class InitMenzaDataSourceImpl(
     ) {
         settings.putString(prefix + MENZA_NAME_KEY, type.toStoreKey().name)
         when (type) {
-            is Subsystem -> settings.putInt(prefix + MENZA_ID_EXTRA_KEY, type.subsystemId)
+            is Subsystem -> {
+                settings.putInt(prefix + MENZA_ID_EXTRA_KEY, type.subsystemId)
+            }
+
             else -> {}
         }
     }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -75,7 +75,7 @@ internal class DefaultDishDetailComponent(
             initialConfiguration = { null },
         ) { configuration, componentContext ->
             when (configuration) {
-                is Rate ->
+                is Rate -> {
                     Child.Rate(
                         DefaultRateDishComponent(
                             componentContext,
@@ -83,6 +83,7 @@ internal class DefaultDishDetailComponent(
                             navigation::dismiss,
                         ),
                     )
+                }
             }
         }
 
@@ -115,7 +116,10 @@ internal fun DishDetailContent(
     // Dialogs
     val slot by component.dialogContent.subscribeAsState()
     when (val instance = slot.child?.instance) {
-        is Child.Rate -> RateDishContent(instance.component)
+        is Child.Rate -> {
+            RateDishContent(instance.component)
+        }
+
         null -> {}
     }
 }

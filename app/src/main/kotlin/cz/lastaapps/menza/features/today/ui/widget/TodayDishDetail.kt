@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -341,18 +341,21 @@ private fun AllergenList(
         )
 
         when {
-            allergens == null ->
+            allergens == null -> {
                 Text(stringResource(R.string.today_info_allergens_unknown))
+            }
 
-            allergens.isEmpty() ->
+            allergens.isEmpty() -> {
                 Text(stringResource(R.string.today_info_allergens_none))
+            }
 
-            else ->
+            else -> {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     allergens.forEach {
                         AllergenRow(id = it)
                     }
                 }
+            }
         }
     }
 }

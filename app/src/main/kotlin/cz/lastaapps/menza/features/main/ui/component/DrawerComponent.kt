@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -82,14 +82,17 @@ internal class DefaultDrawerComponent(
             handleBackButton = true,
         ) { configuration, componentContext ->
             when (configuration) {
-                Config.MenzaList ->
+                Config.MenzaList -> {
                     Child.MenzaSelection(
                         DefaultMenzaSelectionComponent(
                             componentContext,
                         ),
                     )
+                }
 
-                Config.Edit -> Child.Edit(DefaultReorderMenzaComponent(componentContext))
+                Config.Edit -> {
+                    Child.Edit(DefaultReorderMenzaComponent(componentContext))
+                }
             }
         }
 
@@ -136,19 +139,21 @@ internal fun DrawerContent(
     ) { item ->
         Surface {
             when (val instance = item.instance) {
-                is Child.MenzaSelection ->
+                is Child.MenzaSelection -> {
                     MenzaSelectionContent(
                         component = instance.component,
                         onEdit = component::edit,
                         drawerState = drawerState,
                         snackbarHostState = snackbarHostState,
                     )
+                }
 
-                is Child.Edit ->
+                is Child.Edit -> {
                     ReorderMenzaContent(
                         component = instance.component,
                         onComplete = component::pop,
                     )
+                }
             }
         }
     }
