@@ -19,6 +19,7 @@
 
 package cz.lastaapps.menza.ui.util
 
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
@@ -70,6 +71,7 @@ fun HandleError(
                     hostState.showSnackbar(
                         message = error.text(context),
                         actionLabel = context.getString(cz.lastaapps.menza.R.string.error_button_report),
+                        duration = SnackbarDuration.Long,
                     )
                 when (result) {
                     SnackbarResult.Dismissed -> {}
@@ -79,7 +81,10 @@ fun HandleError(
                     }
                 }
             } else {
-                hostState.showSnackbar(message = error.text(context))
+                hostState.showSnackbar(
+                    message = error.text(context),
+                    duration = SnackbarDuration.Short,
+                )
             }
             onDismissLambda()
         }

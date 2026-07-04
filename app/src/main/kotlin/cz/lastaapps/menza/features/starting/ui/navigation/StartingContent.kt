@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,6 +45,7 @@ import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Chil
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.DownloadData
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.OrderMenzaList
 import cz.lastaapps.menza.features.starting.ui.navigation.StartingComponent.Child.Policy
+import cz.lastaapps.menza.ui.util.MenzaSnackbarHost
 
 @Composable
 internal fun StartingContent(
@@ -57,7 +57,7 @@ internal fun StartingContent(
 
     Scaffold(
         modifier = modifier,
-        snackbarHost = { SnackbarHost(hostState = hostState) },
+        snackbarHost = { MenzaSnackbarHost(hostState = hostState) },
     ) { padding ->
         val pager by component.content.subscribeAsState()
 

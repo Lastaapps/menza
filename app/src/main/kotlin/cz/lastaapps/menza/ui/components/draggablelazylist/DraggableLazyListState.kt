@@ -159,7 +159,7 @@ class DraggableLazyListState(
     }
 
     fun checkForOverScroll(): Float =
-        initiallyDraggedElement?.let { it ->
+        initiallyDraggedElement?.let {
             val startOffset = it.offset + draggedDistance
             val endOffset = it.offsetEnd + draggedDistance
 
