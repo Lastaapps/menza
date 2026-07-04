@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -142,10 +142,13 @@ internal fun SettingsScreen(
             onClick = onChooseDishLanguage,
         )
 
-        // Currency
-        CurrencySelector(
-            currentCurrency = appSettings.currency,
-            onCurrency = onCurrency,
+        // Behaviour at startup
+        InitialBehaviourSelector(
+            initialMenzaBehaviour = appSettings.initialMenzaMode,
+            onInitialMenzaBehaviour = onInitialMenzaBehaviour,
+            menzaList = menzaList,
+            selectedMenza = preferredMenza,
+            onSelectedMenza = onSelectedMenza,
         )
 
         // Balance warning threshold
@@ -153,6 +156,12 @@ internal fun SettingsScreen(
             title = stringResource(id = R.string.settings_balance_threshold_title),
             threshold = appSettings.balanceWarningThreshold,
             onThreshold = onBalanceThreshold,
+        )
+
+        // Currency
+        CurrencySelector(
+            currentCurrency = appSettings.currency,
+            onCurrency = onCurrency,
         )
 
         // AI Mode
@@ -177,15 +186,6 @@ internal fun SettingsScreen(
             subtitle = stringResource(id = R.string.settings_alternative_navigation_subtitle),
             isChecked = appSettings.alternativeNavigation,
             onCheck = onAlternativeNavigation,
-        )
-
-        // Behaviour at startup
-        InitialBehaviourSelector(
-            initialMenzaBehaviour = appSettings.initialMenzaMode,
-            onInitialMenzaBehaviour = onInitialMenzaBehaviour,
-            menzaList = menzaList,
-            selectedMenza = preferredMenza,
-            onSelectedMenza = onSelectedMenza,
         )
 
         // About

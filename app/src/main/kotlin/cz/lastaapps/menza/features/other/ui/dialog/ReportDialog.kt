@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -141,6 +141,18 @@ private fun ReportDialog(
                     }
                 }
                 Button(
+                    onClick = { onMode(Email) },
+                    Modifier.fillMaxWidth(),
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(Icons.Default.Email, null, Modifier.size(24.dp))
+                        Text(stringResource(cz.lastaapps.menza.R.string.report_email))
+                    }
+                }
+                Button(
                     onClick = { onMode(Matrix) },
                     Modifier.fillMaxWidth(),
                 ) {
@@ -205,18 +217,6 @@ private fun ReportDialog(
 //                        Text(stringResource(cz.lastaapps.menza.R.string.report_facebook))
 //                    }
 //                }
-                Button(
-                    onClick = { onMode(Email) },
-                    Modifier.fillMaxWidth(),
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(Icons.Default.Email, null, Modifier.size(24.dp))
-                        Text(stringResource(cz.lastaapps.menza.R.string.report_email))
-                    }
-                }
                 if (reportsCrash) {
                     Button(
                         onClick = { onMode(Clipboard) },
