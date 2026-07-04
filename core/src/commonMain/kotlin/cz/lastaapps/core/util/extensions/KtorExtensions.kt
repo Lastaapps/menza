@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -37,6 +37,9 @@ suspend fun <T> catchingNetwork(block: suspend () -> T): Outcome<T> =
             "SocketTimeoutException",
             "OutOfSpaceException", // somehow thrown inside the KTor HttpRequestTimeoutException constructor
             -> NetworkError.Timeout
+
+            "NoTransformationFoundException" if exception.message?.contains("Response status `404 `") == true
+            -> NetworkError.ServerDown(exception)
 
             "UnknownHostException",
             "NoRouteToHostException",

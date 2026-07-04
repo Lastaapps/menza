@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -20,6 +20,7 @@
 <resources>
     <string name="error_unknown">Nečekaná chyba: %s 🥸</string>
     <string name="error_network_unreachable">Nelze se připojit 🗡️</string>
+    <string name="error_network_server_down">Server padl 😔</string>
     <string name="error_network_no_internet">Internet nedorazil 🙎‍♀️</string>
     <string name="error_network_timeout">Limit spojení vypršel 🌧️</string>
     <string name="error_network_serialization">Menza API poslala neplatná data 💀</string>

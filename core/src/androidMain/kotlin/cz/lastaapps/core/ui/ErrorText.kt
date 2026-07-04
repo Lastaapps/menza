@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -53,6 +53,7 @@ import cz.lastaapps.core.domain.error.DomainError.Unknown
 import cz.lastaapps.core.domain.error.NetworkError
 import cz.lastaapps.core.domain.error.NetworkError.NoInternet
 import cz.lastaapps.core.domain.error.NetworkError.SerializationError
+import cz.lastaapps.core.domain.error.NetworkError.ServerDown
 import cz.lastaapps.core.domain.error.NetworkError.Timeout
 import cz.lastaapps.core.domain.error.NetworkError.Unreachable
 import cz.lastaapps.core.domain.error.ParsingError
@@ -108,6 +109,7 @@ val NetworkError.text: AppText
             Unreachable -> E(R.string.error_network_unreachable)
             NoInternet -> E(R.string.error_network_no_internet)
             Timeout -> E(R.string.error_network_timeout)
+            is ServerDown -> E(R.string.error_network_server_down)
             is SerializationError -> E(R.string.error_network_serialization)
         }
 

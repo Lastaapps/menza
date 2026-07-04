@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -24,6 +24,7 @@ import cz.lastaapps.core.domain.error.CommonError.NotLoggedIn
 import cz.lastaapps.core.domain.error.CommonError.WorkTimeout
 import cz.lastaapps.core.domain.error.NetworkError.NoInternet
 import cz.lastaapps.core.domain.error.NetworkError.SerializationError
+import cz.lastaapps.core.domain.error.NetworkError.ServerDown
 import cz.lastaapps.core.domain.error.NetworkError.Timeout
 import cz.lastaapps.core.domain.error.NetworkError.Unreachable
 
@@ -48,6 +49,7 @@ val NetworkError.shouldBeReported: Boolean
             Timeout,
             -> false
 
+            is ServerDown,
             is SerializationError,
             -> true
         }
