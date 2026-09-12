@@ -20,6 +20,7 @@
 package cz.lastaapps.menza.api.agata.api
 
 import arrow.core.raise.Raise
+import arrow.core.raise.context.bind
 import arrow.core.raise.context.raise
 import cz.lastaapps.core.domain.Outcome
 import cz.lastaapps.core.domain.error.ApiError.WalletError.TotallyBroken
@@ -47,48 +48,68 @@ internal class StravnikBlazorClient(
 
     suspend fun fetchViaSignalR(descriptor: String): Outcome<Float> =
         outcome {
-            // 4. Negotiate — get a LongPolling connection token
-            val negotiateJson = catchingNetwork { client.post(negotiateUrl).bodyAsText() }.bind()
-            val connectionToken = getConnectionToken(negotiateJson)
-
-            val blazorUrl = "$domain/_blazor?id=$connectionToken"
-
-            // 5. Handshake: plain JSON terminated by ASCII record-separator 0x1e
-            catchingNetwork {
-                client.post(blazorUrl) {
-                    headers { append("Content-Type", "text/plain;charset=UTF-8") }
-                    setBody("{\"protocol\":\"blazorpack\",\"version\":1}\u001e")
-                }
-            }.bind()
-
-            // 6. StartCircuit: MsgPack invocation, varint-length-prefixed
-            val componentsJson = """[{"type":"server","sequence":0,"descriptor":"$descriptor"}]"""
-            val startCircuitFrame =
-                frame(
-                    blazorInvocation(
-                        invocationId = "1",
-                        target = "StartCircuit",
-                        args = listOf("$domain/", transactionsUrl, componentsJson, ""),
-                    ),
-                )
-            catchingNetwork {
-                client.post(blazorUrl) {
-                    headers { append("Content-Type", "application/octet-stream") }
-                    setBody(startCircuitFrame)
-                }
-            }.bind()
-
-            // 7. Long-poll loop — balance appears in an early render-batch frame as embedded HTML text
-            repeat(8) {
-                val bytes = catchingNetwork { client.get(blazorUrl).bodyAsBytes() }.bind()
-                if (bytes.isNotEmpty()) {
-                    // The binary render-batch frames contain readable UTF-8 HTML snippets
-                    val text = bytes.decodeToString(throwOnInvalidSequence = false)
-                    text.extractBalance()?.let { return@outcome it }
-                }
-            }
-            raise(Unavailable)
+            val blazorUrl = negotiate()
+            handshake(blazorUrl)
+            startCircuit(blazorUrl, descriptor)
+            pollForBalance(blazorUrl)
         }
+
+    context(_: Raise<DomainError>)
+    private suspend fun negotiate(): String {
+        // 4. Negotiate — get a LongPolling connection token
+        val negotiateJson = catchingNetwork { client.post(negotiateUrl).bodyAsText() }.bind()
+        val connectionToken = getConnectionToken(negotiateJson)
+
+        return "$domain/_blazor?id=$connectionToken"
+    }
+
+    context(_: Raise<DomainError>)
+    private suspend fun handshake(blazorUrl: String) {
+        // 5. Handshake: plain JSON terminated by ASCII record-separator 0x1e
+        catchingNetwork {
+            client.post(blazorUrl) {
+                headers { append("Content-Type", "text/plain;charset=UTF-8") }
+                setBody("{\"protocol\":\"blazorpack\",\"version\":1}\u001e")
+            }
+        }.bind()
+    }
+
+    context(_: Raise<DomainError>)
+    private suspend fun startCircuit(
+        blazorUrl: String,
+        descriptor: String,
+    ) {
+        // 6. StartCircuit: MsgPack invocation, varint-length-prefixed
+        val componentsJson = """[{"type":"server","sequence":0,"descriptor":"$descriptor"}]"""
+        val startCircuitFrame =
+            frame(
+                blazorInvocation(
+                    invocationId = "1",
+                    target = "StartCircuit",
+                    args = listOf("$domain/", transactionsUrl, componentsJson, ""),
+                ),
+            )
+        catchingNetwork {
+            client.post(blazorUrl) {
+                headers { append("Content-Type", "application/octet-stream") }
+                setBody(startCircuitFrame)
+            }
+        }.bind()
+    }
+
+    context(_: Raise<DomainError>)
+    private suspend fun pollForBalance(blazorUrl: String): Float {
+        // 7. Long-poll loop — balance appears in an early render-batch frame as embedded HTML text
+        repeat(8) {
+            val bytes = catchingNetwork { client.get(blazorUrl).bodyAsBytes() }.bind()
+            if (bytes.isNotEmpty()) {
+                // The binary render-batch frames contain readable UTF-8 HTML snippets
+                val text = bytes.decodeToString(throwOnInvalidSequence = false)
+                text.extractBalance()?.let { return it }
+            }
+        }
+        raise(Unavailable)
+    }
 
     // Helpers
 

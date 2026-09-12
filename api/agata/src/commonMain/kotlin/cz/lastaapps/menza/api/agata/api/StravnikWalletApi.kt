@@ -59,7 +59,7 @@ internal class StravnikWalletApiImpl(
 
             // disable logging, so user credentials/secrets are not accidentally logged
             install(Logging) {
-                level = LogLevel.NONE
+                level = LogLevel.INFO
             }
             install(HttpCookies)
 
@@ -80,15 +80,22 @@ internal class StravnikWalletApiImpl(
     ): Outcome<Float> =
         mutex.withLock {
             outcome {
-                log.i { "Starting request for ***${username.takeLast(3)}" }
+                log.i {
+                    val lastIndex = username.lastIndex
+                    val obfuscated =
+                        username
+                            .mapIndexed { index, ch -> if (index == 0 || index == lastIndex) ch else '*' }
+                            .joinToString(separator = "")
+                    "Starting request for $obfuscated"
+                }
+
                 if (lastUserName != null && lastUserName != username) {
                     logout().bind()
                     lastUserName = null
                 }
 
-                // first request will fail, let's login first
+                // Login cookies may be fresh from previous fetches
                 if (lastUserName == username) {
-                    // short circuit so we don't call login every time
                     val pageHtml = getData().bind().bodyAsText()
 
                     pageHtml.extractBalance()?.let {
@@ -96,10 +103,10 @@ internal class StravnikWalletApiImpl(
                         return@outcome it
                     }
 
-                    pageHtml.extractDescriptor()?.let { descriptor ->
-                        log.i { "Attempting Blazor fetch (quick)" }
-                        return@outcome blazorClient.fetchViaSignalR(descriptor).bind()
-                    }
+                    // pageHtml.extractDescriptor()?.let { descriptor ->
+                    //     log.i { "Attempting Blazor fetch (quick)" }
+                    //     return@outcome blazorClient.fetchViaSignalR(descriptor).bind()
+                    // }
                 }
 
                 // 1. GET login page — extract CSRF token
@@ -167,10 +174,7 @@ private val BALANCE_REGEX_HTML = Regex("""\[P&#x159;edem\s*([\d\s,.\xA0]+)""")
 private val BALANCE_REGEX_UTF8 = Regex("""\[Před?em\s*([\d\s,.]+)""")
 private val CSRF_REGEX = Regex("""name="__RequestVerificationToken"\s+[^>]*value="([^"]+)"""")
 private val DESCRIPTOR_REGEX =
-    Regex(
-        """<!--Blazor:(\{[^}]*"descriptor"[^}]*(?:\}[^}]*)*\})-->""",
-        RegexOption.DOT_MATCHES_ALL,
-    )
+    """<!--Blazor:(\{[^>]*"descriptor"[^>]*\})-->""".toRegex()
 
 internal fun String.extractBalance(): Float? {
     val raw =
@@ -192,7 +196,7 @@ internal fun String.extractDescriptor(): String? {
     val match = DESCRIPTOR_REGEX.find(this) ?: return null
     return runCatching {
         Json
-            .parseToJsonElement(match.groupValues[1])
+            .parseToJsonElement(match.groupValues.subList(0, 2)[1])
             .jsonObject["descriptor"]
             ?.jsonPrimitive
             ?.content
