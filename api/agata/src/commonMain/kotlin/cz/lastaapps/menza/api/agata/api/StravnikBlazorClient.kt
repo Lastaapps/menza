@@ -19,6 +19,8 @@
 
 package cz.lastaapps.menza.api.agata.api
 
+import arrow.core.Either.Left
+import arrow.core.Either.Right
 import arrow.core.raise.Raise
 import arrow.core.raise.context.bind
 import arrow.core.raise.context.raise
@@ -35,9 +37,11 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsBytes
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class StravnikBlazorClient(
     private val client: HttpClient,
@@ -51,13 +55,31 @@ internal class StravnikBlazorClient(
             val blazorUrl = negotiate()
             handshake(blazorUrl)
             startCircuit(blazorUrl, descriptor)
-            pollForBalance(blazorUrl)
+
+            repeat(10) {
+                catchingNetwork {
+                    client
+                        .get(blazorUrl)
+                        .bodyAsText()
+                        .replace("\u001E", "001E")
+                        .let(::println)
+                }.onLeft {
+                    println("Error: $it")
+                }
+                delay(200.milliseconds)
+            }
+            0.0f
+//            pollForBalance(blazorUrl)
         }
 
     context(_: Raise<DomainError>)
     private suspend fun negotiate(): String {
         // 4. Negotiate — get a LongPolling connection token
-        val negotiateJson = catchingNetwork { client.post(negotiateUrl).bodyAsText() }.bind()
+        val negotiateJson =
+            catchingNetwork {
+                client.post(negotiateUrl).bodyAsText()
+            }.bind()
+        negotiateJson.let(::println)
         val connectionToken = getConnectionToken(negotiateJson)
 
         return "$domain/_blazor?id=$connectionToken"
@@ -67,10 +89,13 @@ internal class StravnikBlazorClient(
     private suspend fun handshake(blazorUrl: String) {
         // 5. Handshake: plain JSON terminated by ASCII record-separator 0x1e
         catchingNetwork {
-            client.post(blazorUrl) {
-                headers { append("Content-Type", "text/plain;charset=UTF-8") }
-                setBody("{\"protocol\":\"blazorpack\",\"version\":1}\u001e")
-            }
+            client
+                .post(blazorUrl) {
+//                        headers { //                            this.append("transport", "LongPolling") //                        }
+                    setBody("{\"protocol\":\"blazorpack\",\"version\":1}\u001E")
+                }.bodyAsText()
+                .replace("\u001E", "001E")
+                .let(::println)
         }.bind()
     }
 
@@ -95,13 +120,26 @@ internal class StravnikBlazorClient(
                 setBody(startCircuitFrame)
             }
         }.bind()
+            .bodyAsText()
+            .let(::println)
     }
 
     context(_: Raise<DomainError>)
     private suspend fun pollForBalance(blazorUrl: String): Float {
         // 7. Long-poll loop — balance appears in an early render-batch frame as embedded HTML text
         repeat(8) {
-            val bytes = catchingNetwork { client.get(blazorUrl).bodyAsBytes() }.bind()
+            val res = catchingNetwork { client.get(blazorUrl).bodyAsBytes() }
+            val bytes =
+                when (res) {
+                    is Left -> {
+                        delay(200L.milliseconds)
+                        return@repeat
+                    }
+
+                    is Right -> {
+                        res.value
+                    }
+                }
             if (bytes.isNotEmpty()) {
                 // The binary render-batch frames contain readable UTF-8 HTML snippets
                 val text = bytes.decodeToString(throwOnInvalidSequence = false)
