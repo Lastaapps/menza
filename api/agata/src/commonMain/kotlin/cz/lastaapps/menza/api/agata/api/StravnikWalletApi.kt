@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,14 +19,9 @@
 
 package cz.lastaapps.menza.api.agata.api
 
-import arrow.core.Either
-import arrow.core.Either.Left
-import arrow.core.Either.Right
-import arrow.core.flatten
-import arrow.core.left
-import arrow.core.right
 import cz.lastaapps.core.domain.Outcome
-import cz.lastaapps.core.domain.error.ApiError
+import cz.lastaapps.core.domain.error.ApiError.WalletError.InvalidCredentials
+import cz.lastaapps.core.domain.error.ApiError.WalletError.Unavailable
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.core.util.extensions.catchingNetwork
 import cz.lastaapps.core.util.extensions.localLogger
@@ -41,10 +36,11 @@ import io.ktor.client.request.post
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.parameters
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 interface StravnikWalletApi : WalletApi
 
@@ -70,6 +66,8 @@ internal class StravnikWalletApiImpl(
             BrowserUserAgent()
         }
 
+    private val blazorClient = StravnikBlazorClient(client)
+
     // needed to not mess up cookies
     private val mutex = Mutex()
 
@@ -89,77 +87,57 @@ internal class StravnikWalletApiImpl(
                 }
 
                 // first request will fail, let's login first
-                if (lastUserName != null) {
+                if (lastUserName == username) {
                     // short circuit so we don't call login every time
-                    val firstAttempt =
-                        getData()
-                            .map { it.bodyAsText().processBody() }
-                            .flatten()
+                    val pageHtml = getData().bind().bodyAsText()
 
-                    when (firstAttempt) {
-                        is Right -> {
-                            log.i { "Success, data fetched (quick)" }
-                            return@outcome firstAttempt.value
-                        }
+                    pageHtml.extractBalance()?.let {
+                        log.i { "Success, data fetched (quick)" }
+                        return@outcome it
+                    }
 
-                        is Left -> {} // login may be needed
+                    pageHtml.extractDescriptor()?.let { descriptor ->
+                        log.i { "Attempting Blazor fetch (quick)" }
+                        return@outcome blazorClient.fetchViaSignalR(descriptor).bind()
                     }
                 }
 
-                login(username, password).bind().let { response ->
+                // 1. GET login page — extract CSRF token
+                val loginPageHtml =
+                    catchingNetwork {
+                        client.get("$domain/Identity/Account/Login").bodyAsText()
+                    }.bind()
+                val csrf = loginPageHtml.extractCsrfToken()
+
+                // 2. POST login
+                login(username, password, csrf).bind().let { response ->
                     if (response.status != HttpStatusCode.Found) {
-                        raise(ApiError.WalletError.InvalidCredentials)
+                        raise(InvalidCredentials)
                     }
+                }
+                lastUserName = username
+
+                // 3. GET Transactions/NoSSO
+                val pageHtml = getData().bind().bodyAsText()
+                pageHtml.extractBalance()?.let {
+                    log.i { "Success, data fetched" }
+                    return@outcome it
                 }
 
-                // I have a suspicion that there is a race condition in the backend
-                // if the second request is to quick
-                // So I add delay and try it multiple times
-                // ----------------------------------------------------------------
-                // Now I checked and actually it is a case somehow
-                // After login server may return the correct page,
-                // but without the account balance.
-                // It is usually fine for the second request,
-                // but I have seen cases when it skip trough 5 cycles with not troubles.
-                // ----------------------------------------------------------------
-                // So I also reproduced the behaviour in browser.
-                // If the server is overloaded or something (most often when I reload the page quickly),
-                // the web page may contain no balance data.
-                // Therefore, the retries should be more spaced out than tens of milliseconds.
-                // If the balance data are missing, the "Vklad na konto" button is also missing.
-                val iterations = 12
-                repeat(iterations) { i ->
-                    getData()
-                        .bind()
-                        .bodyAsText()
-                        .processBody()
-                        .onRight {
-                            log.i { "Success, data fetched" }
-                            lastUserName = username
-                            return@outcome it
-                        }.onLeft {
-                            if (i == iterations - 1) {
-                                log.e { "Failed to fetch data: $it" }
-                                // raise(it)
-                                return@repeat
-                            }
-                        }
-                    delay(690.milliseconds)
-                }
-                getData()
-                    .bind()
-                    .bodyAsText()
-                    .takeIf { it.contains("Os.") && !it.contains("Vklad na konto") }
-                    ?.let {
-                        raise(ApiError.WalletError.Unavailable)
-                    }
-                raise(ApiError.WalletError.TotallyBroken("Failed after all the iterations"))
+                // 4. Slow path: drive the Blazor circuit
+                val descriptor =
+                    pageHtml.extractDescriptor()
+                        ?: raise(Unavailable)
+
+                log.i { "Attempting Blazor fetch" }
+                blazorClient.fetchViaSignalR(descriptor).bind()
             }
         }
 
     private suspend fun login(
         username: String,
         password: String,
+        csrf: String?,
     ) = catchingNetwork {
         log.i { "Logging in" }
         client.submitForm(
@@ -167,6 +145,7 @@ internal class StravnikWalletApiImpl(
             parameters {
                 append("Input.UserName", username)
                 append("Input.Password", password)
+                csrf?.let { append("__RequestVerificationToken", it) }
             },
         )
     }
@@ -182,38 +161,40 @@ internal class StravnikWalletApiImpl(
             log.i { "Logging out" }
             client.post("$domain/Identity/Account/LogOut")
         }
+}
 
-    private fun String.processBody(): Outcome<Float> =
-        """\[P&#x159;edem ((?:&#xA0;|\d|\s)+(?:[,.]\d+)?)"""
-            .toRegex()
-            .let { regex ->
-                Either
-                    .runCatching {
-                        regex
-                            .find(this@processBody, startIndex = 5800)
-                            ?.groups
-                            ?.get(1)
-                            ?.value
-                    }.fold(
-                        { it },
-                        {
-                            log.e(it) { "Finding regex failed" }
-                            log.e { "The error body was:\n$this" }
-                            return ApiError.WalletError
-                                .TotallyBroken(
-                                    "Rexex did not match:\n" +
-                                        this@processBody,
-                                ).left()
-                        },
-                    )
-            }?.replace(',', '.')
-            ?.replace(" ", "")
-            ?.replace("&#xA0;", "")
-            ?.toFloatOrNull()
-            ?.right()
-            ?: ApiError.WalletError
-                .TotallyBroken(
-                    "Failed to parse number:\n" +
-                        this@processBody,
-                ).left()
+private val BALANCE_REGEX_HTML = Regex("""\[P&#x159;edem\s*([\d\s,.\xA0]+)""")
+private val BALANCE_REGEX_UTF8 = Regex("""\[Před?em\s*([\d\s,.]+)""")
+private val CSRF_REGEX = Regex("""name="__RequestVerificationToken"\s+[^>]*value="([^"]+)"""")
+private val DESCRIPTOR_REGEX =
+    Regex(
+        """<!--Blazor:(\{[^}]*"descriptor"[^}]*(?:\}[^}]*)*\})-->""",
+        RegexOption.DOT_MATCHES_ALL,
+    )
+
+internal fun String.extractBalance(): Float? {
+    val raw =
+        BALANCE_REGEX_HTML.find(this)?.groupValues?.getOrNull(1)
+            ?: BALANCE_REGEX_UTF8.find(this)?.groupValues?.getOrNull(1)
+            ?: return null
+    return raw
+        .replace(',', '.')
+        .replace("\u00a0", "")
+        .replace(" ", "")
+        .replace("&#xA0;", "")
+        .trim()
+        .toFloatOrNull()
+}
+
+internal fun String.extractCsrfToken(): String? = CSRF_REGEX.find(this)?.groupValues?.getOrNull(1)
+
+internal fun String.extractDescriptor(): String? {
+    val match = DESCRIPTOR_REGEX.find(this) ?: return null
+    return runCatching {
+        Json
+            .parseToJsonElement(match.groupValues[1])
+            .jsonObject["descriptor"]
+            ?.jsonPrimitive
+            ?.content
+    }.getOrNull()
 }
