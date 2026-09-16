@@ -27,6 +27,7 @@ import cz.lastaapps.core.util.extensions.catchingNetwork
 import cz.lastaapps.core.util.extensions.localLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.BrowserUserAgent
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
@@ -57,9 +58,14 @@ internal class StravnikWalletApiImpl(
             // Because of many redirects
             expectSuccess = false
 
+            install(HttpTimeout) {
+                socketTimeoutMillis = 10_000
+                requestTimeoutMillis = 10_000
+            }
+
             // disable logging, so user credentials/secrets are not accidentally logged
             install(Logging) {
-                level = LogLevel.INFO
+                level = LogLevel.HEADERS
             }
             install(HttpCookies)
 
@@ -89,25 +95,27 @@ internal class StravnikWalletApiImpl(
                     "Starting request for $obfuscated"
                 }
 
-                if (lastUserName != null && lastUserName != username) {
-                    logout().bind()
-                    lastUserName = null
-                }
+                logout().bind()
 
-                // Login cookies may be fresh from previous fetches
-                if (lastUserName == username) {
-                    val pageHtml = getData().bind().bodyAsText()
+//                if (lastUserName != null && lastUserName != username) {
+//                    logout().bind()
+//                    lastUserName = null
+//                }
 
-                    pageHtml.extractBalance()?.let {
-                        log.i { "Success, data fetched (quick)" }
-                        return@outcome it
-                    }
-
-                    // pageHtml.extractDescriptor()?.let { descriptor ->
-                    //     log.i { "Attempting Blazor fetch (quick)" }
-                    //     return@outcome blazorClient.fetchViaSignalR(descriptor).bind()
-                    // }
-                }
+//                // Login cookies may be fresh from previous fetches
+//                if (lastUserName == username) {
+//                    val pageHtml = getData().bind().bodyAsText()
+//
+//                    pageHtml.extractBalance()?.let {
+//                        log.i { "Success, data fetched (quick)" }
+//                        return@outcome it
+//                    }
+//
+//                    // pageHtml.extractDescriptor()?.let { descriptor ->
+//                    //     log.i { "Attempting Blazor fetch (quick)" }
+//                    //     return@outcome blazorClient.fetchViaSignalR(descriptor).bind()
+//                    // }
+//                }
 
                 // 1. GET login page — extract CSRF token
                 val loginPageHtml =

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -53,7 +53,7 @@ internal class AgataWalletViewModel(
     private val log = localLogger()
 
     override suspend fun onFirstAppearance() {
-        launchVM { load(false) }
+        // launchVM { load(false) }
     }
 
     override suspend fun whileSubscribed(scope: CoroutineScope) {

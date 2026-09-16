@@ -55,21 +55,9 @@ internal class StravnikBlazorClient(
             val blazorUrl = negotiate()
             handshake(blazorUrl)
             startCircuit(blazorUrl, descriptor)
+            delay(200.milliseconds)
 
-            repeat(10) {
-                catchingNetwork {
-                    client
-                        .get(blazorUrl)
-                        .bodyAsText()
-                        .replace("\u001E", "001E")
-                        .let(::println)
-                }.onLeft {
-                    println("Error: $it")
-                }
-                delay(200.milliseconds)
-            }
-            0.0f
-//            pollForBalance(blazorUrl)
+            pollForBalance(blazorUrl)
         }
 
     context(_: Raise<DomainError>)
@@ -126,6 +114,7 @@ internal class StravnikBlazorClient(
 
     context(_: Raise<DomainError>)
     private suspend fun pollForBalance(blazorUrl: String): Float {
+        var handshakeChecked = false
         // 7. Long-poll loop — balance appears in an early render-batch frame as embedded HTML text
         repeat(8) {
             val res = catchingNetwork { client.get(blazorUrl).bodyAsBytes() }
@@ -141,12 +130,66 @@ internal class StravnikBlazorClient(
                     }
                 }
             if (bytes.isNotEmpty()) {
-                // The binary render-batch frames contain readable UTF-8 HTML snippets
-                val text = bytes.decodeToString(throwOnInvalidSequence = false)
-                text.extractBalance()?.let { return it }
+                println(
+                    bytes
+                        .decodeToString(throwOnInvalidSequence = false)
+                        .lineSequence()
+                        .take(5)
+                        .toList(),
+                )
+                var offset = 0
+                if (!handshakeChecked) {
+                    val prefixText = bytes.decodeToString(endIndex = minOf(bytes.size, 3))
+                    check(prefixText == "{}\u001E") { "Expected handshake response '{}\\u001E', but got: $prefixText" }
+                    handshakeChecked = true
+                    println("We have header!")
+                    offset = 3
+                }
+
+                val frames = decodeFrames(bytes, offset)
+                for (frame in frames) {
+                    val text = frame.decodeToString(throwOnInvalidSequence = false)
+                    println("Frame: $text")
+                    text.extractBalance()?.let { return it }
+                }
             }
+            delay(200L.milliseconds)
         }
         raise(Unavailable)
+    }
+
+    private fun decodeFrames(
+        bytes: ByteArray,
+        startOffset: Int,
+    ): List<ByteArray> {
+        val frames = mutableListOf<ByteArray>()
+        var offset = startOffset
+        while (offset < bytes.size) {
+            var length = 0
+            var shift = 0
+            var bytesConsumed = 0
+            var varintComplete = false
+            while (offset + bytesConsumed < bytes.size) {
+                val b = bytes[offset + bytesConsumed++].toInt()
+                length = length or ((b and 0x7F) shl shift)
+                if ((b and 0x80) == 0) {
+                    varintComplete = true
+                    break
+                }
+                shift += 7
+            }
+            if (!varintComplete) break
+
+            offset += bytesConsumed
+            if (offset + length <= bytes.size) {
+                val frame = bytes.copyOfRange(offset, offset + length)
+                frames.add(frame)
+                offset += length
+            } else {
+                break
+            }
+        }
+        return frames
     }
 
     // Helpers
