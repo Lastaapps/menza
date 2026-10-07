@@ -1,28 +1,28 @@
 [versions]
-aboutLibraries = "15.0.3"
-android-gradle = "9.2.1"
+aboutLibraries = "15.2.0"
+android-gradle = "9.4.1"
 androidx-activity = "1.13.0"
-androidx-compose = "1.11.4"
+androidx-compose = "1.12.1"
 androidx-compose-icons = "1.7.8"
 androidx-compose-material3 = "1.4.0"
 androidx-lifecycle = "2.11.0"
 androidx-test = "1.7.0"
-coil = "3.5.0"
+coil = "3.6.3"
 decompose = "3.5.0"
 detekt = "1.23.8"
 espresso = "3.7.0"
-google-ksp = "2.3.9"
+google-ksp = "2.3.12"
 # @keep
 java-jvmTarget = "21"
 junit = "4.13.2"
-junit5-bom = "6.1.1"
+junit5-bom = "6.1.3"
 junitVersion = "1.3.0"
-kermit = "2.1.0"
+kermit = "2.2.0"
 koin = "4.2.2"
 koin-annotations = "4.2.2"
-kotest = "6.2.1"
+kotest = "6.2.5"
 kotest-arrow = "2.0.0"
-kotlin = "2.4.0"
+kotlin = "2.4.20"
 # @keep
 kotlin-api = "2.4"
 # @keep
@@ -30,20 +30,20 @@ kotlin-language = "2.4"
 kotlinx-atomicfu = "0.33.0"
 kotlinx-coroutines = "1.11.0"
 # https://mrmans0n.github.io/compose-rules/
-ktlintComposeRules = "0.6.2"
+ktlintComposeRules = "0.6.7"
 # https://github.com/JLLeitschuh/ktlint-gradle
 ktlintGradle = "14.2.0"
 # https://pinterest.github.io/ktlint/latest/
 # @keep
 ktlintJar = "1.8.0"
-ktor = "3.5.1"
+ktor = "3.6.0"
 org-jetbrains-kotlin = "2.1.10"
 russhwolf-settings = "1.3.0"
 sdk-compile = "37"
-sdk-min = "23"
+sdk-min = "24"
 sdk-target = "37"
 shadow = "8.1.1"
-sqldelight = "2.3.2"
+sqldelight = "2.4.1"
 
 [libraries]
 aboutLibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutLibraries" }
@@ -51,8 +51,8 @@ aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref
 android-desugaring = "com.android.tools:desugar_jdk_libs:2.1.5"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-core = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
-androidx-annotation = "androidx.annotation:annotation:1.10.0"
-androidx-appcompat = "androidx.appcompat:appcompat:1.7.1"
+androidx-annotation = "androidx.annotation:annotation:1.11.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.8.0"
 androidx-collection = "androidx.collection:collection:1.6.0"
 androidx-compose-animation = { module = "androidx.compose.animation:animation", version.ref = "androidx-compose" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose" }
@@ -66,12 +66,12 @@ androidx-compose-tooling = { module = "androidx.compose.ui:ui-tooling", version.
 androidx-compose-toolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose" }
 androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "androidx-compose" }
-androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.1.1"
-androidx-constraintlayout-views = "androidx.constraintlayout:constraintlayout:2.2.1"
-androidx-core = "androidx.core:core-ktx:1.19.0"
+androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.1.2"
+androidx-constraintlayout-views = "androidx.constraintlayout:constraintlayout:2.2.2"
+androidx-core = "androidx.core:core-ktx:1.19.1"
 androidx-datastore = "androidx.datastore:datastore-preferences:1.2.1"
 androidx-documentFile = "androidx.documentfile:documentfile:1.1.0"
-androidx-emoji2-core = "androidx.emoji2:emoji2:1.6.0"
+androidx-emoji2-core = "androidx.emoji2:emoji2:1.7.0"
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
@@ -84,10 +84,10 @@ androidx-test-junit = "androidx.test.ext-ktx:junit:1.1.3"
 androidx-test-rules = { module = "androidx.test:rules-ktx", version.ref = "androidx-test" }
 androidx-test-runner = { module = "androidx.test:runner-ktx", version.ref = "androidx-test" }
 androidx-test-truth = { module = "androidx.test.ext:truth-ktx", version.ref = "androidx-test" }
-androidx-tracing = "androidx.tracing:tracing-ktx:1.3.0"
+androidx-tracing = "androidx.tracing:tracing-ktx:2.0.3"
 androidx-vectorDrawables = "androidx.vectordrawable:vectordrawable:1.2.0"
 androidx-windowManager = "androidx.window:window:1.5.1"
-androidx-work = "androidx.work:work-runtime-ktx:2.11.2"
+androidx-work = "androidx.work:work-runtime-ktx:2.12.0"
 arrowkt-bom = "io.arrow-kt:arrow-stack:2.2.3"
 arrowkt-core = { module = "io.arrow-kt:arrow-core" }
 arrowkt-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
@@ -103,7 +103,7 @@ coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" }
 decompose-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
 decompose-compose-experimental = { module = "com.arkivanov.decompose:extensions-compose-experimental", version.ref = "decompose" }
 decompose-core = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
-detekt-kode-compose = "ru.kode:detekt-rules-compose:1.4.0"
+detekt-kode-compose = "ru.kode:detekt-rules-compose:2.1.2"
 detekt-twitter-compose = "com.twitter.compose.rules:detekt:0.0.26"
 espresso-accessibility = { module = "androidx.test.espresso:espresso-accessibility", version.ref = "espresso" }
 espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
@@ -138,7 +138,7 @@ koin-test-jUnit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "
 kotest-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version.ref = "kotest-arrow" }
 kotest-assertion = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-jUnit5runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-kotest-property = "io.kotest:kotest-property:6.2.1"
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-standardLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
@@ -147,39 +147,39 @@ kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common" }
 kotlin-test-core = { module = "org.jetbrains.kotlin:kotlin-test" }
 kotlin-test-jUnit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlinx-atomicfu" }
-kotlinx-collection = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.1"
+kotlinx-collection = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.2"
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-common = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0"
+kotlinx-coroutines-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-atomicfu" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:0.8.0"
-kotlinx-serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0"
+kotlinx-serializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-atomicfu" }
 ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlintComposeRules" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
-ktor-client-cio = "io.ktor:ktor-client-cio:3.5.1"
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
-ktor-client-core = "io.ktor:ktor-client-core:3.5.1"
-ktor-client-encoding = "io.ktor:ktor-client-encoding:3.5.1"
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-encoding = { module = "io.ktor:ktor-client-encoding", version.ref = "ktor" }
 ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
-ktor-client-logging = "io.ktor:ktor-client-logging:3.5.1"
-ktor-client-okhttp = "io.ktor:ktor-client-okhttp:3.5.1"
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-ktor-server-auth = "io.ktor:ktor-server-auth:3.5.1"
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
 ktor-server-autoHeadResponse = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor" }
 ktor-server-caching = { module = "io.ktor:ktor-server-caching-headers", version.ref = "ktor" }
 ktor-server-callLogging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
-ktor-server-cio = "io.ktor:ktor-server-cio:3.5.1"
+ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
 ktor-server-compression = { module = "io.ktor:ktor-server-compression", version.ref = "ktor" }
 ktor-server-conditionalsHeaders = { module = "io.ktor:ktor-server-conditional-headers", version.ref = "ktor" }
 ktor-server-contentNegotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
-ktor-server-core = "io.ktor:ktor-server-core:3.5.1"
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-defaultHeaders = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
 ktor-server-forwardedHeaders = { module = "io.ktor:ktor-server-forwarded-header", version.ref = "ktor" }
 ktor-server-httpRedirect = { module = "io.ktor:ktor-server-http-redirect", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
 ktor-server-partialContent = { module = "io.ktor:ktor-server-partial-content", version.ref = "ktor" }
 ktor-server-sesstions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktor" }
-ktor-server-statusPages = "io.ktor:ktor-server-status-pages:3.5.1"
+ktor-server-statusPages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
 ktor-server-unofficial-apiKeyAuth = "dev.forst:ktor-api-key:2.2.4"
 russhwolf-settings-core = { module = "com.russhwolf:multiplatform-settings", version.ref = "russhwolf-settings" }
 russhwolf-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "russhwolf-settings" }
@@ -187,7 +187,7 @@ russhwolf-settings-datastore = { module = "com.russhwolf:multiplatform-settings-
 russhwolf-settings-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "russhwolf-settings" }
 sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqldelight-jvm = "app.cash.sqldelight:sqlite-driver:2.3.2"
+sqldelight-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-plugin = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 
@@ -235,7 +235,7 @@ aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "abo
 android-application = { id = "com.android.application", version.ref = "android-gradle" }
 android-library-kmp = { id = "com.android.kotlin.multiplatform.library", version.ref = "android-gradle" }
 android-library-platform = { id = "com.android.library", version.ref = "android-gradle" }
-buildKonfig = "com.codingfeline.buildkonfig:0.22.0"
+buildKonfig = "com.codingfeline.buildkonfig:0.23.0"
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 java-kotlin = { id = "kotlin" }
@@ -243,10 +243,10 @@ java-library = { id = "java-library" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-atomicfu = { id = "org.jetbrains.kotlin.plugin.atomicfu", version.ref = "kotlin" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlin-jvm = "org.jetbrains.kotlin.jvm:2.4.0"
+kotlin-jvm = "org.jetbrains.kotlin.jvm:2.4.20"
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-serialization = "org.jetbrains.kotlin.plugin.serialization:2.4.0"
+kotlin-serialization = "org.jetbrains.kotlin.plugin.serialization:2.4.20"
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
 lastaapps-android-app = "android-app-convention:none"
 lastaapps-android-library = "android-library-convention:none"
@@ -255,5 +255,5 @@ lastaapps-common-sqldelight = "common-sqldelight-convention:none"
 lastaapps-jvm-app = "jvm-app-convention:none"
 lastaapps-kmp-library = "kmp-library-convention:none"
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
-sqldelight = "app.cash.sqldelight:2.3.2"
-versionCatalogUpdate = "nl.littlerobots.version-catalog-update:1.1.0"
+sqldelight = "app.cash.sqldelight:2.4.1"
+versionCatalogUpdate = "nl.littlerobots.version-catalog-update:1.1.1"

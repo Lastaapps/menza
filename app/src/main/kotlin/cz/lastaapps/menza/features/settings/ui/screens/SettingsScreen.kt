@@ -332,7 +332,7 @@ private fun Currency.disclaimer() =
 
         Currency.EUR,
         Currency.USD,
-            -> {
+        -> {
             stringResource(id = R.string.settings_currency_disclaimer_conversion)
         }
     }

@@ -89,8 +89,7 @@ fun PullToRefreshWrapper(
                 state = state,
                 isRefreshing = isRefreshing,
                 onRefresh = onRefresh,
-            )
-            .onKeyEvent {
+            ).onKeyEvent {
                 if ((it.isCtrlPressed && it.key == Key.R) || it.key == Key.Refresh) {
                     onRefresh()
                     return@onKeyEvent true
@@ -256,8 +255,7 @@ private fun IndicatorBox(
                     ) {
                         this@drawWithContent.drawContent()
                     }
-                }
-                .layout { measurable, constraints ->
+                }.layout { measurable, constraints ->
                     val placeable = measurable.measure(constraints)
                     layout(placeable.width, placeable.height) {
                         placeable.placeWithLayer(
@@ -267,15 +265,14 @@ private fun IndicatorBox(
                                 val showElevation = state.distanceFraction > 0f || isRefreshing
                                 translationY =
                                     state.distanceFraction * maxDistance.roundToPx() -
-                                            size.height
+                                    size.height
                                 shadowElevation = if (showElevation) elevation.toPx() else 0f
                                 this.shape = shape
                                 clip = true
                             },
                         )
                     }
-                }
-                .background(color = containerColor, shape = shape),
+                }.background(color = containerColor, shape = shape),
         contentAlignment = Alignment.Center,
         content = content,
     )
