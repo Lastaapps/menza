@@ -97,25 +97,25 @@ internal class StravnikWalletApiImpl(
 
                 logout().bind()
 
-//                if (lastUserName != null && lastUserName != username) {
-//                    logout().bind()
-//                    lastUserName = null
-//                }
+                if (lastUserName != null && lastUserName != username) {
+                    logout().bind()
+                    lastUserName = null
+                }
 
-//                // Login cookies may be fresh from previous fetches
-//                if (lastUserName == username) {
-//                    val pageHtml = getData().bind().bodyAsText()
-//
-//                    pageHtml.extractBalance()?.let {
-//                        log.i { "Success, data fetched (quick)" }
-//                        return@outcome it
-//                    }
-//
-//                    // pageHtml.extractDescriptor()?.let { descriptor ->
-//                    //     log.i { "Attempting Blazor fetch (quick)" }
-//                    //     return@outcome blazorClient.fetchViaSignalR(descriptor).bind()
-//                    // }
-//                }
+                // Login cookies may be fresh from previous fetches
+                if (lastUserName == username) {
+                    val pageHtml = getData().bind().bodyAsText()
+
+                    pageHtml.extractBalance()?.let {
+                        log.i { "Success, data fetched (quick)" }
+                        return@outcome it
+                    }
+
+                    pageHtml.extractDescriptor()?.let { descriptor ->
+                        log.i { "Attempting Blazor fetch (quick)" }
+                        return@outcome blazorClient.fetchViaSignalR(descriptor).bind()
+                    }
+                }
 
                 // 1. GET login page — extract CSRF token
                 val loginPageHtml =
@@ -135,17 +135,17 @@ internal class StravnikWalletApiImpl(
                 // 3. GET Transactions/NoSSO
                 val pageHtml = getData().bind().bodyAsText()
                 pageHtml.extractBalance()?.let {
-                    log.i { "Success, data fetched" }
+                    log.i { "Success, data fetched from initial HTML response" }
                     return@outcome it
                 }
 
                 // 4. Slow path: drive the Blazor circuit
-                val descriptor =
+                val blazor =
                     pageHtml.extractDescriptor()
                         ?: raise(Unavailable)
 
                 log.i { "Attempting Blazor fetch" }
-                blazorClient.fetchViaSignalR(descriptor).bind()
+                blazorClient.fetchViaSignalR(blazor.descriptor, blazor.sequence).bind()
             }
         }
 
@@ -178,8 +178,8 @@ internal class StravnikWalletApiImpl(
         }
 }
 
-private val BALANCE_REGEX_HTML = Regex("""\[P&#x159;edem\s*([\d\s,.\xA0]+)""")
-private val BALANCE_REGEX_UTF8 = Regex("""\[Před?em\s*([\d\s,.]+)""")
+private val BALANCE_REGEX_HTML = Regex("""(?:P&#x159;edem|Předem)\s+([-+]?\d[\d\s]*[,.]\d+)""", RegexOption.IGNORE_CASE)
+private val BALANCE_REGEX_UTF8 = Regex("""(?:P&#x159;edem|Předem)\s+([-+]?\d[\d\s]*[,.]\d+)""", RegexOption.IGNORE_CASE)
 private val CSRF_REGEX = Regex("""name="__RequestVerificationToken"\s+[^>]*value="([^"]+)"""")
 private val DESCRIPTOR_REGEX =
     """<!--Blazor:(\{[^>]*"descriptor"[^>]*\})-->""".toRegex()
@@ -200,13 +200,17 @@ internal fun String.extractBalance(): Float? {
 
 internal fun String.extractCsrfToken(): String? = CSRF_REGEX.find(this)?.groupValues?.getOrNull(1)
 
-internal fun String.extractDescriptor(): String? {
+internal data class BlazorDescriptor(
+    val descriptor: String,
+    val sequence: Int,
+)
+
+internal fun String.extractDescriptor(): BlazorDescriptor? {
     val match = DESCRIPTOR_REGEX.find(this) ?: return null
     return runCatching {
-        Json
-            .parseToJsonElement(match.groupValues.subList(0, 2)[1])
-            .jsonObject["descriptor"]
-            ?.jsonPrimitive
-            ?.content
+        val json = Json.parseToJsonElement(match.groupValues[1]).jsonObject
+        val descriptor = json["descriptor"]?.jsonPrimitive?.content ?: return null
+        val sequence = json["sequence"]?.jsonPrimitive?.content?.toIntOrNull() ?: 0
+        BlazorDescriptor(descriptor, sequence)
     }.getOrNull()
 }

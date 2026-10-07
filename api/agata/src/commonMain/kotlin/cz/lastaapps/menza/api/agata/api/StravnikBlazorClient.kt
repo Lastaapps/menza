@@ -30,9 +30,10 @@ import cz.lastaapps.core.domain.error.ApiError.WalletError.Unavailable
 import cz.lastaapps.core.domain.error.DomainError
 import cz.lastaapps.core.domain.outcome
 import cz.lastaapps.core.util.extensions.catchingNetwork
+import cz.lastaapps.core.util.extensions.localLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
+import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsBytes
@@ -50,11 +51,14 @@ internal class StravnikBlazorClient(
     private val negotiateUrl = "$domain/_blazor/negotiate?negotiateVersion=1"
     private val transactionsUrl = "$domain/Transactions/NoSSO"
 
-    suspend fun fetchViaSignalR(descriptor: String): Outcome<Float> =
+    suspend fun fetchViaSignalR(
+        descriptor: String,
+        sequence: Int,
+    ): Outcome<Float> =
         outcome {
             val blazorUrl = negotiate()
             handshake(blazorUrl)
-            startCircuit(blazorUrl, descriptor)
+            startCircuit(blazorUrl, descriptor, sequence)
             delay(200.milliseconds)
 
             pollForBalance(blazorUrl)
@@ -67,7 +71,6 @@ internal class StravnikBlazorClient(
             catchingNetwork {
                 client.post(negotiateUrl).bodyAsText()
             }.bind()
-        negotiateJson.let(::println)
         val connectionToken = getConnectionToken(negotiateJson)
 
         return "$domain/_blazor?id=$connectionToken"
@@ -79,11 +82,8 @@ internal class StravnikBlazorClient(
         catchingNetwork {
             client
                 .post(blazorUrl) {
-//                        headers { //                            this.append("transport", "LongPolling") //                        }
                     setBody("{\"protocol\":\"blazorpack\",\"version\":1}\u001E")
                 }.bodyAsText()
-                .replace("\u001E", "001E")
-                .let(::println)
         }.bind()
     }
 
@@ -91,9 +91,10 @@ internal class StravnikBlazorClient(
     private suspend fun startCircuit(
         blazorUrl: String,
         descriptor: String,
+        sequence: Int,
     ) {
         // 6. StartCircuit: MsgPack invocation, varint-length-prefixed
-        val componentsJson = """[{"type":"server","sequence":0,"descriptor":"$descriptor"}]"""
+        val componentsJson = """[{"type":"server","sequence":$sequence,"descriptor":"$descriptor"}]"""
         val startCircuitFrame =
             frame(
                 blazorInvocation(
@@ -104,19 +105,17 @@ internal class StravnikBlazorClient(
             )
         catchingNetwork {
             client.post(blazorUrl) {
-                headers { append("Content-Type", "application/octet-stream") }
+                header("Content-Type", "application/octet-stream")
                 setBody(startCircuitFrame)
             }
         }.bind()
-            .bodyAsText()
-            .let(::println)
     }
 
     context(_: Raise<DomainError>)
     private suspend fun pollForBalance(blazorUrl: String): Float {
         var handshakeChecked = false
         // 7. Long-poll loop — balance appears in an early render-batch frame as embedded HTML text
-        repeat(8) {
+        repeat(10) {
             val res = catchingNetwork { client.get(blazorUrl).bodyAsBytes() }
             val bytes =
                 when (res) {
@@ -130,32 +129,62 @@ internal class StravnikBlazorClient(
                     }
                 }
             if (bytes.isNotEmpty()) {
-                println(
-                    bytes
-                        .decodeToString(throwOnInvalidSequence = false)
-                        .lineSequence()
-                        .take(5)
-                        .toList(),
-                )
                 var offset = 0
-                if (!handshakeChecked) {
-                    val prefixText = bytes.decodeToString(endIndex = minOf(bytes.size, 3))
-                    check(prefixText == "{}\u001E") { "Expected handshake response '{}\\u001E', but got: $prefixText" }
-                    handshakeChecked = true
-                    println("We have header!")
-                    offset = 3
+                if (!handshakeChecked && bytes.size >= 3) {
+                    val prefixText = bytes.decodeToString(endIndex = 3)
+                    if (prefixText == "{}\u001E") {
+                        handshakeChecked = true
+                        offset = 3
+                    }
                 }
 
                 val frames = decodeFrames(bytes, offset)
                 for (frame in frames) {
+                    // Try decoding as string first (fast path)
                     val text = frame.decodeToString(throwOnInvalidSequence = false)
-                    println("Frame: $text")
                     text.extractBalance()?.let { return it }
+
+                    // Try extracting strings from binary frame (robust path for RenderBatch)
+                    for (s in extractStrings(frame)) {
+                        s.extractBalance()?.let { return it }
+                    }
                 }
             }
             delay(200L.milliseconds)
         }
         raise(Unavailable)
+    }
+
+    /**
+     * Extracts printable UTF-8 string fragments from binary data.
+     * Equivalent to reference.py's extract_strings_from_bytes.
+     */
+    private fun extractStrings(data: ByteArray): List<String> {
+        val result = mutableListOf<String>()
+        var i = 0
+        while (i < data.size) {
+            // Find start of a printable sequence
+            // Reference regex: rb'[\x20-\x7e\xc0-\xff]{2,}'
+            val b = data[i].toInt() and 0xFF
+            if (b in 0x20..0x7E || b >= 0xC0) {
+                val start = i
+                while (i < data.size) {
+                    val curr = data[i].toInt() and 0xFF
+                    if (curr in 0x20..0x7E || curr >= 0x80) {
+                        i++
+                    } else {
+                        break
+                    }
+                }
+                if (i - start >= 2) {
+                    val fragment = data.copyOfRange(start, i).decodeToString(throwOnInvalidSequence = false)
+                    result.add(fragment)
+                }
+            } else {
+                i++
+            }
+        }
+        return result
     }
 
     private fun decodeFrames(
@@ -217,9 +246,19 @@ internal class StravnikBlazorClient(
                 byteArrayOf(0xd9.toByte(), bytes.size.toByte()) + bytes
             }
 
-            else -> {
+            bytes.size <= 0xffff -> {
                 byteArrayOf(
                     0xda.toByte(),
+                    (bytes.size shr 8).toByte(),
+                    bytes.size.toByte(),
+                ) + bytes
+            }
+
+            else -> {
+                byteArrayOf(
+                    0xdb.toByte(),
+                    (bytes.size shr 24).toByte(),
+                    (bytes.size shr 16).toByte(),
                     (bytes.size shr 8).toByte(),
                     bytes.size.toByte(),
                 ) + bytes
