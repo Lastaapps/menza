@@ -96,8 +96,7 @@ fun PullToRefreshWrapper(
                     return@onKeyEvent true
                 }
                 false
-            }
-            .clipToBounds(),
+            }.clipToBounds(),
     ) {
         content()
 
@@ -268,7 +267,7 @@ private fun IndicatorBox(
                                 val showElevation = state.distanceFraction > 0f || isRefreshing
                                 translationY =
                                     state.distanceFraction * maxDistance.roundToPx() -
-                                        size.height
+                                            size.height
                                 shadowElevation = if (showElevation) elevation.toPx() else 0f
                                 this.shape = shape
                                 clip = true

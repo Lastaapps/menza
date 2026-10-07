@@ -303,8 +303,7 @@ private fun AppLayoutExpandedNoFold(
                     .padding(
                         top = insets.calculateTopPadding(),
                         bottom = insets.calculateBottomPadding(),
-                    )
-                    .fillMaxSize(),
+                    ).fillMaxSize(),
             rail = rail,
         ) {
             MenzaDismissibleDrawer(
@@ -391,7 +390,8 @@ private fun AppLayoutExpandedFold(
                     Modifier
                         .padding(
                             end = insets.calculateRightPadding(LocalLayoutDirection.current),
-                        ).fillMaxSize(),
+                        )
+                        .fillMaxSize(),
                 ) {
                     val totalWidthAvailable = maxWidth - spacesWidth + railWidth
                     val startWidth = totalWidthAvailable * weightStart - railWidth

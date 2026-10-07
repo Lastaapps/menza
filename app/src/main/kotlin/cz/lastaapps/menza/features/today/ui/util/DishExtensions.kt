@@ -36,6 +36,8 @@ import cz.lastaapps.menza.features.settings.domain.model.PriceType.Discounted
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Normal
 import cz.lastaapps.menza.features.settings.domain.model.PriceType.Unset
 
+const val RADEGAST_12_PRICE = 52f
+
 @Suppress("NOTHING_TO_INLINE")
 inline fun DishCategory.key() =
     buildString {
@@ -78,9 +80,11 @@ fun Float.applyExchangeRate(currency: Currency) =
 
         Currency.CZK -> this
 
-        // based on Strahov Bar 10 - check for price update once a week at least
+        // based on Strahov Bar 10 - check for price change needed at least once a week
         // last updated 29th September
-        Currency.BEER -> this / 49f
+        // Sep 29th 2025 -> 49 Kč
+        // Oct  7th 2026 -> 52 Kč
+        Currency.BEER -> this / RADEGAST_12_PRICE
 
         // TODO update me every year
         // based on Czech National Bank: https://www.kurzy.cz/kurzy-men/jednotny-kurz/
