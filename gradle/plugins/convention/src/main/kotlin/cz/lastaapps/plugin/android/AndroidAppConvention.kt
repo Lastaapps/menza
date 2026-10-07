@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -103,13 +103,6 @@ class AndroidAppConvention :
                         }.let { rules ->
                             proguardFiles(*rules)
                         }
-                    }
-                }
-
-                packaging {
-                    resources {
-                        // TODO Remove after skrape-it is removed
-                        excludes.add("META-INF/INDEX.LIST")
                     }
                 }
             }
