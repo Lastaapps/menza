@@ -5,6 +5,7 @@ androidx-activity = "1.13.0"
 androidx-compose = "1.12.1"
 androidx-compose-icons = "1.7.8"
 androidx-compose-material3 = "1.4.0"
+androidx-credentials = "1.7.0-alpha03"
 androidx-lifecycle = "2.11.0"
 androidx-test = "1.7.0"
 coil = "3.6.3"
@@ -53,7 +54,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-activity-core = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-annotation = "androidx.annotation:annotation:1.11.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.8.0"
-androidx-collection = "androidx.collection:collection:1.6.0"
+androidx-collection = "androidx.collection:collection:1.7.0"
 androidx-compose-animation = { module = "androidx.compose.animation:animation", version.ref = "androidx-compose" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose" }
 androidx-compose-iconsCore = { module = "androidx.compose.material:material-icons-core", version.ref = "androidx-compose-icons" }
@@ -69,6 +70,8 @@ androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.1.2"
 androidx-constraintlayout-views = "androidx.constraintlayout:constraintlayout:2.2.2"
 androidx-core = "androidx.core:core-ktx:1.19.1"
+androidx-credentials-core = { module = "androidx.credentials:credentials", version.ref = "androidx-credentials" }
+androidx-credentials-playServices = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "androidx-credentials" }
 androidx-datastore = "androidx.datastore:datastore-preferences:1.2.1"
 androidx-documentFile = "androidx.documentfile:documentfile:1.1.0"
 androidx-emoji2-core = "androidx.emoji2:emoji2:1.7.0"

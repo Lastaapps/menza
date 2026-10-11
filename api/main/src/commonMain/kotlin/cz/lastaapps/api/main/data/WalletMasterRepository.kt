@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 
 internal interface WalletMasterRepository : SyncSource<UserBalance?, Unit> {
     suspend fun login(
@@ -54,6 +55,9 @@ internal interface WalletMasterRepository : SyncSource<UserBalance?, Unit> {
     ): Outcome<Unit>
 
     suspend fun logout(): Outcome<Unit>
+
+    @Deprecated("The sole purpose of this is to allow Credentials restoration from use-case")
+    suspend fun getCredentials(): LoginCredentialsSett?
 }
 
 internal class WalletMasterRepositoryImpl(
@@ -94,6 +98,9 @@ internal class WalletMasterRepositoryImpl(
             simpleProperties.setBalance(null)
             log.i { "Logout successful" }
         }
+
+    @Deprecated("The sole purpose of this is to allow Credentials restoration from use case")
+    override suspend fun getCredentials(): LoginCredentialsSett? = credentialsProvider.get().firstOrNull()?.getOrNull()
 
     override fun getData(params: Unit): Flow<UserBalance?> =
         channelFlow {

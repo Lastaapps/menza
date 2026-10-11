@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+  ~    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
   ~
   ~     This file is part of Menza.
   ~
@@ -41,6 +41,8 @@
         android:name=".App"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
+        android:fullBackupOnly="true"
+        android:backupAgent=".AppRestoreBackupAgent"
         android:dataExtractionRules="@xml/extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

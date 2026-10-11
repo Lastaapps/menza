@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -20,6 +20,7 @@
 package cz.lastaapps.api.main.domain.usecase.wallet
 
 import cz.lastaapps.api.core.domain.model.BalanceAccountType
+import cz.lastaapps.api.main.data.RestoreCredentialsManager
 import cz.lastaapps.api.main.data.WalletMasterRepository
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
@@ -27,6 +28,7 @@ import cz.lastaapps.core.domain.UseCase
 class WalletLoginUC internal constructor(
     ucContext: UCContext,
     private val repo: WalletMasterRepository,
+    private val restore: RestoreCredentialsManager,
 ) : UseCase(ucContext) {
     suspend operator fun invoke(
         username: String,
@@ -35,6 +37,9 @@ class WalletLoginUC internal constructor(
     ) = launch {
         repo
             .login(username, password, type)
-            .onRight { repo.sync(Unit, isForced = true) }
+            .onRight {
+                restore.saveRestoreCredentials(username, password, type)
+                repo.sync(Unit, isForced = true)
+            }
     }
 }
