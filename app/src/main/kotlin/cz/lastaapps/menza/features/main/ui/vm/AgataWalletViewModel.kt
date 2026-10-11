@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -59,7 +59,7 @@ internal class AgataWalletViewModel(
     override suspend fun whileSubscribed(scope: CoroutineScope) {
         walletGetBalanceUC()
             .mapLatest { balance ->
-                log.i { "New balance: $balance" }
+                log.i { "New balance: ${balance?.balance} for type ${balance?.type}" }
                 processBalance(balance)
             }.launchIn(scope)
     }

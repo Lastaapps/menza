@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -48,8 +48,10 @@ import cz.lastaapps.api.main.domain.usecase.wallet.WalletGetBalanceUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletLoginUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletLogoutUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletRefreshUC
+import cz.lastaapps.api.main.domain.usecase.wallet.WalletRestoreCredentialsUC
 import cz.lastaapps.api.rating.di.apiRatingModule
 import cz.lastaapps.menza.api.agata.di.apiAgataModule
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
@@ -57,8 +59,10 @@ import org.koin.core.scope.Scope
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+internal expect val platform: Module
 val apiModule =
     module {
+        includes(platform)
         includes(
             apiAgataModule,
             apiBuffetModule,
@@ -84,6 +88,7 @@ val apiModule =
         factoryOf(::WalletLoginUC)
         factoryOf(::WalletLogoutUC)
         factoryOf(::WalletRefreshUC)
+        factoryOf(::WalletRestoreCredentialsUC)
         factoryOf(::GetImportantRequestParams)
         singleOf(::GetDishUC)
         singleOf(::GetTodayRawDishListUC)

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,6 +19,7 @@
 
 package cz.lastaapps.api.main.domain.usecase.wallet
 
+import cz.lastaapps.api.main.data.RestoreCredentialsManager
 import cz.lastaapps.api.main.data.WalletMasterRepository
 import cz.lastaapps.core.domain.UCContext
 import cz.lastaapps.core.domain.UseCase
@@ -26,9 +27,12 @@ import cz.lastaapps.core.domain.UseCase
 class WalletLogoutUC internal constructor(
     ucContext: UCContext,
     private val repo: WalletMasterRepository,
+    private val restore: RestoreCredentialsManager,
 ) : UseCase(ucContext) {
     suspend operator fun invoke() =
         launch {
-            repo.logout()
+            repo.logout().onRight {
+                restore.clearRestoreCredentials()
+            }
         }
 }

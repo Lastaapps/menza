@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -52,6 +52,8 @@ import javax.crypto.spec.GCMParameterSpec
 class JavaXCryptoProvider(
     private val keyAlias: String = "shared_key_alias",
 ) : CryptoProvider {
+    private val log = localLogger()
+
     companion object {
         private const val ANDROID_KEYSTORE_PROVIDER = "AndroidKeyStore"
         private const val AES_MODE = KeyProperties.KEY_ALGORITHM_AES
@@ -61,8 +63,6 @@ class JavaXCryptoProvider(
         private const val TRANSFORMATION = "$AES_MODE/$BLOCK_MODE/$PADDING"
 
         private const val GCM_TAG_LENGTH_BITS = 128
-
-        private val log = localLogger()
     }
 
     private val keyStore: KeyStore =

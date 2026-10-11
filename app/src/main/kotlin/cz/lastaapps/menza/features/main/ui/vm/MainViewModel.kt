@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,6 +22,7 @@ package cz.lastaapps.menza.features.main.ui.vm
 import cz.lastaapps.api.core.domain.model.Menza
 import cz.lastaapps.api.main.domain.usecase.SyncMenzaListUC
 import cz.lastaapps.api.main.domain.usecase.wallet.WalletRefreshUC
+import cz.lastaapps.api.main.domain.usecase.wallet.WalletRestoreCredentialsUC
 import cz.lastaapps.core.ui.vm.StateViewModel
 import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
@@ -45,6 +46,7 @@ internal class MainViewModel(
     private val isFlip: IsFlipUC,
     private val checkLowBalanceUC: CheckLowBalanceUC,
     private val refreshWallet: WalletRefreshUC,
+    private val restoreCredentialsUC: WalletRestoreCredentialsUC,
 ) : StateViewModel<MainState>(MainState(), context) {
     override suspend fun onFirstAppearance() {
         updateState { copy(isFlip = isFlip()) }
@@ -65,6 +67,7 @@ internal class MainViewModel(
             }.launchIn(scope)
 
         scope.launch {
+            restoreCredentialsUC()
             refreshWallet(false)
             checkLowBalanceUC().collectLatest {
                 if (!lastState().lowBalanceShown) {
