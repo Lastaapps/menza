@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -32,6 +32,7 @@ import cz.lastaapps.api.core.domain.model.MenzaType
 import cz.lastaapps.api.core.domain.model.MenzaType.Agata.Strahov
 import cz.lastaapps.api.core.domain.repo.MenzaRepo
 import cz.lastaapps.api.core.domain.repo.MenzaRepoParams
+import cz.lastaapps.api.core.domain.sync.SyncJobNoCache
 import cz.lastaapps.api.core.domain.sync.SyncOutcome
 import cz.lastaapps.api.core.domain.sync.SyncProcessor
 import cz.lastaapps.api.core.domain.sync.SyncResult
@@ -42,10 +43,8 @@ import cz.lastaapps.api.core.domain.validity.withCheckSince
 import cz.lastaapps.api.core.domain.validity.withParams
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.api.agata.api.CafeteriaApi
-import cz.lastaapps.menza.api.agata.data.SyncJobHash
 import cz.lastaapps.menza.api.agata.data.mapers.toDomain
 import cz.lastaapps.menza.api.agata.data.mapers.toEntity
-import cz.lastaapps.menza.api.agata.data.model.HashType
 import cz.lastaapps.menza.api.agata.data.model.dto.SubsystemDto
 import cz.lastaapps.menza.api.agata.data.model.toDB
 import cz.lastaapps.menza.api.agata.data.model.toDto
@@ -95,10 +94,12 @@ internal class MenzaSubsystemRepoImpl(
             .onCompletion { log.i { "Completed collection" } }
 
     private val subsystemJob =
-        SyncJobHash<List<SubsystemDto>, List<SubsystemEntity>, MenzaRepoParams>(
-            hashStore = hashStore,
-            hashType = { HashType.subsystemHash().withLang(it.language) },
-            getHashCode = { api.getSubsystemsHash(it.language.toDto()).bind() },
+        SyncJobNoCache<List<SubsystemDto>, List<SubsystemEntity>, MenzaRepoParams>(
+            // It seems that the fact whether menza is active or not is considered in the hash
+            // This is left for later evaluation in production
+//            hashStore = hashStore,
+//            hashType = { HashType.subsystemHash().withLang(it.language) },
+//            getHashCode = { api.getSubsystemsHash(it.language.toDto()).bind() },
             fetchApi = {
                 api.getSubsystems(it.language.toDto()).bind().orEmpty()
             },
