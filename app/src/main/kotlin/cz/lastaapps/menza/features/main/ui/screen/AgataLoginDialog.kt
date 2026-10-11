@@ -68,8 +68,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.autofill.FillableData
+import androidx.compose.ui.autofill.createFromText
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.fillableData
+import androidx.compose.ui.semantics.onFillData
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -315,13 +319,19 @@ private fun TextFields(
     verticalArrangement = Arrangement.spacedBy(Padding.Tiny),
 ) {
     OutlinedTextField(
+        username,
+        onValueChange = onUsername,
+        enabled = !isLoading,
         modifier =
             Modifier.semantics {
                 contentType = ContentType.Username
+
+                FillableData.createFromText(username)?.let { this@semantics.fillableData = it }
+                onFillData { savedAutofillValue ->
+                    savedAutofillValue.textValue?.let { onUsername(it.toString()) }
+                    true
+                }
             },
-        enabled = !isLoading,
-        value = username,
-        onValueChange = onUsername,
         label = { Text(stringResource(R.string.wallet_login_username)) },
         keyboardOptions =
             KeyboardOptions(
@@ -333,13 +343,19 @@ private fun TextFields(
     var showPasswordInfo by rememberSaveable { mutableStateOf(false) }
 
     OutlinedTextField(
+        value = password,
+        onValueChange = onPassword,
+        enabled = !isLoading,
         modifier =
             Modifier.semantics {
                 contentType = ContentType.Password
+
+                FillableData.createFromText(password)?.let { this@semantics.fillableData = it }
+                onFillData { savedAutofillValue ->
+                    savedAutofillValue.textValue?.let { onPassword(it.toString()) }
+                    true
+                }
             },
-        enabled = !isLoading,
-        value = password,
-        onValueChange = onPassword,
         label = { Text(stringResource(R.string.wallet_login_password)) },
         visualTransformation = PasswordVisualTransformation(),
         keyboardActions =
