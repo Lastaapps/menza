@@ -10,3 +10,4 @@ local.properties
 /gradle/libs.versions.updates.toml
 .kotlin
 /kls_database.db
+/.idea/deviceManager.xml

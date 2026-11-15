@@ -30,6 +30,7 @@ inline fun <reified T : InstanceKeeper.Instance> InstanceKeeper.getOrCreateKoin(
     qualifier: org.koin.core.qualifier.Qualifier? = null,
     noinline parameters: org.koin.core.parameter.ParametersDefinition? = null,
 ): T =
+    // TODO refactor
     getOrCreate {
         component.get<T>(qualifier, parameters)
     }
