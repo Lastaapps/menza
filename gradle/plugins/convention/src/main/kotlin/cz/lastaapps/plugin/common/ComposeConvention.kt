@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,7 +29,6 @@ import cz.lastaapps.plugin.extensions.pluginManager
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.provider.Provider
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
@@ -51,8 +50,8 @@ abstract class ComposeConvention(
             }
 
             with(extensions.getByType<ComposeCompilerGradlePluginExtension>()) {
-                includeSourceInformation = true
-                featureFlags = setOf()
+                includeSourceInformation.set(true)
+                featureFlags.addAll(setOf())
             }
         },
         {
@@ -68,7 +67,6 @@ abstract class ComposeConvention(
             dependencies {
                 // Removes tooling package from the release variant
                 "androidRuntimeClasspath"(libs.androidx.compose.tooling)
-                "androidRuntimeClasspath"(libs.androidx.compose.toolingPreview)
             }
         },
         {
@@ -122,7 +120,6 @@ private fun Project.dependenciesComposeUI(): List<Provider<MinimalExternalModule
 private fun Project.dependenciesDebug(): List<Provider<MinimalExternalModuleDependency>> =
     listOf(
         libs.androidx.compose.tooling,
-        libs.androidx.compose.toolingPreview,
     )
 
 private fun Project.dependenciesAndroidComposeUI(): List<Provider<MinimalExternalModuleDependency>> =
@@ -131,4 +128,5 @@ private fun Project.dependenciesAndroidComposeUI(): List<Provider<MinimalExterna
         libs.androidx.lifecycle.runtime
             .asProvider(),
         libs.androidx.lifecycle.runtime.compose,
+        libs.androidx.compose.toolingPreview,
     )
