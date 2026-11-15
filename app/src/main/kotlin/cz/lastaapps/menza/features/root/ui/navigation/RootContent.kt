@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -58,16 +58,21 @@ internal fun RootContent(
         label = "Root slot",
     ) { instance ->
         when (instance) {
-            is AppContent -> MainContent(component = instance.component, modifier)
+            is AppContent -> {
+                MainContent(component = instance.component, modifier)
+            }
 
-            is AppSetup ->
+            is AppSetup -> {
                 StartingContent(
                     instance.component,
                     component::toAppContent,
                     modifier,
                 )
+            }
 
-            null -> Surface(modifier) {}
+            null -> {
+                Surface(modifier) {}
+            }
         }
         if (instance != null) {
             SideEffect {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -111,17 +111,29 @@ internal class DefaultSettingsHubComponent(
             initialStack = { listOf(Config.Settings) },
         ) { configuration, componentContext ->
             when (configuration) {
-                Config.AppTheme -> Child.AppTheme(DefaultAppThemeComponent(componentContext))
-                Config.DishLanguage ->
+                Config.AppTheme -> {
+                    Child.AppTheme(DefaultAppThemeComponent(componentContext))
+                }
+
+                Config.DishLanguage -> {
                     Child.DishLanguage(
                         DefaultDishLanguageComponent(
                             componentContext,
                         ),
                     )
+                }
 
-                Config.License -> Child.License(DefaultLicenseComponent(componentContext))
-                Config.Osturak -> Child.Osturak(DefaultOsturakComponent(componentContext))
-                Config.Settings -> Child.Settings(DefaultSettingsComponent(componentContext))
+                Config.License -> {
+                    Child.License(DefaultLicenseComponent(componentContext))
+                }
+
+                Config.Osturak -> {
+                    Child.Osturak(DefaultOsturakComponent(componentContext))
+                }
+
+                Config.Settings -> {
+                    Child.Settings(DefaultSettingsComponent(componentContext))
+                }
             }
         }
 
@@ -187,21 +199,29 @@ internal fun SettingsHubContent(
     ) {
         Surface {
             when (val instance = it.instance) {
-                is Child.AppTheme ->
+                is Child.AppTheme -> {
                     AppThemeContent(
                         instance.component,
                         onComplete = component::pop,
                     )
+                }
 
-                is Child.DishLanguage ->
+                is Child.DishLanguage -> {
                     DishLanguageContent(
                         instance.component,
                         component::pop,
                     )
+                }
 
-                is Child.License -> LicenseContent(instance.component)
-                is Child.Osturak -> OsturakContent(instance.component)
-                is Child.Settings ->
+                is Child.License -> {
+                    LicenseContent(instance.component)
+                }
+
+                is Child.Osturak -> {
+                    OsturakContent(instance.component)
+                }
+
+                is Child.Settings -> {
                     SettingsContent(
                         instance.component,
                         onChooseTheme = component::toChooseTheme,
@@ -209,6 +229,7 @@ internal fun SettingsHubContent(
                         onOsturak = component::toOsturak,
                         onLicense = component::toLicense,
                     )
+                }
             }
         }
     }

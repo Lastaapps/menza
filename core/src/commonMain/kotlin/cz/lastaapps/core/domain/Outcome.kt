@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -29,8 +29,6 @@ import kotlin.experimental.ExperimentalTypeInference
 typealias Outcome<A> = Either<DomainError, A>
 
 @OptIn(ExperimentalTypeInference::class)
-inline fun <A> outcome(
-    @BuilderInference block: Raise<DomainError>.() -> A,
-): Outcome<A> = either(block)
+inline fun <A> outcome(block: Raise<DomainError>.() -> A): Outcome<A> = either(block)
 
 typealias OutcomeIor<A> = IorNel<DomainError, A>

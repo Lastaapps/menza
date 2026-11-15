@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -46,17 +46,18 @@ class ContactsRepoImpl(
     private val scraper: ContactsScraper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ContactsRepo {
-
     companion object {
         private val log = logging(ContactsRepo::class.simpleName)
     }
 
     private val queries = database.contactQueries
-    override fun getContactsForMenza(menzaId: MenzaId): Flow<List<Contact>> {
-        return queries.getContactById(menzaId) { newMenzaId, name, role, phone, email ->
-            Contact(newMenzaId, name, role, phone, email)
-        }.asFlow().mapToList(dispatcher)
-    }
+
+    override fun getContactsForMenza(menzaId: MenzaId): Flow<List<Contact>> =
+        queries
+            .getContactById(menzaId) { newMenzaId, name, role, phone, email ->
+                Contact(newMenzaId, name, role, phone, email)
+            }.asFlow()
+            .mapToList(dispatcher)
 
     override val errors: Channel<MenzaScrapingError>
         get() = mErrors
@@ -75,62 +76,66 @@ class ContactsRepoImpl(
             }
         }
 
-        return queries.getAll { menzaId, name, role, phone, email ->
-            Contact(menzaId, name, role, phone, email)
-        }
-            .asFlow().mapToList(scope.coroutineContext)
+        return queries
+            .getAll { menzaId, name, role, phone, email ->
+                Contact(menzaId, name, role, phone, email)
+            }.asFlow()
+            .mapToList(scope.coroutineContext)
     }
 
-    override fun refreshData(): Flow<Boolean?> {
-        return flow {
+    override fun refreshData(): Flow<Boolean?> =
+        flow {
             log.i { "Requesting data refresh" }
             emit(refreshInternal())
         }.flowOn(dispatcher)
-    }
 
-    private suspend fun refreshInternal(): Boolean? = withContext(dispatcher) {
-        if (mRequestInProgress.value) {
-            return@withContext null
-        }
-
-        mRequestInProgress.value = true
-
-        val request = try {
-            log.i { "Getting data from a server" }
-            scraper.createRequest().bodyAsText()
-        } catch (e: Exception) {
-            log.e(e) { "Download failed" }
-            mErrors.send(e.toMenzaError())
-            return@withContext false
-        }
-        val data = try {
-            log.i { "Scraping" }
-            scraper.scrape(request)
-        } catch (e: Exception) {
-            mErrors.send(MenzaScrapingError.ParsingError(e))
-            log.e(e) { "Parsing error" }
-            e.printStackTrace()
-            return@withContext false
-        }
-
-        log.i { "Replacing database entries" }
-        queries.transaction {
-            queries.delete()
-            data.forEach {
-                queries.insert(it.id, it.name, it.role, it.phoneNumber, it.email)
+    private suspend fun refreshInternal(): Boolean? =
+        withContext(dispatcher) {
+            if (mRequestInProgress.value) {
+                return@withContext null
             }
-        }
 
-        return@withContext true
-    }.also { mRequestInProgress.value = false }
+            mRequestInProgress.value = true
 
-    override suspend fun hasData(): Boolean =
-        true // TODO revert
-    // hasDataStored().first().also { log.i { "hasData: $it" } }
+            val request =
+                try {
+                    log.i { "Getting data from a server" }
+                    scraper.createRequest().bodyAsText()
+                } catch (e: Exception) {
+                    log.e(e) { "Download failed" }
+                    mErrors.send(e.toMenzaError())
+                    return@withContext false
+                }
+            val data =
+                try {
+                    log.i { "Scraping" }
+                    scraper.scrape(request)
+                } catch (e: Exception) {
+                    mErrors.send(MenzaScrapingError.ParsingError(e))
+                    log.e(e) { "Parsing error" }
+                    e.printStackTrace()
+                    return@withContext false
+                }
+
+            log.i { "Replacing database entries" }
+            queries.transaction {
+                queries.delete()
+                data.forEach {
+                    queries.insert(it.id, it.name, it.role, it.phoneNumber, it.email)
+                }
+            }
+
+            return@withContext true
+        }.also { mRequestInProgress.value = false }
+
+    override suspend fun hasData(): Boolean = hasDataStored().first().also { log.i { "hasData: $it" } }
 
     override fun hasDataStored(): Flow<Boolean> {
         log.i { "Asking hasData" }
-        return queries.rowNumber().asFlow().mapToOneNotNull(dispatcher)
+        return queries
+            .rowNumber()
+            .asFlow()
+            .mapToOneNotNull(dispatcher)
             .map { it > 0 }
     }
 

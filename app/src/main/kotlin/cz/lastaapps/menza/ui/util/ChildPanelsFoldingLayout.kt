@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -72,34 +72,43 @@ class ChildPanelsFoldingLayout(
 
         val measurePolicy =
             when (mode) {
-                ChildPanelsMode.SINGLE -> singleMeasurePolicy
+                ChildPanelsMode.SINGLE -> {
+                    singleMeasurePolicy
+                }
+
                 ChildPanelsMode.DUAL -> {
                     val foldingFeature =
                         (LocalFoldProvider.current as? FoldingClass.Supported)?.foldingFeature
                     remember(foldingFeature, layoutCoordinates) {
                         layoutCoordinates?.let {
                             when {
-                                enableTableTop && foldingFeature.isTableTopPosture() ->
+                                enableTableTop && foldingFeature.isTableTopPosture() -> {
                                     TableTopMeasurePolicy(
                                         foldingFeature,
                                         it,
                                         minWeightsTableTop,
                                     )
+                                }
 
-                                enableBook && foldingFeature.isBookPosture() ->
+                                enableBook && foldingFeature.isBookPosture() -> {
                                     BookMeasurePolicy(
                                         foldingFeature,
                                         it,
                                         minWeightsBook,
                                     )
+                                }
 
-                                else -> null
+                                else -> {
+                                    null
+                                }
                             }
                         } ?: dualMeasurePolicy
                     }
                 }
 
-                ChildPanelsMode.TRIPLE -> error("Not supported")
+                ChildPanelsMode.TRIPLE -> {
+                    error("Not supported")
+                }
             }
 
         androidx.compose.ui.layout.Layout(

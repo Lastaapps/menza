@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -22,17 +22,13 @@ package cz.lastaapps.menza.features.today.ui.widget
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -74,22 +70,22 @@ internal fun DishListViewModeSwitch(
         val padding = Padding.MidSmall
         Spacer(Modifier.height(padding))
 
-        val text =
+        val (titleText, titleStyle) =
             if (isDismissibleVisible) {
-                R.string.today_list_mode_title_chose
+                R.string.today_list_mode_title_chose to MaterialTheme.typography.titleLarge
             } else {
-                R.string.today_list_mode_title_normal
+                R.string.today_list_mode_title_normal to MaterialTheme.typography.titleMedium
             }
         Text(
-            stringResource(text),
-            style = MaterialTheme.typography.titleMedium,
+            stringResource(titleText),
+            style = titleStyle,
             modifier =
                 Modifier
                     .padding(horizontal = padding)
                     .align(Alignment.CenterHorizontally),
         )
 
-        Spacer(modifier = Modifier.height(Padding.Smaller))
+        Spacer(modifier = Modifier.height(Padding.Small))
 
         FlowRow(
             modifier =
@@ -128,26 +124,11 @@ internal fun DishListViewModeSwitch(
                     .align(Alignment.CenterHorizontally)
                     .padding(horizontal = padding),
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Padding.Smaller),
-            ) {
-                Icon(Icons.Default.ArrowDownward, null)
-                Text(
-                    stringResource(R.string.today_list_mode_button_dismiss),
-                    textAlign = TextAlign.Center,
-                )
-                Icon(Icons.Default.ArrowDownward, null)
-            }
+            Text(
+                stringResource(R.string.today_list_mode_button_dismiss),
+                textAlign = TextAlign.Center,
+            )
         }
-        Text(
-            stringResource(R.string.today_list_mode_dismiss_explain),
-            style = MaterialTheme.typography.bodySmall,
-            textAlign = TextAlign.Center,
-            modifier =
-                Modifier
-                    .align(Alignment.CenterHorizontally),
-        )
         Spacer(Modifier.height(padding))
     }
 }

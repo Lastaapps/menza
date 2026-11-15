@@ -36,6 +36,7 @@ import cz.lastaapps.menza.features.settings.domain.usecase.initialmenza.SetPrefe
 import cz.lastaapps.menza.features.settings.domain.usecase.menzaorder.GetOrderedVisibleMenzaListUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetAppSettingsUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.OnSettingsOpenedUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetAIMode
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetAlternativeNavigationUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetBalanceWarningThresholdUC
 import cz.lastaapps.menza.features.settings.domain.usecase.settings.SetCurrencyUC
@@ -58,6 +59,7 @@ internal class SettingsViewModel(
     val setCurrencyUC: SetCurrencyUC,
     val setImagesOnMeteredUC: SetImagesOnMeteredUC,
     val setAlternativeNavigationUC: SetAlternativeNavigationUC,
+    val setAIModeUC: SetAIMode,
     val setBalanceWarningThresholdUC: SetBalanceWarningThresholdUC,
     val setInitialMenzaUC: SetInitialMenzaUC,
     val setPreferredMenzaUC: SetPreferredMenzaUC,
@@ -106,6 +108,11 @@ internal class SettingsViewModel(
     fun setBalanceWarningThreshold(threshold: Int) =
         launchVM {
             setBalanceWarningThresholdUC(threshold)
+        }
+
+    fun setAIMode(enabled: Boolean) =
+        launchVM {
+            setAIModeUC(enabled)
         }
 
     fun setInitMenzaBehaviour(behaviour: InitialSelectionBehaviour) =

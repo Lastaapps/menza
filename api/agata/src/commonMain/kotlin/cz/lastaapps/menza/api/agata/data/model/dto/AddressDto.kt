@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -31,7 +31,7 @@ internal data class AddressDto(
     @SerialName("podsystem_id")
     val subsystemId: Int,
     @SerialName("podsystem_nazev")
-    val subsystemName: String,
+    val subsystemName: String?,
     @SerialName("adresa")
     val address: String,
     @SerialName("mapag")

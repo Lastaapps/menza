@@ -43,6 +43,7 @@ internal class GetTodayUserSettingsUC(
                     dishListMode = it.todayViewMode,
                     useOliverRow = it.useOliverRows,
                     isDishListModeChosen = it.isDishListModeChosen,
+                    useAIMode = it.aiMode,
                 )
             }.distinctUntilChanged()
 }

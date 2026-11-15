@@ -51,7 +51,10 @@ import cz.lastaapps.menza.features.other.ui.dialog.ReportDialog
 import cz.lastaapps.menza.features.other.ui.dialog.sendReport
 import cz.lastaapps.menza.features.panels.crashreport.ui.CrashesViewModel
 import kotlinx.collections.immutable.ImmutableList
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 internal fun CrashesDialog(
@@ -159,9 +162,9 @@ private fun CrashItem(
                 Text(
                     stringResource(
                         R.string.crash_date_title,
-                        crash.date.format(
-                            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
-                        ),
+                        crash.date
+                            .toLocalDateTime(TimeZone.currentSystemDefault())
+                            .format(LocalDateTime.Formats.ISO),
                     ),
                 )
                 Text(

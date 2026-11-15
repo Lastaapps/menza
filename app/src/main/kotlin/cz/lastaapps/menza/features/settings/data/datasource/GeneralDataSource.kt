@@ -103,6 +103,10 @@ internal interface GeneralDataSource {
     suspend fun setCurrency(currency: Currency)
 
     fun getCurrency(): Flow<Currency?>
+
+    suspend fun setAIMode(enabled: Boolean)
+
+    fun getAIMode(): Flow<Boolean?>
 }
 
 @OptIn(ExperimentalSettingsApi::class)
@@ -127,6 +131,7 @@ internal class GeneralDataSourceImpl(
         private const val alternativeNavigationKey = "alternative_navigation"
         private const val dishListModeChosenKey = "dish_list_mode_chosen"
         private const val currencyKey = "currency"
+        private const val aiModeKey = "aiMode"
     }
 
     override suspend fun storeAppSetupFinished() = settings.putBoolean(appSetupFinishedKey, true)
@@ -208,4 +213,8 @@ internal class GeneralDataSourceImpl(
         settings.getIntOrNullFlow(currencyKey).map { id ->
             Currency.entries.firstOrNull { type -> type.id == id }
         }
+
+    override suspend fun setAIMode(enabled: Boolean) = settings.putBoolean(aiModeKey, enabled)
+
+    override fun getAIMode(): Flow<Boolean?> = settings.getBooleanOrNullFlow(aiModeKey)
 }

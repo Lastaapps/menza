@@ -1,0 +1,12 @@
+AI mode! (see settings)
+Updated beer, EUR and USD exchange rates
+Errors reporting pop-ups disappear automatically
+Logout confirmation dialog
+Updated libs, AGP 9 + KMP migration
+Bug fixes and other optimizations
+
+1.4.0
+Rating added
+Video feeds from supported cafeterias
+Proper English names support
+New Carousel dish view mode

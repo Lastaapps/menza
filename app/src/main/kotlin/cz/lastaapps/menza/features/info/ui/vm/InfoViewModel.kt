@@ -36,12 +36,14 @@ import cz.lastaapps.core.ui.vm.VMContext
 import cz.lastaapps.core.ui.vm.VMState
 import cz.lastaapps.core.util.extensions.localLogger
 import cz.lastaapps.menza.features.main.domain.usecase.GetSelectedMenzaUC
+import cz.lastaapps.menza.features.settings.domain.usecase.settings.GetAppSettingsUC
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 internal class InfoViewModel(
@@ -49,6 +51,7 @@ internal class InfoViewModel(
     private val getSelectedMenza: GetSelectedMenzaUC,
     private val getInfo: GetInfoUC,
     private val syncInfo: SyncInfoUC,
+    private val getSettingsUC: GetAppSettingsUC,
 ) : StateViewModel<InfoState>(InfoState(), context),
     ErrorHolder {
     private val log = localLogger()
@@ -76,6 +79,11 @@ internal class InfoViewModel(
                     }
                 }
             }.launchIn(scope)
+
+        getSettingsUC()
+            .onEach {
+                updateState { copy(useAIMode = it.aiMode) }
+            }.launchIn(scope)
     }
 
     private var syncJob: Job? = null
@@ -96,7 +104,10 @@ internal class InfoViewModel(
     ) {
         withLoading({ copy(isLoading = it) }) {
             when (val res = syncInfo(menza, isForced = isForced).mapSync()) {
-                is Left -> updateState { copy(error = res.value) }
+                is Left -> {
+                    updateState { copy(error = res.value) }
+                }
+
                 is Right -> {}
             }
         }
@@ -113,4 +124,5 @@ internal data class InfoState(
     val isLoading: Boolean = false,
     val items: Info? = null,
     val error: DomainError? = null,
+    val useAIMode: Boolean = false,
 ) : VMState

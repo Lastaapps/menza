@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,16 +19,15 @@
 
 package cz.lastaapps.plugin.jvm
 
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.pluginManager
-import cz.lastaapps.extensions.testImplementation
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.android.common.KotlinBaseConvention
-import cz.lastaapps.plugin.common.ArrowKtConvention
 import cz.lastaapps.plugin.common.DetektConvention
+import cz.lastaapps.plugin.common.KotlinBaseConvention
 import cz.lastaapps.plugin.common.KtLintConvention
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.implementation
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.pluginManager
+import cz.lastaapps.plugin.extensions.testImplementation
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
@@ -36,6 +35,7 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
+// This class (JVM generally) is not up to date according to the project standards
 @Suppress("unused")
 class JvmAppConvention :
     BasePlugin(
@@ -49,19 +49,12 @@ class JvmAppConvention :
             apply<KtLintConvention>()
             apply<DetektConvention>()
             apply<KotlinBaseConvention>()
-            apply<ArrowKtConvention>()
 
             tasks.withType<Test> {
                 useJUnitPlatform()
             }
 
             (kotlinExtension as KotlinJvmProjectExtension).apply {
-                sourceSets.all {
-                    languageSettings.apply {
-                        optIn("kotlin.RequiresOptIn")
-                        optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-                    }
-                }
             }
 
             dependencies {

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -23,7 +23,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -37,6 +36,7 @@ import cz.lastaapps.menza.features.main.ui.layout.NavItem
 import cz.lastaapps.menza.features.main.ui.layout.TopBarNavTarget
 import cz.lastaapps.menza.features.main.ui.navigation.MainNavTarget
 import cz.lastaapps.menza.ui.util.AnimatedAppearance
+import cz.lastaapps.menza.ui.util.MenzaSnackbarHost
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -63,7 +63,7 @@ internal fun MainScreen(
     MenzaScaffold(
         drawerState = drawerState,
         alternativeNavigation = alternativeNavigation,
-        snackbarHost = { SnackbarHost(hostState) },
+        snackbarHost = { MenzaSnackbarHost(hostState) },
         topBar = { topBarState ->
             AnimatedAppearance(
                 appearanceDelay,

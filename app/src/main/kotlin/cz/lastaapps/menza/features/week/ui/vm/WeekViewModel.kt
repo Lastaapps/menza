@@ -92,6 +92,7 @@ internal class WeekViewModel(
                     copy(
                         priceType = it.priceType,
                         currency = it.currency,
+                        useAIMode = it.aiMode,
                     )
                 }
             }.launchIn(scope)
@@ -120,7 +121,10 @@ internal class WeekViewModel(
     ) {
         withLoading({ copy(isLoading = it) }) {
             when (val res = syncWeekDish(menza, isForced = isForced).mapSync()) {
-                is Left -> updateState { copy(error = res.value) }
+                is Left -> {
+                    updateState { copy(error = res.value) }
+                }
+
                 is Right -> {}
             }
         }
@@ -136,6 +140,7 @@ internal data class WeekState(
     val selectedMenza: Option<Menza>? = null,
     val priceType: PriceType = PriceType.Unset,
     val currency: Currency = Currency.NONE,
+    val useAIMode: Boolean = false,
     val isLoading: Boolean = false,
     val error: DomainError? = null,
     val items: ImmutableList<WeekDayDish> = persistentListOf(),

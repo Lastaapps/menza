@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,13 +19,13 @@
 
 package cz.lastaapps.plugin.android
 
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import cz.lastaapps.extensions.alias
-import cz.lastaapps.extensions.implementation
-import cz.lastaapps.extensions.libs
-import cz.lastaapps.extensions.pluginManager
+import com.android.build.api.dsl.ApplicationExtension
 import cz.lastaapps.plugin.BasePlugin
-import cz.lastaapps.plugin.android.config.configureKotlinAndroid
+import cz.lastaapps.plugin.android.config.configureAndroidOnlyModule
+import cz.lastaapps.plugin.extensions.alias
+import cz.lastaapps.plugin.extensions.implementation
+import cz.lastaapps.plugin.extensions.libs
+import cz.lastaapps.plugin.extensions.pluginManager
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
@@ -36,11 +36,12 @@ class AndroidAppConvention :
         {
             pluginManager {
                 alias(libs.plugins.android.application)
-                alias(libs.plugins.kotlin.android)
             }
 
-            extensions.configure<BaseAppModuleExtension> {
-                configureKotlinAndroid(this)
+            apply<AndroidBaseConvention>()
+
+            extensions.configure<ApplicationExtension> {
+                configureAndroidOnlyModule()
 
                 defaultConfig {
                     targetSdk =
@@ -104,16 +105,7 @@ class AndroidAppConvention :
                         }
                     }
                 }
-
-                packaging {
-                    resources {
-                        // TODO Remove after skrape-it is removed
-                        excludes.add("META-INF/INDEX.LIST")
-                    }
-                }
             }
-
-            apply<AndroidBaseConvention>()
 
             dependencies {
                 implementation(libs.google.material)

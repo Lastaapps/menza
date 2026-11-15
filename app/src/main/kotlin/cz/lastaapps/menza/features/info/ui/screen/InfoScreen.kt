@@ -176,6 +176,7 @@ private fun InfoContent(
                 PullToRefreshWrapper(
                     isRefreshing = state.isLoading,
                     onRefresh = onRefresh,
+                    useAIMode = state.useAIMode,
                 ) {
                     AboveOrSideBySideLayout(
                         topLeft = contactAndMessage,

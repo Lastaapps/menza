@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -50,14 +50,16 @@ fun WrapMenzaNotSelected(
         modifier = modifier,
     ) { current ->
         when (current) {
-            None ->
+            None -> {
                 MenzaNotSelected(
                     onOsturak = onOsturak,
                     modifier = Modifier.fillMaxSize(),
                 )
+            }
 
-            is Some ->
+            is Some -> {
                 content()
+            }
 
             null -> {}
         }

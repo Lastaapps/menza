@@ -83,8 +83,11 @@ internal class AndroidWalletCredentialsProvider(
     private fun getSharedPreferences(): SharedPreferences =
         synchronized(this) {
             when (val sp = sharedPreferences) {
-                is Some -> sp.value
-                is None ->
+                is Some -> {
+                    sp.value
+                }
+
+                is None -> {
                     context
                         .getSharedPreferences(
                             // Update backup and extraction rules if changed!!!
@@ -94,6 +97,7 @@ internal class AndroidWalletCredentialsProvider(
                             sharedPreferences = it.some()
                             migrateOldEncryptedSharedPreferences(context, it)
                         }
+                }
             }
         }
 

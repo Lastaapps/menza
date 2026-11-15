@@ -28,7 +28,7 @@ import kotlin.reflect.KProperty1
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-inline fun <State : Any, VM : StateViewModel<State>> HandleDismiss(
+inline fun <State : VMState, VM : StateViewModel<State>> HandleDismiss(
     viewModel: VM,
     getVal: KProperty1<State, Boolean>,
     dismiss: KFunction1<VM, Unit>,
@@ -46,7 +46,7 @@ inline fun <State : Any, VM : StateViewModel<State>> HandleDismiss(
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-inline fun <State : Any, VM : StateViewModel<State>, T : Any> HandleDismiss(
+inline fun <State : VMState, VM : StateViewModel<State>, T : Any> HandleDismiss(
     viewModel: VM,
     getVal: KProperty1<State, T?>,
     dismiss: KFunction1<VM, Unit>,

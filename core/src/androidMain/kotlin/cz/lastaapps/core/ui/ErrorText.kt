@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -53,6 +53,7 @@ import cz.lastaapps.core.domain.error.DomainError.Unknown
 import cz.lastaapps.core.domain.error.NetworkError
 import cz.lastaapps.core.domain.error.NetworkError.NoInternet
 import cz.lastaapps.core.domain.error.NetworkError.SerializationError
+import cz.lastaapps.core.domain.error.NetworkError.ServerDown
 import cz.lastaapps.core.domain.error.NetworkError.Timeout
 import cz.lastaapps.core.domain.error.NetworkError.Unreachable
 import cz.lastaapps.core.domain.error.ParsingError
@@ -78,15 +79,28 @@ private inline fun F(
 val DomainError.text: AppText
     get() =
         when (this) {
-            is NetworkError -> text
-            is ParsingError -> text
-            is ApiError -> text
-            is CommonError -> text
-            is Unknown ->
+            is NetworkError -> {
+                text
+            }
+
+            is ParsingError -> {
+                text
+            }
+
+            is ApiError -> {
+                text
+            }
+
+            is CommonError -> {
+                text
+            }
+
+            is Unknown -> {
                 F(
                     R.string.error_unknown,
                     throwable.localizedMessage ?: "null",
                 )
+            }
         }
 
 val NetworkError.text: AppText
@@ -95,6 +109,7 @@ val NetworkError.text: AppText
             Unreachable -> E(R.string.error_network_unreachable)
             NoInternet -> E(R.string.error_network_no_internet)
             Timeout -> E(R.string.error_network_timeout)
+            is ServerDown -> E(R.string.error_network_server_down)
             is SerializationError -> E(R.string.error_network_serialization)
         }
 
@@ -110,22 +125,27 @@ val ParsingError.text: AppText
 val ApiError.text: AppText
     get() =
         when (this) {
-            WeekNotAvailable -> E(R.string.error_api_week_not_available)
-            is SyncError ->
+            WeekNotAvailable -> {
+                E(R.string.error_api_week_not_available)
+            }
+
+            is SyncError -> {
                 when (this) {
                     is Problem -> E(R.string.error_api_incomplete_data)
                     Unavailable -> E(R.string.error_api_module_unavailable)
                     Closed -> E(R.string.error_api_menza_cloned)
                 }
+            }
 
-            is WalletError ->
+            is WalletError -> {
                 when (this) {
                     is WalletError.TotallyBroken -> E(R.string.error_wallet_login_failed_critical)
                     WalletError.InvalidCredentials -> E(R.string.error_wallet_login_failed_credentials)
                     WalletError.Unavailable -> E(R.string.error_wallet_unavailable)
                 }
+            }
 
-            is RatingError ->
+            is RatingError -> {
                 when (this) {
                     is OldAppVersion -> F(R.string.error_rating_old_app_version, this.reason)
                     is OtherProblem -> F(R.string.error_rating_other_problem, this.code)
@@ -133,14 +153,21 @@ val ApiError.text: AppText
                     Unauthorized -> E(R.string.error_rating_unauthorized)
                     is RatingError.Unrelated -> F(R.string.error_rating_unrelated, this.cause.text)
                 }
+            }
         }
 
 val CommonError.text: AppText
     get() =
         when (this) {
-            is WorkTimeout -> E(R.string.error_network_timeout)
-            is NotLoggedIn -> E(R.string.error_not_logged_in)
-            is AppNotFound ->
+            is WorkTimeout -> {
+                E(R.string.error_network_timeout)
+            }
+
+            is NotLoggedIn -> {
+                E(R.string.error_not_logged_in)
+            }
+
+            is AppNotFound -> {
                 when (this) {
                     AddContact -> E(R.string.error_no_app_contacts)
                     Email -> E(R.string.error_no_app_email)
@@ -150,5 +177,9 @@ val CommonError.text: AppText
                     PhoneCall -> E(R.string.error_no_app_dial)
                     Telegram -> E(R.string.error_no_app_telegram)
                 }
-            is CommonError.CryptoError -> F(R.string.error_crypto, throwable.localizedMessage)
+            }
+
+            is CommonError.CryptoError -> {
+                F(R.string.error_crypto, throwable.localizedMessage)
+            }
         }

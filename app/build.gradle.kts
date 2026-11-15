@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -19,7 +19,6 @@
 
 plugins {
     alias(libs.plugins.lastaapps.android.app)
-    alias(libs.plugins.lastaapps.common.coil)
     alias(libs.plugins.lastaapps.common.compose)
     alias(libs.plugins.aboutLibraries)
     alias(libs.plugins.kotlin.atomicfu)
@@ -37,8 +36,8 @@ android {
         applicationId = "cz.lastaapps.menza"
 
         // have to be specified explicitly for FDroid to work
-        versionCode = 1040800 // 1x major . 2x minor . 2x path . 2x build diff
-        versionName = "1.4.8"
+        versionCode = 1040900 // 1x major . 2x minor . 2x path . 2x build diff
+        versionName = "1.4.9"
 
         minSdk =
             libs.versions.sdk.min
@@ -70,7 +69,6 @@ android {
 }
 
 dependencies {
-
     implementation(projects.api.agata)
     implementation(projects.api.main)
     implementation(projects.core)

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -82,7 +82,7 @@ internal class DownloadViewModel(
                 log.i { "Download progress: $res" }
 
                 when (res) {
-                    is Left ->
+                    is Left -> {
                         updateState {
                             log.i { "Setting an error" }
                             copy(
@@ -90,6 +90,7 @@ internal class DownloadViewModel(
                                 isLoading = false,
                             )
                         }
+                    }
 
                     is Right -> {
                         updateState { copy(downloadProgress = res.value) }

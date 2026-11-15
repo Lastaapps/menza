@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -25,14 +25,12 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-// TODO remove once AS supports Kotlin 2.2
-private typealias Idk = KoinComponent
-
 context(component: KoinComponent)
 inline fun <reified T : InstanceKeeper.Instance> InstanceKeeper.getOrCreateKoin(
     qualifier: org.koin.core.qualifier.Qualifier? = null,
     noinline parameters: org.koin.core.parameter.ParametersDefinition? = null,
 ): T =
+    // TODO refactor
     getOrCreate {
         component.get<T>(qualifier, parameters)
     }

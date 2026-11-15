@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -152,6 +152,7 @@ private data class Shimmer(
                     fraction = progress / progressForMaxAlpha,
                 )
             }
+
             // From ProgressForOpaqueAlpha..1f we animate from 1..0
             else -> {
                 lerp(

@@ -45,7 +45,10 @@ class FlowParametrizedCache<T, Param>(
     ): Flow<T> =
         cacheMutex.withLock {
             when (val param = cacheLastParam) {
-                is Some if (param.value.first == params) -> param.value.second
+                is Some if (param.value.first == params) -> {
+                    param.value.second
+                }
+
                 else -> {
                     param.getOrNull()?.third?.cancel()
                     val scope = CoroutineScope(coroutineContext)

@@ -62,6 +62,10 @@
 # However, since in this case they will not be used, we can disable these warnings
 -dontwarn kotlinx.serialization.internal.ClassValueReferences
 
+# New SlotTable runtime in Compose 1.11
+-assumevalues public class androidx.compose.runtime.ComposeRuntimeFlags {
+    static boolean isLinkBufferComposerEnabled return true;
+}
 
 # Decompose
 -keep class com.arkivanov.decompose.extensions.compose.mainthread.SwingMainThreadChecker

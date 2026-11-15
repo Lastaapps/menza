@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -114,18 +114,37 @@ internal class DefaultStartingComponent(
             },
         ) { configuration, componentContext ->
             when (configuration) {
-                AllSet -> Child.AllSet(DefaultAllSetComponent(componentContext))
-                ChoosePrice -> Child.ChoosePrice(DefaultPriceTypeComponent(componentContext))
-                ChooseDishLanguage ->
+                AllSet -> {
+                    Child.AllSet(DefaultAllSetComponent(componentContext))
+                }
+
+                ChoosePrice -> {
+                    Child.ChoosePrice(DefaultPriceTypeComponent(componentContext))
+                }
+
+                ChooseDishLanguage -> {
                     Child.ChooseDishLanguage(
                         DefaultDishLanguageComponent(
                             componentContext,
                         ),
                     )
-                ChooseTheme -> Child.ChooseTheme(DefaultAppThemeComponent(componentContext))
-                DownloadData -> Child.DownloadData(DefaultDownloadComponent(componentContext))
-                OrderMenzaList -> Child.OrderMenzaList(DefaultReorderMenzaComponent(componentContext))
-                Policy -> Child.Policy(DefaultPolicyComponent(componentContext, true))
+                }
+
+                ChooseTheme -> {
+                    Child.ChooseTheme(DefaultAppThemeComponent(componentContext))
+                }
+
+                DownloadData -> {
+                    Child.DownloadData(DefaultDownloadComponent(componentContext))
+                }
+
+                OrderMenzaList -> {
+                    Child.OrderMenzaList(DefaultReorderMenzaComponent(componentContext))
+                }
+
+                Policy -> {
+                    Child.Policy(DefaultPolicyComponent(componentContext, true))
+                }
             }
         }
 

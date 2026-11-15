@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -110,6 +110,7 @@ internal fun TodayDishCarousel(
     PullToRefreshWrapper(
         isRefreshing = isLoading,
         onRefresh = onRefresh,
+        useAIMode = userSettings.useAIMode,
         modifier = modifier.fillMaxWidth(),
     ) {
         Surface(
@@ -358,7 +359,7 @@ private fun DishItem(
                             dishContainerKey(dish.id),
                             // resizeMode = ResizeMode.RemeasureToBounds,
                             resizeMode =
-                                ResizeMode.ScaleToBounds(
+                                ResizeMode.scaleToBounds(
                                     contentScale = ContentScale.Crop,
                                     alignment = Alignment.CenterStart,
                                 ),
@@ -389,8 +390,7 @@ private fun DishItem(
                                             )
                                     }
                                 },
-                        )
-                        .sharedElement(scopes, key = dishImageKey(dish.id))
+                        ).sharedElement(scopes, key = dishImageKey(dish.id))
                 },
     ) {
         DishImageOrSupplement(

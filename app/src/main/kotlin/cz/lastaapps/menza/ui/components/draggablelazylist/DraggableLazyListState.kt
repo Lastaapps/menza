@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -159,7 +159,7 @@ class DraggableLazyListState(
     }
 
     fun checkForOverScroll(): Float =
-        initiallyDraggedElement?.let { it ->
+        initiallyDraggedElement?.let {
             val startOffset = it.offset + draggedDistance
             val endOffset = it.offsetEnd + draggedDistance
 
@@ -169,12 +169,19 @@ class DraggableLazyListState(
             val scrollOffset = betterScrollRation * total
 
             return@let when {
-                draggedDistance > 0 -> (endOffset - lazyListState.layoutInfo.viewportEndOffset + scrollOffset).takeIf { diff -> diff > 0 }
-                draggedDistance < 0 ->
+                draggedDistance > 0 -> {
+                    (endOffset - lazyListState.layoutInfo.viewportEndOffset + scrollOffset).takeIf { diff -> diff > 0 }
+                }
+
+                draggedDistance < 0 -> {
                     (startOffset - lazyListState.layoutInfo.viewportStartOffset - scrollOffset).takeIf { diff ->
                         diff < 0
                     }
-                else -> null
+                }
+
+                else -> {
+                    null
+                }
             }.also {
 //                if (it != null) {
 //                    println("Scrolling: $it")

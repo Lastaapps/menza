@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -33,25 +33,28 @@ data class SchemeFamily(
         isLight: Boolean,
         contrastClass: ContrastClass = ContrastClass.NONE,
     ) = when (contrastClass) {
-        ContrastClass.NONE ->
+        ContrastClass.NONE -> {
             if (isLight) {
                 baseLight
             } else {
                 baseDark
             }
+        }
 
-        ContrastClass.MEDIUM ->
+        ContrastClass.MEDIUM -> {
             if (isLight) {
                 mediumContrastLight
             } else {
                 mediumContrastDark
             }
+        }
 
-        ContrastClass.HIGH ->
+        ContrastClass.HIGH -> {
             if (isLight) {
                 highContrastLight
             } else {
                 highContrastDark
             }
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -74,6 +74,7 @@ import cz.lastaapps.menza.features.settings.ui.widget.BalanceThresholdSlider
 import cz.lastaapps.menza.features.settings.ui.widget.FullReloadDialog
 import cz.lastaapps.menza.features.settings.ui.widget.SettingsItem
 import cz.lastaapps.menza.features.settings.ui.widget.SettingsSwitch
+import cz.lastaapps.menza.features.today.ui.util.RADEGAST_12_PRICE
 import cz.lastaapps.menza.ui.components.ChooseFromDialog
 import cz.lastaapps.menza.ui.theme.Padding
 import cz.lastaapps.menza.ui.util.PreviewWrapper
@@ -92,6 +93,7 @@ internal fun SettingsScreen(
     onDiscounterPrices: (PriceType) -> Unit,
     onCurrency: (Currency) -> Unit,
     onImagesOnMetered: (Boolean) -> Unit,
+    onAIMode: (Boolean) -> Unit,
     onAlternativeNavigation: (Boolean) -> Unit,
     onBalanceThreshold: (Int) -> Unit,
     onInitialMenzaBehaviour: (InitialSelectionBehaviour) -> Unit,
@@ -141,10 +143,34 @@ internal fun SettingsScreen(
             onClick = onChooseDishLanguage,
         )
 
+        // Behaviour at startup
+        InitialBehaviourSelector(
+            initialMenzaBehaviour = appSettings.initialMenzaMode,
+            onInitialMenzaBehaviour = onInitialMenzaBehaviour,
+            menzaList = menzaList,
+            selectedMenza = preferredMenza,
+            onSelectedMenza = onSelectedMenza,
+        )
+
+        // Balance warning threshold
+        BalanceThresholdSlider(
+            title = stringResource(id = R.string.settings_balance_threshold_title),
+            threshold = appSettings.balanceWarningThreshold,
+            onThreshold = onBalanceThreshold,
+        )
+
         // Currency
         CurrencySelector(
             currentCurrency = appSettings.currency,
             onCurrency = onCurrency,
+        )
+
+        // AI Mode
+        SettingsSwitch(
+            title = stringResource(id = R.string.settings_ai_mode_title),
+            subtitle = stringResource(id = R.string.settings_ai_mode_subtitle),
+            isChecked = appSettings.aiMode,
+            onCheck = onAIMode,
         )
 
         // Metered networks
@@ -161,22 +187,6 @@ internal fun SettingsScreen(
             subtitle = stringResource(id = R.string.settings_alternative_navigation_subtitle),
             isChecked = appSettings.alternativeNavigation,
             onCheck = onAlternativeNavigation,
-        )
-
-        // Balance warning threshold
-        BalanceThresholdSlider(
-            title = stringResource(id = R.string.settings_balance_threshold_title),
-            threshold = appSettings.balanceWarningThreshold,
-            onThreshold = onBalanceThreshold,
-        )
-
-        // Behaviour at startup
-        InitialBehaviourSelector(
-            initialMenzaBehaviour = appSettings.initialMenzaMode,
-            onInitialMenzaBehaviour = onInitialMenzaBehaviour,
-            menzaList = menzaList,
-            selectedMenza = preferredMenza,
-            onSelectedMenza = onSelectedMenza,
         )
 
         // About
@@ -308,14 +318,23 @@ private fun Currency.disclaimer() =
     when (this) {
         Currency.NONE,
         Currency.CZK,
-        -> null
+        -> {
+            null
+        }
 
         Currency.BEER,
-        -> stringResource(id = R.string.settings_currency_disclaimer_desitka)
+        -> {
+            stringResource(
+                id = R.string.settings_currency_disclaimer_desitka,
+                RADEGAST_12_PRICE.toInt(),
+            )
+        }
 
         Currency.EUR,
         Currency.USD,
-        -> stringResource(id = R.string.settings_currency_disclaimer_conversion)
+        -> {
+            stringResource(id = R.string.settings_currency_disclaimer_conversion)
+        }
     }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -452,6 +471,7 @@ private fun SettingsScreenPreview() =
             onCurrency = {},
             onImagesOnMetered = {},
             onAlternativeNavigation = {},
+            onAIMode = {},
             onBalanceThreshold = {},
             onInitialMenzaBehaviour = {},
             menzaList = persistentListOf(),

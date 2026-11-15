@@ -35,7 +35,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
+import kotlin.time.Instant
 
 internal class CrashesViewModel(
     context: VMContext,
@@ -55,7 +55,7 @@ internal class CrashesViewModel(
             database.crashQueries
                 .getCrashes {
                     id: Long,
-                    date: ZonedDateTime,
+                    date: Instant,
                     severity: ErrorSeverity,
                     message: String?,
                     trace: String,
@@ -77,7 +77,7 @@ internal class CrashesViewModel(
             database.crashQueries
                 .getUnreported {
                     id: Long,
-                    date: ZonedDateTime,
+                    date: Instant,
                     severity: ErrorSeverity,
                     message: String?,
                     trace: String,

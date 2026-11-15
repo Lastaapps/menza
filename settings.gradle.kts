@@ -1,5 +1,5 @@
 /*
- *    Copyright 2023, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -26,6 +26,11 @@ pluginManagement {
     }
 }
 
+plugins {
+    // Gradle toolchain detection
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -40,6 +45,7 @@ rootProject.name = "Menza"
 include(
     ":api:agata",
     ":api:buffet",
+    ":api:rating",
     ":api:core",
     ":api:main",
     ":app",
@@ -47,4 +53,3 @@ include(
     ":lastaapps:common",
     ":lastaapps:crash",
 )
-include(":api:rating")

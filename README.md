@@ -13,6 +13,13 @@ Menza is the Czech word for school cafeteria.
 
 [<img alt='Now on Google Play' height="80px" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>](https://play.google.com/store/apps/details?id=cz.lastaapps.menza&utm_source=github)[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/cz.lastaapps.menza)
 
+##### Public acknowledgements
+
+- Faculty
+  news [Život na FIT](https://fit.cvut.cz/cs/zivot-na-fit/aktualne/zpravy/19105-aplikace-studentu-fit-cvut-usnadni-vyber-z-jidelnicku-menz-cvut).
+- [Officially](https://agata.suz.cvut.cz/jidelnicky/aplikace.php) recommended app for Agáta system
+  at CTU.
+
 ## Related projects
 - [Menza CLI (LastaApps)](https://github.com/Lastaapps/menza-cli)
 - [Menza BE (LastaApps)](https://github.com/Lastaapps/menza-backend)
@@ -69,7 +76,8 @@ and how functional approaches can be nicely used in an "imperative" language.
 #### Data sources
 
 Most of the data is obtained from the official Agata API,
-see the documentation [here](https://agata.suz.cvut.cz/jidelnicky/JAPIV2/JAPI-popis.html).
+see the documentation [here](https://agata.suz.cvut.cz/jidelnicky/JAPIV2/JAPI-popis.html),
+or my Postman collection [here](https://www.postman.com/lastaapps-team/workspace/agata-api).
 To get your API key, please contact the IT center and don't steal mine,
 they will be more than happy to give you one.
 

@@ -115,34 +115,38 @@ internal class InfoRepoImpl(
         params: MenzaRepoParams,
         type: BuffetType,
     ) = when (params.language) {
-        Czech ->
+        Czech -> {
             when (type) {
                 FS -> "FS Bufet"
                 FEL -> "FEL Bufet"
             }
+        }
 
-        English ->
+        English -> {
             when (type) {
                 FS -> "FS Buffet"
                 FEL -> "FEE Buffet"
             }
+        }
     }
 
     private fun getNameShort(
         params: MenzaRepoParams,
         type: BuffetType,
     ) = when (params.language) {
-        Czech ->
+        Czech -> {
             when (type) {
                 FS -> "FS"
                 FEL -> "FEL"
             }
+        }
 
-        English ->
+        English -> {
             when (type) {
                 FS -> "FS"
                 FEL -> "FEE"
             }
+        }
     }
 
     @Suppress("SpellCheckingInspection")
@@ -150,17 +154,19 @@ internal class InfoRepoImpl(
         params: InfoRepoParams,
         type: BuffetType,
     ) = when (params.language) {
-        Czech ->
+        Czech -> {
             when (type) {
                 FS -> "1. patro, Technická 1902/4, 160 00 Praha 6"
                 FEL -> "1. patro, Technická 1902/2, 160 00 Praha 6"
             }
+        }
 
-        English ->
+        English -> {
             when (type) {
                 FS -> "1st floor, Technická 1902/4, 160 00 Prague 6"
                 FEL -> "1st floor, Technická 1902/2, 160 00 Prague 6"
             }
+        }
     }.let(::LocationName)
 
     @Suppress("SpellCheckingInspection")

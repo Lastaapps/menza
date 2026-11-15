@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -95,14 +95,21 @@ fun <T, Acu> List<Flow<T>>.foldBinary(
     operation: (Acu, Acu) -> Acu,
 ): Flow<Acu> =
     when (size) {
-        0 -> flow { emit(mapper(initial)) }
-        1 -> this[0].map(mapper)
-        else ->
+        0 -> {
+            flow { emit(mapper(initial)) }
+        }
+
+        1 -> {
+            this[0].map(mapper)
+        }
+
+        else -> {
             combine(
                 subList(0, size / 2).foldBinary(initial, mapper, operation),
                 subList(size / 2, size).foldBinary(initial, mapper, operation),
                 operation,
             )
+        }
     }
 
 fun <T> List<Flow<T>>.foldBinary(

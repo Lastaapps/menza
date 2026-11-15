@@ -72,6 +72,7 @@ fun WeekDishList(
     priceType: PriceType,
     currency: Currency,
     isLoading: Boolean,
+    useAIMode: Boolean,
     onRefresh: () -> Unit,
     noItems: () -> Unit,
     modifier: Modifier = Modifier,
@@ -79,6 +80,7 @@ fun WeekDishList(
     PullToRefreshWrapper(
         isRefreshing = isLoading,
         onRefresh = onRefresh,
+        useAIMode = useAIMode,
         modifier = modifier,
     ) {
         WeekDishContent(

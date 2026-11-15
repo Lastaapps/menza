@@ -42,6 +42,7 @@ internal data class AppSettings(
     val alternativeNavigation: Boolean,
     val isDishListModeChosen: Boolean,
     val currency: Currency,
+    val aiMode: Boolean,
 ) {
     companion object {
         // Used for previews
@@ -64,6 +65,7 @@ internal data class AppSettings(
                 alternativeNavigation = true,
                 isDishListModeChosen = false,
                 currency = Currency.CZK,
+                aiMode = false,
             )
     }
 }

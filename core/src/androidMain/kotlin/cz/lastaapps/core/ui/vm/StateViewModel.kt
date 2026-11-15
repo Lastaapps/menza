@@ -24,7 +24,6 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import arrow.fx.coroutines.resource
 import arrow.fx.coroutines.resourceScope
-import cz.lastaapps.core.BuildConfig
 import cz.lastaapps.core.util.extensions.whileSubscribed
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +63,7 @@ abstract class StateViewModel<State : VMState>(
     val flow =
         myState
             .whileSubscribed(Dispatchers.Default) {
-                check(Thread.currentThread().name == "main" || !BuildConfig.DEBUG)
+                check(Thread.currentThread().name == "main") { "Main thread expected..." }
 
                 if (!didAppear) {
                     didAppear = true
