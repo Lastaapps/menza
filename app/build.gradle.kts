@@ -1,5 +1,5 @@
 /*
- *    Copyright 2025, Petr Laštovička as Lasta apps, All rights reserved
+ *    Copyright 2026, Petr Laštovička as Lasta apps, All rights reserved
  *
  *     This file is part of Menza.
  *
@@ -36,8 +36,8 @@ android {
         applicationId = "cz.lastaapps.menza"
 
         // have to be specified explicitly for FDroid to work
-        versionCode = 1040800 // 1x major . 2x minor . 2x path . 2x build diff
-        versionName = "1.4.8"
+        versionCode = 1040900 // 1x major . 2x minor . 2x path . 2x build diff
+        versionName = "1.4.9"
 
         minSdk =
             libs.versions.sdk.min

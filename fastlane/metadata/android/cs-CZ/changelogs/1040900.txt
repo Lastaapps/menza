@@ -1,0 +1,12 @@
+AI mód (viz nastavení)
+Aktualizované ceny piva, EUR a USD
+Pop-up k hlášiní chyb po chvíli sám zmizí
+Potvrzení odhlášení
+Aktualizace knihoven, AGP 9 + KMP migrace
+Oprava drobných chyb a zrychlování
+
+1.4.0
+Hodnocení jídel
+Videa z podporovaných menz
+Podpora angličtiny
+Přidán nový režim pro zobrazení jídel
